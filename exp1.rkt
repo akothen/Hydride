@@ -1,9 +1,5 @@
 #lang rosette
 
-(require threading
-         racket/trace
-         racket/generator
-         rosette/lib/angelic)
 
 (define (vector-mac v-acc v1 v2)
   (assert (= (length v1)
