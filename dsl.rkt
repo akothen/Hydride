@@ -1,3 +1,5 @@
+ #lang rosette
+
 ;; Vector mac
 (define (vector-mac v-acc v1 v2)
   (assert (= (length v1)
