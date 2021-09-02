@@ -1,3 +1,5 @@
+ #lang rosette
+
 (struct matrix (rows cols elements) #:transparent #:mutable)
 
 (define (matrix-multiply-spec mat-A mat-B)
