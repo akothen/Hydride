@@ -51,6 +51,20 @@
     (vector-set! c i (+ sum (vector-ref c i)))))
 
 
+;; Vector mac reduction
+(define (_mm256_maskz_dpbusds_epi32 v-acc v1 v2 mask)
+    (assert (= (vector-length v1) (vector-length v2))
+          "_mm512_dpbusds_epi32: length of vectors not equal")
+  (for ([i 8])
+    (define sum
+      (if (zero? (vector-ref mask i))
+       0
+      (apply
+       +
+       (for/list ([j 4])
+         (* (bitwise-bit-field (vector-ref v1 (+ j (* i 4))) 0 8) (bitwise-bit-field (vector-ref v2 (+ j (* i 4))) 0 8))))))
+    (vector-set! c i (+ sum (vector-ref c i)))))
+
 
 (define a (build-vector 8 add1))
 (define b (build-vector 8 add1))
