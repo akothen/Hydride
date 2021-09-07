@@ -2,11 +2,16 @@
 
 (require rosette/lib/synthax)
 (require rosette/lib/angelic)
+(require racket/pretty)
 
 ;; Function to extract a bitvector
 ;; depending on the given type size
 (define (ext-bv x i type_size)
-  (extract (+ i (- type_size 1)) i x))
+  (define var (extract (+ (* i type_size) (- type_size 1)) (* i type_size) x))
+  (pretty-print	 var)
+  (pretty-print	 (* i type_size))
+  (pretty-print	 (+ (- type_size 1) (* i type_size)))
+  var)
 
 
 (define (spec v-acc v1 v2)
@@ -34,13 +39,16 @@
 ;; #:forall (list a b c)
 ;; #:guarantee (same spec sketch c a b))
 
-(define p (bv 1 128))
-(define q (bv 1 128))
-(define r (bv 0 64))
+
+;; Test the spec
+(define p (bv #x00010001000100010001000100010001 128))
+(define q (bv #x00010001000100010001000100010001 128))
+(define r (bv #x00000000000000000000000000000000 64))
 
 (define (res x y z)
-  (print (spec x y z))
-  (print r))
+  (pretty-print	 x)
+  (pretty-print	 y)
+  (pretty-print	 z)
+  (pretty-print	 (spec x y z)))
 
-(print (res r p q))
-
+(res r p q)
