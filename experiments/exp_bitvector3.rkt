@@ -34,7 +34,7 @@
   (define-symbolic r integer?)
   ;;(define-symbolic q integer? (apply choose* (list 8 16 32 64)))
   (define q (apply choose* (list 8 16 32 64)))
-  (define p (apply choose* (list 16 32 64)))
+  ;;(define p (apply choose* (list 32 64)))
   (apply
    concat
    (for/list ([i (range len)])
@@ -42,8 +42,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i r)) q p) (sign-ext-bv v2 (+ j (* i r)) q p)))))
-     (bvadd (ext-bv v-acc i p) sum))))
+          (bvmul (sign-ext-bv v1 (+ j (* i r)) q 32) (sign-ext-bv v2 (+ j (* i r)) q 32)))))
+     (bvadd (ext-bv v-acc i 32) sum))))
 
 
 
