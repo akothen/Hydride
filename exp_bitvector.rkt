@@ -8,9 +8,9 @@
 ;; depending on the given type size
 (define (ext-bv x i type_size)
   (define var (extract (+ (* i type_size) (- type_size 1)) (* i type_size) x))
-  (pretty-print	 var)
-  (pretty-print	 (* i type_size))
-  (pretty-print	 (+ (- type_size 1) (* i type_size)))
+  ;;(pretty-print	 var)
+  ;;(pretty-print	 (* i type_size))
+  ;;(pretty-print	 (+ (- type_size 1) (* i type_size)))
   var)
 
 
@@ -26,18 +26,32 @@
      (bvadd (ext-bv v-acc i 16) sum))))
 
 
-(define (same p f v1 v2 v3)
- (assert (= (p v1 v2 v3) (f v1 v2 v3))))
+(define (sketch v-acc v1 v2)
+  (define-symbolic r integer?)
+  ;;(define r
+  ;; (apply choose* (range 0 4)))
+  (apply
+   concat
+   (for/list ([i (range 4)])
+     (define sum
+       (apply
+        bvadd
+        (for/list ([j (range 2)])
+          (bvmul (ext-bv v1 (+ j (* i r)) 16) (ext-bv v2 (+ j (* i r)) 16)))))
+     (bvadd (ext-bv v-acc i 16) sum))))
 
+
+(define (same p f v1 v2 v3)
+ (assert (equal?  (p v1 v2 v3) (f v1 v2 v3))))
 
 
 (define-symbolic a (bitvector 128))
 (define-symbolic b (bitvector 128))
 (define-symbolic c (bitvector 64))
 
-;;(synthesize
-;; #:forall (list a b c)
-;; #:guarantee (same spec sketch c a b))
+(synthesize
+ #:forall (list a b c)
+ #:guarantee (same spec sketch c a b))
 
 
 ;; Test the spec
@@ -46,9 +60,7 @@
 (define r (bv #x00000000000000000000000000000000 64))
 
 (define (res x y z)
-  (pretty-print	 x)
-  (pretty-print	 y)
-  (pretty-print	 z)
-  (pretty-print	 (spec x y z)))
+  (pretty-print	 (spec x y z))
+  (pretty-print	 (sketch x y z)))
 
-(res r p q)
+;;(res r p q)
