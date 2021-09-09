@@ -160,13 +160,58 @@
           (bvmul (sign-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
      (bvadd (ext-bv Vx i 32) tmp))))
      
+     
  
+ (define (hvx_vrmpy Vx Vu Vv c1 c2 c3 c4 c5)
+  (apply
+   concat
+   (for/list ([i (range c1)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([j (range c2)])
+          (bvmul (sign-ext-bv Vu (+ j (* i c3)) c4 c5) (sign-ext-bv Vv (+ j (* i c3)) c4 c5)))))
+     (bvadd (ext-bv Vx i c5) tmp))))
 
  
+ (define (_mm_dpwssd_epi32 src a b c1 c2 c3 c4 c5)
+  (apply
+   concat
+   (for/list ([j (range c1)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([k (range c2)])
+          (bvmul (sign-ext-bv a (+ k (* j c3)) c4 c5) (sign-ext-bv b (+ k (* j c3)) c4 c5)))))
+     (bvadd (ext-bv src i c5) tmp))))
  
  
  
  
+ 
+ (define (hvx_vrmpy Vx Vu Vv len red_len out_precision)
+  (apply
+   concat
+   (for/list ([i (range len)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([j (range red_len)])
+          (bvmul (sign-ext-bv Vu (+ j (* i 4)) 8 out_precision) (sign-ext-bv Vv (+ j (* i 4)) 8 out_precision)))))
+     (bvadd (ext-bv Vx i out_precision) tmp))))
+     
+ 
+ 
+ (define (_mm_dpwssd_epi32 src a b len red_len)
+  (apply
+   concat
+   (for/list ([j (range 4)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([k (range 2)])
+          (bvmul (sign-ext-bv a (+ k (* j 2)) 16 32) (sign-ext-bv b (+ k (* j 2)) 16 32)))))
+     (bvadd (ext-bv src i 32) tmp))))
  
  
  ;; Example for the slides
