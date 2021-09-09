@@ -53,6 +53,40 @@
      (bvadd (ext-bv src i 32) (sign-extend tmp (bitvector 32))))))
 
 
+;;<intrinsic tech="AVX-512" name="_mm256_dpbusd_epi32">
+;;	<type>Integer</type>
+;;	<CPUID>AVX512_VNNI</CPUID>
+;;	<CPUID>AVX512VL</CPUID>
+;;	<category>Arithmetic</category>
+;;	<return type="__m256i" varname="dst" etype="SI32"/>
+;;	<parameter type="__m256i" varname="src" etype="SI32"/>
+;;	<parameter type="__m256i" varname="a" etype="UI8"/>
+;;	<parameter type="__m256i" varname="b" etype="SI8"/>
+;;	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+;;	<operation>
+;;FOR j := 0 to 7
+;;	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+;;	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+;;	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+;;	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+;;	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+;;ENDFOR
+;;dst[MAX:256] := 0
+;;	</operation>
+;;	<instruction name="VPDPBUSDS" form="ymm, ymm, ymm" xed="VPDPBUSDS_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+(define (_mm256_dpbusd_epi32 v-acc v1 v2 len red)
+  (apply
+   concat
+   (for/list ([j (range 8)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([k (range 4)])
+          (bvmul (zero-ext-bv a (+ k (* j 4)) 8 16) (sign-ext-bv b (+ k (* j 4)) 8 16)))))
+     (bvadd (ext-bv src i 32) (sign-extend tmp (bitvector 32))))))
+
 ;; HVX VRMPY 
 ;;for (i = 0; i < VELEM(32); i++) {
 ;;  Vx.w[i] += (Vu.uw[i].ub[0] * Vv.w[i].b[0]);
