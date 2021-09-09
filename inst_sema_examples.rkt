@@ -136,8 +136,9 @@
        (apply
         bvadd
         (for/list ([j (range 4)])
-          (bvmul (sign-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
-     (bvadd (ext-bv Vx i 32) (sign-extend tmp (bitvector 32))))))
+          (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
+     (bvadd (ext-bv Vx i 32) tmp))))
+
  
  
  ;; HVX VRMPY 
@@ -155,8 +156,8 @@
        (apply
         bvadd
         (for/list ([j (range 4)])
-          (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
-     (bvadd (ext-bv Vx i 32) tmp))))
+          (bvmul (sign-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
+     (bvadd (ext-bv Vx i 32) (sign-extend tmp (bitvector 32))))))
      
  
 
