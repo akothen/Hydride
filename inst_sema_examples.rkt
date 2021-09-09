@@ -157,4 +157,18 @@
         (for/list ([j (range 4)])
           (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
      (bvadd (ext-bv Vx i 32) tmp))))
+     
+     
+ ;; Example for the slides
+ (define (vector-dot c a b len)
+  (apply
+   concat
+   (for/list ([i (range 32)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([j (range len)])
+          (bvmul (ext-bv a (+ j (* i len)) 8 32) (ext-bv b (+ j (* i len)) 8 32)))))
+     (bvadd (ext-bv c i 32) tmp))))
+ 
 
