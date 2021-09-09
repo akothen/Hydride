@@ -117,6 +117,61 @@
      (bvadd (ext-bv v-acc i 32) sum))))
 
 
+
+;;<intrinsic tech="AVX-512" name="_mm512_dpbusds_epi32">
+;;	<type>Integer</type>
+;;	<CPUID>AVX512_VNNI</CPUID>
+;;	<category>Arithmetic</category>
+;;	<return type="__m512i" varname="dst" etype="SI32"/>
+;;	<parameter type="__m512i" varname="src" etype="SI32"/>
+;;	<parameter type="__m512i" varname="a" etype="UI8"/>
+;;	<parameter type="__m512i" varname="b" etype="SI8"/>
+;;	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+;;	<operation>
+;;FOR j := 0 to 15
+;;	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+;;	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+;;	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+;;	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+;;	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+;;ENDFOR
+;;dst[MAX:512] := 0
+;;	</operation>
+;;	<instruction name="VPDPBUSDS" form="zmm, zmm, zmm" xed="VPDPBUSDS_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+(define (_mm512_dpbusds_epi32 v-acc v1 v2 len red)
+  (apply
+   concat
+   (for/list ([i (range len)])
+     (define sum
+       (apply
+        bvadd
+        (for/list ([j (range red)])
+          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 16) (zero-ext-bv v2 (+ j (* i 4)) 8 16)))))
+     (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
+
+
+;; HVX VRMPY 
+;;for (i = 0; i < VELEM(32); i++) {
+;;  Vx.w[i] += (Vu.uw[i].ub[0] * Vv.w[i].b[0]);
+;;  Vx.w[i] += (Vu.uw[i].ub[1] * Vv.w[i].b[1]);
+;;  Vx.w[i] += (Vu.uw[i].ub[2] * Vv.w[i].b[2]);
+;;  Vx.w[i] += (Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;
+;}
+(define (hvx_vrmpy v-acc v1 v2 len red)
+  (apply
+   concat
+   (for/list ([i (range len)])
+     (define sum
+       (apply
+        bvadd
+        (for/list ([j (range red)])
+          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 16) (zero-ext-bv v2 (+ j (* i 4)) 8 16)))))
+     (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
+
+
+
 ;;<intrinsic tech="AVX-512" name="_mm_mask_dpwssds_epi32">
 ;;	<type>Integer</type>
 ;;	<CPUID>AVX512_VNNI</CPUID>
@@ -235,6 +290,7 @@
      (bvadd (ext-bv src i 32) tmp))))
 
 
+
 ;; Test the semantics
 (define a128 (bv #x00010001000100010001000100010001 128))
 (define b128 (bv #x00020003000200030002000300020003 128))
@@ -251,6 +307,10 @@
 (define src512 (bv 0 512))
 (define mask128 (bv #x00010100000101000001010000010100 128))
 
+(define a1024 (bv #x0001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001 1024))
+(define b1024 (bv #x0002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003 1024))
+(define src1024 (bv 0 1024))
+
 (define (res)
   (pretty-print	 (_mm_dpwssds_epi32 src128 a128 b128 4 2))
   (pretty-print	 (_mm_mask_dpwssds_epi32 src128 mask8 a128 b128 4 2))
@@ -258,6 +318,8 @@
   (pretty-print	 (_mm512_mask_dpwssd_epi32 src512 mask16 a512 b512 16 2))
   (pretty-print  (_mm256_dpwssd_epi32 src256 a256 b256 8 2))
   (pretty-print  (_mm256_mask_dpwssd_epi32 src256 mask8 a256 b256 8 2))
+  (pretty-print  (_mm512_dpbusds_epi32 src512 a512 b512 16 4))
+  (pretty-print  (hvx_vrmpy src1024 a1024 b1024 32 4))
  )
 
 (res)
