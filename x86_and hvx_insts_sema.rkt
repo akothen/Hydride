@@ -202,8 +202,26 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 16) (sign-ext-bv v2 (+ j (* i 4)) 8 16)))))
+          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 32) (sign-ext-bv v2 (+ j (* i 4)) 8 32)))))
      (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
+
+
+;;for (i = 0; i < VELEM(32); i++) {
+;;  Vx.w[i] += (Vu.w[i].b[0] * Vv.w[i].b[0]);
+;;  Vx.w[i] += (Vu.w[i].b[1] * Vv.w[i].b[1]);
+;;  Vx.w[i] += (Vu.w[i].b[2] * Vv.w[i].b[2]);
+;;  Vx.w[i] += (Vu.w[i].b[3] * Vv.w[i].b[3]);
+;;}
+(define (hvx_vrmpy2 v-acc v1 v2 len red)
+  (apply
+   concat
+   (for/list ([i (range len)])
+     (define sum
+       (apply
+        bvadd
+        (for/list ([j (range red)])
+          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 32) (sign-ext-bv v2 (+ j (* i 4)) 8 32)))))
+     (bvadd (ext-bv v-acc i 32) sum))))
 
 
 ;;<intrinsic tech="AVX-512" name="_mm_mask_dpwssds_epi32">
@@ -355,6 +373,7 @@
   (pretty-print  (_mm512_dpbusd_epi32 src512 a512 b512 16 4))
   (pretty-print  (_mm256_dpbusd_epi32 src256 a256 b256 8 4))
   (pretty-print  (hvx_vrmpy src1024 a1024 b1024 32 4))
+  (pretty-print  (hvx_vrmpy2 src1024 a1024 b1024 32 4))
  )
 
 (res)
