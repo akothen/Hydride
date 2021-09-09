@@ -87,24 +87,6 @@
           (bvmul (zero-ext-bv a (+ k (* j 4)) 8 16) (sign-ext-bv b (+ k (* j 4)) 8 16)))))
      (bvadd (ext-bv src i 32) (sign-extend tmp (bitvector 32))))))
 
-;; HVX VRMPY 
-;;for (i = 0; i < VELEM(32); i++) {
-;;  Vx.w[i] += (Vu.uw[i].ub[0] * Vv.w[i].b[0]);
-;;  Vx.w[i] += (Vu.uw[i].ub[1] * Vv.w[i].b[1]);
-;;  Vx.w[i] += (Vu.uw[i].ub[2] * Vv.w[i].b[2]);
-;;  Vx.w[i] += (Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;
-;}
-(define (hvx_vrmpy Vx Vu Vv)
-  (apply
-   concat
-   (for/list ([i (range 32)])
-     (define tmp
-       (apply
-        bvadd
-        (for/list ([j (range 4)])
-          (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 16) (sign-ext-bv Vv (+ j (* i 4)) 8 16)))))
-     (bvadd (ext-bv Vx i 32) (sign-extend tmp (bitvector 32))))))
-
 
 ;;<intrinsic tech="AVX-512" name="_mm_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -138,4 +120,41 @@
           (bvmul (sign-ext-bv a (+ k (* j 2)) 16 32) (sign-ext-bv b (+ k (* j 2)) 16 32)))))
      (bvadd (ext-bv src i 32) tmp))))
 
+
+;; HVX VRMPY 
+;;for (i = 0; i < VELEM(32); i++) {
+;;  Vx.w[i] += (Vu.uw[i].ub[0] * Vv.w[i].b[0]);
+;;  Vx.w[i] += (Vu.uw[i].ub[1] * Vv.w[i].b[1]);
+;;  Vx.w[i] += (Vu.uw[i].ub[2] * Vv.w[i].b[2]);
+;;  Vx.w[i] += (Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;
+;}
+(define (hvx_vrmpy Vx Vu Vv)
+  (apply
+   concat
+   (for/list ([i (range 32)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([j (range 4)])
+          (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
+     (bvadd (ext-bv Vx i 32) (sign-extend tmp (bitvector 32))))))
+ 
+ 
+ ;; HVX VRMPY 
+;;for (i = 0; i < VELEM(32); i++) {
+;;  Vx.w[i] += (Vu.w[i].b[0] * Vv.w[i].b[0]);
+;;  Vx.w[i] += (Vu.w[i].b[1] * Vv.w[i].b[1]);
+;;  Vx.w[i] += (Vu.w[i].b[2] * Vv.w[i].b[2]);
+;;  Vx.w[i] += (Vu.w[i].b[3] * Vv.w[i].b[3]) ;
+;}
+(define (hvx_vrmpy Vx Vu Vv)
+  (apply
+   concat
+   (for/list ([i (range 32)])
+     (define tmp
+       (apply
+        bvadd
+        (for/list ([j (range 4)])
+          (bvmul (zero-ext-bv Vu (+ j (* i 4)) 8 32) (sign-ext-bv Vv (+ j (* i 4)) 8 32)))))
+     (bvadd (ext-bv Vx i 32) tmp))))
 
