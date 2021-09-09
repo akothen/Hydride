@@ -76,7 +76,7 @@
 ;;	<instruction name="VPDPBUSDS" form="ymm, ymm, ymm" xed="VPDPBUSDS_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm256_dpbusd_epi32 v-acc v1 v2 len red)
+(define (_mm256_dpbusd_epi32 src a b)
   (apply
    concat
    (for/list ([j (range 8)])
