@@ -19,7 +19,7 @@
   var)
 
 
-;;<intrinsic tech="AVX-512" name="_mm512_dpbusds_epi32">
+;;<intrinsic tech="AVX-512" name="_mm512_dpbusd_epi32">
 ;;	<type>Integer</type>
 ;;	<CPUID>AVX512_VNNI</CPUID>
 ;;	<category>Arithmetic</category>
@@ -34,14 +34,14 @@
 ;;	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
 ;;	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
 ;;	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
-;;	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+;;	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
 ;;ENDFOR
 ;;dst[MAX:512] := 0
 ;;	</operation>
 ;;	<instruction name="VPDPBUSDS" form="zmm, zmm, zmm" xed="VPDPBUSDS_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm512_dpbusds_epi32 src a b)
+(define (_mm512_dpbusd_epi32 src a b)
   (apply
    concat
    (for/list ([j (range 16)])
@@ -72,7 +72,7 @@
      (bvadd (ext-bv Vx i 32) (sign-extend tmp (bitvector 32))))))
 
 
-;;<intrinsic tech="AVX-512" name="_mm_dpwssds_epi32">
+;;<intrinsic tech="AVX-512" name="_mm_dpwssd_epi32">
 ;;	<type>Integer</type>
 ;;	<CPUID>AVX512_VNNI</CPUID>
 ;;	<CPUID>AVX512VL</CPUID>
@@ -86,14 +86,14 @@
 ;;FOR j := 0 to 3
 ;;	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
 ;;	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
-;;	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+;;	dst.dword[j] := src.dword[j] + tmp1 + tmp2
 ;;ENDFOR
 ;;dst[MAX:128] := 0
 ;;	</operation>
 ;;	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;; Valid Inputs: len = 4;red = 2;v-acc v1 v2 = 128-bit
-(define (_mm_dpwssds_epi32 src a b)
+(define (_mm_dpwssd_epi32 src a b)
   (apply
    concat
    (for/list ([j (range 4)])
