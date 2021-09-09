@@ -135,7 +135,7 @@
        (apply
         bvadd
         (for/list ([k (range 2)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 32) (sign-ext-bv v2 (+ j (* i 2)) 16 32)))))
-     (bvadd (ext-bv v-acc i 32) sum))))
+          (bvmul (sign-ext-bv a (+ k (* j 2)) 16 32) (sign-ext-bv b (+ k (* j 2)) 16 32)))))
+     (bvadd (ext-bv src i 32) tmp))))
 
 
