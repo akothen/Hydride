@@ -148,7 +148,7 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 16) (zero-ext-bv v2 (+ j (* i 4)) 8 16)))))
+          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 16) (sign-ext-bv v2 (+ j (* i 4)) 8 16)))))
      (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
 
 
@@ -167,9 +167,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 16) (zero-ext-bv v2 (+ j (* i 4)) 8 16)))))
+          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 16) (sign-ext-bv v2 (+ j (* i 4)) 8 16)))))
      (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
-
 
 
 ;;<intrinsic tech="AVX-512" name="_mm_mask_dpwssds_epi32">
