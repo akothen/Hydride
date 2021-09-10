@@ -40,7 +40,7 @@
 ;;	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;; Valid Inputs: len = 4;red = 2;v-acc v1 v2 = 128-bit
-(define (_mm_dpwssds_epi32 v-acc v1 v2 len red)
+(define (_mm_dpwssds_epi32 v-acc v1 v2 len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -48,8 +48,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 32) (sign-ext-bv v2 (+ j (* i 2)) 16 32)))))
-     (bvadd (ext-bv v-acc i 32) sum))))
+          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) sum))))
 
 ;;<intrinsic tech="AVX-512" name="_mm512_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -72,7 +72,7 @@
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
 ;; Valid Inputs: len = 4;red = 2;v-acc v1 v2 = 128-bit
-(define (_mm512_dpwssd_epi32 v-acc v1 v2 len red)
+(define (_mm512_dpwssd_epi32 v-acc v1 v2 len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -80,8 +80,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 32) (sign-ext-bv v2 (+ j (* i 2)) 16 32)))))
-     (bvadd (ext-bv v-acc i 32) sum))))
+          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) sum))))
 
 
 ;;<intrinsic tech="AVX-512" name="_mm256_dpwssd_epi32">
@@ -105,7 +105,7 @@
 ;;	<instruction name="VPDPWSSD" form="ymm, ymm, ymm" xed="VPDPWSSD_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm256_dpwssd_epi32 v-acc v1 v2 len red)
+(define (_mm256_dpwssd_epi32 v-acc v1 v2 len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -113,8 +113,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 32) (sign-ext-bv v2 (+ j (* i 2)) 16 32)))))
-     (bvadd (ext-bv v-acc i 32) sum))))
+          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) sum))))
 
 
 
@@ -194,7 +194,7 @@
 ;;  Vx.w[i] += (Vu.uw[i].ub[2] * Vv.w[i].b[2]);
 ;;  Vx.w[i] += (Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;
 ;}
-(define (hvx_vrmpy v-acc v1 v2 len red)
+(define (hvx_vrmpy v-acc v1 v2 len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -202,8 +202,8 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 32) (sign-ext-bv v2 (+ j (* i 4)) 8 32)))))
-     (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
+          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 out_precision) (sign-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) (sign-extend sum (bitvector out_precision))))))
 
 
 ;;for (i = 0; i < VELEM(32); i++) {
@@ -212,7 +212,7 @@
 ;;  Vx.w[i] += (Vu.w[i].b[2] * Vv.w[i].b[2]);
 ;;  Vx.w[i] += (Vu.w[i].b[3] * Vv.w[i].b[3]);
 ;;}
-(define (hvx_vrmpy2 v-acc v1 v2 len red)
+(define (hvx_vrmpy2 v-acc v1 v2 len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -220,8 +220,30 @@
        (apply
         bvadd
         (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 32) (sign-ext-bv v2 (+ j (* i 4)) 8 32)))))
-     (bvadd (ext-bv v-acc i 32) sum))))
+          (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 out_precision) (sign-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) sum))))
+
+
+;;for (i = 0; i < VELEM(32); i++) {
+;;     Vx.uw[i] += (Vu.uw[i].ub[0] *
+;;     Vv.uw[i].ub[0]);
+;;     Vx.uw[i] += (Vu.uw[i].ub[1] *
+;;     Vv.uw[i].ub[1]);
+;;     Vx.uw[i] += (Vu.uw[i].ub[2] *
+;;     Vv.uw[i].ub[2]);
+;;     Vx.uw[i] += (Vu.uw[i].ub[3] *
+;;     Vv.uw[i].ub[3]) ;
+;;}
+(define (hvx_vrmpy3 v-acc v1 v2 len red out_precision)
+  (apply
+   concat
+   (for/list ([i (range len)])
+     (define sum
+       (apply
+        bvadd
+        (for/list ([j (range red)])
+          (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 out_precision) (zero-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
+     (bvadd (ext-bv v-acc i out_precision) sum))))
 
 
 ;;<intrinsic tech="AVX-512" name="_mm_mask_dpwssds_epi32">
@@ -251,7 +273,7 @@
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
 ;; Valid Inputs: len = 4;red = 2;v-acc v1 v2 = 128-bit
-(define (_mm_mask_dpwssds_epi32 src k a b len red)
+(define (_mm_mask_dpwssds_epi32 src k a b len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -261,8 +283,8 @@
          (apply
           bvadd
           (for/list ([j (range red)])
-            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 32) (sign-ext-bv b (+ j (* i 2)) 16 32))))))
-     (bvadd (ext-bv src i 32) tmp))))
+            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
+     (bvadd (ext-bv src i out_precision) tmp))))
 
 ;;<intrinsic tech="AVX-512" name="_mm512_mask_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -289,7 +311,7 @@
 ;;	<instruction name="VPDPWSSD" form="zmm {k}, zmm, zmm" xed="VPDPWSSD_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm512_mask_dpwssd_epi32 src k a b len red)
+(define (_mm512_mask_dpwssd_epi32 src k a b len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -299,8 +321,8 @@
          (apply
           bvadd
           (for/list ([j (range red)])
-            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 32) (sign-ext-bv b (+ j (* i 2)) 16 32))))))
-     (bvadd (ext-bv src i 32) tmp))))
+            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
+     (bvadd (ext-bv src i out_precision) tmp))))
 
 ;;<intrinsic tech="AVX-512" name="_mm256_mask_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -328,7 +350,7 @@
 ;;	<instruction name="VPDPWSSD" form="ymm {k}, ymm, ymm" xed="VPDPWSSD_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm256_mask_dpwssd_epi32 src k a b len red)
+(define (_mm256_mask_dpwssd_epi32 src k a b len red out_precision)
   (apply
    concat
    (for/list ([i (range len)])
@@ -338,8 +360,12 @@
          (apply
           bvadd
           (for/list ([j (range red)])
-            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 32) (sign-ext-bv b (+ j (* i 2)) 16 32))))))
-     (bvadd (ext-bv src i 32) tmp))))
+            (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
+     (bvadd (ext-bv src i out_precision) tmp))))
+
+
+
+
 
 
 
@@ -364,16 +390,18 @@
 (define src1024 (bv 0 1024))
 
 (define (res)
-  (pretty-print	 (_mm_dpwssds_epi32 src128 a128 b128 4 2))
-  (pretty-print	 (_mm_mask_dpwssds_epi32 src128 mask8 a128 b128 4 2))
-  (pretty-print  (_mm512_dpwssd_epi32 src512 a512 b512 16 2))
-  (pretty-print	 (_mm512_mask_dpwssd_epi32 src512 mask16 a512 b512 16 2))
-  (pretty-print  (_mm256_dpwssd_epi32 src256 a256 b256 8 2))
-  (pretty-print  (_mm256_mask_dpwssd_epi32 src256 mask8 a256 b256 8 2))
+  (pretty-print	 (_mm_dpwssds_epi32 src128 a128 b128 4 2 32))
+  (pretty-print	 (_mm_mask_dpwssds_epi32 src128 mask8 a128 b128 4 2 32))
+  
+  (pretty-print  (_mm512_dpwssd_epi32 src512 a512 b512 16 2 32))
+  (pretty-print	 (_mm512_mask_dpwssd_epi32 src512 mask16 a512 b512 16 2 32))
+  (pretty-print  (_mm256_dpwssd_epi32 src256 a256 b256 8 2 32))
+  (pretty-print  (_mm256_mask_dpwssd_epi32 src256 mask8 a256 b256 8 2 32))
   (pretty-print  (_mm512_dpbusd_epi32 src512 a512 b512 16 4))
   (pretty-print  (_mm256_dpbusd_epi32 src256 a256 b256 8 4))
-  (pretty-print  (hvx_vrmpy src1024 a1024 b1024 32 4))
-  (pretty-print  (hvx_vrmpy2 src1024 a1024 b1024 32 4))
+  (pretty-print  (hvx_vrmpy src1024 a1024 b1024 32 4 32))
+  (pretty-print  (hvx_vrmpy2 src1024 a1024 b1024 32 4 32))
+  (pretty-print  (hvx_vrmpy3 src1024 a1024 b1024 32 4 32))
  )
 
 (res)
