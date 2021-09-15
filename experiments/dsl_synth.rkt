@@ -76,7 +76,7 @@
        (bvmul (ext-bv a (- (- 4 1) j) 32) (ext-bv b (- (- 4 1) j) 32)))
      (begin
        (define dst_res (bvadd (ext-bv dst j 32) tmp))
-       (assert (bvsge dst_res (ext-bv dst j 32)))
+       ;(assert (bvsge dst_res (ext-bv dst j 32)))
        dst_res
      )
    )
@@ -125,17 +125,18 @@
 
 (define-grammar (vec_grammar a b c)
   [expr                            
-   (choose* a b c 
+   (choose a b c 
            ;(vector-mac a b c 4 32)
            ;(vector-mac (expr) (expr) (expr) (?? integer?) 32)
            ;(vector-mac a b c (scalar) 32)
-           ;(vector-mac a b c 4 32)
-           ;(vector-mac-fixed (args) (args) (args))
-           ;(vector-mac-fixed a b c)
-           (vector-mac-unrolled (args) (args) (args))
+           (vector-mac (arg) (arg) (arg) 4 (scale))
+           ;(vector-mac-fixed (arg) (arg) (arg))
+           ;(vector-mac-unrolled (arg) (arg) (arg))
            )]
-  [args
-   (choose* a b c)]
+  [arg
+   (choose a b c)]
+  [scale
+   (choose 16 32)]
 
 
   )
@@ -153,12 +154,12 @@
 (assume (bvsge _arg1 (int128 0)))
 (assume (bvsge _arg2 (int128 0)))
 (assume (bvsge _acc (int128 0)))
-(assume (bvsle _arg1 (int128 4)))
-(assume (bvsle _arg2 (int128 4)))
-(assume (bvsle _acc (int128 4)))
+(assume (bvsle _arg1 (int128 64)))
+(assume (bvsle _arg2 (int128 64)))
+(assume (bvsle _acc (int128 64)))
 
-(define sol
-    (synthesize
+(time 
+(synthesize
      #:forall (list _acc _arg1 _arg2)
      #:guarantee (assert (equal? (compute _acc _arg1 _arg2) (vmac_synth _acc _arg1 _arg2 )))))
 
