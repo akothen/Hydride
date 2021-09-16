@@ -1,6 +1,7 @@
 
 
-import subprocess
+import os
+
 
 # This file assumes that there is a spec file and there is a sketch file.
 # This file will generate a synthesis file automatically.
@@ -74,12 +75,22 @@ def gen_synthesis_code(symbolic_inputs, spec_name, spec_args, sketch_name, sketc
   '''
 
 
-def execute_eq_checker(racket_file):
-  subprocess.run(["racket", racket_file])
+def sema_are_equivalent(racket_file):
+  output_file = "output.txt"
+  os.system("racket " + racket_file + " >> " + output_file)
+  f = open(output_file, "r")
+  for x in f:
+    if "unsat" in x:
+      os.system("rm " + output_file)
+      return False
+  os.system("rm " + output_file)
+  return True
+
+
 
 def gen_racket_file(utility_file, spec_file, sketch_file, num_vectors, vector_bitwidth, num_ints, concrete_vals):
   text = gen_headers(spec_file, sketch_file)
-  f= open(utility_file, "r")
+  f = open(utility_file, "r")
   for x in f:
     text += x
   f = open(spec_file, "r")
@@ -107,7 +118,6 @@ def gen_racket_file(utility_file, spec_file, sketch_file, num_vectors, vector_bi
     args.append(symbol)
   for integer in concints:
     args.append(integer)
-  # args.extend(concints)
   print("args:")
   print(args)
   print("--symbolic_inputs:")
@@ -118,7 +128,7 @@ def gen_racket_file(utility_file, spec_file, sketch_file, num_vectors, vector_bi
 
 def gen_equivalence_checker():
   gen_racket_file(utility_file, spec_file, sketch_file, 3, 128, 0, [4, 2, 32])
-  execute_eq_checker(racket_file)
+  print(sema_are_equivalent(racket_file))
 
 
 if __name__ == '__main__':
