@@ -30,7 +30,7 @@ def gen_intrinsic(id, num_vectors, num_sym_ints, num_concrete_vals):
       input_list += ","
   for i in range(num_concrete_vals):
     input_list += int_ty
-    if i == num_vectors - 1:
+    if i != num_vectors - 1:
       input_list += "],"
   input = "[" + input_list + "]"
   attr = "[IntrNoMem, IntrSpeculatable]"
