@@ -1,6 +1,4 @@
 
-
-
 def find_between(s, first, last, throw_none=False):
   try:
     start = s.index(first) + len(first)
@@ -12,7 +10,7 @@ def find_between(s, first, last, throw_none=False):
     return ""
 
 
-def gen_rosette_func(dsl_file, sketch_file, sketch_func_name):
+def gen_rosette_func(dsl_file, sketch_file, sketch_func_name, dsl_func_name):
   f = open(sketch_file, "r")
   sketch_func_sig_lines = list()
   dsl_func_body = list()
@@ -24,10 +22,10 @@ def gen_rosette_func(dsl_file, sketch_file, sketch_func_name):
       continue
     if sketch_func_name in line:
       print(sketch_func_name)
+      line = line.replace(sketch_func_name, dsl_func_name)
       sketch_func_sig_lines.append(line)
       if ")" in line:
         sig_end = True
-        sketch_func_sig_lines.append(line)
         last_sig_line = line
         print("last_sig_line:")
         print(line)
