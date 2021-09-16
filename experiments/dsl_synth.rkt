@@ -49,7 +49,7 @@
    (for/list ([j (range 4)])
      (define tmp
        (bvmul (ext-bv a (- 3 j) 32) (ext-bv b (- 3 j) 32)))
-     (bvadd (ext-bv dst j 32) tmp)
+     (bvadd (ext-bv dst (- 3 j) 32) tmp)
      )
    )
   )
@@ -62,7 +62,7 @@
    (for/list ([j (range len)])
      (define tmp
        (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision)))
-     (bvadd (ext-bv dst j precision) tmp)
+     (bvadd (ext-bv dst (- (- len 1) j) precision) tmp)
      )
    )
   )
@@ -183,7 +183,7 @@
 
 
 (define (vmac_synth a b c)
-  (vec_grammar a b c #:depth 3)
+  (vec_grammar a b c #:depth 4)
 )
 
 (define-symbolic _arg1 (bitvector 128))
