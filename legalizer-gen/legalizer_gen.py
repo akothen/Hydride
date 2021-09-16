@@ -1,11 +1,17 @@
+
+
 from equivalence_checker import gen_equivalence_checker 
 from gen_intrinsic import gen_intrinsic
+from tensor_dsl_gen import gen_rosette_func
 
 
 spec_file = "spec.rkt" 
 sketch_file = "sketch.rkt"
 utility_file = "utility.rkt"
 racket_file = "eq_check.rkt"
+
+sketch_func_name = "sketch"
+dsl_file = "dsl.rkt"
 
 num_vectors = 3
 vector_bitwidth = 128
@@ -21,6 +27,8 @@ def gen_legalizer():
     # Generate the intrinsic
     num_concrete_vals = len(concrete_vals)
     gen_intrinsic(1, num_vectors, num_sym_ints, num_concrete_vals)
+    dsl_func_name = "intrinsic" + str(1)
+    gen_rosette_func(dsl_file, sketch_file, sketch_func_name, dsl_func_name)
 
 
 
