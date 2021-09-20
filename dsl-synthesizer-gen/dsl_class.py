@@ -2,29 +2,27 @@ from enum import Enum
 from collections import Counter
 
 
-
 class ArgType(Enum):
     IntConst = 1
     BitVectorConst = 2
     IntSymbolic = 3
     BitVectorSymbolic = 4
+    PrecisionConst = 5
+    LengthConst = 6
 
 class DSLArg:
 
-    def __init__(self, name, arg_ty, is_precision = False, is_length = False):
+    def __init__(self, name, arg_ty ):
         self.name = name
         self.arg_ty = arg_ty
-        self.is_precision = False
-        self.is_length = False
-
-        assert (not (is_precision and is_length)), "Argument can not be precision and length simultaneously!"
+        self.is_precision = (arg_ty == ArgType.PrecisionConst) 
+        self.is_length = (arg_ty == ArgType.LengthConst) 
 
 
 class DSLInst:
     """ Base class to represent Target Agnostic DSL Instructions"""
     
     def __init__(self, name, inputs):
-        
         self.name = name
         self.inputs = inputs 
 
@@ -42,7 +40,11 @@ class DSLInst:
         count_inst_types = Counter(inst_types)
 
 
+
         for arg_ty in count_inst_types:
+            if arg_ty == ArgType.PrecisionConst or arg_ty == ArgType.LengthConst:
+                continue
+
             if arg_ty not in count_arg_list:
                 return False
 
@@ -56,9 +58,11 @@ class DSLInst:
         assert (idx < len(self.inputs)), "Out of bounds argument indexing!"
         return  self.inputs[idx].arg_ty
 
+    def getNumOperands(self):
+        return len(self.inputs)
+
 
     def getPrecisionOperandIdx(self):
-
         for idx, arg in enumerate(self.inputs):
             if arg.is_precision:
                 return idx
@@ -66,20 +70,14 @@ class DSLInst:
 
 
     def getLengthOperandIdx(self):
-
         for idx, arg in enumerate(self.inputs):
             if arg.is_length:
                 return idx
         return -1
-
-
-
-        
-
-
-
-
-
     
+    def str(self):
+        dsl_str_list = [self.name] + [str(arg.arg_ty.name) for arg in self.inputs]  
+        return "("+(" ".join(dsl_str_list))+")"
 
-    
+
+

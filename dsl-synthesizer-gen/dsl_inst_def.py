@@ -1,8 +1,8 @@
 from dsl_class import *
 
 BitVectorArg = DSLArg("bvArg", ArgType.BitVectorSymbolic)
-LengthArg = DSLArg("bvLen", ArgType.IntConst, is_length=True)
-PrecisionArg = DSLArg("bvPrecision", ArgType.IntConst , is_precision = True)
+LengthArg = DSLArg("bvLen", ArgType.LengthConst)
+PrecisionArg = DSLArg("bvPrecision", ArgType.PrecisionConst)
 
 
 
@@ -21,4 +21,5 @@ vector_mul = DSLInst("vector-mul", [BitVectorArg, BitVectorArg,
     LengthArg, PrecisionArg])
 
 
-print("Hello World")
+DSLList = [vector_mac, vector_add, vector_sub, vector_mul]
+
