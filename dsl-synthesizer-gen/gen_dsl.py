@@ -76,6 +76,24 @@ class DSLGen:
 
         return rosette_calls
 
+    def generate_grammar(self, rosette_calls):
+        args = ["arg"+str(i) for i in range(0,len(self.inputs))]
+        expr = args + rosette_calls
+
+        args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]" 
+        expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]" 
+
+        grammar_prototype = "("+ (" ".join(["vec-grammar"]+args)) +")"
+
+        grammar_str = "("+"define-grammar " + grammar_prototype+"\n"+expr_str+"\n"+args_str+"\n"+")"
+        print("\n")
+        print(grammar_str)
+
+
+
+    
+        
+
     
     def generate(self):
         dsl_call_desc = self.permute_precision_and_length(self.num_input_bits)
@@ -83,6 +101,8 @@ class DSLGen:
 
         print("\n","="*4, "Generated Rossete Calls","="*4)
         [print(call) for call in dsl_rosette_calls] 
+
+        self.generate_grammar(dsl_rosette_calls)
 
 
 

@@ -28,7 +28,7 @@ class DSLInst:
 
     
     """ Returns true if each arg from arg_list can be used
-    to directly map to one of the instructions operands. Note
+    to uniquely map to one of the instructions operands. Note
     we can not directly use set superset since the number
     of duplicates is important."""
     def isArgumentTypeSuperset(self, arg_list):
@@ -52,6 +52,17 @@ class DSLInst:
                 return False
 
         return True
+
+    """ Returns true if each arg from arg_list can be used
+    to directly mapped to at least one of the arguments present
+    in arg_list. Note that a particular argument may be repeated
+    across locations"""
+    def isArgumentTypeSupersetWithRepitition(self, arg_list):
+        arg_list_types = set([arg.arg_ty for arg in arg_list])
+        inst_types = set([arg.arg_ty for arg in self.inputs])
+
+        return inst_types.issubset(arg_list_types)
+
 
     
     def getOperandType(self, idx):
