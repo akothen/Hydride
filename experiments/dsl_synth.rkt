@@ -316,6 +316,7 @@
 ; =========================================================================================================
 
 (define relu-arg (apply concat (list (int32 1) (int32 2) (int32 3) (int32 -1))))
+(define tensor-arg2 (apply concat (list (int32 2) (int32 2) (int32 -2) (int32 0))))
 
 (define (bvmax a b)
   (if (bvsle a b) b a))
@@ -428,7 +429,7 @@
 (define-grammar (matmul-grammar arg0 arg1)
 [expr (choose
 	arg0
-        arg2
+        arg1
         (int128 0)
         (no-op (expr))
         (tensor-matmul (expr) (expr) 2 2 2 32)
@@ -440,3 +441,50 @@
   (matmul-grammar a b #:depth 1)
 )
 
+(define (matmul-ref arg1 arg2)
+  (apply
+   concat
+   (for/list ([i (range 2)])
+     (apply concat
+      (for/list ([j (range 2)])
+        (define size1 (* 2 2))
+        (define size2 (* 2 2))
+        (apply bvadd (for/list ([k (range 2)])
+          (define idx_left (- (- size1 1)(+ (* i 2) k)))
+          (define idx_right (- (- size2 1)(+ (* k 2) j)))
+          (define value1 (ext-bv arg1 idx_left 32))
+          (define value2 (ext-bv arg2 idx_right 32))
+          (bvmul value1 value2)
+        )
+           )
+       )
+      )
+      )
+    )
+   )
+
+(define matsol 
+(time
+(synthesize
+     #:forall (list relu-arg tensor-arg2)
+     #:guarantee (assert (and
+                          (equal? (matmul-ref relu-arg tensor-arg2) (matmul_synth relu-arg tensor-arg2
+                                                                    ))
+                          
+                                )))))
+
+
+(assert (sat? matsol) "Unsatisfiable")
+(print-forms matsol)
+
+(define matmul_gen (generate-forms matsol))
+
+
+(define-symbolic _left (bitvector 128))
+(define-symbolic _right (bitvector 128))
+
+
+(define (verify-matmul impl ref)
+  (verify (assert (equal? (impl _left _right) (ref _left _right)))))
+
+(print-forms (verify-matmul matmul_gen matmul-ref))
