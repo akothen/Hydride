@@ -4,6 +4,8 @@
 (require rosette/lib/angelic)
 (require racket/pretty)
 
+;(current-bitwidth 32)
+
 ; Import the DSL definitions
 ;(require (file "/Users/abdulrafaenoor/Documents/Rosette/Rosette-experiments-main/dsl.rkt"))
 
@@ -57,6 +59,10 @@
 
 ;; Vector mac (DSL instruction)
 (define (vector-mac dst a b len precision)
+  (begin
+  (assert (bv? dst))
+  (assert (bv? a))
+  (assert (bv? b))
   (apply
    concat
    (for/list ([j (range len)])
@@ -66,6 +72,7 @@
      )
    )
   )
+)
 
 ;; Vector Add 
 (define (vector-add a b len precision)
@@ -131,23 +138,29 @@
 ; 
 ;
 ;
-;(define arg1  (apply concat
-;              (for/list ([j (range 4)])
-;                 (bv j 32))
-;  )
-;)
-;
-;(define arg2  (apply concat
-;              (for/list ([j (range 4)])
-;                 (bv j 32))
-;  )
-;)
-;
-;(define acc  (apply concat
-;              (for/list ([j (range 4)])
-;                 (bv 1 32))
-;  )
-;)
+(define arg1  (apply concat
+              (for/list ([j (range 4)])
+                 (bv j 32))
+  )
+)
+
+(define arg2  (apply concat
+              (for/list ([j (range 4)])
+                 (bv j 32))
+  )
+)
+
+(define acc  (apply concat
+              (for/list ([j (range 4)])
+                 (bv (- 4 j) 32))
+  )
+)
+
+;(bv? acc
+;(print acc)
+;(print arg1)
+;(print arg2)
+;(vector-mac acc arg1 arg2 4 32)
 ;;
 ;(define res (compute acc arg1 arg2))
 ;;(define vec-res (vector-mac acc arg1 arg2 (bitvector->integer (int4 4)) 32))
@@ -182,8 +195,37 @@
   )
 
 
+(define (no-op a)
+  a)
+
+
+(define-grammar (gen-grammar arg0 arg1 arg2)
+[expr (choose
+	arg0
+	arg1
+	arg2
+        (int128 0)
+        (no-op (expr))
+	(vector-mac (expr) (expr) (expr) 8 16)
+	(vector-add (expr) (expr) 8 16)
+	(vector-sub (expr) (expr) 8 16)
+	(vector-mul (expr) (expr) 8 16)
+	(vector-mac (expr) (expr) (expr) 4 32)
+	(vector-add (expr) (expr) 4 32)
+	(vector-sub (expr) (expr) 4 32)
+	(vector-mul (expr) (expr) 4 32)
+	(vector-mac (expr) (expr) (expr) 2 64)
+	(vector-add (expr) (expr) 2 64)
+	(vector-sub (expr) (expr) 2 64)
+	(vector-mul (expr) (expr) 2 64)
+        (vector-mac (expr) (expr) (expr) 1 128)
+	(vector-add (expr) (expr) 1 128)
+	(vector-sub (expr) (expr) 1 128)
+	(vector-mul (expr) (expr) 1 128))]
+)
+
 (define (vmac_synth a b c)
-  (vec_grammar a b c #:depth 4)
+  (gen-grammar a b c #:depth 2)
 )
 
 (define-symbolic _arg1 (bitvector 128))
@@ -203,20 +245,70 @@
 ;    (assume (bvsle acc_j (int32 32)))
 ;)
 
+(define (verify-impl impl ref)
+  (verify (assert (equal? (impl _acc _arg1 _arg2) (ref _acc _arg1 _arg2)))))
 
+(define cex1_arg1 (bv #x1c35991bcc1b1dbb424f12036c14862b 128))
+(define cex1_arg2 (bv #x3aa510518bc70cbf5bf01eff30c0900d 128))
+(define cex1_acc (bv #xf0e008163b947687c0102100448ea0af 128))
+
+(define cex2_arg1 (bv #xde388d971f8503f580007ffa0101ffef 128))
+(define cex2_arg2 (bv #x66da214dab368e9e471c555634987f5f 128))
+(define cex2_acc (bv #xa8ea0d6b0708573600000000013e8ab3 128))
+
+
+;; As mentioned in the porcupine paper
+;; having input over symbolic bitvectors
+;; presents universal quantifiers
+;; which can cause time-out or exhaust memory.
+;; Modified the synthesis approach to
+;; 1. Take concrete inputs and attempt
+;; to synthesize function.
+;; 2. Attempt to verify equivalance over all
+;; symbolic inputs. Will yield counter example. (verify-impl?)
+;; 3. Re-insert the concret counter example
+;; into the synthesis contraint, stating it must
+;; also satisfy this.
+;; 4. Repeat steps 3 and 4 until verification step
+;; produces unsat.
 
 (define sol 
 (time
 (synthesize
-     #:forall (list _acc _arg1 _arg2)
-     #:guarantee (assert (equal? (compute _acc _arg1 _arg2) (vmac_synth _acc
-                                                                        _arg1
-                                                                        _arg2
-                                                                        ))))))
+     #:forall (list acc arg1 arg2 cex1_arg1 cex1_arg2 cex1_acc cex2_arg1 cex2_arg2 cex2_acc)
+     #:guarantee (assert (and
+                          (equal? (compute cex1_acc cex1_arg1 cex1_arg2) (vmac_synth cex1_acc
+                                                                        cex1_arg1
+                                                                        cex1_arg2
+                                                                    ))
+                          (equal? (compute cex2_acc cex2_arg1 cex2_arg2) (vmac_synth cex2_acc
+                                                                        cex2_arg1
+                                                                        cex2_arg2
+                                                                    ))
+
+                          (equal? (compute acc arg1 arg2) (vmac_synth acc
+                                                                        arg1
+                                                                        arg2
+                                                                        ))
+
+                                )))))
 
 (assert (sat? sol) "Unsatisfiable")
 (print-forms sol)
 
 
+;; Without no-op and 0 bitvector
+;(define (vmac_gen a b c)
+;   (vector-add (vector-sub a a 4 32) (vector-mac a c b 4 32) 4 32))
+
+;; With no-op and 0 bitvector
+;(define (vmac_gen a b c) (no-op (vector-mac a c b 4 32)))
 
 
+;; adding counter examples
+;(define (vmac_gen a b c)
+;   (vector-sub
+;    (vector-mac a b c 4 32)
+;    (vector-sub (int128 0) (int128 0) 8 16)
+;    8
+;    16))

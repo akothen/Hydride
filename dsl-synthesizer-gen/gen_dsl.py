@@ -39,7 +39,7 @@ class DSLGen:
                 elif i == length_arg_idx:
                     dsl_call.append(str(length))
                 elif ith_arg_ty == ArgType.BitVectorSymbolic:
-                    dsl_call.append("(arg)")
+                    dsl_call.append("(expr)")
                 elif ith_arg_ty == ArgType.IntSymbolic:
                     dsl_call.append("(?? integer?)")
                 else:
@@ -83,7 +83,7 @@ class DSLGen:
         args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]" 
         expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]" 
 
-        grammar_prototype = "("+ (" ".join(["vec-grammar"]+args)) +")"
+        grammar_prototype = "("+ (" ".join(["gen-grammar"]+args)) +")"
 
         grammar_str = "("+"define-grammar " + grammar_prototype+"\n"+expr_str+"\n"+args_str+"\n"+")"
         print("\n")
