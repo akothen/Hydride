@@ -272,29 +272,29 @@
 ;; 4. Repeat steps 3 and 4 until verification step
 ;; produces unsat.
 
-(define sol 
-(time
-(synthesize
-     #:forall (list acc arg1 arg2 cex1_arg1 cex1_arg2 cex1_acc cex2_arg1 cex2_arg2 cex2_acc)
-     #:guarantee (assert (and
-                          (equal? (compute cex1_acc cex1_arg1 cex1_arg2) (vmac_synth cex1_acc
-                                                                        cex1_arg1
-                                                                        cex1_arg2
-                                                                    ))
-                          (equal? (compute cex2_acc cex2_arg1 cex2_arg2) (vmac_synth cex2_acc
-                                                                        cex2_arg1
-                                                                        cex2_arg2
-                                                                    ))
-
-                          (equal? (compute acc arg1 arg2) (vmac_synth acc
-                                                                        arg1
-                                                                        arg2
-                                                                        ))
-
-                                )))))
-
-(assert (sat? sol) "Unsatisfiable")
-(print-forms sol)
+;(define sol 
+;(time
+;(synthesize
+;     #:forall (list acc arg1 arg2 cex1_arg1 cex1_arg2 cex1_acc cex2_arg1 cex2_arg2 cex2_acc)
+;     #:guarantee (assert (and
+;                          (equal? (compute cex1_acc cex1_arg1 cex1_arg2) (vmac_synth cex1_acc
+;                                                                        cex1_arg1
+;                                                                        cex1_arg2
+;                                                                    ))
+;                          (equal? (compute cex2_acc cex2_arg1 cex2_arg2) (vmac_synth cex2_acc
+;                                                                        cex2_arg1
+;                                                                        cex2_arg2
+;                                                                    ))
+;
+;                          (equal? (compute acc arg1 arg2) (vmac_synth acc
+;                                                                        arg1
+;                                                                        arg2
+;                                                                        ))
+;
+;                                )))))
+;
+;(assert (sat? sol) "Unsatisfiable")
+;(print-forms sol)
 
 
 ;; Without no-op and 0 bitvector
@@ -312,3 +312,131 @@
 ;    (vector-sub (int128 0) (int128 0) 8 16)
 ;    8
 ;    16))
+
+; =========================================================================================================
+
+(define relu-arg (apply concat (list (int32 1) (int32 2) (int32 3) (int32 -1))))
+
+(define (bvmax a b)
+  (if (bvsle a b) b a))
+
+(define (tensor-relu arg length width precision)
+  (apply
+   concat
+   (for/list ([i (range length)])
+     (apply
+      concat
+      (for/list ([j (range width)])
+        (define size (* length width))
+        (define idx (- (- size 1)(+ (* i length) j)))
+        
+        (define value (ext-bv arg idx precision))
+        (define max (bvmax value (bv 0 (bitvector precision))))
+        max
+        )
+      )
+    )
+   )
+  )
+
+
+(define (tensor-matmul arg1 arg2 length1 common_dim width2 precision)
+  (apply
+   concat
+   (for/list ([i (range length1)])
+     (apply concat
+      (for/list ([j (range width2)])
+        (define size1 (* length1 common_dim))
+        (define size2 (* width2 common_dim))
+        (apply bvadd (for/list ([k (range common_dim)])
+          (define idx_left (- (- size1 1)(+ (* i length1) k)))
+          (define idx_right (- (- size2 1)(+ (* k common_dim) j)))
+          (define value1 (ext-bv arg1 idx_left precision))
+          (define value2 (ext-bv arg2 idx_right precision))
+          (bvmul value1 value2)
+        )
+           )
+       )
+      )
+      )
+    )
+   )
+  
+
+(define (relu-ref arg)
+  (apply
+   concat
+   (for/list ([i (range 2)])
+     (apply
+      concat
+      (for/list ([j (range 2)])
+        (define size (* 2 2))
+        (define idx (- (- size 1)(+ (* i 2) j)))
+        
+        (define value (ext-bv arg idx 32))
+        (define max (bvmax value (bv 0 (bitvector 32))))
+        max
+        )
+      )
+    )
+   )
+  )
+
+
+(define-grammar (tensor-grammar arg0)
+[expr (choose
+	arg0
+        (int128 0)
+        (no-op (expr))
+        (tensor-relu (expr) 2 2 32)
+        (tensor-relu (expr) 4 4 8)
+        )]
+)
+
+(define (tensor_synth a)
+  (tensor-grammar a #:depth 1)
+)
+
+
+;(tensor-matmul relu-arg relu-arg 2 2 2 32)
+
+(define cex1_arg (bv #x007f7f7f007f7f7f00807d7f007f7f7f 128))
+
+(define sol 
+(time
+(synthesize
+     #:forall (list relu-arg cex1_arg)
+     #:guarantee (assert (and
+                          (equal? (relu-ref relu-arg) (tensor_synth relu-arg
+                                                                    ))
+                          (equal? (relu-ref cex1_arg) (tensor_synth cex1_arg
+                                                                    ))
+                                )))))
+
+(assert (sat? sol) "Unsatisfiable")
+(print-forms sol)
+
+(define tensor_gen (generate-forms sol))
+
+(define (verify-relu impl ref)
+  (verify (assert (equal? (impl _acc) (ref _acc)))))
+
+(print-forms (verify-relu tensor_gen relu-ref))
+
+
+
+(define-grammar (matmul-grammar arg0 arg1)
+[expr (choose
+	arg0
+        arg2
+        (int128 0)
+        (no-op (expr))
+        (tensor-matmul (expr) (expr) 2 2 2 32)
+        (tensor-matmul (expr) (expr) 1 4 1 32)
+        )]
+)
+
+(define (matmul_synth a b)
+  (matmul-grammar a b #:depth 1)
+)
+
