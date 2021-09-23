@@ -16,10 +16,9 @@ def gen_intrinsic(target_intrinsic_name, shape_m, shape_n):
   code += "auto &Ctx = II->getParent()->getContext();\n"
   code += "auto *Int16Ty = Type::getInt16Ty(Ctx);\n"
   code += "auto *ShapeM = ConstantInt::get(Int16Ty, " + str(shape_m) + ");\n"
-  code += "auto *ShapeM = ConstantInt::get(Int16Ty, " + str(shape_n) + ");\n"
-  code += "SmallVector<Value *, 2> Shape = {ShapeM, ShapeN};\n"
+  code += "auto *ShapeN = ConstantInt::get(Int16Ty, " + str(shape_n) + ");\n"
   code += "std::vector<Value *> Args;\n"
-  code += "Args.insert(Args.end(), Shape.begin(), Shape.end());\n"
+  code += "Args.insert(Args.end(), {ShapeM, ShapeN});\n"
   intrinsic_code = "Builder.CreateIntrinsic(Intrinsic::" + target_intrinsic_name + ", None, ArrayRef<Value *>(Args));\n"
   code += "auto *LI = " +  intrinsic_code
   code += "ToBeRemoved.insert(II); \n"
