@@ -1,5 +1,9 @@
 
 
+from tensor_dsl import dsl
+from tensor_spec import spec
+
+
 bv_ops = [
   'bvnot', 'bvand', 'bvor', 'bvxor', 'bvshl', 'bvlshr', 'bvashr', 
   'bvneg', 'bvadd', 'bvsub', 'bvmul', 'bvsdiv', 'bvudiv', 
@@ -9,31 +13,29 @@ bv_ops = [
 ]
 
 
-#spec_file = "spec.rkt"
-#dsl_inst_file = "dsl.rkt"
+def dsl_inst_rel_spec(spec_name, dsl_name):
+  dsl_sema = dsl[dsl_name]['semantics']
+  print(dsl_sema)
+  bvops_list = list()
+  for op in bv_ops:
+    if op in dsl_sema:
+      bvops_list.append(op)
+  spec_sema = spec[spec_name]['semantics']
+  for op in bvops_list:
+    if op not in spec_sema:
+      return False
+    print(spec_sema)
+  return True
 
-def dsl_inst_rel_spec(spec_file, dsl_inst_file):
-  # Get all the bitvector ops in the dsl instruction
-  # implementation.
-  f = open(dsl_inst_file, "r")
-  bvop_list = list()
-  for line in f:
-    for op in bv_ops:
-      if op in line:
-        bvop_list.append(op)
-  assert(len(bvop_list) != 0)
-  
-  # Check if the bitvector ops in the dsl instruction
-  # implementation are present in the given spec.
-  f = open(spec_file, "r")
-  for line in f:
-    for op in bvop_list:
-      if op in line:
-        bvop_list.remove(op)
-  if len(bvop_list) == 0:
-    print("TRUE")
-    return True
-  return False
+# Returns a list of dsl instructions that
+# must be in the sketch of the given spec.
+def get_dsl_insts_for(spec_name):
+  dsl_inst_list = list()
+  for inst in dsl:
+    rel = dsl_inst_rel_spec(spec_name, inst)
+    if rel == True:
+      dsl_inst_list.append(inst)
+  print(dsl_inst_list)
+  return dsl_inst_list
 
-
-#dsl_inst_rel_spec(spec_file, dsl_inst_file)
+#get_dsl_insts_for("tensor-matmul")
