@@ -24,6 +24,18 @@
    )
    
    
+(define (vector-sub a b len precision)
+  (apply
+   concat
+   (for/list ([j (range len)])
+     (define tmp
+       (bvsub (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision)))
+     tmp
+   )
+  )
+ )
+   
+   
 (define (vector-mac dst a b len precision)
  (begin
   (assert (bv? dst))
