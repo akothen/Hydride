@@ -12,11 +12,13 @@ class ArgType(Enum):
 
 class DSLArg:
 
-    def __init__(self, name, arg_ty ):
+    def __init__(self, name, arg_ty, total_bits = 0, concrete_value = ""):
         self.name = name
         self.arg_ty = arg_ty
         self.is_precision = (arg_ty == ArgType.PrecisionConst) 
         self.is_length = (arg_ty == ArgType.LengthConst) 
+        self.total_bits = total_bits
+        self.concrete_value = concrete_value
 
 
 class DSLInst:

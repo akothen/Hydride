@@ -185,10 +185,10 @@
 )
 
 (define (tensor_synth a b)
-  (tensor-grammar a b #:depth 2)
+  (tensor-grammar a b #:depth 3)
 )
 
-(assert (equal? (tensor-matmul mat0 mat1 8 2 8 32) (matmul-ref mat0 mat1)))
+;(assert (equal? (tensor-matmul mat0 mat1 8 2 8 32) (matmul-ref mat0 mat1)))
 
 (define matsol 
 (time
