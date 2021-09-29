@@ -1,11 +1,12 @@
 
 from dsl_class import ArgType, DSLArg, DSLInst
+import subprocess as sb
 
 
 
 class IterativeSynth:
     def __init__(self, input_args, grammar_name = "synth_grammar", spec_name =
-            "spec", grammar_file = None, spec_file = None, verify_name = "verify_impl"):
+            "spec", grammar_file = None, spec_file = None, dsl_file = None ,verify_name = "verify_impl"):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
@@ -14,7 +15,10 @@ class IterativeSynth:
         self.solution_name = "sol"
         self.grammar_file = grammar_file
         self.spec_file = spec_file
+        self.dsl_file = dsl_file
         self.gen_impl_name = "gen_impl"
+        self.gen_impl_prefix = "check"
+        self.racket_binary = "/Applications/Racket\ v8.2/bin/racket"
 
     def get_verification_str(self):
         return self.generate_verification_func(self.input_args, self.verify_name)
@@ -108,7 +112,7 @@ class IterativeSynth:
 
         assert_list = []
 
-        for_all_str = "#:forall ("
+        for_all_str = "#:forall (list"
         for cex_names in cex_names_list:
             assert_list.append(generate_assert(cex_names))
             for_all_str += " " + " ".join(cex_names)
@@ -125,7 +129,9 @@ class IterativeSynth:
 
         generate_forms_str = "(define "+self.gen_impl_name+ " (generate-forms "+self.solution_name+"))"
 
-        synth_str += "\n" + satisfiable_str +"\n" + generate_forms_str+"\n"
+        print_forms_str = "(with-output-to-file \""+self.gen_impl_prefix+"_1.txt\" "+"(lambda () (print-forms "+self.solution_name+")))"
+
+        synth_str += "\n" +"\n\n".join([satisfiable_str,generate_forms_str,print_forms_str])
 
         return synth_str
 
@@ -144,6 +150,12 @@ class IterativeSynth:
             with open(self.spec_file, "r") as SpecFile:
                 racket_str += ";; Reference Specification\n"
                 racket_str += "".join([line for line in SpecFile])+"\n"
+
+        
+        if self.dsl_file != None:
+            with open(self.dsl_file, "r") as DSLFile:
+                racket_str += ";; DSL Specification\n"
+                racket_str += "".join([line for line in DSLFile])+"\n"
 
         if self.grammar_file != None:
             with open(self.grammar_file, "r") as GrammarFile:
@@ -181,6 +193,42 @@ class IterativeSynth:
 
         print(racket_str)
 
+        with open("generated.rkt","w+") as RktFile:
+            RktFile.write(racket_str)
+
+        
+        Execute_Synthesis_CMD = " ".join([self.racket_binary, "generated.rkt"])
+
+        print(Execute_Synthesis_CMD)
+
+        sb.call(Execute_Synthesis_CMD, shell=True)
+
+
+        with open(self.gen_impl_prefix+"_1.txt","r") as GenFile:
+            include_str = False
+
+            gen_body = []
+
+            for line in GenFile:
+                
+                if line.startswith('\''):
+                    include_str = True
+
+                if include_str:
+                    gen_body.append(line)
+
+            print(gen_body)
+
+                
+
+
+
+        
+
+
+
+        
+
 
 
 
@@ -198,7 +246,8 @@ Synth = IterativeSynth(InputArgs, spec_name = "compute" ,verify_name =
         "test-impl",
         grammar_name = "vmac_synth",
         grammar_file = "../iterative_synths_experiments/example_grammar.rkt",
-        spec_file = "../iterative_synths_experiments/example_spec.rkt")
+        spec_file = "../iterative_synths_experiments/example_spec.rkt",
+        dsl_file = "../iterative_synths_experiments/example_dsl.rkt")
 
 Synth.iterate()
 
