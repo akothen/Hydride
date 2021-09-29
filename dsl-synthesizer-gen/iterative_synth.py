@@ -4,12 +4,17 @@ from dsl_class import ArgType, DSLArg, DSLInst
 
 
 class IterativeSynth:
-    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", verify_name = "verify_impl"):
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name =
+            "spec", grammar_file = None, spec_file = None, verify_name = "verify_impl"):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
         self.concrete_inputs = [self.get_initial_cex(input_args)]
         self.grammar_name = grammar_name
+        self.solution_name = "sol"
+        self.grammar_file = grammar_file
+        self.spec_file = spec_file
+        self.gen_impl_name = "gen_impl"
 
     def get_verification_str(self):
         return self.generate_verification_func(self.input_args, self.verify_name)
@@ -38,7 +43,13 @@ class IterativeSynth:
         "+ "\t\t\t(impl " + arg_string +") "+"\n \
         \t\t\t(ref "+ arg_string+")" + "))))"
 
-        verification_str = symbolic_block + "\n" + definition_block
+
+        print_forms_block = "(print-forms (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))"
+
+        verification_str = symbolic_block + "\n" + definition_block + "\n" + print_forms_block
+
+
+
 
         return verification_str
 
@@ -107,12 +118,41 @@ class IterativeSynth:
         guarantee_str = "#:guarantee (assert (and "+"\n".join(assert_list)+"))"
 
 
-        synth_str = "(define sol \n(synthesize\n"+for_all_str+"\n"+guarantee_str +"\n))"
+
+        synth_str = "(define "+ self.solution_name +"\n(synthesize\n"+for_all_str+"\n"+guarantee_str +"\n))"
+
+        satisfiable_str = "(assert (sat? "+self.solution_name + ") \"Unsatisfiable\")"
+
+        generate_forms_str = "(define "+self.gen_impl_name+ " (generate-forms "+self.solution_name+"))"
+
+        synth_str += "\n" + satisfiable_str +"\n" + generate_forms_str+"\n"
 
         return synth_str
 
 
 
+
+    def generate_racket_file(self, blocks):
+
+        racket_str = "#lang rosette\n"
+
+        racket_str += "(require rosette/lib/synthax)\n\
+        (require rosette/lib/angelic)\n\
+        (require racket/pretty)\n"
+
+        if self.spec_file != None:
+            with open(self.spec_file, "r") as SpecFile:
+                racket_str += ";; Reference Specification\n"
+                racket_str += "".join([line for line in SpecFile])+"\n"
+
+        if self.grammar_file != None:
+            with open(self.grammar_file, "r") as GrammarFile:
+                racket_str += ";; Grammar Definition\n"
+                racket_str += "".join([line for line in GrammarFile]) +"\n"
+
+        racket_str += "\n\n".join(blocks) +"\n"
+
+        return racket_str
 
 
 
@@ -120,20 +160,26 @@ class IterativeSynth:
     def iterate(self):
 
         names, defs = self.generate_counter_examples()
-        print("CEX Block")
-        print(names)
+        #print("CEX Block")
+        #print(names)
         cex_def_block = "\n".join(defs)
-        print(cex_def_block,"\n")
+        #print(cex_def_block,"\n")
 
 
-        print("Synthesize block")
+        #print("Synthesize block")
 
         synth_str = self.generate_synth_query(self.grammar_name, self.spec_name, names)
-        print(synth_str, "\n")
+        #print(synth_str, "\n")
 
         verify_block = self.generate_verification_func(self.input_args, self.verify_name)
-        print("Verification Block")
-        print(verify_block,"\n")
+        #print("Verification Block")
+        #print(verify_block,"\n")
+
+        #print("Racket file")
+        racket_str = self.generate_racket_file([cex_def_block, synth_str,
+            verify_block])
+
+        print(racket_str)
 
 
 
@@ -146,9 +192,13 @@ _128BitArg = DSLArg("BVArg", ArgType.BitVectorSymbolic, total_bits = 128 )
 _256BitArg = DSLArg("BVArg", ArgType.BitVectorSymbolic, total_bits = 256 )
 
 
-InputArgs =  [_256BitArg] * 0 + [_128BitArg] * 2
+InputArgs =  [_256BitArg] * 0 + [_128BitArg] * 3
 
-Synth = IterativeSynth(InputArgs, spec_name = "compute" ,verify_name = "test-impl")
+Synth = IterativeSynth(InputArgs, spec_name = "compute" ,verify_name =
+        "test-impl",
+        grammar_name = "vmac_synth",
+        grammar_file = "../iterative_synths_experiments/example_grammar.rkt",
+        spec_file = "../iterative_synths_experiments/example_spec.rkt")
 
 Synth.iterate()
 
