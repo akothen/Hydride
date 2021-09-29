@@ -4,6 +4,8 @@ from dsl_class import ArgType, DSLArg, DSLInst
 import subprocess as sb
 
 
+def pprint(s):
+    print("="*5,s,"="*5)
 
 class IterativeSynth:
     def __init__(self, input_args, grammar_name = "synth_grammar", spec_name =
@@ -204,7 +206,6 @@ class IterativeSynth:
 
     def read_cex_file(self, cex_file):
 
-        print("=== Reading Counter Example ===")
         concrete_cex = []
         with open(cex_file,"r") as CexFile: 
             data = CexFile.read().replace('\n','')
@@ -223,14 +224,12 @@ class IterativeSynth:
                 bv = cex.split(" ")[2].strip()
                 width = cex.split(" ")[3].strip().strip(")")
 
-                print("bv: {}, width: {}".format(bv,width))
 
                 cex_arg = DSLArg("CexArg",ArgType.BitVectorConst,
                         total_bits = int(width), concrete_value = bv)
 
                 concrete_cex.append(cex_arg)
 
-        print(concrete_cex)
         return concrete_cex
             
 
@@ -240,8 +239,13 @@ class IterativeSynth:
         i = 0
 
         while i < 3:
+
+            pprint("Iteration {}".format(i))
             names, defs = self.generate_counter_examples()
             cex_def_block = "\n".join(defs)
+
+            print("Accumalated Cex's:","\n",cex_def_block)
+
 
 
 
@@ -250,7 +254,6 @@ class IterativeSynth:
 
 
             racket_str = self.generate_synth_racket_file([cex_def_block, synth_str])
-            print(racket_str)
 
             synth_file = self.work_dir+"/"+"generated_"+str(i)+".rkt"
 
@@ -287,13 +290,11 @@ class IterativeSynth:
                 
 
             verify_block = self.generate_verification_func(self.input_args, self.verify_name, i)
-            print("verify_block",verify_block)
-            print(gen_def)
+            print("Generated Candidate:",gen_def)
 
             verify_str = self.generate_verification_racket_file(gen_def, i,
                     verify_block) 
 
-            print(verify_str)
 
             verify_file_name = self.work_dir+"/"+"verification_"+str(i)+".rkt"
             with open(verify_file_name,"w+") as VerifyFile:
@@ -313,6 +314,7 @@ class IterativeSynth:
             """ If rosette was unable 
             to generate a counter example """
             if len(new_cex) == 0:
+                print("Success! Definition is verified ...")
                 break
 
             self.concrete_inputs.append(new_cex)

@@ -15,8 +15,8 @@ spec = {
                         (define size1 (* length1 common_dim))  \
                         (define size2 (* width2 common_dim))  \
                         (apply bvadd (for/list ([k (range common_dim)])  \
-                          (define idx_left (- (- size1 1)(+ (* i length1) k)))  \
-                          (define idx_right (- (- size2 1)(+ (* k common_dim) j)))  \
+                          (define idx_left (- (- size1 1)(+ (* i common_dim) k)))  \
+                          (define idx_right (- (- size2 1)(+ (* k width2) j)))  \
                           (define value1 (ext-bv arg1 idx_left precision)) \
                           (define value2 (ext-bv arg2 idx_right precision))  \
                           (bvmul value1 value2)  \
