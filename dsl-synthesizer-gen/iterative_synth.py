@@ -1,4 +1,5 @@
-
+import os
+import glob
 from dsl_class import ArgType, DSLArg, DSLInst
 import subprocess as sb
 
@@ -19,11 +20,18 @@ class IterativeSynth:
         self.gen_impl_name = "gen_impl"
         self.gen_impl_prefix = "check"
         self.racket_binary = "/Applications/Racket\ v8.2/bin/racket"
+        self.work_dir = "./tmp"
 
-    def get_verification_str(self):
-        return self.generate_verification_func(self.input_args, self.verify_name)
+        if not os.path.exists(self.work_dir):
+            os.makedirs(self.work_dir)
+        files = glob.glob(self.work_dir + '/*')
+        for f in files:
+            os.remove(f)
 
-    def generate_verification_func(self, args, verify_name):
+
+
+
+    def generate_verification_func(self, args, verify_name, iteration_number):
         symbolic_defs = []
         argument_names = []
 
@@ -48,12 +56,9 @@ class IterativeSynth:
         \t\t\t(ref "+ arg_string+")" + "))))"
 
 
-        print_forms_block = "(print-forms (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))"
+        print_forms_block = "(with-output-to-file \""+self.work_dir+"/"+"cex_"+str(iteration_number)+".txt\" " + "(lambda () "+"(print (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))))"
 
         verification_str = symbolic_block + "\n" + definition_block + "\n" + print_forms_block
-
-
-
 
         return verification_str
 
@@ -103,7 +108,8 @@ class IterativeSynth:
 
         return (cex_names_list, cex_definition_list)
 
-    def generate_synth_query(self, grammar_name, spec_name , cex_names_list):
+    def generate_synth_query(self, grammar_name, spec_name , cex_names_list,
+            iteration_number):
 
         def generate_assert(args):
             arg_str = " ".join(args)
@@ -129,7 +135,7 @@ class IterativeSynth:
 
         generate_forms_str = "(define "+self.gen_impl_name+ " (generate-forms "+self.solution_name+"))"
 
-        print_forms_str = "(with-output-to-file \""+self.gen_impl_prefix+"_1.txt\" "+"(lambda () (print-forms "+self.solution_name+")))"
+        print_forms_str = "(with-output-to-file \""+self.work_dir+"/"+self.gen_impl_prefix+"_"+str(iteration_number)+".txt\" "+"(lambda () (print-forms "+self.solution_name+")))"
 
         synth_str += "\n" +"\n\n".join([satisfiable_str,generate_forms_str,print_forms_str])
 
@@ -138,7 +144,7 @@ class IterativeSynth:
 
 
 
-    def generate_racket_file(self, blocks):
+    def generate_synth_racket_file(self, blocks):
 
         racket_str = "#lang rosette\n"
 
@@ -168,60 +174,150 @@ class IterativeSynth:
 
 
 
+    def generate_verification_racket_file(self, impl_def, iteration_number ,verification_block):
+
+        racket_str = "#lang rosette\n"
+
+        racket_str += "(require rosette/lib/synthax)\n\
+        (require rosette/lib/angelic)\n\
+        (require racket/pretty)\n"
+
+        if self.spec_file != None:
+            with open(self.spec_file, "r") as SpecFile:
+                racket_str += ";; Reference Specification\n"
+                racket_str += "".join([line for line in SpecFile])+"\n"
+
+        
+        if self.dsl_file != None:
+            with open(self.dsl_file, "r") as DSLFile:
+                racket_str += ";; DSL Specification\n"
+                racket_str += "".join([line for line in DSLFile])+"\n"
+
+
+        racket_str += impl_def +"\n"
+
+        racket_str += verification_block
+
+
+        return racket_str
+
+
+    def read_cex_file(self, cex_file):
+
+        print("=== Reading Counter Example ===")
+        concrete_cex = []
+        with open(cex_file,"r") as CexFile: 
+            data = CexFile.read().replace('\n','')
+            if "unsat" in data:
+                return []
+
+            data = " ".join(data.split(" ")[1:])
+            data = data.split("]")
+            data = data[:len(data)-1]
+            data = [word.strip("[") for word in data]
+
+            
+        
+            for cex in data:
+                cex = cex.lstrip(" ")
+                bv = cex.split(" ")[2].strip()
+                width = cex.split(" ")[3].strip().strip(")")
+
+                print("bv: {}, width: {}".format(bv,width))
+
+                cex_arg = DSLArg("CexArg",ArgType.BitVectorConst,
+                        total_bits = int(width), concrete_value = bv)
+
+                concrete_cex.append(cex_arg)
+
+        print(concrete_cex)
+        return concrete_cex
+            
+
 
     def iterate(self):
 
-        names, defs = self.generate_counter_examples()
-        #print("CEX Block")
-        #print(names)
-        cex_def_block = "\n".join(defs)
-        #print(cex_def_block,"\n")
+        i = 0
+
+        while i < 3:
+            names, defs = self.generate_counter_examples()
+            cex_def_block = "\n".join(defs)
 
 
-        #print("Synthesize block")
 
-        synth_str = self.generate_synth_query(self.grammar_name, self.spec_name, names)
-        #print(synth_str, "\n")
-
-        verify_block = self.generate_verification_func(self.input_args, self.verify_name)
-        #print("Verification Block")
-        #print(verify_block,"\n")
-
-        #print("Racket file")
-        racket_str = self.generate_racket_file([cex_def_block, synth_str,
-            verify_block])
-
-        print(racket_str)
-
-        with open("generated.rkt","w+") as RktFile:
-            RktFile.write(racket_str)
-
-        
-        Execute_Synthesis_CMD = " ".join([self.racket_binary, "generated.rkt"])
-
-        print(Execute_Synthesis_CMD)
-
-        sb.call(Execute_Synthesis_CMD, shell=True)
+            synth_str = self.generate_synth_query(self.grammar_name,
+                    self.spec_name, names, i)
 
 
-        with open(self.gen_impl_prefix+"_1.txt","r") as GenFile:
-            include_str = False
+            racket_str = self.generate_synth_racket_file([cex_def_block, synth_str])
+            print(racket_str)
 
-            gen_body = []
+            synth_file = self.work_dir+"/"+"generated_"+str(i)+".rkt"
 
-            for line in GenFile:
+
+
+            with open(synth_file,"w+") as RktFile:
+                RktFile.write(racket_str)
+
+            
+            Execute_Synthesis_CMD = " ".join([self.racket_binary, synth_file])
+
+            print(Execute_Synthesis_CMD)
+            sb.call(Execute_Synthesis_CMD, shell=True)
+
+
+            # TODO: First check if file generated
+            gen_def = ""
+            with open(self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt","r") as GenFile:
+                include_str = False
+
+                gen_body = []
+
+                for line in GenFile:
+                    
+                    if line.startswith('\''):
+                        include_str = True
+
+                    if include_str:
+                        gen_body.append(line)
+
+                split = "\n".join(gen_body).split(self.grammar_name)
+
+                gen_def = split[0][1:] + self.gen_impl_name + split[1] 
                 
-                if line.startswith('\''):
-                    include_str = True
 
-                if include_str:
-                    gen_body.append(line)
+            verify_block = self.generate_verification_func(self.input_args, self.verify_name, i)
+            print("verify_block",verify_block)
+            print(gen_def)
 
-            print(gen_body)
+            verify_str = self.generate_verification_racket_file(gen_def, i,
+                    verify_block) 
 
-                
+            print(verify_str)
 
+            verify_file_name = self.work_dir+"/"+"verification_"+str(i)+".rkt"
+            with open(verify_file_name,"w+") as VerifyFile:
+                VerifyFile.write(verify_str)
 
+                    
+
+            Execute_Verification_CMD = " ".join([self.racket_binary, verify_file_name])
+
+            print(Execute_Verification_CMD)
+            sb.call(Execute_Verification_CMD, shell=True)
+
+            cex_file_name = self.work_dir+"/"+"cex_"+str(i)+".txt"
+
+            new_cex = self.read_cex_file(cex_file_name)
+
+            """ If rosette was unable 
+            to generate a counter example """
+            if len(new_cex) == 0:
+                break
+
+            self.concrete_inputs.append(new_cex)
+
+            i += 1
 
         
 
