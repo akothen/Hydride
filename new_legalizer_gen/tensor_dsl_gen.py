@@ -16,6 +16,9 @@ def gen_dict_entry(dsl_info):
   out_precision = dsl_info.get_out_precision()
   out_precision_string = "\"" + out_precision + "\""
   semantics = dsl_info.get_semantics()
+  print("--semantics:")
+  print(semantics)
+  print("_--------")
   semantics_string = "\"" + semantics + "\""
   return f'''
     "name" : {name},
@@ -37,7 +40,9 @@ def gen_tensor_dsl_dict(spec_list, dsl_file):
     name = "\"" + inst_name + "\""
     key = name + " : {\n"
     entry = gen_dict_entry(dsl_info)
-    full_entry = key + entry + "},\n\n"
+    print("entry:")
+    print(entry)
+    full_entry = key + entry + "},"
     string += full_entry
   string += "}"
   f = open(dsl_file, "w")
