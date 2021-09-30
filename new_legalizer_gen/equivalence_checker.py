@@ -428,7 +428,7 @@ def gen_equivalence_checker(target_inst_map, utility_file):
       save_spec = ""
       for line in cmp_sketch_lines:
         spec += (line + "\n")
-        save_spec += ((line + "\\n \\\n"))
+        save_spec += ((line + "\\n \\"))
       inst_spec_map[cmp_instinfo['name']] = save_spec
       print("=========================================")
       print(spec)
