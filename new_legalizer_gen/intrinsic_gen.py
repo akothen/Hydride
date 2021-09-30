@@ -21,7 +21,6 @@ def gen_intrinsic(name, num_vectors, num_other_args):
       input_list += ","
   input = "[" + input_list + "]"
   attr = "[IntrNoMem, IntrSpeculatable]"
-  #name = "intrinsic" + str(id)
   intrinsic_def = "def int_tensor_" + name + " : Intrinsic<" \
                     + output + "," + input + "," + attr + ">;"
   print(intrinsic_def)
