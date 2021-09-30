@@ -121,7 +121,19 @@ class DSLInstInfo:
   def get_semantics(self):
     inst_sema_lines = self.semantics.split("\n")
     new_form = ""
-    for line in inst_sema_lines:
-      new_form += ((line + "\n"))
+    for index, line in enumerate(inst_sema_lines):
+      new_form += (line)
+      if index != len(inst_sema_lines) - 1:
+        new_form += "\n"
     new_form = "{ \\\n" + new_form + "}"
     return new_form
+
+  def get_indices_of_regs(self):
+    args_array = self.get_args()
+    regs_indices = list()
+    for index, arg in enumerate(args_array):
+      if "vreg" in arg or "sreg" in arg or "treg" in arg:
+        regs_indices.append(index)
+    print("regs indices:")
+    print(regs_indices)
+    return regs_indices
