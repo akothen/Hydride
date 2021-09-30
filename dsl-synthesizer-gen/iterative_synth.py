@@ -74,7 +74,7 @@ class IterativeSynth:
             
             if arg.arg_ty == ArgType.BitVectorSymbolic:
                 total_hex_values = arg.total_bits // 4
-                hex_value = "#x"+("0"*(total_hex_values-1))+str(idx)
+                hex_value = "#x"+(str(0 % 10 )*(total_hex_values-1))+str(0 % 10)
                 concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
                     total_bits = arg.total_bits, concrete_value = hex_value))
             elif arg.arg_ty == ArgType.BitVectorConst:
@@ -154,6 +154,8 @@ class IterativeSynth:
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
 
+        racket_str += "(custodian-limit-memory (current-custodian) (* 2000 1024 1024))" +"\n"
+
         if self.spec_file != None:
             with open(self.spec_file, "r") as SpecFile:
                 racket_str += ";; Reference Specification\n"
@@ -183,6 +185,9 @@ class IterativeSynth:
         racket_str += "(require rosette/lib/synthax)\n\
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
+
+
+        racket_str += "(custodian-limit-memory (current-custodian) (* 2000 1024 1024))" +"\n"
 
         if self.spec_file != None:
             with open(self.spec_file, "r") as SpecFile:
@@ -270,6 +275,7 @@ class IterativeSynth:
 
 
             # TODO: First check if file generated
+
             gen_def = ""
             with open(self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt","r") as GenFile:
                 include_str = False
