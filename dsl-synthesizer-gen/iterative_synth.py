@@ -1,4 +1,5 @@
 import os
+import time
 import glob
 from dsl_class import ArgType, DSLArg, DSLInst
 import subprocess as sb
@@ -8,11 +9,12 @@ def pprint(s):
     print("="*5,s,"="*5)
 
 class IterativeSynth:
-    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name =
-            "spec", grammar_file = None, spec_file = None, dsl_file = None ,verify_name = "verify_impl"):
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", grammar_file = None, spec_file = None, 
+            dsl_file = None ,verify_name = "verify_impl", use_zero_init = True):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
+        self.use_zero_init = use_zero_init 
         self.concrete_inputs = [self.get_initial_cex(input_args)]
         self.grammar_name = grammar_name
         self.solution_name = "sol"
@@ -72,9 +74,13 @@ class IterativeSynth:
         
         for idx, arg in enumerate(args):
             
+            val = idx + 1 
+            if self.use_zero_init:
+                val = 0
+
             if arg.arg_ty == ArgType.BitVectorSymbolic:
                 total_hex_values = arg.total_bits // 4
-                hex_value = "#x"+(str(0 % 10 )*(total_hex_values-1))+str(0 % 10)
+                hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
                 concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
                     total_bits = arg.total_bits, concrete_value = hex_value))
             elif arg.arg_ty == ArgType.BitVectorConst:
@@ -270,11 +276,19 @@ class IterativeSynth:
             
             Execute_Synthesis_CMD = " ".join([self.racket_binary, synth_file])
 
-            print(Execute_Synthesis_CMD)
+            print("\n"+Execute_Synthesis_CMD)
+            start_synth = time.time()
             sb.call(Execute_Synthesis_CMD, shell=True)
+            end_synth = time.time()
+
+            print("Synthesis time:\t{} seconds".format(end_synth - start_synth))
 
 
             # TODO: First check if file generated
+
+            if not os.path.exists( self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt"):
+                print("Synthesis timeout out or crashed...")
+                return
 
             gen_def = ""
             with open(self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt","r") as GenFile:
@@ -311,7 +325,10 @@ class IterativeSynth:
             Execute_Verification_CMD = " ".join([self.racket_binary, verify_file_name])
 
             print(Execute_Verification_CMD)
+            start_verify = time.time()
             sb.call(Execute_Verification_CMD, shell=True)
+            end_verify = time.time()
+            print("Verification time:\t{} seconds".format(end_verify - start_verify))
 
             cex_file_name = self.work_dir+"/"+"cex_"+str(i)+".txt"
 
@@ -351,7 +368,8 @@ Synth = IterativeSynth(InputArgs, spec_name = "compute" ,verify_name =
         grammar_name = "vmac_synth",
         grammar_file = "../iterative_synths_experiments/example_grammar.rkt",
         spec_file = "../iterative_synths_experiments/example_spec.rkt",
-        dsl_file = "../iterative_synths_experiments/example_dsl.rkt")
+        dsl_file = "../iterative_synths_experiments/example_dsl.rkt",
+        use_zero_init= True)
 
 Synth.iterate()
 
