@@ -78,12 +78,12 @@ def sema_are_equivalent(racket_file):
   f = open(output_file, "r")
   for x in f:
     if "model" in x:
-      os.system("rm " + output_file)
+      #os.system("rm " + output_file)
       return True
     if "unsat" in x:
-      os.system("rm " + output_file)
+      #os.system("rm " + output_file)
       return False
-  os.system("rm " + output_file)
+  #os.system("rm " + output_file)
   return False
 
 
@@ -164,7 +164,13 @@ def get_num_reg_args(args):
   return [num_scalars, num_vectors, num_tiles]
 
 
-def find_between(s, first, last, throw_none=False):
+ext_utility_funcs = [
+  "ext-bv", "sign-ext-bv", "zero-ext-bv", 
+  "low-ext-bv", "sign-low-ext-bv", "zero-low-ext-bv"
+]
+
+
+def find_between(s, first, last):
   find_bw_array = list()
   # Split the string 
   s_array = s.split(first)
@@ -375,7 +381,10 @@ def modify_func_sig(sig, sym_vars, concrete_vars):
   return sig
 
 def gen_equivalence_checker(target_inst_map, utility_file):
+  inst_spec_map = dict()
   eq_inst_list = list()
+  dsl_to_inst_map = dict()
+  index = 0
   for inst, instinfo in target_inst_map.items():
     inst_num_args = num_inst_args(instinfo['args'])
     num_reg_args = get_num_reg_args(instinfo['args'])
@@ -416,15 +425,43 @@ def gen_equivalence_checker(target_inst_map, utility_file):
       print(cmp_concrete_val)
       vector_bitwidth = cmp_instinfo['bitwidth']
       spec = ""
+      save_spec = ""
       for line in cmp_sketch_lines:
         spec += (line + "\n")
+        save_spec += ((line + "\\n \\\n"))
+      inst_spec_map[cmp_instinfo['name']] = save_spec
       print("=========================================")
       print(spec)
       print("=========================================")
       gen_racket_file(utility_file, spec, sketch, cmp_num_reg_args[1], vector_bitwidth, 0, concrete_val, cmp_concrete_val)
-      print(sema_are_equivalent(racket_file))
+      ret = sema_are_equivalent(racket_file)
+      print(ret)
+      if ret == True:
+        save_spec = ""
+        dsl_inst_name = "dsl_inst_" + str(index)
+        for line in cmp_sketch_lines:
+          print("dsl_inst_name:")
+          print(dsl_inst_name)
+          if "define" in line and "spec" in line:
+            line = line.replace("spec", dsl_inst_name)
+            index += 1
+          save_spec += ((line + " \\n \\\n"))
+        if inst_spec_map.get(cmp_instinfo['name']) == None:
+          inst_spec_map[cmp_instinfo['name']] = save_spec
+        if inst_spec_map.get(instinfo['name']) == None:
+          inst_spec_map[instinfo['name']] = save_spec
+        eq_inst_list.append(save_spec)
+        if dsl_to_inst_map.get(dsl_inst_name) == None:
+          dsl_to_inst_map[dsl_inst_name] = [cmp_instinfo['name'], instinfo['name']]
+        else:
+          if cmp_instinfo['name'] not in dsl_to_inst_map[dsl_inst_name]:  
+            dsl_to_inst_map[dsl_inst_name].append(cmp_instinfo['name'])
+
       break
     break
+  print("+=====================")
+  print(dsl_to_inst_map["dsl_inst_0"])
+  return eq_inst_list, inst_spec_map, dsl_to_inst_map
 
       
 

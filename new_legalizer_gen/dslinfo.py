@@ -1,41 +1,5 @@
 
-
-def find_between(s, first, last):
-  find_bw_array = list()
-  # Split the string 
-  s_array = s.split(first)
-  print("s_array:")
-  print(s_array)
-  print(len(s_array))
-  for string in s_array:
-    string = first + string
-    print("string:")
-    print(string)
-    if string not in s:
-      continue
-    start = string.index(first) + len(first)
-    print("start:")
-    print(start)
-    try:
-      end = string.index(last, start)
-    except ValueError:
-      continue
-    print("end:")
-    print(end)
-    ret = string[start:end]
-    print("ret:")
-    print(ret)
-    if ret == '':
-      continue
-    if ret not in find_bw_array:
-      find_bw_array.append(ret)
-  return find_bw_array
-
-
-ext_utility_funcs = [
-  "ext-bv", "sign-ext-bv", "zero-ext-bv", 
-  "low-ext-bv", "sign-low-ext-bv", "zero-low-ext-bv"
-]
+from utility import ext_utility_funcs, find_between
 
 
 # This class helps extract information about a given instruction
@@ -68,7 +32,6 @@ class DSLInstInfo:
     print("args_array:")
     print(args_array)
     args = args_array[0].strip()
-    args = args[1:]
     args_list = args.split(" ")
     print("args_list:")
     print(args_list)
@@ -103,10 +66,10 @@ class DSLInstInfo:
   def get_reg_size(self):
     loop_bounds = self.get_loop_bounds()
     in_precision = self.get_in_precision()
-    size = int(in_precision)
+    size = list()#int(in_precision)
     for bound in loop_bounds:
-      size *= int(bound)
-    return str(size)
+      size.append(bound)
+    return size
 
   def get_in_precision(self):
     inst_sema_lines = self.semantics.split("\n")
@@ -159,70 +122,6 @@ class DSLInstInfo:
     inst_sema_lines = self.semantics.split("\n")
     new_form = ""
     for line in inst_sema_lines:
-      new_form += ((line + "\\n \\\n"))
+      new_form += ((line + "\n"))
     new_form = "{ \\\n" + new_form + "}"
     return new_form
-  
-  
-def list_to_string(lst):
-  string = "\""
-  for index, item in enumerate(lst):
-    string += item
-    if index != len(lst) - 1:
-      string += ","
-  string += "\""
-  return string
-
-
-def gen_dict_entry(dsl_info):
-  inst_name = dsl_info.get_name()
-  name = "\"" + inst_name + "\""
-  args = dsl_info.get_args()
-  args_string = list_to_string(args)
-  regs = dsl_info.get_regs()
-  regs_string = list_to_string(regs)
-  size = dsl_info.get_reg_size()
-  size_string = "\"" + size + "\""
-  in_precision = dsl_info.get_in_precision()
-  in_precision_string = "\"" + in_precision + "\""
-  out_precision = dsl_info.get_out_precision()
-  out_precision_string = "\"" + out_precision + "\""
-  semantics = dsl_info.get_semantics()
-  semantics_string = "\"" + semantics + "\""
-  return f'''
-    "name" : {name},
-    "args" : {args_string},
-    "reg"  : {regs_string},
-    "size" : {size_string},
-    "in_precision" : {in_precision_string},
-    "out_precision" : {out_precision_string},
-    "semantics" : {semantics_string}, 
- '''
-
-def gen_tensor_dsl_dict(spec_list, dsl_file):
-  string = "\n\ndsl = {\n"
-  for spec in spec_list:
-    dsl_info = DSLInstInfo(spec)
-    inst_name = dsl_info.get_name()
-    name = "\"" + inst_name + "\""
-    key = name + " : {\n"
-    entry = gen_dict_entry(dsl_info)
-    full_entry = key + entry + "},\n\n"
-    string += full_entry
-  string += "}"
-  f = open(dsl_file, "w")
-  f.write(string)
-
-
-
-# Just for testing
-from x86_sema import x86_sema
-
-if __name__ == '__main__':
-  spec_list = list()
-  for inst, instinfo in x86_sema.items():
-    spec_list.append(instinfo['semantics'])
-  gen_tensor_dsl_dict(spec_list, "test_tensor_dsl.py")
-
-
-

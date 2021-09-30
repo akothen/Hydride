@@ -1,6 +1,9 @@
 
+
 from dslinfo import DSLInstInfo
 from utility import list_to_string
+
+from x86_sema import x86_sema
 
 
 def gen_inst_map_entry(inst_spec_map, inst_sema_map, inst_name):
@@ -25,8 +28,8 @@ def gen_inst_map_entry(inst_spec_map, inst_sema_map, inst_name):
   '''
 
 
-def gen_intrinsic_target_inst_map_entry(inst_spec_map, inst_sema_map, inst_list):
-  string = ""
+def gen_intrinsic_target_inst_map_entry(inst_spec_map, inst_sema_map, intrisic_name, inst_list):
+  string = "\n" + intrisic_name +  " = {\n"
   for inst_name in inst_list:
     entry = gen_inst_map_entry(inst_spec_map, inst_sema_map, inst_name)
     name = "\"" + inst_name + "\""
@@ -40,10 +43,10 @@ def gen_intrinsic_target_inst_map_entry(inst_spec_map, inst_sema_map, inst_list)
 def gen_intrinsic_target_inst_map(intrinsic_to_inst_map, inst_spec_map, inst_sema_map, legalizer_file):
   string = "\n\nintrinsics = {\n"
   for intrisic_name, inst_list in intrinsic_to_inst_map.items():
-    name = "\n\"" + intrisic_name +  "\""
+    name = "\"" + intrisic_name + "\""
     key = name + " : {\n"
-    entry = gen_intrinsic_target_inst_map_entry(inst_spec_map, inst_sema_map, inst_list)
-    full_entry = key + entry + "\n},\n\n"
+    entry = gen_intrinsic_target_inst_map_entry(inst_spec_map, inst_sema_map, intrisic_name, inst_list)
+    full_entry = key + entry + "},\n\n"
     string += full_entry
   string += "}"
   f = open(legalizer_file, "w")
