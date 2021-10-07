@@ -12,11 +12,11 @@ x86_sema = {
                 (define (_mm512_dpwssd_epi32 vreg-acc vreg1 vreg2) \n \
                   (apply \n \
                   concat  \n \
-                  (for/list ([i (range 16)])  \n \
+                  (for/list ([i (reverse (range 16))])  \n \
                     (define sum  \n \
                       (apply   \n \
                         bvadd   \n \
-                        (for/list ([j (range 2)])  \n  \
+                        (for/list ([j (reverse (range 2))])  \n  \
                           (bvmul (sign-ext-bv vreg1 (+ j (* i 2)) 16 32) (sign-ext-bv vreg2 (+ j (* i 2)) 16 32))))) \n \
                     (bvadd (ext-bv vreg-acc i 32) sum))))  \n \
               }",
@@ -32,11 +32,11 @@ x86_sema = {
               (define (_mm_dpwssds_epi32 vreg-acc vreg1 vreg2) \n \
                 (apply \n \
                 concat \n \
-                (for/list ([i (range 4)]) \n \
+                (for/list ([i (reverse (range 4))]) \n \
                   (define sum  \n \
                     (apply  \n  \
                       bvadd \n  \
-                      (for/list ([j (range 2)]) \n  \
+                      (for/list ([j (reverse (range 2))]) \n  \
                         (bvmul (sign-ext-bv vreg1 (+ j (* i 2)) 16 32) (sign-ext-bv vreg2 (+ j (* i 2)) 16 32))))) \n \
                   (bvadd (ext-bv vreg-acc i 32) sum)))) \n  \
             }",
@@ -52,11 +52,11 @@ x86_sema = {
                (define (_mm256_dpwssd_epi32 vreg-acc vreg1 vreg2) \n \
                 (apply  \n \
                 concat  \n \
-                (for/list ([i (range 8)])  \n \
+                (for/list ([i (reverse (range 8))])  \n \
                   (define sum  \n \
                     (apply  \n \
                       bvadd   \n \
-                      (for/list ([j (range 2)])  \n \
+                      (for/list ([j (reverse (range 2))])  \n \
                         (bvmul (sign-ext-bv vreg1 (+ j (* i 2)) 16 32) (sign-ext-bv vreg2 (+ j (* i 2)) 16 32)))))  \n \
                   (bvadd (ext-bv vreg-acc i 32) sum))))  \n \
               }",
@@ -73,11 +73,11 @@ x86_sema = {
                (define (_mm512_dpbusd_epi32 vreg-acc vreg1 vreg2)  \n \
                 (apply  \n \
                 concat   \n \
-                (for/list ([i (range 16)])  \n \
+                (for/list ([i (reverse (range 16))])  \n \
                   (define sum   \n \
                     (apply   \n \
                       bvadd  \n \
-                      (for/list ([j (range 4)])  \n \
+                      (for/list ([j (reverse (range 4))])  \n \
                         (bvmul (zero-ext-bv vreg1 (+ j (* i 4)) 8 16) (sign-ext-bv vreg2 (+ j (* i 4)) 8 16)))))  \n \
                   (bvadd (ext-bv vreg-acc i 32) (sign-extend sum (bitvector 32))))))  \n \
               }",
@@ -94,11 +94,11 @@ x86_sema = {
                (define (_mm256_dpbusd_epi32 vreg-acc vreg1 vreg2 len red)  \n \
                 (apply  \n \
                 concat  \n \
-                (for/list ([i (range 8)])  \n \
+                (for/list ([i (reverse (range 8))s])  \n \
                   (define sum   \n \
                     (apply  \n \
                       bvadd   \n \
-                      (for/list ([j (range 4)])  \n \
+                      (for/list ([j (reverse (range 4))])  \n \
                         (bvmul (zero-ext-bv vreg1 (+ j (* i 4)) 8 16) (sign-ext-bv vreg2 (+ j (* i 4)) 8 16)))))   \n \
                   (bvadd (ext-bv vreg-acc i 32) (sign-extend sum (bitvector 32))))))  \n \
               }",
@@ -116,7 +116,7 @@ x86_sema = {
                 (define result \n \
                   (apply  \n \
                   concat   \n \
-                  (for/list ([i (range 4)])  \n \
+                  (for/list ([i (reverse (range 4))])  \n \
                     (define tmp  \n \
                       (bvmul (sign-low-ext-bv vreg1 i 32 64 64) (sign-low-ext-bv vreg2 i 32 64 64)))  \n \
                     tmp)))  \n \
@@ -136,7 +136,7 @@ x86_sema = {
                 (define result  \n \
                   (apply  \n \
                   concat  \n \
-                  (for/list ([i (range 4)])  \n \
+                  (for/list ([i (reverse (range 4))])  \n \
                     (define tmp  \n \
                       (bvmul (low-ext-bv vreg1 i 32 64) (low-ext-bv vreg2 i 32 64)))  \n \
                     (sign-ext-bv tmp 0 32 64))))  \n \
@@ -155,7 +155,7 @@ x86_sema = {
                 (define result  \n \
                   (apply  \n \
                   concat  \n \
-                  (for/list ([i (range 8)])  \n \
+                  (for/list ([i (reverse (range 8))])  \n \
                     (define tmp  \n \
                       (bvmul (low-ext-bv vreg1 i 32 64) (low-ext-bv vreg2 i 32 64)))  \n \
                     (sign-ext-bv tmp 0 32 64))))  \n \
@@ -174,7 +174,7 @@ x86_sema = {
                 (define result  \n \
                   (apply  \n \
                   concat  \n \
-                  (for/list ([i (range 8)])  \n \
+                  (for/list ([i (reverse (range 8))])  \n \
                     (define tmp  \n \
                       (bvmul (low-ext-bv vreg1 (i) 32 64) (low-ext-bv vreg2 (i) 32 64)))  \n \
                     (sign-ext-bv tmp 0 32 64))))  \n \
@@ -193,7 +193,7 @@ x86_sema = {
                 (define result  \n \
                   (apply  \n \
                   concat  \n \
-                  (for/list ([i (range 1)])  \n \
+                  (for/list ([i (reverse (range 1))])  \n \
                     (define tmp  \n \
                       (bvmul (low-ext-bv vreg1 (i) 32 64) (low-ext-bv vreg2 (i) 32 64)))  \n \
                     (sign-ext-bv tmp 0 32 64))))  \n \
