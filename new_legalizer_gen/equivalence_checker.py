@@ -59,7 +59,7 @@ class SketchSemaInfo:
 
 
 class SymIntGen:
-  prefix = 0
+  __prefix = 0
   
   @staticmethod
   def gen_symbolic_integers(num_symbols):
@@ -67,15 +67,15 @@ class SymIntGen:
     sym_int_list = []
     for i in range(num_symbols):
       print(type(i))
-      sym_int_name = "symint" + str(SymIntGen.prefix)
+      sym_int_name = "symint" + str(SymIntGen.__prefix)
       string += "(define-symbolic " + sym_int_name + " integer?)\n"
       sym_int_list.append(sym_int_name)
-      SymIntGen.prefix += 1
+      SymIntGen.__prefix += 1
     return string, sym_int_list
 
 
 class SymBitVectorGen:
-  prefix = 0
+  __prefix = 0
   
   @staticmethod
   def gen_symbolic_bitvectors(num_symbols, bitwidth):
@@ -83,15 +83,15 @@ class SymBitVectorGen:
     sym_bv_list = []
     for i in range(num_symbols):
       print(type(i))
-      sym_bv_name = "symbv" + str(SymBitVectorGen.prefix)
+      sym_bv_name = "symbv" + str(SymBitVectorGen.__prefix)
       string += "(define-symbolic " + sym_bv_name + " (bitvector " + str(bitwidth) + "))\n"
       sym_bv_list.append(sym_bv_name)
-      SymBitVectorGen.prefix += 1
+      SymBitVectorGen.__prefix += 1
     return string, sym_bv_list
 
 
 class IntDefGen:
-  prefix = 0
+  __prefix = 0
 
   @staticmethod
   def gen_integer_defs(int_vals):
@@ -99,10 +99,10 @@ class IntDefGen:
     conc_int_list = []
     for i, val in enumerate(int_vals):
       print(type(i))
-      conc_int_name = "concint" + str(IntDefGen.prefix)
+      conc_int_name = "concint" + str(IntDefGen.__prefix)
       string += "(define " + conc_int_name + " " + str(val) + " )\n"
       conc_int_list.append(conc_int_name)
-      IntDefGen.prefix += 1
+      IntDefGen.__prefix += 1
     return string, conc_int_list
 
 
@@ -584,6 +584,7 @@ class EquivalenceChecker:
         print("=========================================")
         racket_file = RosetteCodeGen.gen_racket_file(spec, sketch, cmp_num_reg_args[1], cmp_instinfo['bitwidth'], cmp_sema_info)
         ret = EquivalenceChecker.__sema_are_equivalent(racket_file)
+
         print(ret)
         if ret == True:
           save_spec = ""
