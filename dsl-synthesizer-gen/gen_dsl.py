@@ -83,10 +83,13 @@ class DSLGen:
 
     def generate_grammar(self, rosette_calls):
         args = ["arg"+str(i) for i in range(0,len(self.inputs))]
-        expr = args + rosette_calls
+        no_op_def = "(define (no-op a) a)"
+        no_op_str = "(no-op (expr))"
+        expr = args + rosette_calls + [no_op_str]
 
         args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]"
         expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]"
+
 
         grammar_prototype = "("+ (" ".join(["gen-grammar"]+args)) +")"
 
@@ -94,7 +97,7 @@ class DSLGen:
         self.log("\n")
         self.log(grammar_str)
 
-        return grammar_str
+        return no_op_def + "\n"+ grammar_str
 
 
 

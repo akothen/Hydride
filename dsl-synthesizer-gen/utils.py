@@ -43,6 +43,13 @@ def get_spec_args_from_user_dictionary(user_dict):
     return args_info
 
 
+def get_grammar_depth_str(grammar_name ,grammar_tree_name, arg_list, depth):
+    arg_str = " ".join([arg.name for arg in arg_list])
+    grammar_str = "(define ("+grammar_name+" "+arg_str+")\n\
+                    ("+grammar_tree_name+" "+arg_str +" #:depth "+str(depth)+"))"
+
+    return grammar_str
+
 
 
 

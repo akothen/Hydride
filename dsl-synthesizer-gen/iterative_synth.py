@@ -9,8 +9,8 @@ def pprint(s):
     print("="*5,s,"="*5)
 
 class IterativeSynth:
-    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", grammar_file = None, spec_file = None,
-            dsl_file = None ,verify_name = "verify_impl", use_zero_init = True):
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
+            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
@@ -18,9 +18,10 @@ class IterativeSynth:
         self.concrete_inputs = [self.get_initial_cex(input_args)]
         self.grammar_name = grammar_name
         self.solution_name = "sol"
-        self.grammar_file = grammar_file
-        self.spec_file = spec_file
-        self.dsl_file = dsl_file
+        self.grammar_def = grammar_def
+        self.spec_semantics = spec_semantics
+        self.dsl_desc = dsl_desc
+        self.utility_file = utility_file
         self.gen_impl_name = "gen_impl"
         self.gen_impl_prefix = "check"
         self.racket_binary = "/home/arnoor2/Racket/racket/bin/racket"
@@ -162,21 +163,25 @@ class IterativeSynth:
 
         racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
-        if self.spec_file != None:
-            with open(self.spec_file, "r") as SpecFile:
-                racket_str += ";; Reference Specification\n"
-                racket_str += "".join([line for line in SpecFile])+"\n"
+        if self.utility_file != None:
+            with open(self.utility_file, "r") as UtilFile:
+                racket_str += "".join([line for line in UtilFile])+"\n"
 
 
-        if self.dsl_file != None:
-            with open(self.dsl_file, "r") as DSLFile:
-                racket_str += ";; DSL Specification\n"
-                racket_str += "".join([line for line in DSLFile])+"\n"
+        if self.spec_semantics != None:
+            racket_str += ";; Reference Specification\n"
+            racket_str += self.spec_semantics
 
-        if self.grammar_file != None:
-            with open(self.grammar_file, "r") as GrammarFile:
-                racket_str += ";; Grammar Definition\n"
-                racket_str += "".join([line for line in GrammarFile]) +"\n"
+
+
+        if self.dsl_desc != None:
+            racket_str += ";; DSL Specification\n"
+            for inst in self.dsl_desc:
+                racket_str += inst.semantics + "\n"
+
+        if self.grammar_def != None:
+            racket_str += ";; Grammar Definition\n"
+            racket_str += self.grammar_def + "\n"
 
         racket_str += "\n\n".join(blocks) +"\n"
 
@@ -195,16 +200,22 @@ class IterativeSynth:
 
         racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
-        if self.spec_file != None:
-            with open(self.spec_file, "r") as SpecFile:
-                racket_str += ";; Reference Specification\n"
-                racket_str += "".join([line for line in SpecFile])+"\n"
+
+        if self.utility_file != None:
+            with open(self.utility_file, "r") as UtilFile:
+                racket_str += "".join([line for line in UtilFile])+"\n"
+
+        if self.spec_semantics != None:
+            racket_str += ";; Reference Specification\n"
+            racket_str += self.spec_semantics
 
 
-        if self.dsl_file != None:
-            with open(self.dsl_file, "r") as DSLFile:
-                racket_str += ";; DSL Specification\n"
-                racket_str += "".join([line for line in DSLFile])+"\n"
+        if self.dsl_desc != None:
+            racket_str += ";; DSL Specification\n"
+            for inst in self.dsl_desc:
+                racket_str += inst.semantics + "\n"
+
+
 
 
         racket_str += impl_def +"\n"
@@ -245,11 +256,11 @@ class IterativeSynth:
 
 
 
-    def iterate(self):
+    def iterate(self, max_iterations = 3):
 
         i = 0
 
-        while i < 3:
+        while i < max_iterations:
 
             pprint("Iteration {}".format(i))
             names, defs = self.generate_counter_examples()
@@ -339,6 +350,8 @@ class IterativeSynth:
             if len(new_cex) == 0:
                 print("Success! Definition is verified ...")
                 break
+            else:
+                print("Counter example found!, moving to next iteration")
 
             self.concrete_inputs.append(new_cex)
 
@@ -353,6 +366,7 @@ class IterativeSynth:
 
 
 
+"""
 
 
 
@@ -366,7 +380,6 @@ InputArgs =  [_256BitArg] * 0 + [_128BitArg] * 3
 Synth = IterativeSynth(InputArgs, spec_name = "compute" ,verify_name =
         "test-impl",
         grammar_name = "vmac_synth",
-        grammar_file = "../iterative_synths_experiments/example_grammar.rkt",
         spec_file = "../iterative_synths_experiments/example_spec.rkt",
         dsl_file = "../iterative_synths_experiments/example_dsl.rkt",
         use_zero_init= True)
@@ -375,6 +388,7 @@ Synth.iterate()
 
 
 
+"""
 
 
 

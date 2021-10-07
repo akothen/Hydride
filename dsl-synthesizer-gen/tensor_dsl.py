@@ -8,7 +8,7 @@ dsl = {
     "size" : "len",
     "in_precision" : "precision",
     "out_precision" : "precision",
-    "semantics" : "{   \
+    "semantics" : "   \
                     (define (vector-mac dst a b len precision) \n \
                       (begin  \n \
                       (assert (bv? dst))  \n \
@@ -24,7 +24,7 @@ dsl = {
                       ) \n \
                       ) \n \
                     ) \n \
-                  }",
+                  ",
   },
 
   "vector-add" : {
@@ -34,7 +34,7 @@ dsl = {
     "size" : "len",
     "in_precision" : "precision",
     "out_precision" : "precision",
-    "semantics" : "{   \
+    "semantics" : "   \
                     (define (vector-add a b len precision) \n \
                       (apply \n \
                       concat \n \
@@ -45,7 +45,7 @@ dsl = {
                         ) \n \
                       ) \n \
                       ) \n \
-                 }",
+                 ",
   },
 
   "vector-sub" : {
@@ -55,7 +55,7 @@ dsl = {
     "size" : "len",
     "in_precision" : "precision",
     "out_precision" : "precision",
-    "semantics" : "{   \
+    "semantics" : "   \
                     (define (vector-sub a b len precision) \n \
                       (apply \n \
                       concat \n \
@@ -66,6 +66,6 @@ dsl = {
                         ) \n \
                       ) \n \
                       ) \n \
-                  }",
+                  ",
   },
 }
