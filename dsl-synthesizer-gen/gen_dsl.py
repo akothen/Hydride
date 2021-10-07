@@ -4,24 +4,29 @@ from dsl_class import *
 
 class DSLGen:
 
-    def __init__(self, inputs, outputs, num_input_bits ,dsl_list):
-        """ Taking in the input and output types, generate a Rossete 
+    def __init__(self, inputs, outputs, num_input_bits ,dsl_list, verbose = False):
+        """ Taking in the input and output types, generate a Rossete
         synthesis grammar """
 
         self.inputs = inputs
         self.outputs = outputs
         self.dsl_list = dsl_list
         self.num_input_bits = num_input_bits
+        self.verbose = verbose
+
+    def log(self, val):
+        if self.verbose:
+            print(val)
 
     def get_dsl_calls(self, precision, length):
 
-        print("get_dsl_calls with precision: {}, length: {}".format(precision,length))
-        """Using those DSL instructions which can be 
+        self.log("get_dsl_calls with precision: {}, length: {}".format(precision,length))
+        """Using those DSL instructions which can be
         correctly called with the argument types in the inputs"""
 
         valid_dsl = [dsl_inst for dsl_inst in self.dsl_list if dsl_inst.isArgumentTypeSuperset(self.inputs)]
 
-        print("Number of Valid DSL instructions for this configuration: {}".format(len(valid_dsl)))
+        self.log("Number of Valid DSL instructions for this configuration: {}".format(len(valid_dsl)))
 
         dsl_calls = []
 
@@ -47,14 +52,14 @@ class DSLGen:
             dsl_calls.append(dsl_call)
 
         return dsl_calls
-            
+
 
     def permute_precision_and_length(self, total_bits):
 
         # Starting with 16 bit precision
         prec = 16
 
-        
+
         dsl_calls = []
         """ While the precision evenly divides the total bits"""
         while total_bits % prec == 0:
@@ -80,42 +85,44 @@ class DSLGen:
         args = ["arg"+str(i) for i in range(0,len(self.inputs))]
         expr = args + rosette_calls
 
-        args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]" 
-        expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]" 
+        args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]"
+        expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]"
 
         grammar_prototype = "("+ (" ".join(["gen-grammar"]+args)) +")"
 
         grammar_str = "("+"define-grammar " + grammar_prototype+"\n"+expr_str+"\n"+args_str+"\n"+")"
-        print("\n")
-        print(grammar_str)
+        self.log("\n")
+        self.log(grammar_str)
+
+        return grammar_str
 
 
 
-    
-        
 
-    
+
+
+
     def generate(self):
         dsl_call_desc = self.permute_precision_and_length(self.num_input_bits)
         dsl_rosette_calls = self.convert_calls_to_rosette(dsl_call_desc)
 
-        print("\n","="*4, "Generated Rossete Calls","="*4)
-        [print(call) for call in dsl_rosette_calls] 
+        self.log("\n"+"="*4+"Generated Rossete Calls"+"="*4)
+        [self.log(call) for call in dsl_rosette_calls]
 
-        self.generate_grammar(dsl_rosette_calls)
-
-
+        return self.generate_grammar(dsl_rosette_calls)
 
 
 
 
 
 
-            
 
 
 
-        
 
 
-        
+
+
+
+
+

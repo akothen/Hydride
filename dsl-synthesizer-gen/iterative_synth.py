@@ -9,12 +9,12 @@ def pprint(s):
     print("="*5,s,"="*5)
 
 class IterativeSynth:
-    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", grammar_file = None, spec_file = None, 
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", grammar_file = None, spec_file = None,
             dsl_file = None ,verify_name = "verify_impl", use_zero_init = True):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
-        self.use_zero_init = use_zero_init 
+        self.use_zero_init = use_zero_init
         self.concrete_inputs = [self.get_initial_cex(input_args)]
         self.grammar_name = grammar_name
         self.solution_name = "sol"
@@ -23,7 +23,7 @@ class IterativeSynth:
         self.dsl_file = dsl_file
         self.gen_impl_name = "gen_impl"
         self.gen_impl_prefix = "check"
-        self.racket_binary = "/Applications/Racket\ v8.2/bin/racket"
+        self.racket_binary = "/home/arnoor2/Racket/racket/bin/racket"
         self.work_dir = "./tmp"
 
         if not os.path.exists(self.work_dir):
@@ -40,8 +40,8 @@ class IterativeSynth:
         argument_names = []
 
         for idx, arg in enumerate(args):
-            
-            if arg.arg_ty == ArgType.BitVectorSymbolic:
+
+            if arg.arg_ty == ArgType.BitVectorSymbolic or arg.arg_ty == ArgType.BitVectorConst:
                 symbolic_def = "(define-symbolic "+"_arg"+str(idx)+" (bitvector "+str(arg.total_bits)+"))"
                 symbolic_defs.append(symbolic_def)
                 argument_names.append("_arg"+str(idx))
@@ -71,10 +71,10 @@ class IterativeSynth:
     concrete values for initial testing"""
     def get_initial_cex(self, args):
         concrete_inputs = []
-        
+
         for idx, arg in enumerate(args):
-            
-            val = idx + 1 
+
+            val = idx + 1
             if self.use_zero_init:
                 val = 0
 
@@ -95,7 +95,7 @@ class IterativeSynth:
     def generate_counter_examples(self):
         cex_names_list = []
         cex_definition_list = []
-        
+
         for idx_cex_set, cex_set in enumerate(self.concrete_inputs):
             cex_names = []
             for idx_into_cex, cex_value in enumerate(cex_set):
@@ -160,14 +160,14 @@ class IterativeSynth:
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 2000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
         if self.spec_file != None:
             with open(self.spec_file, "r") as SpecFile:
                 racket_str += ";; Reference Specification\n"
                 racket_str += "".join([line for line in SpecFile])+"\n"
 
-        
+
         if self.dsl_file != None:
             with open(self.dsl_file, "r") as DSLFile:
                 racket_str += ";; DSL Specification\n"
@@ -193,14 +193,14 @@ class IterativeSynth:
         (require racket/pretty)\n"
 
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 2000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
         if self.spec_file != None:
             with open(self.spec_file, "r") as SpecFile:
                 racket_str += ";; Reference Specification\n"
                 racket_str += "".join([line for line in SpecFile])+"\n"
 
-        
+
         if self.dsl_file != None:
             with open(self.dsl_file, "r") as DSLFile:
                 racket_str += ";; DSL Specification\n"
@@ -218,7 +218,7 @@ class IterativeSynth:
     def read_cex_file(self, cex_file):
 
         concrete_cex = []
-        with open(cex_file,"r") as CexFile: 
+        with open(cex_file,"r") as CexFile:
             data = CexFile.read().replace('\n','')
             if "unsat" in data:
                 return []
@@ -228,8 +228,8 @@ class IterativeSynth:
             data = data[:len(data)-1]
             data = [word.strip("[") for word in data]
 
-            
-        
+
+
             for cex in data:
                 cex = cex.lstrip(" ")
                 bv = cex.split(" ")[2].strip()
@@ -242,7 +242,7 @@ class IterativeSynth:
                 concrete_cex.append(cex_arg)
 
         return concrete_cex
-            
+
 
 
     def iterate(self):
@@ -273,7 +273,7 @@ class IterativeSynth:
             with open(synth_file,"w+") as RktFile:
                 RktFile.write(racket_str)
 
-            
+
             Execute_Synthesis_CMD = " ".join([self.racket_binary, synth_file])
 
             print("\n"+Execute_Synthesis_CMD)
@@ -297,7 +297,7 @@ class IterativeSynth:
                 gen_body = []
 
                 for line in GenFile:
-                    
+
                     if line.startswith('\''):
                         include_str = True
 
@@ -306,21 +306,21 @@ class IterativeSynth:
 
                 split = "\n".join(gen_body).split(self.grammar_name)
 
-                gen_def = split[0][1:] + self.gen_impl_name + split[1] 
-                
+                gen_def = split[0][1:] + self.gen_impl_name + split[1]
+
 
             verify_block = self.generate_verification_func(self.input_args, self.verify_name, i)
             print("Generated Candidate:",gen_def)
 
             verify_str = self.generate_verification_racket_file(gen_def, i,
-                    verify_block) 
+                    verify_block)
 
 
             verify_file_name = self.work_dir+"/"+"verification_"+str(i)+".rkt"
             with open(verify_file_name,"w+") as VerifyFile:
                 VerifyFile.write(verify_str)
 
-                    
+
 
             Execute_Verification_CMD = " ".join([self.racket_binary, verify_file_name])
 
@@ -334,7 +334,7 @@ class IterativeSynth:
 
             new_cex = self.read_cex_file(cex_file_name)
 
-            """ If rosette was unable 
+            """ If rosette was unable
             to generate a counter example """
             if len(new_cex) == 0:
                 print("Success! Definition is verified ...")
@@ -344,11 +344,6 @@ class IterativeSynth:
 
             i += 1
 
-        
-
-
-
-        
 
 
 
@@ -356,7 +351,12 @@ class IterativeSynth:
 
 
 
-_128BitArg = DSLArg("BVArg", ArgType.BitVectorSymbolic, total_bits = 128 )
+
+
+
+
+
+_128BitArg = DSLArg("BVArg", ArgType.BitVectorSymbolic, total_bits = 128, concrete_value = "#x00000004000000030000000200000001"  )
 
 _256BitArg = DSLArg("BVArg", ArgType.BitVectorSymbolic, total_bits = 256 )
 
@@ -375,6 +375,6 @@ Synth.iterate()
 
 
 
-    
+
 
 

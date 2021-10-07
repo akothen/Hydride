@@ -15,20 +15,21 @@ class DSLArg:
     def __init__(self, name, arg_ty, total_bits = 0, concrete_value = ""):
         self.name = name
         self.arg_ty = arg_ty
-        self.is_precision = (arg_ty == ArgType.PrecisionConst) 
-        self.is_length = (arg_ty == ArgType.LengthConst) 
+        self.is_precision = (arg_ty == ArgType.PrecisionConst)
+        self.is_length = (arg_ty == ArgType.LengthConst)
         self.total_bits = total_bits
         self.concrete_value = concrete_value
 
 
 class DSLInst:
     """ Base class to represent Target Agnostic DSL Instructions"""
-    
-    def __init__(self, name, inputs):
-        self.name = name
-        self.inputs = inputs 
 
-    
+    def __init__(self, name, inputs, semantics = None):
+        self.name = name
+        self.inputs = inputs
+        self.semantics = semantics
+
+
     """ Returns true if each arg from arg_list can be used
     to uniquely map to one of the instructions operands. Note
     we can not directly use set superset since the number
@@ -66,7 +67,7 @@ class DSLInst:
         return inst_types.issubset(arg_list_types)
 
 
-    
+
     def getOperandType(self, idx):
         assert (idx < len(self.inputs)), "Out of bounds argument indexing!"
         return  self.inputs[idx].arg_ty
@@ -87,10 +88,16 @@ class DSLInst:
             if arg.is_length:
                 return idx
         return -1
-    
+
     def str(self):
-        dsl_str_list = [self.name] + [str(arg.arg_ty.name) for arg in self.inputs]  
-        return "("+(" ".join(dsl_str_list))+")"
+        dsl_str_list = [self.name] + [str(arg.arg_ty.name) for arg in self.inputs]
+        semantics_str = ""
+
+        if self.semantics != None:
+            semantics_str = self.semantics
+        return "("+(" ".join(dsl_str_list))+")" +"\n"+semantics_str
+
+
 
 
 
