@@ -19,6 +19,12 @@ The user must specify the dictionary for their racket code according to the foll
 The currently supported types for arguments include only Bitvectors. For each argument
 we need to know the bit width of the argument being passed in. An example can be found in `user_spec.py`
 
+If your `racket` binary is not part of your `PATH`, you will need to define the environment variable `RACKET_BINARY` as follows:
+
+```
+export RACKET_BINARY=<PATH/TO/YOUR/RACKET/BINARY>
+```
+
 ## Usage
 ```
 usage: run_synth.py [-h] [-v] [--utils UTILS] [--depth DEPTH] [--iterations ITERATIONS] [--scheme {bvops,arg_superset}] reference

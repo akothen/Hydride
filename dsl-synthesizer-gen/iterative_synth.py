@@ -24,7 +24,7 @@ class IterativeSynth:
         self.utility_file = utility_file
         self.gen_impl_name = "gen_impl"
         self.gen_impl_prefix = "check"
-        self.racket_binary = "/home/arnoor2/Racket/racket/bin/racket"
+        self.racket_binary = os.getenv("RACKET_BINARY","racket")
         self.work_dir = "./tmp"
 
         if not os.path.exists(self.work_dir):
