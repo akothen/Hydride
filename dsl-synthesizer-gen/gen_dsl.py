@@ -4,7 +4,7 @@ from dsl_class import *
 
 class DSLGen:
 
-    def __init__(self, inputs, outputs, num_input_bits ,dsl_list, verbose = False):
+    def __init__(self, inputs, outputs, num_input_bits ,dsl_list, verbose = False, spec_sema = "" , inclusion_scheme = "bvops"):
         """ Taking in the input and output types, generate a Rossete
         synthesis grammar """
 
@@ -13,6 +13,8 @@ class DSLGen:
         self.dsl_list = dsl_list
         self.num_input_bits = num_input_bits
         self.verbose = verbose
+        self.inclusion_scheme = inclusion_scheme
+        self.spec_sema = spec_sema
 
     def log(self, val):
         if self.verbose:
@@ -24,7 +26,14 @@ class DSLGen:
         """Using those DSL instructions which can be
         correctly called with the argument types in the inputs"""
 
-        valid_dsl = [dsl_inst for dsl_inst in self.dsl_list if dsl_inst.isArgumentTypeSuperset(self.inputs)]
+        valid_dsl = []
+
+        if self.inclusion_scheme == "arg_superset":
+            valid_dsl = [dsl_inst for dsl_inst in self.dsl_list if dsl_inst.isArgumentTypeSuperset(self.inputs)]
+        elif self.inclusion_scheme == "bvops":
+            assert self.spec_sema != "", "Must provide specification semantics for bvops inclusion scheme"
+            valid_dsl = [dsl_inst for dsl_inst in self.dsl_list if dsl_inst.hasSameBVOps(self.spec_sema)]
+
 
         self.log("Number of Valid DSL instructions for this configuration: {}".format(len(valid_dsl)))
 
@@ -97,7 +106,7 @@ class DSLGen:
         self.log("\n")
         self.log(grammar_str)
 
-        return no_op_def + "\n"+ grammar_str
+        return  grammar_str
 
 
 

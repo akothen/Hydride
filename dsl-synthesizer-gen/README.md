@@ -21,26 +21,24 @@ we need to know the bit width of the argument being passed in. An example can be
 
 ## Usage
 ```
-usage: run_synth.py [-h] [-v] [--utils UTILS] [--depth DEPTH] [--iterations ITERATIONS] reference
+usage: run_synth.py [-h] [-v] [--utils UTILS] [--depth DEPTH] [--iterations ITERATIONS] [--scheme {bvops,arg_superset}] reference
 
-  
 positional arguments:
+  reference             Path to the file for the reference implementation dictionary
 
-reference Path to the file for the reference implementation dictionary
-
-  
 optional arguments:
-
--h, --help  show this help message and exit
-
--v, --verbose Print debug messages during execution
-
---utils UTILS Path to the racket file which contains definitions of helper functions used by reference
-
---depth DEPTH The depth of the grammar tree considered during synthesis (default = 1)
-
---iterations ITERATIONS
-
-Maximum number of iterations to use during iterative synthesis (default = 3)
+  -h, --help            show this help message and exit
+  -v, --verbose         Print debug messages during execution
+  --utils UTILS         Path to the racket file which contains definitions of helper functions used (default = racket_utils.rkt)
+  --depth DEPTH         The depth of the grammar tree considered during synthesis (default = 1)
+  --iterations ITERATIONS
+                        Maximum number of iterations to use during iterative synthesis (default = 3)
+  --scheme {bvops,arg_superset}
+                        The heurstic to use identify dsl instruction usage in the synthesis grammar (default = "bvops")
 ```
 
+
+An example usage can be found by running the command:
+```
+python3 run_synth.py user_spec.py
+```

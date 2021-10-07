@@ -27,3 +27,5 @@
 (define (zero-ext-bv x i type-size target-size)
   (define var (zero-extend (ext-bv x i type-size) (bitvector target-size)))
   var)
+
+(define (no-op a) a)

@@ -68,4 +68,25 @@ dsl = {
                       ) \n \
                   ",
   },
+
+  "vector-mul" : {
+    "name" : "vector-mul",
+    "args" : "a, b, len, precision",
+    "reg" : "a, b",
+    "size" : "len",
+    "in_precision" : "precision",
+    "out_precision" : "precision",
+    "semantics" : "   \
+                    (define (vector-mul a b len precision) \n \
+                      (apply \n \
+                      concat \n \
+                      (for/list ([j (range len)]) \n \
+                        (define tmp \n \
+                          (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) \n \
+                        tmp \n \
+                        ) \n \
+                      ) \n \
+                      ) \n \
+                  ",
+  },
 }

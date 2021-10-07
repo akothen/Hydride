@@ -1,6 +1,13 @@
 from enum import Enum
 from collections import Counter
 
+bv_ops = [
+  'bvnot', 'bvand', 'bvor', 'bvxor', 'bvshl', 'bvlshr', 'bvashr',
+  'bvneg', 'bvadd', 'bvsub', 'bvmul', 'bvsdiv', 'bvudiv',
+  'bvsrem', 'bvurem', 'bvsmod',
+  'bvsmin', 'bvumin', 'bvsmax', 'bvumax',
+  'bveq', 'bvslt', 'bvult', 'bvsle', 'bvule', 'bvsgt', 'bvugt', 'bvsge', 'bvuge'
+]
 
 class ArgType(Enum):
     IntConst = 1
@@ -65,6 +72,24 @@ class DSLInst:
         inst_types = set([arg.arg_ty for arg in self.inputs])
 
         return inst_types.issubset(arg_list_types)
+
+
+    """ Given the racket semantics of the current
+    DSL instruction and the semantics of some user's
+    code, we return true if they contain the same
+    underlying bitvector operations."""
+    def hasSameBVOps(self, spec_sema):
+        dsl_sema = self.semantics
+        # print(dsl_sema)
+        bvops_list = list()
+        for op in bv_ops:
+            if op in dsl_sema:
+                bvops_list.append(op)
+        for op in bvops_list:
+            if op not in spec_sema:
+                return False
+            #print(spec_sema)
+        return True
 
 
 
