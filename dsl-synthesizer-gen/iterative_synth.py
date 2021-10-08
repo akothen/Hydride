@@ -368,6 +368,12 @@ class ConcreteIterativeSynth(SynthBase):
                 hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
                 concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
                     total_bits = arg.total_bits, concrete_value = hex_value))
+            elif arg.arg_ty == ArgType.BitVectorConst and arg.concrete_value == "":
+                """ Concrete value but deferring to system generated value """
+                total_hex_values = arg.total_bits // 4
+                hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
+                concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
+                    total_bits = arg.total_bits, concrete_value = hex_value))
             elif arg.arg_ty == ArgType.BitVectorConst:
                 """ Use the user provided concrete value """
                 concrete_inputs.append(arg)
@@ -389,6 +395,59 @@ class ConcreteIterativeSynth(SynthBase):
 
 
 
+class ConcolicIterativeSynth(SynthBase):
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
+            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True):
+
+        SynthBase.__init__(self, input_args, grammar_name = grammar_name, spec_name = spec_name,
+                           spec_semantics = spec_semantics, grammar_def=grammar_def,
+                           verify_name = verify_name, dsl_desc = dsl_desc, utility_file=utility_file,
+                           use_zero_init = use_zero_init)
+
+
+
+    """ Given a description of the argument types, generate
+    concrete values for initial testing"""
+    def get_initial_cex(self, args):
+        concrete_inputs = []
+
+        for idx, arg in enumerate(args):
+
+            val = idx + 1
+            if self.use_zero_init:
+                val = 0
+
+            if arg.arg_ty == ArgType.BitVectorSymbolic:
+                concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorSymbolic , total_bits = arg.total_bits))
+            elif arg.arg_ty == ArgType.BitVectorConst and arg.concrete_value == "":
+                """ Concrete value but deferring to system generated value """
+                total_hex_values = arg.total_bits // 4
+                hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
+                concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
+                    total_bits = arg.total_bits, concrete_value = hex_value))
+            elif arg.arg_ty == ArgType.BitVectorConst:
+                """ Use the user provided concrete value """
+                concrete_inputs.append(arg)
+            else:
+                assert False, "Unsupported type for get_initial_cex"
+
+        return concrete_inputs
+
+
+    def update_cex_store(self, new_cex):
+        concolic_cex_list = []
+        for idx, cex in enumerate(new_cex):
+
+            if self.input_args[idx].arg_ty == ArgType.BitVectorSymbolic:
+                concolic_cex_list.append(DSLArg("ConcBVArg",ArgType.BitVectorSymbolic,
+                                                total_bits = cex.total_bits))
+            elif self.input_args[idx].arg_ty == ArgType.BitVectorConst:
+                concolic_cex_list.append(cex)
+            else:
+                assert False, "Unsupported counter example type"
+
+
+        self.concrete_inputs.append(concolic_cex_list)
 
 
 

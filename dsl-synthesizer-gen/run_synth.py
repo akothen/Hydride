@@ -3,7 +3,7 @@ from tensor_dsl import dsl as dsl_dict
 from dsl_class import *
 from utils import *
 from gen_dsl import DSLGen
-from iterative_synth import ConcreteIterativeSynth
+from iterative_synth import ConcreteIterativeSynth, ConcolicIterativeSynth
 import json
 
 
@@ -50,13 +50,14 @@ if __name__ == "__main__":
     for user_func in args_info:
         print("="*8," Processing",user_func,"="*8,"\n")
 
-        func_arg_desc = args_info[user_func]
+        func_arg_desc = args_info[user_func]['arg_info']
+        synth_type = args_info[user_func]['synth_type']
         bitwidth = func_arg_desc[0].total_bits
 
         DSLGenerator = DSLGen(func_arg_desc, [], bitwidth, DSLDefs, verbose = args.verbose,
                               spec_sema = user_data[user_func]['semantics'], inclusion_scheme = args.scheme)
 
-        print("**** Created DSL Grammar Generator for ",user_func)
+        print("**** Created DSL Grammar Generator for ",user_func,"\n")
         grammar_name = "synth_grammar"
         grammar_tree_name = "gen-grammar"
         grammar_tree = DSLGenerator.generate()
@@ -71,11 +72,14 @@ if __name__ == "__main__":
             print("Grammar Definition:")
             print(grammar_def)
 
-        print("**** Grammar Generation Complete ... ")
+        print("**** Grammar Generation Complete ... ","\n")
 
 
+        Synth = {}
 
-        Synth = ConcreteIterativeSynth(func_arg_desc, spec_name = user_func,
+        if synth_type == "concrete":
+            print("*"*10, "Using Iterative Concrete Synthesis", "*"*10)
+            Synth = ConcreteIterativeSynth(func_arg_desc, spec_name = user_func,
                                verify_name = "test_"+user_func+"_impl",
                                grammar_name = grammar_name,
                                grammar_def = grammar_def,
@@ -83,6 +87,22 @@ if __name__ == "__main__":
                                dsl_desc = DSLDefs,
                                utility_file = args.utils,
                                use_zero_init = True)
+        elif synth_type == "concolic":
+            print("*"*10, "Using Iterative Concolic Synthesis", "*"*10)
+            Synth = ConcolicIterativeSynth(func_arg_desc, spec_name = user_func,
+                               verify_name = "test_"+user_func+"_impl",
+                               grammar_name = grammar_name,
+                               grammar_def = grammar_def,
+                               spec_semantics = user_data[user_func]['semantics'],
+                               dsl_desc = DSLDefs,
+                               utility_file = args.utils,
+                               use_zero_init = True)
+        elif synth_type == "symbolic":
+            print("*"*10, "Using Direct Symbolic Synthesis", "*"*10)
+            assert False, "Direct Symbolic synthesis needs to be implemented"
+        else:
+            assert False, ("Unregonized synthesis type:\t"+synth_type)
+
 
 
         Synth.iterate(max_iterations = args.iterations)
