@@ -8,7 +8,8 @@ import subprocess as sb
 def pprint(s):
     print("="*5,s,"="*5)
 
-class IterativeSynth:
+
+class SynthBase:
     def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
             verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True):
         self.input_args = input_args
@@ -34,88 +35,6 @@ class IterativeSynth:
             os.remove(f)
 
 
-
-
-    def generate_verification_func(self, args, verify_name, iteration_number):
-        symbolic_defs = []
-        argument_names = []
-
-        for idx, arg in enumerate(args):
-
-            if arg.arg_ty == ArgType.BitVectorSymbolic or arg.arg_ty == ArgType.BitVectorConst:
-                symbolic_def = "(define-symbolic "+"_arg"+str(idx)+" (bitvector "+str(arg.total_bits)+"))"
-                symbolic_defs.append(symbolic_def)
-                argument_names.append("_arg"+str(idx))
-            else:
-                assert False, "Unsupported type"
-
-
-        symbolic_block = "\n".join(symbolic_defs)
-
-        arg_string = " ".join(argument_names)
-
-        definition_block = "(define (" + verify_name + " impl ref)\n \
-        \t(verify \n \
-        \t\t(assert (equal?\n \
-        "+ "\t\t\t(impl " + arg_string +") "+"\n \
-        \t\t\t(ref "+ arg_string+")" + "))))"
-
-
-        print_forms_block = "(with-output-to-file \""+self.work_dir+"/"+"cex_"+str(iteration_number)+".txt\" " + "(lambda () "+"(print (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))))"
-
-        verification_str = symbolic_block + "\n" + definition_block + "\n" + print_forms_block
-
-        return verification_str
-
-
-    """ Given a description of the argument types, generate
-    concrete values for initial testing"""
-    def get_initial_cex(self, args):
-        concrete_inputs = []
-
-        for idx, arg in enumerate(args):
-
-            val = idx + 1
-            if self.use_zero_init:
-                val = 0
-
-            if arg.arg_ty == ArgType.BitVectorSymbolic:
-                total_hex_values = arg.total_bits // 4
-                hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
-                concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
-                    total_bits = arg.total_bits, concrete_value = hex_value))
-            elif arg.arg_ty == ArgType.BitVectorConst:
-                """ Use the user provided concrete value """
-                concrete_inputs.append(arg)
-            else:
-                assert False, "Unsupported type for get_initial_cex"
-
-        return concrete_inputs
-
-
-    def generate_counter_examples(self):
-        cex_names_list = []
-        cex_definition_list = []
-
-        for idx_cex_set, cex_set in enumerate(self.concrete_inputs):
-            cex_names = []
-            for idx_into_cex, cex_value in enumerate(cex_set):
-                cex_name = "cex_set"+str(idx_cex_set)+"_arg"+str(idx_into_cex)
-
-                cex_def = "(define "+cex_name+" "
-                if cex_value.arg_ty == ArgType.BitVectorConst:
-                    cex_def += "(bv "+cex_value.concrete_value+" "+str(cex_value.total_bits)+ ")"
-                else:
-                    assert False, "Unsupported concrete input case"
-
-                cex_def += ")"
-
-                cex_names.append(cex_name)
-                cex_definition_list.append(cex_def)
-
-            cex_names_list.append(cex_names)
-
-        return (cex_names_list, cex_definition_list)
 
     def generate_synth_query(self, grammar_name, spec_name , cex_names_list,
             iteration_number):
@@ -149,7 +68,6 @@ class IterativeSynth:
         synth_str += "\n" +"\n\n".join([satisfiable_str,generate_forms_str,print_forms_str])
 
         return synth_str
-
 
 
 
@@ -187,6 +105,95 @@ class IterativeSynth:
 
         return racket_str
 
+    def update_cex_store(self, new_cex):
+        pass
+
+
+
+    def generate_counter_examples(self):
+        cex_names_list = []
+        cex_definition_list = []
+
+        for idx_cex_set, cex_set in enumerate(self.concrete_inputs):
+            cex_names = []
+            for idx_into_cex, cex_value in enumerate(cex_set):
+                cex_name = "cex_set"+str(idx_cex_set)+"_arg"+str(idx_into_cex)
+
+                cex_def = ""
+                if cex_value.arg_ty == ArgType.BitVectorConst:
+                    cex_def += "(define "+cex_name+" "+ "(bv "+cex_value.concrete_value+" "+str(cex_value.total_bits)+ ")"
+                elif cex_value.arg_ty == ArgType.BitVectorSymbolic:
+                    cex_def += "(define-symbolic "+cex_name+" "+ "(bitvector "+" "+str(cex_value.total_bits)+ ")"
+                else:
+                    assert False, "Unsupported concrete input case"
+
+                cex_def += ")"
+
+                cex_names.append(cex_name)
+                cex_definition_list.append(cex_def)
+
+            cex_names_list.append(cex_names)
+
+        return (cex_names_list, cex_definition_list)
+
+    def read_cex_file(self, cex_file):
+
+        concrete_cex = []
+        with open(cex_file,"r") as CexFile:
+            data = CexFile.read().replace('\n','')
+            if "unsat" in data:
+                return []
+
+            data = " ".join(data.split(" ")[1:])
+            data = data.split("]")
+            data = data[:len(data)-1]
+            data = [word.strip("[") for word in data]
+
+
+
+            for cex in data:
+                cex = cex.lstrip(" ")
+                bv = cex.split(" ")[2].strip()
+                width = cex.split(" ")[3].strip().strip(")")
+
+
+                cex_arg = DSLArg("CexArg",ArgType.BitVectorConst,
+                        total_bits = int(width), concrete_value = bv)
+
+                concrete_cex.append(cex_arg)
+
+        return concrete_cex
+
+    def generate_verification_func(self, args, verify_name, iteration_number):
+        symbolic_defs = []
+        argument_names = []
+
+        for idx, arg in enumerate(args):
+
+            if arg.arg_ty == ArgType.BitVectorSymbolic or arg.arg_ty == ArgType.BitVectorConst:
+                symbolic_def = "(define-symbolic "+"_arg"+str(idx)+" (bitvector "+str(arg.total_bits)+"))"
+                symbolic_defs.append(symbolic_def)
+                argument_names.append("_arg"+str(idx))
+            else:
+                assert False, "Unsupported type"
+
+
+        symbolic_block = "\n".join(symbolic_defs)
+
+        arg_string = " ".join(argument_names)
+
+        definition_block = "(define (" + verify_name + " impl ref)\n \
+        \t(verify \n \
+        \t\t(assert (equal?\n \
+        "+ "\t\t\t(impl " + arg_string +") "+"\n \
+        \t\t\t(ref "+ arg_string+")" + "))))"
+
+
+        print_forms_block = "(with-output-to-file \""+self.work_dir+"/"+"cex_"+str(iteration_number)+".txt\" " + "(lambda () "+"(print (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))))"
+
+        verification_str = symbolic_block + "\n" + definition_block + "\n" + print_forms_block
+
+        return verification_str
 
 
     def generate_verification_racket_file(self, impl_def, iteration_number ,verification_block):
@@ -224,37 +231,6 @@ class IterativeSynth:
 
 
         return racket_str
-
-
-    def read_cex_file(self, cex_file):
-
-        concrete_cex = []
-        with open(cex_file,"r") as CexFile:
-            data = CexFile.read().replace('\n','')
-            if "unsat" in data:
-                return []
-
-            data = " ".join(data.split(" ")[1:])
-            data = data.split("]")
-            data = data[:len(data)-1]
-            data = [word.strip("[") for word in data]
-
-
-
-            for cex in data:
-                cex = cex.lstrip(" ")
-                bv = cex.split(" ")[2].strip()
-                width = cex.split(" ")[3].strip().strip(")")
-
-
-                cex_arg = DSLArg("CexArg",ArgType.BitVectorConst,
-                        total_bits = int(width), concrete_value = bv)
-
-                concrete_cex.append(cex_arg)
-
-        return concrete_cex
-
-
 
     def iterate(self, max_iterations = 3):
 
@@ -353,9 +329,65 @@ class IterativeSynth:
             else:
                 print("Counter example found!, moving to next iteration")
 
-            self.concrete_inputs.append(new_cex)
+            self.update_cex_store(new_cex)
 
             i += 1
+
+
+
+
+
+
+
+
+
+
+class ConcreteIterativeSynth(SynthBase):
+    def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
+            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True):
+
+        SynthBase.__init__(self, input_args, grammar_name = grammar_name, spec_name = spec_name,
+                           spec_semantics = spec_semantics, grammar_def=grammar_def,
+                           verify_name = verify_name, dsl_desc = dsl_desc, utility_file=utility_file,
+                           use_zero_init = use_zero_init)
+
+
+    """ Given a description of the argument types, generate
+    concrete values for initial testing"""
+    def get_initial_cex(self, args):
+        concrete_inputs = []
+
+        for idx, arg in enumerate(args):
+
+            val = idx + 1
+            if self.use_zero_init:
+                val = 0
+
+            if arg.arg_ty == ArgType.BitVectorSymbolic:
+                total_hex_values = arg.total_bits // 4
+                hex_value = "#x"+(str(val % 10 )*(total_hex_values-1))+str(val % 10)
+                concrete_inputs.append(DSLArg("BVArg", ArgType.BitVectorConst ,
+                    total_bits = arg.total_bits, concrete_value = hex_value))
+            elif arg.arg_ty == ArgType.BitVectorConst:
+                """ Use the user provided concrete value """
+                concrete_inputs.append(arg)
+            else:
+                assert False, "Unsupported type for get_initial_cex"
+
+        return concrete_inputs
+
+
+    def update_cex_store(self, new_cex):
+        self.concrete_inputs.append(new_cex)
+
+
+
+
+
+
+
+
+
 
 
 

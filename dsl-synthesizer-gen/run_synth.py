@@ -3,7 +3,7 @@ from tensor_dsl import dsl as dsl_dict
 from dsl_class import *
 from utils import *
 from gen_dsl import DSLGen
-from iterative_synth import IterativeSynth
+from iterative_synth import ConcreteIterativeSynth
 import json
 
 
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
 
 
-        Synth = IterativeSynth(func_arg_desc, spec_name = user_func,
+        Synth = ConcreteIterativeSynth(func_arg_desc, spec_name = user_func,
                                verify_name = "test_"+user_func+"_impl",
                                grammar_name = grammar_name,
                                grammar_def = grammar_def,
