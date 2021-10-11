@@ -19,37 +19,6 @@
   var)
 
 
-;;<intrinsic tech="AVX-512" name="_mm_dpwssds_epi32">
-;;	<type>Integer</type>
-;;	<CPUID>AVX512_VNNI</CPUID>
-;;	<CPUID>AVX512VL</CPUID>
-;;	<category>Arithmetic</category>
-;;	<return type="__m128i" varname="dst" etype="SI32"/>
-;;	<parameter type="__m128i" varname="src" etype="SI32"/>
-;;	<parameter type="__m128i" varname="a" etype="SI16"/>
-;;	<parameter type="__m128i" varname="b" etype="SI16"/>
-;;	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
-;;	<operation>
-;;FOR j := 0 to 3
-;;	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
-;;	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
-;;	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
-;;ENDFOR
-;;dst[MAX:128] := 0
-;;	</operation>
-;;	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
-;;	<header>immintrin.h</header>
-;; Valid Inputs: len = 4;red = 2;v-acc v1 v2 = 128-bit
-(define (_mm_dpwssds_epi32 v-acc v1 v2 len red out_precision)
-  (apply
-   concat
-   (for/list ([i (range len)])
-     (define sum
-       (apply
-        bvadd
-        (for/list ([j (range red)])
-          (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
-     (bvadd (ext-bv v-acc i out_precision) sum))))
 
 ;;<intrinsic tech="AVX-512" name="_mm512_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -75,11 +44,11 @@
 (define (_mm512_dpwssd_epi32 v-acc v1 v2 len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
      (bvadd (ext-bv v-acc i out_precision) sum))))
 
@@ -108,11 +77,11 @@
 (define (_mm256_dpwssd_epi32 v-acc v1 v2 len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (sign-ext-bv v1 (+ j (* i 2)) 16 out_precision) (sign-ext-bv v2 (+ j (* i 2)) 16 out_precision)))))
      (bvadd (ext-bv v-acc i out_precision) sum))))
 
@@ -143,11 +112,11 @@
 (define (_mm512_dpbusd_epi32 v-acc v1 v2 len red)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 16) (sign-ext-bv v2 (+ j (* i 4)) 8 16)))))
      (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
 
@@ -178,11 +147,11 @@
 (define (_mm256_dpbusd_epi32 v-acc v1 v2 len red)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 16) (sign-ext-bv v2 (+ j (* i 4)) 8 16)))))
      (bvadd (ext-bv v-acc i 32) (sign-extend sum (bitvector 32))))))
 
@@ -197,11 +166,11 @@
 (define (hvx_vrmpy v-acc v1 v2 len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 out_precision) (sign-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
      (bvadd (ext-bv v-acc i out_precision) (sign-extend sum (bitvector out_precision))))))
 
@@ -215,11 +184,11 @@
 (define (hvx_vrmpy2 v-acc v1 v2 len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (sign-ext-bv v1 (+ j (* i 4)) 8 out_precision) (sign-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
      (bvadd (ext-bv v-acc i out_precision) sum))))
 
@@ -237,11 +206,11 @@
 (define (hvx_vrmpy3 v-acc v1 v2 len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define sum
        (apply
         bvadd
-        (for/list ([j (range red)])
+        (for/list ([j (reverse (range red))])
           (bvmul (zero-ext-bv v1 (+ j (* i 4)) 8 out_precision) (zero-ext-bv v2 (+ j (* i 4)) 8 out_precision)))))
      (bvadd (ext-bv v-acc i out_precision) sum))))
 
@@ -276,15 +245,17 @@
 (define (_mm_mask_dpwssds_epi32 src k a b len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define tmp
        (if (equal? (ext-bv k i 2) (bv 0 2))
          (bv 0 32)
          (apply
           bvadd
-          (for/list ([j (range red)])
+          (for/list ([j (reverse (range red))])
             (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
      (bvadd (ext-bv src i out_precision) tmp))))
+
+
 
 ;;<intrinsic tech="AVX-512" name="_mm512_mask_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -314,15 +285,16 @@
 (define (_mm512_mask_dpwssd_epi32 src k a b len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define tmp
        (if (equal? (ext-bv k i 1) (bv 0 1))
          (bv 0 32)
          (apply
           bvadd
-          (for/list ([j (range red)])
+          (for/list ([j (reverse (range red))])
             (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
      (bvadd (ext-bv src i out_precision) tmp))))
+
 
 ;;<intrinsic tech="AVX-512" name="_mm256_mask_dpwssd_epi32">
 ;;	<type>Integer</type>
@@ -353,13 +325,13 @@
 (define (_mm256_mask_dpwssd_epi32 src k a b len red out_precision)
   (apply
    concat
-   (for/list ([i (range len)])
+   (for/list ([i (reverse (range len))])
      (define tmp
        (if (equal? (ext-bv k i 1) (bv 0 1))
          (bv 0 32)
          (apply
           bvadd
-          (for/list ([j (range red)])
+          (for/list ([j (reverse (range red))])
             (bvmul (sign-ext-bv a (+ j (* i 2)) 16 out_precision) (sign-ext-bv b (+ j (* i 2)) 16 out_precision))))))
      (bvadd (ext-bv src i out_precision) tmp))))
 
@@ -386,11 +358,10 @@
 (define mask128 (bv #x00010100000101000001010000010100 128))
 
 (define a1024 (bv #x0001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100010001 1024))
-(define b1024 (bv #x0002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003 1024))
+(define b1024 (bv #x0001000100020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003000200030002000300020003 1024))
 (define src1024 (bv 0 1024))
 
 (define (res)
-  (pretty-print	 (_mm_dpwssds_epi32 src128 a128 b128 4 2 32))
   (pretty-print	 (_mm_mask_dpwssds_epi32 src128 mask8 a128 b128 4 2 32))
   
   (pretty-print  (_mm512_dpwssd_epi32 src512 a512 b512 16 2 32))
