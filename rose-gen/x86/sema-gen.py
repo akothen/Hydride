@@ -1,14 +1,9 @@
 import xml.etree.ElementTree as ET
 from manual_parser import get_spec_from_xml
 import sys
-#from fuzzer import fuzz_intrinsic
-#from compiler import compile
-#from spec_serializer import dump_spec
-#from multiprocessing import Pool
 
 
 data_f = "data-latest.xml"
-#data_f, out_fname, num_threads = sys.argv[1:]
 #num_threads = int(num_threads)
 data_root = ET.parse(data_f)
 
@@ -24,12 +19,9 @@ skipped = False
 skip_to = '_mm512_popcnt_epi16'
 skip_to = None
 
-#outf = open(out_fname, 'w')
-
 def get_verified_spec(intrin):
   try:
     spec = get_spec_from_xml(intrin)
-    #ok, compiled = fuzz_intrinsic(spec, num_tests=100)
     return True, spec
   except:
     return False, spec
@@ -165,27 +157,6 @@ print("PARSING DONE")
 #pool = Pool(1 if debug else num_threads)
 #num_intrins = 0
 #for ok, compiled, spec in pool.imap_unordered(get_verified_spec, intrins):
-#  num_intrins+=1
-#  if ok:
-#    spec_sema = dump_spec(spec, precision=False)
-#    outf.write(spec.intrin + '\n')
-#    outf.write(spec_sema + '\n')
-#    outf.flush()
-#    num_interpreted += compiled
-#    num_ok += ok
-#    print(spec.intrin, spec.cpuids, flush=True)
-#    print('\tverified / parsed ',num_ok,'/', num_intrins, flush=True)
-#    supported_insts.add(inst_form)
-#  else:
-#    print('Parsed', num_parsed, ' semantics, failling:')
-#    print(spec.intrin)
-
-#outf.close()
 
 #pool.terminate()
 
-#print('Parsed:', num_parsed,
-#    'Skipped:', num_skipped,
-#    'Num unique inst forms parsed:', len(supported_insts),
-#    'Num inst forms skipped:', len(skipped_insts)
-#    )
