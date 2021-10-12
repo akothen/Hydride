@@ -79,7 +79,7 @@ class SynthBase:
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 6000 1024 1024))" +"\n"
 
         if self.utility_file != None:
             with open(self.utility_file, "r") as UtilFile:
@@ -205,7 +205,7 @@ class SynthBase:
         (require racket/pretty)\n"
 
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 6000 1024 1024))" +"\n"
 
 
         if self.utility_file != None:
@@ -236,6 +236,9 @@ class SynthBase:
 
         i = 0
 
+        total_time = 0
+        sat = False
+        synth_result = ""
         while i < max_iterations:
 
             pprint("Iteration {}".format(i))
@@ -270,12 +273,14 @@ class SynthBase:
 
             print("Synthesis time:\t{} seconds".format(end_synth - start_synth))
 
+            total_time += (end_synth - start_synth)
 
             # TODO: First check if file generated
 
             if not os.path.exists( self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt"):
                 print("Synthesis timeout out or crashed...")
-                return
+                break
+
 
             gen_def = ""
             with open(self.work_dir +"/"+ self.gen_impl_prefix+"_"+str(i)+".txt","r") as GenFile:
@@ -317,6 +322,8 @@ class SynthBase:
             end_verify = time.time()
             print("Verification time:\t{} seconds".format(end_verify - start_verify))
 
+            total_time += (end_verify - start_verify)
+
             cex_file_name = self.work_dir+"/"+"cex_"+str(i)+".txt"
 
             new_cex = self.read_cex_file(cex_file_name)
@@ -325,6 +332,8 @@ class SynthBase:
             to generate a counter example """
             if len(new_cex) == 0:
                 print("Success! Definition is verified ...")
+                sat = True
+                synth_result = gen_def
                 break
             else:
                 print("Counter example found!, moving to next iteration")
@@ -332,6 +341,9 @@ class SynthBase:
             self.update_cex_store(new_cex)
 
             i += 1
+        print("Total Synthesis time: {} seconds ...".format(total_time))
+        return (total_time, sat, synth_result, i)
+
 
 
 

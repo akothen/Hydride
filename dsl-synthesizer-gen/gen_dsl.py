@@ -71,7 +71,7 @@ class DSLGen:
 
         dsl_calls = []
         """ While the precision evenly divides the total bits"""
-        while total_bits % prec == 0:
+        while total_bits % prec == 0 and prec < total_bits:
             length = total_bits // prec
             dsl_calls += self.get_dsl_calls(prec, length)
 
@@ -94,7 +94,9 @@ class DSLGen:
         args = ["arg"+str(i) for i in range(0,len(self.inputs))]
         no_op_def = "(define (no-op a) a)"
         no_op_str = "(no-op (expr))"
-        expr = args + rosette_calls + [no_op_str]
+        zero_bv = "(bv 0 (bitvector "+str(self.inputs[0].total_bits)+"))"
+        one_bv = ""#"(bv 1 (bitvector "+str(self.inputs[0].total_bits)+"))"
+        expr = args + rosette_calls + [no_op_str,zero_bv, one_bv]
 
         args_str = "[arg (" +("\n\t".join((["choose"]+args)))+")]"
         expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]"

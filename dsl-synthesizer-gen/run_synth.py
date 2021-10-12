@@ -1,4 +1,5 @@
 import argparse
+import os
 from tensor_dsl import dsl as dsl_dict
 from dsl_class import *
 from utils import *
@@ -105,7 +106,26 @@ if __name__ == "__main__":
 
 
 
-        Synth.iterate(max_iterations = args.iterations)
+        (exec_time, sat, synth_result, iterations) = Synth.iterate(max_iterations = args.iterations)
+
+        time_dir = "./time"
+        ref_name = args.reference.split("/")[-1].split(".")[0]
+
+        time_file_name = "time_"+"depth_"+str(args.depth)+"_scheme_"+args.scheme+"_synth_"+synth_type+"_"+ref_name+".json"
+
+        if not os.path.exists(time_dir):
+            os.makedirs(time_dir)
+
+        with open(time_dir+"/"+time_file_name, "w+") as LogFile:
+            json_str = json.dumps({"time": exec_time, "sat": str(sat), "synth_result": synth_result, "num_iterations":iterations+1}, indent=4)
+            LogFile.write(json_str)
+
+
+
+
+
+
+
 
 
 
