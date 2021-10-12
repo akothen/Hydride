@@ -59,50 +59,50 @@ class SketchSemaInfo:
 
 
 class SymIntGen:
-  __prefix = 0
+  __suffix = 0
   
-  @staticmethod
-  def gen_symbolic_integers(num_symbols):
+  @classmethod
+  def gen_symbolic_integers(self, num_symbols):
     string = ""
     sym_int_list = []
     for i in range(num_symbols):
       print(type(i))
-      sym_int_name = "symint" + str(SymIntGen.__prefix)
+      sym_int_name = "symint" + str(SymIntGen.__suffix)
       string += "(define-symbolic " + sym_int_name + " integer?)\n"
       sym_int_list.append(sym_int_name)
-      SymIntGen.__prefix += 1
+      SymIntGen.__suffix += 1
     return string, sym_int_list
 
 
 class SymBitVectorGen:
-  __prefix = 0
+  __suffix = 0
   
-  @staticmethod
-  def gen_symbolic_bitvectors(num_symbols, bitwidth):
+  @classmethod
+  def gen_symbolic_bitvectors(self, num_symbols, bitwidth):
     string = ""
     sym_bv_list = []
     for i in range(num_symbols):
       print(type(i))
-      sym_bv_name = "symbv" + str(SymBitVectorGen.__prefix)
+      sym_bv_name = "symbv" + str(SymBitVectorGen.__suffix)
       string += "(define-symbolic " + sym_bv_name + " (bitvector " + str(bitwidth) + "))\n"
       sym_bv_list.append(sym_bv_name)
-      SymBitVectorGen.__prefix += 1
+      SymBitVectorGen.__suffix += 1
     return string, sym_bv_list
 
 
 class IntDefGen:
-  __prefix = 0
+  __suffix = 0
 
-  @staticmethod
-  def gen_integer_defs(int_vals):
+  @classmethod
+  def gen_integer_defs(self, int_vals):
     string = ""
     conc_int_list = []
     for i, val in enumerate(int_vals):
       print(type(i))
-      conc_int_name = "concint" + str(IntDefGen.__prefix)
+      conc_int_name = "concint" + str(IntDefGen.__suffix)
       string += "(define " + conc_int_name + " " + str(val) + " )\n"
       conc_int_list.append(conc_int_name)
-      IntDefGen.__prefix += 1
+      IntDefGen.__suffix += 1
     return string, conc_int_list
 
 
@@ -498,7 +498,21 @@ class SpecGen:
     return sema_info
 
 
+class DSLNameGen:
+  __suffix  = 0
+
+  @classmethod
+  def gen_new_inst_name(self):
+    dsl_inst_name = "dsl_inst_" + str(DSLNameGen.__suffix)
+    DSLNameGen.__suffix += 1
+    return dsl_inst_name
+
+
 class EquivalenceChecker:
+  inst_to_sema_map = dict()
+  unique_sema_list = list()
+  dsl_to_insts_map = dict()
+
   @classmethod
   def __sema_are_equivalent(self, racket_file):
     output_file = "output.txt"
@@ -534,23 +548,45 @@ class EquivalenceChecker:
       if "treg" in arg:
         num_tiles += 1
     return [num_scalars, num_vectors, num_tiles]
+  
+  
+  @classmethod
+  def __populate_dsl_sema_info(self, sketch_inst_name, spec_inst_name, spec_sema_info):
+    # Replace the spec name with new dsl instruction's name
+    new_sema = ""
+    dsl_inst_name = DSLNameGen.gen_new_inst_name()
+    for line in spec_sema_info.sketch_lines:
+      print("dsl_inst_name:")
+      print(dsl_inst_name)
+      if "define" in line and "spec" in line:
+        line = line.replace("spec", dsl_inst_name)
+      new_sema += ((line + " \\n \\\n"))
+    
+    # Map the target instructions to the new semantics
+    EquivalenceChecker.inst_to_sema_map[spec_inst_name] = new_sema
+    if self.inst_to_sema_map.get(sketch_inst_name) == None:
+      self.inst_to_sema_map[sketch_inst_name] = new_sema
+    
+    # Map the new dsl instruction to the target instructions
+    if self.dsl_to_insts_map.get(dsl_inst_name) == None:
+      self.dsl_to_insts_map[dsl_inst_name] = [spec_inst_name, sketch_inst_name]
+    else:
+      if spec_inst_name not in self.dsl_to_insts_map[dsl_inst_name]:  
+        self.dsl_to_insts_map[dsl_inst_name].append(spec_inst_name)
+    
+    # Record the generated semantics
+    self.unique_sema_list.append(new_sema)
+
 
   @classmethod
   def gen_equivalence_checker(self, target_inst_map):
-    inst_spec_map = dict()
-    eq_inst_list = list()
-    dsl_to_inst_map = dict()
-    index = 0
     for inst, instinfo in target_inst_map.items():
       inst_num_args = EquivalenceChecker.__num_inst_args(instinfo['args'])
       num_reg_args = EquivalenceChecker.__get_num_reg_args(instinfo['args'])
       sema_info = SketchGen.gen_sketch(instinfo)
-      sketch_lines = sema_info.sketch_lines
       print("sketch_lines:")
-      for line in sketch_lines:
-        print(line)
       sketch = ""
-      for line in sketch_lines:
+      for line in sema_info.sketch_lines:
         sketch += (line + "\n")
       print("=========================================")
       print(sketch)
@@ -567,51 +603,25 @@ class EquivalenceChecker:
         # Now we need to perform equivalence checking between
         # the two instructions.
         cmp_sema_info = SpecGen.gen_spec(cmp_instinfo)
-        cmp_sketch_lines = cmp_sema_info.sketch_lines
         if sema_info.is_compatible_with_spec(cmp_sema_info) == False:
           continue
         print("cmp_sketch_lines:")
-        for line in cmp_sketch_lines:
-          print(line)
         spec = ""
-        save_spec = ""
-        for line in cmp_sketch_lines:
+        for line in cmp_sema_info.sketch_lines:
           spec += (line + "\n")
-          save_spec += ((line + "\\n \\"))
-        inst_spec_map[cmp_instinfo['name']] = save_spec
         print("=========================================")
         print(spec)
         print("=========================================")
         racket_file = RosetteCodeGen.gen_racket_file(spec, sketch, cmp_num_reg_args[1], cmp_instinfo['bitwidth'], cmp_sema_info)
         ret = EquivalenceChecker.__sema_are_equivalent(racket_file)
-
         print(ret)
+        
         if ret == True:
-          save_spec = ""
-          dsl_inst_name = "dsl_inst_" + str(index)
-          for line in cmp_sketch_lines:
-            print("dsl_inst_name:")
-            print(dsl_inst_name)
-            if "define" in line and "spec" in line:
-              line = line.replace("spec", dsl_inst_name)
-              index += 1
-            save_spec += ((line + " \\n \\\n"))
-          if inst_spec_map.get(cmp_instinfo['name']) == None:
-            inst_spec_map[cmp_instinfo['name']] = save_spec
-          if inst_spec_map.get(instinfo['name']) == None:
-            inst_spec_map[instinfo['name']] = save_spec
-          eq_inst_list.append(save_spec)
-          if dsl_to_inst_map.get(dsl_inst_name) == None:
-            dsl_to_inst_map[dsl_inst_name] = [cmp_instinfo['name'], instinfo['name']]
-          else:
-            if cmp_instinfo['name'] not in dsl_to_inst_map[dsl_inst_name]:  
-              dsl_to_inst_map[dsl_inst_name].append(cmp_instinfo['name'])
+          EquivalenceChecker.__populate_dsl_sema_info(instinfo['name'], cmp_instinfo['name'], cmp_sema_info)
 
         break
       break
-    print("+=====================")
-    print(dsl_to_inst_map["dsl_inst_0"])
-    return eq_inst_list, inst_spec_map, dsl_to_inst_map
+    return
 
         
 # Just for testing
