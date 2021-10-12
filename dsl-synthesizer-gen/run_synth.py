@@ -41,6 +41,7 @@ if __name__ == "__main__":
 
     args_info = get_spec_args_from_user_dictionary(user_data)
 
+    print(args_info)
 
     if args.verbose:
         for ref, dsl_list in args_info.items():
@@ -53,9 +54,10 @@ if __name__ == "__main__":
 
         func_arg_desc = args_info[user_func]['arg_info']
         synth_type = args_info[user_func]['synth_type']
+        out_desc = args_info[user_func]['out_desc']
         bitwidth = func_arg_desc[0].total_bits
 
-        DSLGenerator = DSLGen(func_arg_desc, [], bitwidth, DSLDefs, verbose = args.verbose,
+        DSLGenerator = DSLGen(func_arg_desc, out_desc , bitwidth, DSLDefs, verbose = args.verbose,
                               spec_sema = user_data[user_func]['semantics'], inclusion_scheme = args.scheme)
 
         print("**** Created DSL Grammar Generator for ",user_func,"\n")

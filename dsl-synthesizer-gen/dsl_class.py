@@ -19,13 +19,17 @@ class ArgType(Enum):
 
 class DSLArg:
 
-    def __init__(self, name, arg_ty, total_bits = 0, concrete_value = ""):
+    def __init__(self, name, arg_ty, total_bits = 0, concrete_value = "", is_in_precision = True,
+                 precision_value = 0):
         self.name = name
         self.arg_ty = arg_ty
         self.is_precision = (arg_ty == ArgType.PrecisionConst)
         self.is_length = (arg_ty == ArgType.LengthConst)
         self.total_bits = total_bits
         self.concrete_value = concrete_value
+        self.is_in_precision = is_in_precision
+        self.precision_value = precision_value
+
 
 
 class DSLInst:
@@ -101,18 +105,60 @@ class DSLInst:
         return len(self.inputs)
 
 
-    def getPrecisionOperandIdx(self):
+    """
+    in_precision : true if requesting in precision, false
+    if requesting the output precision
+    """
+    def getPrecisionOperandIdx(self, in_precision = True):
         for idx, arg in enumerate(self.inputs):
             if arg.is_precision:
-                return idx
+                """ If the argument type is a precision
+                type and corresponds to an incoming precision"""
+                if in_precision and arg.is_in_precision:
+                    return idx
+
+
+                """ If the argument type is a precision
+                type and corresponds to an out precision"""
+                if not in_precision and not arg.is_in_precision:
+                    return idx
         return -1
 
 
-    def getLengthOperandIdx(self):
+    """ For DSL instructions with multiple dimensions,
+    the length number specifies the specific dimension
+    (starting from 0 )"""
+    def getLengthOperandIdx(self, length_num = 0):
         for idx, arg in enumerate(self.inputs):
             if arg.is_length:
-                return idx
+                if length_num == 0:
+                    return idx
+                length_num -= 1
         return -1
+
+    def getLengthOperandsIndices(self):
+        ops = []
+        for idx, arg in enumerate(self.inputs):
+            if arg.is_length:
+                ops.append(idx)
+        return ops
+
+
+
+    def getLengthOperands(self):
+        ops = []
+        for idx, arg in enumerate(self.inputs):
+            if arg.is_length:
+                ops.append(arg)
+        return ops
+
+    def getNumLengthParams(self):
+        num = 0
+        for idx, arg in enumerate(self.inputs):
+            if arg.is_length:
+                num += 1
+        return num
+
 
     def str(self):
         dsl_str_list = [self.name] + [str(arg.arg_ty.name) for arg in self.inputs]

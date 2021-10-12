@@ -19,9 +19,7 @@ for arg1 in ArgVariant:
             if arg1 == 0 and arg2 == 0 and arg3 == 0:
                 continue
 
-            dict_copy = {"semantics": data['semantics'],
-                         "args": data["args"],
-                         "input_precision": data['input_precision']}
+            dict_copy = data
             dict_copy['arg_types'] = [ArgVariantName[arg1], ArgVariantName[arg2],
                                  ArgVariantName[arg3]]
 

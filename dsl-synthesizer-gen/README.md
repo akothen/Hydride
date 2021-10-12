@@ -10,7 +10,8 @@ The user must specify the dictionary for their racket code according to the foll
 		"semantics" : "<RACKET FUNCTION DEFINITION STRING>",
 		"args" : [<LIST OF ARG NAMES>],
 		"arg_types" : ["[BitVectorSymbolic | BitVectorConst]"*],
-		"input_precision" : [<INTEGER BITWIDTH>]
+		"input_length" : [<INTEGER BITWIDTH>],
+        "output_precision" : [<OUTPUT PRECISION HINT>]
 	},
 	...
 }

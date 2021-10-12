@@ -8,20 +8,31 @@ def read_dsl_dictionary(dsl_dict):
     for inst_name, inst_def in dsl_dict.items():
         args = [arg.strip()  for arg in inst_def['args'].split(",")]
         regs = [arg.strip()  for arg in inst_def['reg'].split(",")]
-        size_name = inst_def['size']
-        precision_name = inst_def['in_precision']
+        size_name_list = inst_def['size'].split(",")
+        in_precision_name = inst_def['in_precision']
+
+        out_precision_name = inst_def['out_precision']
+
+
 
         DSLArgList = []
         for arg in args:
             if arg in regs:
                 regArg = DSLArg(arg, ArgType.BitVectorSymbolic)
                 DSLArgList.append(regArg)
-            elif arg == size_name:
+            elif arg in size_name_list:
                 lengthArg = DSLArg(arg, ArgType.LengthConst)
                 DSLArgList.append(lengthArg)
-            elif arg == precision_name:
-                precisionArg = DSLArg(arg, ArgType.PrecisionConst )
+            elif arg == in_precision_name:
+                precisionArg = DSLArg(arg, ArgType.PrecisionConst, is_in_precision = True )
                 DSLArgList.append(precisionArg)
+            elif arg == out_precision_name:
+                precisionArg = DSLArg(arg, ArgType.PrecisionConst, is_in_precision = False )
+                DSLArgList.append(precisionArg)
+            else:
+                """ We assume the value to be of integer type """
+                intArg = DSLArg(arg, ArgType.IntSymbolic)
+                DSLArgList.append(intArg)
 
         Inst = DSLInst(inst_name, DSLArgList, semantics = inst_def['semantics'])
         DSLInstList.append(Inst)
@@ -38,17 +49,28 @@ def get_spec_args_from_user_dictionary(user_dict):
         for idx, arg in enumerate(ref_obj['args']):
             if ref_obj['arg_types'][idx] == "BitVectorSymbolic":
                 num_symbolic += 1
-                arg_desc = DSLArg(arg, ArgType.BitVectorSymbolic, total_bits = ref_obj['input_precision'][idx])
+                arg_desc = DSLArg(arg, ArgType.BitVectorSymbolic, total_bits = ref_obj['input_length'][idx])
                 user_args.append(arg_desc)
             elif ref_obj['arg_types'][idx] == "BitVectorConst":
                 num_concrete += 1
                 """ Rely on concrete value initilization scheme to
                 give an initial value against this symbolic bv """
-                arg_desc = DSLArg(arg, ArgType.BitVectorConst, total_bits = ref_obj['input_precision'][idx])
+                arg_desc = DSLArg(arg, ArgType.BitVectorConst, total_bits = ref_obj['input_length'][idx])
                 user_args.append(arg_desc)
             else:
                 assert False, ("Unsupported user argument type:\t"+ref_obj['arg_types'][idx])
         func_info['arg_info'] = user_args
+
+        out_prec_list =  ref_obj['output_precision']
+
+        assert len(out_prec_list) != 0, "Output precision must be specified for reference implementation"
+
+        user_out_args_list = []
+        for prec in out_prec_list:
+            out_arg = DSLArg("out", ArgType.PrecisionConst, precision_value = int(prec))
+            user_out_args_list.append(out_arg)
+
+        func_info['out_desc'] = user_out_args_list
 
         if num_symbolic > 0 and num_concrete > 0:
             func_info['synth_type'] = "concolic"
