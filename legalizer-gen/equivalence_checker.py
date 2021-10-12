@@ -9,6 +9,7 @@
 
 import os
 from utility import ext_utility_funcs, find_between
+from legalizer_info import LegalizerInfo
 
 
 # Class to track semantic info of a spec.
@@ -509,10 +510,13 @@ class DSLNameGen:
 
 
 class EquivalenceChecker:
-  inst_to_sema_map = dict()
-  unique_sema_list = list()
-  dsl_to_insts_map = dict()
+  __target_inst_map_list = list()
+  __legalizer_info = LegalizerInfo()
 
+  def __init__(self, target_inst_map_list, legalizer_info):
+    self.__target_inst_map_list = target_inst_map_list
+    self.__legalizer_info = legalizer_info
+  
   @classmethod
   def __sema_are_equivalent(self, racket_file):
     output_file = "output.txt"
@@ -549,7 +553,6 @@ class EquivalenceChecker:
         num_tiles += 1
     return [num_scalars, num_vectors, num_tiles]
   
-  
   @classmethod
   def __populate_dsl_sema_info(self, sketch_inst_name, spec_inst_name, spec_sema_info):
     # Replace the spec name with new dsl instruction's name
@@ -563,26 +566,25 @@ class EquivalenceChecker:
       new_sema += ((line + " \\n \\\n"))
     
     # Map the target instructions to the new semantics
-    EquivalenceChecker.inst_to_sema_map[spec_inst_name] = new_sema
-    if self.inst_to_sema_map.get(sketch_inst_name) == None:
-      self.inst_to_sema_map[sketch_inst_name] = new_sema
+    self.__legalizer_info.inst_to_sema_map[spec_inst_name] = new_sema
+    if self.__legalizer_info.inst_to_sema_map.get(sketch_inst_name) == None:
+      self.__legalizer_info.inst_to_sema_map[sketch_inst_name] = new_sema
     
     # Map the new dsl instruction to the target instructions
-    if self.dsl_to_insts_map.get(dsl_inst_name) == None:
-      self.dsl_to_insts_map[dsl_inst_name] = [spec_inst_name, sketch_inst_name]
+    if self.__legalizer_info.dsl_to_insts_map.get(dsl_inst_name) == None:
+      self.__legalizer_info.dsl_to_insts_map[dsl_inst_name] = [spec_inst_name, sketch_inst_name]
     else:
-      if spec_inst_name not in self.dsl_to_insts_map[dsl_inst_name]:  
-        self.dsl_to_insts_map[dsl_inst_name].append(spec_inst_name)
+      if spec_inst_name not in self.__legalizer_info.dsl_to_insts_map[dsl_inst_name]:  
+        self.__legalizer_info.dsl_to_insts_map[dsl_inst_name].append(spec_inst_name)
     
     # Record the generated semantics
-    self.unique_sema_list.append(new_sema)
-
+    self.__legalizer_info.unique_sema_list.append(new_sema)
 
   @classmethod
-  def gen_equivalence_checker(self, target_inst_map):
+  def __gen_equivalence_checker(self, target_inst_map):
     for inst, instinfo in target_inst_map.items():
-      inst_num_args = EquivalenceChecker.__num_inst_args(instinfo['args'])
-      num_reg_args = EquivalenceChecker.__get_num_reg_args(instinfo['args'])
+      inst_num_args = self.__num_inst_args(instinfo['args'])
+      num_reg_args = self.__get_num_reg_args(instinfo['args'])
       sema_info = SketchGen.gen_sketch(instinfo)
       print("sketch_lines:")
       sketch = ""
@@ -594,9 +596,9 @@ class EquivalenceChecker:
       for cmp_inst, cmp_instinfo in target_inst_map.items():
         if cmp_inst == inst:
           continue
-        if inst_num_args != EquivalenceChecker.__num_inst_args(cmp_instinfo['args']):
+        if inst_num_args != self.__num_inst_args(cmp_instinfo['args']):
           continue
-        cmp_num_reg_args = EquivalenceChecker.__get_num_reg_args(cmp_instinfo['args'])
+        cmp_num_reg_args = self.__get_num_reg_args(cmp_instinfo['args'])
         if num_reg_args != cmp_num_reg_args:
           continue
 
@@ -613,19 +615,41 @@ class EquivalenceChecker:
         print(spec)
         print("=========================================")
         racket_file = RosetteCodeGen.gen_racket_file(spec, sketch, cmp_num_reg_args[1], cmp_instinfo['bitwidth'], cmp_sema_info)
-        ret = EquivalenceChecker.__sema_are_equivalent(racket_file)
+        ret = self.__sema_are_equivalent(racket_file)
         print(ret)
         
         if ret == True:
-          EquivalenceChecker.__populate_dsl_sema_info(instinfo['name'], cmp_instinfo['name'], cmp_sema_info)
+          self.__populate_dsl_sema_info(instinfo['name'], cmp_instinfo['name'], cmp_sema_info)
 
         break
       break
     return
 
-        
+  def perform_equivalence_checking(self):
+    '''
+    perform intra-architecture equivalence checking
+    '''
+    for target_inst_map in self.__target_inst_map_list:
+      EquivalenceChecker.__gen_equivalence_checker(target_inst_map)
+    return 
+  
+  def get_updated_legalizer_info(self):
+    '''
+    return the legalize info that has been modified as a 
+    result of equivalence checking.
+    '''
+    return self.__legalizer_info
+
+
+
 # Just for testing
 from x86_sema import x86_sema
 
 if __name__ == '__main__':
-  EquivalenceChecker.gen_equivalence_checker(x86_sema)
+  legalizer_info = LegalizerInfo()
+  eq_checker = EquivalenceChecker([x86_sema], legalizer_info)
+  eq_checker.perform_equivalence_checking()
+  legalizer_info = eq_checker.get_updated_legalizer_info()
+  #legalizer_info = eqchecker.gen_equivalence_checker()
+  #EquivalenceChecker.gen_equivalence_checker(x86_sema)
+

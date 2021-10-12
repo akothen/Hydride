@@ -1,3 +1,11 @@
+#################################################################
+
+# This file parses the semantics of a given DSL instruction
+# and returns information about its properties such as 
+# name, args, precision, etc.
+
+################################################################
+
 
 from utility import ext_utility_funcs, find_between
 
@@ -137,3 +145,4 @@ class DSLInstInfo:
     print("regs indices:")
     print(regs_indices)
     return regs_indices
+
