@@ -15,8 +15,9 @@ from legalizer_info import LegalizerInfo
 # Class to track semantic info of a spec.
 class SpecSemaInfo:
   def __init__(self):
-    self.sketch_lines = []
+    self.sema_lines = []
     self.reg_args = []
+    self.induction_vars = []
     self.loop_bounds = []
     self.loop_bounds_vals = []
     self.in_precision = None
@@ -41,8 +42,9 @@ class SpecSemaInfo:
 # Class to track semantic info of a sketch.
 class SketchSemaInfo:
   def __init__(self):
-    self.sketch_lines = []
+    self.sema_lines = []
     self.reg_args = []
+    self.induction_vars = []
     self.loop_bounds = []
     self.in_precision = None
     self.out_precision = None
@@ -191,7 +193,6 @@ class SketchGen:
   def __modify_sketch_func_sig(self, sig, sema_info):
     sig_array = sig.split(")")
     sig = sig_array[0]
-
     # Loop bounds come first
     for var in sema_info.loop_bounds:
       sig = sig + " " + var
@@ -210,7 +211,6 @@ class SketchGen:
     in_precision = instinfo['input_precision']
     out_precision = instinfo['output_precision']
     inst_sema_lines = inst_sema.split("\n")
-    induction_var = list()
     symbolic_var = list()
     var_to_val_map = dict()
     first_line = ""
@@ -226,7 +226,7 @@ class SketchGen:
         assert(name in line)
         line = line.replace(name, "sketch")
         first_line = line
-        sema_info.sketch_lines.append(line)
+        sema_info.sema_lines.append(line)
         print("first line:")
         print(first_line)
         continue
@@ -238,7 +238,7 @@ class SketchGen:
         print(var_array)
         assert(len(var_array) == 1)
         var = var_array[0].strip()
-        induction_var.append(var)
+        sema_info.induction_vars.append(var)
         bound_array = find_between(line, "range", ")")
         print("bound_array:")
         print(bound_array)
@@ -260,16 +260,16 @@ class SketchGen:
         print(type(bound_arg))
         if bound_arg not in sema_info.loop_bounds:
           sema_info.loop_bounds.append(bound_arg)
-        sema_info.sketch_lines.append(line)
+        sema_info.sema_lines.append(line)
         continue
 
       # Replace some induction variables
-      for var in induction_var:
+      for var in sema_info.induction_vars:
         if var in line:
           print("line:")
           print(line)
           print("induction_var:")
-          print(induction_var)
+          print(sema_info.induction_vars)
           constant_array = find_between(line, var, ")")
           print("--constant array:")
           print(constant_array)
@@ -332,20 +332,20 @@ class SketchGen:
             except:
               pass
           break
-      sema_info.sketch_lines.append(line)
+      sema_info.sema_lines.append(line)
     
     first_line = SketchGen.__modify_sketch_func_sig(first_line, sema_info)
-    sema_info.sketch_lines[0] = first_line
+    sema_info.sema_lines[0] = first_line
 
     # Add the symbolic variables' definitions
-    new_sketch_lines = list()
-    for index, line in enumerate(sema_info.sketch_lines):
+    new_sema_lines = list()
+    for index, line in enumerate(sema_info.sema_lines):
       if index == 1:
         for sym in symbolic_var:
-          new_sketch_lines.append("(define-symbolic " + sym + " integer?) ")
-      new_sketch_lines.append(line)
+          new_sema_lines.append("(define-symbolic " + sym + " integer?) ")
+      new_sema_lines.append(line)
 
-    sema_info.sketch_lines = new_sketch_lines
+    sema_info.sema_lines = new_sema_lines
     return sema_info
 
 
@@ -354,7 +354,6 @@ class SpecGen:
   def __modify_spec_func_sig(self, sig, sema_info):
     sig_array = sig.split(")")
     sig = sig_array[0]
-
     # Loop bounds come first
     for var in sema_info.loop_bounds:
       sig = sig + " " + var
@@ -378,7 +377,6 @@ class SpecGen:
     in_precision = instinfo['input_precision']
     out_precision = instinfo['output_precision']
     inst_sema_lines = inst_sema.split("\n")
-    induction_var = list()
     var_to_val_map = dict()
     first_line = ""
     sema_info = SpecSemaInfo()
@@ -394,7 +392,7 @@ class SpecGen:
         assert(name in line)
         line = line.replace(name, "spec")
         first_line = line
-        sema_info.sketch_lines.append(line)
+        sema_info.sema_lines.append(line)
         print("first_line:")
         print(first_line)
         continue
@@ -414,15 +412,15 @@ class SpecGen:
         if bound_arg not in sema_info.loop_bounds:
           sema_info.loop_bounds.append(bound_arg)
           sema_info.loop_bounds_vals.append(bound)
-        induction_var.append(var)
-        sema_info.sketch_lines.append(line)
+        sema_info.induction_vars.append(var)
+        sema_info.sema_lines.append(line)
         continue
 
       # Handle the induction variables
-      for var in induction_var:
+      for var in sema_info.induction_vars:
         if var in line:
           print("induction_var:")
-          print(induction_var)
+          print(sema_info.induction_vars)
           constant_array = find_between(line, var, ")")
           print("--constant array:")
           print(constant_array)
@@ -491,12 +489,79 @@ class SpecGen:
             except:
               pass
           break
-      sema_info.sketch_lines.append(line)
+      sema_info.sema_lines.append(line)
 
     assert(sema_info.spec_info_is_legal())
     first_line = SpecGen.__modify_spec_func_sig(first_line, sema_info)
-    sema_info.sketch_lines[0] = first_line
+    sema_info.sema_lines[0] = first_line
     return sema_info
+
+
+class DSLSemaGen:
+  @classmethod
+  def __modify_sema_func_sig(self, sig, spec_sema_info):
+    for sym in reversed(spec_sema_info.sym_args):
+      sig = sig.replace(sym, "")
+    sig_array = sig.split(")")
+    sig = sig_array[0].strip() + ")"
+    return sig
+  
+  @staticmethod
+  def gen_dsl_sema(spec_sema_info, dsl_inst_name):
+    first_line = ""
+    dsl_sema_lines = list()
+    reversed_loop_bounds = spec_sema_info.loop_bounds
+    reversed_loop_bounds.reverse()
+    print("reversed_loop_bounds:")
+    print(reversed_loop_bounds)
+    print("spec_sema_info.sym_args:")
+    print(spec_sema_info.sym_args)
+    for index, line in enumerate(spec_sema_info.sema_lines): 
+      line = line.strip()
+      if line == "{" or line == "}":
+        continue
+      print("line:")
+      print(line)
+
+      # Replace function name
+      if index == 0 and "define" in line:
+        array = find_between(line, "define (", " ")
+        assert(len(array) == 1)
+        line = line.replace(array[0].strip(), dsl_inst_name)
+        first_line = line
+        dsl_sema_lines.append(line)
+        print("first_line:")
+        print(first_line)
+        continue
+      
+      for sym in reversed(spec_sema_info.sym_args):
+        if sym in line:
+          # Go from inner induction variables to outer
+          # TODO: We need to make this more general
+          for index, var in enumerate(reversed(spec_sema_info.induction_vars)):
+            # Skip the inner most loop's induction variable
+            if index == 0:
+              continue
+            if var not in line:
+              continue
+            print("=====line:")
+            print(line)
+            array = find_between(line, "(* " + var, ")")
+            print("====array:")
+            print(array)
+            print("==sym:")
+            print(sym)
+            if len(array) == 0:
+              line = line.replace(sym, spec_sema_info.out_precision)
+            else:
+              assert(len(array) == 1)
+              assert(array[0].strip() == sym)
+              line = line.replace(sym, reversed_loop_bounds[index - 1])
+      dsl_sema_lines.append(line)
+    
+    first_line = DSLSemaGen.__modify_sema_func_sig(first_line, spec_sema_info)
+    dsl_sema_lines[0] = first_line
+    return dsl_sema_lines
 
 
 class DSLNameGen:
@@ -558,11 +623,8 @@ class EquivalenceChecker:
     # Replace the spec name with new dsl instruction's name
     new_sema = ""
     dsl_inst_name = DSLNameGen.gen_new_inst_name()
-    for line in spec_sema_info.sketch_lines:
-      print("dsl_inst_name:")
-      print(dsl_inst_name)
-      if "define" in line and "spec" in line:
-        line = line.replace("spec", dsl_inst_name)
+    sema_lines = DSLSemaGen.gen_dsl_sema(spec_sema_info, dsl_inst_name)
+    for line in sema_lines:
       new_sema += ((line + " \\n \\\n"))
     
     # Map the target instructions to the new semantics
@@ -586,9 +648,9 @@ class EquivalenceChecker:
       inst_num_args = self.__num_inst_args(instinfo['args'])
       num_reg_args = self.__get_num_reg_args(instinfo['args'])
       sema_info = SketchGen.gen_sketch(instinfo)
-      print("sketch_lines:")
+      print("sema_lines:")
       sketch = ""
-      for line in sema_info.sketch_lines:
+      for line in sema_info.sema_lines:
         sketch += (line + "\n")
       print("=========================================")
       print(sketch)
@@ -607,9 +669,9 @@ class EquivalenceChecker:
         cmp_sema_info = SpecGen.gen_spec(cmp_instinfo)
         if sema_info.is_compatible_with_spec(cmp_sema_info) == False:
           continue
-        print("cmp_sketch_lines:")
+        print("cmp_sema_lines:")
         spec = ""
-        for line in cmp_sema_info.sketch_lines:
+        for line in cmp_sema_info.sema_lines:
           spec += (line + "\n")
         print("=========================================")
         print(spec)
@@ -652,4 +714,3 @@ if __name__ == '__main__':
   legalizer_info = eq_checker.get_updated_legalizer_info()
   #legalizer_info = eqchecker.gen_equivalence_checker()
   #EquivalenceChecker.gen_equivalence_checker(x86_sema)
-
