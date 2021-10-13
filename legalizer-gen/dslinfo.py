@@ -112,9 +112,6 @@ class DSLInstInfo:
             print("out_precision:")
             print(precision)
           else:
-            # ext-bv is not sign/zero extension, so ignore it.
-            if op == "ext-bv":
-              continue
             # This means we need to change the precision
             string = find_between(line, op, ")")
             print("semantics")
@@ -148,4 +145,3 @@ class DSLInstInfo:
     print("regs indices:")
     print(regs_indices)
     return regs_indices
-
