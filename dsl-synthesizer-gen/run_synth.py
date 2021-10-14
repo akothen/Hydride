@@ -23,6 +23,8 @@ def get_arg_parser():
     parser.add_argument("--scheme", type = str, help = "The heurstic to use identify dsl instruction usage in the synthesis grammar (default = \"bvops\")",
                         choices = ["bvops", "arg_superset"], default = "bvops")
 
+    parser.add_argument("--grammar",type = str, help = "Use specfied grammar file instead of generating one automatically", default = None)
+
     return parser
 
 
@@ -57,13 +59,21 @@ if __name__ == "__main__":
         out_desc = args_info[user_func]['out_desc']
         bitwidth = func_arg_desc[0].total_bits
 
-        DSLGenerator = DSLGen(func_arg_desc, out_desc , bitwidth, DSLDefs, verbose = args.verbose,
-                              spec_sema = user_data[user_func]['semantics'], inclusion_scheme = args.scheme)
+        grammar_tree = ""
 
-        print("**** Created DSL Grammar Generator for ",user_func,"\n")
+        if args.grammar == None:
+            DSLGenerator = DSLGen(func_arg_desc, out_desc , bitwidth, DSLDefs, verbose = args.verbose,
+                                  spec_sema = user_data[user_func]['semantics'], inclusion_scheme = args.scheme)
+            print("**** Created DSL Grammar Generator for ",user_func,"\n")
+            grammar_tree = DSLGenerator.generate()
+        else:
+            with open(args.grammar,"r") as GrammarFile:
+                grammar_tree = GrammarFile.read()
+
+
+
         grammar_name = "synth_grammar"
         grammar_tree_name = "gen-grammar"
-        grammar_tree = DSLGenerator.generate()
 
 
 

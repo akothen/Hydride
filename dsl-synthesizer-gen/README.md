@@ -35,7 +35,7 @@ export RACKET_BINARY=<PATH/TO/YOUR/RACKET/BINARY>
 
 ## Usage
 ```
-usage: run_synth.py [-h] [-v] [--utils UTILS] [--depth DEPTH] [--iterations ITERATIONS] [--scheme {bvops,arg_superset}] reference
+usage: run_synth.py [-h] [-v] [--utils UTILS] [--depth DEPTH] [--iterations ITERATIONS] [--scheme {bvops,arg_superset}] [--grammar GRAMMAR] reference
 
 positional arguments:
   reference             Path to the file for the reference implementation dictionary
@@ -49,8 +49,8 @@ optional arguments:
                         Maximum number of iterations to use during iterative synthesis (default = 3)
   --scheme {bvops,arg_superset}
                         The heurstic to use identify dsl instruction usage in the synthesis grammar (default = "bvops")
+  --grammar GRAMMAR     Use specfied grammar file instead of generating one automatically
 ```
-
 
 An example usage can be found by running the command:
 ```
