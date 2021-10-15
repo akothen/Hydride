@@ -337,28 +337,28 @@
 
 
 
-;;<intrinsic tech="AVX-512/KNC" sequence="TRUE" name="_mm512_reduce_add_ps">
-;;	<type>Floating Point</type>
+;;<intrinsic tech="AVX-512/KNC" sequence="TRUE" name="_mm512_reduce_add_epi64">
+;;	<type>Integer</type>
 ;;	<CPUID>AVX512F/KNCNI</CPUID>
 ;;	<category>Arithmetic</category>
-;;	<return type="float" varname="dst" etype="FP32"/>
-;;	<parameter type="__m512" varname="a" etype="FP32"/>
-;;	<description>Reduce the packed single-precision (32-bit) floating-point elements in "a" by addition. Returns the sum of all elements in "a".</description>
+;;	<return type="__int64" varname="dst" etype="UI64"/>
+;;	<parameter type="__m512i" varname="a" etype="UI64"/>
+;;	<description>Reduce the packed 64-bit integers in "a" by addition. Returns the sum of all elements in "a".</description>
 ;;	<operation>
-;;dst[31:0] := 0.0
-;;FOR j := 0 to 15
-;;	i := j*32
-;;	dst[31:0] := dst[31:0] + a[i+31:i]
+;;dst[63:0] := 0
+;;FOR j := 0 to 7
+;;	i := j*64
+;;	dst[63:0] := dst[63:0] + a[i+63:i]
 ;;ENDFOR
 ;;	</operation>
 ;;	<header>immintrin.h</header>
 ;;</intrinsic>
-(define (_mm512_reduce_add_ps v)
+(define (_mm512_reduce_add_epi64 v)
   (define result
     (apply
      bvadd
-     (for/list ([i (reverse (range 16))])
-       (ext-bv v i 32))))
+     (for/list ([i (reverse (range 8))])
+       (ext-bv v i 64))))
   result)
 
 
