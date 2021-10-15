@@ -134,7 +134,21 @@ class DSLGen:
         zero_bv = "(bv 0 (bitvector "+str(self.inputs[0].total_bits)+"))"
         one_bv = ""#"(bv 1 (bitvector "+str(self.inputs[0].total_bits)+"))"
         hint_str = ""  #"(vector-add (vector-mul (expr) (expr) 32 32) (vector-mac (expr) (expr) (expr) 32 32) 64 16)"
-        expr = args + rosette_calls + [no_op_str,zero_bv, one_bv, hint_str]
+
+        """
+        Matrix operation support instructions
+        """
+        concat_str = "(concat (expr) (expr))"
+        extract_row_str = "(ext-matrix-row (expr) 2 2 (?? integer?) 32)"
+        extract_col_str = "(ext-matrix-col (expr) 2 2 (?? integer?) 32)"
+
+        extract_rows = ["(ext-matrix-row (expr) 2 2 {} 32)".format(i) for i in range(2)]
+        extract_cols = ["(ext-matrix-col (expr) 2 2 {} 32)".format(i) for i in range(2)]
+        extract_strs = [] #  extract_rows + extract_cols + [ "(dsl_inst_0 (expr) (expr) (expr) 1 2 32 32)" ]
+
+
+
+        expr = args + rosette_calls + [no_op_str,zero_bv, one_bv, hint_str, concat_str]+extract_strs
 
         args_str = "" #"[arg (" +("\n\t".join((["choose"]+args)))+")]"
         expr_str = "[expr (" +("\n\t".join((["choose"]+expr)))+")]"

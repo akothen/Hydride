@@ -11,7 +11,7 @@ def pprint(s):
 
 class SynthBase:
     def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
-            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True, current_bitwidth = 16):
+            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True, current_bitwidth = 32):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
@@ -80,7 +80,7 @@ class SynthBase:
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 6000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
         if self.current_bitwidth != None:
             racket_str += "(current-bitwidth "+str(self.current_bitwidth)+")"+"\n"
@@ -209,7 +209,7 @@ class SynthBase:
         (require racket/pretty)\n"
 
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 6000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
 
 
         if self.current_bitwidth != None:
