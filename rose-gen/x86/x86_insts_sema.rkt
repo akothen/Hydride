@@ -337,7 +337,29 @@
 
 
 
-
+;;<intrinsic tech="AVX-512/KNC" sequence="TRUE" name="_mm512_reduce_add_ps">
+;;	<type>Floating Point</type>
+;;	<CPUID>AVX512F/KNCNI</CPUID>
+;;	<category>Arithmetic</category>
+;;	<return type="float" varname="dst" etype="FP32"/>
+;;	<parameter type="__m512" varname="a" etype="FP32"/>
+;;	<description>Reduce the packed single-precision (32-bit) floating-point elements in "a" by addition. Returns the sum of all elements in "a".</description>
+;;	<operation>
+;;dst[31:0] := 0.0
+;;FOR j := 0 to 15
+;;	i := j*32
+;;	dst[31:0] := dst[31:0] + a[i+31:i]
+;;ENDFOR
+;;	</operation>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+(define (_mm512_reduce_add_ps v)
+  (define result
+    (apply
+     bvadd
+     (for/list ([i (reverse (range 16))])
+       (ext-bv v i 32))))
+  result)
 
 
 
