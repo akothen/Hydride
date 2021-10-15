@@ -99,7 +99,7 @@ if __name__ == "__main__":
                                spec_semantics = user_data[user_func]['semantics'],
                                dsl_desc = DSLDefs,
                                utility_file = args.utils,
-                               use_zero_init = True)
+                               use_zero_init = False)
         elif synth_type == "concolic":
             print("*"*10, "Using Iterative Concolic Synthesis", "*"*10)
             Synth = ConcolicIterativeSynth(func_arg_desc, spec_name = user_func,
