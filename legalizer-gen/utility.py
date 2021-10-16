@@ -1,5 +1,8 @@
 
 
+import re
+
+
 def find_between(s, first, last):
   find_bw_array = list()
   # Split the string 
@@ -46,3 +49,7 @@ def list_to_string(lst):
       string += ","
   string += "\""
   return string
+
+
+def strip_brackets(s):
+  return re.sub(r"[\([{})\]]", "", s)

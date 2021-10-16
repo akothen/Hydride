@@ -2,6 +2,40 @@
 
 x86_sema = {
 
+  "_mm512_reduce_add_epi64" : {
+    "name" : "_mm512_reduce_add_epi64",
+    "args" : "vreg",
+    "bitwidth" : "512",
+    "input_precision" : "64",
+    "output_precision" : "64",
+    "semantics" : "{   \n \
+      (define (_mm512_reduce_add_epi64 vreg)  \n \
+        (define result   \n \
+          (apply   \n \
+          bvadd   \n \
+          (for/list ([i (reverse (range 8))])  \n \
+            (ext-bv vreg i 64))))  \n \
+        result)   \n \
+    }",
+  },
+
+  "_mm512_reduce_add_epi32" : {
+  "name" : "_mm512_reduce_add_epi32",
+  "args" : "vreg",
+  "bitwidth" : "512",
+  "input_precision" : "32",
+  "output_precision" : "32",
+  "semantics" : "{   \n \
+    (define (_mm512_reduce_add_epi32 vreg)  \n \
+      (define result   \n \
+        (apply   \n \
+        bvadd   \n \
+        (for/list ([i (reverse (range 16))])  \n \
+          (ext-bv vreg i 32))))  \n \
+      result)   \n \
+    }",
+  },
+
   "_mm512_dpwssd_epi32" : {
     "name" : "_mm512_dpwssd_epi32",
     "args" : "vreg-acc, vreg1, vreg2",

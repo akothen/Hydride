@@ -7,7 +7,7 @@
 ################################################################
 
 
-from utility import ext_utility_funcs, find_between
+from utility import ext_utility_funcs, find_between, strip_brackets
 
 
 # This class helps extract information about a given instruction
@@ -89,6 +89,14 @@ class DSLInstInfo:
           string = find_between(line, op, ") (")
           print("string:")
           print(string)
+          if len(string) == 0:
+            # Check if we are only extracting bits and not extending them
+            assert("(ext-bv" in line)
+            string_array = find_between(line, "(ext-bv", ")")
+            string_array = string_array[0].strip().split(" ")
+            precision = string_array[len(string_array) - 1].strip()
+            precision = strip_brackets(precision)
+            return precision
           assert(len(string) == 1)
           string_array = string[0].strip().split(" ")
           precision = string_array[len(string_array) - 2]
@@ -106,6 +114,14 @@ class DSLInstInfo:
             string = find_between(line, op, ") (")
             print("string:")
             print(string)
+            if len(string) == 0:
+              # Check if we are only extracting bits and not extending them
+              assert("(ext-bv" in line)
+              string_array = find_between(line, "(ext-bv", ")")
+              string_array = string_array[0].strip().split(" ")
+              precision = string_array[len(string_array) - 1].strip()
+              precision = strip_brackets(precision)
+              return precision
             assert(len(string) == 1)
             string_array = string[0].strip().split(" ")
             precision = string_array[len(string_array) - 1].strip()

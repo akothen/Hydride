@@ -8,7 +8,7 @@
 
 
 import os
-from utility import ext_utility_funcs, find_between
+from utility import ext_utility_funcs, find_between, strip_brackets
 from legalizer_info import LegalizerInfo
 
 
@@ -36,7 +36,39 @@ class SpecSemaInfo:
       return False
     if len(self.other_args) != len(self.other_args_vals):
       return False
+    
+    # Output precions must never be None
+    if ((self.out_precision is None) or (self.out_precision_val is None)):
+      return False
     return True
+  
+  def print(self):
+    print("sema_lines:")
+    print(self.sema_lines)
+    print("reg_args:")
+    print(self.reg_args)
+    print("induction_vars:")
+    print(self.induction_vars)
+    print("loop_bounds:")
+    print(self.loop_bounds)
+    print("loop_bounds_vals:")
+    print(self.loop_bounds_vals)
+    print("in_precision:")
+    print(self.in_precision)
+    print("in_precision_val:")
+    print(self.in_precision_val)
+    print("out_precision:")
+    print(self.out_precision)
+    print("out_precision_val:")
+    print(self.out_precision_val)
+    print("sym_args:")
+    print(self.sym_args)
+    print("sym_args_vals:")
+    print(self.sym_args_vals)
+    print("other_args:")
+    print(self.other_args)
+    print("other_args_vals:")
+    print(self.other_args_vals)
 
 
 # Class to track semantic info of a sketch.
@@ -59,6 +91,24 @@ class SketchSemaInfo:
     if len(self.other_args) != len(spec.other_args):
       return False
     return True
+  
+  def print(self):
+    print("sema_lines:")
+    print(self.sema_lines)
+    print("reg_args:")
+    print(self.reg_args)
+    print("induction_vars:")
+    print(self.induction_vars)
+    print("loop_bounds:")
+    print(self.loop_bounds)
+    print("in_precision:")
+    print(self.in_precision)
+    print("out_precision:")
+    print(self.out_precision)
+    print("sym_args:")
+    print(self.sym_args)
+    print("other_args:")
+    print(self.other_args)
 
 
 class SymIntGen:
@@ -101,6 +151,8 @@ class IntDefGen:
     string = ""
     conc_int_list = []
     for i, val in enumerate(int_vals):
+      if val == None:
+        continue
       print(type(i))
       conc_int_name = "concint" + str(IntDefGen.__suffix)
       string += "(define " + conc_int_name + " " + str(val) + " )\n"
@@ -144,7 +196,7 @@ class RosetteCodeGen:
     '''
 
   @classmethod
-  def gen_racket_file(self, spec, sketch, num_vectors, vector_bitwidth, spec_sema_info):
+  def gen_racket_file(self, spec, sketch, num_vectors, vector_bitwidth, spec_sema_info, sketch_sema_info):
     text = self.__gen_headers()
     f = open(RosetteCodeGen.utility_file, "r")
     for x in f:
@@ -177,7 +229,8 @@ class RosetteCodeGen:
     sketch_args = []
     sketch_args.extend(symbvs)
     sketch_args.extend(loop_bounds_vars)
-    sketch_args.extend(out_precision_vars)
+    if sketch_sema_info.out_precision is not None:
+      sketch_args.extend(out_precision_vars)
     sketch_args.extend(other_args_vars)
     text += self.__gen_synthesis_code(symbvs, "spec", spec_args, "sketch", sketch_args)
 
@@ -191,13 +244,15 @@ class RosetteCodeGen:
 class SketchGen:
   @classmethod
   def __modify_sketch_func_sig(self, sig, sema_info):
+    sema_info.print()
     sig_array = sig.split(")")
     sig = sig_array[0]
     # Loop bounds come first
     for var in sema_info.loop_bounds:
       sig = sig + " " + var
     # Output precision next
-    sig = sig + " " + sema_info.out_precision
+    if sema_info.out_precision is not None:
+      sig = sig + " " + sema_info.out_precision
     # Other args next
     for var in sema_info.other_args:
       sig = sig + " " + var
@@ -352,13 +407,15 @@ class SketchGen:
 class SpecGen:
   @classmethod
   def __modify_spec_func_sig(self, sig, sema_info):
+    sema_info.print()
     sig_array = sig.split(")")
     sig = sig_array[0]
     # Loop bounds come first
     for var in sema_info.loop_bounds:
       sig = sig + " " + var
     # Input precion next 
-    sig = sig + " " + sema_info.in_precision
+    if sema_info.in_precision is not None:
+      sig = sig + " " + sema_info.in_precision
     # Output precision next
     sig = sig + " " + sema_info.out_precision
     # Other args next
@@ -366,6 +423,8 @@ class SpecGen:
       sig = sig + " " + var
     # Sym args next
     for var in sema_info.sym_args:
+      if var == None:
+        continue
       sig = sig + " " + var
     sig = sig + ")"
     return sig
@@ -468,29 +527,50 @@ class SpecGen:
           else:
             string = find_between(line, op, ") (")
             if len(string) == 0:
-              continue
-            print("line:")
-            print(line)
-            print("string:")
-            print(string)
-            assert(len(string) == 1)
-            string_array = string[0].strip().split(" ")
-            new_out_precision = string_array[len(string_array) - 1].strip()
-            try:
-              _ = int(new_out_precision)
-              if out_precision != new_out_precision:
-                var_out_precision = "conc_int_out_precision"
-                line = line.replace(new_out_precision, var_out_precision)
-                if var_out_precision not in sema_info.other_args:
-                  sema_info.other_args.append(var_out_precision)
-                  sema_info.other_args_vals.append(new_out_precision)
-              print("--out_precision:")
-              print(out_precision)
-            except:
-              pass
+              # Check if we are only extracting bits and not extending them
+              if "(ext-bv" in line:
+                string_array = line.strip().split(" ")
+                out_precision = string_array[len(string_array) - 1].strip()
+                out_precision = strip_brackets(out_precision)
+                print("===out_precision:")
+                print(out_precision)
+                if out_precision in sema_info.sym_args:
+                  # Remove it for the sym_args list
+                  index = sema_info.sym_args.index(out_precision)
+                  var_out_precision = "conc_precision"
+                  sema_info.out_precision = var_out_precision
+                  sema_info.out_precision_val = sema_info.sym_args_vals[index]
+                  line = line.replace(out_precision, var_out_precision)
+                  sema_info.sym_args[index] = None
+                  sema_info.sym_args_vals[index] = None
+                  #sema_info.sym_args.pop(index)
+                  #sema_info.sym_args_vals.pop(index)
+              else:
+                continue
+            else:
+              print("line:")
+              print(line)
+              print("string:")
+              print(string)
+              assert(len(string) == 1)
+              string_array = string[0].strip().split(" ")
+              new_out_precision = string_array[len(string_array) - 1].strip()
+              try:
+                _ = int(new_out_precision)
+                if out_precision != new_out_precision:
+                  var_out_precision = "conc_int_out_precision"
+                  line = line.replace(new_out_precision, var_out_precision)
+                  if var_out_precision not in sema_info.other_args:
+                    sema_info.other_args.append(var_out_precision)
+                    sema_info.other_args_vals.append(new_out_precision)
+                print("--out_precision:")
+                print(out_precision)
+              except:
+                pass
           break
       sema_info.sema_lines.append(line)
-
+    
+    sema_info.print()
     assert(sema_info.spec_info_is_legal())
     first_line = SpecGen.__modify_spec_func_sig(first_line, sema_info)
     sema_info.sema_lines[0] = first_line
@@ -501,6 +581,8 @@ class DSLSemaGen:
   @classmethod
   def __modify_sema_func_sig(self, sig, spec_sema_info):
     for sym in reversed(spec_sema_info.sym_args):
+      if sym is None:
+        continue
       sig = sig.replace(sym, "")
     sig_array = sig.split(")")
     sig = sig_array[0].strip() + ")"
@@ -535,6 +617,8 @@ class DSLSemaGen:
         continue
       
       for sym in reversed(spec_sema_info.sym_args):
+        if sym is None:
+          continue
         if sym in line:
           # Go from inner induction variables to outer
           # TODO: We need to make this more general
@@ -676,7 +760,8 @@ class EquivalenceChecker:
         print("=========================================")
         print(spec)
         print("=========================================")
-        racket_file = RosetteCodeGen.gen_racket_file(spec, sketch, cmp_num_reg_args[1], cmp_instinfo['bitwidth'], cmp_sema_info)
+        racket_file = RosetteCodeGen.gen_racket_file(spec, sketch, cmp_num_reg_args[1], \
+                                    cmp_instinfo['bitwidth'], cmp_sema_info, sema_info)
         ret = self.__sema_are_equivalent(racket_file)
         print(ret)
         
