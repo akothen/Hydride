@@ -105,7 +105,7 @@
 )
 
 ;; Reference Specification
-(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 4))])  (apply concat  (for/list ([j (reverse (range 4))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 4) j))(define value1 (ext-bv arg1 idx_left 4)) (define value2 (ext-bv arg2 idx_right 4))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
+(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 2))])  (apply bvadd (for/list ([k (reverse (range 2))])  (define idx_left (+ (* i 2) k)) (define idx_right (+ (* k 2) j))(define value1 (ext-bv arg1 idx_left 32)) (define value2 (ext-bv arg2 idx_right 32))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
                        (define (vector-mac dst a b len precision) 
                        (begin  
                        (assert (bv? dst))  
@@ -194,14 +194,14 @@
     ;;(apply concat (list  (expr) (expr) (expr) (expr) (expr) (expr) ))
     ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
 	(dsl_inst_0 (bv 0 (bitvector 64)) (expr) (expr) 1 2 8 8)
-	(dsl_inst_1 (expr) 2 8)
-	(vector-load arg0 16 0 4 8)
-	(vector-load arg0 16 1 4 8)
-	(vector-load arg0 16 2 4 8)
-	(vector-load arg0 16 3 4 8)
+	;;(dsl_inst_1 (expr) 2 8)
+	(vector-load arg0 4 0 2 8)
+	(vector-load arg0 4 1 2 8)
+	;;(vector-load arg0 4 2 2 8)
+	;;(vector-load arg0 4 3 2 8)
 	(strided-gather arg1 16 0 4 2 8)
 	(strided-gather arg1 16 1 4 2 8)
-	(strided-gather arg1 16 2 4 2 8)
+	;;(strided-gather arg1 16 2 4 2 8)
 
 	;;(ext-matrix-row arg0 2 4 0 8)
 	;;(ext-matrix-row arg0 2 4 1 8)
