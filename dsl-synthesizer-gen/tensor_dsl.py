@@ -109,5 +109,23 @@ bvadd \n \
 (bvmul (sign-ext-bv vreg1 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision) (sign-ext-bv vreg2 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision))))) \n \
 (bvadd (ext-bv vreg-acc i conc_out_precision) sum)))) \n \
 ",
-}
+},
+
+"dsl_inst_1" : {
+      "name" : "dsl_inst_1",
+      "args" : "vreg,conc_i_bound,conc_precision",
+      "reg"  : "vreg",
+      "size" : "conc_i_bound",
+      "in_precision" : "conc_precision",
+      "out_precision" : "conc_precision",
+      "semantics" : " \
+(define (dsl_inst_1 vreg conc_i_bound conc_precision) \n \
+(define result \n \
+(apply \n \
+bvadd \n \
+(for/list ([i (reverse (range conc_i_bound))]) \n \
+(ext-bv vreg i conc_precision)))) \n \
+result) \n \
+",
+  },
 }
