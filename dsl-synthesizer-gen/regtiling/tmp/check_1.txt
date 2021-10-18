@@ -1,0 +1,110 @@
+/Users/jeff/Desktop/rose/new2/Rosette-experiments/dsl-synthesizer-gen/regtiling/tmp/generated_1.rkt:214:0
+'(define (synth_grammar arg1 arg2)
+   (choose
+    (apply
+     concat
+     (list
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (strided-gather arg2 192 0 6 4 8)
+        (vector-load arg1 64 0 4 8)
+        1
+        4
+        8
+        8))
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (strided-gather arg2 192 1 6 4 8)
+        (vector-load arg1 64 0 4 8)
+        1
+        4
+        8
+        8))
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (vector-load arg1 64 0 4 8)
+        (strided-gather arg2 192 2 6 4 8)
+        1
+        4
+        8
+        8))
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (no-op (vector-load arg1 64 0 4 8))
+       (strided-gather arg2 192 3 6 4 8)
+       1
+       4
+       8
+       8)
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (no-op (vector-load arg1 64 0 4 8))
+       (no-op (strided-gather arg2 192 4 6 4 8))
+       1
+       4
+       8
+       8)
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (strided-gather arg2 192 5 6 4 8)
+        (vector-load arg1 64 0 4 8)
+        1
+        4
+        8
+        8))
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        arg1
+        (strided-gather arg2 192 0 6 4 8)
+        1
+        4
+        8
+        8))
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (no-op (strided-gather arg2 192 1 6 4 8))
+       arg1
+       1
+       4
+       8
+       8)
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (strided-gather arg2 192 2 6 4 8)
+        arg1
+        1
+        4
+        8
+        8))
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        (strided-gather arg2 192 3 6 4 8)
+        (vector-load arg1 64 4 4 8)
+        1
+        4
+        8
+        8))
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (no-op arg1)
+       (strided-gather arg2 192 4 6 4 8)
+       1
+       4
+       8
+       8)
+      (no-op
+       (dsl_inst_0
+        (bv 0 (bitvector 64))
+        arg1
+        (strided-gather arg2 192 5 6 4 8)
+        1
+        4
+        8
+        8))))))
