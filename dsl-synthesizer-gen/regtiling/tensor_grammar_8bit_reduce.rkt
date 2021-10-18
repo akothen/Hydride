@@ -24,6 +24,7 @@
 	;;(vector-load arg0 64 4 4 8)
 
 	(strided-gather arg1 192 0 6 2 8)
+	(strided-gather arg1 192 1 6 2 8)
 	(strided-gather arg1 192 2 6 2 8)
 	(strided-gather arg1 192 3 6 2 8)
 	(strided-gather arg1 192 4 6 2 8)
