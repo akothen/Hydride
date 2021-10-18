@@ -199,12 +199,6 @@
 	(strided-gather arg1 192 3 6 4 8)
 	(strided-gather arg1 192 4 6 4 8)
 	(strided-gather arg1 192 5 6 4 8)
-	;;(ext-matrix-col arg1 4 6 0 8)
-	;;(ext-matrix-col arg1 4 6 1 8)
-	;;(ext-matrix-col arg1 4 6 2 8)
-	;;(ext-matrix-col arg1 4 6 3 8)
-	;;(ext-matrix-col arg1 4 6 4 8)
-	;;(ext-matrix-col arg1 4 6 5 8)
     )]
 )
 

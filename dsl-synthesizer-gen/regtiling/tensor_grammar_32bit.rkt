@@ -14,10 +14,10 @@
 	(ext-matrix-row (expr) 2 2 1 32)
 	(ext-matrix-col (expr) 2 2 0 32)
 	(ext-matrix-col (expr) 2 2 1 32)
-	;;(vector-load arg0 4 0 2 32)
-	;;(vector-load arg0 4 1 2 32)
-	;;(strided-gather arg1 4 0 2 32)
-	;;(strided-gather arg1 4 1 2 32)
+	;;(vector-load arg0 128 0 2 32)
+	;;(vector-load arg0 128 2 2 32)
+	;;(strided-gather arg1 128 0 2 2 32)
+	;;(strided-gather arg1 128 1 2 2 32)
     )]
 )
 
