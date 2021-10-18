@@ -1,0 +1,38 @@
+/Users/jeff/Desktop/rose/new2/Rosette-experiments/dsl-synthesizer-gen/regtiling/tmp/generated_4.rkt:203:0
+'(define (synth_grammar arg1 arg2)
+   (choose
+    (apply
+     concat
+     (list
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (ext-matrix-col arg2 2 2 0 32)
+       (ext-matrix-row arg1 2 2 1 32)
+       1
+       2
+       32
+       32)
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (ext-matrix-col arg2 2 2 1 32)
+       (ext-matrix-row arg1 2 2 1 32)
+       1
+       2
+       32
+       32)
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       arg1
+       (ext-matrix-col arg2 2 2 0 32)
+       1
+       2
+       32
+       32)
+      (dsl_inst_0
+       (bv 0 (bitvector 64))
+       (ext-matrix-col arg2 2 2 1 32)
+       arg1
+       1
+       2
+       32
+       32)))))

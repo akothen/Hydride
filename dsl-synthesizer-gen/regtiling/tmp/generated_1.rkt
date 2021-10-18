@@ -105,7 +105,7 @@
 )
 
 ;; Reference Specification
-(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
+(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 2))])  (apply bvadd (for/list ([k (reverse (range 2))])  (define idx_left (+ (* i 2) k)) (define idx_right (+ (* k 2) j))(define value1 (ext-bv arg1 idx_left 32)) (define value2 (ext-bv arg2 idx_right 32))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
                        (define (vector-mac dst a b len precision) 
                        (begin  
                        (assert (bv? dst))  
@@ -178,59 +178,34 @@
 ;; Grammar Definition
 (define-grammar (gen-grammar arg0 arg1)
 [top (choose
-       (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
+       ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
+       (apply concat (list (expr) (expr) (expr) (expr) ))
 )]
 
 [expr (choose
 	arg0
 	arg1
 	(no-op (expr))
-	(bv 0 (bitvector 32))
-	(bv 0 (bitvector 96))
-	(bv 0 (bitvector 64))
-
-	(dsl_inst_0 (bv 0 (bitvector 16)) (expr) (expr) 1 2 8 8)
-	(dsl_inst_1 (expr) 2 8)
-
-	(vector-load arg0 64 0 2 8)
-	(vector-load arg0 64 2 2 8)
-	(vector-load arg0 64 4 2 8)
-	(vector-load arg0 64 6 2 8)
-
-	;;(vector-load arg0 64 0 4 8)
-	;;(vector-load arg0 64 4 4 8)
-
-	(strided-gather arg1 192 0 6 2 8)
-	(strided-gather arg1 192 2 6 2 8)
-	(strided-gather arg1 192 3 6 2 8)
-	(strided-gather arg1 192 4 6 2 8)
-	(strided-gather arg1 192 5 6 2 8)
-	
-	(strided-gather arg1 192 12 6 2 8)
-	(strided-gather arg1 192 13 6 2 8)
-	(strided-gather arg1 192 14 6 2 8)
-	(strided-gather arg1 192 15 6 2 8)
-	(strided-gather arg1 192 16 6 2 8)
-	(strided-gather arg1 192 17 6 2 8)
-
-	;;(strided-gather arg1 192 0 6 4 8)
-	;;(strided-gather arg1 192 1 6 4 8)
-	;;(strided-gather arg1 192 2 6 4 8)
-	;;(strided-gather arg1 192 3 6 4 8)
-	;;(strided-gather arg1 192 4 6 4 8)
-	;;(strided-gather arg1 192 5 6 4 8)
+	(bv 0 (bitvector 128))
+        (dsl_inst_0  (bv 0 (bitvector 64)) (expr) (expr) 1 2 32 32)
+	(ext-matrix-row (expr) 2 2 0 32)
+	(ext-matrix-row (expr) 2 2 1 32)
+	(ext-matrix-col (expr) 2 2 0 32)
+	(ext-matrix-col (expr) 2 2 1 32)
+	;;(vector-load arg0 128 0 2 32)
+	;;(vector-load arg0 128 2 2 32)
+	;;(strided-gather arg1 128 0 2 2 32)
+	;;(strided-gather arg1 128 1 2 2 32)
     )]
 )
 
 
-
-
 (define (synth_grammar arg1 arg2)
                     (gen-grammar arg1 arg2 #:depth 3))
-(define cex_set0_arg0 (bv #x1111111111111111 64))
-(define cex_set0_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
-(define cex_set1_arg0 (bv #xa7d7ffd3a79db3e7 64))
-(define cex_set1_arg1 (bv #x6e70fb3df70e0330402f55921d3f00dcc0ea3da68ebced55 192))
+(define cex_set0_arg0 (bv #x11111111111111111111111111111111 128))
+(define cex_set0_arg1 (bv #x22222222222222222222222222222222 128))
+(define cex_set1_arg0 (bv #x4923db6d324933cffffffffbdb6de493 128))
+(define cex_set1_arg1 (bv #xccccd99a9999999b9999999b533119a2 128))
 
 (define sol
 (synthesize

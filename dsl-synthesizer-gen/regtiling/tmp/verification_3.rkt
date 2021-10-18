@@ -184,13 +184,69 @@
 
      (list
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
+      (dsl_inst_0
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
+       (bv 0 (bitvector 64))
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))
+       (ext-matrix-row arg1 2 2 1 32)
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))))))
+       (ext-matrix-col arg2 2 2 0 32)
+
+       1
+
+       2
+
+       32
+
+       32)
+
+      (dsl_inst_0
+
+       (bv 0 (bitvector 64))
+
+       (ext-matrix-row arg2 2 2 0 32)
+
+       (ext-matrix-row arg1 2 2 1 32)
+
+       1
+
+       2
+
+       32
+
+       32)
+
+      (dsl_inst_0
+
+       (bv 0 (bitvector 64))
+
+       (ext-matrix-row arg2 2 2 1 32)
+
+       (no-op arg1)
+
+       1
+
+       2
+
+       32
+
+       32)
+
+      (dsl_inst_0
+
+       (bv 0 (bitvector 64))
+
+       (ext-matrix-col arg2 2 2 1 32)
+
+       (no-op arg1)
+
+       1
+
+       2
+
+       32
+
+       32)))))
 
 (define-symbolic _arg0 (bitvector 128))
 (define-symbolic _arg1 (bitvector 128))
@@ -199,4 +255,4 @@
          		(assert (equal?
          			(impl _arg0 _arg1) 
          			(ref _arg0 _arg1)))))
-(with-output-to-file "./tmp/cex_0.txt" (lambda () (print (test_tensor-matmul_impl tensor-matmul gen_impl))))
+(with-output-to-file "./tmp/cex_3.txt" (lambda () (print (test_tensor-matmul_impl tensor-matmul gen_impl))))

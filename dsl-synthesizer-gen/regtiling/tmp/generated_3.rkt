@@ -174,29 +174,57 @@
  (ext-bv vreg i conc_precision)))) 
  result) 
  
-(define (gen_impl arg1 arg2)
+;; Grammar Definition
+;; Grammar Definition
+(define-grammar (gen-grammar arg0 arg1)
+[top (choose
+       ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
+       (apply concat (list (expr) (expr) (expr) (expr) ))
+)]
 
-   (choose
+[expr (choose
+	arg0
+	arg1
+	(no-op (expr))
+	(bv 0 (bitvector 128))
+        (dsl_inst_0  (bv 0 (bitvector 64)) (expr) (expr) 1 2 32 32)
+	(ext-matrix-row (expr) 2 2 0 32)
+	(ext-matrix-row (expr) 2 2 1 32)
+	(ext-matrix-col (expr) 2 2 0 32)
+	(ext-matrix-col (expr) 2 2 1 32)
+	;;(vector-load arg0 128 0 2 32)
+	;;(vector-load arg0 128 2 2 32)
+	;;(strided-gather arg1 128 0 2 2 32)
+	;;(strided-gather arg1 128 1 2 2 32)
+    )]
+)
 
-    (apply
 
-     concat
+(define (synth_grammar arg1 arg2)
+                    (gen-grammar arg1 arg2 #:depth 3))
+(define cex_set0_arg0 (bv #x11111111111111111111111111111111 128))
+(define cex_set0_arg1 (bv #x22222222222222222222222222222222 128))
+(define cex_set1_arg0 (bv #x4923db6d324933cffffffffbdb6de493 128))
+(define cex_set1_arg1 (bv #xccccd99a9999999b9999999b533119a2 128))
+(define cex_set2_arg0 (bv #x0000000077ffffff0e20ade1cb0aa2a2 128))
+(define cex_set2_arg1 (bv #x69638fe3fffffff1fffffff160fafafa 128))
+(define cex_set3_arg0 (bv #x00000000000000001000000300000000 128))
+(define cex_set3_arg1 (bv #x00000000000000001aaaaaab00000000 128))
 
-     (list
+(define sol
+(synthesize
+#:forall (list cex_set0_arg0 cex_set0_arg1 cex_set1_arg0 cex_set1_arg1 cex_set2_arg0 cex_set2_arg1 cex_set3_arg0 cex_set3_arg1)
+#:guarantee (assert (and (assert 
+ (equal? (synth_grammar cex_set0_arg0 cex_set0_arg1) (tensor-matmul cex_set0_arg0 cex_set0_arg1)))
+(assert 
+ (equal? (synth_grammar cex_set1_arg0 cex_set1_arg1) (tensor-matmul cex_set1_arg0 cex_set1_arg1)))
+(assert 
+ (equal? (synth_grammar cex_set2_arg0 cex_set2_arg1) (tensor-matmul cex_set2_arg0 cex_set2_arg1)))
+(assert 
+ (equal? (synth_grammar cex_set3_arg0 cex_set3_arg1) (tensor-matmul cex_set3_arg0 cex_set3_arg1)))))
+))
+(assert (sat? sol) "Unsatisfiable")
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
+(define gen_impl (generate-forms sol))
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
-
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))
-
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))))))
-
-(define-symbolic _arg0 (bitvector 128))
-(define-symbolic _arg1 (bitvector 128))
-(define (test_tensor-matmul_impl impl ref)
-         	(verify 
-         		(assert (equal?
-         			(impl _arg0 _arg1) 
-         			(ref _arg0 _arg1)))))
-(with-output-to-file "./tmp/cex_0.txt" (lambda () (print (test_tensor-matmul_impl tensor-matmul gen_impl))))
+(with-output-to-file "./tmp/check_3.txt" (lambda () (print-forms sol)))

@@ -1,97 +1,10 @@
-/Users/jeff/Desktop/rose/new2/Rosette-experiments/dsl-synthesizer-gen/regtiling/tmp/generated_0.rkt:228:0
+/Users/jeff/Desktop/rose/new2/Rosette-experiments/dsl-synthesizer-gen/regtiling/tmp/generated_0.rkt:203:0
 '(define (synth_grammar arg1 arg2)
    (choose
     (apply
      concat
      (list
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (dsl_inst_0 (bv 0 (bitvector 16)) (no-op arg2) arg2 1 2 8 8)
-      (dsl_inst_0 (bv 0 (bitvector 16)) arg2 arg2 1 2 8 8)
-      (dsl_inst_0
-       (bv 0 (bitvector 16))
-       arg2
-       (strided-gather arg2 192 0 6 2 8)
-       1
-       2
-       8
-       8)
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))
-      (no-op
-       (dsl_inst_0
-        (bv 0 (bitvector 16))
-        (strided-gather arg2 192 17 6 2 8)
-        (strided-gather arg2 192 17 6 2 8)
-        1
-        2
-        8
-        8))))))
+      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
+      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 2 32 32))
+      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))
+      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))))))
