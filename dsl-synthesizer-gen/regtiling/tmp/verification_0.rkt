@@ -188,15 +188,15 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        (vector-load arg1 64 4 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
-        (strided-gather arg2 192 1 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 
@@ -206,15 +206,15 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        (strided-gather arg2 192 0 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
-        arg1
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 
@@ -224,37 +224,15 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        (strided-gather arg2 192 1 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
-        (vector-load arg1 64 0 4 8)
-
-        1
-
-        4
-
-        8
-
-        8))
-
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 4 8 8))
-
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 4 8 8))
-
-      (no-op
-
-       (dsl_inst_0
-
-        (bv 0 (bitvector 64))
-
-        arg1
-
-        (strided-gather arg2 192 0 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 
@@ -264,15 +242,15 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        arg1
+        (strided-gather arg2 192 17 6 2 8)
 
-        (strided-gather arg2 192 1 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 
@@ -282,15 +260,53 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        arg1
+        (strided-gather arg2 192 17 6 2 8)
 
-        (strided-gather arg2 192 1 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
+
+        8
+
+        8))
+
+      (dsl_inst_0 (bv 0 (bitvector 16)) (no-op arg2) arg2 1 2 8 8)
+
+      (dsl_inst_0 (bv 0 (bitvector 16)) arg2 arg2 1 2 8 8)
+
+      (dsl_inst_0
+
+       (bv 0 (bitvector 16))
+
+       arg2
+
+       (strided-gather arg2 192 0 6 2 8)
+
+       1
+
+       2
+
+       8
+
+       8)
+
+      (no-op
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 16))
+
+        (strided-gather arg2 192 17 6 2 8)
+
+        (strided-gather arg2 192 17 6 2 8)
+
+        1
+
+        2
 
         8
 
@@ -300,37 +316,51 @@
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        (strided-gather arg2 192 4 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
-        arg1
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 
         8))
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 4 8 8))
+      (no-op
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg2 arg1 1 4 8 8))
+       (dsl_inst_0
+
+        (bv 0 (bitvector 16))
+
+        (strided-gather arg2 192 17 6 2 8)
+
+        (strided-gather arg2 192 17 6 2 8)
+
+        1
+
+        2
+
+        8
+
+        8))
 
       (no-op
 
        (dsl_inst_0
 
-        (bv 0 (bitvector 64))
+        (bv 0 (bitvector 16))
 
-        (strided-gather arg2 192 0 6 4 8)
+        (strided-gather arg2 192 17 6 2 8)
 
-        arg1
+        (strided-gather arg2 192 17 6 2 8)
 
         1
 
-        4
+        2
 
         8
 

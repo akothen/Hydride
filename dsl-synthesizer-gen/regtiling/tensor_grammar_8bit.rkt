@@ -11,7 +11,7 @@
 	(bv 0 (bitvector 32))
 	(bv 0 (bitvector 96))
 	(bv 0 (bitvector 64))
-	(dsl_inst_0 (bv 0 (bitvector 64)) (expr) (expr) 1 4 8 8)
+	(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 1 4 8 8)
 	(vector-load arg0 64 0 4 8)
 	(vector-load arg0 64 4 4 8)
 	(strided-gather arg1 192 0 6 4 8)
