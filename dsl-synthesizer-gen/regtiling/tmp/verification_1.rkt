@@ -105,7 +105,7 @@
 )
 
 ;; Reference Specification
-(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 2))])  (apply bvadd (for/list ([k (reverse (range 2))])  (define idx_left (+ (* i 2) k)) (define idx_right (+ (* k 2) j))(define value1 (ext-bv arg1 idx_left 32)) (define value2 (ext-bv arg2 idx_right 32))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
+(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
                        (define (vector-mac dst a b len precision) 
                        (begin  
                        (assert (bv? dst))  
@@ -184,44 +184,272 @@
 
      (list
 
-      (dsl_inst_0
+      (dsl_inst_1
 
-       (bv 0 (bitvector 64))
+       (dsl_inst_0
 
-       (ext-matrix-row arg1 2 2 1 32)
+        (bv 0 (bitvector 32))
 
-       (ext-matrix-row arg2 2 2 1 32)
+        (strided-gather arg2 192 0 6 4 8)
 
-       1
+        (vector-load arg1 64 0 4 8)
 
-       2
+        2
 
-       32
+        2
 
-       32)
+        8
 
-      (dsl_inst_0
-
-       (bv 0 (bitvector 64))
-
-       (ext-matrix-col arg2 2 2 1 32)
-
-       (ext-matrix-row arg1 2 2 1 32)
-
-       1
+        8)
 
        2
 
-       32
+       8)
 
-       32)
+      (dsl_inst_1
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))
+       (dsl_inst_0
 
-      (no-op (dsl_inst_0 (bv 0 (bitvector 64)) arg1 arg2 1 2 32 32))))))
+        (bv 0 (bitvector 32))
 
-(define-symbolic _arg0 (bitvector 128))
-(define-symbolic _arg1 (bitvector 128))
+        (strided-gather arg2 192 1 6 4 8)
+
+        (vector-load arg1 64 0 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 0 4 8)
+
+        (strided-gather arg2 192 2 6 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (strided-gather arg2 192 3 6 4 8)
+
+        (vector-load arg1 64 0 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (strided-gather arg2 192 4 6 4 8)
+
+        (vector-load arg1 64 0 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 0 4 8)
+
+        (strided-gather arg2 192 5 6 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        arg1
+
+        (strided-gather arg2 192 0 6 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (strided-gather arg2 192 1 6 4 8)
+
+        (vector-load arg1 64 4 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (strided-gather arg2 192 2 6 4 8)
+
+        (vector-load arg1 64 4 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 4 4 8)
+
+        (strided-gather arg2 192 3 6 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        (strided-gather arg2 192 4 6 4 8)
+
+        (vector-load arg1 64 4 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)
+
+      (dsl_inst_1
+
+       (dsl_inst_0
+
+        (bv 0 (bitvector 32))
+
+        arg1
+
+        (strided-gather arg2 192 5 6 4 8)
+
+        2
+
+        2
+
+        8
+
+        8)
+
+       2
+
+       8)))))
+
+(define-symbolic _arg0 (bitvector 64))
+(define-symbolic _arg1 (bitvector 192))
 (define (test_tensor-matmul_impl impl ref)
          	(verify 
          		(assert (equal?
