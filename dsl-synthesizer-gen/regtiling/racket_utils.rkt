@@ -82,6 +82,22 @@
   result
 )
 
+
+;; An example of a masked vector "load" instruction
+(define (masked-vector-load mem mem_size start num_elems type_size mask mask_size mask_type_size)
+  (define total_num_mask_elems (/ mask_size mask_type_size))
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (if (equal? (ext-bv mask (- (- total_num_mask_elems 1) i) mask_type_size) (bv 0 mask_type_size))
+          (bv 0 type_size)          
+          (scalar-load mem mem_size (+ i start) type_size))
+    )))
+  result
+)
+
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
