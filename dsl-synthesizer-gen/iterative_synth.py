@@ -11,12 +11,12 @@ def pprint(s):
 
 class SynthBase:
     def __init__(self, input_args, grammar_name = "synth_grammar", spec_name = "spec", spec_semantics = None, grammar_def = None,
-            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True, current_bitwidth = 32):
+            verify_name = "verify_impl", dsl_desc = None, utility_file = None, use_zero_init = True, current_bitwidth = None):
         self.input_args = input_args
         self.spec_name = spec_name
         self.verify_name = verify_name
         self.use_zero_init = use_zero_init
-        self.concrete_inputs = [self.get_initial_cex(input_args)]
+        self.concrete_inputs = [self.get_initial_cex(input_args, use_two_init=False)] # + [self.get_initial_cex(input_args, use_two_init = False)]
         self.grammar_name = grammar_name
         self.solution_name = "sol"
         self.grammar_def = grammar_def
@@ -140,29 +140,31 @@ class SynthBase:
 
         return (cex_names_list, cex_definition_list)
 
-    def read_cex_file(self, cex_file):
+    def read_cex_file(self, cex_file_list):
 
         concrete_cex = []
-        with open(cex_file,"r") as CexFile:
-            data = CexFile.read().replace('\n','')
-            if "unsat" in data:
+
+        for cex_file in cex_file_list:
+            if not os.path.exists(cex_file):
                 return []
 
-            data = " ".join(data.split(" ")[1:])
-            data = data.split("]")
-            data = data[:len(data)-1]
-            data = [word.strip("[") for word in data]
+            with open(cex_file,"r") as CexFile:
+                data = CexFile.read().replace('\n','')
+                print(cex_file,":\t",data)
+                if "unsat" in data:
+                    return []
 
-
-
-            for cex in data:
-                cex = cex.lstrip(" ")
-                bv = cex.split(" ")[2].strip()
-                width = cex.split(" ")[3].strip().strip(")")
-
+                bv = data.split(" ")[1]
+                width = data.split(" ")[2].strip(")")
+                print(data)
+                #data = data.split("]")
+                #data = data[:len(data)-1]
+                #print(data)
+                #data = [word.strip("[") for word in data]
+                #print(data)
 
                 cex_arg = DSLArg("CexArg",ArgType.BitVectorConst,
-                        total_bits = int(width), concrete_value = bv)
+                            total_bits = int(width), concrete_value = bv)
 
                 concrete_cex.append(cex_arg)
 
@@ -190,14 +192,42 @@ class SynthBase:
         \t(verify \n \
         \t\t(assert (equal?\n \
         "+ "\t\t\t(impl " + arg_string +") "+"\n \
-        \t\t\t(ref "+ arg_string+")" + "))))"
+        \t\t\t(ref "+ arg_string+")" + "))))\n"
 
 
-        print_forms_block = "(with-output-to-file \""+self.work_dir+"/"+"cex_"+str(iteration_number)+".txt\" " + "(lambda () "+"(print (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))))"
+        # print_forms_block = "(with-output-to-file \""+self.work_dir+"/"+"cex_"+str(iteration_number)+".txt\" " + "(lambda () "+"(print (" + verify_name + " " + self.spec_name + " " + self.gen_impl_name +"))))"
 
-        verification_str = symbolic_block + "\n" + definition_block + "\n" + print_forms_block
+        cex_str = "(define cex ("+verify_name +" "+self.spec_name +" "+ self.gen_impl_name+"))"
 
-        return verification_str
+        evaluate_list = []
+        cex_name_list = []
+        write_to_file_list = []
+        cex_fname_list = []
+        for idx,arg_name in enumerate(argument_names):
+            cex_name = "cex"+arg_name
+            cex_arg_str = "(define "+cex_name+" (evaluate "+arg_name+" "+"cex"+"))"
+            evaluate_list.append(cex_arg_str)
+            cex_name_list.append(cex_name)
+
+
+            cex_arg_fname = self.work_dir + "/" + "cex_"+str(iteration_number)+arg_name+".txt"
+            cex_fname_list.append(cex_arg_fname)
+            write_to_file_str = "(with-output-to-file \""+cex_arg_fname+"\" " +"(lambda () (print "+ cex_name+") "+"))"
+
+            write_to_file_list.append(write_to_file_str)
+
+        evaluate_str = "\n".join(evaluate_list)
+        write_to_file_str = "\n".join(write_to_file_list)
+
+
+        gaurd_str = "(assert (sat? cex) \"Verification Complete!\")"
+
+
+
+
+        verification_str = "\n".join([symbolic_block, definition_block, cex_str, gaurd_str, evaluate_str, write_to_file_str])
+
+        return (verification_str, cex_fname_list)
 
 
     def generate_verification_racket_file(self, impl_def, iteration_number ,verification_block):
@@ -308,7 +338,7 @@ class SynthBase:
                 gen_def = split[0][1:] + self.gen_impl_name + split[1]
 
 
-            verify_block = self.generate_verification_func(self.input_args, self.verify_name, i)
+            verify_block, cex_fname_list = self.generate_verification_func(self.input_args, self.verify_name, i)
             print("Generated Candidate:",gen_def)
 
             verify_str = self.generate_verification_racket_file(gen_def, i,
@@ -331,9 +361,9 @@ class SynthBase:
 
             total_time += (end_verify - start_verify)
 
-            cex_file_name = self.work_dir+"/"+"cex_"+str(i)+".txt"
+            # cex_file_name = self.work_dir+"/"+"cex_"+str(i)+".txt"
 
-            new_cex = self.read_cex_file(cex_file_name)
+            new_cex = self.read_cex_file(cex_fname_list)
 
             """ If rosette was unable
             to generate a counter example """
@@ -373,13 +403,14 @@ class ConcreteIterativeSynth(SynthBase):
 
     """ Given a description of the argument types, generate
     concrete values for initial testing"""
-    def get_initial_cex(self, args):
+    def get_initial_cex(self, args, use_two_init = False):
         concrete_inputs = []
+
 
         for idx, arg in enumerate(args):
 
             val = idx + 1
-            if self.use_zero_init:
+            if self.use_zero_init or use_two_init:
                 val = 0
 
             if arg.arg_ty == ArgType.BitVectorSymbolic:
