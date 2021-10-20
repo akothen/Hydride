@@ -97,7 +97,29 @@
   result
 )
 
+;; An example of vector broadcast
+(define (vector-broadcast val num_elems type_size)
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (ext-bv val 0 type_size)
+    )))
+  result
+)
 
+;; An example of vector-mac instruction
+(define (vector-mac v1 v2 v3 num_elems type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range num_elems))])
+       (define tmp
+         (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size)))
+      (bvadd (ext-bv v1 i type_size) tmp)
+      )))
+  result
+)
 
 ;; Implementation of a simple custom concat operation
 (define (vector-shufl-concat v1 v2 num_elems type_size)

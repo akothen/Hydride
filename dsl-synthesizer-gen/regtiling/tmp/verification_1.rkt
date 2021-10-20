@@ -3,7 +3,6 @@
         (require rosette/lib/angelic)
         (require racket/pretty)
 (custodian-limit-memory (current-custodian) (* 8000 1024 1024))
-(current-bitwidth 32)
 (define int128? (bitvector 128))
 (define int32? (bitvector 32))
 (define int8? (bitvector 8))
@@ -88,6 +87,55 @@
   result
 )
 
+
+;; An example of a masked vector "load" instruction
+(define (masked-vector-load mem mem_size start num_elems type_size mask mask_size mask_type_size)
+  (define total_num_mask_elems (/ mask_size mask_type_size))
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (if (equal? (ext-bv mask (- (- total_num_mask_elems 1) i) mask_type_size) (bv 0 mask_type_size))
+          (bv 0 type_size)          
+          (scalar-load mem mem_size (+ i start) type_size))
+    )))
+  result
+)
+
+;; An example of vector broadcast
+(define (vector-broadcast val num_elems type_size)
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (ext-bv val 0 type_size)
+    )))
+  result
+)
+
+;; An example of vector-mac instruction
+(define (vector-mac v1 v2 v3 num_elems type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range num_elems))])
+       (define tmp
+         (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size)))
+      (bvadd (ext-bv v1 i type_size) tmp)
+      )))
+  result
+)
+
+;; Implementation of a simple custom concat operation
+(define (vector-shufl-concat v1 v2 num_elems type_size)
+ (define old_size (* num_elems type_size))
+ (define result_size (* 2 old_size))
+ (define new-v1 (zero-extend v1 (bitvector result_size)))
+ (define new-v2 (zero-extend v2 (bitvector result_size)))
+ (define result (bvor (bvshl new-v1 (bv old_size result_size)) new-v2))
+ result
+)
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
@@ -106,22 +154,6 @@
 
 ;; Reference Specification
 (define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
-                       (define (vector-mac dst a b len precision) 
-                       (begin  
-                       (assert (bv? dst))  
-                       (assert (bv? a))  
-                       (assert (bv? b))  
-                       (apply  
-                       concat  
-                       (for/list ([j (range len)])  
-                         (define tmp  
-                           (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
-                         (bvadd (ext-bv dst (- (- len 1) j) precision) tmp) 
-                         ) 
-                       ) 
-                       ) 
-                     ) 
-                   
                        (define (vector-add a b len precision) 
                        (apply 
                        concat 
@@ -186,265 +218,217 @@
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
         (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 0 4 8)
 
         (strided-gather arg2 192 0 6 4 8)
 
-        (vector-load arg1 64 0 4 8)
-
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 48))
+
+        (vector-load arg1 64 0 4 8)
 
         (strided-gather arg2 192 1 6 4 8)
 
-        (vector-load arg1 64 0 4 8)
-
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
-
-        (vector-load arg1 64 0 4 8)
+        (bv 0 (bitvector 128))
 
         (strided-gather arg2 192 2 6 4 8)
 
-        2
+        (vector-load arg1 64 0 4 8)
 
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 48))
 
         (strided-gather arg2 192 3 6 4 8)
 
         (vector-load arg1 64 0 4 8)
 
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 48))
+
+        (vector-load arg1 64 4 4 8)
 
         (strided-gather arg2 192 4 6 4 8)
 
-        (vector-load arg1 64 0 4 8)
-
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
         (bv 0 (bitvector 32))
-
-        (vector-load arg1 64 0 4 8)
 
         (strided-gather arg2 192 5 6 4 8)
 
-        2
+        (vector-load arg1 64 0 4 8)
 
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 48))
 
-        arg1
+        (vector-load arg1 64 4 4 8)
 
         (strided-gather arg2 192 0 6 4 8)
 
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
         (bv 0 (bitvector 32))
 
         (strided-gather arg2 192 1 6 4 8)
 
-        (vector-load arg1 64 4 4 8)
+        arg1
 
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 128))
 
         (strided-gather arg2 192 2 6 4 8)
 
-        (vector-load arg1 64 4 4 8)
+        arg1
 
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
 
        8)
 
       (dsl_inst_1
 
-       (dsl_inst_0
+       (vector-mac
 
-        (bv 0 (bitvector 32))
-
-        (vector-load arg1 64 4 4 8)
-
-        (strided-gather arg2 192 3 6 4 8)
-
-        2
-
-        2
-
-        8
-
-        8)
-
-       2
-
-       8)
-
-      (dsl_inst_1
-
-       (dsl_inst_0
-
-        (bv 0 (bitvector 32))
-
-        (strided-gather arg2 192 4 6 4 8)
-
-        (vector-load arg1 64 4 4 8)
-
-        2
-
-        2
-
-        8
-
-        8)
-
-       2
-
-       8)
-
-      (dsl_inst_1
-
-       (dsl_inst_0
-
-        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 128))
 
         arg1
 
-        (strided-gather arg2 192 5 6 4 8)
+        (strided-gather arg2 192 3 6 4 8)
 
-        2
-
-        2
-
-        8
+        4
 
         8)
 
-       2
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (vector-load arg1 64 4 4 8)
+
+        (vector-load arg2 192 18 6 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (strided-gather arg2 192 5 6 4 8)
+
+        (vector-load arg1 64 4 4 8)
+
+        4
+
+        8)
+
+       4
 
        8)))))
 
@@ -455,4 +439,10 @@
          		(assert (equal?
          			(impl _arg0 _arg1) 
          			(ref _arg0 _arg1)))))
-(with-output-to-file "./tmp/cex_1.txt" (lambda () (print (test_tensor-matmul_impl tensor-matmul gen_impl))))
+
+(define cex (test_tensor-matmul_impl tensor-matmul gen_impl))
+(assert (sat? cex) "Verification Complete!")
+(define cex_arg0 (evaluate _arg0 cex))
+(define cex_arg1 (evaluate _arg1 cex))
+(with-output-to-file "./tmp/cex_1_arg0.txt" (lambda () (print cex_arg0) ))
+(with-output-to-file "./tmp/cex_1_arg1.txt" (lambda () (print cex_arg1) ))

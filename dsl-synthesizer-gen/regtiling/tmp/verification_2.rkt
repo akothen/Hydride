@@ -224,73 +224,11 @@
 
         (vector-load arg1 64 0 4 8)
 
-        (strided-gather arg2 192 2 6 4 8)
+        (strided-gather arg2 192 0 6 4 8)
 
         4
 
         8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 4 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (strided-gather arg2 192 3 6 4 8)
-
-        arg1
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 2 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac (bv 0 (bitvector 32)) arg2 (vector-load arg1 64 4 4 8) 4 8)
 
        4
 
@@ -320,65 +258,9 @@
 
         (bv 0 (bitvector 96))
 
-        (vector-load arg1 64 4 4 8)
-
-        (strided-gather arg2 192 1 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
+        (strided-gather arg2 192 2 6 4 8)
 
         (vector-load arg1 64 0 4 8)
-
-        (strided-gather arg2 192 0 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1 (vector-mac (bv 0 (bitvector 96)) arg2 arg1 4 8) 4 8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 4 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (vector-load arg2 192 18 6 8)
-
-        arg1
 
         4
 
@@ -404,6 +286,150 @@
 
        4
 
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (strided-gather arg2 192 4 6 4 8)
+
+        (vector-load arg1 64 0 4 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (vector-load arg1 64 0 4 8)
+
+        (strided-gather arg2 192 5 6 4 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 32))
+
+        arg1
+
+        (strided-gather arg2 192 0 6 4 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 4 4 8)
+
+        (strided-gather arg2 192 1 6 4 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (strided-gather arg2 192 2 6 4 8)
+
+        arg1
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 48))
+
+        (strided-gather arg2 192 3 6 4 8)
+
+        arg1
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 128))
+
+        (strided-gather arg2 192 4 6 4 8)
+
+        (vector-load arg1 64 4 4 8)
+
+        4
+
+        8)
+
+       4
+
+       8)
+
+      (dsl_inst_1
+
+       (vector-mac
+
+        (bv 0 (bitvector 32))
+
+        (vector-load arg1 64 4 4 8)
+
+        (strided-gather arg2 192 5 6 4 8)
+
+        4
+
+        8)
+
+       4
+
        8)))))
 
 (define-symbolic _arg0 (bitvector 64))
@@ -418,5 +444,5 @@
 (assert (sat? cex) "Verification Complete!")
 (define cex_arg0 (evaluate _arg0 cex))
 (define cex_arg1 (evaluate _arg1 cex))
-(with-output-to-file "./tmp/cex_0_arg0.txt" (lambda () (print cex_arg0) ))
-(with-output-to-file "./tmp/cex_0_arg1.txt" (lambda () (print cex_arg1) ))
+(with-output-to-file "./tmp/cex_2_arg0.txt" (lambda () (print cex_arg0) ))
+(with-output-to-file "./tmp/cex_2_arg1.txt" (lambda () (print cex_arg1) ))

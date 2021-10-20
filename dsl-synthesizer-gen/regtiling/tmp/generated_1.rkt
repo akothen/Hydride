@@ -3,7 +3,6 @@
         (require rosette/lib/angelic)
         (require racket/pretty)
 (custodian-limit-memory (current-custodian) (* 8000 1024 1024))
-(current-bitwidth 32)
 (define int128? (bitvector 128))
 (define int32? (bitvector 32))
 (define int8? (bitvector 8))
@@ -88,6 +87,55 @@
   result
 )
 
+
+;; An example of a masked vector "load" instruction
+(define (masked-vector-load mem mem_size start num_elems type_size mask mask_size mask_type_size)
+  (define total_num_mask_elems (/ mask_size mask_type_size))
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (if (equal? (ext-bv mask (- (- total_num_mask_elems 1) i) mask_type_size) (bv 0 mask_type_size))
+          (bv 0 type_size)          
+          (scalar-load mem mem_size (+ i start) type_size))
+    )))
+  result
+)
+
+;; An example of vector broadcast
+(define (vector-broadcast val num_elems type_size)
+  (define result
+    (apply
+    concat
+    (for/list ([i (range num_elems)])
+      (ext-bv val 0 type_size)
+    )))
+  result
+)
+
+;; An example of vector-mac instruction
+(define (vector-mac v1 v2 v3 num_elems type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range num_elems))])
+       (define tmp
+         (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size)))
+      (bvadd (ext-bv v1 i type_size) tmp)
+      )))
+  result
+)
+
+;; Implementation of a simple custom concat operation
+(define (vector-shufl-concat v1 v2 num_elems type_size)
+ (define old_size (* num_elems type_size))
+ (define result_size (* 2 old_size))
+ (define new-v1 (zero-extend v1 (bitvector result_size)))
+ (define new-v2 (zero-extend v2 (bitvector result_size)))
+ (define result (bvor (bvshl new-v1 (bv old_size result_size)) new-v2))
+ result
+)
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
@@ -106,22 +154,6 @@
 
 ;; Reference Specification
 (define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
-                       (define (vector-mac dst a b len precision) 
-                       (begin  
-                       (assert (bv? dst))  
-                       (assert (bv? a))  
-                       (assert (bv? b))  
-                       (apply  
-                       concat  
-                       (for/list ([j (range len)])  
-                         (define tmp  
-                           (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
-                         (bvadd (ext-bv dst (- (- len 1) j) precision) tmp) 
-                         ) 
-                       ) 
-                       ) 
-                     ) 
-                   
                        (define (vector-add a b len precision) 
                        (apply 
                        concat 
@@ -179,6 +211,8 @@
 (define-grammar (gen-grammar arg0 arg1)
 [top (choose
        (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
+       ;;(apply concat (list (expr) (expr) (expr) (expr)))
+       ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr)))
 )]
 
 [expr (choose
@@ -190,11 +224,31 @@
 	(bv 0 (bitvector 96))
 	(bv 0 (bitvector 64))
 	(bv 0 (bitvector 128))
-
-	(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
-	(dsl_inst_1 (expr) 2 8)
+	(bv 0 (bitvector 48))
+	;;(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
+	(dsl_inst_1 (expr) 4 8)
+	;;(masked-vector-load arg0 64 0 4 8 (bv #xffffffff 32) 32 8)
+	(ext-bv arg0 0 8)
+	(ext-bv arg0 1 8)
+	(ext-bv arg0 2 8)
+	(ext-bv arg0 3 8)
+	(ext-bv arg0 4 8)
+	(ext-bv arg0 5 8)
+	(ext-bv arg0 6 8)
+	(ext-bv arg0 7 8)
+	;;(vector-broadcast (expr) 6 8)
+	(vector-mac (expr) (expr) (expr) 4 8)
 	(vector-load arg0 64 0 4 8)
 	(vector-load arg0 64 4 4 8)
+	(strided-gather arg0 192 0 4 2 8)
+	(strided-gather arg0 192 1 4 2 8)
+	(strided-gather arg0 192 2 4 2 8)
+	(strided-gather arg0 192 3 4 2 8)
+	(vector-load arg1 192 0 6 8)
+	(vector-load arg1 192 6 6 8)
+	(vector-load arg1 192 12 6 8)
+	(vector-load arg1 192 18 6 8)
+	(vector-load arg1 192 24 6 8)
 	(strided-gather arg1 192 0 6 4 8)
 	(strided-gather arg1 192 1 6 4 8)
 	(strided-gather arg1 192 2 6 4 8)
@@ -211,8 +265,8 @@
                     (gen-grammar arg1 arg2 #:depth 3))
 (define cex_set0_arg0 (bv #x1111111111111111 64))
 (define cex_set0_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
-(define cex_set1_arg0 (bv #x187f4e160e3f617b 64))
-(define cex_set1_arg1 (bv #x005b6b191b6b88721d9f46080198193fd3e62d194bafde02 192))
+(define cex_set1_arg0 (bv #xf9fdb6dd7f2d093f 64))
+(define cex_set1_arg1 (bv #x7580c18bfd7db6803317112f00b63e1380397ee685ac41c1 192))
 
 (define sol
 (synthesize

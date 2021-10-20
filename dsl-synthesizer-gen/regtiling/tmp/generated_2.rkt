@@ -206,217 +206,82 @@
  (ext-bv vreg i conc_precision)))) 
  result) 
  
-(define (gen_impl arg1 arg2)
-
-   (choose
-
-    (apply
-
-     concat
-
-     (list
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (vector-load arg1 64 0 4 8)
-
-        (strided-gather arg2 192 2 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 4 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (strided-gather arg2 192 3 6 4 8)
-
-        arg1
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 2 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac (bv 0 (bitvector 32)) arg2 (vector-load arg1 64 4 4 8) 4 8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 48))
-
-        (strided-gather arg2 192 1 6 4 8)
-
-        (vector-load arg1 64 0 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 96))
-
-        (vector-load arg1 64 4 4 8)
-
-        (strided-gather arg2 192 1 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (vector-load arg1 64 0 4 8)
-
-        (strided-gather arg2 192 0 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1 (vector-mac (bv 0 (bitvector 96)) arg2 arg1 4 8) 4 8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        arg1
-
-        (strided-gather arg2 192 4 6 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (vector-load arg2 192 18 6 8)
-
-        arg1
-
-        4
-
-        8)
-
-       4
-
-       8)
-
-      (dsl_inst_1
-
-       (vector-mac
-
-        (bv 0 (bitvector 32))
-
-        (strided-gather arg2 192 3 6 4 8)
-
-        (vector-load arg1 64 0 4 8)
-
-        4
-
-        8)
-
-       4
-
-       8)))))
-
-(define-symbolic _arg0 (bitvector 64))
-(define-symbolic _arg1 (bitvector 192))
-(define (test_tensor-matmul_impl impl ref)
-         	(verify 
-         		(assert (equal?
-         			(impl _arg0 _arg1) 
-         			(ref _arg0 _arg1)))))
-
-(define cex (test_tensor-matmul_impl tensor-matmul gen_impl))
-(assert (sat? cex) "Verification Complete!")
-(define cex_arg0 (evaluate _arg0 cex))
-(define cex_arg1 (evaluate _arg1 cex))
-(with-output-to-file "./tmp/cex_0_arg0.txt" (lambda () (print cex_arg0) ))
-(with-output-to-file "./tmp/cex_0_arg1.txt" (lambda () (print cex_arg1) ))
+;; Grammar Definition
+;; Grammar Definition
+(define-grammar (gen-grammar arg0 arg1)
+[top (choose
+       (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
+       ;;(apply concat (list (expr) (expr) (expr) (expr)))
+       ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr)))
+)]
+
+[expr (choose
+	arg0
+	arg1
+	(no-op (expr))
+	(bv 0 (bitvector 16))
+	(bv 0 (bitvector 32))
+	(bv 0 (bitvector 96))
+	(bv 0 (bitvector 64))
+	(bv 0 (bitvector 128))
+	(bv 0 (bitvector 48))
+	;;(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
+	(dsl_inst_1 (expr) 4 8)
+	;;(masked-vector-load arg0 64 0 4 8 (bv #xffffffff 32) 32 8)
+	(ext-bv arg0 0 8)
+	(ext-bv arg0 1 8)
+	(ext-bv arg0 2 8)
+	(ext-bv arg0 3 8)
+	(ext-bv arg0 4 8)
+	(ext-bv arg0 5 8)
+	(ext-bv arg0 6 8)
+	(ext-bv arg0 7 8)
+	;;(vector-broadcast (expr) 6 8)
+	(vector-mac (expr) (expr) (expr) 4 8)
+	(vector-load arg0 64 0 4 8)
+	(vector-load arg0 64 4 4 8)
+	(strided-gather arg0 192 0 4 2 8)
+	(strided-gather arg0 192 1 4 2 8)
+	(strided-gather arg0 192 2 4 2 8)
+	(strided-gather arg0 192 3 4 2 8)
+	(vector-load arg1 192 0 6 8)
+	(vector-load arg1 192 6 6 8)
+	(vector-load arg1 192 12 6 8)
+	(vector-load arg1 192 18 6 8)
+	(vector-load arg1 192 24 6 8)
+	(strided-gather arg1 192 0 6 4 8)
+	(strided-gather arg1 192 1 6 4 8)
+	(strided-gather arg1 192 2 6 4 8)
+	(strided-gather arg1 192 3 6 4 8)
+	(strided-gather arg1 192 4 6 4 8)
+	(strided-gather arg1 192 5 6 4 8)
+    )]
+)
+
+
+
+
+(define (synth_grammar arg1 arg2)
+                    (gen-grammar arg1 arg2 #:depth 3))
+(define cex_set0_arg0 (bv #x1111111111111111 64))
+(define cex_set0_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
+(define cex_set1_arg0 (bv #xf9fdb6dd7f2d093f 64))
+(define cex_set1_arg1 (bv #x7580c18bfd7db6803317112f00b63e1380397ee685ac41c1 192))
+(define cex_set2_arg0 (bv #x0b6e6b622bc1df21 64))
+(define cex_set2_arg1 (bv #x00000000dc0000000000cd00000000003e00000095c1dde1 192))
+
+(define sol
+(synthesize
+#:forall (list cex_set0_arg0 cex_set0_arg1 cex_set1_arg0 cex_set1_arg1 cex_set2_arg0 cex_set2_arg1)
+#:guarantee (assert (and (assert 
+ (equal? (synth_grammar cex_set0_arg0 cex_set0_arg1) (tensor-matmul cex_set0_arg0 cex_set0_arg1)))
+(assert 
+ (equal? (synth_grammar cex_set1_arg0 cex_set1_arg1) (tensor-matmul cex_set1_arg0 cex_set1_arg1)))
+(assert 
+ (equal? (synth_grammar cex_set2_arg0 cex_set2_arg1) (tensor-matmul cex_set2_arg0 cex_set2_arg1)))))
+))
+(assert (sat? sol) "Unsatisfiable")
+
+(define gen_impl (generate-forms sol))
+
+(with-output-to-file "./tmp/check_2.txt" (lambda () (print-forms sol)))
