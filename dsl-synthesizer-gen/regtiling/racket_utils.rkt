@@ -98,6 +98,18 @@
 )
 
 
+
+;; Implementation of a simple custom concat operation
+(define (vector-shufl-concat v1 v2 num_elems type_size)
+ (define old_size (* num_elems type_size))
+ (define result_size (* (* num_elems num_elems) type_size))
+ (define new-v1 (zero-extend v1 (bitvector result_size)))
+ (define new-v2 (zero-extend v2 (bitvector result_size)))
+ (define result (bvor (bvshl new-v1 (bv old_size result_size)) new-v2))
+ result
+)
+
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
