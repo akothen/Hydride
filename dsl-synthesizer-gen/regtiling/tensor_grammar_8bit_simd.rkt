@@ -2,8 +2,8 @@
 (define-grammar (gen-grammar arg0 arg1)
 [top (choose
        (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
-       ;;(apply concat (list (expr) (expr) (expr) (expr)))
-       ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr)))
+       (apply concat (list (expr) (expr) (expr) (expr)))
+       (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr)))
 )]
 
 [expr (choose
@@ -16,7 +16,8 @@
 	(bv 0 (bitvector 64))
 	(bv 0 (bitvector 128))
 	(bv 0 (bitvector 48))
-	;;(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
+	#(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
+	#(dsl_inst_1 (expr) 2 8)
 	(dsl_inst_1 (expr) 4 8)
 	;;(masked-vector-load arg0 64 0 4 8 (bv #xffffffff 32) 32 8)
 	(ext-bv arg0 0 8)
