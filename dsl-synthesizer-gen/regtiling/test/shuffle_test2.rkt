@@ -197,11 +197,11 @@
  )
  
 
-(define-symbolic cex_set0_arg0 (bitvector 64))
-(define-symbolic cex_set0_arg1 (bitvector 192))
+(define-symbolic sym_arg0 (bitvector 64))
+(define-symbolic sym_arg1 (bitvector 192))
 
-(verify (when (<= 0 cex_set0_arg1 cex_set0_arg0) ;
-  (assert (equal? (spec cex_set0_arg0 cex_set0_arg1)  (sketch cex_set0_arg0 cex_set0_arg1)))))
+(verify
+  (assert (equal? (spec sym_arg0 sym_arg1)  (sketch sym_arg0 sym_arg1))))
 
 
 
