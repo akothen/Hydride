@@ -104,9 +104,11 @@
     concat
     (for/list ([i (reverse (range mask_num_elems))])
       (define index (bitvector->natural (ext-bv mask i mask_type_size)))
-      (if (< index (- num_elems 1))
+      (pretty-print (ext-bv mask i mask_type_size))
+      (pretty-print index)
+      (if (< index num_elems)
           (ext-bv v1 (- (- num_elems  1) index) type_size)
-          (ext-bv v2 (- (- num_elems  1) (- index (- num_elems  1))) type_size))
+          (ext-bv v2 (- (- num_elems  1) (- index num_elems)) type_size))
       )))
   result
 )
