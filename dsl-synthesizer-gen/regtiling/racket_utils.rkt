@@ -97,6 +97,20 @@
   result
 )
 
+;; Example of vector shuffle
+(define (vector-shuffle v1 v2 num_elems type_size mask mask_num_elems mask_type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range mask_num_elems))])
+      (define index (bitvector->natural (ext-bv mask i mask_type_size)))
+      (if (< index (- num_elems 1))
+          (ext-bv v1 (- (- num_elems  1) index) type_size)
+          (ext-bv v2 (- (- num_elems  1) (- index (- num_elems  1))) type_size))
+      )))
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result

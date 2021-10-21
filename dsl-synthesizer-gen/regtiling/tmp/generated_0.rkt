@@ -102,6 +102,20 @@
   result
 )
 
+;; Example of vector shuffle
+(define (vector-shuffle v1 v2 num_elems type_size mask mask_num_elems mask_type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range mask_num_elems))])
+      (define index (bitvector->natural (ext-bv mask i mask_type_size)))
+      (if (< index (- num_elems 1))
+          (ext-bv v1 (- (- num_elems  1) index) type_size)
+          (ext-bv v2 (- (- num_elems  1) (- index (- num_elems  1))) type_size))
+      )))
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result
@@ -110,19 +124,6 @@
     (for/list ([i (range num_elems)])
       (ext-bv val 0 type_size)
     )))
-  result
-)
-
-;; An example of vector-mac instruction
-(define (vector-mac v1 v2 v3 num_elems type_size)
-  (define result
-   (apply
-    concat
-    (for/list ([i (reverse (range num_elems))])
-       (define tmp
-         (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size)))
-      (bvadd (ext-bv v1 i type_size) tmp)
-      )))
   result
 )
 
@@ -154,37 +155,58 @@
 
 ;; Reference Specification
 (define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );; DSL Specification
+                       (define (vector-mac v1 v2 v3 num_elems type_size) 
+                       (define result 
+                        (apply   
+                         concat 
+                         (for/list ([i (reverse (range num_elems))]) 
+                            (define tmp 
+                              (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size))) 
+                           (bvadd (ext-bv v1 i type_size) tmp) 
+                           ))) 
+                       result 
+                     ) 
+                   
                        (define (vector-add a b len precision) 
+                     (define result 
                        (apply 
                        concat 
-                       (for/list ([j (range len)]) 
+                       (for/list ([j (reverse (range len))]) 
                          (define tmp 
-                           (bvadd (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                           (bvadd (ext-bv a j precision) (ext-bv b j precision))) 
                          tmp 
                          ) 
                        ) 
+                       ) 
+                       result 
                        ) 
                   
                        (define (vector-sub a b len precision) 
+                      (define result 
                        (apply 
                        concat 
-                       (for/list ([j (range len)]) 
+                       (for/list ([j (reverse (range len))]) 
                          (define tmp 
-                           (bvsub (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                           (bvsub (ext-bv a j precision) (ext-bv b j precision))) 
                          tmp 
                          ) 
                        ) 
+                       ) 
+                       result 
                        ) 
                    
                        (define (vector-mul a b len precision) 
+                       (define result 
                        (apply 
                        concat 
-                       (for/list ([j (range len)]) 
+                       (for/list ([j (reverse (range len))]) 
                          (define tmp 
-                           (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                           (bvmul (ext-bv a j precision) (ext-bv b j precision))) 
                          tmp 
                          ) 
                        ) 
+                       ) 
+                       result 
                        ) 
                    
  (define (dsl_inst_0 vreg-acc vreg1 vreg2 conc_i_bound conc_j_bound conc_in_precision conc_out_precision) 
@@ -208,6 +230,7 @@
  
 ;; Grammar Definition
 ;; Grammar Definition
+
 (define-grammar (gen-grammar arg0 arg1)
 [top (choose
        (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
@@ -215,51 +238,50 @@
        ;;(apply concat (list (expr) (expr) (expr) (expr) (expr) (expr)))
 )]
 
-[expr (choose
-	arg0
-	arg1
-	(no-op (expr))
-	(bv 0 (bitvector 16))
-	(bv 0 (bitvector 32))
-	(bv 0 (bitvector 96))
-	(bv 0 (bitvector 64))
-	(bv 0 (bitvector 128))
-	(bv 0 (bitvector 48))
-	;;(dsl_inst_0 (bv 0 (bitvector 32)) (expr) (expr) 2 2 8 8)
-	(dsl_inst_1 (expr) 4 8)
-	;;(masked-vector-load arg0 64 0 4 8 (bv #xffffffff 32) 32 8)
-	(ext-bv arg0 0 8)
-	(ext-bv arg0 1 8)
-	(ext-bv arg0 2 8)
-	(ext-bv arg0 3 8)
-	(ext-bv arg0 4 8)
-	(ext-bv arg0 5 8)
-	(ext-bv arg0 6 8)
-	(ext-bv arg0 7 8)
-	;;(vector-broadcast (expr) 6 8)
-	(vector-mac (expr) (expr) (expr) 4 8)
-	(vector-load arg0 64 0 4 8)
-	(vector-load arg0 64 4 4 8)
-	(strided-gather arg0 192 0 4 2 8)
-	(strided-gather arg0 192 1 4 2 8)
-	(strided-gather arg0 192 2 4 2 8)
-	(strided-gather arg0 192 3 4 2 8)
-	(vector-load arg1 192 0 6 8)
-	(vector-load arg1 192 6 6 8)
-	(vector-load arg1 192 12 6 8)
-	(vector-load arg1 192 18 6 8)
-	(vector-load arg1 192 24 6 8)
+[mem (choose
+        (vector-load arg0 64 0 4 8)
+        (vector-load arg0 64 4 4 8)
+        (vector-load arg1 192 0 6 8)
+        (vector-load arg1 192 6 6 8)
+        (vector-load arg1 192 12 6 8)
+        (vector-load arg1 192 18 6 8)
+        (strided-gather arg0 192 0 4 2 8)
+        (strided-gather arg0 192 1 4 2 8)
+        (strided-gather arg0 192 2 4 2 8)
+        (strided-gather arg0 192 3 4 2 8)
 	(strided-gather arg1 192 0 6 4 8)
-	(strided-gather arg1 192 1 6 4 8)
-	(strided-gather arg1 192 2 6 4 8)
-	(strided-gather arg1 192 3 6 4 8)
-	(strided-gather arg1 192 4 6 4 8)
-	(strided-gather arg1 192 5 6 4 8)
+        (strided-gather arg1 192 1 6 4 8)
+        (strided-gather arg1 192 2 6 4 8)
+        (strided-gather arg1 192 3 6 4 8)
+        (strided-gather arg1 192 4 6 4 8)
+        (strided-gather arg1 192 5 6 4 8)
+)]
+
+[expr (choose
+        (no-op (expr))
+        (bv 0 (bitvector 16))
+        (bv 0 (bitvector 32))
+        (bv 0 (bitvector 48))
+	(dsl_inst_0 (expr) (mem) (expr) 2 2 8 8)
+	(dsl_inst_0 (expr) (expr) (expr) 2 2 8 8)
+        (dsl_inst_0 (expr) (mem) (mem) 2 2 8 8)
+	(dsl_inst_0 (mem) (mem) (mem) 2 2 8 8)
+        (dsl_inst_1 (expr) 2 8)
+	(dsl_inst_1 (mem) 2 8)
+	(dsl_inst_1 (expr) 4 8)
+	(dsl_inst_1 (mem) 4 8)
+	(vector-mac (expr) (expr) (expr) 4 8)
+	(vector-mac (expr) (expr) (mem) 4 8)
+	(vector-mac (expr) (mem) (mem) 4 8)
+	(vector-mac (mem) (mem) (mem) 4 8)
+        (vector-add (expr) (expr) 4 8)
+	(vector-add (expr) (mem) 4 8)
+	(vector-add (mem) (mem) 4 8)
+        (vector-mul (expr) (expr) 4 8)
+	(vector-mul (expr) (mem) 4 8)
+	(vector-mul (mem) (mem) 4 8)
     )]
 )
-
-
-
 
 (define (synth_grammar arg1 arg2)
                     (gen-grammar arg1 arg2 #:depth 3))
