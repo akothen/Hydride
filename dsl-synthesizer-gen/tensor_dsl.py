@@ -3,26 +3,22 @@
 dsl = {
   "vector-mac" : {
     "name" : "vector-mac",
-    "args" : "dst, a, b, len, precision",
-    "reg" : "dst, a, b",
-    "size" : "len",
-    "in_precision" : "precision",
-    "out_precision" : "precision",
+    "args" : "v1, v2, v3, num_elems, type_size",
+    "reg" : "v1, v2, v3",
+    "size" : "num_elems",
+    "in_precision" : "type_size",
+    "out_precision" : "type_size",
     "semantics" : "   \
-                    (define (vector-mac dst a b len precision) \n \
-                      (begin  \n \
-                      (assert (bv? dst))  \n \
-                      (assert (bv? a))  \n \
-                      (assert (bv? b))  \n \
-                      (apply  \n \
-                      concat  \n \
-                      (for/list ([j (range len)])  \n \
-                        (define tmp  \n \
-                          (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) \n \
-                        (bvadd (ext-bv dst (- (- len 1) j) precision) tmp) \n \
-                        ) \n \
-                      ) \n \
-                      ) \n \
+                    (define (vector-mac v1 v2 v3 num_elems type_size) \n \
+                      (define result \n \
+                       (apply   \n \
+                        concat \n \
+                        (for/list ([i (reverse (range num_elems))]) \n \
+                           (define tmp \n \
+                             (bvmul (ext-bv v2 i type_size) (ext-bv v3 i type_size))) \n \
+                          (bvadd (ext-bv v1 i type_size) tmp) \n \
+                          ))) \n \
+                      result \n \
                     ) \n \
                   ",
   },
@@ -36,14 +32,17 @@ dsl = {
     "out_precision" : "precision",
     "semantics" : "   \
                     (define (vector-add a b len precision) \n \
+                    (define result \n \
                       (apply \n \
                       concat \n \
-                      (for/list ([j (range len)]) \n \
+                      (for/list ([j (reverse (range len))]) \n \
                         (define tmp \n \
-                          (bvadd (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) \n \
+                          (bvadd (ext-bv a j precision) (ext-bv b j precision))) \n \
                         tmp \n \
                         ) \n \
                       ) \n \
+                      ) \n \
+                      result \n \
                       ) \n \
                  ",
   },
@@ -57,14 +56,17 @@ dsl = {
     "out_precision" : "precision",
     "semantics" : "   \
                     (define (vector-sub a b len precision) \n \
+                     (define result \n \
                       (apply \n \
                       concat \n \
-                      (for/list ([j (range len)]) \n \
+                      (for/list ([j (reverse (range len))]) \n \
                         (define tmp \n \
-                          (bvsub (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) \n \
+                          (bvsub (ext-bv a j precision) (ext-bv b j precision))) \n \
                         tmp \n \
                         ) \n \
                       ) \n \
+                      ) \n \
+                      result \n \
                       ) \n \
                   ",
   },
@@ -78,14 +80,17 @@ dsl = {
     "out_precision" : "precision",
     "semantics" : "   \
                     (define (vector-mul a b len precision) \n \
+                      (define result \n \
                       (apply \n \
                       concat \n \
-                      (for/list ([j (range len)]) \n \
+                      (for/list ([j (reverse (range len))]) \n \
                         (define tmp \n \
-                          (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) \n \
+                          (bvmul (ext-bv a j precision) (ext-bv b j precision))) \n \
                         tmp \n \
                         ) \n \
                       ) \n \
+                      ) \n \
+                      result \n \
                       ) \n \
                   ",
   },
