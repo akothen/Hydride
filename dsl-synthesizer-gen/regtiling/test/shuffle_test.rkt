@@ -148,7 +148,6 @@
           (dsl_inst_1 int_res10 2 8) (dsl_inst_1 int_res11 2 8) (dsl_inst_1 int_res12 2 8)
           (dsl_inst_1 int_res13 2 8) (dsl_inst_1 int_res14 2 8) (dsl_inst_1 int_res15 2 8))
     )
-  (pretty-print result)
   result
  )
 
@@ -162,10 +161,6 @@
   (define row11 (vector-load arg1 192 6 6 8))
   (define row12 (vector-load arg1 192 12 6 8))
   (define row13 (vector-load arg1 192 18 6 8))
-  ;;(pretty-print row10)
-  ;;(pretty-print row11)
-  ;;(pretty-print row12)
-  ;;(pretty-print row13)
   (define shufl_top0 (vector-shuffle row10 row11 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl_top1 (vector-shuffle row12 row13 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl0 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x00010c0d 32) 4 8))
@@ -202,20 +197,14 @@
 
 
 (define cex_set0_arg0 (bv #x1111111111111111 64))
-(define cex_set0_arg1 (bv #x222222211111111111111111111222222222000000000000 192))
+(define cex_set0_arg1 (bv #x222222211111331111111111111222222222000000000000 192))
 ;;(define cex_set0_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
 
-;;(define (sol)
-  (pretty-print "spec:")
-  (pretty-print (spec cex_set0_arg0 cex_set0_arg1))
-  (pretty-print "matmul:")
-  (pretty-print (tensor-matmul cex_set0_arg0 cex_set0_arg1))
-  (pretty-print "sketch:")
-  (pretty-print (sketch cex_set0_arg0 cex_set0_arg1))
-;;)
-;;(verify (equal? (spec cex_set0_arg0 cex_set0_arg1)  (sketch cex_set0_arg0 cex_set0_arg1))))
-  
 
-;;(sol)
-
+(pretty-print "spec:")
+(pretty-print (spec cex_set0_arg0 cex_set0_arg1))
+(pretty-print "matmul:")
+(pretty-print (tensor-matmul cex_set0_arg0 cex_set0_arg1))
+(pretty-print "sketch:")
+(pretty-print (sketch cex_set0_arg0 cex_set0_arg1))
 
