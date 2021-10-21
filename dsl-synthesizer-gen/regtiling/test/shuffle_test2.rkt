@@ -148,7 +148,6 @@
           (dsl_inst_1 int_res10 2 8) (dsl_inst_1 int_res11 2 8) (dsl_inst_1 int_res12 2 8)
           (dsl_inst_1 int_res13 2 8) (dsl_inst_1 int_res14 2 8) (dsl_inst_1 int_res15 2 8))
     )
-  ;;(pretty-print result)
   result
  )
 
@@ -162,10 +161,6 @@
   (define row11 (vector-load arg1 192 6 6 8))
   (define row12 (vector-load arg1 192 12 6 8))
   (define row13 (vector-load arg1 192 18 6 8))
-  ;;(pretty-print row10)
-  ;;(pretty-print row11)
-  ;;(pretty-print row12)
-  ;;(pretty-print row13)
   (define shufl_top0 (vector-shuffle row10 row11 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl_top1 (vector-shuffle row12 row13 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl0 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x00010c0d 32) 4 8))
@@ -192,7 +187,6 @@
           (dsl_inst_1 int_res10 2 8) (dsl_inst_1 int_res11 2 8) (dsl_inst_1 int_res12 2 8)
           (dsl_inst_1 int_res13 2 8) (dsl_inst_1 int_res14 2 8) (dsl_inst_1 int_res15 2 8))
     )
-  ;;(pretty-print result)
   result
  )
  
@@ -201,7 +195,4 @@
 (define-symbolic sym_arg1 (bitvector 192))
 
 (verify
-  (assert (equal? (spec sym_arg0 sym_arg1)  (sketch sym_arg0 sym_arg1))))
-
-
-
+  (assert (equal? (tensor-matmul sym_arg0 sym_arg1)  (sketch sym_arg0 sym_arg1))))
