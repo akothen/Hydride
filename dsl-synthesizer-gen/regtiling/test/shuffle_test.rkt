@@ -71,8 +71,6 @@
     concat
     (for/list ([i (reverse (range mask_num_elems))])
       (define index (bitvector->natural (ext-bv mask i mask_type_size)))
-      (pretty-print (ext-bv mask i mask_type_size))
-      (pretty-print index)
       (if (< index num_elems)
           (ext-bv v1 (- (- num_elems  1) index) type_size)
           (ext-bv v2 (- (- num_elems  1) (- index num_elems)) type_size))
@@ -126,8 +124,6 @@
 (define (spec arg0 arg1)
   (define row0 (vector-load arg0 64 0 4 8))
   (define row1 (vector-load arg0 64 4 4 8))
-  (pretty-print row0)
-  (pretty-print row1)
   (define col0 (strided-gather arg1 192 0 6 4 8))
   (define col1 (strided-gather arg1 192 1 6 4 8))
   (define col2 (strided-gather arg1 192 2 6 4 8))
@@ -157,6 +153,8 @@
  )
 
 
+(define (tensor-matmul arg1 arg2)  (apply  concat  (for/list ([i (reverse (range 2))])  (apply concat  (for/list ([j (reverse (range 6))])  (apply bvadd (for/list ([k (reverse (range 4))])  (define idx_left (+ (* i 4) k)) (define idx_right (+ (* k 6) j))(define value1 (ext-bv arg1 idx_left 8)) (define value2 (ext-bv arg2 idx_right 8))  (bvmul value1 value2)  )  )  )  )  )  ) );
+
 (define (sketch arg0 arg1)
   (define row0 (vector-load arg0 64 0 4 8))
   (define row1 (vector-load arg0 64 4 4 8))
@@ -164,10 +162,10 @@
   (define row11 (vector-load arg1 192 6 6 8))
   (define row12 (vector-load arg1 192 12 6 8))
   (define row13 (vector-load arg1 192 18 6 8))
-  (pretty-print row10)
-  (pretty-print row11)
-  (pretty-print row12)
-  (pretty-print row13)
+  ;;(pretty-print row10)
+  ;;(pretty-print row11)
+  ;;(pretty-print row12)
+  ;;(pretty-print row13)
   (define shufl_top0 (vector-shuffle row10 row11 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl_top1 (vector-shuffle row12 row13 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl0 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x00010c0d 32) 4 8))
@@ -210,6 +208,8 @@
 ;;(define (sol)
   (pretty-print "spec:")
   (pretty-print (spec cex_set0_arg0 cex_set0_arg1))
+  (pretty-print "matmul:")
+  (pretty-print (tensor-matmul cex_set0_arg0 cex_set0_arg1))
   (pretty-print "sketch:")
   (pretty-print (sketch cex_set0_arg0 cex_set0_arg1))
 ;;)
