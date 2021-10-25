@@ -31,5 +31,6 @@
 [expr (choose
         (dsl_inst_0 (bv 0 (bitvector 32)) (mem) (shufl) 2 2 8 8)
         (dsl_inst_1 (expr) 2 8)
+        (no-op (expr))
     )]
 )
