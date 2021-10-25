@@ -113,6 +113,40 @@
   result
 )
 
+;; Specialized (mask-less) shuffle 
+(define (vector-shuffle-special v1 v2 num_elems type_size)
+  (define result
+   (apply
+    concat
+    (for/list ([i (reverse (range num_elems))])
+       (concat
+          (ext-bv v1 i type_size)
+          (ext-bv v2 i type_size)
+          )
+        )
+      ))
+  result
+)
+
+;; Specialized (mask-less) shuffle and extract
+(define (vector-shuffle-ext-special v1 v2 num_elems type_size start num_lump)
+  (define result
+    (concat 
+    (apply
+     concat
+     (for/list ([i (range num_lump)])
+          (ext-bv v1 (- (- num_elems  1) (+ i start)) type_size))
+     )
+     (apply
+     concat
+     (for/list ([i (range num_lump)])
+          (ext-bv v2 (- (- num_elems  1) (+ i start)) type_size))
+      )
+     )
+    )
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result
