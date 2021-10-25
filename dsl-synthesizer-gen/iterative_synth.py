@@ -80,7 +80,7 @@ class SynthBase:
         (require rosette/lib/angelic)\n\
         (require racket/pretty)\n"
 
-        racket_str += "(custodian-limit-memory (current-custodian) (* 8000 1024 1024))" +"\n"
+        racket_str += "(custodian-limit-memory (current-custodian) (* 16000 1024 1024))" +"\n"
 
         if self.current_bitwidth != None:
             racket_str += "(current-bitwidth "+str(self.current_bitwidth)+")"+"\n"
