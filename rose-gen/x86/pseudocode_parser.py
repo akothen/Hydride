@@ -17,7 +17,7 @@ def parse_unary(op, p):
 
 if __name__ != '__main__':
   def p_error(p):
-    raise SyntaxError('Parser error')
+    raise SyntaxError('Parser error: {}'.format(p))
 
 def p_stmts(p):
   '''stmts : stmt
@@ -138,7 +138,7 @@ def p_args(p):
 
 def p_expr_bit_index(p):
   'expr : expr LBRACE expr RBRACE'
-  p[0] = BitSlice(p[1], lo=p[3], hi=p[3])
+  p[0] = Index(p[1], p[3])
 
 def p_expr_bit_slice(p):
   'expr : expr LBRACE expr COLON expr RBRACE'
