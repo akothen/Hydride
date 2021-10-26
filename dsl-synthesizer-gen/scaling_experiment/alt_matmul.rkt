@@ -11,7 +11,7 @@
 
 ;; Tensor shape bounds
 
-(define bound1 4)
+(define bound1 1024)
 (define bound2 2)
 (define bound3 2)
 
@@ -292,15 +292,15 @@
               (vector-shuffle-ext-special
                 (choose
                   (vector-shuffle-special
-                    (vector-load arg2 arg2_size 3 reduction_len prec)
-                    (vector-load arg2 arg2_size 3 reduction_len prec)
-                    reduction_len prec))
+                    (vector-load arg2 arg2_size 2 reduction_len prec)
+                    (vector-load arg2 arg2_size 2 reduction_len prec)
+                    jbound prec))
 
                 (choose
                   (vector-shuffle-special
                     (vector-load arg2 arg2_size 0 reduction_len prec)
-                    (vector-load arg2 arg2_size 3 reduction_len prec)
-                    reduction_len prec))
+                    (vector-load arg2 arg2_size 2 reduction_len prec)
+                    jbound prec))
                 (* reduction_len jbound) prec (* j jbound) reduction_len)
               1 reduction_len prec prec)           
             )
@@ -322,7 +322,7 @@
 (define (test_tensor-matmul_impl impl ref)
   (verify 
     (assert (equal?
-              (impl _arg0 _arg1 left_size right_size bound1 bound3 bound2 8) 
+              (impl _arg0 _arg1 left_size right_size bound1 bound2 bound3 8) 
               (ref _arg0 _arg1)))))
 
 
@@ -348,7 +348,7 @@
 
 
 (define gen_res (tensor-matmul cex_arg0 cex_arg1))
-(define rolled_res (rolled_impl cex_arg0 cex_arg1 left_size right_size bound1 bound3 bound2 8))
+(define rolled_res (rolled_impl cex_arg0 cex_arg1 left_size right_size bound1 bound2 bound3 8))
 
 
 (println "gen_impl_res::")
