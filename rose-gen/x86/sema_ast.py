@@ -21,6 +21,7 @@ Match = namedtuple('Match', ['val', 'cases'])
 Case = namedtuple('Case', ['val', 'stmts'])
 # property lookup
 Lookup = namedtuple('Lookup', ['obj', 'key'])
+Index = namedtuple('Index', ['obj', 'idx'])
 FuncDef = namedtuple('FuncDef', ['name', 'params', 'body'])
 Break = namedtuple('Break', [])
 

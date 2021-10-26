@@ -1,4 +1,4 @@
-
+# RTFM: https://docs.racket-lang.org/rosette-guide/sec_bitvectors.html#%28def._%28%28lib._rosette%2Fbase%2Fbase..rkt%29._sign-extend%29%29
 
 x86_sema = {
 
