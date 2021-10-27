@@ -174,8 +174,6 @@
   (define num_lanes_elems (/ num_elems num_lanes))
   (define low (/ num_lanes_elems 2))
   (define high num_lanes_elems)
-  (pretty-print low)
-  (pretty-print high)
   (define result
     (apply
      concat
@@ -183,8 +181,6 @@
        (apply
         concat
         (for/list ([j (reverse (range low high))])
-          ;;(pretty-print (ext-bv v1 (+ j (* i num_lanes_elems)) type_size))
-          ;;(pretty-print (ext-bv v2 (+ j (* i num_lanes_elems)) type_size))
           (concat (ext-bv v1 (+ j (* i num_lanes_elems)) type_size) (ext-bv v2 (+ j (* i num_lanes_elems)) type_size))
          )
         )
@@ -200,8 +196,6 @@
   (define num_lanes_elems (/ num_elems num_lanes))
   (define low 0)
   (define high (/ num_lanes_elems 2))
-  (pretty-print low)
-  (pretty-print high)
   (define result
     (apply
      concat
@@ -209,8 +203,6 @@
        (apply
         concat
         (for/list ([j (reverse (range low high))])
-          ;;(pretty-print (ext-bv v1 (+ j (* i num_lanes_elems)) type_size))
-          ;;(pretty-print (ext-bv v2 (+ j (* i num_lanes_elems)) type_size))
           (concat (ext-bv v1 (+ j (* i num_lanes_elems)) type_size) (ext-bv v2 (+ j (* i num_lanes_elems)) type_size))
          )
         )
