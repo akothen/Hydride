@@ -363,6 +363,114 @@
 
 
 
+;; Interleave-low instruction
+;;<intrinsic tech="AVX2" name="_mm256_unpacklo_epi8">
+;;	<type>Integer</type>
+;;	<CPUID>AVX2</CPUID>
+;;	<category>Swizzle</category>
+;;	<return type="__m256i" varname="dst" etype="UI8"/>
+;;	<parameter type="__m256i" varname="a" etype="UI8"/>
+;;	<parameter type="__m256i" varname="b" etype="UI8"/>
+;;	<description>Unpack and interleave 8-bit integers from the low half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
+;;	<operation>
+;;DEFINE INTERLEAVE_BYTES(src1[127:0], src2[127:0]) {
+;;	dst[7:0] := src1[7:0] 
+;;	dst[15:8] := src2[7:0] 
+;;	dst[23:16] := src1[15:8] 
+;;	dst[31:24] := src2[15:8] 
+;;	dst[39:32] := src1[23:16] 
+;;	dst[47:40] := src2[23:16] 
+;;	dst[55:48] := src1[31:24] 
+;;	dst[63:56] := src2[31:24] 
+;;	dst[71:64] := src1[39:32]
+;;	dst[79:72] := src2[39:32] 
+;;	dst[87:80] := src1[47:40] 
+;;	dst[95:88] := src2[47:40] 
+;;	dst[103:96] := src1[55:48] 
+;;	dst[111:104] := src2[55:48] 
+;;	dst[119:112] := src1[63:56] 
+;;	dst[127:120] := src2[63:56] 
+;;	RETURN dst[127:0]
+;;}
+;;dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
+;;dst[255:128] := INTERLEAVE_BYTES(a[255:128], b[255:128])
+;;dst[MAX:256] := 0
+;;	</operation>
+;;	<instruction name="VPUNPCKLBW" form="ymm, ymm, ymm" xed="VPUNPCKLBW_YMMqq_YMMqq_YMMqq"/>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+(define (_mm256_unpacklo_epi8 v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (reverse (range 2))])
+       (apply
+        concat
+        (for/list ([j (reverse (range 8 16))])
+          (concat (ext-bv v1 (+ j (* i 16)) 8) (ext-bv v2 (+ j (* i 16)) 8))
+         )
+        )
+       )
+     )
+    )
+    result
+)
+
+
+;; Interleave-high instruction
+;;<intrinsic tech="AVX2" name="_mm256_unpackhi_epi8">
+;;	<type>Integer</type>
+;;	<CPUID>AVX2</CPUID>
+;;	<category>Swizzle</category>
+;;	<return type="__m256i" varname="dst" etype="UI8"/>
+;;	<parameter type="__m256i" varname="a" etype="UI8"/>
+;;	<parameter type="__m256i" varname="b" etype="UI8"/>
+;;	<description>Unpack and interleave 8-bit integers from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
+;;	<operation>
+;;DEFINE INTERLEAVE_HIGH_BYTES(src1[127:0], src2[127:0]) {
+;;	dst[7:0] := src1[71:64] 
+;;	dst[15:8] := src2[71:64] 
+;;	dst[23:16] := src1[79:72] 
+;;	dst[31:24] := src2[79:72] 
+;;	dst[39:32] := src1[87:80] 
+;;	dst[47:40] := src2[87:80] 
+;;	dst[55:48] := src1[95:88] 
+;;	dst[63:56] := src2[95:88] 
+;;	dst[71:64] := src1[103:96] 
+;;	dst[79:72] := src2[103:96] 
+;;	dst[87:80] := src1[111:104] 
+;;	dst[95:88] := src2[111:104] 
+;;	dst[103:96] := src1[119:112] 
+;;	dst[111:104] := src2[119:112] 
+;;	dst[119:112] := src1[127:120] 
+;;	dst[127:120] := src2[127:120] 
+;;	RETURN dst[127:0]	
+;;}
+;;dst[127:0] := INTERLEAVE_HIGH_BYTES(a[127:0], b[127:0])
+;;dst[255:128] := INTERLEAVE_HIGH_BYTES(a[255:128], b[255:128])
+;;dst[MAX:256] := 0
+;;	</operation>
+;;	<instruction name="VPUNPCKHBW" form="ymm, ymm, ymm" xed="VPUNPCKHBW_YMMqq_YMMqq_YMMqq"/>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+(define (_mm256_unpackhi_epi8 v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (reverse (range 2))])
+       (apply
+        concat
+        (for/list ([j (reverse (range 0 8))])
+          (concat (ext-bv v1 (+ j (* i 16)) 8) (ext-bv v2 (+ j (* i 16)) 8))
+         )
+        )
+       )
+     )
+    )
+    result
+)
+
+
 ;; Test the semantics
 (define a128 (bv #x00010001000100010001000100010001 128))
 (define b128 (bv #x00020003000200030002000300020003 128))
@@ -395,6 +503,8 @@
   (pretty-print  (hvx_vrmpy src1024 a1024 b1024 32 4 32))
   (pretty-print  (hvx_vrmpy2 src1024 a1024 b1024 32 4 32))
   (pretty-print  (hvx_vrmpy3 src1024 a1024 b1024 32 4 32))
+  (pretty-print (_mm256_unpacklo_epi8 a256 b256))
+  (pretty-print (_mm256_unpackhi_epi8 a256 b256))
  )
 
 (res)
