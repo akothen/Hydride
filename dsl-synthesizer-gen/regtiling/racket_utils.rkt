@@ -212,6 +212,23 @@
     result
 )
 
+;; masked-blend instuction
+(define (vector-masked-blend v1 v2 num_elems type_size mask mask_type_size)
+  (define result
+    (apply 
+    concat
+    (for/list ([i (reverse (range num_elems))])
+      (pretty-print (ext-bv mask i mask_type_size))
+      (if (equal? (ext-bv mask i mask_type_size) (bv 0 mask_type_size))
+      (ext-bv v1 i type_size)
+      (ext-bv v2 i type_size)
+     )
+    )
+    )
+  )
+  result
+)
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
