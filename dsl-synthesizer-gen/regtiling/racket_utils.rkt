@@ -198,6 +198,34 @@
   result
 )
 
+
+;; Perform shuffle-ext on vectors
+(define (vector-shuffle-ext-special-internal v1 v2 start num_lump)
+  (assert (equal? (vector-length v1) (vector-length v2)))
+  (define result (make-vector (* 2 num_lump)))
+  (for/list ([i (range num_lump)])
+    (define tmp (vector-ref v1 (+ start i)))
+    (vector-set! result i tmp)
+  )
+  (for/list ([i (range num_lump)])
+    (define tmp (vector-ref v2 (+ start i)))
+    (vector-set! result (+ num_lump i) tmp)
+  )
+  (pretty-print result)
+  (pretty-print (vector-length result))
+  result
+)
+
+
+;; Specialized (mask-less) shuffle and extract version 2
+(define (vector-shuffle-ext-special-cast v1 v2 num_elems type_size start num_lump)
+  (define vect1 (bv-to-vector v1 num_elems type_size))
+  (define vect2 (bv-to-vector v2 num_elems type_size))
+  (define res-vect (vector-shuffle-ext-special-internal vect1 vect2 start num_lump))
+  (define result (vector-to-bv res-vect type_size))
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result
