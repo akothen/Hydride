@@ -147,6 +147,46 @@
   result
 )
 
+;; Bitvector to vector
+(define (bv-to-vector v num_elems type_size)
+  (define result (make-vector num_elems))
+  (for/list ([i (reverse (range num_elems))])
+    (define tmp (bitvector->integer (ext-bv v i type_size)))
+    (vector-set! result (- (- num_elems 1) i) tmp)
+    )
+  result
+)
+
+;; vector to bitvector
+(define (vector-to-bv v type_size)
+  (define num_elems (vector-length v))
+  (define result
+    (apply
+     concat
+      (for/list ([i (range num_elems)])
+        (integer->bitvector (vector-ref v i) (bitvector type_size))
+        )
+      )
+    )
+  result
+)
+
+;; Perform shuffle on vector
+(define (vector-shuffle-special-internal v1 v2)
+  (assert (equal? (vector-length v1) (vector-length v2)))
+  (define num_elems (+ (vector-length v1) (vector-length v2)))
+  (define result (make-vector num_elems))
+  (for/list ([i (range (vector-length v1))])
+    (define tmp1 (vector-ref v1 i))
+    (define tmp2 (vector-ref v2 i))
+    (vector-set! result (* 2 i) tmp1)
+    (vector-set! result (+ (* 2 i) 1) tmp2)
+  )
+  (pretty-print result)
+  (pretty-print (vector-length result))
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result
