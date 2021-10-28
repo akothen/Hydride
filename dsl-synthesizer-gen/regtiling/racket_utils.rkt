@@ -182,8 +182,6 @@
     (vector-set! result (* 2 i) tmp1)
     (vector-set! result (+ (* 2 i) 1) tmp2)
   )
-  (pretty-print result)
-  (pretty-print (vector-length result))
   result
 )
 
@@ -191,8 +189,6 @@
 (define (vector-shuffle-special-cast v1 v2 num_elems type_size)
   (define vect1 (bv-to-vector v1 num_elems type_size))
   (define vect2 (bv-to-vector v2 num_elems type_size))
-  (pretty-print vect1)
-  (pretty-print vect2)
   (define res-vect (vector-shuffle-special-internal vect1 vect2))
   (define result (vector-to-bv res-vect type_size))
   result
@@ -211,8 +207,6 @@
     (define tmp (vector-ref v2 (+ start i)))
     (vector-set! result (+ num_lump i) tmp)
   )
-  (pretty-print result)
-  (pretty-print (vector-length result))
   result
 )
 
@@ -225,6 +219,7 @@
   (define result (vector-to-bv res-vect type_size))
   result
 )
+
 
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
