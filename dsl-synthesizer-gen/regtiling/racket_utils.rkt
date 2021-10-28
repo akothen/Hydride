@@ -187,6 +187,17 @@
   result
 )
 
+;; Specialized shuffle version 2
+(define (vector-shuffle-special-cast v1 v2 num_elems type_size)
+  (define vect1 (bv-to-vector v1 num_elems type_size))
+  (define vect2 (bv-to-vector v2 num_elems type_size))
+  (pretty-print vect1)
+  (pretty-print vect2)
+  (define res-vect (vector-shuffle-special-internal vect1 vect2))
+  (define result (vector-to-bv res-vect type_size))
+  result
+)
+
 ;; An example of vector broadcast
 (define (vector-broadcast val num_elems type_size)
   (define result
