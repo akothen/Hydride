@@ -303,6 +303,23 @@
   result
 )
 
+
+;; Subtensor extraction based on number of subtensors to skip (starting from top-left corner)
+(define (sub-tensor-ext tensor tensor_size rows cols sub_rows sub_cols type_size idx)
+  (define subtensor_size (* (* sub_rows sub_cols) type_size))
+  (define subtensors_per_row (/ cols sub_cols)) ; 2
+  (define skip_subs (* (quotient idx subtensors_per_row) subtensors_per_row)) 
+  (define subrow_offset (remainder idx subtensors_per_row)) ;; 1
+  (define row_size (* cols type_size))
+  (define sub_row_size (* sub_cols type_size))
+  (define subtensor_start (+ (* subrow_offset sub_row_size) (* skip_subs subtensor_size)))
+  (define start_idx (/ subtensor_start type_size))
+  (apply concat (for/list ([i (range sub_rows)])
+                          (vector-load tensor tensor_size (+ start_idx (* i cols)) sub_cols type_size)
+                          
+                          ))
+)
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))

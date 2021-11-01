@@ -150,20 +150,16 @@
 )
 
 
-;; define a vector mask which contains loads
+;; Subtensor extraction based on number of subtensors to skip (starting from top-left corner)
 (define (sub-tensor-ext tensor tensor_size rows cols sub_rows sub_cols type_size idx)
   (define subtensor_size (* (* sub_rows sub_cols) type_size))
   (define subtensors_per_row (/ cols sub_cols)) ; 2
-  (define skip_subs (* (quotient idx subtensors_per_row) subtensors_per_row)) ;; number of complete subtensor rows to skip ; skip_subs = 2
+  (define skip_subs (* (quotient idx subtensors_per_row) subtensors_per_row)) 
   (define subrow_offset (remainder idx subtensors_per_row)) ;; 1
   (define row_size (* cols type_size))
   (define sub_row_size (* sub_cols type_size))
   (define subtensor_start (+ (* subrow_offset sub_row_size) (* skip_subs subtensor_size)))
   (define start_idx (/ subtensor_start type_size))
-  ;;subtensor_size
-  ;;subtensors_per_row
-  ;;skip_subs
-  ;;subrow_offset
   (apply concat (for/list ([i (range sub_rows)])
                           (vector-load tensor tensor_size (+ start_idx (* i cols)) sub_cols type_size)
                           
@@ -194,7 +190,7 @@
 (define tens (apply concat (for/list ([i (range 16)])
                                      (int32 i))))
 
-(define subt (sub-tensor-ext tens 512 4 4 2 2 32 3 ))
+(define subt (sub-tensor-ext tens 512 4 4 2 2 32 2))
 
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
@@ -214,3 +210,25 @@
 
 (print-mat tens 4 4 32)
 (print-mat subt 2 2 32)
+
+
+(define (max-pool mat rows cols pool_rows pool_cols type_size)
+  (define mat-size (* (* rows cols) type_size))
+  (define submat-size (* (* pool_rows pool_cols) type_size))
+  (define num_submat (quotient mat-size submat-size))
+
+  (apply concat (for/list ([i (range num_submat)]) 
+                          (define submat (sub-tensor-ext mat mat-size rows cols pool_rows pool_cols type_size i))
+
+                          (apply bvsmax
+                                 (for/list ([j (reverse (range (* pool_rows pool_cols)))])
+                                           (ext-bv submat j type_size)
+                                           )
+                                 )
+                          ))
+
+)
+
+
+(define check (max-pool tens 4 4 2 2 32))
+(print-mat check 2 2 32)
