@@ -1,4 +1,5 @@
-python3 ../run_synth.py --grammar tensor_grammar_8bit_specialized_shufl2.rkt tensor_8bit.spec -v --iterations 10 --depth 5
+python3 ../run_synth.py --grammar tensor_grammar_8bit_specialized_shufl2_v2.rkt tensor_8bit.spec -v --iterations 10 --depth 5
+#python3 ../run_synth.py --grammar tensor_grammar_8bit_specialized_shufl2.rkt tensor_8bit.spec -v --iterations 10 --depth 5
 #python3 ../run_synth.py --grammar tensor_grammar_8bit_specialized_shufl.rkt tensor_8bit.spec -v --iterations 10 --depth 5
 #python3 ../run_synth.py --grammar tensor_grammar_8bit_full2.rkt tensor_8bit.spec -v --iterations 10 --depth 3
 #python3 ../run_synth.py --grammar tensor_grammar_8bit_shufl2.rkt tensor_8bit.spec -v --iterations 10 --depth 3
