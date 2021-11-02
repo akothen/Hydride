@@ -1,5 +1,3 @@
-#lang rosette
-
 (define int128? (bitvector 128))
 (define int32? (bitvector 32))
 (define int8? (bitvector 8))
