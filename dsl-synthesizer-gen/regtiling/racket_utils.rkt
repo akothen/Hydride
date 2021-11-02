@@ -54,67 +54,79 @@
 
 ;; Bitvector scalar "load" instruction
 (define (scalar-load mem mem_size index type_size)
+  (assert (equal? (bvlength mem) mem_size))
   (define total_num_elems (/ mem_size type_size))
   (define result 
   (ext-bv mem (- (- total_num_elems  1) index) type_size))
+  (assert (equal? (bvlength result) type_size))
   result
 )
 
 ;; Bitvector vector "load" instruction
 (define (vector-load mem mem_size start num_elems type_size)
+  (assert (equal? (bvlength mem) mem_size))
   (define result
     (apply
     concat
     (for/list ([i (range num_elems)])
       (scalar-load mem mem_size (+ i start) type_size))
     ))
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
 ;; Bitvector vector "gather" instruction
 (define (strided-gather mem mem_size start stride num_elems type_size)
+  (assert (equal? (bvlength mem) mem_size))
   (define result
     (apply
     concat
     (for/list ([i (range num_elems)])
       (scalar-load mem mem_size (+ (* i stride) start) type_size))
     ))
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
 
 ;; An example of a masked vector "load" instruction
-(define (masked-vector-load mem mem_size start num_elems type_size mask mask_size mask_type_size)
-  (define total_num_mask_elems (/ mask_size mask_type_size))
+(define (masked-vector-load mem mem_size start type_size mask num_elems mask_type_size)
+  (assert (equal? (bvlength mem) mem_size))
+  (assert (equal? (bvlength mask) (* num_elems mask_type_size)))
   (define result
     (apply
     concat
     (for/list ([i (range num_elems)])
-      (if (equal? (ext-bv mask (- (- total_num_mask_elems 1) i) mask_type_size) (bv 0 mask_type_size))
+      (if (equal? (ext-bv mask (- (- num_elems 1) i) mask_type_size) (bv 0 mask_type_size))
           (bv 0 type_size)          
           (scalar-load mem mem_size (+ i start) type_size))
     )))
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
 ;; Example of vector shuffle
 (define (vector-shuffle v1 v2 num_elems type_size mask mask_num_elems mask_type_size)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
+  (assert (equal? (bvlength mask) (* mask_num_elems mask_type_size)))
   (define result
    (apply
     concat
     (for/list ([i (reverse (range mask_num_elems))])
       (define index (bitvector->natural (ext-bv mask i mask_type_size)))
-      ;;(pretty-print (ext-bv mask i mask_type_size))
-      ;;(pretty-print index)
       (if (< index num_elems)
           (ext-bv v1 (- (- num_elems  1) index) type_size)
           (ext-bv v2 (- (- num_elems  1) (- index num_elems)) type_size))
       )))
+  (assert (equal? (bvlength result) (* mask_num_elems type_size)))
   result
 )
 
 ;; Specialized (mask-less) shuffle 
 (define (vector-shuffle-special v1 v2 num_elems type_size)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define result
    (apply
     concat
@@ -125,11 +137,14 @@
           )
         )
       ))
+  (assert (equal? (bvlength result) (* 2 (bvlength v1))))
   result
 )
 
 ;; Specialized (mask-less) shuffle and extract
 (define (vector-shuffle-ext-special v1 v2 num_elems type_size start num_lump)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define result
     (concat 
     (apply
@@ -144,16 +159,19 @@
       )
      )
     )
+  (assert (equal? (bvlength result) (* (* 2 num_lump) type_size)))
   result
 )
 
 ;; Bitvector to vector
 (define (bv-to-vector v num_elems type_size)
+  (assert (equal? (bvlength v) (* num_elems type_size)))
   (define result (make-vector num_elems))
   (for/list ([i (reverse (range num_elems))])
     (define tmp (bitvector->integer (ext-bv v i type_size)))
     (vector-set! result (- (- num_elems 1) i) tmp)
     )
+  (assert (equal? (vector-length result) num_elems))
   result
 )
 
@@ -168,6 +186,7 @@
         )
       )
     )
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
@@ -182,11 +201,14 @@
     (vector-set! result (* 2 i) tmp1)
     (vector-set! result (+ (* 2 i) 1) tmp2)
   )
+  (assert (equal? (vector-length result) (* 2 (vector-length v1))))
   result
 )
 
 ;; Specialized shuffle version 2
 (define (vector-shuffle-special-cast v1 v2 num_elems type_size)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define vect1 (bv-to-vector v1 num_elems type_size))
   (define vect2 (bv-to-vector v2 num_elems type_size))
   (define res-vect (vector-shuffle-special-internal vect1 vect2))
@@ -207,12 +229,15 @@
     (define tmp (vector-ref v2 (+ start i)))
     (vector-set! result (+ num_lump i) tmp)
   )
+  (assert (equal? (vector-length result) (* 2 num_lump)))
   result
 )
 
 
 ;; Specialized (mask-less) shuffle and extract version 2
 (define (vector-shuffle-ext-special-cast v1 v2 num_elems type_size start num_lump)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define vect1 (bv-to-vector v1 num_elems type_size))
   (define vect2 (bv-to-vector v2 num_elems type_size))
   (define res-vect (vector-shuffle-ext-special-internal vect1 vect2 start num_lump))
@@ -229,22 +254,28 @@
     (for/list ([i (range num_elems)])
       (ext-bv val 0 type_size)
     )))
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
 ;; Implementation of a simple custom concat operation
 (define (vector-shufl-concat v1 v2 num_elems type_size)
+ (assert (equal? (bvlength v1) (bvlength v2)))
+ (assert (equal? (bvlength v1) (* num_elems type_size)))
  (define old_size (* num_elems type_size))
  (define result_size (* 2 old_size))
  (define new-v1 (zero-extend v1 (bitvector result_size)))
  (define new-v2 (zero-extend v2 (bitvector result_size)))
  (define result (bvor (bvshl new-v1 (bv old_size result_size)) new-v2))
+ (assert (equal? (bvlength result) ( * 2 (bvlength v1))))
  result
 )
 
 
 ;; Interleave-low instruction
 (define (vector-interleave-low v1 v2 num_elems type_size num_lanes)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define num_lanes_elems (/ num_elems num_lanes))
   (define low (/ num_lanes_elems 2))
   (define high num_lanes_elems)
@@ -261,12 +292,15 @@
        )
      )
     )
-    result
+  (assert (equal? (bvlength result) (bvlength v1)))
+  result
 )
 
 
 ;; Interleave-high instruction
 (define (vector-interleave-high v1 v2 num_elems type_size num_lanes)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
   (define num_lanes_elems (/ num_elems num_lanes))
   (define low 0)
   (define high (/ num_lanes_elems 2))
@@ -283,11 +317,15 @@
        )
      )
     )
-    result
+  (assert (equal? (bvlength result) (bvlength v1)))
+  result
 )
 
 ;; masked-blend instuction
 (define (vector-masked-blend v1 v2 num_elems type_size mask mask_type_size)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
+  (assert (equal? (bvlength mask) (* num_elems mask_type_size)))
   (define result
     (apply 
     concat
@@ -300,6 +338,7 @@
     )
     )
   )
+  (assert (equal? (bvlength result) (bvlength v1)))
   result
 )
 
