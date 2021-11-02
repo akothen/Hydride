@@ -7,7 +7,7 @@
          (only-in rosette constant model terms-ref term?
                   [boolean? @boolean?] [integer? @integer?] [if @if] [assert @assert]))
 
-(provide ?? choose define-synthax define-grammar define-simple-grammar generate-forms print-forms
+(provide ?? choose choose-cost define-synthax define-grammar define-cost-grammar define-simple-grammar generate-forms print-forms
          (rename-out [depth current-grammar-depth])
          (for-syntax save-properties) restore-properties)
 
@@ -178,6 +178,30 @@
                  [((list y) (list)) y]
                  [((list y _ ...) (list #t _ ...)) y]
                  [(_ _) (loop (cdr xs) (cdr vs))]))))])))
+
+
+(define cost-dec (make-parameter 1))
+
+(define-synthax choose-cost
+  #:syntax
+  (lambda (stx)
+    (syntax-case stx ()
+      [(_ x) #'x]
+      [(call x y ...) #`(in-context (syntax/source call) base-context (choose-thunk (thunk x) (thunk y) ...))]))
+  #:codegen
+   (lambda (expr sol) 
+    (syntax-case expr ()
+      [(_ x) #'x]
+      [(_ x ...) 
+       (let* ([xs (syntax->list #'(x ...))]
+              [vs (hole-value sol (sub1 (length xs)))])
+         (if (andmap term? vs)
+             expr
+             (let loop ([xs xs][vs vs])
+               (match* (xs vs)
+                 [((list y) (list)) y]
+                 [((list y _ ...) (list #t _ ...)) y]
+                 [(_ _) (loop (cdr xs) (cdr vs))]))))])))
                                    
 (define (choose-thunk . thunks)
   ((let loop ([xs thunks][hs (hole @boolean? (sub1 (length thunks)))])
@@ -189,6 +213,7 @@
   (error 'generate-forms "cannot generate code for ~a" expr))
 
 (define depth (make-parameter 0))
+(define cost (make-parameter 0))
 
 (define-syntax (define-grammar stx)
   (syntax-parse stx 
@@ -211,6 +236,65 @@
                         codegen-error) ...        
                       (parameterize ([depth d])
                         (in-context (syntax/source call) base-context (start))))]))
+           #:codegen
+           (lambda (expr sol)
+             (syntax-case expr ()
+               [(_ param ... _ (... ...))
+                (begin (codegen-add! #'cid (lambda (e s) #'clause)) ...)])
+             (syntax-case expr ()
+               [(_ (... ...) #:start s) #`(#,(car (member #'s (syntax->list #'(cid ...)) free-label-identifier=?)))]
+               [_ #'(c0)]))))]))
+
+
+
+(define-syntax (define-cost-grammar stx)
+  (syntax-parse stx 
+    [(_ (id:id param:id ...) [cid:id clause] ...+)
+     (with-syntax ([c0 (car (syntax->list #'(cid ...)))])
+       #'(define-synthax id
+           #:syntax
+           (lambda (stx)
+             (syntax-parse stx 
+               [(call param ...)           #'(call param ... #:depth (depth) #:start c0 #:cost (cost))]
+               [(call param ... #:depth d) #'(call param ... #:depth d #:start c0)]
+               [(call param ... #:start s) #'(call param ... #:depth (depth) #:start s)]
+               [(call param ... #:cost c) #'(call param ...  #:start c0 #:cost c)]
+               [(call param ... #:depth d #:cost c) #'(call param ... #:depth d #:start c0 #:cost c)]
+               [(call param ... #:depth d #:start (~and s:id (~or (~literal cid) ...)))
+                #:with start (car (member #'s (syntax->list #'(cid ...)) free-label-identifier=?))
+                #'(local ()
+                      (define-synthax cid
+                        [() (@assert (>= (depth) 0))
+                            (parameterize ([depth (sub1 (depth))])
+                              clause)]
+                        codegen-error) ...        
+                      (parameterize ([depth d])
+                        (in-context (syntax/source call) base-context (start))))]
+               [(call param ... #:depth d #:start (~and s:id (~or (~literal cid) ...)) #:cost c)
+                #:with start (car (member #'s (syntax->list #'(cid ...)) free-label-identifier=?))
+                #'(local ()
+                      (define-synthax cid
+                        [() (@assert (>= (depth) 0))
+                            (@assert (>= (cost) 0))
+                            (parameterize ( [depth (sub1 (depth))] [cost (- (cost) (cost-dec))] )
+                              clause)]
+                        codegen-error) ...        
+                      (parameterize ([depth d] [cost c])
+                        (in-context (syntax/source call) base-context (start))))]
+               [(call param ... #:start (~and s:id (~or (~literal cid) ...)) #:cost c)
+                #:with start (car (member #'s (syntax->list #'(cid ...)) free-label-identifier=?))
+                #'(local ()
+                      (define-synthax cid
+                        [() 
+                            (@assert (>= (cost) 0))
+                            (parameterize (  [cost (- (cost) (cost-dec))] )
+                              clause)]
+                        codegen-error) ...        
+                      (parameterize ( [cost c])
+                        (in-context (syntax/source call) base-context (start))))]
+               
+               ))
+
            #:codegen
            (lambda (expr sol)
              (syntax-case expr ()
