@@ -36,7 +36,7 @@
      @integer->bitvector @bitvector->integer @bitvector->natural
      ; core/bvlib.rkt
      bit lsb msb bvzero? bvadd1 bvsub1
-     bvsmin bvsmax bvumin bvumax
+     bvsmin bvsmax bvumin bvumax bvlength
      rotate-left rotate-right bvrol bvror
      bool->bitvector bitvector->bool bitvector->bits
      ; core/function.rkt

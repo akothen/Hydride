@@ -7,7 +7,7 @@
   (only-in "numerics.rkt" extreme))
 
 (provide bit lsb msb bvzero? bvadd1 bvsub1
-         bvsmin bvsmax bvumin bvumax
+         bvsmin bvsmax bvumin bvumax bvlength
          rotate-left rotate-right bvrol bvror
          bool->bitvector bitvector->bool bitvector->bits)
 
@@ -31,6 +31,10 @@
 (define-lifted bvsmax (curry extreme @bvsge))
 (define-lifted bvumin (curry extreme @bvule))
 (define-lifted bvumax (curry extreme @bvuge))
+
+
+(define (bvlength x)
+  (bitvector-size (get-type x)))
 
 (define (bool->bitvector x [t 1])
   (merge (@false? x) (bv 0 t) (bv 1 t)))
