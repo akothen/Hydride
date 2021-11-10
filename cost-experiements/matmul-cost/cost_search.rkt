@@ -186,6 +186,30 @@
 (define cost-vec-strided-gather 10)
 (define cost-nop 1)
 
+(define (get-length val env)
+  (destruct val
+            [(reg id) (bvlength (vector-ref env id))]
+            [(lit val) (bvlength val)]
+            [(vec-mul v1 v2 len prec) (* len prec)]
+            [(vec-add v1 v2 len prec) (* len prec)]
+            [(vec-mac v1 v2 v3 len prec) (* len prec)]
+            [(dot-prod vacc v1 v2 i j IP OP) (* i j IP)]
+            [(vec-reduction v1 len prec) (* len prec)]
+            [(vec-load v1 vsize start num prec) (* num prec)]
+            [(vec-strided-gather v1 vsize start stride num prec) (* num prec)]
+            [(nop v1) (get-length v1)]
+            [_ -1]
+            )
+  )
+
+(define (equality-wrapper a b)
+  ;(define-symbolic left (bitvector (bvlength a)))
+  ;(define-symbolic right (bitvector (bvlength b)))
+  (println (bvlength a))
+  (println (bvlength b))
+  (assert (equal? (bvlength b) (bvlength a)))
+  )
+
 
 
 ; Prog is an expression in the above AST.
@@ -213,10 +237,12 @@
                         )
              ]
             [(dot-prod vacc v1 v2 i j IP OP)
+
+             ;(println (get-length v1 env))
+             (assert (equal? (get-length v1 env) (get-length v2 env)))
              (define acc_v (interpret vacc env))
              (define v1_v (interpret v1 env))
              (define v2_v (interpret v2 env))
-             ;(assert (= (bvlength v1_v) (bvlength v2_v)))
              (dsl_inst_0  acc_v v1_v v2_v i j IP OP)
              ]
             [(vec-reduction v1 len prec)
@@ -535,6 +561,10 @@
 ;(println (interpret actual-out env2))
 ;(assert (equal?  (interpret actual-out env2) (tensor-matmul x2 y2)) "Error!")
   
+;(define-symbolic left (bitvector 32))
+;(define-symbolic right (bitvector 32))
+
+;(assert (equal? left right) "bitvectors not equal")
 
 
 
