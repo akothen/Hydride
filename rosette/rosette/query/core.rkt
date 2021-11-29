@@ -2,6 +2,7 @@
 
 (require 
   "eval.rkt" "finitize.rkt"
+  (only-in "../base/core/real.rkt" @integer?)
   (only-in "../base/core/term.rkt" constant? term-type get-type term? with-terms clear-terms! term<? solvable-default)
   (only-in "../base/core/bool.rkt" ! || && => @boolean?)
   "../solver/solver.rkt"
@@ -131,13 +132,13 @@
           (cond 
             [bw
              (define fmap (finitize (append inputs assumes asserts) bw))
-             (define fsol (cegis (for/list ([i inputs])  (hash-ref fmap i))
+             (define fsol (custom-cegis (for/list ([i inputs])  (hash-ref fmap i))
                                  (for/list ([φ assumes]) (hash-ref fmap φ))
                                  (for/list ([φ asserts]) (hash-ref fmap φ))
                                  (solver-type) (solver-type)))
              (unfinitize fsol fmap)]
             [else 
-             (cegis inputs assumes asserts (solver-type) (solver-type))])
+             (custom-cegis inputs assumes asserts (solver-type) (solver-type))])
           (custodian-shutdown-all (current-custodian)))))))
          
 
@@ -180,3 +181,49 @@
             [(unsat? cex) candidate]
             [else (loop (guess (evaluate φ cex)))]))])))
  
+
+
+(define (custom-cegis inputs assumes asserts guesser checker)
+  
+  (define  φ `(,(=> (apply && assumes) (apply && asserts))))
+  
+  (define ¬φ `(,@assumes ,(apply || (map ! asserts))))
+
+  (define trial 0)
+
+  (define (init x)
+    (solver-clear guesser)
+    (solver-assert guesser x)
+    (begin0
+      (match (solver-check guesser)
+        [(model m) (sat (for/hash ([(c v) m] #:when (equal? @integer? (get-type c))) (values c v)))]
+        [other other])
+      (solver-clear guesser)
+      (solver-assert guesser x)))
+
+  (define (guess ψ)
+    (set! trial (add1 trial))
+    (solver-assert guesser ψ)
+    (match (solver-check guesser)
+      [(model m) (sat (for/hash ([(c v) m] #:unless (member c inputs)) (values c v)))]
+      [other other]))
+  
+  (define (check sol)
+    (solver-clear checker)
+    (solver-assert checker (evaluate ¬φ sol))
+    (match (solver-check checker)
+      [(? sat? m) (sat (for/hash ([i inputs])
+                         (values i (let ([v (m i)])
+                                     (if (eq? v i)
+                                         (solvable-default (term-type i))
+                                         v)))))]
+      [other other]))
+    
+  (let loop ([candidate (init (append assumes asserts))])
+    (cond 
+      [(unsat? candidate) candidate]
+      [else
+        (let ([cex (check candidate)])
+          (cond 
+            [(unsat? cex) candidate]
+            [else (loop (guess (evaluate φ cex)))]))])))
