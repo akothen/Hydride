@@ -22,20 +22,24 @@
 
 ;; Bitvector scalar "load" instruction
 (define (scalar-load mem mem_size index type_size)
+  (assert (equal? (bvlength mem) mem_size))
   (define total_num_elems (/ mem_size type_size))
   (define result
   (ext-bv mem (- (- total_num_elems  1) index) type_size))
+  (assert (equal? (bvlength result) type_size))
   result
 )
 
 ;; Bitvector vector "load" instruction
 (define (vector-load mem mem_size start num_elems type_size)
+  (assert (equal? (bvlength mem) mem_size))
   (define result
     (apply
     concat
     (for/list ([i (range num_elems)])
       (scalar-load mem mem_size (+ i start) type_size))
     ))
+  (assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
@@ -80,6 +84,8 @@
 
 ;; Specialized shuffle
 (define (vector-shuffle-special v1 v2 num_elems type_size)
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
+  (assert (equal? (bvlength v2) (* num_elems type_size)))
   (define result
    (apply
     concat
@@ -90,11 +96,14 @@
           )
         )
       ))
+  (assert (equal? (bvlength result) (* 2 (* num_elems type_size))))
   result
 )
 
 ;; Specialized shuffle and extract
 (define (vector-shuffle-ext-special v1 v2 num_elems type_size start num_lump)
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
+  (assert (equal? (bvlength v2) (* num_elems type_size)))
   (define result
     (concat 
     (apply
@@ -109,6 +118,7 @@
       )
      )
     )
+  (assert (equal? (bvlength result) (* (* 2 num_lump) type_size)))
   result
 )
 
@@ -134,6 +144,10 @@
 )
 
 (define (dsl_inst_0 vreg-acc vreg1 vreg2 conc_i_bound conc_j_bound conc_in_precision conc_out_precision)
+  (assert (equal? (bvlength vreg-acc) (* conc_i_bound conc_out_precision))) 
+  (assert (equal? (bvlength vreg1) (* (* conc_i_bound conc_j_bound) conc_in_precision)))
+  (assert (equal? (bvlength vreg2) (* (* conc_i_bound conc_j_bound) conc_in_precision))) 
+  (define result 
   (apply
    concat 
    (for/list ([i (reverse (range conc_i_bound))])
@@ -142,17 +156,24 @@
         bvadd
         (for/list ([j (reverse (range conc_j_bound))]) 
           (bvmul (sign-ext-bv vreg1 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision) (sign-ext-bv vreg2 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision)))))
-     (bvadd (ext-bv vreg-acc i conc_out_precision) sum))))
+      (bvadd (ext-bv vreg-acc i conc_out_precision) sum)))
+  )
+  (assert (equal? (bvlength result) (* conc_i_bound conc_out_precision))) 
+  result
+ )
 
 
 
 (define (dsl_inst_1 vreg conc_i_bound conc_precision) 
+  (assert (equal? (bvlength vreg) (* conc_i_bound conc_precision))) 
   (define result
     (apply
      bvadd
      (for/list ([i (reverse (range conc_i_bound))])
        (ext-bv vreg i conc_precision)))) 
+  (assert (equal? (bvlength result) conc_precision)) 
   result)
+
 
 
 ;; Code equivalent to matmul
@@ -165,18 +186,18 @@
   (define col3 (strided-gather arg1 192 3 6 4 8))
   (define col4 (strided-gather arg1 192 4 6 4 8))
   (define col5 (strided-gather arg1 192 5 6 4 8))
-  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col0 2 2 8 8))
-  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col1 2 2 8 8))
-  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col2 2 2 8 8))
-  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col3 2 2 8 8))
-  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col4 2 2 8 8))
-  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 32)) row0 col5 2 2 8 8))
-  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col0 2 2 8 8))
-  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col1 2 2 8 8))
-  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col2 2 2 8 8))
-  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col3 2 2 8 8))
-  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col4 2 2 8 8))
-  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 32)) row1 col5 2 2 8 8))
+  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col0 2 2 8 8))
+  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col1 2 2 8 8))
+  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col2 2 2 8 8))
+  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col3 2 2 8 8))
+  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col4 2 2 8 8))
+  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 16)) row0 col5 2 2 8 8))
+  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col0 2 2 8 8))
+  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col1 2 2 8 8))
+  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col2 2 2 8 8))
+  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col3 2 2 8 8))
+  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col4 2 2 8 8))
+  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 16)) row1 col5 2 2 8 8))
   (define result
   (concat (dsl_inst_1 int_res00 2 8) (dsl_inst_1 int_res01 2 8) (dsl_inst_1 int_res02 2 8)
           (dsl_inst_1 int_res03 2 8) (dsl_inst_1 int_res04 2 8) (dsl_inst_1 int_res05 2 8)
@@ -222,18 +243,18 @@
   (define shufl3 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x06071213 32) 4 8))
   (define shufl4 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x08091415 32) 4 8))
   (define shufl5 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x0a0b1617 32) 4 8))
-  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl0 2 2 8 8))
-  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl1 2 2 8 8))
-  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl2 2 2 8 8))
-  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl3 2 2 8 8))
-  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl4 2 2 8 8))
-  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl5 2 2 8 8))
-  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl0 2 2 8 8))
-  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl1 2 2 8 8))
-  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl2 2 2 8 8))
-  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl3 2 2 8 8))
-  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl4 2 2 8 8))
-  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl5 2 2 8 8))
+  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl0 2 2 8 8))
+  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl1 2 2 8 8))
+  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl2 2 2 8 8))
+  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl3 2 2 8 8))
+  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl4 2 2 8 8))
+  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl5 2 2 8 8))
+  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl0 2 2 8 8))
+  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl1 2 2 8 8))
+  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl2 2 2 8 8))
+  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl3 2 2 8 8))
+  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl4 2 2 8 8))
+  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl5 2 2 8 8))
   (define result
   (concat (dsl_inst_1 int_res00 2 8) (dsl_inst_1 int_res01 2 8) (dsl_inst_1 int_res02 2 8)
           (dsl_inst_1 int_res03 2 8) (dsl_inst_1 int_res04 2 8) (dsl_inst_1 int_res05 2 8)
@@ -252,34 +273,26 @@
   (define row11 (vector-load arg1 192 6 6 8))
   (define row12 (vector-load arg1 192 12 6 8))
   (define row13 (vector-load arg1 192 18 6 8))
-  ;;(define shufl_top0 (vector-shuffle row10 row11 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl_top0 (vector-shuffle-special row10 row11 6 8))
-  ;;(define shufl_top1 (vector-shuffle row12 row13 6 8 (bv #x0006010702080309040a050b 96) 12 8))
   (define shufl_top1 (vector-shuffle-special row12 row13 6 8))
-  ;;(define shufl0 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x00010c0d 32) 4 8))
   (define shufl0 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 0 2))
-  ;;(define shufl1 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x02030e0f 32) 4 8))
   (define shufl1 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 2 2))
-  ;;(define shufl2 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x04051011 32) 4 8))
   (define shufl2 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 4 2))
-  ;;(define shufl3 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x06071213 32) 4 8))
   (define shufl3 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 6 2))
-  ;;(define shufl4 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x08091415 32) 4 8))
   (define shufl4 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 8 2))
-  ;;(define shufl5 (vector-shuffle shufl_top0 shufl_top1 12 8 (bv #x0a0b1617 32) 4 8))
   (define shufl5 (vector-shuffle-ext-special shufl_top0 shufl_top1 12 8 10 2))
-  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl0 2 2 8 8))
-  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl1 2 2 8 8))
-  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl2 2 2 8 8))
-  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl3 2 2 8 8))
-  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl4 2 2 8 8))
-  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 32)) row0 shufl5 2 2 8 8))
-  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl0 2 2 8 8))
-  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl1 2 2 8 8))
-  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl2 2 2 8 8))
-  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl3 2 2 8 8))
-  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl4 2 2 8 8))
-  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 32)) row1 shufl5 2 2 8 8))
+  (define int_res00 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl0 2 2 8 8))
+  (define int_res01 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl1 2 2 8 8))
+  (define int_res02 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl2 2 2 8 8))
+  (define int_res03 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl3 2 2 8 8))
+  (define int_res04 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl4 2 2 8 8))
+  (define int_res05 (dsl_inst_0 (bv 0 (bitvector 16)) row0 shufl5 2 2 8 8))
+  (define int_res10 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl0 2 2 8 8))
+  (define int_res11 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl1 2 2 8 8))
+  (define int_res12 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl2 2 2 8 8))
+  (define int_res13 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl3 2 2 8 8))
+  (define int_res14 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl4 2 2 8 8))
+  (define int_res15 (dsl_inst_0 (bv 0 (bitvector 16)) row1 shufl5 2 2 8 8))
   (define result
   (concat (dsl_inst_1 int_res00 2 8) (dsl_inst_1 int_res01 2 8) (dsl_inst_1 int_res02 2 8)
           (dsl_inst_1 int_res03 2 8) (dsl_inst_1 int_res04 2 8) (dsl_inst_1 int_res05 2 8)
