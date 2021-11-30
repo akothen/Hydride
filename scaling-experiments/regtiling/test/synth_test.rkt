@@ -3,6 +3,7 @@
 (require rosette/lib/angelic)
 (require racket/pretty)
 (require data/bit-vector)
+(require rosette/lib/destruct)
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -336,30 +337,216 @@
     )]
 )
 
+
+
+; Because we'll be using regs to index into a
+; vector, it is best to make them mutable 
+; so they get merged into a union rather than field-wise.
+(struct reg (id)   #:transparent #:mutable)
+(struct lit (val)  #:transparent )
+(struct vec-concat (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12) #:transparent)
+(struct dot-prod ([vacc #:mutable] [v1 #:mutable] [v2 #:mutable] i j IP OP) #:transparent )
+(struct vec-reduction ([v1 #:mutable] len prec) #:transparent )
+(struct vec-load ([v1 #:mutable] vsize start num prec) #:transparent )
+(struct vec-shuffle-special ([v1 #:mutable] [v2 #:mutable] len prec)  #:transparent )
+(struct vec-shuffle-ext-special ([v1 #:mutable] [v2 #:mutable] len prec index lump)  #:transparent )
+(struct nop (v1) #:transparent)
+
+
+(define (reg-idx val)
+  (destruct val 
+            [(reg id) id]
+            [_ -1]
+            ))
+
+
+; Prog is an expression in the above AST.
+; env is a vector of values; register
+; identifiers must be in the range 0 ... |env| - 1.
+(define (interpret prog env)
+  (destruct prog
+            [(reg id) (vector-ref env id)]
+            [(nop v1) (interpret v1 env)]
+            [(lit val) val]
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+                (concat (interpret v1 env) (interpret v2 env) (interpret v3 env)
+                        (interpret v4 env) (interpret v5 env) (interpret v6 env)
+                        (interpret v7 env) (interpret v8 env) (interpret v9 env)
+                        (interpret v10 env) (interpret v11 env) (interpret v12 env)
+                        )
+             ]
+            [(dot-prod vacc v1 v2 i j IP OP)
+             (dsl_inst_0 (interpret vacc env) (interpret v1 env) (interpret v2 env) i j IP OP)
+             ]
+            [(vec-reduction v1 len prec)
+             (dsl_inst_1 (interpret v1 env) len prec)
+             ]
+            [
+             (vec-load v1 vsize start num prec)
+             (vector-load (interpret v1 env) vsize start num prec)
+             ]
+             [
+             (vec-shuffle-special v1 v2 len prec)
+             (vector-shuffle-special (interpret v1 env) (interpret v2 env) len prec)
+             ]
+             [
+             (vec-shuffle-ext-special v1 v2 len prec index lump)
+             (vec-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
+             ]
+            ))
+
+
+(define (mem vars #:depth k)
+  (assert (> k 0))
+    (cond
+    [(choose* #t #f)
+     (apply choose* vars)]
+    [(choose* #t #f)
+       (vec-load (mem vars #:depth (- k 1)) 64 0 4 8)
+    ]
+    [(choose* #t #f)
+       (vec-load (mem vars #:depth (- k 1)) 64 4 4 8)
+    ]
+    [(choose* #t #f)
+       (vec-load (mem vars #:depth (- k 1)) 192 0 6 8)
+    ]
+    [(choose* #t #f)
+       (vec-load (mem vars #:depth (- k 1)) 192 6 6 8)
+    ]
+    [(choose* #t #f)
+       (vec-load (mem vars #:depth (- k 1)) 192 12 6 8)
+    ]
+    [else
+       (vec-load (mem vars #:depth (- k 1)) 192 18 6 8)
+    ]
+  )
+)
+
+(define (shufl vars #:depth k)
+  (assert (> k 0))
+  (cond
+    [(choose* #t #f)
+     (apply choose* vars)]
+    [(choose* #t #f)
+     (vec-shuffle-special
+                    (mem vars #:depth (- k 1))
+                    (mem vars #:depth (- k 1))
+                    6 8
+    )]
+    [(choose* #t #f)
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 0 2
+    )]
+    [(choose* #t #f)
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 2 2
+    )]
+    [(choose* #t #f)
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 4 2
+    )]
+    [(choose* #t #f)
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 6 2
+    )]
+    [(choose* #t #f)
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 8 2
+    )]
+    [else
+     (vec-shuffle-ext-special
+                    (shufl vars #:depth (- k 1))
+                    (shufl vars #:depth (- k 1))
+                    12 8 10 2
+    )]
+   )
+  )
+
+
+(define (expr vars #:depth k)
+  (assert (> k 0))
+  (cond
+    [(choose* #t #f)
+     (apply choose* vars)]
+    [(choose* #t #f)
+     (dot-prod (expr vars #:depth (- k 1))
+                 (mem vars #:depth (- k 1))
+                 (shufl vars #:depth (- k 1))
+                 2 2 8 8
+    )]
+    [(choose* #t #f)
+     (vec-reduction (expr vars #:depth (- k 1)) 2 8
+    )]
+    [(choose* #t #f)
+     (nop (expr vars #:depth (- k 1))
+    )]
+    [else
+      (lit (bv 0 (bitvector 16)))
+    ]
+   )
+  )
+
+;; Define arbritray nesting of grammars.
+;; Top-grammar invokes grammar with depth k-1
+;; 
+(define (top-grammar vars #:depth k)
+  (assert (> k 0))
+     (vec-concat 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+       (expr vars #:depth (- k 1)) 
+    )
+    
+  )
+
+; Get a sketch of depth 5.
+(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 6))
+
 (define (synth_grammar arg1 arg2)
-                    (gen-grammar arg1 arg2 #:depth 5))
-
-
-
-
+                    (gen-grammar arg1 arg2 #:depth 6))
 
 (define-symbolic sym_arg0 (bitvector 64))
 (define-symbolic sym_arg1 (bitvector 192))
-
 
 (pretty-print "VERIFY----")
 (verify
   (assert (equal? (tensor-matmul sym_arg0 sym_arg1)  (sketch-special sym_arg0 sym_arg1))))
 
 
+
+(define cex_arg0 (bv #x1111111111111111 64))
+(define cex_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
+
+(define env (vector cex_arg0 cex_arg1))
+
+
 (pretty-print "SYNTHESIZE----")
 (define sol
 (synthesize
-  #:forall (list sym_arg0 sym_arg1)
-  #:guarantee (assert (equal? (synth_grammar sym_arg0 sym_arg1) (tensor-matmul sym_arg0 sym_arg1)))
+  #:forall (list sym_arg0 sym_arg1 env)
+  #:guarantee (assert (equal? (interpret sketch-grammar env) (tensor-matmul cex_arg0 cex_arg1)))
 ))
 
 (assert (sat? sol) "Unsatisfiable")
-
-
 
