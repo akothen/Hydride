@@ -5,6 +5,9 @@
 (require data/bit-vector)
 (require rosette/lib/destruct)
 
+
+(custodian-limit-memory (current-custodian) (* 10000 1024 1024))
+
 ;; Some uility functions
 (define (ext-bv x i type-size)
   (define var (extract (+ (* i type-size) (- type-size 1)) (* i type-size) x))
@@ -23,24 +26,24 @@
 
 ;; Bitvector scalar "load" instruction
 (define (scalar-load mem mem_size index type_size)
-  (assert (equal? (bvlength mem) mem_size))
+  ;(assert (equal? (bvlength mem) mem_size))
   (define total_num_elems (/ mem_size type_size))
   (define result
   (ext-bv mem (- (- total_num_elems  1) index) type_size))
-  (assert (equal? (bvlength result) type_size))
+  ;(assert (equal? (bvlength result) type_size))
   result
 )
 
 ;; Bitvector vector "load" instruction
 (define (vector-load mem mem_size start num_elems type_size)
-  (assert (equal? (bvlength mem) mem_size))
+  ;(assert (equal? (bvlength mem) mem_size))
   (define result
     (apply
     concat
     (for/list ([i (range num_elems)])
       (scalar-load mem mem_size (+ i start) type_size))
     ))
-  (assert (equal? (bvlength result) (* num_elems type_size)))
+  ;(assert (equal? (bvlength result) (* num_elems type_size)))
   result
 )
 
@@ -85,8 +88,8 @@
 
 ;; Specialized shuffle
 (define (vector-shuffle-special v1 v2 num_elems type_size)
-  (assert (equal? (bvlength v1) (* num_elems type_size)))
-  (assert (equal? (bvlength v2) (* num_elems type_size)))
+  ;(assert (equal? (bvlength v1) (* num_elems type_size)))
+  ;(assert (equal? (bvlength v2) (* num_elems type_size)))
   (define result
    (apply
     concat
@@ -97,14 +100,14 @@
           )
         )
       ))
-  (assert (equal? (bvlength result) (* 2 (* num_elems type_size))))
+  ;(assert (equal? (bvlength result) (* 2 (* num_elems type_size))))
   result
 )
 
 ;; Specialized shuffle and extract
 (define (vector-shuffle-ext-special v1 v2 num_elems type_size start num_lump)
-  (assert (equal? (bvlength v1) (* num_elems type_size)))
-  (assert (equal? (bvlength v2) (* num_elems type_size)))
+  ;(assert (equal? (bvlength v1) (* num_elems type_size)))
+  ;(assert (equal? (bvlength v2) (* num_elems type_size)))
   (define result
     (concat 
     (apply
@@ -119,7 +122,7 @@
       )
      )
     )
-  (assert (equal? (bvlength result) (* (* 2 num_lump) type_size)))
+  ;(assert (equal? (bvlength result) (* (* 2 num_lump) type_size)))
   result
 )
 
@@ -145,9 +148,9 @@
 )
 
 (define (dsl_inst_0 vreg-acc vreg1 vreg2 conc_i_bound conc_j_bound conc_in_precision conc_out_precision)
-  (assert (equal? (bvlength vreg-acc) (* conc_i_bound conc_out_precision))) 
-  (assert (equal? (bvlength vreg1) (* (* conc_i_bound conc_j_bound) conc_in_precision)))
-  (assert (equal? (bvlength vreg2) (* (* conc_i_bound conc_j_bound) conc_in_precision))) 
+  ;(assert (equal? (bvlength vreg-acc) (* conc_i_bound conc_out_precision))) 
+  ;(assert (equal? (bvlength vreg1) (* (* conc_i_bound conc_j_bound) conc_in_precision)))
+  ;(assert (equal? (bvlength vreg2) (* (* conc_i_bound conc_j_bound) conc_in_precision))) 
   (define result 
   (apply
    concat 
@@ -159,20 +162,20 @@
           (bvmul (sign-ext-bv vreg1 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision) (sign-ext-bv vreg2 (+ j (* i conc_j_bound)) conc_in_precision conc_out_precision)))))
       (bvadd (ext-bv vreg-acc i conc_out_precision) sum)))
   )
-  (assert (equal? (bvlength result) (* conc_i_bound conc_out_precision))) 
+  ;(assert (equal? (bvlength result) (* conc_i_bound conc_out_precision))) 
   result
  )
 
 
 
 (define (dsl_inst_1 vreg conc_i_bound conc_precision) 
-  (assert (equal? (bvlength vreg) (* conc_i_bound conc_precision))) 
+  ;(assert (equal? (bvlength vreg) (* conc_i_bound conc_precision))) 
   (define result
     (apply
      bvadd
      (for/list ([i (reverse (range conc_i_bound))])
        (ext-bv vreg i conc_precision)))) 
-  (assert (equal? (bvlength result) conc_precision)) 
+  ;(assert (equal? (bvlength result) conc_precision)) 
   result)
 
 
@@ -304,6 +307,8 @@
  )
 
 
+
+
 (define-grammar (gen-grammar arg0 arg1)
 [top (choose
        (apply concat (list (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) (expr) ))
@@ -353,6 +358,70 @@
 (struct nop (v1) #:transparent)
 
 
+
+  (define row0 (vec-load (reg 0) 64 0 4 8))
+  (define row1 (vec-load (reg 0) 64 4 4 8))
+  (define row10 (vec-load (reg 1) 192 0 6 8))
+  (define row11 (vec-load (reg 1) 192 6 6 8))
+  (define row12 (vec-load (reg 1) 192 12 6 8))
+  (define row13 (vec-load (reg 1) 192 18 6 8))
+  (define shufl_top0 (vec-shuffle-special row10 row11 6 8))
+  (define shufl_top1 (vec-shuffle-special row12 row13 6 8))
+  (define shufl0 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 0 2))
+  (define shufl1 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 2 2))
+  (define shufl2 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 4 2))
+  (define shufl3 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 6 2))
+  (define shufl4 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 8 2))
+  (define shufl5 (vec-shuffle-ext-special shufl_top0 shufl_top1 12 8 10 2))
+  (define int_res00 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl0 2 2 8 8))
+  (define int_res01 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl1 2 2 8 8))
+  (define int_res02 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl2 2 2 8 8))
+  (define int_res03 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl3 2 2 8 8))
+  (define int_res04 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl4 2 2 8 8))
+  (define int_res05 (dot-prod (lit (bv 0 (bitvector 16))) row0 shufl5 2 2 8 8))
+  (define int_res10 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl0 2 2 8 8))
+  (define int_res11 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl1 2 2 8 8))
+  (define int_res12 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl2 2 2 8 8))
+  (define int_res13 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl3 2 2 8 8))
+  (define int_res14 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl4 2 2 8 8))
+  (define int_res15 (dot-prod (lit (bv 0 (bitvector 16))) row1 shufl5 2 2 8 8))
+  (define result
+  (vec-concat (vec-reduction int_res00 2 8) (vec-reduction int_res01 2 8) (vec-reduction int_res02 2 8)
+          (vec-reduction int_res03 2 8) (vec-reduction int_res04 2 8) (vec-reduction int_res05 2 8)
+          (vec-reduction int_res10 2 8) (vec-reduction int_res11 2 8) (vec-reduction int_res12 2 8)
+          (vec-reduction int_res13 2 8) (vec-reduction int_res14 2 8) (vec-reduction int_res15 2 8))
+    )
+
+;; Function using shuffle instructions
+(define struct-sketch-special 
+  result
+ )
+
+
+(println "Struct def")
+(pretty-print  struct-sketch-special)
+
+
+
+(define (get-length val)
+  (destruct val
+            [(reg id) (list-ref (list 64 192) id)]
+            [(lit val) (bvlength val)]
+            ;[(vec-mul v1 v2 len prec) (* len prec)]
+            ;[(vec-add v1 v2 len prec) (* len prec)]
+            ;[(vec-mac v1 v2 v3 len prec) (* len prec)]
+            [(dot-prod vacc v1 v2 i j IP OP) (* i j IP)]
+            [(vec-reduction v1 len prec) (* len prec)]
+            [(vec-load v1 vsize start num prec) (* num prec)]
+            ;[(vec-strided-gather v1 vsize start stride num prec) (* num prec)]
+            [(nop v1) (get-length v1)]
+            [(vec-shuffle-special v1 v2 len prec) (* 2 len prec)]
+            [(vec-shuffle-ext-special v1 v2 len prec index lump) (* 2 lump prec)]
+            [_ -1]
+            )
+  )
+
+
 (define (reg-idx val)
   (destruct val 
             [(reg id) id]
@@ -376,6 +445,10 @@
                         )
              ]
             [(dot-prod vacc v1 v2 i j IP OP)
+             (assert (equal? (get-length vacc) (* i OP) ))
+             (assert (equal? (get-length v1) (* i j IP) ))
+             (assert (equal? (get-length v2) (* i j IP) ))
+
              (dsl_inst_0 (interpret vacc env) (interpret v1 env) (interpret v2 env) i j IP OP)
              ]
             [(vec-reduction v1 len prec)
@@ -383,15 +456,18 @@
              ]
             [
              (vec-load v1 vsize start num prec)
+             (assert (equal? (get-length v1) vsize))
              (vector-load (interpret v1 env) vsize start num prec)
              ]
              [
              (vec-shuffle-special v1 v2 len prec)
+             (assert (equal? (get-length v1) (get-length v2)))
              (vector-shuffle-special (interpret v1 env) (interpret v2 env) len prec)
              ]
              [
              (vec-shuffle-ext-special v1 v2 len prec index lump)
-             (vec-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
+             (assert (equal? (get-length v1) (get-length v2)))
+             (vector-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
              ]
             ))
 
@@ -521,32 +597,62 @@
   )
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 6))
+(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 5))
 
-(define (synth_grammar arg1 arg2)
-                    (gen-grammar arg1 arg2 #:depth 6))
+;(define (synth_grammar arg1 arg2)
+;                    (gen-grammar arg1 arg2 #:depth 6))
 
-(define-symbolic sym_arg0 (bitvector 64))
-(define-symbolic sym_arg1 (bitvector 192))
+;(define-symbolic sym_arg0 (bitvector 64))
+;(define-symbolic sym_arg1 (bitvector 192))
 
 (pretty-print "VERIFY----")
-(verify
-  (assert (equal? (tensor-matmul sym_arg0 sym_arg1)  (sketch-special sym_arg0 sym_arg1))))
+;(verify
+;  (assert (equal? (tensor-matmul sym_arg0 sym_arg1)  (sketch-special sym_arg0 sym_arg1))))
 
 
+(define-symbolic sym2_arg0 (bitvector 64))
+(define-symbolic sym2_arg1 (bitvector 192))
 
 (define cex_arg0 (bv #x1111111111111111 64))
 (define cex_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
 
+
 (define env (vector cex_arg0 cex_arg1))
+
+(println "Verify on concrete output")
+(println (tensor-matmul cex_arg0 cex_arg1))
+
+(println (interpret struct-sketch-special env))
+
+
+
+(define sym_env (vector sym2_arg0 sym2_arg1))
+
+
+
+(pretty-print "VERIFY 2 ----")
+(define cex
+(verify
+  (assert (equal? (tensor-matmul sym2_arg0 sym2_arg1)  
+                  (interpret struct-sketch-special sym_env)))
+  )
+)
+
+
+
+
 
 
 (pretty-print "SYNTHESIZE----")
 (define sol
 (synthesize
-  #:forall (list sym_arg0 sym_arg1 env)
+  #:forall (list  env)
   #:guarantee (assert (equal? (interpret sketch-grammar env) (tensor-matmul cex_arg0 cex_arg1)))
 ))
 
 (assert (sat? sol) "Unsatisfiable")
+
+(define synth_res (evaluate sketch-grammar sol))
+(pretty-print synth_res)
+;(println (cost synth_res))
 
