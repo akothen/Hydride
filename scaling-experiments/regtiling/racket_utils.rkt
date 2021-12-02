@@ -342,6 +342,34 @@
   result
 )
 
+
+(define (swizzle idx group_size fan_size len rot_factor wrap)
+  (define (rot n i)
+     (modulo (+ i rot_factor) n))
+
+  (define (GCD a b)
+    (cond
+         [(> a b) (GCD b (- a b))]
+         [(< a b) (GCD a (- b a))]
+         [else a]))
+
+  (define (fan cf n i)
+    (modulo (+ (* i cf) (floor (/ i (/ n (GCD cf n))) n))))
+
+  (define (group gs func_res i)
+    (+ (* (floor (/ i gs) gs) fun_res)))
+
+   (define (fan_rot gs cf n i)
+       (define fan_res (fan cf n i))
+       (if (== wrap 1)
+        (group  gs (GCD cf gs) (rot (GCD cf gs) (modulo fan_res gs)) fan_res)
+        (rot n fan_res)))
+  
+   (define result (group group_size (fan_rot group_size fan_size len idx) idx))
+
+  result
+ )
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
