@@ -370,17 +370,47 @@
   result
  )
  
- (define (vector-shuffle-swizzle v num_elems type_size group_size fan_size rot_factor wrap)
+;; General version of swizzle with single input vector
+(define (vector-shuffle-swizzle1 v num_elems type_size group_size fan_size rot_factor wrap)
 (define result
        (apply
         concat
         (for/list ([i (reverse (range num_elems))])
-          (ext-bv v (swizzle i group_size fan_size num_elems rot_factor wrap) type_size)
+          (define swizzled-index (swizzle i group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v swizzled-index type_size)
          )
         )
     )
     result
   )
+
+;; General version of swizzle with two input vectors
+(define (vector-shuffle-swizzle2 v1 v2 num_elems type_size group_size fan_size rot_factor wrap)
+  (define result
+    (apply
+     concat
+     (for/list ([i (range (/ num_elems (* 2 group_size)))])
+       (apply
+        concat
+        (for/list ([j (range group_size)])
+           (define raw-index (- (- num_elems  1) (+ (* i group_size) j)))
+           (define swizzled-index (swizzle raw-index group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v1 swizzled-index type_size)
+         )
+        )
+       (apply
+        concat
+        (for/list ([j (range group_size (* 2 group_size))])
+          (define raw-index (- (- num_elems  1) (+ (* i group_size) j)))
+          (define swizzled-index (swizzle raw-index group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v2 swizzled-index type_size)
+         )
+        )
+       )
+     )
+    )
+  result
+)
 
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
