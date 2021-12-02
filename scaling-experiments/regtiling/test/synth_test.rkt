@@ -410,7 +410,7 @@
             ;[(vec-mul v1 v2 len prec) (* len prec)]
             ;[(vec-add v1 v2 len prec) (* len prec)]
             ;[(vec-mac v1 v2 v3 len prec) (* len prec)]
-            [(dot-prod vacc v1 v2 i j IP OP) (* i j IP)]
+            [(dot-prod vacc v1 v2 i j IP OP) (* i OP)]
             [(vec-reduction v1 len prec) (* len prec)]
             [(vec-load v1 vsize start num prec) (* num prec)]
             ;[(vec-strided-gather v1 vsize start stride num prec) (* num prec)]
@@ -452,6 +452,7 @@
              (dsl_inst_0 (interpret vacc env) (interpret v1 env) (interpret v2 env) i j IP OP)
              ]
             [(vec-reduction v1 len prec)
+             (assert (equal? (get-length v1) (* len prec) ))
              (dsl_inst_1 (interpret v1 env) len prec)
              ]
             [
