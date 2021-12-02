@@ -369,6 +369,18 @@
 
   result
  )
+ 
+ (define (vector-shuffle-swizzle v num_elems type_size group_size fan_size rot_factor wrap)
+(define result
+       (apply
+        concat
+        (for/list ([i (reverse (range num_elems))])
+          (ext-bv v (swizzle i group_size fan_size num_elems rot_factor wrap) type_size)
+         )
+        )
+    )
+    result
+  )
 
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
