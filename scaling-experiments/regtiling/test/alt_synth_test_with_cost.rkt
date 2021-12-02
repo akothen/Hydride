@@ -343,6 +343,17 @@
 )
 
 
+(define cost-vec-mul 10)
+(define cost-vec-mac 12)
+(define cost-vec-add 5)
+(define cost-vec-concat 5)
+(define cost-dot-prod 5)
+(define cost-vec-reduction 3)
+(define cost-vec-load 5)
+(define cost-vec-strided-gather 10)
+(define cost-nop 1)
+(define cost-vec-shuffle-special 2)
+(define cost-vec-shuffle-ext-special 2)
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
@@ -357,6 +368,47 @@
 (struct vec-shuffle-ext-special ([v1 #:mutable] [v2 #:mutable] len prec index lump)  #:transparent )
 (struct nop (v1) #:transparent)
 
+(define (cost expr)
+  (destruct expr
+            [(lit _) 3]
+            [(reg _) 5]
+            ;[(vec-mul v1 v2 len prec)
+            ; (+ cost-vec-mul (cost v1) (cost v2))
+            ; ]
+            ;[(vec-mac v1 v2 v3 len prec)
+            ; (+ cost-vec-mac (cost v1) (cost v2) (cost v3))
+            ; ]
+            ;[(vec-add v1 v2 len prec)
+            ; (+ cost-vec-add (cost v1) (cost v2))
+            ; ]
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+                (+ cost-vec-concat   (cost v1) (cost v2) (cost v3)
+                        (cost v4) (cost v5) (cost v6)
+                        (cost v7 ) (cost v8) (cost v9)
+                        (cost v10) (cost v11) (cost v12)
+                        )
+             ]
+            [(dot-prod vacc v1 v2 i j IP OP)
+             (+ cost-dot-prod (cost v1) (cost v2))
+             ]
+            [(vec-reduction v1 len prec)
+             (+ cost-vec-reduction (cost v1))
+             ]
+            [(vec-load v1 vsize start num prec)
+             (+ cost-vec-load (cost v1))
+             ]
+            ;[(vec-strided-gather v1 vsize start stride num prec)
+            ; (+ cost-vec-strided-gather (cost v1))
+            ; ]
+            [(nop v1) 
+             (+ cost-nop (cost v1))]
+            [(vec-shuffle-special v1 v2 len prec)
+             (+ cost-vec-shuffle-special (cost v1) (cost v2))
+             ]
+            [(vec-shuffle-ext-special v1 v2 len prec index lump)
+             (+ cost-vec-shuffle-ext-special (cost v1) (cost v2))
+             ]
+            ))
 
 
   (define row0 (vec-load (reg 0) 64 0 4 8))
@@ -472,6 +524,67 @@
              (assert (equal? (get-length v1) (get-length v2)))
              ;;(assert (equal? (get-length v1)  (* len prec) ))
              (vector-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
+             ]
+            ))
+
+
+(define (print-prog prog )
+  (destruct prog
+            [(reg id) 
+             (display "arg")
+             (println id)]
+            [(nop v1) (print-prog v1)]
+            [(lit val) (println val)]
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+                (displayln "(concat ")
+                (print-prog v1) (print-prog v2) (print-prog v3)
+                (print-prog v4) (print-prog v5) (print-prog v6)
+                (print-prog v7) (print-prog v8) (print-prog v9)
+                (print-prog v10) (print-prog v11) (print-prog v12)
+                (displayln ")")
+             ]
+            [(dot-prod vacc v1 v2 i j IP OP)
+             
+             (displayln "(dsl_inst_0 ")
+             (print-prog vacc) (print-prog v1) (print-prog v2)
+             (println i) (println j) (println IP) (println OP)
+             (displayln ")")
+             ]
+            [(vec-reduction v1 len prec)
+             (displayln "(dsl_inst_1 ")
+             (print-prog v1)
+             (println len)
+             (println prec)
+             (displayln ")")
+             ]
+            [
+             (vec-load v1 vsize start num prec)
+             (displayln "(vector-load ")
+             (print-prog v1)
+             (println vsize) (println start) (println num) (println prec) 
+             (displayln ")")
+             ]
+             [
+             (vec-shuffle-special v1 v2 len prec)
+             (displayln "(vector-shuffle-special ")
+             (print-prog v1) (print-prog v2)
+             (println len)
+             (println prec)
+             (displayln ")")
+             ]
+             [
+             (vec-shuffle-ext-special v1 v2 len prec index lump)
+             (assert (equal? (get-length v1) (get-length v2)))
+             ;;(assert (equal? (get-length v1)  (* len prec) ))
+             (vector-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
+
+             (displayln "(vector-shuffle-ext-special ")
+             (print-prog v1) (print-prog v2)
+             (println len)
+             (println prec)
+             (println index)
+             (println lump)
+             (displayln ")")
              ]
             ))
 
@@ -629,12 +742,11 @@
 (define cex_arg0 (bv #x1111111111111111 64))
 (define cex_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
 
-
 (define cex2_arg0 (bv 0 (bitvector 64)))
 (define cex2_arg1 (bv 0 (bitvector 192)))
 
-
 (define env (vector cex_arg0 cex_arg1))
+
 (define env2 (vector cex2_arg0 cex2_arg1))
 
 (println "Verify on concrete output")
@@ -664,17 +776,324 @@
 (pretty-print "SYNTHESIZE----")
 (define sol
 (time
-(synthesize
-  #:forall (list  env)
+(optimize
+  ;#:forall (list  env)
+  #:minimize (list (cost sketch-grammar))
   #:guarantee (begin 
                 (assert (equal? (interpret sketch-grammar env) (tensor-matmul cex_arg0 cex_arg1)))
                 (assert (equal? (interpret sketch-grammar env2) (tensor-matmul cex2_arg0 cex2_arg1)))
-                
 ))
-))
+)
+)
 
 (assert (sat? sol) "Unsatisfiable")
 
 (define synth_res (evaluate sketch-grammar sol))
 (pretty-print synth_res)
-;(println (cost synth_res))
+(println (cost synth_res))
+
+
+(println (tensor-matmul cex_arg0 cex_arg1))
+
+(println (interpret synth_res env))
+
+
+
+
+(println (tensor-matmul cex2_arg0 cex2_arg1))
+(println (interpret synth_res env2))
+
+
+;(print-prog synth_res)
+
+(define (check arg0 arg1)
+  (concat 
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    (dsl_inst_1 
+      (dsl_inst_0 
+        (dsl_inst_0 
+          (bv #x0000 16)
+          arg0
+          arg0
+          2
+          2
+          8
+          8
+          )
+        arg0
+        arg0
+        2
+        2
+        8
+        8
+        )
+      2
+      8
+      )
+    )
+  )
+
+(clear-vc!)
+(define-symbolic sym2_arg0 (bitvector 64))
+(define-symbolic sym2_arg1 (bitvector 192))
+
+(define sym_env (vector sym2_arg0 sym2_arg1))
+
+(println "Interpreted")
+(println (interpret synth_res sym_env))
+
+(println "Actual")
+(println (tensor-matmul sym2_arg0 sym2_arg1))
+(pretty-print "VERIFY 2 ----")
+(define cex
+  (time
+(verify
+  (assert (equal? (tensor-matmul sym2_arg0 sym2_arg1)  
+                  (interpret synth_res sym_env)
+                  ;(check sym2_arg0 sym2_arg1)
+                  
+                  
+                  ))
+  )
+)
+  )
+
+(println cex)
+(assert (sat? cex) "Equal")
+
+(define val1 (evaluate sym2_arg0 cex ))
+(define val2 (evaluate sym2_arg1 cex ))
+
+(println val1)
+(println val2)
+
