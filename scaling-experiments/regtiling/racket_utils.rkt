@@ -342,6 +342,76 @@
   result
 )
 
+
+(define (swizzle idx group_size fan_size len rot_factor wrap)
+  (define (rot n i)
+     (modulo (+ i rot_factor) n))
+
+  (define (GCD a b)
+    (cond
+         [(> a b) (GCD b (- a b))]
+         [(< a b) (GCD a (- b a))]
+         [else a]))
+
+  (define (fan cf n i)
+    (modulo (+ (* i cf) (floor (/ i (/ n (GCD cf n))) n))))
+
+  (define (group gs func_res i)
+    (+ (* (floor (/ i gs) gs) fun_res)))
+
+   (define (fan_rot gs cf n i)
+       (define fan_res (fan cf n i))
+       (if (== wrap 1)
+        (group  gs (GCD cf gs) (rot (GCD cf gs) (modulo fan_res gs)) fan_res)
+        (rot n fan_res)))
+  
+   (define result (group group_size (fan_rot group_size fan_size len idx) idx))
+
+  result
+ )
+ 
+;; General version of swizzle with single input vector
+(define (vector-shuffle-swizzle1 v num_elems type_size group_size fan_size rot_factor wrap)
+(define result
+       (apply
+        concat
+        (for/list ([i (reverse (range num_elems))])
+          (define swizzled-index (swizzle i group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v swizzled-index type_size)
+         )
+        )
+    )
+    result
+  )
+
+;; General version of swizzle with two input vectors
+(define (vector-shuffle-swizzle2 v1 v2 num_elems type_size group_size fan_size rot_factor wrap)
+  (define result
+    (apply
+     concat
+     (for/list ([i (range (/ num_elems (* 2 group_size)))])
+       (apply
+        concat
+        (for/list ([j (range group_size)])
+           (define raw-index (- (- num_elems  1) (+ (* i group_size) j)))
+           (define swizzled-index (swizzle raw-index group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v1 swizzled-index type_size)
+         )
+        )
+       (apply
+        concat
+        (for/list ([j (range group_size (* 2 group_size))])
+          (define raw-index (- (- num_elems  1) (+ (* i group_size) j)))
+          (define swizzled-index (swizzle raw-index group_size fan_size num_elems rot_factor wrap))
+          (ext-bv v2 swizzled-index type_size)
+         )
+        )
+       )
+     )
+    )
+  result
+)
+
 (define (print-vector vec len precision)
   (for/list ( [i (reverse (range len))])
             (define ith_val (ext-bv vec i precision))
