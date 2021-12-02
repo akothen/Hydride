@@ -24,6 +24,30 @@
 (define (no-op a) a)
 
 
+
+(define (vector-add a b len precision) 
+  (apply 
+    concat 
+    (for/list ([j (range len)]) 
+              (define tmp 
+                (bvadd (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+              tmp 
+              ) 
+    ) 
+  ) 
+
+(define (vector-mul a b len precision) 
+  (apply 
+    concat 
+    (for/list ([j (range len)]) 
+              (define tmp 
+                (bvmul (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+              tmp 
+              ) 
+    ) 
+  ) 
+
+
 ;; Bitvector scalar "load" instruction
 (define (scalar-load mem mem_size index type_size)
   ;(assert (equal? (bvlength mem) mem_size))
@@ -343,6 +367,15 @@
 )
 
 
+(define cost-vec-mul 10)
+(define cost-vec-mac 12)
+(define cost-vec-add 5)
+(define cost-vec-concat 5)
+(define cost-dot-prod 5)
+(define cost-vec-reduction 3)
+(define cost-vec-load 5)
+(define cost-vec-strided-gather 10)
+(define cost-nop 1)
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
@@ -351,10 +384,13 @@
 (struct lit (val)  #:transparent )
 (struct vec-concat (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12) #:transparent)
 (struct dot-prod ([vacc #:mutable] [v1 #:mutable] [v2 #:mutable] i j IP OP) #:transparent )
+(struct vec-mul ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
+(struct vec-add ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
 (struct vec-reduction ([v1 #:mutable] len prec) #:transparent )
 (struct vec-load ([v1 #:mutable] vsize start num prec) #:transparent )
 (struct vec-shuffle-special ([v1 #:mutable] [v2 #:mutable] len prec)  #:transparent )
 (struct vec-shuffle-ext-special ([v1 #:mutable] [v2 #:mutable] len prec index lump)  #:transparent )
+(struct vec-strided-gather ([v1 #:mutable] vsize start stride num prec) #:transparent )
 (struct nop (v1) #:transparent)
 
 
@@ -407,13 +443,13 @@
   (destruct val
             [(reg id) (list-ref (list 64 192) id)]
             [(lit val) (bvlength val)]
-            ;[(vec-mul v1 v2 len prec) (* len prec)]
-            ;[(vec-add v1 v2 len prec) (* len prec)]
+            [(vec-mul v1 v2 len prec) (* len prec)]
+            [(vec-add v1 v2 len prec) (* len prec)]
             ;[(vec-mac v1 v2 v3 len prec) (* len prec)]
             [(dot-prod vacc v1 v2 i j IP OP) (* i OP)]
             [(vec-reduction v1 len prec) prec]
             [(vec-load v1 vsize start num prec) (* num prec)]
-            ;[(vec-strided-gather v1 vsize start stride num prec) (* num prec)]
+            [(vec-strided-gather v1 vsize start stride num prec) (* num prec)]
             [(nop v1) (get-length v1)]
             [(vec-shuffle-special v1 v2 len prec) (* 2 len prec)]
             [(vec-shuffle-ext-special v1 v2 len prec index lump) (* 2 lump prec)]
@@ -452,7 +488,6 @@
              (dsl_inst_0 (interpret vacc env) (interpret v1 env) (interpret v2 env) i j IP OP)
              ]
             [(vec-reduction v1 len prec)
-             (assert (equal? (get-length v1) (* len prec) ))
              (dsl_inst_1 (interpret v1 env) len prec)
              ]
             [
@@ -469,6 +504,23 @@
              (vec-shuffle-ext-special v1 v2 len prec index lump)
              (assert (equal? (get-length v1) (get-length v2)))
              (vector-shuffle-ext-special (interpret v1 env) (interpret v2 env) len prec index lump)
+             ]
+            [(vec-mul v1 v2 len prec)
+                (assert (equal? (get-length v1) (get-length v2)))
+                (assert (equal? (get-length v1) (* len prec)))
+                (vector-mul (interpret v1 env) (interpret v2 env) len prec)
+             ]
+            [(vec-add v1 v2 len prec)
+                (assert (equal? (get-length v1) (get-length v2)))
+                (assert (equal? (get-length v1) (* len prec)))
+                (vector-add (interpret v1 env) (interpret v2 env) len prec)
+             ]
+
+            [
+             (vec-strided-gather v1 vsize start stride num prec)
+
+             (assert (equal? (get-length v1) vsize))
+             (strided-gather (interpret v1 env) vsize start stride num prec)
              ]
             ))
 
@@ -540,12 +592,51 @@
                     (shufl vars #:depth (- k 1))
                     12 8 8 2
     )]
+    [(choose* #t #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     ;(assert (equal? (get-length left_operand) (* 4 8)))
+     (vec-strided-gather left_operand 
+               192 0 6 4 8
+              )]
+    [(choose* #t  #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     ;(assert (equal? (get-length left_operand) (* 4 8)))
+     (vec-strided-gather left_operand 
+               192 1 6 4 8
+              )]
+
+    [(choose* #t #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     (vec-strided-gather left_operand 
+               192 2 6 4 8
+              )]
+    [(choose* #t #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     ;(assert (equal? (get-length left_operand) (* 4 8)))
+     (vec-strided-gather left_operand 
+               192 3 6 4 8
+              )]
+
+    [(choose* #t #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     ;(assert (equal? (get-length left_operand) (* 4 8)))
+     (vec-strided-gather left_operand 
+               192 4 6 4 8
+              )]
+
+    [(choose* #t #f)
+     (define left_operand (shufl vars #:depth (- k 1) ) )
+     ;(assert (equal? (get-length left_operand) (* 4 8)))
+     (vec-strided-gather left_operand 
+               192 5 6 4 8
+              )]
     [else
      (vec-shuffle-ext-special
                     (shufl vars #:depth (- k 1))
                     (shufl vars #:depth (- k 1))
                     12 8 10 2
     )]
+
    )
   )
 
@@ -620,14 +711,13 @@
 
 (define env (vector cex_arg0 cex_arg1))
 
-;(println "Verify on concrete output")
-;(println (tensor-matmul cex_arg0 cex_arg1))
-
-;(println (interpret struct-sketch-special env))
-
+(println "Verify on concrete output")
+(println (tensor-matmul cex_arg0 cex_arg1))
+(println (interpret struct-sketch-special env))
 
 
-(define sym_env (vector sym2_arg0 sym2_arg1))
+
+;(define sym_env (vector sym2_arg0 sym2_arg1))
 
 
 
@@ -642,15 +732,19 @@
 
 
 
+(define env2 (vector (bv 0 (bitvector 64)) (bv 0 (bitvector 192))))
 
 
 (pretty-print "SYNTHESIZE----")
 (define sol
 (time
 (synthesize
-  #:forall (list  env)
-  #:guarantee (assert (equal? (interpret sketch-grammar env) (tensor-matmul cex_arg0 cex_arg1)))
+  #:forall (list  env env2)
+  #:guarantee (begin
+               (assert (equal? (interpret sketch-grammar env) (tensor-matmul cex_arg0 cex_arg1)))
+               (assert (equal? (interpret sketch-grammar env2) (tensor-matmul (bv 0 (bitvector 64)) (bv 0 (bitvector 192)))))
 )))
+)
 
 (assert (sat? sol) "Unsatisfiable")
 
@@ -658,3 +752,10 @@
 (pretty-print synth_res)
 ;(println (cost synth_res))
 
+(println "Post verify---")
+
+;(define cex2 (verify
+;  (assert (equal? (tensor-matmul sym2_arg0 sym2_arg1)  
+;                  (interpret synth_res sym_env)))
+;  )
+;)
