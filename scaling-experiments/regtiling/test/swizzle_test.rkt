@@ -40,17 +40,11 @@
 
 ;; General version of swizzle with single input vector
 (define (vector-shuffle-swizzle1 v num_elems type_size group_size dis_size rot_factor)
-(pretty-print "vector-shuffle-swizzle1")
 (define result
        (apply
         concat
         (for/list ([i (reverse (range num_elems))])
-          (pretty-print "START SWIZZLED INDEX COMPUTE")
-          (pretty-print "raw index:")
-          (pretty-print (- (- num_elems 1) i))
           (define swizzled-index (swizzle (- (- num_elems 1) i) group_size dis_size rot_factor))
-          (pretty-print "swizzled-index")
-          (pretty-print swizzled-index)
           (ext-bv v (- (- num_elems 1) swizzled-index) type_size)
          )
         )
