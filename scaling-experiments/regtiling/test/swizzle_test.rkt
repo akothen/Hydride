@@ -19,7 +19,7 @@
   var)
 
 
-(define (swizzle idx group_size fan_size len rot_factor wrap)
+(define (swizzle idx group_size fan_size rot_factor)
   (define (rot n i)
     (define rot_res
      (modulo (+ i rot_factor) n)
@@ -45,6 +45,8 @@
     )
     (pretty-print "fan_res:")
     (pretty-print fan_res)
+    (pretty-print "(/ n (GCD cf n)):")
+    (pretty-print (/ n (GCD cf n)))
     fan_res
   )
 
@@ -57,26 +59,23 @@
     group_res
   )
 
-   (define (fan_rot gs cf n i)
-       (define fan_res (fan cf n i))
+   (define (fan_rot gs cf i)
        (define fan_rot_res
-           (if (equal? wrap 1)
-            (group (GCD cf gs) (rot (GCD cf gs) (modulo fan_res gs)) fan_res)
-            (rot n fan_res))
+          (rot gs (fan cf gs (modulo i gs)))
         )
         (pretty-print "fan_rot_res:")
         (pretty-print fan_rot_res)
         fan_rot_res
     )
   
-   (define result (group group_size (fan_rot group_size fan_size len idx) idx))
+   (define result (group group_size (rot group_size (fan fan_size group_size (modulo idx group_size))) idx))
 
   result
  )
 
 
 ;; General version of swizzle with single input vector
-(define (vector-shuffle-swizzle1 v num_elems type_size group_size fan_size rot_factor wrap)
+(define (vector-shuffle-swizzle1 v num_elems type_size group_size fan_size rot_factor)
 (pretty-print "vector-shuffle-swizzle1")
 (define result
        (apply
@@ -85,7 +84,7 @@
           (pretty-print "START SWIZZLED INDEX COMPUTE")
           (pretty-print "raw index:")
           (pretty-print (- (- num_elems 1) i))
-          (define swizzled-index (swizzle (- (- num_elems 1) i) group_size fan_size num_elems rot_factor wrap))
+          (define swizzled-index (swizzle (- (- num_elems 1) i) group_size fan_size rot_factor))
           (pretty-print "swizzled-index")
           (pretty-print swizzled-index)
           (ext-bv v (- (- num_elems 1) swizzled-index) type_size)
@@ -97,12 +96,18 @@
   
   
 (define a64 (bv #x0102030405060708 64))
+(define a72 (bv #x010203040506070809 72))
 
   
 (define (sol)
-  (pretty-print (vector-shuffle-swizzle1 a64 8 8 8 1 2 1))
-  (pretty-print (vector-shuffle-swizzle1 a64 8 8 8 3 0 1))
-  ;;(pretty-print (vector-shuffle-swizzle1 a64 8 8 group_size fan_size rot_factor wrap))
+  (pretty-print (vector-shuffle-swizzle1 a64 8 8 8 1 -2))
+  (pretty-print (vector-shuffle-swizzle1 a64 8 8 8 3 0))
+  (pretty-print (vector-shuffle-swizzle1 a72 9 8 9 3 0))
+  (pretty-print (vector-shuffle-swizzle1 a72 9 8 9 3 -1))
+  (pretty-print (vector-shuffle-swizzle1 a72 9 8 9 3 1))
+  (pretty-print (vector-shuffle-swizzle1 a72 9 8 9 3 0))
+  (pretty-print (vector-shuffle-swizzle1 a64 8 8 4 3 0))
+  (pretty-print (vector-shuffle-swizzle1 a64 8 8 4 3 1))
 )
 
 (sol)
