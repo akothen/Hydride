@@ -321,6 +321,35 @@
   result
 )
 
+(define (vector-interleave v1 v2 num_elems type_size num_lanes high?)
+  (assert (equal? (bvlength v1) (bvlength v2)))
+  (assert (equal? (bvlength v1) (* num_elems type_size)))
+  (define num_lanes_elems (/ num_elems num_lanes))
+  (define low
+       (if (equal? high? 0)
+         (/ num_lanes_elems 2)
+         0))
+ (define high
+   (if (equal? high? 0)
+     (num_lanes_elems)
+     (/ num_lanes_elems 2)))
+  (define result
+    (apply
+     concat
+     (for/list ([i (reverse (range num_lanes))])
+       (apply
+        concat
+        (for/list ([j (reverse (range low high))])
+          (concat (ext-bv v1 (+ j (* i num_lanes_elems)) type_size) (ext-bv v2 (+ j (* i num_lanes_elems)) type_size))
+         )
+        )
+       )
+     )
+    )
+  (assert (equal? (bvlength result) (bvlength v1)))
+  result
+)
+
 ;; masked-blend instuction
 (define (vector-masked-blend v1 v2 num_elems type_size mask mask_type_size)
   (assert (equal? (bvlength v1) (bvlength v2)))
