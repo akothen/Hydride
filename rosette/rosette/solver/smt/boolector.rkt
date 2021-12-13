@@ -125,6 +125,9 @@
             [(list (== 'model) def ...)
              (for/hash ([d def] #:when (and (pair? d) (equal? (car d) 'define-fun)))
                (values (cadr d) d))]
+            [(list  def ...)
+             (for/hash ([d def] #:when (and (pair? d) (equal? (car d) 'define-fun)))
+               (values (cadr d) d))]
             [other (error 'read-solution "expected model, given ~a" other)])]
          [(== 'unsat) 'unsat]
          [(== 'unknown) 'unknown]

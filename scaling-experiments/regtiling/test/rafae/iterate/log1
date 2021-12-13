@@ -1,0 +1,7 @@
+"Post verify---"
+cpu time: 329 real time: 873 gc time: 207
+(model
+ [sym2_arg0 (bv #xffff7fffffffffff 64)]
+ [sym2_arg1 (bv #xbfbf9f3f3fbf3f3f3f3fbf3fff7f7f3bff7fffffffffffff 192)])
+v1 (bv #xffff7fffffffffff 64)
+v2 (bv #xbfbf9f3f3fbf3f3f3f3fbf3fff7f7f3bff7fffffffffffff 192)
