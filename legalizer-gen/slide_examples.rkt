@@ -609,6 +609,21 @@ dst[MAX:256] := 0
   result
 )
 
+(define (hvx_pack v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (range 16)])
+       (concat
+          (SAT (ext-bv v1 (+ j (* 16 i)) 16) 8)
+          (SAT (ext-bv v2 (+ j (* 16 i)) 16) 8)
+       )
+      )
+     )
+    )
+  result
+)
+
 
 ;; Test the semantics
 (define a128 (bv #x00010001000100010001000100010001 128))
