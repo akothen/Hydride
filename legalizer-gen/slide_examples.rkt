@@ -586,6 +586,28 @@ dst[MAX:256] := 0
   result
 )
 
+(define (havx_pack v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (range 16)])
+       (apply
+        concat
+        (for/list ([j (range 1)])
+          (SAT (ext-bv v1 (+ j (* 16 i)) 16) 8)
+         )
+        )
+       (apply
+        concat
+        (for/list ([j (range 1)])
+          (SAT (ext-bv v2 (+ j (* 16 i)) 16) 8)
+         )
+        )
+       )
+     )
+    )
+  result
+)
 
 
 ;; Test the semantics
