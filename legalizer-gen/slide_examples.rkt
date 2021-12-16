@@ -533,6 +533,59 @@ dst[MAX:512] := 0
 )
 
 
+<intrinsic tech="AVX2" name="_mm256_packs_epi32">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m256i" varname="dst" etype="SI16"/>
+	<parameter type="__m256i" varname="a" etype="SI32"/>
+	<parameter type="__m256i" varname="b" etype="SI32"/>
+	<description>Convert packed signed 32-bit integers from "a" and "b" to packed 16-bit integers using signed saturation, and store the results in "dst".</description>
+	<operation>
+dst[15:0] := Saturate16(a[31:0])
+dst[31:16] := Saturate16(a[63:32])
+dst[47:32] := Saturate16(a[95:64])
+dst[63:48] := Saturate16(a[127:96])
+dst[79:64] := Saturate16(b[31:0])
+dst[95:80] := Saturate16(b[63:32])
+dst[111:96] := Saturate16(b[95:64])
+dst[127:112] := Saturate16(b[127:96])
+dst[143:128] := Saturate16(a[159:128])
+dst[159:144] := Saturate16(a[191:160])
+dst[175:160] := Saturate16(a[223:192])
+dst[191:176] := Saturate16(a[255:224])
+dst[207:192] := Saturate16(b[159:128])
+dst[223:208] := Saturate16(b[191:160])
+dst[239:224] := Saturate16(b[223:192])
+dst[255:240] := Saturate16(b[255:224])
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPACKSSDW" form="ymm, ymm, ymm" xed="VPACKSSDW_YMMqq_YMMqq_YMMqq"/>
+	<header>immintrin.h</header>
+</intrinsic>
+(define (_mm256_packs_epi32 v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (range 2)])
+       (apply
+        concat
+        (for/list ([j (range 4)])
+          (SAT (ext-bv v1 (+ j (* 4 i)) 32) 16)
+         )
+        )
+       (apply
+        concat
+        (for/list ([j (range 4)])
+          (SAT (ext-bv v2 (+ j (* 4 i)) 32) 16)
+         )
+        )
+       )
+     )
+    )
+  result
+)
+
 
 
 ;; Test the semantics
