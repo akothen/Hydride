@@ -586,7 +586,7 @@ dst[MAX:256] := 0
   result
 )
 
-(define (havx_pack v1 v2)
+(define (hvx_pack v1 v2)
   (define result
     (apply
      concat
