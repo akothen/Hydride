@@ -39,6 +39,11 @@ class RoseType:
         Type.TypeEnum = Type.RoseTypeEnum.List
         return Type
     
+    def getBitwidth(self):
+        assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
+            or self.TypeEnum == self.RoseTypeEnum.Integer)
+        return self.Bitwidth
+    
     def setBitwidth(self, Bitwidth):
         assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
             or self.TypeEnum == self.RoseTypeEnum.Integer)
