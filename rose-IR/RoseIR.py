@@ -1,5 +1,6 @@
 
-import os
+# File that puts all abstractions in Rose IR in one place
+
 from enum import Enum, auto
 
 
@@ -63,27 +64,6 @@ class RoseType:
     
     def isListTy(self):
         return self.TypeEnum == self.RoseTypeEnum.List
-
-
-
-# Base class for Rosette values. The values have name
-# and type. Keeping this simple for now.
-class RoseValue:
-    def __init__(self, Name : str, Type : RoseType):
-        self.Name = Name
-        self.Type = Type
-
-    def getType(self):
-        return self.Type
-
-    def getName(self):
-        return self.Name
-    
-    def setName(self, Name : str):
-        self.Name = Name
-
-    def print(self):
-        print(self.Name)
 
 
 # List of all operations that
@@ -202,13 +182,116 @@ class RoseOpcode(Enum):
             BVInputs = self.getNumBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(1)
+        return None
 
-
+    def inputsAreValid(self, Inputs : list): 
+        if self.isValidNumInputs(len(Inputs)) == False:
+            return False
+        if self.name == self.bvzero \
+        or self.name == self.bit \
+        or self.name == self.lsb \
+        or self.name == self.msb \
+        or self.name == self.bvneg \
+        or self.name == self.bvnot \
+        or self.name == self.bvadd1 \
+        or self.name == self.bvsub1 \
+        or self.name == self.rotateleft \
+        or self.name == self.rotateright:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            if len(BVInputs) == 1:
+                return True
+            else:
+                return False
+        if self.name == self.bvadd \
+        or self.name == self.bvsub \
+        or self.name == self.bvmul \
+        or self. name == self.bvor \
+        or self. name == self.bvxor \
+        or self. name == self.bvand \
+        or self. name == self.bvshl \
+        or self. name == self.bvlshr \
+        or self. name == self.bvashr \
+        or self. name == self.bvsmin \
+        or self. name == self.bvumin \
+        or self. name == self.bvsmax \
+        or self. name == self.bvumax:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            if len(BVInputs) > 1:
+                return True
+            else:
+                return False
+        if self.name == self.bvsdiv \
+        or self.name == self.bvudiv \
+        or self.name == self.bvsrem \
+        or self.name == self.bvurem \
+        or self.name == self.bvsmod \
+        or self.name == self.bvrol \
+        or self.name == self.bvror \
+        or self.name == self.bveq \
+        or self.name == self.bvslt \
+        or self.name == self.bvult \
+        or self.name == self.bvsle \
+        or self.name == self.bvule \
+        or self.name == self.bvsgt \
+        or self.name == self.bvugt \
+        or self.name == self.bvsge \
+        or self.name == self.bvuge:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            if len(BVInputs) == 2:
+                return True
+            else:
+                return False
+        return None
+    
+    def isValidNumInputs(self, NumInputs : int):
+        if self.name == self.bvzero \
+        or self.name == self.lsb \
+        or self.name == self.msb \
+        or self.name == self.bvneg \
+        or self.name == self.bvnot \
+        or self.name == self.bvadd1 \
+        or self.name == self.bvsub1:
+            return (NumInputs == 1)
+        if self.name == self.bvadd \
+        or self.name == self.bvsub \
+        or self.name == self.bvmul \
+        or self. name == self.bvor \
+        or self. name == self.bvxor \
+        or self. name == self.bvand \
+        or self. name == self.bvshl \
+        or self. name == self.bvlshr \
+        or self. name == self.bvashr \
+        or self. name == self.bvsmin \
+        or self. name == self.bvumin \
+        or self. name == self.bvsmax \
+        or self. name == self.bvumax:
+            return (NumInputs > 1)
+        if self.name == self.bvsdiv \
+        or self.name == self.bvudiv \
+        or self.name == self.bvsrem \
+        or self.name == self.bvurem \
+        or self.name == self.bvsmod \
+        or self.name == self.bvrol \
+        or self.name == self.bvror \
+        or self.name == self.bit \
+        or self.name == self.bveq \
+        or self.name == self.bvslt \
+        or self.name == self.bvult \
+        or self.name == self.bvsle \
+        or self.name == self.bvule \
+        or self.name == self.bvsgt \
+        or self.name == self.bvugt \
+        or self.name == self.bvsge \
+        or self.name == self.bvuge \
+        or self.name == self.rotateleft \
+        or self.name == self.rotateright:
+            return (NumInputs == 2)
+        return None
 
 
 # Let's see how this could be useful
 class HighOrderFunctions(Enum):
-    concat = auto()
+    apply = auto()
     map = auto()
     zip = auto()
 
@@ -216,191 +299,238 @@ class HighOrderFunctions(Enum):
         return self.name
 
 
-# An operation in Rosette
-# An operation is either an instruction or a sort of lambda function
-class RoseOperation:
-    def __init__(self, Opcode : RoseOpcode, NumOperands : int, Name : str, Type : RoseType, Bitwidth : int, ParentBlock):
-        self.Opcode = Opcode
-        self.NumOperands = NumOperands
-        self.OperandList = [None] * NumOperands
-        self.Value = RoseValue(Name, Type, Bitwidth)
-        self.ParentBlock = None
+# Base class for Rosette values. The values have name
+# and type. Keeping this simple for now.
+class RoseValue:
+    def __init__(self, Name : str, Type : RoseType):
+        self.Name = Name
+        self.Type = Type
 
-    def __ctor(self, Opcode : RoseOpcode, OperandList : list, RetVal : RoseValue):
-        assert(len(OperandList) == self.OperandList)
-        self.Opcode = Opcode
-        self.NumOperands = len(OperandList)
-        self.OperandList = OperandList
-        self.RetVal = RetVal
+    def getType(self):
+        return self.Type
+
+    def getName(self):
+        return self.Name
     
-    @classmethod
-    def create(self, Opcode : RoseOpcode, OperandList : list, Name : str):
-        self.__ctor(Name, ArgsList, RetVal, [])
+    def setName(self, Name : str):
+        self.Name = Name
 
-    def setFuncName(self, FuncName):
-        self.FuncName = FuncName
+    def print(self):
+        print(self.Name)
+
+
+# An operation in Rosette
+# An operation is either an instruction.
+# TODO: complete the definition
+class RoseOperation(RoseValue):
+    def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock):
+        # Sanity check to see that the operand list is complete
+        assert(Opcode.inputsAreValid(OperandList))
+        self.Opcode = Opcode
+        self.OperandList = OperandList
+        # The result of an operation is a RoseValue
+        super().__init__(Name, Opcode.getOutputType(OperandList))
+        self.ParentBlock = ParentBlock
+    
+    @staticmethod
+    def create(Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock = None):
+        return RoseOperation(Opcode, Name, OperandList, ParentBlock)
     
     def getOperand(self, Index):
-        assert Index < self.NumOperands
+        assert(Index < self.len(self.OperandList))
         return self.OperandList[Index]
     
     def setOperand(self, Index, Operand):
-        assert Index < self.NumOperands
+        assert(Index < self.len(self.OperandList))
         self.OperandList[Index] = Operand
+        # Sanity Check
+        assert(self.Opcode.inputsAreValid(self.OperandList))
 
-    def hangOffOperand(self, Index):
-        assert Index < self.NumOperands
-        self.OperandList[Index] = None
+    def print(self):
+        Op = "(define (" + self.getName() + " (" + str(self.Opcode)
+        for Operand in self.OperandList:
+            Op += (" " + Operand.getName())
+        Op += ")"
+        print(Op)
 
-    def Print(self):
-        Func_Sig = "(define (" + str(self.Opcode)
-        for Arg in self.Operands:
-            Func_Sig += (" " + Arg)
-        Func_Sig += ")"
-        print(Func_Sig)
+
+# Abstract class representing a region.
+# Regions can contain loops, function, blocks.
+# Regions can be contained in functions and loops.
+class RoseRegion:
+    def __init__(self, Parent, Children : list):
+        self.Parent = Parent
+        self.Children = Children
+    
+    @staticmethod
+    def create(self, Parent, Children : list):
+        return RoseRegion(Parent, Children)
+    
+    def getChildren(self):
+        return self.Children
+    
+    def getParent(self):
+        return self.Parent
+    
+    def addChild(self, Child):
+        self.Children.append(Child)
+
+    def print(self):
+        for Child in self.Children:
+            Child.print()
 
 
 # This is need to track the lower-level regions,
 # blocks, operations, etc. This does not inherit
 # any other class for now.
-class RoseTopLevelFunction:
-    def __init__(self, Name : str, NumArgs : int, RetType : RoseType, RetBitwidth : int):
+class RoseFunction(RoseRegion):
+    def __init__(self, Name : str, ArgsList : list, RetType : RoseType, RegionList : list, ParentRegion : RoseRegion):
         self.Name = Name
-        self.NumArgs = NumArgs
-        self.ArgList = [None] * NumArgs
-        self.RetVal = RoseValue("", RetType, RetBitwidth)
-        self.RegionList = []
+        self.ArgList = ArgsList
+        self.ReturnValue = RoseValue("", RetType)
+        super().__init__(ParentRegion, RegionList)
+    
+    @staticmethod
+    def create(Name : str, ArgsList : list, RetType : RoseType, RegionList : list, ParentRegion : RoseRegion):
+        return RoseFunction(Name, ArgsList, RetType, RegionList, ParentRegion)
+    
+    # Empty function
+    @staticmethod
+    def create(Name : str, ArgsList : list, RetType : RoseType):
+        return RoseFunction(Name, ArgsList, RetType, [], None)
 
-    def __ctor(self, Name : str, ArgList : list, RetVal : RoseValue, RegionList : list):
-        assert(len(ArgList) == self.NumArgs)
-        self.Name = Name
-        self.NumArgs = len(ArgList)
-        self.ArgList = ArgList
-        self.RetVal = RetVal
-        self.RegionList = RegionList
-    
-    @classmethod
-    def createEmptyFunction(self, Name : str, ArgsList : list, RetVal : RoseValue):
-        self.__ctor(Name, ArgsList, RetVal, [])
-    
     def getNumArgs(self):
-        return self.NumArgs
+        return len(self.ArgsList)
     
     def getArg(self, Index):
         return self.ArgList[Index]
     
-    def getRetVal(self):
-        return self.RetVal
+    def getReturnValue(self):
+        return self.ReturnValue
+    
+    def getReturnTy(self):
+        return self.ReturnValue.getType()
     
     def addArg(self, NewArg):
-        self.NumArgs += 1
         self.ArgList.append(NewArg)
 
-    def Print(self):
-        Func_Sig = "(define (" + self.FuncName
-        for Arg in self.ArgsList:
-            Func_Sig += (" " + Arg)
+    def isTopLevelFunction(self):
+        return (self.getParent() == None)
+
+    def print(self):
+        # Print function signature first
+        Func_Sig = "(define (" + self.Name
+        for Arg in self.ArgList:
+            Func_Sig += (" " + Arg.getName())
         Func_Sig += ")"
         print(Func_Sig)
+        # Print regions in this function
+        super().print()
+        print(")")
+
+
+# This represents internal and external function calls
+# This class is for operations whose opcodes are not known ahead of time.
+class RoseFunctionCall(RoseValue):
+    def __init__(self, Callee : RoseFunction, Name : str, OperandList : list, ParentBlock):
+        # Sanity check to see that the operand list is complete
+        #assert(Opcode.inputsAreValid(OperandList))
+        self.Callee = Callee
+        self.OperandList = OperandList
+        # The result of a function call is a RoseValue
+        super().__init__(Name, Callee.getReturnTy())
+        self.ParentBlock = ParentBlock
+    
+    @staticmethod
+    def create(Callee : RoseFunction, Name : str, OperandList : list, ParentBlock = None):
+        return RoseOperation(Callee, Name, OperandList, ParentBlock)
+    
+    def getOperand(self, Index):
+        assert(Index < self.len(self.OperandList))
+        return self.OperandList[Index]
+    
+    def setOperand(self, Index, Operand):
+        assert(Index < self.len(self.OperandList))
+        self.OperandList[Index] = Operand
+
+    def print(self):
+        Op = "(define (" + self.getName() + " (" + str(self.Opcode)
+        for Operand in self.OperandList:
+            Op += (" " + Operand.getName())
+        Op += ")"
+        print(Op)
 
 
 # Definition of Block 
-# It is a list of operations
-class RoseBlock:
-    def __init__(self):
-        self.ArgsList = []
-        self.BasicBlockList = []
+# A block is a list of operations and function calls
+class RoseBlock(RoseRegion):
+    def __init__(self, OpList : list, ParentRegion):
+        # Sanity check
+        for Op in OpList:
+            assert(isinstance(Op, RoseOperation) 
+            or isinstance(Op, RoseFunctionCall))
+        super().__init__(ParentRegion, OpList)
         
-    
-    def Create(self, FuncName, ArgsList, BasicBlockList):
-        self.FuncName = FuncName
-        self.ArgsList = ArgsList
-        self.BasicBlockList = BasicBlockList
+    @staticmethod
+    def create(OpList : list, ParentRegion):
+        return RoseBlock(OpList, ParentRegion)
 
+    def getOps(self):
+        return self.getChildren()
 
-    def CreateEmptyFunc(self, FuncName, ArgsList):
-        self.Create(FuncName, ArgsList, [])
-    
+    def addOp(self, Op):
+        assert(isinstance(Op, RoseOperation)
+            or isinstance(Op, RoseFunctionCall))
+        self.addChild(Op)
+ 
 
-    def setFuncName(self, FuncName):
-        self.FuncName = FuncName
-
-
-    def Print(self):
-        Func_Sig = "(define (" + self.FuncName
-        for Arg in self.ArgsList:
-            Func_Sig += (" " + Arg)
-        Func_Sig += ")"
-        print(Func_Sig)
-
-
-class RoseRegion:
-     def __init__(self):
-        self.FuncName = ""
-        self.ArgsList = []
-        self.BasicBlockList = []
-    
-    def Create(self, FuncName, ArgsList, BasicBlockList):
-        self.FuncName = FuncName
-        self.ArgsList = ArgsList
-        self.BasicBlockList = BasicBlockList
-
-
-    def CreateEmptyFunc(self, FuncName, ArgsList):
-        self.Create(FuncName, ArgsList, [])
-    
-
-    def setFuncName(self, FuncName):
-        self.FuncName = FuncName
-
-
-    def Print(self):
-        Func_Sig = "(define (" + self.FuncName
-        for Arg in self.ArgsList:
-            Func_Sig += (" " + Arg)
-        Func_Sig += ")"
-        print(Func_Sig)   
-
-
-
+# Class representing loops
+# Loops have headers and region list for body
 class RoseLoop(RoseRegion):
-    def __init__(self):
-        self.InductionVar = None
-        self.LowIndex = None
-        self.HighIndex = None
-        self.BlockList = []
-
-
-class RoseLoopNest:
-    def __init__(self, NumLoops):
-        self.Loops = [None] * NumLoops
-
-
-class RoseFunction(RoseRegion):
-    def __init__(self):
-        self.FuncName = ""
-        self.ArgsList = []
-        self.BasicBlockList = []
-        
+    def __init__(self, InductionVar : RoseValue, Start : int, End : int, Step : int, 
+                RegionList : list, ParentRegion : RoseRegion):
+        # Loop header information
+        self.InductionVar = InductionVar
+        self.Start = Start
+        self.End = End
+        self.Step = Step
+        # Loop region body
+        super().__init__(ParentRegion, RegionList)
     
-    def Create(self, FuncName, ArgsList, BasicBlockList):
-        self.FuncName = FuncName
-        self.ArgsList = ArgsList
-        self.BasicBlockList = BasicBlockList
+    @staticmethod
+    def create(InductionVar : RoseValue, End : int, Start : int, Step : int, 
+                RegionList : list, ParentRegion : RoseRegion):
+        return RoseLoop(InductionVar, Start, End, Step, RegionList, ParentRegion)
 
+    # More regular loop
+    @staticmethod
+    def create(InductionVar : RoseValue, End : int, RegionList : list, ParentRegion : RoseRegion):
+        return RoseLoop(InductionVar, 0, End, 1, RegionList, ParentRegion)
 
-    def CreateEmptyFunc(self, FuncName, ArgsList):
-        self.Create(FuncName, ArgsList, [])
+    # Empty loop
+    @staticmethod
+    def create(InductionVar : RoseValue, End : int, Start = 0, Step = 1):
+        return RoseLoop(InductionVar, Start, End, Step, [], None)
+
+    def getInductionVariable(self):
+        return self.InductionVar
     
+    def getStartIndex(self):
+        return self.Start
 
-    def setFuncName(self, FuncName):
-        self.FuncName = FuncName
+    def getEndIndex(self):
+        return self.End
+
+    def getStep(self):
+        return self.Step
+
+    def print(self):
+        LoopHeader = "(for/list ([" + self.InductionVar.getName() + " (range " \
+            + str(self.Start) + " " + str(self.End) + " " + str(self.Step) + ")])"
+        print(LoopHeader)
+        # Print regions in this loop
+        super().print()
+        print(")")
 
 
-    def Print(self):
-        Func_Sig = "(define (" + self.FuncName
-        for Arg in self.ArgsList:
-            Func_Sig += (" " + Arg)
-        Func_Sig += ")"
-        print(Func_Sig)
 
