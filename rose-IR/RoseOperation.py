@@ -28,7 +28,7 @@ class RoseOperation(RoseValue):
         self.OperandList[Index] = Operand
 
     def print(self):
-        Op = "(define (" + self.Value.getName() + " (" + str(self.Opcode)
+        Op = "(define (" + self.getName() + " (" + str(self.Opcode)
         for Operand in self.OperandList:
             Op += (" " + Operand.getName())
         Op += ")"
