@@ -14,6 +14,11 @@ class RoseFunction(RoseRegion):
     @staticmethod
     def create(Name : str, ArgsList : list, RetType : RoseType, RegionList : list, ParentRegion = None):
         return RoseFunction(Name, ArgsList, RetType, RegionList, ParentRegion)
+  
+    # Empty function
+    @staticmethod
+    def create(Name : str, ArgsList : list, RetType : RoseType):
+        return RoseFunction(Name, ArgsList, RetType, [], None)
     
     def getNumArgs(self):
         return len(self.ArgsList)
