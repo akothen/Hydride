@@ -3,46 +3,87 @@ import os
 from enum import Enum, auto
 
 
-
-# Rosette types we are concerned with
-class RoseTypeEnum(Enum):
-    Integer = auto()
-    BitVector = auto()
-    Vector = auto()
-    List = auto()
-
- 
 # Definition of concept of types in Rose IR
 class RoseType:
-    def __init__(self, TypeEnum : RoseTypeEnum):
-        self.TypeEnum = TypeEnum
+    # Rosette types we are concerned with
+    class RoseTypeEnum(Enum):
+        Integer = auto()
+        BitVector = auto()
+        Vector = auto()
+        List = auto()
+
+    def __init__(self):
+        self.TypeEnum = None
         self.Bitwidth = None
     
+    @staticmethod
+    def getBitVectorTy(Bitwidth):
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.BitVector
+        Type.Bitwidth = Bitwidth
+        return Type
+
+    @staticmethod
+    def getIntegerTy():
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.Integer
+        Type.Bitwidth = 32
+        return Type
+    
+    @staticmethod
+    def getVectorTy():
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.Vector
+        return Type
+    
+    @staticmethod
+    def getListTy():
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.List
+        return Type
+    
+    def getBitwidth(self):
+        assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
+            or self.TypeEnum == self.RoseTypeEnum.Integer)
+        return self.Bitwidth
+    
     def setBitwidth(self, Bitwidth):
-        assert(self.TypeEnum == RoseTypeEnum.BitVector \
-            or self.TypeEnum == RoseTypeEnum.Integer)
+        assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
+            or self.TypeEnum == self.RoseTypeEnum.Integer)
         self.Bitwidth = Bitwidth
     
+    def isBitVectorTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.BitVector
+    
+    def isIntegerTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.Integer
+    
+    def isVectorTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.Vector
+    
+    def isListTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.List
+
+
 
 # Base class for Rosette values. The values have name
-# and type (bitwidth). 
+# and type. Keeping this simple for now.
 class RoseValue:
-    def __init__(self, Name : str, Type : RoseType, Bitwidth : int):
+    def __init__(self, Name : str, Type : RoseType):
         self.Name = Name
         self.Type = Type
-        self.Bitwidth = Bitwidth
 
     def getType(self):
-        return self.Type.name
-    
-    def getTypeSize(self):
-        return self.Bitwidth
+        return self.Type
 
     def getName(self):
         return self.Name
     
     def setName(self, Name : str):
         self.Name = Name
+
+    def print(self):
+        print(self.Name)
 
 
 # List of all operations that
@@ -56,6 +97,10 @@ class RoseOpcode(Enum):
     bvsrem = auto()
     bvurem = auto()
     bvsmod = auto()
+    bvsmin = auto()
+    bvumin = auto()
+    bvsmax = auto()
+    bvumax = auto()
     bveq = auto()
     bvslt = auto()
     bvult = auto()
@@ -73,6 +118,16 @@ class RoseOpcode(Enum):
     bvlshr = auto()
     bvashr = auto()
     bvneg = auto()
+    bvzero = auto()
+    bvrol = auto()
+    bvror = auto()
+    bit = auto()
+    lsb = auto()
+    msb = auto()
+    bvadd1 = auto()
+    bvsub1 = auto()
+    rotateleft = auto()
+    rotateright = auto()
     concat = auto()
     bvextract = auto()
     bvsignextract = auto()
@@ -84,29 +139,69 @@ class RoseOpcode(Enum):
     def __str__(self):
         return self.name
     
-    def getNumBVOpInputs(self, Inputs : list):
-        NumBVInputs = 0
+    def getBVOpInputs(self, Inputs : list):
+        BVInputs = []
         for Input in Inputs:
-            if Input.getType() == RoseType.BitVector:
-                NumBVInputs += 1
-        return NumBVInputs
+            if Input.getType().isBitVectorTy():
+                BVInputs.append(Input)
+        return BVInputs
 
     def getOutputType(self, Inputs : list): 
-        assert(len(Inputs) > 1)
+        assert(len(Inputs) >= 1)
+        if self.name == self.bvzero \
+        or self.name == self.bit \
+        or self.name == self.lsb \
+        or self.name == self.msb:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            return RoseType.getBitVectorTy(1)
+        if self.name == self.bvneg \
+        or self.name == self.bvnot \
+        or self.name == self.bvadd1 \
+        or self.name == self.bvsub1 \
+        or self.name == self.rotateleft \
+        or self.name == self.rotateright:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
         if self.name == self.bvadd \
         or self.name == self.bvsub \
-        or self.name == self.bvmul:
-            assert(self.getNumBVOpInputs(Inputs) > 1)
-            return 
+        or self.name == self.bvmul \
+        or self. name == self.bvor \
+        or self. name == self.bvxor \
+        or self. name == self.bvand \
+        or self. name == self.bvshl \
+        or self. name == self.bvlshr \
+        or self. name == self.bvashr \
+        or self. name == self.bvsmin \
+        or self. name == self.bvumin \
+        or self. name == self.bvsmax \
+        or self. name == self.bvumax:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            assert(len(BVInputs) > 1)
+            return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
         if self.name == self.bvsdiv \
         or self.name == self.bvudiv \
         or self.name == self.bvsrem \
         or self.name == self.bvurem \
-        or self.name == self.bvsmod:
-            assert(self.getNumBVOpInputs(Inputs) == 2)
-            return 
-        
-
+        or self.name == self.bvsmod \
+        or self.name == self.bvrol \
+        or self.name == self.bvror:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            assert(len(BVInputs) == 2)
+            return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
+        if self.name == self.bveq \
+        or self.name == self.bvslt \
+        or self.name == self.bvult \
+        or self.name == self.bvsle \
+        or self.name == self.bvule \
+        or self.name == self.bvsgt \
+        or self.name == self.bvugt \
+        or self.name == self.bvsge \
+        or self.name == self.bvuge:
+            BVInputs = self.getNumBVOpInputs(Inputs)
+            assert(len(BVInputs) == 2)
+            return RoseType.getBitVectorTy(1)
 
 
 
