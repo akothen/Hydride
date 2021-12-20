@@ -20,6 +20,9 @@ class RoseOperation:
 
     def getName(self):
         return self.Value.getName()
+    
+    def getType(self):
+        return self.Value.getType()
 
     def setName(self, Name):
         self.Value = RoseValue(Name, self.Value.getType())
