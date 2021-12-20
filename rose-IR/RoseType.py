@@ -55,3 +55,12 @@ class RoseType:
     
     def isListTy(self):
         return self.TypeEnum == self.RoseTypeEnum.List
+
+    
+# Test
+if __name__ == '__main__':
+    BVType = RoseType.getBitVectorTy(8)
+    print(BVType)
+
+
+ 
