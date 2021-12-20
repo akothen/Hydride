@@ -225,4 +225,11 @@ class RoseOpcode(Enum):
         return None
   
 
-  
+# Let's see how this could be useful
+class HighOrderFunctions(Enum):
+    apply = auto()
+    map = auto()
+    zip = auto()
+
+    def __str__(self):
+        return self.name
