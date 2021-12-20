@@ -1,33 +1,28 @@
 from RoseOperation import RoseOperation
 from RoseFunctionCall import RoseFunctionCall
+from RoseRegion import RoseRegion
 
 
 # Definition of Block 
 # A block is a list of operations and function calls
-# Blocka sre contained in regions
-class RoseBlock:
+class RoseBlock(RoseRegion):
     def __init__(self, OpList : list, ParentRegion):
         # Sanity check
         for Op in OpList:
             assert(isinstance(Op, RoseOperation) 
             or isinstance(Op, RoseFunctionCall))
-        self.OpList = OpList
-        self.ParentRegion = ParentRegion
+        super().__init__(ParentRegion, OpList)
         
     @staticmethod
     def create(OpList : list, ParentRegion):
         return RoseBlock(OpList, ParentRegion)
 
     def getOps(self):
-        return self.OpList
+        return self.getChildren()
 
     def addOp(self, Op):
-        assert(isinstance(Op, RoseOperation) 
+        assert(isinstance(Op, RoseOperation)
             or isinstance(Op, RoseFunctionCall))
-        self.OpList.append(Op)
-
-    def print(self):
-        for Op in self.OpList:
-            Op.print()
-
+        self.addChild(Op)
+ 
 
