@@ -5,6 +5,7 @@ class RoseType:
     # Rosette types we are concerned with
     class RoseTypeEnum(Enum):
         Integer = auto()
+        Float = auto()
         BitVector = auto()
         Vector = auto()
         List = auto()
@@ -26,7 +27,14 @@ class RoseType:
         Type.TypeEnum = Type.RoseTypeEnum.Integer
         Type.Bitwidth = Bitwidth
         return Type
-    
+
+    @staticmethod
+    def getFloatTy(Bitwidth = 32):
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.Float
+        Type.Bitwidth = Bitwidth
+        return Type
+
     @staticmethod
     def getVectorTy():
         Type = RoseType()
@@ -41,12 +49,14 @@ class RoseType:
     
     def getBitwidth(self):
         assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
-            or self.TypeEnum == self.RoseTypeEnum.Integer)
+            or self.TypeEnum == self.RoseTypeEnum.Integer \
+            or self.TypeEnum == self.RoseTypeEnum.Float)
         return self.Bitwidth
     
     def setBitwidth(self, Bitwidth):
         assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
-            or self.TypeEnum == self.RoseTypeEnum.Integer)
+            or self.TypeEnum == self.RoseTypeEnum.Integer \
+            or self.TypeEnum == self.RoseTypeEnum.Float)
         self.Bitwidth = Bitwidth
     
     def isBitVectorTy(self):
@@ -54,13 +64,15 @@ class RoseType:
     
     def isIntegerTy(self):
         return self.TypeEnum == self.RoseTypeEnum.Integer
+
+    def isFloatTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.Float
     
     def isVectorTy(self):
         return self.TypeEnum == self.RoseTypeEnum.Vector
     
     def isListTy(self):
         return self.TypeEnum == self.RoseTypeEnum.List
-
 
     
 # Test
