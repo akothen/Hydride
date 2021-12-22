@@ -1,6 +1,5 @@
 from enum import Enum, auto
 
-
 # Definition of concept of types in Rose IR
 class RoseType:
     # Rosette types we are concerned with
@@ -22,9 +21,10 @@ class RoseType:
         return Type
 
     @staticmethod
-    def getIntegerTy():
+    def getIntegerTy(Bitwidth = 32):
         Type = RoseType()
         Type.TypeEnum = Type.RoseTypeEnum.Integer
+        Type.Bitwidth = Bitwidth
         return Type
     
     @staticmethod
@@ -60,6 +60,7 @@ class RoseType:
     
     def isListTy(self):
         return self.TypeEnum == self.RoseTypeEnum.List
+
 
     
 # Test
