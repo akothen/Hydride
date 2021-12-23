@@ -6,9 +6,11 @@ class RoseType:
     class RoseTypeEnum(Enum):
         Integer = auto()
         Float = auto()
+        Double = auto()
         BitVector = auto()
         Vector = auto()
         List = auto()
+        Undefined = auto()
 
     def __init__(self):
         self.TypeEnum = None
@@ -34,6 +36,13 @@ class RoseType:
         Type.TypeEnum = Type.RoseTypeEnum.Float
         Type.Bitwidth = Bitwidth
         return Type
+    
+    @staticmethod
+    def getDoubleTy(Bitwidth = 64):
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.Double
+        Type.Bitwidth = Bitwidth
+        return Type
 
     @staticmethod
     def getVectorTy():
@@ -47,16 +56,24 @@ class RoseType:
         Type.TypeEnum = Type.RoseTypeEnum.List
         return Type
     
+    @staticmethod
+    def getUndefTy():
+        Type = RoseType()
+        Type.TypeEnum = Type.RoseTypeEnum.Undefined
+        return Type
+
     def getBitwidth(self):
         assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
             or self.TypeEnum == self.RoseTypeEnum.Integer \
-            or self.TypeEnum == self.RoseTypeEnum.Float)
+            or self.TypeEnum == self.RoseTypeEnum.Float \
+            or self.TypeEnum == self.RoseTypeEnum.Double)
         return self.Bitwidth
     
     def setBitwidth(self, Bitwidth):
         assert(self.TypeEnum == self.RoseTypeEnum.BitVector \
             or self.TypeEnum == self.RoseTypeEnum.Integer \
-            or self.TypeEnum == self.RoseTypeEnum.Float)
+            or self.TypeEnum == self.RoseTypeEnum.Float \
+            or self.TypeEnum == self.RoseTypeEnum.Double)
         self.Bitwidth = Bitwidth
     
     def isBitVectorTy(self):
@@ -67,12 +84,20 @@ class RoseType:
 
     def isFloatTy(self):
         return self.TypeEnum == self.RoseTypeEnum.Float
-    
+
+    def isDoubleTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.Double
+
     def isVectorTy(self):
         return self.TypeEnum == self.RoseTypeEnum.Vector
     
     def isListTy(self):
         return self.TypeEnum == self.RoseTypeEnum.List
+    
+    def isUndefTy(self):
+        return self.TypeEnum == self.RoseTypeEnum.Undefined
+
+
 
     
 # Test
