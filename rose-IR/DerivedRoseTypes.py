@@ -1,4 +1,4 @@
-imoport RoseType from RoseType
+import RoseType from RoseType
 
 
 # Constant value (integer and float) class
