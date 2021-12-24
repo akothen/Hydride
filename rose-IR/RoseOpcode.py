@@ -51,6 +51,8 @@ class RoseOpcode(Enum):
     bvlowextextract = auto()
     bvsignlowextract = auto()
     bvzerolowextract = auto()
+    bvsignextend = auto()
+    bvzeroextend = auto()
 
     def __str__(self):
         return self.name
