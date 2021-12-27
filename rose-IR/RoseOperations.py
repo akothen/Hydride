@@ -1,7 +1,28 @@
 from RoseOperation import RoseOperation
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseBitVectorType
+from RoseType import RoseType, RoseBitVectorType
+
+
+# Constant value (integer and float) class
+class Constant(RoseValue):
+  def __init__(self, Value, Type : RoseType):
+      self.Val = Value
+      super().__init__("", Type)
+  
+  @staticmethod
+  def create(Value, Bitwidth : int):
+      if isinstance(Value, int):
+          return Constant(Value, RoseType.getIntegerTy(Bitwidth))
+      if isinstance(Value, float):
+          return Constant(Value, RoseType.getFloatTy())
+      exit()
+
+  def getValue(self):
+      return self.Val
+  
+  def print(self):
+      print(self.Val)
 
 
 class RoseSignExtendOp(RoseOperation):
