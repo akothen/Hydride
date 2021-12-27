@@ -12,6 +12,7 @@ class RoseType:
         List = auto()
         Undefined = auto()
         Void = auto()
+        Function = auto()
 
     # SubClassData is data necessary for different types
     # Its used by different derived types differently.
@@ -55,6 +56,11 @@ class RoseType:
     @staticmethod
     def getVoidTy():
         return RoseVoidType.create()
+    
+    @staticmethod
+    def getFunctionTy(ArgTypeList : list, ReturnType):
+        assert isinstance(ReturnType, RoseType)
+        return RoseFunctionType.create(ArgTypeList, ReturnType)
 
     def getSubClassData(self):
         return self.SubClassData
@@ -86,6 +92,9 @@ class RoseType:
 
     def isVoidTy(self):
         return isinstance(self, RoseVoidType)
+    
+    def isFunctionTy(self):
+        return isinstance(self, RoseFunctionType)
 
 
 class RoseBitVectorType(RoseType):
@@ -232,6 +241,7 @@ class RoseListType(RoseType):
         print("list")
 
 
+# Sort of placeholder type
 class RoseUndefinedType(RoseType):
     def __init__(self):
         SubClassData = None
@@ -258,6 +268,30 @@ class RoseVoidType(RoseType):
         print("void")
 
 
+# Rosette does not have a function type but it is good for Rose IR to
+# have it for the IR to have some definitive structure and sanity checks.
+class RoseFunctionType(RoseType):
+    def __init__(self, ArgTypeList : list, ReturnType : RoseType):
+        # Some sanity checks
+        for ArgType in ArgTypeList:
+            assert isinstance(ArgType, RoseType)
+        SubClassData = {}
+        SubClassData["arglist"] = ArgTypeList
+        SubClassData["return"] = ReturnType
+        super().__init__(RoseType.RoseTypeEnum.Function, SubClassData)
+    
+    @staticmethod
+    def create(ArgTypeList : list, ReturnType : RoseType):
+        return RoseFunctionType()
+    
+    def getArgType(self, ArgNo : int):
+        # Sanity check
+        ArgTypeList = self.getSubClassData()["arglist"]
+        assert ArgNo < len(ArgTypeList)
+        return ArgTypeList[ArgNo]
+    
+    def getReturnType(self):
+        return self.getSubClassData()["return"]
 
     
 # Test
@@ -266,5 +300,4 @@ if __name__ == '__main__':
     print(BVType)
 
 
-    
 
