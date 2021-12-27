@@ -60,64 +60,66 @@ class RoseOpcode(Enum):
     def getBVOpInputs(self, Inputs : list):
         BVInputs = []
         for Input in Inputs:
+            assert isinstance(Input, RoseValue)
             if Input.getType().isBitVectorTy():
                 BVInputs.append(Input)
         return BVInputs
 
     def getOutputType(self, Inputs : list): 
         assert(len(Inputs) >= 1)
-        if self.name == self.bvzero \
-        or self.name == self.bit \
-        or self.name == self.lsb \
-        or self.name == self.msb:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvzero.value \
+        or self.value == self.bit.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             return RoseType.getBitVectorTy(1)
-        if self.name == self.bvneg \
-        or self.name == self.bvnot \
-        or self.name == self.bvadd1 \
-        or self.name == self.bvsub1 \
-        or self.name == self.rotateleft \
-        or self.name == self.rotateright:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvneg.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value \
+        or self.value == self.rotateleft.value \
+        or self.value == self.rotateright.value \
+        or self.value == self.bvextract.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
-        if self.name == self.bvadd \
-        or self.name == self.bvsub \
-        or self.name == self.bvmul \
-        or self. name == self.bvor \
-        or self. name == self.bvxor \
-        or self. name == self.bvand \
-        or self. name == self.bvshl \
-        or self. name == self.bvlshr \
-        or self. name == self.bvashr \
-        or self. name == self.bvsmin \
-        or self. name == self.bvumin \
-        or self. name == self.bvsmax \
-        or self. name == self.bvumax:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvadd.value \
+        or self.value == self.bvsub.value \
+        or self.value == self.bvmul.value \
+        or self.value == self.bvor.value \
+        or self.value == self.bvxor.value \
+        or self.value == self.bvand.value \
+        or self.value == self.bvshl.value \
+        or self.value == self.bvlshr.value \
+        or self.value == self.bvashr.value \
+        or self.value == self.bvsmin.value \
+        or self.value == self.bvumin.value \
+        or self.value == self.bvsmax.value \
+        or self.value == self.bvumax.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) > 1)
             return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
-        if self.name == self.bvsdiv \
-        or self.name == self.bvudiv \
-        or self.name == self.bvsrem \
-        or self.name == self.bvurem \
-        or self.name == self.bvsmod \
-        or self.name == self.bvrol \
-        or self.name == self.bvror:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvsdiv.value \
+        or self.value == self.bvudiv.value \
+        or self.value == self.bvsrem.value \
+        or self.value == self.bvurem.value \
+        or self.value == self.bvsmod.value \
+        or self.value == self.bvrol.value \
+        or self.value == self.bvror.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
-        if self.name == self.bveq \
-        or self.name == self.bvslt \
-        or self.name == self.bvult \
-        or self.name == self.bvsle \
-        or self.name == self.bvule \
-        or self.name == self.bvsgt \
-        or self.name == self.bvugt \
-        or self.name == self.bvsge \
-        or self.name == self.bvuge:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bveq.value \
+        or self.value == self.bvslt.value \
+        or self.value == self.bvult.value \
+        or self.value == self.bvsle.value \
+        or self.value == self.bvule.value \
+        or self.value == self.bvsgt.value \
+        or self.value == self.bvugt.value \
+        or self.value == self.bvsge.value \
+        or self.value == self.bvuge.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(1)
         return None
@@ -125,56 +127,65 @@ class RoseOpcode(Enum):
     def inputsAreValid(self, Inputs : list): 
         if self.isValidNumInputs(len(Inputs)) == False:
             return False
-        if self.name == self.bvzero \
-        or self.name == self.bit \
-        or self.name == self.lsb \
-        or self.name == self.msb \
-        or self.name == self.bvneg \
-        or self.name == self.bvnot \
-        or self.name == self.bvadd1 \
-        or self.name == self.bvsub1 \
-        or self.name == self.rotateleft \
-        or self.name == self.rotateright:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        print("inputsAreValid")
+        print("Inputs:")
+        print(Inputs)
+        print(self.value)
+        print(self.value)
+        print(self.bvextract.value)
+        if self.value == self.bvzero.value \
+        or self.value == self.bit.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value \
+        or self.value == self.bvneg.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value \
+        or self.value == self.rotateleft.value \
+        or self.value == self.rotateright.value \
+        or self.value == self.bvextract.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            print("BVInputs:")
+            print(BVInputs)
             if len(BVInputs) == 1:
                 return True
             else:
                 return False
-        if self.name == self.bvadd \
-        or self.name == self.bvsub \
-        or self.name == self.bvmul \
-        or self. name == self.bvor \
-        or self. name == self.bvxor \
-        or self. name == self.bvand \
-        or self. name == self.bvshl \
-        or self. name == self.bvlshr \
-        or self. name == self.bvashr \
-        or self. name == self.bvsmin \
-        or self. name == self.bvumin \
-        or self. name == self.bvsmax \
-        or self. name == self.bvumax:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvadd.value \
+        or self.value == self.bvsub.value \
+        or self.value == self.bvmul.value \
+        or self.value == self.bvor.value \
+        or self.value == self.bvxor.value \
+        or self.value == self.bvand.value \
+        or self.value == self.bvshl.value \
+        or self.value == self.bvlshr.value \
+        or self.value == self.bvashr.value \
+        or self.value == self.bvsmin.value \
+        or self.value == self.bvumin.value \
+        or self.value == self.bvsmax.value \
+        or self.value == self.bvumax.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) > 1:
                 return True
             else:
                 return False
-        if self.name == self.bvsdiv \
-        or self.name == self.bvudiv \
-        or self.name == self.bvsrem \
-        or self.name == self.bvurem \
-        or self.name == self.bvsmod \
-        or self.name == self.bvrol \
-        or self.name == self.bvror \
-        or self.name == self.bveq \
-        or self.name == self.bvslt \
-        or self.name == self.bvult \
-        or self.name == self.bvsle \
-        or self.name == self.bvule \
-        or self.name == self.bvsgt \
-        or self.name == self.bvugt \
-        or self.name == self.bvsge \
-        or self.name == self.bvuge:
-            BVInputs = self.getNumBVOpInputs(Inputs)
+        if self.value == self.bvsdiv.value \
+        or self.value == self.bvudiv.value \
+        or self.value == self.bvsrem.value \
+        or self.value == self.bvurem.value \
+        or self.value == self.bvsmod.value \
+        or self.value == self.bvrol.value \
+        or self.value == self.bvror.value \
+        or self.value == self.bveq.value \
+        or self.value == self.bvslt.value \
+        or self.value == self.bvult.value \
+        or self.value == self.bvsle.value \
+        or self.value == self.bvule.value \
+        or self.value == self.bvsgt.value \
+        or self.value == self.bvugt.value \
+        or self.value == self.bvsge.value \
+        or self.value == self.bvuge.value:
+            BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) == 2:
                 return True
             else:
@@ -182,48 +193,53 @@ class RoseOpcode(Enum):
         return None
     
     def isValidNumInputs(self, NumInputs : int):
-        if self.name == self.bvzero \
-        or self.name == self.lsb \
-        or self.name == self.msb \
-        or self.name == self.bvneg \
-        or self.name == self.bvnot \
-        or self.name == self.bvadd1 \
-        or self.name == self.bvsub1:
+        print("isValidNumInputs")
+        if self.value == self.bvzero.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value \
+        or self.value == self.bvneg.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value:
             return (NumInputs == 1)
-        if self.name == self.bvadd \
-        or self.name == self.bvsub \
-        or self.name == self.bvmul \
-        or self. name == self.bvor \
-        or self. name == self.bvxor \
-        or self. name == self.bvand \
-        or self. name == self.bvshl \
-        or self. name == self.bvlshr \
-        or self. name == self.bvashr \
-        or self. name == self.bvsmin \
-        or self. name == self.bvumin \
-        or self. name == self.bvsmax \
-        or self. name == self.bvumax:
+        if self.value == self.bvadd.value \
+        or self.value == self.bvsub.value \
+        or self.value == self.bvmul.value \
+        or self.value == self.bvor.value \
+        or self.value == self.bvxor.value \
+        or self.value == self.bvand.value \
+        or self.value == self.bvshl.value \
+        or self.value == self.bvlshr.value \
+        or self.value == self.bvashr.value \
+        or self.value == self.bvsmin.value \
+        or self.value == self.bvumin.value \
+        or self.value == self.bvsmax.value \
+        or self.value == self.bvumax.value:
             return (NumInputs > 1)
-        if self.name == self.bvsdiv \
-        or self.name == self.bvudiv \
-        or self.name == self.bvsrem \
-        or self.name == self.bvurem \
-        or self.name == self.bvsmod \
-        or self.name == self.bvrol \
-        or self.name == self.bvror \
-        or self.name == self.bit \
-        or self.name == self.bveq \
-        or self.name == self.bvslt \
-        or self.name == self.bvult \
-        or self.name == self.bvsle \
-        or self.name == self.bvule \
-        or self.name == self.bvsgt \
-        or self.name == self.bvugt \
-        or self.name == self.bvsge \
-        or self.name == self.bvuge \
-        or self.name == self.rotateleft \
-        or self.name == self.rotateright:
+        if self.value == self.bvsdiv.value \
+        or self.value == self.bvudiv.value \
+        or self.value == self.bvsrem.value \
+        or self.value == self.bvurem.value \
+        or self.value == self.bvsmod.value \
+        or self.value == self.bvrol.value \
+        or self.value == self.bvror.value \
+        or self.value == self.bit.value \
+        or self.value == self.bveq.value \
+        or self.value == self.bvslt.value \
+        or self.value == self.bvult.value \
+        or self.value == self.bvsle.value \
+        or self.value == self.bvule.value \
+        or self.value == self.bvsgt.value \
+        or self.value == self.bvugt.value \
+        or self.value == self.bvsge.value \
+        or self.value == self.bvuge.value \
+        or self.value == self.rotateleft.value \
+        or self.value == self.rotateright.value:
             return (NumInputs == 2)
+        if self.value == self.bvextract:
+            print("NumInputs:")
+            print(NumInputs)
+            return (NumInputs > 2)
         return None
   
 
