@@ -33,11 +33,11 @@ class RoseSignExtendOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = None):
-    return RoseOperation(Name, [Bitvector, TargetBitwidth], ParentBlock)
+    return RoseSignExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = None):
-    return RoseOperation(Name, [Bitvector, Constant("", TargetBitwidth)], ParentBlock)
+    return RoseSignExtendOp(Name, Bitvector, Constant("", TargetBitwidth), ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -54,11 +54,11 @@ class RoseZeroExtendOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = None):
-    return RoseOperation(Name, [Bitvector, TargetBitwidth], ParentBlock)
+    return RoseZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = None):
-    return RoseOperation(Name, [Bitvector, Constant("", TargetBitwidth)], ParentBlock)
+    return RoseZeroExtendOp(Name, Bitvector, Constant("", TargetBitwidth), ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -75,7 +75,7 @@ class RoseSliceOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock = None):
-    return RoseOperation(Name, Bitvector, Low, High, ParentBlock)
+    return RoseSliceOp(Name, Bitvector, Low, High, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
