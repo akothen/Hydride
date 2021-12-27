@@ -6,6 +6,10 @@ class RoseValue:
     def __init__(self, Name : str, Type : RoseType):
         self.Name = Name
         self.Type = Type
+    
+    @staticmethod
+    def create(Name : str, Type : RoseType):
+        return RoseValue(Name, Type)
 
     def getType(self):
         return self.Type
@@ -16,5 +20,8 @@ class RoseValue:
     def setName(self, Name : str):
         self.Name = Name
 
-    def print(self):
+    def print(self, Debug = False):
         print(self.Name)
+        if Debug == True:
+            self.Type.print()
+
