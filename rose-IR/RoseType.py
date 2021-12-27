@@ -290,10 +290,18 @@ class RoseFunctionType(RoseType):
         assert ArgNo < len(ArgTypeList)
         return ArgTypeList[ArgNo]
     
+    def getNumArgs(self):
+        ArgTypeList = self.getSubClassData()["arglist"]
+        return len(ArgTypeList)
+
+    def getArgList(self):
+        ArgTypeList = self.getSubClassData()["arglist"]
+        return ArgTypeList
+    
     def getReturnType(self):
         return self.getSubClassData()["return"]
 
-    
+
 # Test
 if __name__ == '__main__':
     BVType = RoseType.getBitVectorTy(8)
