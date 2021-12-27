@@ -1,3 +1,4 @@
+
 from enum import Enum, auto
 
 # Definition of concept of types in Rose IR
@@ -20,23 +21,23 @@ class RoseType:
     
     @staticmethod
     def getBitVectorTy(Bitwidth : int):
-       return RoseIntegerType.create(Bitwidth)
+       return RoseBitVectorType.create(Bitwidth)
 
     @staticmethod
-    def getIntegerTy(Bitwidth : int, isSigned : bool = True):
-        return RoseIntegerType.create(Bitwidth, isSigned)
+    def getIntegerTy(Bitwidth : int):
+        return RoseIntegerType.create(Bitwidth)
 
     @staticmethod
     def getGenericFloatTy(Mantissa : int, Exponent : int, IsSigned : bool = True):
         return RoseGenericFloatType.create(Mantissa, Exponent, IsSigned)
 
     @staticmethod
-    def getFloatTy(IsSigned : bool = True):
-        return RoseFloatType.create(IsSigned)
+    def getFloatTy():
+        return RoseFloatType.create()
     
     @staticmethod
-    def getDoubleTy(IsSigned : bool = True):
-        return RoseDoubleType.create(IsSigned)
+    def getDoubleTy():
+        return RoseDoubleType.create()
 
     @staticmethod
     def getVectorTy(ElemType, Length : int):
@@ -68,7 +69,8 @@ class RoseType:
         return isinstance(self, RoseGenericFloatType)
 
     def isFloatTy(self):
-        return isinstance(self, RoseFloatType)
+        return (isinstance(self, RoseFloatType) \
+            or isinstance(self, RoseDoubleType))
 
     def isDoubleTy(self):
         return isinstance(self, RoseDoubleType)
@@ -95,75 +97,89 @@ class RoseBitVectorType(RoseType):
         return RoseBitVectorType(Bitwidth)
 
     def getBitwidth(self):
-        return self.getSubClassData()
+        Bitwidth = self.getSubClassData()
+        assert type(Bitwidth) == int
+        return Bitwidth
+    
+    def print(self):
+        print("bitvector" + str(self.getBitwidth()))
 
 
 class RoseIntegerType(RoseType):
-    def __init__(self, Bitwidth : int, IsSigned : bool):
-        SubClassData = {}
-        SubClassData["bitwidth"] = Bitwidth
-        SubClassData["isSigned"] = IsSigned
-        super().__init__(RoseType.RoseTypeEnum.Integer, SubClassData)
+    def __init__(self, Bitwidth : int):
+        super().__init__(RoseType.RoseTypeEnum.Integer, Bitwidth)
     
     @staticmethod
-    def create(Bitwidth : int, IsSigned : bool = True):
-        return RoseIntegerType(Bitwidth, IsSigned)
+    def create(Bitwidth : int):
+        return RoseIntegerType(Bitwidth)
     
     def getBitwidth(self):
-        return self.getSubClassData()["bitwidth"]
+        Bitwidth = self.getSubClassData()
+        assert type(Bitwidth) == int
+        return Bitwidth
     
-    def isSigned(self):
-        return self.getSubClassData()["isSigned"]
-
-
+    def print(self):
+        print("int" + str(self.getBitwidth()))
+    
 
 class RoseGenericFloatType(RoseType):
-    def __init__(self, Mantissa : int, Exponent : int, IsSigned : bool):
+    def __init__(self, Mantissa : int, Exponent : int):
         SubClassData = {}
         SubClassData["mantissa"] = Mantissa
         SubClassData["exponent"] = Exponent
-        SubClassData["isSigned"] = IsSigned
         super().__init__(RoseType.RoseTypeEnum.Float, SubClassData)
     
     @staticmethod
-    def create(Mantissa : int, Exponent : int, IsSigned : bool = True):
-        return RoseGenericFloatType(Mantissa, Exponent, IsSigned)
+    def create(Mantissa : int, Exponent : int):
+        return RoseGenericFloatType(Mantissa, Exponent)
     
     def getBitwidth(self):
         Mantissa = self.getSubClassData()["mantissa"]
         Exponent = self.getSubClassData()["exponent"]
+        assert type(Mantissa) == int
+        assert type(Exponent) == int
         return (Mantissa + Exponent + 1)
     
     def getMantissaWidth(self):
-        return self.getSubClassData()["mantissa"]
+        Mantissa = self.getSubClassData()["mantissa"]
+        assert type(Mantissa) == int
+        return Mantissa
 
     def getExponentWidth(self):
-        return self.getSubClassData()["exponent"]
-
-    def isSigned(self):
-        return self.getSubClassData()["isSigned"]
+        Exponent = self.getSubClassData()["exponent"]
+        assert type(Exponent) == int
+        return Exponent
+    
+    def print(self):
+        print("fp." + str(self.getMantissaWidth()) + "." + str(self.getExponentWidth()))
 
 
 class RoseFloatType(RoseGenericFloatType):
-    def __init__(self, IsSigned : bool):
+    def __init__(self):
         Mantissa = 23
         Exponent = 8
-        super().__init__(Mantissa, Exponent, IsSigned)
+        super().__init__(Mantissa, Exponent)
     
     @staticmethod
-    def create(IsSigned : bool = True):
-        return RoseFloatType(IsSigned)
+    def create():
+        return RoseFloatType()
+    
+    def print(self):
+        print("float")
 
 
 class RoseDoubleType(RoseGenericFloatType):
-    def __init__(self, IsSigned : bool):
+    def __init__(self):
         Mantissa = 52
         Exponent = 11
-        super().__init__(Mantissa, Exponent, IsSigned)
+        super().__init__(Mantissa, Exponent)
     
     @staticmethod
-    def create(IsSigned : bool = True):
-        return RoseDoubleType(IsSigned)
+    def create():
+        return RoseDoubleType()
+    
+    def print(self):
+        print("double")
 
 
 class RoseVectorType(RoseType):
@@ -178,13 +194,16 @@ class RoseVectorType(RoseType):
     
     @staticmethod
     def create(ElemType, Length : int):
-        return RoseBitVectorType(ElemType, Length)
+        return RoseVectorType(ElemType, Length)
 
     def getLength(self):
         return self.getSubClassData()["length"]
     
     def getElemType(self):
         return self.getSubClassData()["elemType"]
+    
+    def print(self):
+        print("vector")
 
 
 class RoseListType(RoseType):
@@ -208,6 +227,9 @@ class RoseListType(RoseType):
     
     def getNodeType(self):
         return self.getSubClassData()["nodeType"]
+    
+    def print(self):
+        print("list")
 
 
 class RoseUndefinedType(RoseType):
@@ -218,6 +240,9 @@ class RoseUndefinedType(RoseType):
     @staticmethod
     def create():
         return RoseUndefinedType()
+    
+    def print(self):
+        print("undefined")
 
 
 class RoseVoidType(RoseType):
@@ -228,6 +253,9 @@ class RoseVoidType(RoseType):
     @staticmethod
     def create():
         return RoseVoidType()
+    
+    def print(self):
+        print("void")
 
 
 
@@ -238,4 +266,5 @@ if __name__ == '__main__':
     print(BVType)
 
 
- 
+    
+
