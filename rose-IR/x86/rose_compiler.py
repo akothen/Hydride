@@ -6,7 +6,6 @@ from RoseOpcode import RoseOpcode
 from RoseType import RoseType, RoseBitVectorType
 #from DerivedRoseTypes import Constant
 from RoseValue import RoseValue
-from RoseOperation import RoseOperation
 from RoseFunctionCall import RoseFunctionCall
 from RoseFunction import RoseFunction
 from RoseForLoop import RoseForLoop
@@ -100,6 +99,9 @@ class RoseContext:
 
 
 def CompileVar(Variable, Context, _):
+  print("COMPILE VARIABLE")
+  print("VARIABLE:")
+  print(Variable)
   # Create a new rose value
   Val = RoseValue.create(Variable.name, Context.getVariableValue(Variable.name).getType())
   return Val
@@ -107,28 +109,39 @@ def CompileVar(Variable, Context, _):
 
 def CompileStatement(Stmt, Context, pred=True):
   StmtTy = type(Stmt)
+  print("STATEMENT:")
+  print(Stmt)
+  print("STATEMENT TYPE:")
+  print(StmtTy)
   CompileAbstractions[StmtTy](Stmt, Context, pred)
 
 
 def CompileNumber(Num, Context, _):
-    if isinstance(Num.val, int):
-        ConstantVal = Constant.create(Num.val, RoseType.getIntegerTy(32))
-        return ConstantVal
-    else:
-        NonConstantVal = Num.val
-        return NonConstantVal
+  print("COMPILE NUMBER")
+  print("NUM:")
+  print(Num)
+  if isinstance(Num.val, int):
+      ConstantVal = Constant.create(Num.val, RoseType.getIntegerTy(32))
+      return ConstantVal
+  else:
+      NonConstantVal = Num.val
+      return NonConstantVal
 
 
 def CompileExpression(Expr, env, pred=True, deref=False):
-    if deref and type(Expr) == Lookup:
-        # normalize `x.dword` to `x.dword[1]`
-        CompiledExpr = BitSlice(Expr, hi=Number(0), lo=Number(0))
+  print("COMPILE EXPRESSION")
+  print("EXPR:")
+  print(Expr)
 
-    ExprTy = type(Expr)
-    CompiledExpr = CompileAbstractions[ExprTy](Expr, env, pred)
-    #if deref:
-    #  return get_value(slice_or_val, env), ty
-    return CompiledExpr
+  if deref and type(Expr) == Lookup:
+      # normalize `x.dword` to `x.dword[1]`
+      CompiledExpr = BitSlice(Expr, hi=Number(0), lo=Number(0))
+
+  ExprTy = type(Expr)
+  CompiledExpr = CompileAbstractions[ExprTy](Expr, env, pred)
+  #if deref:
+  #  return get_value(slice_or_val, env), ty
+  return CompiledExpr
 
 
 def CompileForLoop(ForStmt, Context : RoseContext, pred=True):
@@ -154,16 +167,26 @@ def CompileForLoop(ForStmt, Context : RoseContext, pred=True):
 
 
 def CompileBitSlice(BitSliceExpr, Context, pred):
+  print("COMPILE BITSLICE")
+  print("BITSLICE:")
+  print(BitSliceExpr)
+
   # First compile low and high expressions
+  print("COMPILING LOW")
   Low = CompileExpression(BitSliceExpr.lo, Context, pred, deref=True)
+  print("COMPILED LOW")
+  Low.print()
 
   # Special case for the magic variable 'MAX' 
+  print("COMPILING HIGH")
   if (type(BitSliceExpr.hi) == Var and
     BitSliceExpr.hi.name == 'MAX'):
     #hi = conc_val(max_vl - 1, IntegerType(32))
     High = Constant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
     High = CompileExpression(BitSliceExpr.hi, Context, pred, deref=True)
+  print("COMPILED HIGH")
+  High.print()
 
   # In case we have a variable implicitly declared,
   # assume only integers can be implicitly declared
@@ -172,22 +195,36 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
     Context.addVariable(RoseValue.create(BitSliceExpr.bv.name,
                   RoseType.getBitVectorTy(MaxVectorLength)), implicit=True)
   
+  print("COMPILING BITVECTOR")
   BitVector = CompileExpression(BitSliceExpr.bv, Context, pred)
+  print("COMPILED BITVECTOR")
+  BitVector.print()
   assert isinstance(BitVector.getType(), RoseBitVectorType)
+  print("BITVEVTOR BITWODTH:")
+  print(BitVector.getType().getBitwidth())
 
   # Do some sanity check if possible
   if isinstance(Low, Constant) and isinstance(High, Constant):
-    assert BitVector.getType().getBitwidth == (High.getValue() - Low.getValue() + 1)
+    assert BitVector.getType().getBitwidth() == (High.getValue() - Low.getValue() + 1)
 
   # Add an bitslice operation
   Operation = RoseSliceOp(BitVector, Low, High)
+  print("BIT SLICE OP:")
+  Operation.print()
 
   return Operation
 
 
 def CompileUpdate(Update, Context, pred):
+  print("COMPILE UPDATE")
+  print("UPDATE:")
+  print(Update)
+
+  print("COMPILING RHS")
   RHSExprVal = CompileExpression(Update.rhs, Context, pred)
   RHSExprVal.setName(Update.lhs.name)
+  print("COMPILED RHS")
+  RHSExprVal.print()
    
   #if type(Update.lhs) == Lookup:
     # normalize `x.dword = foo` into `x.dword[0] = foo`
@@ -198,7 +235,10 @@ def CompileUpdate(Update, Context, pred):
     Context.addVariable(LHSval, implicit=True)
     assert Context.isVariableDefined(Update.lhs.name)
 
+  print("COMPILING LHS")
   LHSExprVal = CompileExpression(Update.lhs, Context, pred)
+  print("COMPILED LHS")
+  LHSExprVal.print()
 
   # Propagate type from RHS
   Context.setVariableType(LHSExprVal.getName(), RHSExprVal.getType())
@@ -209,6 +249,9 @@ def CompileUpdate(Update, Context, pred):
 # Function will be compiled later
 def CompileFunction(FunctionDef, Context : RoseContext, _):
     assert(type(FunctionDef) == FuncDef)
+    print("COMPILE FUNCTION")
+    print("FUNCDEF:")
+    print(FunctionDef)
 
     # New context for a newly defined function
     NewContext = RoseContext()
@@ -217,20 +260,23 @@ def CompileFunction(FunctionDef, Context : RoseContext, _):
     Context.addContext(FunctionDef.name, NewContext)
 
 
-
 def CompileCall(CallStmt, Context : RoseContext, pred):
+  print("COMPILE CALL")
+
   assert type(CallStmt.func) == str
   FunctionName = CallStmt.func
 
   # Compile arguments first
+  print("COMPILE ARGUMENTS")
   ArgValuesList = []
   for Arg in CallStmt.args:
     ArgValuesList.append(CompileExpression(Arg, Context, deref=True))
+  print("ARGUMENTS COMPILED")
 
   # Check if this is a call to a builtin function
   # The builtins do not modify the environment
   if FunctionName in Builtins:
-     return Builtins[FunctionName](ArgValuesList, Context)
+    return Builtins[FunctionName](ArgValuesList, Context)
 
   # This is a function call
   ChildContext = Context.getContext(FunctionName)
@@ -286,6 +332,9 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
 
 
 def CompileUnaryExpr(UnaryExpr, Context, pred):
+  print("COMPILE UNARY EXPRESSION")
+  print("UNARY EXPR:")
+  print(UnaryExpr)
   Value = CompileExpression(UnaryExpr.a, Context, pred, deref=True)
   UnaryFuncHandle = UnaryOps[UnaryExpr.op]
   return UnaryFuncHandle(Value)
@@ -294,14 +343,14 @@ def CompileUnaryExpr(UnaryExpr, Context, pred):
 def CompileSemantics(Sema):
   # Create the root context
   RootContext = RoseContext()
-  out_params = []
+  OutParams = []
   returns_void = False
   ParamValues = []
   for Param in Sema.params:
     is_out_param = False
     if Param.type.endswith('*'):
         ParamType = x86Types[Param.type[:-1].strip()]
-        out_params.append(Param.name)
+        OutParams.append(Param.name)
         is_out_param = True
     else:
         ParamType = x86Types[Param.type]
@@ -321,20 +370,32 @@ def CompileSemantics(Sema):
     # if the environment has 'k' defined. E.g. k is a parameter
     # the k cannot be returned implicitly
     if not ReturnsMask or RootContext.isVariableDefined('k'):
+      print("adding dst to context")
       RootContext.addVariable(RoseValue.create('dst', RetType))
       #RootContext.define('dst', type=RetType, value=new_sym_val(rettype))
     else:
+      print("adding k to context")
       RootContext.addVariable(RoseValue.create('k', RetType))
       #RootContext.define('k', type=RetType, value=new_sym_val(rettype))
   else:
     returns_void = True
 
+  # Compile all the statements
   for Stmt in Sema.spec:
     if type(Stmt) == Return:
       assign_to_dst = Update(lhs=Var('dst'), rhs=Stmt.val)
       CompileStatement(assign_to_dst, RootContext)
       break
     CompileStatement(Stmt, RootContext)
+  
+  Outputs = [RootContext.getVariableValue(OutParam)) for OutParam in OutParams]
+  if not returns_void:
+    if not ReturnsMask:
+      RetVal = RootContext.getVariableValue("dst")
+    else:
+      RetVal = RootContext.getVariableValue("k")
+    Outputs = [RetVal] + Outputs
+  return ParamValues, Outputs
 
 
 CompileAbstractions = {
@@ -472,6 +533,7 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
 	<header>emmintrin.h</header>
 </intrinsic>
   '''
+  print(sema)
   intrin_node = ET.fromstring(sema)
   spec = get_spec_from_xml(intrin_node)
   print(spec)
