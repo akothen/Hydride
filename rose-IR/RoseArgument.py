@@ -22,8 +22,12 @@ class RoseArgument(RoseValue):
   def getFunction(self):
     return self.Function
   
+  def setFunction(self, Function : RoseFunction):
+    # Sanity check
+    assert Function.getArg(self.ArgIndex).getType() == self.getType()
+    self.Function = Function
+  
   def print(self):
     print(self.Val)
 
- 
-
+    
