@@ -1,13 +1,13 @@
-from RoseOperation import RoseOperation
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType, RoseBitVectorType
+from RoseType import RoseType
 from RoseConstant import RoseConstant
+from RoseOperation import RoseOperation
 
 
 class RoseSignExtendOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
 
@@ -29,7 +29,7 @@ class RoseSignExtendOp(RoseOperation):
 
 class RoseZeroExtendOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
@@ -51,7 +51,7 @@ class RoseZeroExtendOp(RoseOperation):
 
 class RoseSliceOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, Low, High]
     super().__init__(RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
@@ -72,7 +72,7 @@ class RoseSliceOp(RoseOperation):
 
 class RoseNotOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvnot, Name, OperandList, ParentBlock)
 
@@ -86,7 +86,7 @@ class RoseNotOp(RoseOperation):
 
 class RoseNegOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvneg, Name, OperandList, ParentBlock)
 
