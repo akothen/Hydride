@@ -1,12 +1,13 @@
-from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
+import RoseAbstractions
 
 # An operation in Rosette
 # An operation is either an instruction.
-# TODO: complete the definition
 class RoseOperation(RoseValue):
     def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock):
+        if ParentBlock != None:
+            assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
         # Sanity check to see that the operand list is complete
         assert(Opcode.inputsAreValid(OperandList))
         self.Opcode = Opcode
@@ -26,6 +27,9 @@ class RoseOperation(RoseValue):
     def setOperand(self, Index, Operand):
         assert(Index < self.len(self.OperandList))
         self.OperandList[Index] = Operand
+    
+    def setParentBlock(self, Block):
+        self.ParentBlock = Block
 
     def print(self):
         Op = "(define (" + self.getName() + " (" + str(self.Opcode)
