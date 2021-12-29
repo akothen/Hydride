@@ -1,13 +1,14 @@
-from RoseType import RoseType
-from RoseValue import RoseValue
-from RoseOpcode import RoseOpcode
-from RoseFunction import RoseFunction
 
+from RoseValue import RoseValue
+import RoseAbstractions
 
 # This represents internal and external function calls
 # This class is for operations whose opcodes are not known ahead of time.
 class RoseFunctionCall(RoseValue):
-    def __init__(self, Callee : RoseFunction, Name : str, OperandList : list, ParentBlock):
+    def __init__(self, Callee, Name : str, OperandList : list, ParentBlock):
+        assert isinstance(Callee, RoseAbstractions.RoseFunction)
+        if ParentBlock != None:
+            assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
         # Sanity check to see that the operand list is complete
         #assert(Opcode.inputsAreValid(OperandList))
         self.Callee = Callee
@@ -17,8 +18,8 @@ class RoseFunctionCall(RoseValue):
         self.ParentBlock = ParentBlock
     
     @staticmethod
-    def create(Callee : RoseFunction, Name : str, OperandList : list, ParentBlock = None):
-        return RoseOperation(Callee, Name, OperandList, ParentBlock)
+    def create(Callee, Name : str, OperandList : list, ParentBlock = None):
+        return RoseFunctionCall(Callee, Name, OperandList, ParentBlock)
     
     def getOperand(self, Index):
         assert(Index < self.len(self.OperandList))
