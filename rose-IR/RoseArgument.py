@@ -1,13 +1,15 @@
 
 from RoseType import RoseType
 from RoseValue import RoseValue
-from RoseFunction import RoseFunction
+import RoseFunction   # Avoid circular dependence
 
 
 class RoseArgument(RoseValue):
   def __init__(self, Name : str, Type : RoseType, Function : RoseFunction, ArgIndex : int):
     # Some sanity checks
-    assert ArgIndex < Function.getNumArgs() 
+    if Function != None:
+      assert ArgIndex < Function.getNumArgs() 
+      assert Function.getArg(ArgIndex).getType() == Type
     self.Function = Function
     self.ArgIndex = ArgIndex
     super().__init__(Name, Type)
@@ -29,5 +31,3 @@ class RoseArgument(RoseValue):
   
   def print(self):
     print(self.Val)
-
-    
