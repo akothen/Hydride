@@ -4,14 +4,15 @@ from sema_ast import Parameter, Spec, BitSlice, Var, Number, Update, \
                     Case, Lookup, Index, FuncDef, Break
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType, RoseBitVectorType
-#from DerivedRoseTypes import Constant
+from RoseConstant import RoseConstant
 from RoseValue import RoseValue
 from RoseFunctionCall import RoseFunctionCall
 from RoseFunction import RoseFunction
 from RoseForLoop import RoseForLoop
 from RoseBlock import RoseBlock
+from RoseArgument import RoseArgument
 from RoseOperations import RoseSliceOp, RoseSignExtendOp, RoseZeroExtendOp, \
-                          RoseNegOp, RoseNotOp, Constant
+                          RoseNegOp, RoseNotOp
 from x86Types import x86Types
 
 
@@ -20,6 +21,27 @@ MaxVectorLength = 512
 
 # Keeps track of all variables, functions and contexts
 class RoseContext:
+  # This is a name generator which uses name prefixes as keys
+  class RoseValueNameGenerator:
+      def __init__(self):
+          self.NameDict = {}
+      
+      def genName(self, Prefix : str, NameChange : bool = True):
+          if Prefix is not "":
+              return Prefix
+          if NameChange is False:
+              return Prefix
+          Name = self.NameDict.get(Prefix, None)
+          if Name == None:
+              self.NameDict[Prefix] = 0
+          else:
+              self.NameDict[Prefix] += 1
+          return "%" + Prefix + str(self.NameDict[Prefix])
+        
+      def reset(self):
+        self.NameDict.clear()
+
+
   def __init__(self):
     self.ParentConext = None
     self.Variables = {}
@@ -29,7 +51,8 @@ class RoseContext:
     # track range of defined bits for implicitly defined variables
     # mapping <implicit var> -> <highest defined bit>
     self.DefinedRange = {}
-
+    self.NameGenerator = self.RoseValueNameGenerator()
+  
   def addFunctionDef(self, Name : str, FunctionDef):
     assert(type(FunctionDef) == FuncDef)
     self.FunctionDefs[Name] = FunctionDef
@@ -42,13 +65,13 @@ class RoseContext:
     self.Functions[Name] = Function
 
   def getFunction(self, Name : str):
-    return self.Functions[Name]
+    return self.Functions.get(Name, None)
   
   def addContext(self, FunctionName : str, Context):
     assert isinstance(Context, RoseContext)
     self.Contexts[FunctionName] = Context
     Context.setParentContext(self)
-      
+  
   def getContext(self, FunctionName : str):
     return self.Contexts[FunctionName]
   
@@ -95,16 +118,17 @@ class RoseContext:
   def getHighestDefinedBit(self, Name : str):
     assert Name in self.DefinedRange
     return self.DefinedRange[Name]
+  
+  def hangUp(self, Name : str):
+    if self. Variables.get(Name, None) is not None:
+      self.Variables[Name] = None
+    if self. DefinedRange.get(Name, None) is not None:
+      self.DefinedRange[Name] = None
+    if self. FunctionDefs.get(Name, None) is not None:
+      self.FunctionDefs[Name] = None
+    if self. Functions.get(Name, None) is not None:
+      self.Functions[Name] = None
 
-
-
-def CompileVar(Variable, Context, _):
-  print("COMPILE VARIABLE")
-  print("VARIABLE:")
-  print(Variable)
-  # Create a new rose value
-  Val = RoseValue.create(Variable.name, Context.getVariableValue(Variable.name).getType())
-  return Val
 
 
 def CompileStatement(Stmt, Context, pred=True):
@@ -121,14 +145,29 @@ def CompileNumber(Num, Context, _):
   print("NUM:")
   print(Num)
   if isinstance(Num.val, int):
-      ConstantVal = Constant.create(Num.val, RoseType.getIntegerTy(32))
+      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
       return ConstantVal
   else:
       NonConstantVal = Num.val
       return NonConstantVal
 
 
-def CompileExpression(Expr, env, pred=True, deref=False):
+def CompileVar(Variable, Context, _):
+  print("COMPILE VARIABLE")
+  print("VARIABLE:")
+  print(Variable)
+  # Create a new rose value
+  Val = RoseValue.create(Variable.name, Context.getVariableValue(Variable.name).getType())
+  return Val
+
+
+#def CompileParam(Param, Context, _):
+#  ArgType = Context.getVariableValue(Param.name).getType()
+#  Arg = RoseArgument.create(Param.name, ArgType, )
+#  return Arg
+
+
+def CompileExpression(Expr, Context, pred=True, deref=False):
   print("COMPILE EXPRESSION")
   print("EXPR:")
   print(Expr)
@@ -138,15 +177,15 @@ def CompileExpression(Expr, env, pred=True, deref=False):
       CompiledExpr = BitSlice(Expr, hi=Number(0), lo=Number(0))
 
   ExprTy = type(Expr)
-  CompiledExpr = CompileAbstractions[ExprTy](Expr, env, pred)
+  CompiledExpr = CompileAbstractions[ExprTy](Expr, Context, pred)
   #if deref:
   #  return get_value(slice_or_val, env), ty
   return CompiledExpr
 
 
 def CompileForLoop(ForStmt, Context : RoseContext, pred=True):
-  One = Constant.create(1, 32)
-  MinusOne = Constant.create(-1, 32)
+  One = RoseConstant.create(1, RoseType.getIntegerTy(32))
+  MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
   Step = One if ForStmt.inc else MinusOne
   Begin = CompileExpression(ForStmt.begin, Context, deref=True)
   End = CompileExpression(ForStmt.end, Context, deref=True)
@@ -182,7 +221,7 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
   if (type(BitSliceExpr.hi) == Var and
     BitSliceExpr.hi.name == 'MAX'):
     #hi = conc_val(max_vl - 1, IntegerType(32))
-    High = Constant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
+    High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
     High = CompileExpression(BitSliceExpr.hi, Context, pred, deref=True)
   print("COMPILED HIGH")
@@ -193,7 +232,7 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
   if (type(BitSliceExpr.bv) == Var and
     not Context.isVariableDefined(BitSliceExpr.bv.name)):
     Context.addVariable(RoseValue.create(BitSliceExpr.bv.name,
-                  RoseType.getBitVectorTy(MaxVectorLength)), implicit=True)
+                  RoseType.getBitVectorTy(MaxVectorLength)), Implicit=True)
   
   print("COMPILING BITVECTOR")
   BitVector = CompileExpression(BitSliceExpr.bv, Context, pred)
@@ -204,11 +243,15 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
   print(BitVector.getType().getBitwidth())
 
   # Do some sanity check if possible
-  if isinstance(Low, Constant) and isinstance(High, Constant):
-    assert BitVector.getType().getBitwidth() == (High.getValue() - Low.getValue() + 1)
+  if isinstance(Low, RoseConstant):
+    assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
+  if isinstance(High, RoseConstant):
+    assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
+  if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
+    assert High.getValue() >= Low.getValue()
 
   # Add an bitslice operation
-  Operation = RoseSliceOp(BitVector, Low, High)
+  Operation = RoseSliceOp.create("Bitslice", BitVector, Low, High)
   print("BIT SLICE OP:")
   Operation.print()
 
@@ -222,7 +265,9 @@ def CompileUpdate(Update, Context, pred):
 
   print("COMPILING RHS")
   RHSExprVal = CompileExpression(Update.rhs, Context, pred)
-  RHSExprVal.setName(Update.lhs.name)
+  RHSExprVal.print()
+  print(type(RHSExprVal))
+  #RHSExprVal.setName(Update.rhs.name)
   print("COMPILED RHS")
   RHSExprVal.print()
    
@@ -232,7 +277,7 @@ def CompileUpdate(Update, Context, pred):
   
   if type(Update.lhs) == Var and not Context.isVariableDefined(Update.lhs.name):
     LHSval = RoseValue.create(Update.lhs.name, RHSExprVal.getType())
-    Context.addVariable(LHSval, implicit=True)
+    Context.addVariable(LHSval, Implicit=True)
     assert Context.isVariableDefined(Update.lhs.name)
 
   print("COMPILING LHS")
@@ -248,16 +293,18 @@ def CompileUpdate(Update, Context, pred):
 
 # Function will be compiled later
 def CompileFunction(FunctionDef, Context : RoseContext, _):
-    assert(type(FunctionDef) == FuncDef)
-    print("COMPILE FUNCTION")
-    print("FUNCDEF:")
-    print(FunctionDef)
+  assert(type(FunctionDef) == FuncDef)
+  print("COMPILE FUNCTION")
+  print("FUNCDEF:")
+  print(FunctionDef)
 
-    # New context for a newly defined function
-    NewContext = RoseContext()
-    #NewContext.addFunction(FunctionDef.name, None)
-    NewContext.addFunctionDef(FunctionDef.name, FunctionDef)
-    Context.addContext(FunctionDef.name, NewContext)
+  # New context for a newly defined function
+  NewContext = RoseContext()
+  #NewContext.addFunction(FunctionDef.name, None)
+  print("FunctionDef.name:")
+  print(FunctionDef.name)
+  NewContext.addFunctionDef(FunctionDef.name, FunctionDef)
+  Context.addContext(FunctionDef.name, NewContext)
 
 
 def CompileCall(CallStmt, Context : RoseContext, pred):
@@ -268,7 +315,7 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
 
   # Compile arguments first
   print("COMPILE ARGUMENTS")
-  ArgValuesList = []
+  ArgValuesList = list()
   for Arg in CallStmt.args:
     ArgValuesList.append(CompileExpression(Arg, Context, deref=True))
   print("ARGUMENTS COMPILED")
@@ -280,7 +327,7 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
 
   # This is a function call
   ChildContext = Context.getContext(FunctionName)
-  FunctionDef = Context.getFunctionDef(FunctionName)
+  FunctionDef = ChildContext.getFunctionDef(FunctionName)
   assert len(FunctionDef.params) == len(CallStmt.args)
 
   # Check if we are compiling this function for the first time
@@ -301,8 +348,7 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
           ParamName = Param.name
           ParamWidth = Arg.getType().getBitwidth()
       assert Arg.getType().getBitwidth() == ParamWidth
-      #arg = fix_bitwidth(arg, param_width)
-      Context.addVariable(ParamName, Arg)
+      Context.addVariable(RoseValue.create(ParamName, Arg.getType()))
 
     # Comoile the function body
     ReturnValue = None
@@ -313,9 +359,32 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
             break
         FuncOperationList.append(CompileStatement(Stmt, ChildContext, pred))
     assert(ReturnValue != None)
+
+    # Get the types of the arguments
+    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
+    FunctionType = RoseType.getFunctionTy(ArgsTypeList, ReturnValue.getType())
     
-    # Compile the function first
-    Function = RoseFunction.create(FunctionName, ArgValuesList, ReturnValue.getType())
+    # Compile the function and its arguments
+    print(type(FunctionName))
+    print(type(ArgValuesList))
+    print(type(ReturnValue.getType()))
+    Function = RoseFunction.create(FunctionName, FunctionType)
+    print("Function:")
+    print(Function)
+    print(FunctionDef.params)
+    print(type(FunctionDef.params))
+
+    # Set the name of the arguments now
+    for ArgIndex in range(Function.getNumArgs()):
+      if type(FunctionDef.params[ArgIndex]) == BitSlice:
+        ArgName = FunctionDef.params[ArgIndex].bv
+      elif type(FunctionDef.params[ArgIndex]) == Var:
+        ArgName = FunctionDef.params[ArgIndex].name
+      else:
+        assert(False)
+      print(ArgName)
+      Function.setArgName(ArgName, ArgIndex)
+    print("FUNCTION GENERATED")
 
     # Create a new block and add it to the function
     Block = RoseBlock.create(FuncOperationList, Function)
@@ -354,12 +423,9 @@ def CompileSemantics(Sema):
         is_out_param = True
     else:
         ParamType = x86Types[Param.type]
-    # override signedness of the variables
-    #ParamType = param_type._replace(is_signed=param.is_signed)
     # Create a new rosette value
     ParamVal = RoseValue.create(Param.name, ParamType)
     ParamVal.print()
-    #param_val = new_sym_val(param_type)
     if not is_out_param: 
       ParamValues.append(ParamVal)
     RootContext.addVariable(ParamVal)
@@ -372,11 +438,9 @@ def CompileSemantics(Sema):
     if not ReturnsMask or RootContext.isVariableDefined('k'):
       print("adding dst to context")
       RootContext.addVariable(RoseValue.create('dst', RetType))
-      #RootContext.define('dst', type=RetType, value=new_sym_val(rettype))
     else:
       print("adding k to context")
       RootContext.addVariable(RoseValue.create('k', RetType))
-      #RootContext.define('k', type=RetType, value=new_sym_val(rettype))
   else:
     returns_void = True
 
@@ -388,7 +452,7 @@ def CompileSemantics(Sema):
       break
     CompileStatement(Stmt, RootContext)
   
-  Outputs = [RootContext.getVariableValue(OutParam)) for OutParam in OutParams]
+  Outputs = [RootContext.getVariableValue(OutParam) for OutParam in OutParams]
   if not returns_void:
     if not ReturnsMask:
       RetVal = RootContext.getVariableValue("dst")
@@ -407,6 +471,7 @@ CompileAbstractions = {
   BitSlice: CompileBitSlice,
   Update: CompileUpdate,
   UnaryExpr: CompileUnaryExpr,
+  #Parameter: CompileParam,
   #BinaryExpr: CompileBinaryExpr,
   #Select: compile_select,
   #Match: compile_match,
