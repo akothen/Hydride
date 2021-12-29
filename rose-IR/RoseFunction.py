@@ -43,7 +43,8 @@ class RoseFunction(RoseValue, RoseRegion):
                     ArgTypeList = FunctionType.getArgList()
                     ArgsList = []
                     for ArgIndex, ArgTy in enumerate(ArgTypeList):
-                        ArgsList.append(RoseArgument.create("arg", ArgTy, None, ArgIndex))
+                        # All arguments start out unmaed
+                        ArgsList.append(RoseArgument.create("", ArgTy, None, ArgIndex))
                     Function = RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], None)
                     for ArgIndex, Arg in enumerate(ArgsList):
                         Arg.setFunction(Function)
@@ -73,6 +74,11 @@ class RoseFunction(RoseValue, RoseRegion):
     
     def setRetValName(self, Name):
         self.ReturnValue = RoseValue(Name, self.getType().getReturnType())
+    
+    def setArgName(self, Name, ArgIndex):
+        # Some sanity checks
+        assert ArgIndex < len(self.ArgList)
+        self.ArgList[ArgIndex].setName(Name)
 
     def print(self):
         # Print function signature first
