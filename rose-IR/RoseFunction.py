@@ -1,4 +1,3 @@
-from types import FunctionType
 from RoseValue import RoseValue
 from RoseType import RoseType, RoseFunctionType
 from RoseRegion import RoseRegion
@@ -17,34 +16,43 @@ class RoseFunction(RoseValue, RoseRegion):
         self.ReturnValue = None
         self.ArgList = ArgsList
         ArgTyList = [Arg.getType() for Arg in ArgsList]
-        FunctionType = RoseFunctionType.create(ArgTyList, RetType)
-        RoseValue.__init__(Name, FunctionType)
-        RoseRegion.__init__(ParentRegion, RegionList)
+        FunctionType = RoseType.getFunctionTy(ArgTyList, RetType)
+        print(type(FunctionType))
+        RoseValue.__init__(self, Name, FunctionType)
+        RoseRegion.__init__(self, ParentRegion, RegionList)
     
+    # Multiple constructors packaged into one
     @staticmethod
-    def create(Name : str, ArgsList : list, RetType : RoseType, RegionList : list, ParentRegion : RoseRegion):
-        return RoseFunction(Name, ArgsList, RetType, RegionList, ParentRegion)
-    
-    # Empty function
-    @staticmethod
-    def create(Name : str, ArgsList : list, RetType : RoseType):
-        return RoseFunction(Name, ArgsList, RetType, [], None)
-    
-    # Empty function skeleton
-    @staticmethod
-    def create(Name : str, FunctionType : RoseFunctionType):
-        ArgTypeList = FunctionType.getArgList()
-        ArgsList = []
-        for ArgTy, ArgIndex in enumerate(ArgTypeList):
-            ArgsList.append(RoseArgument.create("arg", ArgTy, None, ArgIndex))
-        Function = RoseFunction(Name, ArgsList, FunctionType.getReturnType(), [], None)
-        for Arg, ArgIndex in enumerate(ArgsList):
-            Arg.setFunction(Function)
-            Function.addArg(Arg, ArgIndex)
-        return Function
+    def create(*args):
+        if len(args) == 5:
+            if isinstance(args[0], str) and isinstance(args[1], list) \
+            and isinstance(args[2], RoseType) and isinstance(args[3], list) \
+            and isinstance(args[4], RoseRegion):
+                return RoseFunction(args[0], args[1], args[2], args[3], args[4])
+        if len(args) == 4:
+            if isinstance(args[0], str) and isinstance(args[1], list) \
+            and isinstance(args[2], RoseType) and isinstance(args[3], list):
+                return RoseFunction(args[0], args[1], args[2], args[3], None)
+        if len(args) == 3:
+                if isinstance(args[0], str) and isinstance(args[1], list) \
+                and isinstance(args[2], RoseType):
+                    return RoseFunction(args[0], args[1], args[2], [], None)
+        if len(args) == 2:
+                if isinstance(args[0], str) and isinstance(args[1], RoseFunctionType):
+                    FunctionType = args[1]
+                    ArgTypeList = FunctionType.getArgList()
+                    ArgsList = []
+                    for ArgIndex, ArgTy in enumerate(ArgTypeList):
+                        ArgsList.append(RoseArgument.create("arg", ArgTy, None, ArgIndex))
+                    Function = RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], None)
+                    for ArgIndex, Arg in enumerate(ArgsList):
+                        Arg.setFunction(Function)
+                        Function.addArg(Arg, ArgIndex)
+                    return Function
+        assert(False)
     
     def getNumArgs(self):
-        return len(self.ArgsList)
+        return len(self.ArgList)
     
     def getArg(self, Index):
         return self.ArgList[Index]
