@@ -1,4 +1,3 @@
-
 from enum import Enum, auto
 
 # Definition of concept of types in Rose IR
@@ -282,7 +281,7 @@ class RoseFunctionType(RoseType):
     
     @staticmethod
     def create(ArgTypeList : list, ReturnType : RoseType):
-        return RoseFunctionType()
+        return RoseFunctionType(ArgTypeList, ReturnType)
     
     def getArgType(self, ArgNo : int):
         # Sanity check
@@ -306,6 +305,3 @@ class RoseFunctionType(RoseType):
 if __name__ == '__main__':
     BVType = RoseType.getBitVectorTy(8)
     print(BVType)
-
-
-
