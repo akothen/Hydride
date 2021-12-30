@@ -19,6 +19,14 @@ class RoseType:
         self.TypeEnum = Enum
         self.SubClassData = SubClassData
     
+    def __eq__(self, Other):
+        assert isinstance(Other, RoseType)
+        return self.TypeEnum == Other.TypeEnum and self.SubClassData == Other.SubClassData
+    
+    def __ne__(self, Other):
+        assert isinstance(Other, RoseType)
+        return self.TypeEnum != Other.TypeEnum or self.SubClassData != Other.SubClassData
+    
     @staticmethod
     def getBitVectorTy(Bitwidth : int):
        return RoseBitVectorType.create(Bitwidth)
@@ -305,3 +313,4 @@ class RoseFunctionType(RoseType):
 if __name__ == '__main__':
     BVType = RoseType.getBitVectorTy(8)
     print(BVType)
+
