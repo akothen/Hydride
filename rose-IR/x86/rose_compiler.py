@@ -2,17 +2,12 @@ from sema_ast import Parameter, Spec, BitSlice, Var, Number, Update, \
                     OpUpdate, For, While, If, Call, BinaryExpr, UnaryExpr, \
                     PseudoExpr, PseudoStmt, Return, Select, RegSel, Match, \
                     Case, Lookup, Index, FuncDef, Break
-from RoseOpcode import RoseOpcode
-from RoseType import RoseType, RoseBitVectorType
-from RoseConstant import RoseConstant
 from RoseValue import RoseValue
-from RoseFunctionCall import RoseFunctionCall
-from RoseFunction import RoseFunction
-from RoseForLoop import RoseForLoop
-from RoseBlock import RoseBlock
-from RoseArgument import RoseArgument
+from RoseType import RoseType
+from RoseAbstractions import RoseFunction, RoseForLoop, RoseBlock
+from RoseConstant import RoseConstant
 from RoseOperations import RoseSliceOp, RoseSignExtendOp, RoseZeroExtendOp, \
-                          RoseNegOp, RoseNotOp
+                          RoseNegOp, RoseNotOp, RoseCallOp
 from x86Types import x86Types
 
 
@@ -27,7 +22,7 @@ class RoseContext:
           self.NameDict = {}
       
       def genName(self, Prefix : str, NameChange : bool = True):
-          if Prefix is not "":
+          if Prefix != "":
               return Prefix
           if NameChange is False:
               return Prefix
@@ -137,7 +132,7 @@ def CompileStatement(Stmt, Context, pred=True):
   print(Stmt)
   print("STATEMENT TYPE:")
   print(StmtTy)
-  CompileAbstractions[StmtTy](Stmt, Context, pred)
+  return CompileAbstractions[StmtTy](Stmt, Context, pred)
 
 
 def CompileNumber(Num, Context, _):
@@ -238,7 +233,7 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
   BitVector = CompileExpression(BitSliceExpr.bv, Context, pred)
   print("COMPILED BITVECTOR")
   BitVector.print()
-  assert isinstance(BitVector.getType(), RoseBitVectorType)
+  assert BitVector.getType().isBitVectorTy()
   print("BITVEVTOR BITWODTH:")
   print(BitVector.getType().getBitwidth())
 
@@ -350,14 +345,14 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
       assert Arg.getType().getBitwidth() == ParamWidth
       Context.addVariable(RoseValue.create(ParamName, Arg.getType()))
 
-    # Comoile the function body
+    # Compile the function body
     ReturnValue = None
     FuncOperationList = []
     for Stmt in FunctionDef.body:
-        if type(Stmt) == Return:
-            ReturnValue = CompileExpression(Stmt.val, ChildContext, pred, deref=True)
-            break
-        FuncOperationList.append(CompileStatement(Stmt, ChildContext, pred))
+      if type(Stmt) == Return:
+        ReturnValue = CompileExpression(Stmt.val, ChildContext, pred, deref=True)
+        break
+      FuncOperationList.append(CompileStatement(Stmt, ChildContext, pred))
     assert(ReturnValue != None)
 
     # Get the types of the arguments
@@ -377,25 +372,29 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
     # Set the name of the arguments now
     for ArgIndex in range(Function.getNumArgs()):
       if type(FunctionDef.params[ArgIndex]) == BitSlice:
-        ArgName = FunctionDef.params[ArgIndex].bv
+        ArgName = FunctionDef.params[ArgIndex].bv.name
       elif type(FunctionDef.params[ArgIndex]) == Var:
         ArgName = FunctionDef.params[ArgIndex].name
       else:
         assert(False)
       print(ArgName)
       Function.setArgName(ArgName, ArgIndex)
+    Function.setRetValName(ReturnValue.getName())
     print("FUNCTION GENERATED")
 
     # Create a new block and add it to the function
+    print(type(FuncOperationList))
     Block = RoseBlock.create(FuncOperationList, Function)
     Function.addBlock(Block)
     
     # Add this function to the current context
-    Context.addFunction(Function.name, Function)
+    Context.addFunction(Function)
+    print("FUNCTION ADDED TO CONTEXT")
 
   # Compile call statement now
   Function = Context.getFunction(FunctionName)
-  FunctionCall = RoseFunctionCall.create(Function, ArgValuesList)
+  FunctionCall = RoseCallOp.create("", Function, ArgValuesList)
+  print(FunctionCall)
 
   return FunctionCall
 
