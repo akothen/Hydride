@@ -96,3 +96,37 @@ class RoseNegOp(RoseOperation):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+
+
+# This represents internal and external function calls
+# This class is for operations whose opcodes are not known ahead of time.
+class RoseCallOp(RoseOperation):
+  def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
+    assert Callee.getType().isFunctionTy()
+    self.Callee = Callee
+    super().__init__(RoseOpcode.call, Name, OperandList, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Callee, OperandList : list, ParentBlock = None):
+    return RoseCallOp(Name, Callee, OperandList, ParentBlock)
+  
+  # Override the function in the base class
+  def assertValidationOfInputs(self):
+    print("assertValidationOfInputs")
+    assert RoseOpcode.call.callInputsAreValid(self.Callee, self.getOperands())
+  
+  # Override the function in the base class
+  def getType(self):
+    return self.Callee.getType().getReturnType()
+  
+  def getCallee(self):
+    return self.Callee
+
+  def print(self):
+    Op = "(define (" + self.getName() + " (" + str(self.Opcode)
+    for Operand in self.OperandList:
+        Op += (" " + Operand.getName())
+    Op += ")"
+    print(Op)
+    
+ 
