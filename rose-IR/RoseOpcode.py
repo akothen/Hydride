@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from RoseType import RoseType
-from RoseValue import RoseValue
+from  RoseValue import RoseValue
+import RoseAbstractions
 
 # List of all operations that
 # involve bitvectors.
@@ -53,6 +54,7 @@ class RoseOpcode(Enum):
     bvzerolowextract = auto()
     bvsignextend = auto()
     bvzeroextend = auto()
+    call = auto()
 
     def __str__(self):
         return self.name
@@ -127,12 +129,6 @@ class RoseOpcode(Enum):
     def inputsAreValid(self, Inputs : list): 
         if self.isValidNumInputs(len(Inputs)) == False:
             return False
-        print("inputsAreValid")
-        print("Inputs:")
-        print(Inputs)
-        print(self.value)
-        print(self.value)
-        print(self.bvextract.value)
         if self.value == self.bvzero.value \
         or self.value == self.bit.value \
         or self.value == self.lsb.value \
@@ -193,7 +189,6 @@ class RoseOpcode(Enum):
         return None
     
     def isValidNumInputs(self, NumInputs : int):
-        print("isValidNumInputs")
         if self.value == self.bvzero.value \
         or self.value == self.lsb.value \
         or self.value == self.msb.value \
@@ -241,7 +236,29 @@ class RoseOpcode(Enum):
             print(NumInputs)
             return (NumInputs > 2)
         return None
-  
+
+    def callInputsAreValid(self, Callee, Inputs : list):
+        print("callInputsAreValid")
+        assert isinstance(Callee, RoseAbstractions.RoseFunction)
+        if self.value != self.call.value:
+            print("OPCODE IS INVALID")
+            return False
+        print("OPCODE IS VALID")
+        if len(Inputs) != Callee.getNumArgs():
+            print("INPUT LENGHTS ARE NOT EQUAL")
+            return False
+        print("INPUT LENGHTS ARE EQUAL")
+        for Index in range(Callee.getNumArgs()):
+            Arg = Callee.getArg(Index)
+            print(Arg.getType())
+            print(Inputs[Index].getType())
+            Arg.getType().print()
+            Inputs[Index].getType().print()
+            if Arg.getType() != Inputs[Index].getType():
+                print(Index)
+                return False
+        return True
+
 
 # Let's see how this could be useful
 class HighOrderFunctions(Enum):
