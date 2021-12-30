@@ -1,6 +1,5 @@
 
 from RoseOperation import RoseOperation
-from RoseFunctionCall import RoseFunctionCall
 import RoseAbstractions
 
 
@@ -20,8 +19,7 @@ class RoseRegion:
       assert isinstance(Child, RoseAbstractions.RoseForLoop) \
           or isinstance(Child, RoseAbstractions.RoseFunction) \
           or isinstance(Child, RoseAbstractions.RoseBlock) \
-          or isinstance(Child, RoseOperation) \
-          or isinstance(Child, RoseFunctionCall)
+          or isinstance(Child, RoseOperation)
     self.Children = Children
   
   @staticmethod
@@ -63,9 +61,7 @@ class RoseRegion:
      
   def addOperation(self, Op):
     # Sanity check
-    assert isinstance(Op, RoseFunctionCall) \
-        or isinstance(Op, RoseOperation)
-    
+    assert isinstance(Op, RoseOperation)
     # Operations are contained only in blocks
     assert isinstance(self, RoseAbstractions.RoseBlock)
     Op.setParentBlock(self)
