@@ -8,21 +8,31 @@ class RoseOperation(RoseValue):
     def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock):
         if ParentBlock != None:
             assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
-        # Sanity check to see that the operand list is complete
-        assert(Opcode.inputsAreValid(OperandList))
         self.Opcode = Opcode
         self.OperandList = OperandList
+        print(OperandList)
+        # Sanity check to see that the operand list is complete
+        self.assertValidationOfInputs()
         # The result of an operation is a RoseValue
-        super().__init__(Name, Opcode.getOutputType(OperandList))
+        super().__init__(Name, self.getType())
         self.ParentBlock = ParentBlock
     
     @staticmethod
     def create(Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock = None):
         return RoseOperation(Opcode, Name, OperandList, ParentBlock)
     
+    def assertValidationOfInputs(self):
+        assert(self.Opcode.inputsAreValid(self.OperandList))
+    
+    def getOperands(self):
+        return self.OperandList
+    
     def getOperand(self, Index):
         assert(Index < self.len(self.OperandList))
         return self.OperandList[Index]
+    
+    def getType(self):
+        return self.Opcode.getOutputType(self.OperandList)
     
     def setOperand(self, Index, Operand):
         assert(Index < self.len(self.OperandList))
