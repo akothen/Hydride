@@ -2,7 +2,6 @@
 from RoseType import RoseType, RoseFunctionType
 from RoseValue import RoseValue
 from RoseOperation import RoseOperation
-from RoseFunctionCall import RoseFunctionCall
 from RoseArgument import RoseArgument
 from RoseRegion import RoseRegion
 
@@ -108,8 +107,7 @@ class RoseBlock(RoseRegion):
     # Sanity check
     for Op in OpList:
       print(type(Op))
-      assert isinstance(Op, RoseOperation) \
-          or isinstance(Op, RoseFunctionCall)
+      assert isinstance(Op, RoseOperation)
     super().__init__(OpList, ParentRegion)
   
   @staticmethod
