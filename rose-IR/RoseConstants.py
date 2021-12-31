@@ -1,6 +1,7 @@
 
 from RoseType import RoseType
 from RoseValue import RoseValue
+from RoseRegion import RoseRegion
 
 
 # Constant value (integer and float) class
@@ -25,14 +26,17 @@ class RoseConstant(RoseValue):
 
 
 
-class RoseUndef(RoseValue):
+class RoseUndefValue(RoseValue):
   def __init__(self):
       super().__init__("undef", RoseType.getUndefTy())
   
-  @staticmethod
-  def create():
-        return RoseUndef()
-  
   def print(self):
       print(self.getName())
- 
+
+
+class RoseUndefRegion(RoseRegion):
+  def __init__(self):
+    super().__init__(None, None)
+
+  def print(self):
+    print("undef_reg")
