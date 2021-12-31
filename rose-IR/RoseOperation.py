@@ -15,7 +15,7 @@ class RoseOperation(RoseValue):
         OpSubClassData["opcode"] = Opcode
         OpSubClassData["operands"] = OperandList
         OpSubClassData["parent"] = ParentBlock
-        OpSubClassData["subclassdata"] = SubClassData)
+        OpSubClassData["subclassdata"] = SubClassData
         # The result of an operation is a RoseValue
         Type = Opcode.getOutputType(OperandList)
         RoseValue.__init__(self, Name, Type, OpSubClassData)
