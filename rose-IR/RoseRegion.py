@@ -1,5 +1,6 @@
 
 import RoseAbstractions
+import RoseConstants
 
 
 # Abstract class representing a region.
@@ -11,7 +12,8 @@ class RoseRegion:
     if self.Parent is not None:
       assert self.isParentValid(Parent)
     self.Children = Children
-    assert self.areChildrenValid()
+    if self.Children is not None:
+      assert self.areChildrenValid()
     self.SubClassData = SubClassData
 
   def __eq__(self, Other):
@@ -25,12 +27,18 @@ class RoseRegion:
         or self.Parent != Other.Parent
 
   def areChildrenValid(self):
-    pass
+    if isinstance(self, RoseConstants.RoseUndefRegion):
+      return True
+    return False
 
   def isParentValid(self, Parent):
+    if isinstance(self, RoseConstants.RoseUndefRegion):
+      return True
     if isinstance(Parent, RoseAbstractions.RoseForLoop) \
     or isinstance(Parent, RoseAbstractions.RoseFunction) \
     or isinstance(Parent, RoseAbstractions.RoseCond):
+      return True
+    if Parent == RoseConstants.RoseUndefRegion():
       return True
     return False
   
