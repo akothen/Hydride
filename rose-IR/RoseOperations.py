@@ -53,7 +53,7 @@ class RoseSliceOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, Low, High]
-    super().__init__(RoseOpcode.bvextract, Name, OperandList, ParentBlock)
+    RoseOperation.__init__(self, RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock = RoseUndefRegion()):
@@ -103,8 +103,7 @@ class RoseNegOp(RoseOperation):
 class RoseCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
     assert Callee.getType().isFunctionTy()
-    self.Callee = Callee
-    super().__init__(RoseOpcode.call, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.call, Name, OperandList, ParentBlock, Callee)
     
   @staticmethod
   def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
@@ -113,18 +112,18 @@ class RoseCallOp(RoseOperation):
   # Override the function in the base class
   def assertValidationOfInputs(self):
     print("assertValidationOfInputs")
-    assert RoseOpcode.call.callInputsAreValid(self.Callee, self.getOperands())
-  
-  # Override the function in the base class
-  def getType(self):
-    return self.Callee.getType().getReturnType()
+    assert RoseOpcode.call.callInputsAreValid(self.getCallee(), self.getOperands())
   
   def getCallee(self):
-    return self.Callee
+    return self.getOpSubClassData()
+
+  # Override the function in the base class
+  def getType(self):
+    return self.getCallee().getType().getReturnType()
 
   def print(self):
-    Op = "(define (" + self.getName() + " (" + str(self.Opcode)
-    for Operand in self.OperandList:
+    Op = "(define (" + self.getName() + " (" + str(self.getOpcode())
+    for Operand in self.getOperands():
         Op += (" " + Operand.getName())
     Op += ")"
     print(Op)
