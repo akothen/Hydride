@@ -12,25 +12,26 @@ class RoseArgument(RoseValue):
       assert isinstance(Function, RoseAbstractions.RoseFunction)
       assert ArgIndex < Function.getNumArgs() 
       assert Function.getArg(ArgIndex).getType() == Type
-    self.Function = Function
-    self.ArgIndex = ArgIndex
-    super().__init__(Name, Type)
+    SubClassData = {}
+    SubClassData["function"] = Function
+    SubClassData["index"] = ArgIndex
+    super().__init__(Name, Type, SubClassData)
   
   @staticmethod
   def create(Name : str, Type : RoseType, Function = RoseUndefValue(), ArgIndex : int = 0):
     return RoseArgument(Name, Type, Function, ArgIndex)
 
   def getArgIndex(self):
-    return self.ArgIndex
+    return self.getSubClassData()["index"]
   
   def getFunction(self):
-    return self.Function
+    return self.getSubClassData()["function"]
   
   def setFunction(self, Function):
     # Sanity checks
     assert isinstance(Function, RoseAbstractions.RoseFunction)
-    assert Function.getArg(self.ArgIndex).getType() == self.getType()
-    self.Function = Function
+    assert Function.getArg(self.getArgIndex()).getType() == self.getType()
+    self.setSubClassData(Function, "function")
   
   def print(self):
-    print(self.Val)
+    print(self.getName())
