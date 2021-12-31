@@ -55,9 +55,18 @@ class RoseOpcode(Enum):
     bvsignextend = auto()
     bvzeroextend = auto()
     call = auto()
+    select = auto()
 
     def __str__(self):
         return self.name
+    
+    def __eq__(self, Other):
+        assert isinstance(Other, RoseOpcode)
+        return self.value == Other.value
+
+    def __ne__(self, Other):
+        assert isinstance(Other, RoseOpcode)
+        return self.value != Other.value
     
     def getBVOpInputs(self, Inputs : list):
         BVInputs = []
@@ -231,7 +240,7 @@ class RoseOpcode(Enum):
         or self.value == self.rotateleft.value \
         or self.value == self.rotateright.value:
             return (NumInputs == 2)
-        if self.value == self.bvextract:
+        if self.value == self.bvextract.value:
             print("NumInputs:")
             print(NumInputs)
             return (NumInputs > 2)
