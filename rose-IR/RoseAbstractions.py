@@ -1,7 +1,7 @@
 
-from RoseType import RoseType, RoseFunctionType, RoseUndefinedType
+from RoseType import RoseType, RoseFunctionType
 from RoseValue import RoseValue
-from RoseConstants import RoseUndef
+from RoseConstants import RoseUndefValue, RoseUndefRegion
 from RoseOperation import RoseOperation
 from RoseArgument import RoseArgument
 from RoseRegion import RoseRegion
@@ -23,7 +23,7 @@ class RoseFunction(RoseValue, RoseRegion):
     FunctionType = RoseType.getFunctionTy(ArgTyList, RetType)
     RoseValue.__init__(self, Name, FunctionType)
     SubClassData = {}
-    SubClassData["return"] = RoseUndef()
+    SubClassData["return"] = RoseUndefValue()
     SubClassData["args"] = ArgsList
     RoseRegion.__init__(self, RegionList, ParentRegion, SubClassData)
     
@@ -38,11 +38,11 @@ class RoseFunction(RoseValue, RoseRegion):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], list) \
       and isinstance(args[2], RoseType) and isinstance(args[3], list):
-        return RoseFunction(args[0], args[1], args[2], args[3], None)
+        return RoseFunction(args[0], args[1], args[2], args[3], RoseUndefRegion())
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], list) \
       and isinstance(args[2], RoseType):
-        return RoseFunction(args[0], args[1], args[2], [], None)
+        return RoseFunction(args[0], args[1], args[2], [], RoseUndefRegion())
     if len(args) == 2:
       if isinstance(args[0], str) and isinstance(args[1], RoseFunctionType):
         FunctionType = args[1]
@@ -50,8 +50,8 @@ class RoseFunction(RoseValue, RoseRegion):
         ArgsList = []
         for ArgIndex, ArgTy in enumerate(ArgTypeList):
           # All arguments start out unmaed
-          ArgsList.append(RoseArgument.create("", ArgTy, RoseUndef(), ArgIndex))
-        Function = RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], None)
+          ArgsList.append(RoseArgument.create("", ArgTy, RoseUndefValue(), ArgIndex))
+        Function = RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], RoseUndefRegion())
         for ArgIndex, Arg in enumerate(ArgsList):
           Arg.setFunction(Function)
           Function.addArg(Arg, ArgIndex)
@@ -94,7 +94,7 @@ class RoseFunction(RoseValue, RoseRegion):
     # TODO: Replace uses as well
 
   def isTopLevelFunction(self):
-    return (self.getParent() == None)
+    return (self.getParent() == RoseUndefRegion())
   
   def setRetValName(self, Name):
     ReturnValue = RoseValue(Name, self.getType().getReturnType())
@@ -165,7 +165,7 @@ class RoseForLoop(RoseRegion):
   
   @staticmethod
   def create(IteratorName : str, End : RoseValue, Start : RoseValue, Step : RoseValue, 
-                RegionList : list = [], ParentRegion : RoseRegion = None):
+                RegionList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseForLoop(IteratorName, Start, End, Step, RegionList, ParentRegion)
   
   def areChildrenValid(self):
