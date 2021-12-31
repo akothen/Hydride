@@ -8,6 +8,7 @@ class RoseValue:
         self.Name = Name
         self.Type = Type
         self.SubClassData = SubClassData
+        print(self.SubClassData)
     
     @staticmethod
     def create(Name : str, Type : RoseType, SubClassData = None):
@@ -28,6 +29,15 @@ class RoseValue:
 
     def getName(self):
         return self.Name
+    
+    def getSubClassData(self):
+        return self.SubClassData
+    
+    def setSubClassData(self, Data, Key = None):
+        if Key == None:
+            self.SubClassData = Data
+        else:
+            self.SubClassData[Key] = Data
     
     def setName(self, Name : str):
         self.Name = Name
