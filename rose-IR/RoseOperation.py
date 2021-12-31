@@ -2,50 +2,63 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseConstants import RoseUndefRegion
 import RoseAbstractions 
-#from RoseAbstractions import RoseBlock
 
 # An operation in Rosette
 # An operation is either an instruction.
 class RoseOperation(RoseValue):
-    def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock):
+    def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, \
+                ParentBlock = RoseUndefRegion(), SubClassData = None):
         if not isinstance(ParentBlock, RoseUndefRegion):
             assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
-        self.Opcode = Opcode
-        self.OperandList = OperandList
         print(OperandList)
+        OpSubClassData = {}
+        OpSubClassData["opcode"] = Opcode
+        OpSubClassData["operands"] = OperandList
+        OpSubClassData["parent"] = ParentBlock
+        OpSubClassData["subclassdata"] = SubClassData)
+        # The result of an operation is a RoseValue
+        Type = Opcode.getOutputType(OperandList)
+        RoseValue.__init__(self, Name, Type, OpSubClassData)
         # Sanity check to see that the operand list is complete
         self.assertValidationOfInputs()
-        # The result of an operation is a RoseValue
-        super().__init__(Name, self.getType())
-        self.ParentBlock = ParentBlock
     
     @staticmethod
     def create(Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock = RoseUndefRegion()):
         return RoseOperation(Opcode, Name, OperandList, ParentBlock)
     
     def assertValidationOfInputs(self):
-        assert(self.Opcode.inputsAreValid(self.OperandList))
+        assert self.getOpcode().inputsAreValid(self.getOperands())
+
+    def getOpcode(self):
+        return self.getSubClassData()["opcode"]
     
     def getOperands(self):
-        return self.OperandList
+        return self.getSubClassData()["operands"]
+    
+    def getParent(self):
+        return self.getSubClassData()["parent"]
+    
+    def getOpSubClassData(self):
+        return self.getSubClassData()["subclassdata"]
     
     def getOperand(self, Index):
-        assert(Index < self.len(self.OperandList))
-        return self.OperandList[Index]
-    
-    def getType(self):
-        return self.Opcode.getOutputType(self.OperandList)
+        OperandList = self.getOperands()
+        assert Index < self.len(OperandList)
+        return OperandList[Index]
     
     def setOperand(self, Index, Operand):
-        assert(Index < self.len(self.OperandList))
-        self.OperandList[Index] = Operand
+        OperandList = self.getOperands()
+        assert Index < self.len(OperandList)
+        OperandList[Index] = Operand
+        self.setSubClassData(OperandList, "operands")
     
-    def setParentBlock(self, Block):
-        self.ParentBlock = Block
+    def setParent(self, Block):
+        assert isinstance(Block, RoseAbstractions.RoseBlock)
+        self.setSubClassData(Block, "operands")
 
     def print(self):
-        Op = "(define (" + self.getName() + " (" + str(self.Opcode)
-        for Operand in self.OperandList:
+        Op = "(define (" + self.getName() + " (" + str(self.getOpcode())
+        for Operand in self.getOperands():
             Op += (" " + Operand.getName())
         Op += ")"
         print(Op)
