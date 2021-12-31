@@ -1,7 +1,7 @@
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
-from RoseConstant import RoseConstant
+from RoseConstants import RoseConstant, RoseUndefRegion
 from RoseOperation import RoseOperation
 
 
@@ -12,11 +12,11 @@ class RoseSignExtendOp(RoseOperation):
     super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseSignExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
     TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
     return RoseSignExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
 
@@ -34,11 +34,11 @@ class RoseZeroExtendOp(RoseOperation):
     super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
     TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
     return RoseZeroExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
 
@@ -56,7 +56,7 @@ class RoseSliceOp(RoseOperation):
     super().__init__(RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseSliceOp(Name, Bitvector, Low, High, ParentBlock)
 
   def getInputBitVector(self):
@@ -77,7 +77,7 @@ class RoseNotOp(RoseOperation):
     super().__init__(RoseOpcode.bvnot, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseNotOp(Name, Bitvector, ParentBlock)
 
   def getInputBitVector(self):
@@ -91,7 +91,7 @@ class RoseNegOp(RoseOperation):
     super().__init__(RoseOpcode.bvneg, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, ParentBlock = None):
+  def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseNegOp(Name, Bitvector, ParentBlock)
 
   def getInputBitVector(self):
@@ -107,7 +107,7 @@ class RoseCallOp(RoseOperation):
     super().__init__(RoseOpcode.call, Name, OperandList, ParentBlock)
     
   @staticmethod
-  def create(Name : str, Callee, OperandList : list, ParentBlock = None):
+  def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
     return RoseCallOp(Name, Callee, OperandList, ParentBlock)
   
   # Override the function in the base class
