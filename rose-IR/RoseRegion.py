@@ -1,73 +1,70 @@
 
-from RoseOperation import RoseOperation
 import RoseAbstractions
 
 
 # Abstract class representing a region.
-# Regions can contain loops, function, blocks.
+# Regions can contain loops, function, blocks, etc.
 # Regions can be contained in functions and loops.
 class RoseRegion:
-  def __init__(self, Children : list, Parent):
-    # Parent must be a function, loop or a block
-    if Parent is not None:
-      assert isinstance(Parent, RoseAbstractions.RoseForLoop) \
-          or isinstance(Parent, RoseAbstractions.RoseFunction)
+  def __init__(self, Children, Parent, SubClassData = None):
     self.Parent = Parent
-
-    # Children do not have to be instances of regions
-    for Child in Children:
-      assert isinstance(Child, RoseAbstractions.RoseForLoop) \
-          or isinstance(Child, RoseAbstractions.RoseFunction) \
-          or isinstance(Child, RoseAbstractions.RoseBlock) \
-          or isinstance(Child, RoseOperation)
+    if self.Parent is not None:
+      assert self.isParentValid(Parent)
     self.Children = Children
+    assert self.areChildrenValid()
+    self.SubClassData = SubClassData
+
+  def __eq__(self, Other):
+    assert isinstance(Other, RoseRegion)
+    return self.SubClassData == Other.SubClassData and self.Children == Other.Children \
+       and self.Parent == Other.Parent
   
-  @staticmethod
-  def create(Children : list, Parent = None):
-    return RoseRegion(Children, Parent)
-    
+  def __ne__(self, Other):
+    assert isinstance(Other, RoseRegion)
+    return self.SubClassData != Other.SubClassData or self.Children != Other.Children \
+        or self.Parent != Other.Parent
+
+  def areChildrenValid(self):
+    pass
+
+  def isParentValid(self, Parent):
+    if isinstance(Parent, RoseAbstractions.RoseForLoop) \
+    or isinstance(Parent, RoseAbstractions.RoseFunction) \
+    or isinstance(Parent, RoseAbstractions.RoseCond):
+      return True
+    return False
+  
   def getChildren(self):
     return self.Children
   
   def getParent(self):
     return self.Parent
   
+  def getSubClassData(self):
+    return self.SubClassData
+  
   def setParent(self, Parent):
+    assert isinstance(Parent, RoseRegion)
+    assert self.isParentValid(Parent)
     self.Parent = Parent
-  
-  def addBlock(self, Block):
-    assert isinstance(Block, RoseAbstractions.RoseBlock)
-    # Blocks can only be added to functions and loops only
-    assert isinstance(self, RoseAbstractions.RoseForLoop) \
-        or isinstance(self, RoseAbstractions.RoseFunction)
-    Block.setParent(self)
-    self.Children.append(Block)
-  
-  def addFunction(self, Function):
-    assert isinstance(Function, RoseAbstractions.RoseFunction)
-    # Functions can only be added to other functions ans perhaps loops
-    assert isinstance(self, RoseAbstractions.RoseForLoop) \
-        or isinstance(self, RoseAbstractions.RoseFunction)
-    Function.setParent(self)
-    self.Children.append(Function)
-  
-  def addForLoop(self, Loop):
-    assert isinstance(Loop, RoseAbstractions.RoseForLoop)
-    # Loops can only be added to functions and other loops
-    assert isinstance(self, RoseAbstractions.RoseForLoop) \
-        or isinstance(self, RoseAbstractions.RoseFunction)
-    Loop.setParent(self)
-    self.Children.append(Loop)
-     
-  def addOperation(self, Op):
-    # Sanity check
-    assert isinstance(Op, RoseOperation)
-    # Operations are contained only in blocks
-    assert isinstance(self, RoseAbstractions.RoseBlock)
-    Op.setParentBlock(self)
-    self.Children.append(Op)
+
+  def addChildren(self):
+    pass
+
+  def addRegion(self, Region, Key = None):
+    assert self.isChildValid(Region)
+    Region.setParent(self)
+    if Key == None:
+      self.Children.append(Region)
+    else:
+      self.Children[Key].append(Region)
+    
+  def setSubClassData(self, Data, Key = None):
+    if Key == None:
+       self.SubClassData = Data
+    else:
+      self.SubClassData[Key] = Data
 
   def print(self):
     for Child in self.Children:
         Child.print()
-
