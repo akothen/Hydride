@@ -1,14 +1,14 @@
 
 from RoseType import RoseType
 from RoseValue import RoseValue
-from RoseConstant import RoseUndef
+from RoseConstants import RoseUndefValue
 import RoseAbstractions
 
 
 class RoseArgument(RoseValue):
   def __init__(self, Name : str, Type : RoseType, Function, ArgIndex : int):
     # Some sanity checks
-    if not isinstance(Function, RoseUndef):
+    if isinstance(Function, RoseUndefValue) == False:
       assert isinstance(Function, RoseAbstractions.RoseFunction)
       assert ArgIndex < Function.getNumArgs() 
       assert Function.getArg(ArgIndex).getType() == Type
@@ -17,7 +17,7 @@ class RoseArgument(RoseValue):
     super().__init__(Name, Type)
   
   @staticmethod
-  def create(Name : str, Type : RoseType, Function = RoseUndef(), ArgIndex : int = 0):
+  def create(Name : str, Type : RoseType, Function = RoseUndefValue(), ArgIndex : int = 0):
     return RoseArgument(Name, Type, Function, ArgIndex)
 
   def getArgIndex(self):
