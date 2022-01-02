@@ -7,31 +7,39 @@ from RoseRegion import RoseRegion
 # Constant value (integer and float) class
 class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
-      self.Val = Value
-      super().__init__(str(Value), Type)
+    self.Val = Value
+    super().__init__(str(Value), Type)
   
   @staticmethod
   def create(Value, Bitwidth : int):
-      if isinstance(Value, int):
-          return RoseConstant(Value, RoseType.getIntegerTy(Bitwidth))
-      if isinstance(Value, float):
-          return RoseConstant(Value, RoseType.getFloatTy())
-      exit()
+    if isinstance(Value, int):
+      return RoseConstant(Value, RoseType.getIntegerTy(Bitwidth))
+    if isinstance(Value, float):
+      return RoseConstant(Value, RoseType.getFloatTy())
+    assert False
+
+  def __eq__(self, Other):
+    assert isinstance(Other, RoseConstant)
+    return self.Val == Other.Val and super().__eq__(Other)
+
+  def __ne__(self, Other):
+    assert isinstance(Other, RoseConstant)
+    return self.Val != Other.Val or super().__ne__(Other)
 
   def getValue(self):
-      return self.Val
+    return self.Val
   
   def print(self):
-      print(self.Val)
+    print(self.Val)
 
 
 
 class RoseUndefValue(RoseValue):
   def __init__(self):
-      super().__init__("undef", RoseType.getUndefTy())
+    super().__init__("undef", RoseType.getUndefTy())
   
   def print(self):
-      print(self.getName())
+    print(self.getName())
 
 
 class RoseUndefRegion(RoseRegion):
