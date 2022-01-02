@@ -98,28 +98,22 @@ class RoseNegOp(RoseOperation):
     return self.getOperand(0)
 
 
-# This represents internal and external function calls
-# This class is for operations whose opcodes are not known ahead of time.
 class RoseCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
     assert Callee.getType().isFunctionTy()
-    super().__init__(RoseOpcode.call, Name, OperandList, ParentBlock, Callee)
+    Operands = [Callee]
+    Operands.extend(OperandList)
+    super().__init__(RoseOpcode.call, Name, Operands, ParentBlock)
     
   @staticmethod
   def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
     return RoseCallOp(Name, Callee, OperandList, ParentBlock)
   
-  # Override the function in the base class
-  def assertValidationOfInputs(self):
-    print("assertValidationOfInputs")
-    assert RoseOpcode.call.callInputsAreValid(self.getCallee(), self.getOperands())
-  
   def getCallee(self):
-    return self.getOpSubClassData()
-
-  # Override the function in the base class
-  def getType(self):
-    return self.getCallee().getType().getReturnType()
+    return self.getOperands()[0]
+  
+  def getCallOperands(self):
+    return self.getOperands()[1:]
 
   def print(self):
     Op = "(define (" + self.getName() + " (" + str(self.getOpcode())
@@ -127,5 +121,31 @@ class RoseCallOp(RoseOperation):
         Op += (" " + Operand.getName())
     Op += ")"
     print(Op)
+
+
+class RoseSelectOp(RoseOperation):
+  def __init__(self, Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, ParentBlock):
+    OperandList = [Cond, Then, Else]
+    super().__init__(RoseOpcode.select, Name, OperandList, ParentBlock)
     
- 
+  @staticmethod
+  def create(Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, 
+            ParentBlock : RoseUndefRegion()):
+    return RoseSelectOp(Name, Cond, Then, Else, ParentBlock)
+  
+  def getCondition(self):
+    return self.getOperands()[0]
+  
+  def getThenValue(self):
+    return self.getOperands()[1]
+  
+  def getElseValue(self):
+    return self.getOperands()[2]
+
+  def print(self):
+    Op = "(define (" + self.getName() + " (" + str(self.getOpcode())
+    for Operand in self.getOperands():
+        Op += (" " + Operand.getName())
+    Op += ")"
+    print(Op)
+
