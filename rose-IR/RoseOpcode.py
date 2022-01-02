@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from typing import Callable
 from RoseType import RoseType
 from  RoseValue import RoseValue
 import RoseAbstractions
@@ -133,6 +134,13 @@ class RoseOpcode(Enum):
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(1)
+        if self.value == self.call.value:
+            Callee = Inputs[0]
+            assert isinstance(Callee, RoseAbstractions.RoseFunction)
+            return Callee.getType().getReturnType()
+        if self.value == self.select.value:
+            assert Inputs[1].getType() == Inputs[2].getType()
+            return Inputs[1].getType()
         return None
 
     def inputsAreValid(self, Inputs : list): 
@@ -195,6 +203,13 @@ class RoseOpcode(Enum):
                 return True
             else:
                 return False
+        if self.value == self.call.value:
+            Callee = Inputs[0]
+            if len(Inputs) > 1:
+                return self.callInputsAreValid(Callee, Inputs[1:])
+            return self.callInputsAreValid(Callee, [])
+        if self.value == self.select.value:
+            return self.selectInputsAreValid(Inputs)
         return None
     
     def isValidNumInputs(self, NumInputs : int):
@@ -244,13 +259,16 @@ class RoseOpcode(Enum):
             print("NumInputs:")
             print(NumInputs)
             return (NumInputs > 2)
+        if self.value == self.select.value:
+            return (NumInputs == 3)
+        if self.value == self.call.value:
+            return (NumInputs >= 1)
         return None
 
     def callInputsAreValid(self, Callee, Inputs : list):
+        assert self.value == self.call.value
         print("callInputsAreValid")
-        assert isinstance(Callee, RoseAbstractions.RoseFunction)
-        if self.value != self.call.value:
-            print("OPCODE IS INVALID")
+        if not isinstance(Callee, RoseAbstractions.RoseFunction):
             return False
         print("OPCODE IS VALID")
         if len(Inputs) != Callee.getNumArgs():
@@ -266,6 +284,23 @@ class RoseOpcode(Enum):
             if Arg.getType() != Inputs[Index].getType():
                 print(Index)
                 return False
+        return True
+    
+    def selectInputsAreValid(self, Inputs : list):
+        assert self.value == self.selec.value
+        if len(Inputs) != 3:
+            return False
+        Cond = Inputs[0]
+        Then = Inputs[1]
+        Else = Inputs[2]
+        if Then.getType() != Else.getType():
+            return False
+        if Then.getType() == RoseType.isVoidTy() or Then.getType() == RoseType.isUndefTy():
+            return False
+        if not Cond.getType().isBitVectorTy() and not Cond.getType().isIntegerTy():
+            return False
+        if Cond.getType().getBitwidth() != 1:
+            return False
         return True
 
 
