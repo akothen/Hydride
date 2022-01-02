@@ -29,6 +29,12 @@ class RoseValue:
     def setName(self, Name : str):
         self.Name = Name
     
+    # This should only be used if the current type is undefined
+    def setType(self, Type : RoseType):
+        assert self.Type.isUndefTy()
+        assert not Type.isUndefTy()
+        self.Type = Type
+    
     def print(self, Debug = False):
         print(self.Name)
         if Debug == True:
