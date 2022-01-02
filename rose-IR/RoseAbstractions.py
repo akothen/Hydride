@@ -22,10 +22,9 @@ class RoseFunction(RoseValue, RoseRegion):
     ArgTyList = [Arg.getType() for Arg in ArgsList]
     FunctionType = RoseType.getFunctionTy(ArgTyList, RetType)
     RoseValue.__init__(self, Name, FunctionType)
-    SubClassData = {}
-    SubClassData["return"] = RoseUndefValue()
-    SubClassData["args"] = ArgsList
-    RoseRegion.__init__(self, RegionList, ParentRegion, SubClassData)
+    self.ArgList = ArgsList
+    self.RetVal = RoseUndefValue()
+    RoseRegion.__init__(self, RegionList, ParentRegion)
     
   # Multiple constructors packaged into one
   @staticmethod
@@ -72,45 +71,68 @@ class RoseFunction(RoseValue, RoseRegion):
     or isinstance(Child, RoseBlock):
       return True
     return False
-    
+  
+  def __eq__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return False
+    assert isinstance(Other, RoseFunction)
+    return self.RetVal == Other.RetVal and self.ArgsList == Other.ArgsList \
+        and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
+
+  def __ne__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return True
+    assert isinstance(Other, RoseFunction)
+    return self.RetVal != Other.RetVal or self.ArgsList != Other.ArgsList \
+        or RoseValue.__ne__(self, Other) or RoseRegion.__ne__(self, Other)
+  
   def getNumArgs(self):
-    return len(self.getSubClassData()["args"])
+    return len(self.ArgList)
   
   def getArg(self, Index):
-    return self.getSubClassData()["args"][Index]
+    return self.ArgList[Index]
   
   def getReturnValue(self):
-    return self.getSubClassData()["return"]
+    return self.RetVal
   
   def addArg(self, NewArg : RoseValue, ArgIndex : int):
     # Some sanity checks
-    ArgsList = self.getSubClassData()["args"]
-    assert ArgIndex < len(ArgsList)
-    assert ArgsList[ArgIndex].getType() == NewArg.getType()
+    assert ArgIndex < len(self.ArgsList)
+    assert self.ArgsList[ArgIndex].getType() == NewArg.getType()
     Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), self, ArgIndex)
-    ArgsList = self.getSubClassData()["args"]
-    ArgsList[ArgIndex] = Arg
-    self.setSubClassData(ArgsList, "args")
+    self.ArgsList[ArgIndex] = Arg
     # TODO: Replace uses as well
 
   def isTopLevelFunction(self):
     return (self.getParent() == RoseUndefRegion())
   
   def setRetValName(self, Name):
-    ReturnValue = RoseValue(Name, self.getType().getReturnType())
-    self.setSubClassData(ReturnValue, "return")
+    self.RetVal = RoseValue(Name, self.getType().getReturnType())
+  
+  # Use this in *very* rare cases
+  def setRetVal(self, Value):
+    # Just some safety checks
+    assert self.getType().isUndefTy()
+    assert not Value.getType().isUndefTy()
+    # Set the return type first
+    RetType = Value.getType()
+    NewFunctionType = RoseType.getFunctionTy(self.getType().getArgList(), RetType)
+    self.setType(NewFunctionType)
+    # Do some sanity checks again
+    assert self.getType() == NewFunctionType
+    assert self.getType().getReturnType() == Value.getType()
+    # Now set the name for the return value
+    self.setRetValName(Value.getName())
   
   def setArgName(self, Name, ArgIndex):
     # Some sanity checks
-    ArgsList = self.getSubClassData()["args"]
-    assert ArgIndex < len(ArgsList)
-    ArgsList[ArgIndex].setName(Name)
-    self.setSubClassData(ArgsList, "args")
+    assert ArgIndex < len(self.ArgsList)
+    self.ArgsList[ArgIndex].setName(Name)
 
   def print(self):
     # Print function signature first
     Func_Sig = "(define (" + self.getName()
-    for Arg in self.getSubClassData()["args"]:
+    for Arg in self.ArgList:
       Func_Sig += (" " + Arg.getName())
     Func_Sig += ")"
     print(Func_Sig)
@@ -156,12 +178,11 @@ class RoseBlock(RoseRegion):
 class RoseForLoop(RoseRegion):
   def __init__(self, IteratorName : str, Start : RoseValue, End : RoseValue, Step : RoseValue, 
               RegionList : list, ParentRegion : RoseRegion):
-    SubClassData = {}
-    SubClassData["iterator"] = RoseValue.create(IteratorName, RoseType.getIntegerTy())
-    SubClassData["start"] = Start
-    SubClassData["end"] = End
-    SubClassData["step"] = Step
-    super().__init__(RegionList, ParentRegion, SubClassData)
+    self.Iterator = RoseValue.create(IteratorName, RoseType.getIntegerTy())
+    self.Start = Start
+    self.End = End
+    self.Step = Step
+    super().__init__(RegionList, ParentRegion)
   
   @staticmethod
   def create(IteratorName : str, End : RoseValue, Start : RoseValue, Step : RoseValue, 
@@ -183,17 +204,31 @@ class RoseForLoop(RoseRegion):
       return True
     return False
 
+  def __eq__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return False
+    assert isinstance(Other, RoseForLoop)
+    return self.Iterator == Other.Iterator and self.Start == Other.Start \
+        and self.End == Other.End and self.Step == Other.Step and super().__eq__(Other)
+
+  def __ne__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return True
+    assert isinstance(Other, RoseForLoop)
+    return self.Iterator != Other.Iterator or self.Start != Other.Start \
+        or self.End != Other.End or self.Step != Other.Step or super().__ne__(Other)
+
   def getIterator(self):
-    return self.getSubClassData()["iterator"]
+    return self.Iterator
   
   def getStartIndex(self):
-    return self.getSubClassData()["start"]
+    return self.Start
 
   def getEndIndex(self):
-    return self.getSubClassData()["end"]
+    return self.End
 
   def getStep(self):
-    return self.getSubClassData()["step"]
+    return self.Step
   
   def setIteratorName(self, Name):
     self.Iterator = RoseValue.create(Name, self.Iterator.getType())
@@ -217,7 +252,8 @@ class RoseCond(RoseRegion):
     Children = {}
     Children["then"] = ThenRegionList
     Children["else"] = ElseRegionList
-    super().__init__(Children, ParentRegion, Condition)
+    self.Condition = Condition
+    super().__init__(Children, ParentRegion)
   
   @staticmethod
   def create(Condition : RoseValue, ThenRegionList : list, ElseRegionList : list, 
@@ -242,8 +278,22 @@ class RoseCond(RoseRegion):
       return True
     return False
   
+  def __eq__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return False
+    assert isinstance(Other, RoseCond)
+    return self.Condition == Other.Condition and self.Start == Other.Start \
+        and self.End == Other.End and self.Step == Other.Step and super().__eq__(Other)
+
+  def __ne__(self, Other):
+    if isinstance(Other, RoseUndefRegion):
+        return True
+    assert isinstance(Other, RoseCond)
+    return self.Condition != Other.Condition or self.Start != Other.Start \
+        or self.End != Other.End or self.Step != Other.Step or super().__ne__(Other)
+
   def getCondition(self):
-    return self.getSubClassData()
+    return self.Condition
   
   def getThenRegions(self):
     return self.getChildren()["then"]
