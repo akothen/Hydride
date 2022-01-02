@@ -7,24 +7,21 @@ import RoseConstants
 # Regions can contain loops, function, blocks, etc.
 # Regions can be contained in functions and loops.
 class RoseRegion:
-  def __init__(self, Children, Parent, SubClassData = None):
+  def __init__(self, Children, Parent):
     self.Parent = Parent
     if self.Parent is not None:
       assert self.isParentValid(Parent)
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
-    self.SubClassData = SubClassData
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
-    return self.SubClassData == Other.SubClassData and self.Children == Other.Children \
-       and self.Parent == Other.Parent
+    return self.Children == Other.Children and self.Parent == Other.Parent
   
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
-    return self.SubClassData != Other.SubClassData or self.Children != Other.Children \
-        or self.Parent != Other.Parent
+    return self.Children != Other.Children or self.Parent != Other.Parent
 
   def areChildrenValid(self):
     if isinstance(self, RoseConstants.RoseUndefRegion):
@@ -48,9 +45,6 @@ class RoseRegion:
   def getParent(self):
     return self.Parent
   
-  def getSubClassData(self):
-    return self.SubClassData
-  
   def setParent(self, Parent):
     assert isinstance(Parent, RoseRegion)
     assert self.isParentValid(Parent)
@@ -66,13 +60,9 @@ class RoseRegion:
       self.Children.append(Region)
     else:
       self.Children[Key].append(Region)
-    
-  def setSubClassData(self, Data, Key = None):
-    if Key == None:
-       self.SubClassData = Data
-    else:
-      self.SubClassData[Key] = Data
 
   def print(self):
     for Child in self.Children:
         Child.print()
+  
+  
