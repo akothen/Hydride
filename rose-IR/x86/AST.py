@@ -1,23 +1,21 @@
 
 from collections import namedtuple
 
-BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo'])
+BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo', 'expr_id'])
 Var = namedtuple('Var', ['name'])
 Number = namedtuple('Number', ['val'])
 Update = namedtuple('Update', ['lhs', 'rhs'])
-OpUpdate = namedtuple('OpUpdate', ['op_name'])
 # inc is a flag specifying whether we increment of decrement the induction variable
-For = namedtuple('For', ['iterator', 'begin', 'end', 'body', 'inc'])
-While = namedtuple('While', ['cond', 'body'])
-If = namedtuple('If', ['cond', 'then', 'otherwise'])
-Call = namedtuple('Call', ['func', 'args'])
+For = namedtuple('For', ['iterator', 'begin', 'end', 'body', 'inc', 'expr_id'])
+While = namedtuple('While', ['cond', 'body', 'expr_id'])
+If = namedtuple('If', ['cond', 'then', 'otherwise', 'expr_id'])
+Call = namedtuple('Call', ['func', 'args', 'expr_id'])
 BinaryExpr = namedtuple('BinaryExpr', ['op', 'a', 'b', 'expr_id'])
-UnaryExpr = namedtuple('UnaryExpr', ['op', 'a'])
+UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'expr_id'])
 Return = namedtuple('Return', ['val'])
-Select = namedtuple('Select', ['cond', 'then', 'otherwise'])
-RegSel = namedtuple('RegSel', ['base', 'idx'])
-Match = namedtuple('Match', ['val', 'cases'])
-Case = namedtuple('Case', ['val', 'stmts'])
+Select = namedtuple('Select', ['cond', 'then', 'otherwise', 'expr_id'])
+Match = namedtuple('Match', ['val', 'cases', 'expr_id'])
+Case = namedtuple('Case', ['val', 'stmts', 'expr_id'])
 # property lookup
 Lookup = namedtuple('Lookup', ['obj', 'key'])
 Index = namedtuple('Index', ['obj', 'idx'])
