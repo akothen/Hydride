@@ -7,31 +7,60 @@ from RoseConstants import RoseUndefRegion
 from RoseOperation import RoseOperation
 
 
-# Keeps track of all variables, functions and contexts
+# This is a generic context that could be used across
+# different architectures.
 class RoseContext:
+  # Keep this simple
+  class RoseValueNameGenerator:
+    def __init__(self):
+      self.Num = 0
+    
+    def generateName(self):
+      Name =  "%" + str(self.Num)
+      str.Num += 1
+      return Name
+  
   def __init__(self):
     # Keep track of all variables (arguments, LHS)
-    self.Variables = {}
-    # Keep track of RHS
+    self.LhsVariables = {}
     self.RhsOperations = {}
+    self.Variables = {}
     # Cache the functions we encounter
     self.FunctionDefs = {}
     self.Functions = {}
     # Track the contexts we encounter
-    self.ParentConext = None
+    self.ParentContext = None
     self.Contexts = {}
     # Heirarchical abstractions such as functions, loops and cond regions.
     # Blocks are not dealt with by this compiler.
     self.RootAbstractions = []
-    # track range of defined bits for implicitly defined variables
-    # mapping <implicit var> -> <highest defined bit>
-    self.DefinedRange = {}
+    # Every context has its own name generator
+    self.NameGenerator = self.RoseValueNameGenerator()
+  
+  def getNewName(self):
+    Name = self.NameGenerator.generateName()
+    assert type(Name) == str
+    return Name
+  
+  def createContext(self, ContextName : str, ChildContext):
+    assert isinstance(ChildContext, RoseContext)
+    ChildContext.setParentContext(self)
+    self.Contexts[ContextName] = ChildContext
+  
+  def destroyContext(self, ContextName : str):
+    self.Contexts[ContextName] = None
+
+  def getContext(self, AbstractionName : str):
+    return self.Contexts.get(AbstractionName, None)
   
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
     
   def popRootAbstraction(self):
     return self.RootAbstractions.pop(len(self.RootAbstractions) - 1)
+  
+  def getRootAbstraction(self):
+    return self.RootAbstractions[len(self.RootAbstractions) - 1]
   
   def addFunctionDef(self, FunctionDef):
     assert(type(FunctionDef) == FuncDef)
@@ -47,43 +76,36 @@ class RoseContext:
   def getFunction(self, Name : str):
     return self.Functions.get(Name, RoseUndefRegion())
   
-  def addContext(self, FunctionName : str, Context):
-    assert isinstance(Context, RoseContext)
-    self.Contexts[FunctionName] = Context
-    Context.setParentContext(self)
-  
-  def getContext(self, AbstractionName : str):
-    return self.Contexts.get(AbstractionName, None)
-  
   def addRhsOperation(self, Operation : RoseOperation):
     self.RhsOperations.append(Operation)
   
   def setParentContext(self, Context):
     assert isinstance(Context, RoseContext)
-    self.ParentConext = Context
+    self.ParentContext = Context
 
-  def getParentConext(self):
-    return self.ParentConext
+  def getParentContext(self):
+    return self.ParentContext
+  
+  def isRootContext(self):
+    return self.ParentContext == None
+  
+  def copyVariables(self, Parent):
+    assert isinstance(Parent, RoseContext)
+    self.Variables = deepcopy(Parent.getVariables())
 
-  def addVariable(self, Value : RoseValue, Implicit = False):
+  def getVariables(self):
+    return self.Variables
+
+  def addVariable(self, Value : RoseValue):
     Name = Value.getName()
     assert Name not in self.Variables
     self.Variables[Name] = Value
-    if Implicit:
-        self.DefinedRange[Name] = 0
   
   def isVariableDefined(self, Name : str):
     return Name in self.Variables
 
   def getVariableValue(self, Name : str):
     return self.Variables[Name]
-  
-  def getVariableType(self, Name : str):
-    Type = self.Variables[Name].getType()
-    if self.isVariableImplicitlyDefined(Name):
-        High = self.getHighestDefinedBit(Name)
-        ty = ty._replace(bitwidth=hi+1, useful_bits=hi+1)
-    return ty
 
   def setVariableValue(self, Name : str, Value : RoseValue):
     self.Variables[Name] = Value
@@ -91,15 +113,3 @@ class RoseContext:
   def setVariableType(self, Name : str, Type : RoseType):
     self.Variables[Name] = RoseValue.create(Name, Type)
   
-  def isVariableImplicitlyDefined(self, Name : str):
-    return Name in self.DefinedRange
-
-  def updateDefinedRange(self, Name : str, High : int):
-    if Name in self.DefinedRange:
-        self.DefinedRange[Name] = max(self.DefinedRange[Name], High)
-
-  def getHighestDefinedBit(self, Name : str):
-    assert Name in self.DefinedRange
-    return self.DefinedRange[Name]
-
-
