@@ -1,56 +1,87 @@
-from sema_ast import Parameter, Spec, BitSlice, Var, Number, Update, \
-                    OpUpdate, For, While, If, Call, BinaryExpr, UnaryExpr, \
-                    PseudoExpr, PseudoStmt, Return, Select, RegSel, Match, \
-                    Case, Lookup, Index, FuncDef, Break
+
+from sema_ast import *
 from RoseValue import RoseValue
 from RoseType import RoseType
 from RoseAbstractions import RoseFunction, RoseForLoop, RoseBlock
-from RoseConstant import RoseConstant
-from RoseOperations import RoseSliceOp, RoseSignExtendOp, RoseZeroExtendOp, \
-                          RoseNegOp, RoseNotOp, RoseCallOp
+from RoseConstants import RoseConstant, RoseUndefValue, RoseUndefRegion
+from RoseArgument import RoseArgument
+from RoseOperation import RoseOperation
+from RoseOperations import RoseExtractSliceOp, RoseSignExtendOp, RoseZeroExtendOp, \
+                          RoseNegOp, RoseNotOp, RoseCallOp, RoseSelectOp, RoseInsertSliceOp
 from x86Types import x86Types
+
+import math
+from copy import deepcopy
 
 
 MaxVectorLength = 512
 
 
-# Keeps track of all variables, functions and contexts
+# This is a generic context that could be used across
+# different architectures.
 class RoseContext:
-  # This is a name generator which uses name prefixes as keys
+  # Keep this simple
   class RoseValueNameGenerator:
-      def __init__(self):
-          self.NameDict = {}
-      
-      def genName(self, Prefix : str, NameChange : bool = True):
-          if Prefix != "":
-              return Prefix
-          if NameChange is False:
-              return Prefix
-          Name = self.NameDict.get(Prefix, None)
-          if Name == None:
-              self.NameDict[Prefix] = 0
-          else:
-              self.NameDict[Prefix] += 1
-          return "%" + Prefix + str(self.NameDict[Prefix])
-        
-      def reset(self):
-        self.NameDict.clear()
-
-
+    def __init__(self):
+      self.Num = 0
+    
+    def generateName(self):
+      Name =  "%" + str(self.Num)
+      str.Num += 1
+      return Name
+  
   def __init__(self):
-    self.ParentConext = None
+    # Keep track of all variables (arguments, LHS)
+    self.LhsVariables = {}
+    self.RhsOperations = {}
     self.Variables = {}
+    # Cache the functions we encounter
     self.FunctionDefs = {}
     self.Functions = {}
+    # Track the contexts we encounter
+    self.ParentContext = None
     self.Contexts = {}
-    # track range of defined bits for implicitly defined variables
-    # mapping <implicit var> -> <highest defined bit>
-    self.DefinedRange = {}
+    # Heirarchical abstractions such as functions, loops and cond regions.
+    # Blocks are not dealt with by this compiler.
+    self.RootAbstractions = []
+    # Every context has its own name generator
     self.NameGenerator = self.RoseValueNameGenerator()
   
-  def addFunctionDef(self, Name : str, FunctionDef):
+  def addCompiledStmt(self, Name : str, Stmt):
+    assert isinstance(Stmt, RoseValue)
+    self.CompiledStmts[Name] = Stmt
+  
+  def isCompiledStmt(self, Name : str):
+    return self.CompiledStmts.get(Name, None)
+  
+  def getNewName(self):
+    Name = self.NameGenerator.generateName()
+    assert type(Name) == str
+    return Name
+  
+  def createContext(self, ContextName : str, ChildContext):
+    assert isinstance(ChildContext, RoseContext)
+    ChildContext.setParentContext(self)
+    self.Contexts[ContextName] = ChildContext
+  
+  def destroyContext(self, ContextName : str):
+    self.Contexts[ContextName] = None
+
+  def getContext(self, AbstractionName : str):
+    return self.Contexts.get(AbstractionName, None)
+  
+  def pushRootAbstraction(self, Abstraction):
+    self.RootAbstractions.append(Abstraction)
+    
+  def popRootAbstraction(self):
+    return self.RootAbstractions.pop(len(self.RootAbstractions) - 1)
+  
+  def getRootAbstraction(self):
+    return self.RootAbstractions[len(self.RootAbstractions) - 1]
+  
+  def addFunctionDef(self, FunctionDef):
     assert(type(FunctionDef) == FuncDef)
-    self.FunctionDefs[Name] = FunctionDef
+    self.FunctionDefs[FunctionDef.name] = FunctionDef
   
   def getFunctionDef(self, Name : str):
     return self.FunctionDefs[Name]
@@ -60,49 +91,98 @@ class RoseContext:
     self.Functions[Name] = Function
 
   def getFunction(self, Name : str):
-    return self.Functions.get(Name, None)
-  
-  def addContext(self, FunctionName : str, Context):
-    assert isinstance(Context, RoseContext)
-    self.Contexts[FunctionName] = Context
-    Context.setParentContext(self)
-  
-  def getContext(self, FunctionName : str):
-    return self.Contexts[FunctionName]
+    return self.Functions.get(Name, RoseUndefRegion())
   
   def setParentContext(self, Context):
     assert isinstance(Context, RoseContext)
-    self.ParentConext = Context
+    self.ParentContext = Context
 
-  def getParentConext(self):
-    return self.ParentConext
+  def getParentContext(self):
+    return self.ParentContext
+  
+  def isRootContext(self):
+    return self.ParentContext == None
+  
+  def copyVariables(self, Parent):
+    assert isinstance(Parent, RoseContext)
+    self.Variables = deepcopy(Parent.getVariables())
 
-  def addVariable(self, Value : RoseValue, Implicit = False):
+  def getVariables(self):
+    return self.Variables
+
+  def addVariable(self, Value : RoseValue):
     Name = Value.getName()
     assert Name not in self.Variables
     self.Variables[Name] = Value
-    if Implicit:
-        self.DefinedRange[Name] = 0
+  
+  def addLhsVariable(self, Value : RoseValue):
+    Name = Value.getName()
+    assert Name not in self.LhsVariables
+    self.LhsVariables[Name] = Value
+
+  def addRhsOperation(self, Operation : RoseOperation):
+    Name = Operation.getName()
+    assert Name not in self.RhsOperations
+    self.RhsOperations[Name] = Operation
+  
+  def isLhsVariableDefined(self, Name : str):
+    return Name in self.LhsVariables
   
   def isVariableDefined(self, Name : str):
     return Name in self.Variables
 
   def getVariableValue(self, Name : str):
     return self.Variables[Name]
-  
-  def getVariableType(self, Name : str):
-    Type = self.Variables[Name].getType()
-    if self.isVariableImplicitlyDefined(Name):
-        High = self.getHighestDefinedBit(Name)
-        ty = ty._replace(bitwidth=hi+1, useful_bits=hi+1)
-    return ty
 
-  def setVariableValue(self, Name : str, Value : RoseValue):
-    self.Variables[Name] = Value
+
+# This defines rules specifically for x86 to RoseIR convertion
+class x86RoseContext(RoseContext):
+  def __init__(self):
+    # track range of defined bits for implicitly defined variables
+    # mapping <implicit var> -> <highest defined bit>
+    self.DefinedRange = {}
+    super().__init__()
+
+  def createContextForFunction(self, ContextName : str, ChildContext):
+    assert isinstance(ChildContext, x86RoseContext)
+    # A function accepts no external variables besides arguments
+    self.createContext(ContextName, ChildContext)
   
-  def setVariableType(self, Name : str, Type : RoseType):
-    self.Variables[Name] = RoseValue.create(Name, Type)
+  def destroyContextForFunction(self, ContextName : str):
+    # Nothing escapes a function. So nothing to copy over from child context.
+    self.destroyContext(ContextName)
+
+  def createContextForLoop(self, ContextName : str, Context):
+    assert isinstance(Context, x86RoseContext)
+    # Add the variables from parent function into this one
+    Context.copyVariables(self)
+    self.createContext(ContextName, Context)
   
+  def destroyContextForLoop(self, ContextName : str):
+    # Copy the LHS variables to variables in the parent context
+    self.destroyContext(ContextName)
+  
+  # This is used to check if the variable 
+  def isVariableDefined(self, Name : str):
+    if isinstance(self.getRootAbstraction(), RoseFunction):
+      return super().isVariableDefined(Name)
+    if isinstance(self.getRootAbstraction(), RoseForLoop):
+      return super().isVariableDefined(Name)
+    
+  def addVariable(self, Value : RoseValue, Implicit = False):
+    if isinstance(self.getRootAbstraction(), RoseFunction):
+      super().addVariable(Value)
+    if isinstance(self.getRootAbstraction(), RoseForLoop):
+      if super().isVariableDefined(Value.getName()):
+        return
+      # Add these to the LHS if it has not been already
+      if super().isLhsVariableDefined(Value.getName()):
+        return 
+      super().addLhsVariable(Value)
+    if Implicit:
+      Name = Value.getName()
+      self.DefinedRange[Name] = 0
+
   def isVariableImplicitlyDefined(self, Name : str):
     return Name in self.DefinedRange
 
@@ -113,124 +193,82 @@ class RoseContext:
   def getHighestDefinedBit(self, Name : str):
     assert Name in self.DefinedRange
     return self.DefinedRange[Name]
-  
-  def hangUp(self, Name : str):
-    if self. Variables.get(Name, None) is not None:
-      self.Variables[Name] = None
-    if self. DefinedRange.get(Name, None) is not None:
-      self.DefinedRange[Name] = None
-    if self. FunctionDefs.get(Name, None) is not None:
-      self.FunctionDefs[Name] = None
-    if self. Functions.get(Name, None) is not None:
-      self.Functions[Name] = None
 
 
 
-def CompileStatement(Stmt, Context, pred=True):
-  StmtTy = type(Stmt)
-  print("STATEMENT:")
-  print(Stmt)
-  print("STATEMENT TYPE:")
-  print(StmtTy)
-  return CompileAbstractions[StmtTy](Stmt, Context, pred)
-
-
-def CompileNumber(Num, Context, _):
+def CompileNumber(Num, Context : x86RoseContext):
   print("COMPILE NUMBER")
   print("NUM:")
   print(Num)
   if isinstance(Num.val, int):
-      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
-      return ConstantVal
+    ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+    return ConstantVal
   else:
-      NonConstantVal = Num.val
-      return NonConstantVal
+    # TODO: These needs fixing
+    NonConstantVal = Num.val
+    return NonConstantVal
 
 
-def CompileVar(Variable, Context, _):
-  print("COMPILE VARIABLE")
-  print("VARIABLE:")
-  print(Variable)
-  # Create a new rose value
-  Val = RoseValue.create(Variable.name, Context.getVariableValue(Variable.name).getType())
-  return Val
+#def CompileVar(Variable, Context):
+#  print("COMPILE VARIABLE")
+#  print("VARIABLE:")
+#  print(Variable)
+#  # Check if the variable is already defined and cached. If yes, just return that.
+#  if Context.getVariableValue(Variable.name)
+
+#  # Create a new rose value
+#  Val = RoseValue.create(Variable.name, Context.getVariableValue(Variable.name).getType())
+#  return Val
 
 
-#def CompileParam(Param, Context, _):
-#  ArgType = Context.getVariableValue(Param.name).getType()
-#  Arg = RoseArgument.create(Param.name, ArgType, )
-#  return Arg
+def CompileSelect(Select, Context : x86RoseContext):
+  print("COMPILE Select EXPRESSION")
+  print("SELECT EXPR:")
+  print(Select)
+  Cond = CompileExpression(Select.cond, Context)
+  Then = CompileExpression(Select.then, Context)
+  Otherwise = CompileExpression(Select.otherwise, Context)
+  Operation = RoseSelectOp.create(Context.getNewName(), Cond, Then, Otherwise)
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(Operation)
+  Context.pushRootAbstraction(RootAbstraction)
+  return Operation
 
 
-def CompileExpression(Expr, Context, pred=True, deref=False):
-  print("COMPILE EXPRESSION")
-  print("EXPR:")
-  print(Expr)
-
-  if deref and type(Expr) == Lookup:
-      # normalize `x.dword` to `x.dword[1]`
-      CompiledExpr = BitSlice(Expr, hi=Number(0), lo=Number(0))
-
-  ExprTy = type(Expr)
-  CompiledExpr = CompileAbstractions[ExprTy](Expr, Context, pred)
-  #if deref:
-  #  return get_value(slice_or_val, env), ty
-  return CompiledExpr
+def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
+  print("COMPILE UNARY EXPRESSION")
+  print("UNARY EXPR:")
+  print(UnaryExpr)
+  Value = CompileExpression(UnaryExpr.a, Context)
+  UnaryFuncHandle = UnaryOps[UnaryExpr.op]
+  Operation = UnaryFuncHandle(Context.getNewName(), Value, Context)
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(Operation)
+  Context.pushRootAbstraction(RootAbstraction)
+  return Operation
 
 
-def CompileForLoop(ForStmt, Context : RoseContext, pred=True):
-  One = RoseConstant.create(1, RoseType.getIntegerTy(32))
-  MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
-  Step = One if ForStmt.inc else MinusOne
-  Begin = CompileExpression(ForStmt.begin, Context, deref=True)
-  End = CompileExpression(ForStmt.end, Context, deref=True)
-
-  # Generate an empty for loop
-  Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
-
-  # Collect all statements in the loop body
-  OpList = []
-  for Stmt in ForStmt.body:
-      OpList.append(CompileStatement(Stmt, Context, False))
-
-  # Create a new block and add it to the loop
-  Block = RoseBlock.create(OpList, Loop)
-  Loop.addBlock(Block)
-
-  return Loop
-
-
-def CompileBitSlice(BitSliceExpr, Context, pred):
+def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   print("COMPILE BITSLICE")
   print("BITSLICE:")
   print(BitSliceExpr)
-
   # First compile low and high expressions
   print("COMPILING LOW")
-  Low = CompileExpression(BitSliceExpr.lo, Context, pred, deref=True)
+  Low = CompileExpression(BitSliceExpr.lo, Context)
   print("COMPILED LOW")
   Low.print()
 
   # Special case for the magic variable 'MAX' 
   print("COMPILING HIGH")
-  if (type(BitSliceExpr.hi) == Var and
-    BitSliceExpr.hi.name == 'MAX'):
-    #hi = conc_val(max_vl - 1, IntegerType(32))
+  if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
     High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
-    High = CompileExpression(BitSliceExpr.hi, Context, pred, deref=True)
+    High = CompileExpression(BitSliceExpr.hi, Context)
   print("COMPILED HIGH")
   High.print()
-
-  # In case we have a variable implicitly declared,
-  # assume only integers can be implicitly declared
-  if (type(BitSliceExpr.bv) == Var and
-    not Context.isVariableDefined(BitSliceExpr.bv.name)):
-    Context.addVariable(RoseValue.create(BitSliceExpr.bv.name,
-                  RoseType.getBitVectorTy(MaxVectorLength)), Implicit=True)
   
   print("COMPILING BITVECTOR")
-  BitVector = CompileExpression(BitSliceExpr.bv, Context, pred)
+  BitVector = CompileExpression(BitSliceExpr.bv, Context)
   print("COMPILED BITVECTOR")
   BitVector.print()
   assert BitVector.getType().isBitVectorTy()
@@ -246,65 +284,59 @@ def CompileBitSlice(BitSliceExpr, Context, pred):
     assert High.getValue() >= Low.getValue()
 
   # Add an bitslice operation
-  Operation = RoseSliceOp.create("Bitslice", BitVector, Low, High)
+  Operation = RoseExtractSliceOp.create(Context.getNewName(), BitVector, Low, High)
   print("BIT SLICE OP:")
   Operation.print()
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(Operation)
+  Context.pushRootAbstraction(RootAbstraction)
 
   return Operation
 
 
-def CompileUpdate(Update, Context, pred):
+def CompileUpdate(Update, Context : x86RoseContext):
   print("COMPILE UPDATE")
   print("UPDATE:")
   print(Update)
-
   print("COMPILING RHS")
-  RHSExprVal = CompileExpression(Update.rhs, Context, pred)
-  RHSExprVal.print()
+  RHSExprVal = CompileExpression(Update.rhs, Context)
   print(type(RHSExprVal))
-  #RHSExprVal.setName(Update.rhs.name)
   print("COMPILED RHS")
   RHSExprVal.print()
-   
-  #if type(Update.lhs) == Lookup:
-    # normalize `x.dword = foo` into `x.dword[0] = foo`
-  #  update = Update._replace(lhs=BitSlice(Update.lhs, hi=Number(0), lo=Number(0)))
-  
+
   if type(Update.lhs) == Var and not Context.isVariableDefined(Update.lhs.name):
-    LHSval = RoseValue.create(Update.lhs.name, RHSExprVal.getType())
-    Context.addVariable(LHSval, Implicit=True)
-    assert Context.isVariableDefined(Update.lhs.name)
+    # This is a newly defined variable. Let's rename the RHS.
+    NewRHSExprVal = RHSExprVal
+    NewRHSExprVal.setName(Update.lhs.name)
+    RootAbstraction = Context.popRootAbstraction()
+    RootAbstraction.replaceAbstraction(RHSExprVal, NewRHSExprVal)
+    Context.pushRootAbstraction(RootAbstraction)
+    # Cache RHS in the context
+    Context.addVariable(RHSExprVal)
+    return
 
-  print("COMPILING LHS")
-  LHSExprVal = CompileExpression(Update.lhs, Context, pred)
-  print("COMPILED LHS")
-  LHSExprVal.print()
-
-  # Propagate type from RHS
-  Context.setVariableType(LHSExprVal.getName(), RHSExprVal.getType())
-
-  return RHSExprVal
+  if type(Update.lhs) == BitSlice:
+    if not Context.isVariableDefined(Update.lhs.name):
+      # This is an implicitly defined bit slice.
+      # Define the insert slice operation.
+      Op = RoseInsertSliceOp.create()
+      # Add the variable to context first
+      Context.addVariable(RHSExprVal)
 
 
 # Function will be compiled later
-def CompileFunction(FunctionDef, Context : RoseContext, _):
+def CompileFunction(FunctionDef, Context : x86RoseContext):
   assert(type(FunctionDef) == FuncDef)
   print("COMPILE FUNCTION")
   print("FUNCDEF:")
   print(FunctionDef)
-
-  # New context for a newly defined function
-  NewContext = RoseContext()
-  #NewContext.addFunction(FunctionDef.name, None)
-  print("FunctionDef.name:")
-  print(FunctionDef.name)
-  NewContext.addFunctionDef(FunctionDef.name, FunctionDef)
-  Context.addContext(FunctionDef.name, NewContext)
+  # Add the function definiton to the current context
+  # This function will be compiled later.
+  Context.addFunctionDef(FunctionDef)
 
 
-def CompileCall(CallStmt, Context : RoseContext, pred):
+def CompileCall(CallStmt, Context : x86RoseContext):
   print("COMPILE CALL")
-
   assert type(CallStmt.func) == str
   FunctionName = CallStmt.func
 
@@ -312,21 +344,22 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
   print("COMPILE ARGUMENTS")
   ArgValuesList = list()
   for Arg in CallStmt.args:
-    ArgValuesList.append(CompileExpression(Arg, Context, deref=True))
+    ArgValuesList.append(CompileExpression(Arg, Context))
   print("ARGUMENTS COMPILED")
 
   # Check if this is a call to a builtin function
   # The builtins do not modify the environment
   if FunctionName in Builtins:
-    return Builtins[FunctionName](ArgValuesList, Context)
+    return Builtins[FunctionName](Context.getNewName(), ArgValuesList, Context)
 
   # This is a function call
-  ChildContext = Context.getContext(FunctionName)
-  FunctionDef = ChildContext.getFunctionDef(FunctionName)
+  FunctionDef = Context.getFunctionDef(FunctionName)
   assert len(FunctionDef.params) == len(CallStmt.args)
 
   # Check if we are compiling this function for the first time
-  if ChildContext.getFunction(CallStmt.func) == None:
+  if Context.getFunction(CallStmt.func) == RoseUndefRegion():
+    ChildContext = x86RoseContext()
+    FuncArgList = []
     for Index  in range(len(FunctionDef.params)):
       Param = FunctionDef.params[Index]
       Arg = ArgValuesList[Index]
@@ -337,97 +370,156 @@ def CompileCall(CallStmt, Context : RoseContext, pred):
           assert type(Param.hi) == Number
           assert Param.lo.val == 0
           ParamName = Param.bv.name
-          ParamWidth = Param.hi.val + 1 
+          ParamWidth = Param.hi.val + 1
       else:
           assert type(Param) == Var
           ParamName = Param.name
           ParamWidth = Arg.getType().getBitwidth()
       assert Arg.getType().getBitwidth() == ParamWidth
-      Context.addVariable(RoseValue.create(ParamName, Arg.getType()))
-
-    # Compile the function body
-    ReturnValue = None
-    FuncOperationList = []
-    for Stmt in FunctionDef.body:
-      if type(Stmt) == Return:
-        ReturnValue = CompileExpression(Stmt.val, ChildContext, pred, deref=True)
-        break
-      FuncOperationList.append(CompileStatement(Stmt, ChildContext, pred))
-    assert(ReturnValue != None)
-
-    # Get the types of the arguments
-    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
-    FunctionType = RoseType.getFunctionTy(ArgsTypeList, ReturnValue.getType())
+      ArgVal = RoseArgument.create(ParamName, Arg.getType(), RoseUndefValue(), Index)
+      FuncArgList.append(ArgVal)
+      # Add arguments to the child context
+      ChildContext.addVariable(ArgVal)
     
     # Compile the function and its arguments
-    print(type(FunctionName))
-    print(type(ArgValuesList))
-    print(type(ReturnValue.getType()))
-    Function = RoseFunction.create(FunctionName, FunctionType)
+    Function = RoseFunction.create(FunctionName, FuncArgList, RoseType.getUndefTy())
     print("Function:")
     print(Function)
     print(FunctionDef.params)
     print(type(FunctionDef.params))
-
-    # Set the name of the arguments now
-    for ArgIndex in range(Function.getNumArgs()):
-      if type(FunctionDef.params[ArgIndex]) == BitSlice:
-        ArgName = FunctionDef.params[ArgIndex].bv.name
-      elif type(FunctionDef.params[ArgIndex]) == Var:
-        ArgName = FunctionDef.params[ArgIndex].name
-      else:
-        assert(False)
-      print(ArgName)
-      Function.setArgName(ArgName, ArgIndex)
-    Function.setRetValName(ReturnValue.getName())
+    
+    # Add this function as the root abstraction for this this child context
+    ChildContext.pushRootAbstraction(Function)
+    Context.createContextForFunction(FunctionDef.name, ChildContext)
+    print("FUNCTION ADDED TO CONTEXT")
+    
+    # Compile the function body
+    ReturnValue = RoseUndefValue()
+    for Stmt in FunctionDef.body:
+      if type(Stmt) == Return:
+        ReturnValue = CompileExpression(Stmt.val, ChildContext)
+        break
+      CompileStatement(Stmt, ChildContext)
+    assert ReturnValue != RoseUndefValue()
     print("FUNCTION GENERATED")
 
-    # Create a new block and add it to the function
-    print(type(FuncOperationList))
-    Block = RoseBlock.create(FuncOperationList, Function)
-    Function.addBlock(Block)
-    
-    # Add this function to the current context
-    Context.addFunction(Function)
-    print("FUNCTION ADDED TO CONTEXT")
+    # Pop the root function from the child context 
+    CompiledFunction = ChildContext.popRootAbstraction()
 
-  # Compile call statement now
+    # Set the return value for this function
+    CompiledFunction.setRetVal(ReturnValue)
+
+    # Cache this function in this context now
+    Context.addFunction(CompiledFunction)
+
+    # Add this function to the root abstraction and update context
+    RootAbstraction = Context.popRootAbstraction()
+    RootAbstraction.addAbstraction(CompiledFunction)
+    Context.pushRootAbstraction(RootAbstraction)
+
+    # Destroy the child context now
+    Context.destroyContextForFunction(FunctionDef.name)
+
+  # Compile call statement now.
+  # If the compiled call returns void, we add it to the root function,
+  # or else we just return it.
   Function = Context.getFunction(FunctionName)
-  FunctionCall = RoseCallOp.create("", Function, ArgValuesList)
-  print(FunctionCall)
+  if Function.getType().getReturnType() == RoseType.isVoidTy():
+    FunctionCall = RoseCallOp.create("", Function, ArgValuesList)
+    print(FunctionCall)
+    RootAbstraction = Context.popRootAbstraction()
+    RootAbstraction.addAbstraction(FunctionCall)
+    Context.pushRootAbstraction(RootAbstraction)
+    Context.addCompiledStmt(CallStmt.func, FunctionCall)
+  else:
+    FunctionCall = RoseCallOp.create(Context.getNewName(), Function, ArgValuesList)
+    print(FunctionCall)
+    RootAbstraction = Context.popRootAbstraction()
+    RootAbstraction.addAbstraction(FunctionCall)
+    Context.pushRootAbstraction(RootAbstraction)
+    return FunctionCall
 
-  return FunctionCall
+
+def CompileForLoop(ForStmt, Context : x86RoseContext):
+  # Generate an empty for loop
+  One = RoseConstant.create(1, RoseType.getIntegerTy(32))
+  MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
+  Step = One if ForStmt.inc else MinusOne
+  Begin = CompileExpression(ForStmt.begin, Context)
+  End = CompileExpression(ForStmt.end, Context)
+  Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
+
+  # Add a new context for this loop and add loop as root abstraction 
+  ChildContext = x86RoseContext()
+  ChildContext.pushRootAbstraction(Loop)
+  Context.createContextForLoop(ForStmt.iterator.name, ChildContext)
+
+  # Add the iterator to the child context
+  ChildContext.addVariable(Loop.getIterator())
+
+  # Comoile all the statements in this loop
+  for Stmt in ForStmt.body:
+    CompileStatement(Stmt, ChildContext)
+  
+  # Pop the root loop from the child context 
+  CompiledLoop = ChildContext.popRootAbstraction()
+
+  # Add loop to the root abstraction
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(CompiledLoop)
+  Context.pushRootAbstraction(RootAbstraction)
+
+  # Remove the child context now
+  Context.destroyContextForLoop(ForStmt.iterator.name)
 
 
-def CompileUnaryExpr(UnaryExpr, Context, pred):
-  print("COMPILE UNARY EXPRESSION")
-  print("UNARY EXPR:")
-  print(UnaryExpr)
-  Value = CompileExpression(UnaryExpr.a, Context, pred, deref=True)
-  UnaryFuncHandle = UnaryOps[UnaryExpr.op]
-  return UnaryFuncHandle(Value)
+def CompileIf(IfStmt, Context : x86RoseContext):
+  Cond = CompileExpression(IfStmt.cond, Context)
+  for Stmt in IfStmt.then:
+    CompileStatement(Stmt, Context)
+  for Stmt in IfStmt.otherwise:
+    CompileStatement(Stmt, Context)
+
+
+def CompileExpression(Expr, Context : x86RoseContext):
+  print("COMPILE EXPRESSION")
+  print("EXPR:")
+  print(Expr)
+  ExprTy = type(Expr)
+  CompiledExpr = CompileAbstractions[ExprTy](Expr, Context)
+  return CompiledExpr
+
+
+def CompileStatement(Stmt, Context : x86RoseContext):
+  StmtTy = type(Stmt)
+  print("STATEMENT:")
+  print(Stmt)
+  print("STATEMENT TYPE:")
+  print(StmtTy)
+  return CompileAbstractions[StmtTy](Stmt, Context)
 
 
 def CompileSemantics(Sema):
   # Create the root context
-  RootContext = RoseContext()
+  RootContext = x86RoseContext()
   OutParams = []
-  returns_void = False
+  ReturnsVoid = False
   ParamValues = []
-  for Param in Sema.params:
-    is_out_param = False
+  for Index, Param in enumerate(Sema.params):
+    IsOutParam = False
     if Param.type.endswith('*'):
         ParamType = x86Types[Param.type[:-1].strip()]
         OutParams.append(Param.name)
-        is_out_param = True
+        IsOutParam = True
     else:
         ParamType = x86Types[Param.type]
     # Create a new rosette value
-    ParamVal = RoseValue.create(Param.name, ParamType)
+    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
-    if not is_out_param: 
+    if not IsOutParam:
       ParamValues.append(ParamVal)
-    RootContext.addVariable(ParamVal)
+    # Cache compiled parameter
+    RootContext.addCompiledStmt(Param.name, ParamVal)
 
   ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
@@ -436,23 +528,41 @@ def CompileSemantics(Sema):
     # the k cannot be returned implicitly
     if not ReturnsMask or RootContext.isVariableDefined('k'):
       print("adding dst to context")
-      RootContext.addVariable(RoseValue.create('dst', RetType))
+      RetValue = RoseValue.create('dst', RetType)
     else:
       print("adding k to context")
-      RootContext.addVariable(RoseValue.create('k', RetType))
+      RetValue = RoseValue.create('k', RetType)
   else:
-    returns_void = True
+    ReturnsVoid = True
+    RetType = RoseType.getVoidTy()
+    RetValue = RoseValue.create("", RetType)
+  
+  # Add return value to the context
+  RootContext.addVariable(RetValue)
+  RootContext.addCompiledStmt(RetValue.getName(), RetValue)
+  
+  # Define a Rose function
+  RootFunction = RoseFunction.create(Sema.intrin, ParamValues, RetType)
+
+  # Add the arguments to context too
+  RootFunction.setRetValName(RetValue.getName())
+  for ParamVal in ParamValues:
+    ParamVal.setFunction(RootFunction)
+    RootContext.addVariable(ParamVal)
+  
+  # Add the root function now
+  RootContext.pushRootAbstraction(RootFunction)
 
   # Compile all the statements
   for Stmt in Sema.spec:
     if type(Stmt) == Return:
-      assign_to_dst = Update(lhs=Var('dst'), rhs=Stmt.val)
-      CompileStatement(assign_to_dst, RootContext)
+      Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
+      CompileStatement(Dst, RootContext)
       break
     CompileStatement(Stmt, RootContext)
   
   Outputs = [RootContext.getVariableValue(OutParam) for OutParam in OutParams]
-  if not returns_void:
+  if not ReturnsVoid:
     if not ReturnsMask:
       RetVal = RootContext.getVariableValue("dst")
     else:
@@ -464,41 +574,39 @@ def CompileSemantics(Sema):
 CompileAbstractions = {
   For: CompileForLoop,
   Number: CompileNumber,
-  Var: CompileVar,
+  #Var: CompileVar,
   FuncDef: CompileFunction,
   Call: CompileCall,
   BitSlice: CompileBitSlice,
   Update: CompileUpdate,
   UnaryExpr: CompileUnaryExpr,
-  #Parameter: CompileParam,
+  Select: CompileSelect,
+  If: CompileIf,
   #BinaryExpr: CompileBinaryExpr,
-  #Select: compile_select,
-  #Match: compile_match,
   #While: compile_while,
-  #If: compile_if,
+  #Match: CompileMatch,
   #Lookup: compile_lookup,
-  #PseudoStmt: lambda *_:None
 }
 
 
 def HandleToSignExtend(Bitwidth : int):
-  def LamdaImplFunc(Args, Context : RoseContext):
+  def LamdaImplFunc(Name : str, Args, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
       return Value
-    return RoseSignExtendOp.create(Value, Bitwidth)
+    return RoseSignExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
 
 
 def HandleToZeroExtend(Bitwidth : int):
-  def LamdaImplFunc(Args, Context : RoseContext):
+  def LamdaImplFunc(Name : str, Args, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
       return Value
-    return RoseZeroExtendOp.create(Value, Bitwidth)
+    return RoseZeroExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
 
@@ -532,16 +640,16 @@ Builtins = {
 }
 
 
-def HandleToNot(Bitwidth):
-  def LamdaImplFunc(Value):
+def HandleToNot():
+  def LamdaImplFunc(Name : str, Value, Context : x86RoseContext):
     assert Value.getType().isBitVectorTy() == True
     return RoseNotOp.create(Value)
   
   return LamdaImplFunc
 
 
-def HandleToNeg(Bitwidth):
-  def LamdaImplFunc(Value):
+def HandleToNeg():
+  def LamdaImplFunc(Name : str, Value, Context : x86RoseContext):
     assert Value.getType().isBitVectorTy() == True
     return RoseNegOp.create(Value)
   
@@ -555,11 +663,20 @@ UnaryOps = {
     '~': HandleToNot,
 }
 
+# Strides definitions
+Strides = {
+  'bit': 1,
+  'byte': 8,
+  'word': 16,
+  'dword': 32,
+  'qword': 64,
+  'm128': 128,
+}
+
 
 
 if __name__ == '__main__':
-  from manual_parser import get_spec_from_xml
-
+  from PseudoCodeParser import get_spec_from_xml
   import xml.etree.ElementTree as ET
 
   sema = '''
