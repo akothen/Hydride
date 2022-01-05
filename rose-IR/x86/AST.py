@@ -2,7 +2,7 @@
 from collections import namedtuple
 
 BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo', 'expr_id'])
-Var = namedtuple('Var', ['name'])
+Var = namedtuple('Var', ['name', 'expr_id'])
 Number = namedtuple('Number', ['val'])
 Update = namedtuple('Update', ['lhs', 'rhs'])
 # inc is a flag specifying whether we increment of decrement the induction variable
@@ -19,7 +19,8 @@ Case = namedtuple('Case', ['val', 'stmts', 'expr_id'])
 # property lookup
 Lookup = namedtuple('Lookup', ['obj', 'key'])
 Index = namedtuple('Index', ['obj', 'idx'])
-FuncDef = namedtuple('FuncDef', ['name', 'params', 'body'])
+FuncDef = namedtuple('FuncDef', ['name', 'params', 'body', 'expr_id'])
+#Arg = namedtuple('Arg', ['arg', 'expr_id'])
 Break = namedtuple('Break', [])
 
 Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm'])
