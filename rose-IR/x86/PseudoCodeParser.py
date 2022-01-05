@@ -15,16 +15,19 @@ def parse_cpuid(cpuid):
 def get_spec_from_xml(node):
     params = []
     imm_width = None
+    ID = 0
     for param_node in node.findall('parameter'):
-        name = param_node.attrib.get('varname', '')
-        type = param_node.attrib['type']
-        if name == '':
-            continue
-        is_signed = param_node.attrib.get('etype', '').startswith('SI')
-        is_imm = param_node.attrib.get('etype') == 'IMM'
-        if is_imm:
-            imm_width = int(param_node.attrib.get('immwidth', '8'))
-        params.append(Parameter(name, type, is_signed, is_imm))
+      name = param_node.attrib.get('varname', '')
+      type = param_node.attrib['type']
+      if name == '':
+          continue
+      is_signed = param_node.attrib.get('etype', '').startswith('SI')
+      is_imm = param_node.attrib.get('etype') == 'IMM'
+      if is_imm:
+          imm_width = int(param_node.attrib.get('immwidth', '8'))
+      id = "param" + "." + name + "." + str(ID)
+      params.append(Parameter(name, type, is_signed, is_imm, id))
+      ID += 1
     cpuids = [parse_cpuid(cpuid) for cpuid in node.findall('CPUID')]
     intrin = node.attrib['name']
     inst = node.find('instruction')
@@ -69,7 +72,7 @@ def parse_specs(spec_f):
 
 
 def new_binary_expr(parser, op, a, b):
-  expr_id = gen_unique_id(parser)
+  expr_id = "binexpr." + gen_unique_id(parser)
   expr = BinaryExpr(op, a, b, expr_id)
   parser.binary_exprs.append(expr)
   return expr
@@ -78,7 +81,7 @@ def parse_binary(op, p):
   p[0] = new_binary_expr(p.parser, op, p[1], p[3])
 
 def parse_unary(op, p):
-  expr_id = gen_unique_id(parser)
+  expr_id = "unaryexpr." + gen_unique_id(parser)
   p[0] = UnaryExpr(op, p[2], expr_id)
 
 if __name__ != '__main__':
@@ -97,7 +100,7 @@ def p_stmts(p):
 def p_func_decl(p):
   '''stmt : DEFINE ID LPAREN args RPAREN LBRACKET stmts RBRACKET
   '''
-  expr_id = gen_unique_id(parser)
+  expr_id = "funcdef." + gen_unique_id(parser)
   p[0] = FuncDef(p[2], p[4], p[7], expr_id)
 
 def p_stmt_break(p):
@@ -111,14 +114,14 @@ def p_stmt_expr(p):
 def p_match(p):
   '''stmt : CASE expr OF cases ESAC
   '''
-  expr_id = gen_unique_id(parser)
+  expr_id = "match." + gen_unique_id(parser)
   p[0] = Match(p[2], p[4], expr_id)
 
 def p_single_case(p):
   '''cases : CASE_HEADER stmts
            | cases CASE_HEADER stmts
   '''
-  expr_id = gen_unique_id(parser)
+  expr_id = "case." + gen_unique_id(parser)
   if len(p) == 3:
     p[0] = [Case(p[1], p[2], expr_id)]
   else:
@@ -150,42 +153,42 @@ def p_expr_or_equal(p):
 
 def p_stmt_while(p):
   'stmt : DO WHILE expr stmts OD'
-  expr_id = gen_unique_id(parser)
+  expr_id = "while." + gen_unique_id(parser)
   p[0] = While(p[3], p[4], expr_id)
 
 def p_stmt_for(p):
   'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
-  expr_id = gen_unique_id(parser)
+  expr_id = "for." + gen_unique_id(parser)
   p[0] = For(p[2], p[4], p[6], p[7], True, expr_id)
 
 def p_stmt_for_dec(p):
   'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
-  expr_id = gen_unique_id(parser)
+  expr_id = "for." + gen_unique_id(parser)
   p[0] = For(p[2], p[4], p[6], p[7], False, expr_id)
 
 def p_stmt_if(p):
   'stmt : IF expr THEN stmts FI'
-  expr_id = gen_unique_id(parser)
+  expr_id = "if." + gen_unique_id(parser)
   p[0] = If(p[2], p[4], [], expr_id)
 
 def p_stmt_if2(p):
   'stmt : IF expr THEN stmts ELSE stmts FI'
-  expr_id = gen_unique_id(parser)
+  expr_id = "if." + gen_unique_id(parser)
   p[0] = If(p[2], p[4], p[6], expr_id)
 
 def p_stmt_if_no_then(p):
   'stmt : IF expr stmts FI'
-  expr_id = gen_unique_id(parser)
+  expr_id = "if." + gen_unique_id(parser)
   p[0] = If(p[2], p[3], [], expr_id)
 
 def p_stmt_if2_no_then(p):
   'stmt : IF expr stmts ELSE stmts FI'
-  expr_id = gen_unique_id(parser)
+  expr_id = "if." + gen_unique_id(parser)
   p[0] = If(p[2], p[3], p[5], expr_id)
 
 def p_stmt_if2_no_then_no_fi(p):
   'stmt : IF expr stmts ELSE stmts'
-  expr_id = gen_unique_id(parser)
+  expr_id = "if." + gen_unique_id(parser)
   p[0] = If(p[2], p[3], p[5], expr_id)
 
 #def p_stmt_pseudo(p):
@@ -194,12 +197,12 @@ def p_stmt_if2_no_then_no_fi(p):
 
 def p_expr_call(p):
   'expr : ID LPAREN args RPAREN'
-  expr_id = gen_unique_id(parser)
+  expr_id = "call." + gen_unique_id(parser)
   p[0] = Call(p[1], p[3], expr_id)
 
 def p_expr_call_no_args(p):
   'expr : ID LPAREN RPAREN'
-  expr_id = gen_unique_id(parser)
+  expr_id = "call." + gen_unique_id(parser)
   p[0] = Call(p[1], [], expr_id)
 
 #def p_expr_reg_sel(p):
@@ -214,7 +217,7 @@ def p_args(p):
   '''args : expr
         | args COMMA expr
   '''
-  expr_id = gen_unique_id(parser)
+  #expr_id = gen_unique_id(parser)
   if len(p) == 2:
     p[0] = [p[1]] #[Arg(p[1], expr_id)]
   else:
@@ -226,12 +229,12 @@ def p_expr_bit_index(p):
 
 def p_expr_bit_slice(p):
   'expr : expr LBRACE expr COLON expr RBRACE'
-  expr_id = gen_unique_id(parser)
+  expr_id = "bitslice." + gen_unique_id(parser)
   p[0] = BitSlice(p[1], p[3], p[5], expr_id)
 
 def p_expr_select(p):
   'expr : expr QUEST expr COLON expr'
-  expr_id = gen_unique_id(parser)
+  expr_id = "select." + gen_unique_id(parser)
   p[0] = Select(p[1], p[3], p[5], expr_id)
 
 def p_expr_not(p):
@@ -337,7 +340,7 @@ def p_expr_wrapped(p):
 
 def p_expr_var(p):
   'expr : ID'
-  expr_id = gen_unique_id(parser)
+  expr_id = "var." + gen_unique_id(parser)
   p[0] = Var(p[1], expr_id)
 
 def p_expr_num(p):
@@ -369,7 +372,7 @@ parser = yacc.yacc()
 def gen_unique_id(parser):
   ID = parser.id_counter
   parser.id_counter += 1
-  return ID
+  return str(ID)
 
 def reset_parser_state(parser):
   parser.id_counter = 0
