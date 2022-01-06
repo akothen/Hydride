@@ -1,10 +1,9 @@
 
 from RoseValue import RoseValue
 from RoseType import RoseType
-from RoseAbstractions import RoseFunction, RoseForLoop
+from RoseAbstractions import *
 from RoseConstants import RoseConstant, RoseUndefValue, RoseUndefRegion
 from RoseArgument import RoseArgument
-from RoseOperation import RoseOperation
 from RoseOperations import *
 
 from AST import *
@@ -23,12 +22,12 @@ class RoseContext:
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
     # Track the contexts we encounter
     self.ParentContext = None
-    self.Contexts = {}   # ID --> child context
+    self.Contexts = dict()   # ID --> child context
     # Heirarchical abstractions such as functions, loops and cond regions.
     # Blocks are not dealt with by this compiler.
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
-    self.Variables = {}    # Name --> ID
+    self.Variables = dict()    # Name --> ID
   
   def isCompiledAbstraction(self, ID : str):
     if ID in self.CompiledAbstractions:
@@ -222,6 +221,8 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
 
   # Add the operation to the context
   Context.addCompiledAbstraction(BitSliceExpr.id, Operation)
+  print("==================================")
+  Operation.getType().print()
 
   return Operation
 
@@ -555,11 +556,39 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
 
 
 def CompileIf(IfStmt, Context : x86RoseContext):
+  # Generate a cond region
   Cond = CompileExpression(IfStmt.cond, Context)
+  CondRegion = RoseCond.create(Cond)
+
+  # Add cond region as root abstraction 
+  ChildContext = x86RoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(IfStmt.id, CondRegion)
+
+  # Add a new context for this loop
+  Context.createContext(IfStmt.id, ChildContext)
+
+  # Compile all the statements in this cond region
   for Stmt in IfStmt.then:
-    CompileStatement(Stmt, Context)
+    CompileStatement(Stmt, ChildContext)
   for Stmt in IfStmt.otherwise:
-    CompileStatement(Stmt, Context)
+    CompileStatement(Stmt, ChildContext)
+
+  # Pop the root cond region from the child context 
+  CompiledCondRegion = ChildContext.popRootAbstraction()
+
+  # Add cond region to the root abstraction
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(CompiledCondRegion)
+  Context.pushRootAbstraction(RootAbstraction)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(IfStmt.id)
 
 
 def CompileExpression(Expr, Context : x86RoseContext):
@@ -958,3 +987,4 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
   spec = get_spec_from_xml(intrin_node)
   print(spec)
   CompiledFunction = CompileSemantics(spec)
+
