@@ -568,9 +568,7 @@ def CompileSemantics(Sema):
   ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
     RetType = x86Types[Sema.rettype]
-    # if the environment has 'k' defined. E.g. k is a parameter
-    # the k cannot be returned implicitly
-    if not ReturnsMask or RootContext.isVariableDefined('k'):
+    if not ReturnsMask:
       print("adding dst to context")
       RetValue = RoseValue.create('dst', RetType)
     else:
@@ -607,18 +605,22 @@ def CompileSemantics(Sema):
   # Compile all the statements
   for Stmt in Sema.spec:
     if type(Stmt) == Return:
-      Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
-      CompileStatement(Dst, RootContext)
+      #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
+      #CompileStatement(Dst, RootContext)
+      CompileStatement(Stmt, RootContext)
       break
     CompileStatement(Stmt, RootContext)
   
-  Outputs = [RootContext.getVariableValue(OutParam) for OutParam in OutParams]
+  #Outputs = [RootContext.getVariableValue(OutParam) for OutParam in OutParams]
+  Outputs = []
   if not ReturnsVoid:
     if not ReturnsMask:
-      RetVal = RootContext.getVariableValue("dst")
+      ID = RootContext.getVariableID("dst")
+      RetVal = RootContext.getCompiledAbstractionForID(ID)
     else:
-      RetVal = RootContext.getVariableValue("k")
-    Outputs = [RetVal] + Outputs
+      ID = RootContext.getVariableID("k")
+      RetVal = RootContext.getCompiledAbstractionForID(ID)
+    Outputs = [RetVal] #+ Outputs
   return ParamValues, Outputs
 
 
@@ -772,3 +774,6 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
   print(spec)
   param_vals, outs = CompileSemantics(spec)
   print(param_vals, outs)
+
+
+
