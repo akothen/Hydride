@@ -134,6 +134,7 @@ class RoseFunction(RoseValue, RoseRegion):
 
   # An abstraction can be an operation and region
   def addAbstraction(self, Abstraction):
+    print("METHOD ADDING ABSTRACTION:")
     print(Abstraction)
     if isinstance(Abstraction, RoseRegion):
       self.addRegion(Abstraction)
@@ -149,7 +150,7 @@ class RoseFunction(RoseValue, RoseRegion):
         self.addRegion(Block)
       else:
         TailRegion.addRegion(Abstraction)
-      self.updateTailChild(TailRegion)
+        self.updateTailChild(TailRegion)
       return
     assert False
 
@@ -169,14 +170,13 @@ class RoseFunction(RoseValue, RoseRegion):
 
   def print(self):
     # Print function signature first
-    Func_Sig = "(define (" + self.getName()
+    Func_Sig = "function " + self.getName() + " ("
     for Arg in self.ArgList:
       Func_Sig += (" " + Arg.getName())
-    Func_Sig += ")"
+    Func_Sig += " ) {"
     print(Func_Sig)
-    # Print regions in this function
-    RoseRegion.print()
-    print(")")
+    RoseRegion.print(self)
+    print("}")
 
 
 
@@ -300,7 +300,7 @@ class RoseForLoop(RoseRegion):
         self.addRegion(Block)
       else:
         TailRegion.addRegion(Abstraction)
-      self.updateTailChild(TailRegion)
+        self.updateTailChild(TailRegion)
       return
     assert False
   
@@ -319,7 +319,7 @@ class RoseForLoop(RoseRegion):
     return False
   
   def print(self):
-    LoopHeader = "(for/list ([" + self.Iterator.getName() + " (range " \
+    LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
         + self.getStartIndex().print() + " " + self.getEndIndex().print() \
         + " " + self.getStep().print() + ")])"
     print(LoopHeader)
@@ -410,7 +410,7 @@ class RoseCond(RoseRegion):
         self.addRegion(Block, Key)
       else:
         TailRegion.addRegion(Abstraction)
-      self.updateTailChild(TailRegion, Key)
+        self.updateTailChild(TailRegion, Key)
       return
     assert False
 
