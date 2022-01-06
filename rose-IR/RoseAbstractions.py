@@ -189,7 +189,7 @@ class RoseBlock(RoseRegion):
     super().__init__(OpList, ParentRegion)
   
   @staticmethod
-  def create(OpList : list, ParentRegion : RoseRegion = RoseUndefRegion()):
+  def create(OpList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseBlock(OpList, ParentRegion)
   
   def areChildrenValid(self):
@@ -341,8 +341,8 @@ class RoseCond(RoseRegion):
     super().__init__(Children, ParentRegion)
   
   @staticmethod
-  def create(Condition : RoseValue, ThenRegionList : list, ElseRegionList : list, 
-              ParentRegion : RoseRegion):
+  def create(Condition : RoseValue, ThenRegionList : list = [], ElseRegionList : list = [], 
+              ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseCond(Condition, ThenRegionList, ElseRegionList, ParentRegion)
   
   def areChildrenValid(self):
