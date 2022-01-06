@@ -31,16 +31,13 @@ Index = namedtuple('Index', ['obj', 'idx'])
 Break = namedtuple('Break', [])
 
 Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'])
-Spec = namedtuple('Spec', [
-  'intrin', 'inst', 'params',
-  'spec', 'rettype', 'binary_exprs',
 
+Sema = namedtuple('Sema', [
+  'intrin', 'inst', 'params',
+  'spec', 'rettype',
   'inst_form',
   'cpuids',
   'imm_width', # None of this instruction doesn't have imm8
   'xed',
   'elem_type',
-
-  # configuration of binary exprs
-  'configs',
   ])
