@@ -34,7 +34,8 @@ class RoseZeroExtendOp(RoseOperation):
     super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
+            ParentBlock = RoseUndefRegion()):
     return RoseZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
@@ -49,15 +50,16 @@ class RoseZeroExtendOp(RoseOperation):
     return self.getOperand(1)
 
 
-class RoseSliceOp(RoseOperation):
+class RoseExtractSliceOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, Low, High]
     RoseOperation.__init__(self, RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseSliceOp(Name, Bitvector, Low, High, ParentBlock)
+  def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
+            ParentBlock = RoseUndefRegion()):
+    return RoseExtractSliceOp(Name, Bitvector, Low, High, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -68,6 +70,31 @@ class RoseSliceOp(RoseOperation):
   def getHighIndex(self):
     return self.getOperand(2)
 
+
+class RoseInsertSliceOp(RoseOperation):
+  def __init__(self, InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, \
+              High : RoseValue, ParentBlock):
+    assert Bitvector.getType().isBitVectorTy()
+    assert InsertVal.getType().isBitVectorTy()
+    OperandList = [InsertVal, Bitvector, Low, High]
+    RoseOperation.__init__(self, RoseOpcode.bvinsert, "", OperandList, ParentBlock)
+
+  @staticmethod
+  def create(InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
+            ParentBlock = RoseUndefRegion()):
+    return RoseInsertSliceOp(InsertVal, Bitvector, Low, High, ParentBlock)
+
+  def getInsertValue(self):
+    return self.getOperand(0)
+
+  def getBitVector(self):
+    return self.getOperand(1)
+  
+  def getLowIndex(self):
+    return self.getOperand(2)
+  
+  def getHighIndex(self):
+    return self.getOperand(3)
 
 
 class RoseNotOp(RoseOperation):
@@ -96,6 +123,31 @@ class RoseNegOp(RoseOperation):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+
+
+class RoseReturnOp(RoseOperation):
+  def __init__(self, Value : RoseValue, ParentBlock):
+    OperandList = [Value]
+    super().__init__(RoseOpcode.rosereturn, "", OperandList, ParentBlock)
+
+  @staticmethod  
+  def create(*args):
+    if len(args) == 2:
+      if isinstance(args[0], RoseValue):
+        return RoseReturnOp(args[0], args[1])
+    if len(args) == 1:
+      if isinstance(args[0], RoseValue):
+        return RoseReturnOp(args[0], RoseUndefRegion())
+      if not isinstance(args[0], RoseValue):
+        Value = RoseValue.create("", RoseType.getVoidTy())
+        return RoseReturnOp(Value, args[0])
+    if len(args) == 0:
+      Value = RoseValue.create("", RoseType.getVoidTy())
+      return RoseReturnOp(Value, RoseUndefRegion())
+    assert False
+
+  def getReturnedValue(self):
+    return self.getOperands(0)
 
 
 class RoseCallOp(RoseOperation):
@@ -130,7 +182,7 @@ class RoseSelectOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, 
-            ParentBlock : RoseUndefRegion()):
+            ParentBlock = RoseUndefRegion()):
     return RoseSelectOp(Name, Cond, Then, Else, ParentBlock)
   
   def getCondition(self):
