@@ -79,7 +79,7 @@ class RoseContext:
     self.RootAbstractions.append(Abstraction)
     
   def popRootAbstraction(self):
-    return self.RootAbstractions.pop(len(self.RootAbstractions) - 1)
+    return self.RootAbstractions.pop()
   
   def getRootAbstraction(self):
     return self.RootAbstractions[len(self.RootAbstractions) - 1]
@@ -211,7 +211,13 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
 
   # Add the op to the IR
   RootAbstraction = Context.popRootAbstraction()
+  print("ROOT ABSTRACTION BEFORE")
+  print(RootAbstraction)
+  RootAbstraction.print()
   RootAbstraction.addAbstraction(Operation)
+  print("ROOT ABSTRACTION AFTER:")
+  print(RootAbstraction)
+  RootAbstraction.print()
   Context.pushRootAbstraction(RootAbstraction)
 
   # Add the operation to the context
@@ -260,7 +266,13 @@ def CompileUpdate(Update, Context : x86RoseContext):
 
   # Add the op to the IR
   RootAbstraction = Context.popRootAbstraction()
+  print("----ROOT ABSTRACTION BEFORE")
+  print(RootAbstraction)
+  RootAbstraction.print()
   RootAbstraction.addAbstraction(LHSOp)
+  print("------ROOT ABSTRACTION AFTER:")
+  print(RootAbstraction)
+  RootAbstraction.print()
   Context.pushRootAbstraction(RootAbstraction)
 
   # Add the operation to the context
@@ -447,6 +459,8 @@ def CompileCall(CallStmt, Context : x86RoseContext):
 
     # Destroy the child context now
     Context.destroyContext(FunctionDef.id)
+    print("COMPILED FUNCITON:")
+    CompiledFunction.print()
 
   # Compile call statement now.
   FunctionCall = RoseCallOp.create(CallStmt.id, Function, ArgValuesList)
@@ -455,9 +469,14 @@ def CompileCall(CallStmt, Context : x86RoseContext):
   RootAbstraction = Context.popRootAbstraction()
   RootAbstraction.addAbstraction(FunctionCall)
   Context.pushRootAbstraction(RootAbstraction)
+  print("====ROOT ABSTRACTION")
+  print(RootAbstraction)
+  RootAbstraction.print()
   # Add the operation to the context
   Context.addCompiledAbstraction(CallStmt.id, FunctionCall)
-  
+  print("COMPILED CALL OPERATION:")
+  FunctionCall.print()
+
   return FunctionCall
 
 
@@ -610,18 +629,13 @@ def CompileSemantics(Sema):
       CompileStatement(Stmt, RootContext)
       break
     CompileStatement(Stmt, RootContext)
-  
-  #Outputs = [RootContext.getVariableValue(OutParam) for OutParam in OutParams]
-  Outputs = []
-  if not ReturnsVoid:
-    if not ReturnsMask:
-      ID = RootContext.getVariableID("dst")
-      RetVal = RootContext.getCompiledAbstractionForID(ID)
-    else:
-      ID = RootContext.getVariableID("k")
-      RetVal = RootContext.getCompiledAbstractionForID(ID)
-    Outputs = [RetVal] #+ Outputs
-  return ParamValues, Outputs
+
+  # Get the compiled function
+  CompiledFunction = RootContext.popRootAbstraction()
+  print("==========================PRINTING THE COMPILED FUNCTION")
+  CompiledFunction.print()
+
+  return CompiledFunction
 
 
 CompileAbstractions = {
@@ -772,8 +786,4 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
   intrin_node = ET.fromstring(sema)
   spec = get_spec_from_xml(intrin_node)
   print(spec)
-  param_vals, outs = CompileSemantics(spec)
-  print(param_vals, outs)
-
-
-
+  CompiledFunction = CompileSemantics(spec)
