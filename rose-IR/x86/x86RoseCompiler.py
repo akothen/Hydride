@@ -313,11 +313,29 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   print(UnaryExpr)
   # Compile the operation
   Value = CompileExpression(UnaryExpr.a, Context)
-  Operation = UnaryOps[UnaryExpr.op](UnaryExpr.id, Value, Context)
+  Operation = UnaryOps[UnaryExpr.op](UnaryExpr.id, Value)
   # Add the operation to the IR
   RootAbstraction = Context.popRootAbstraction()
   RootAbstraction.addAbstraction(Operation)
   Context.pushRootAbstraction(RootAbstraction)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(UnaryExpr.id, Operation)
+  return Operation
+
+
+def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
+  # Compile the operands
+  Operand1 = CompileExpression(BinaryExpr.a, Context)
+  Operand2 = CompileExpression(BinaryExpr.b, Context)
+
+  # Compile the binary operation
+  Operation = BinaryOps[BinaryExpr.op](BinaryExpr.id, Operand1, Operand2)
+
+  # Add the operation to the IR
+  RootAbstraction = Context.popRootAbstraction()
+  RootAbstraction.addAbstraction(Operation)
+  Context.pushRootAbstraction(RootAbstraction)
+
   # Add the operation to the context
   Context.addCompiledAbstraction(UnaryExpr.id, Operation)
   return Operation
@@ -368,7 +386,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
 
   # Check if this is a call to a builtin function
   if FunctionName in Builtins:
-    Operation = Builtins[FunctionName](CallStmt.id, ArgValuesList, Context)
+    Operation = Builtins[FunctionName](CallStmt.id, ArgValuesList)
     # Add the operation to the IR
     RootAbstraction = Context.popRootAbstraction()
     RootAbstraction.addAbstraction(Operation)
@@ -658,7 +676,7 @@ CompileAbstractions = {
   UnaryExpr: CompileUnaryExpr,
   Select: CompileSelect,
   If: CompileIf,
-  #BinaryExpr: CompileBinaryExpr,
+  BinaryExpr: CompileBinaryExpr,
   #While: compile_while,
   #Match: CompileMatch,
   #Lookup: compile_lookup,
@@ -666,7 +684,7 @@ CompileAbstractions = {
 
 
 def HandleToSignExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args, Context : x86RoseContext):
+  def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
@@ -677,7 +695,7 @@ def HandleToSignExtend(Bitwidth : int):
 
 
 def HandleToZeroExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args, Context : x86RoseContext):
+  def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
@@ -717,17 +735,17 @@ Builtins = {
 
 
 def HandleToNot():
-  def LamdaImplFunc(Name : str, Value, Context : x86RoseContext):
+  def LamdaImplFunc(Name : str, Value):
     assert Value.getType().isBitVectorTy() == True
-    return RoseNotOp.create(Value)
+    return RoseNotOp.create(Name, Value)
   
   return LamdaImplFunc
 
 
 def HandleToNeg():
-  def LamdaImplFunc(Name : str, Value, Context : x86RoseContext):
+  def LamdaImplFunc(Name : str, Value):
     assert Value.getType().isBitVectorTy() == True
-    return RoseNegOp.create(Value)
+    return RoseNegOp.create(Name, Value)
   
   return LamdaImplFunc
 
@@ -738,6 +756,151 @@ UnaryOps = {
     '-': HandleToNeg,
     '~': HandleToNot,
 }
+
+
+def HandleToAdd():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseAddOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToSub():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseSubOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToMul():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseMulOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToDiv():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseSdivOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToOr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return HandleToOr.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToXor():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseXorOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToAnd():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    Operands = [Operand1, Operand2]
+    return RoseAndOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+def HandleToLessThan():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseSltOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToLessThanEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseSleOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToGreaterThan():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseSgtOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToGreaterThanEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseSgeOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToAshr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseAshrOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToLshr():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseLshrOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+BinaryOps = {
+    '+': HandleToAdd,
+    '-' : HandleToSub,
+    '*' : HandleToMul,
+    '/' : HandleToDiv,
+    '<' : HandleToLessThan,
+    '<=' : HandleToLessThanEqual,
+    '>' : HandleToGreaterThan,
+    '>=' : HandleToGreaterThanEqual,
+    #'!=' : binary_float_cmp('ne'),
+    '>>' : HandleToAshr,
+    '<<' : HandleToLshr,
+    '&' : HandleToAnd,
+    '|' : HandleToOr,
+    'AND' : HandleToAnd,
+    'OR' : HandleToOr,
+    'XOR' : HandleToXor,
+}
+
 
 # Strides definitions
 Strides = {
@@ -795,5 +958,3 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
   spec = get_spec_from_xml(intrin_node)
   print(spec)
   CompiledFunction = CompileSemantics(spec)
-
-
