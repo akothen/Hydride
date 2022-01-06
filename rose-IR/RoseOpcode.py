@@ -1,7 +1,7 @@
 from enum import Enum, auto
-from typing import Callable
 from RoseType import RoseType
 from  RoseValue import RoseValue
+from RoseConstants import RoseConstant
 import RoseAbstractions
 
 # List of all operations that
@@ -90,8 +90,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvadd1.value \
         or self.value == self.bvsub1.value \
         or self.value == self.rotateleft.value \
-        or self.value == self.rotateright.value \
-        or self.value == self.bvextract.value:
+        or self.value == self.rotateright.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
@@ -146,6 +145,15 @@ class RoseOpcode(Enum):
             return Inputs[1].getType()
         if self.value == self.ret.value:
             return Inputs[0].getType()
+        if self.value == self.bvextract.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            assert Inputs[1].getType() == Inputs[2].getType()
+            # TODO: This is temporary. This needs to be fixed.
+            assert isinstance(Inputs[1], RoseConstant)
+            assert isinstance(Inputs[2], RoseConstant)
+            Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
+            return RoseType.getBitVectorTy(Bitwidth)
         return None
 
     def inputsAreValid(self, Inputs : list): 
