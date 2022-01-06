@@ -437,7 +437,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     ReturnValue = RoseUndefValue()
     for Stmt in FunctionDef.body:
       if type(Stmt) == Return:
-        ReturnValue = CompileExpression(Stmt.val, ChildContext)
+        ReturnValue = CompileExpression(Stmt, ChildContext)
         break
       CompileStatement(Stmt, ChildContext)
     assert ReturnValue != RoseUndefValue()
@@ -622,17 +622,25 @@ def CompileSemantics(Sema):
   RootContext.pushRootAbstraction(RootFunction)
 
   # Compile all the statements
+  CompiledRetVal = RoseUndefValue()
   for Stmt in Sema.spec:
     if type(Stmt) == Return:
       #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
       #CompileStatement(Dst, RootContext)
-      CompileStatement(Stmt, RootContext)
+      CompiledRetVal = CompileStatement(Stmt, RootContext)
       break
     CompileStatement(Stmt, RootContext)
-
+  
   # Get the compiled function
   CompiledFunction = RootContext.popRootAbstraction()
-  print("==========================PRINTING THE COMPILED FUNCTION")
+
+  # See if the function returns anything, if not add a return op
+  if CompiledRetVal == RoseUndefValue():
+      Op = RoseReturnOp.create(RetValue)
+      # NO meed to add this operation to the context but add it to the function
+      CompiledFunction.addAbstraction(Op)
+
+  print("\n\n\n\n\n")
   CompiledFunction.print()
 
   return CompiledFunction
@@ -787,3 +795,5 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
   spec = get_spec_from_xml(intrin_node)
   print(spec)
   CompiledFunction = CompileSemantics(spec)
+
+
