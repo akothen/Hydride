@@ -45,6 +45,27 @@ class RoseRegion:
   def getParent(self):
     return self.Parent
   
+  def getTailChild(self, Key = None):
+    if self.isEmpty(Key):
+      return RoseConstants.RoseUndefRegion()
+    if Key == None:
+      return self.Children[len(self.Children) - 1]
+    else:
+      return self.Children[Key][len(self.Children) - 1]
+  
+  def isEmpty(self, Key = None):
+    if Key == None:
+      return len(self.Children) == 0
+    else:
+      return len(self.Children[Key]) == 0
+  
+  def updateTailChild(self, UpdatedChild, Key = None):
+    assert not self.isEmpty(Key)
+    if Key == None:
+      self.Children[len(self.Children) - 1] = UpdatedChild
+    else:
+      self.Children[Key][len(self.Children) - 1] = UpdatedChild
+
   def setParent(self, Parent):
     assert isinstance(Parent, RoseRegion)
     assert self.isParentValid(Parent)
@@ -60,9 +81,18 @@ class RoseRegion:
       self.Children.append(Region)
     else:
       self.Children[Key].append(Region)
+    
+  def replaceRegion(self, Region, Index, Key = None):
+    assert self.isChildValid(Region)
+    if Key == None:
+      assert Index >= 0 and Index < len(self.Children)
+      self.Children[Index] = Region
+    else:
+      assert Index >= 0 and Index < len(self.Children[Key])
+      self.Children[Key][Index] = Region
 
   def print(self):
     for Child in self.Children:
         Child.print()
-  
-  
+
+
