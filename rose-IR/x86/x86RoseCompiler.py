@@ -482,6 +482,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     CompiledFunction.print()
 
   # Compile call statement now.
+  Function = Context.getCompiledAbstractionForID(FunctionDef.id)
   FunctionCall = RoseCallOp.create(CallStmt.id, Function, ArgValuesList)
   print(FunctionCall)
   # Add the op to the IR
@@ -706,9 +707,9 @@ CompileAbstractions = {
   Select: CompileSelect,
   If: CompileIf,
   BinaryExpr: CompileBinaryExpr,
-  #While: compile_while,
+  #While: CompileWhile,
   #Match: CompileMatch,
-  #Lookup: compile_lookup,
+  #Lookup: CompileLookup,
 }
 
 
@@ -943,11 +944,8 @@ Strides = {
 
 
 
-if __name__ == '__main__':
-  from PseudoCodeParser import get_spec_from_xml
-  import xml.etree.ElementTree as ET
-
-  sema = '''
+def sema1():
+  return '''
 <intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
 	<type>Integer</type>
 	<CPUID>SSE2</CPUID>
@@ -982,9 +980,45 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
 	<header>emmintrin.h</header>
 </intrinsic>
   '''
+
+def sema2():
+  return '''
+<intrinsic tech="AVX2" name="_mm256_unpacklo_epi16">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Swizzle</category>
+	<return type="__m256i" varname="dst" etype="UI16"/>
+	<parameter type="__m256i" varname="a" etype="UI16"/>
+	<parameter type="__m256i" varname="b" etype="UI16"/>
+	<description>Unpack and interleave 16-bit integers from the low half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
+	<operation>
+DEFINE INTERLEAVE_WORDS(src1[127:0], src2[127:0]) {
+	dst[15:0] := src1[15:0] 
+	dst[31:16] := src2[15:0] 
+	dst[47:32] := src1[31:16] 
+	dst[63:48] := src2[31:16] 
+	dst[79:64] := src1[47:32] 
+	dst[95:80] := src2[47:32] 
+	dst[111:96] := src1[63:48] 
+	dst[127:112] := src2[63:48] 
+	RETURN dst[127:0]	
+}
+dst[127:0] := INTERLEAVE_WORDS(a[127:0], b[127:0])
+dst[255:128] := INTERLEAVE_WORDS(a[255:128], b[255:128])
+	</operation>
+	<instruction name="VPUNPCKLWD" form="ymm, ymm, ymm" xed="VPUNPCKLWD_YMMqq_YMMqq_YMMqq"/>
+	<header>immintrin.h</header>
+</intrinsic>
+  '''
+
+
+if __name__ == '__main__':
+  from PseudoCodeParser import GetSemaFromXML
+  import xml.etree.ElementTree as ET
+
+  sema = sema2()
   print(sema)
   intrin_node = ET.fromstring(sema)
-  spec = get_spec_from_xml(intrin_node)
+  spec = GetSemaFromXML(intrin_node)
   print(spec)
   CompiledFunction = CompileSemantics(spec)
-
