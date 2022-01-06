@@ -48,24 +48,23 @@ class RoseOpcode(Enum):
     rotateright = auto()
     concat = auto()
     bvextract = auto()
-    bvsignextract = auto()
-    bvzeroextract = auto()
-    bvlowextextract = auto()
-    bvsignlowextract = auto()
-    bvzerolowextract = auto()
+    bvinsert = auto()
     bvsignextend = auto()
     bvzeroextend = auto()
     call = auto()
     select = auto()
+    rosereturn = auto()  # "return" is a keyword in Python
 
     def __str__(self):
         return self.name
     
     def __eq__(self, Other):
+        print(Other)
         assert isinstance(Other, RoseOpcode)
         return self.value == Other.value
 
     def __ne__(self, Other):
+        print(Other)
         assert isinstance(Other, RoseOpcode)
         return self.value != Other.value
     
@@ -134,6 +133,10 @@ class RoseOpcode(Enum):
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(1)
+        if self.value == self.bvinsert.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            assert(len(BVInputs) == 2)
+            return RoseType.getVoidTy()
         if self.value == self.call.value:
             Callee = Inputs[0]
             assert isinstance(Callee, RoseAbstractions.RoseFunction)
@@ -141,6 +144,8 @@ class RoseOpcode(Enum):
         if self.value == self.select.value:
             assert Inputs[1].getType() == Inputs[2].getType()
             return Inputs[1].getType()
+        if self.value == self.rosereturn.value:
+            return Inputs[0].getType()
         return None
 
     def inputsAreValid(self, Inputs : list): 
@@ -197,7 +202,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvsgt.value \
         or self.value == self.bvugt.value \
         or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value:
+        or self.value == self.bvuge.value \
+        or self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) == 2:
                 return True
@@ -210,6 +216,9 @@ class RoseOpcode(Enum):
             return self.callInputsAreValid(Callee, [])
         if self.value == self.select.value:
             return self.selectInputsAreValid(Inputs)
+        if self.value == self.rosereturn.value:
+            assert isinstance(Inputs[0], RoseValue)
+            return (len(Inputs) == 1)
         return None
     
     def isValidNumInputs(self, NumInputs : int):
@@ -256,13 +265,15 @@ class RoseOpcode(Enum):
         or self.value == self.rotateright.value:
             return (NumInputs == 2)
         if self.value == self.bvextract.value:
-            print("NumInputs:")
-            print(NumInputs)
-            return (NumInputs > 2)
+            return (NumInputs == 3)
+        if self.value == self.bvinsert.value:
+            return (NumInputs == 4)
         if self.value == self.select.value:
             return (NumInputs == 3)
         if self.value == self.call.value:
             return (NumInputs >= 1)
+        if self.value == self.rosereturn.value:
+            return (NumInputs == 1)
         return None
 
     def callInputsAreValid(self, Callee, Inputs : list):
