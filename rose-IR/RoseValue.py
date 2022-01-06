@@ -31,7 +31,7 @@ class RoseValue:
     
     # This should only be used if the current type is undefined
     def setType(self, Type : RoseType):
-        assert self.Type.isUndefTy()
+        # just a sanity check meant to make you stop and think
         assert not Type.isUndefTy()
         self.Type = Type
     
