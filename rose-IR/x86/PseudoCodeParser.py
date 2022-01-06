@@ -129,8 +129,8 @@ def p_single_case(p):
 
 def p_return(p):
   'stmt : RETURN expr'
-  #expr_id = gen_unique_id(parser)
-  p[0] = Return(p[2])
+  expr_id = gen_unique_id(parser)
+  p[0] = Return(p[2], expr_id)
 
 def p_expr_assign(p):
   'expr : expr UPDATE expr'
@@ -158,13 +158,15 @@ def p_stmt_while(p):
 
 def p_stmt_for(p):
   'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
+  it_id = "iterator." + gen_unique_id(parser)
   expr_id = "for." + gen_unique_id(parser)
-  p[0] = For(p[2], p[4], p[6], p[7], True, expr_id)
+  p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], True, expr_id)
 
 def p_stmt_for_dec(p):
   'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
+  it_id = "iterator." + gen_unique_id(parser)
   expr_id = "for." + gen_unique_id(parser)
-  p[0] = For(p[2], p[4], p[6], p[7], False, expr_id)
+  p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], False, expr_id)
 
 def p_stmt_if(p):
   'stmt : IF expr THEN stmts FI'
