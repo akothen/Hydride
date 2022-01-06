@@ -53,7 +53,7 @@ class RoseOpcode(Enum):
     bvzeroextend = auto()
     call = auto()
     select = auto()
-    rosereturn = auto()  # "return" is a keyword in Python
+    ret = auto()  # "return" is a keyword in Python
 
     def __str__(self):
         return self.name
@@ -144,7 +144,7 @@ class RoseOpcode(Enum):
         if self.value == self.select.value:
             assert Inputs[1].getType() == Inputs[2].getType()
             return Inputs[1].getType()
-        if self.value == self.rosereturn.value:
+        if self.value == self.ret.value:
             return Inputs[0].getType()
         return None
 
@@ -216,7 +216,7 @@ class RoseOpcode(Enum):
             return self.callInputsAreValid(Callee, [])
         if self.value == self.select.value:
             return self.selectInputsAreValid(Inputs)
-        if self.value == self.rosereturn.value:
+        if self.value == self.ret.value:
             assert isinstance(Inputs[0], RoseValue)
             return (len(Inputs) == 1)
         return None
@@ -272,7 +272,7 @@ class RoseOpcode(Enum):
             return (NumInputs == 3)
         if self.value == self.call.value:
             return (NumInputs >= 1)
-        if self.value == self.rosereturn.value:
+        if self.value == self.ret.value:
             return (NumInputs == 1)
         return None
 
