@@ -5,6 +5,7 @@ from RoseAbstractions import *
 from RoseConstants import RoseConstant, RoseUndefValue, RoseUndefRegion
 from RoseArgument import RoseArgument
 from RoseOperations import *
+from RoseBitVectorOperations import *
 
 from AST import *
 from x86Types import x86Types
@@ -20,6 +21,7 @@ MaxVectorLength = 512
 class RoseContext:
   def __init__(self):
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
+    self.CompiledIDs = dict()   # Some Rose abstraction --> ID
     # Track the contexts we encounter
     self.ParentContext = None
     self.Contexts = dict()   # ID --> child context
@@ -36,20 +38,27 @@ class RoseContext:
   
   def addCompiledAbstraction(self, ID : str, Abstraction):
     self.CompiledAbstractions[ID] = Abstraction
+    #self.CompiledIDs[Abstraction] = ID
   
   def updateCompiledAbstraction(self, ID : str, NewAbstraction):
     assert ID in self.CompiledAbstractions
     self.CompiledAbstractions[ID] = NewAbstraction
+    #self.CompiledIDs[NewAbstraction] = ID
 
   def getCompiledAbstractionForID(self, ID : str):
+    print(ID)
     assert ID in self.CompiledAbstractions
     return self.CompiledAbstractions[ID]
   
-  def getIDForCompiledAbstraction(self, Abstaction):
-    for ID, Value in self.CompiledAbstractions.items():
-      if Value == Abstaction:
-        return ID
-    assert False
+  def getIDForCompiledAbstraction(self, Abstraction):
+    return self.CompiledIDs[Abstraction]
+    #Abstraction.print()
+    #print(self.CompiledAbstractions)
+    #for ID, Value in self.CompiledAbstractions.items():
+    #  Value.print()
+      #if Value == Abstraction:
+      #  return ID
+    #assert False
   
   def addVariable(self, Name : str, ID : str):
     self.Variables[Name] = ID
@@ -95,11 +104,18 @@ class RoseContext:
   
   def getCompiledAbstractions(self):
     return self.CompiledAbstractions
+  
+  def getCompiledIDs(self):
+    return self.CompiledIDs
 
   def copyAbstractionsFromParent(self):
-    assert not self.isRootContext()
+    assert not self.isRootContext()    
     assert isinstance(self.ParentContext, RoseContext)
-    self.CompiledAbstractions = deepcopy(self.Parent.getCompiledAbstractions())
+    self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
+    #self.CompiledIDs = deepcopy(self.ParentContext.getCompiledIDs())
+  
+  def getDefinedVariables(self):
+    return self.Variables
 
 
 # This defines rules specifically for x86 to RoseIR convertion
@@ -118,6 +134,7 @@ class x86RoseContext(RoseContext):
     return self.FunctionDefs[Name]
 
   def createContext(self, ID : str, ChildContext):
+    print("CREATING CONTEXT")
     assert isinstance(ChildContext, x86RoseContext)
     assert self.isCompiledAbstraction(ID)
     Abstraction = self.getCompiledAbstractionForID(ID)
@@ -126,6 +143,7 @@ class x86RoseContext(RoseContext):
       super().createContext(ID, ChildContext)
     elif isinstance(Abstraction, RoseForLoop):
       # Copy all the compiled abstractions from this context to the child
+      ChildContext.setParentContext(self)
       ChildContext.copyAbstractionsFromParent()
       super().createContext(ID, ChildContext)
   
@@ -156,6 +174,8 @@ def CompileVar(Variable, Context):
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(Variable.name):
     ID = Context.getVariableID(Variable.name)
+    print("^^^^^^^^^ID:")
+    print(ID)
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
@@ -204,7 +224,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
     assert High.getValue() >= Low.getValue()
 
   # Add an bitslice operation
-  Operation = RoseExtractSliceOp.create(BitSliceExpr.id, BitVector, Low, High)
+  Operation = RoseBVExtractSliceOp.create(BitSliceExpr.id, BitVector, Low, High)
   print("BIT SLICE EXTRACT OP:")
   Operation.print()
 
@@ -221,6 +241,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
 
   # Add the operation to the context
   Context.addCompiledAbstraction(BitSliceExpr.id, Operation)
+  print(BitSliceExpr.id)
   print("==================================")
   Operation.getType().print()
 
@@ -239,13 +260,25 @@ def CompileUpdate(Update, Context : x86RoseContext):
 
   if type(Update.lhs) == Var:
     # Get the ID associated with the RHS value
-    ID = Context.getIDForCompiledAbstraction(RHSExprVal)
+    ID = Update.rhs.id
+    #ID = Context.getIDForCompiledAbstraction(RHSExprVal)
     # Update the ID associated with this variable name
     Context.addVariable(Update.lhs.name, ID)
+    print(Update.lhs.name)
+    print(ID)
+    print("HERE")
+    print(Context.getCompiledAbstractions())
+    print(Context.getDefinedVariables())
     return RHSExprVal
 
   # We should be compiling the bitslice as LHS now
   assert type(Update.lhs) == BitSlice
+  print(Update.lhs)
+  print(Update)
+  print(Update.lhs.lo)
+  print(Context.getCompiledAbstractions())
+  print(Context.getDefinedVariables())
+  print("*************************************")
   # Compile the LHS Bitslice
   Low = CompileExpression(Update.lhs.lo, Context)
   if (type(Update.lhs.hi) == Var and Update.lhs.hi.name == 'MAX'):
@@ -253,6 +286,10 @@ def CompileUpdate(Update, Context : x86RoseContext):
   else:
     High = CompileExpression(Update.lhs.hi, Context)
   BitVector = CompileExpression(Update.lhs.bv, Context)
+  print("BITVECTOR======:")
+  BitVector.print()
+  Low.print()
+  High.print()
   # Do some sanity check if possible
   if isinstance(Low, RoseConstant):
     assert Low.getValue() >= 0 and Low.getValue() < BitVector.getType().getBitwidth()
@@ -261,7 +298,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
     assert High.getValue() >= Low.getValue()
   # Add an bitslice operation
-  LHSOp = RoseInsertSliceOp.create(RHSExprVal, BitVector, Low, High)
+  LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High)
   print("BIT SLICE INSERT OP:")
   LHSOp.print()
 
@@ -325,12 +362,27 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
 
 
 def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
+    # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(BinaryExpr.id):
+    return Context.getCompiledAbstractionForID(BinaryExpr.id)
+
+  print("COMPILING BINARY EXPRESSION")
+  print("BINARY EXPR:")
+  print(BinaryExpr)
   # Compile the operands
   Operand1 = CompileExpression(BinaryExpr.a, Context)
   Operand2 = CompileExpression(BinaryExpr.b, Context)
+  print('OPERAND1:')
+  Operand1.print()
+  print(Operand1.getType())
+  print("OPERAND2:")
+  Operand2.print()
+  print(Operand2.getType())
 
   # Compile the binary operation
-  Operation = BinaryOps[BinaryExpr.op](BinaryExpr.id, Operand1, Operand2)
+  print("GENERATING BINARY OP")
+  Operation = BinaryOps[BinaryExpr.op]()(BinaryExpr.id, Operand1, Operand2)
+  print("BINARY OP GENERATED")
 
   # Add the operation to the IR
   RootAbstraction = Context.popRootAbstraction()
@@ -338,7 +390,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   Context.pushRootAbstraction(RootAbstraction)
 
   # Add the operation to the context
-  Context.addCompiledAbstraction(UnaryExpr.id, Operation)
+  Context.addCompiledAbstraction(BinaryExpr.id, Operation)
+  print("BINARY OP COMPILED")
   return Operation
 
 
@@ -517,6 +570,9 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     return
 
   # Generate an empty for loop
+  print("COMPILING FOR LOOP")
+  print("FOR EXPR:")
+  print(ForStmt)
   One = RoseConstant.create(1, RoseType.getIntegerTy(32))
   MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
   Step = One if ForStmt.inc else MinusOne
@@ -535,6 +591,11 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Context.createContext(ForStmt.id, ChildContext)
 
   # Add the iterator to the child context
+  print("ITERATOR:")
+  print(Loop.getIterator())
+  Loop.getIterator().print()
+  print(Loop.getIterator().getType())
+  ChildContext.addVariable(ForStmt.iterator.name, ForStmt.iterator.id)
   ChildContext.addCompiledAbstraction(ForStmt.iterator.id, Loop.getIterator())
 
   # Comoile all the statements in this loop
@@ -719,7 +780,7 @@ def HandleToSignExtend(Bitwidth : int):
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
       return Value
-    return RoseSignExtendOp.create(Name, Value, Bitwidth)
+    return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
 
@@ -730,7 +791,7 @@ def HandleToZeroExtend(Bitwidth : int):
     assert Value.getType().isBitVectorTy() == True
     if Value.getType().getBitwidth() > Bitwidth:
       return Value
-    return RoseZeroExtendOp.create(Name, Value, Bitwidth)
+    return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
 
@@ -767,7 +828,7 @@ Builtins = {
 def HandleToNot():
   def LamdaImplFunc(Name : str, Value):
     assert Value.getType().isBitVectorTy() == True
-    return RoseNotOp.create(Name, Value)
+    return RoseBVNotOp.create(Name, Value)
   
   return LamdaImplFunc
 
@@ -775,7 +836,7 @@ def HandleToNot():
 def HandleToNeg():
   def LamdaImplFunc(Name : str, Value):
     assert Value.getType().isBitVectorTy() == True
-    return RoseNegOp.create(Name, Value)
+    return RoseBVNegOp.create(Name, Value)
   
   return LamdaImplFunc
 
@@ -790,9 +851,10 @@ UnaryOps = {
 
 def HandleToAdd():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
     Operands = [Operand1, Operand2]
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVAddOp.create(Name, Operands)
     return RoseAddOp.create(Name, Operands)
   
   return LamdaImplFunc
@@ -800,9 +862,10 @@ def HandleToAdd():
 
 def HandleToSub():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
     Operands = [Operand1, Operand2]
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSubOp.create(Name, Operands)
     return RoseSubOp.create(Name, Operands)
   
   return LamdaImplFunc
@@ -810,50 +873,55 @@ def HandleToSub():
 
 def HandleToMul():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
     Operands = [Operand1, Operand2]
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVMulOp.create(Name, Operands)
     return RoseMulOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
+# TODO: Take signedness into account
 def HandleToDiv():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    Operands = [Operand1, Operand2]
-    return RoseSdivOp.create(Name, Operands)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSdivOp.create(Name, Operand1, Operand2)
+    return RoseDivOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToOr():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
     Operands = [Operand1, Operand2]
-    return HandleToOr.create(Name, Operands)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVOrOp.create(Name, Operands)
+    return RoseNotOp.create(Name, RoseNorOp.create("nand." + Name, Operands))
   
   return LamdaImplFunc
 
 
 def HandleToXor():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    Operands = [Operand1, Operand2]
-    return RoseXorOp.create(Name, Operands)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      Operands = [Operand1, Operand2]
+      return RoseBVXorOp.create(Name, Operands)
+    return RoseXorOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToAnd():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
     Operands = [Operand1, Operand2]
-    return RoseAndOp.create(Name, Operands)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVAndOp.create(Name, Operands)
+    return RoseNotOp.create(Name, RoseNandOp.create("nand." + Name, Operands))
   
   return LamdaImplFunc
 
@@ -862,7 +930,7 @@ def HandleToLessThan():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseSltOp.create(Name, Operand1, Operand2)
+    return RoseBVSLTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -871,7 +939,7 @@ def HandleToLessThanEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseSleOp.create(Name, Operand1, Operand2)
+    return RoseBVSLEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -880,7 +948,7 @@ def HandleToGreaterThan():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseSgtOp.create(Name, Operand1, Operand2)
+    return RoseBVSGTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -889,7 +957,7 @@ def HandleToGreaterThanEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseSgeOp.create(Name, Operand1, Operand2)
+    return RoseBVSGEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -898,7 +966,7 @@ def HandleToAshr():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseAshrOp.create(Name, Operand1, Operand2)
+    return RoseBVAshrOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -907,7 +975,7 @@ def HandleToLshr():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseLshrOp.create(Name, Operand1, Operand2)
+    return RoseBVLshrOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -943,8 +1011,19 @@ Strides = {
 }
 
 
+def Compile():
+  from PseudoCodeParser import GetSemaFromXML
+  import xml.etree.ElementTree as ET
 
-def sema1():
+  sema = test3()
+  print(sema)
+  intrin_node = ET.fromstring(sema)
+  spec = GetSemaFromXML(intrin_node)
+  print(spec)
+  CompiledFunction = CompileSemantics(spec)
+
+
+def test1():
   return '''
 <intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
 	<type>Integer</type>
@@ -981,7 +1060,7 @@ dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
 </intrinsic>
   '''
 
-def sema2():
+def test2():
   return '''
 <intrinsic tech="AVX2" name="_mm256_unpacklo_epi16">
 	<type>Integer</type>
@@ -1012,13 +1091,28 @@ dst[255:128] := INTERLEAVE_WORDS(a[255:128], b[255:128])
   '''
 
 
-if __name__ == '__main__':
-  from PseudoCodeParser import GetSemaFromXML
-  import xml.etree.ElementTree as ET
+def test3():
+  return '''
+<intrinsic tech="AVX2" name="_mm_broadcastb_epi8">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Swizzle</category>
+	<return type="__m128i" varname="dst" etype="UI8"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<description>Broadcast the low packed 8-bit integer from "a" to all elements of "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*8
+	dst[i+7:i] := a[7:0]
+ENDFOR
+	</operation>
+	<instruction name="VPBROADCASTB" form="xmm, xmm" xed="VPBROADCASTB_XMMdq_XMMb"/>
+	<header>immintrin.h</header>
+</intrinsic>
+  '''
+#dst[MAX:128] := 0
 
-  sema = sema2()
-  print(sema)
-  intrin_node = ET.fromstring(sema)
-  spec = GetSemaFromXML(intrin_node)
-  print(spec)
-  CompiledFunction = CompileSemantics(spec)
+if __name__ == '__main__':
+  Compile()
+
+
