@@ -1,3 +1,4 @@
+
 from enum import Enum, auto
 
 # Definition of concept of types in Rose IR
@@ -346,5 +347,4 @@ class RoseFunctionType(RoseType):
 if __name__ == '__main__':
     BVType = RoseType.getBitVectorTy(8)
     print(BVType)
- 
 
