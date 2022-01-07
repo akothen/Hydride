@@ -228,7 +228,7 @@ class RoseBlock(RoseRegion):
 class RoseForLoop(RoseRegion):
   def __init__(self, IteratorName : str, Start : RoseValue, End : RoseValue, Step : RoseValue, 
               RegionList : list, ParentRegion : RoseRegion):
-    self.Iterator = RoseValue.create(IteratorName, RoseType.getIntegerTy())
+    self.Iterator = RoseValue.create(IteratorName, RoseType.getIntegerTy(32))
     self.Start = Start
     self.End = End
     self.Step = Step
@@ -285,7 +285,6 @@ class RoseForLoop(RoseRegion):
   
   # An abstraction can be an operation and region
   def addAbstraction(self, Abstraction):
-    assert self.isChildValid(Abstraction)
     if isinstance(Abstraction, RoseRegion):
       self.addRegion(Abstraction)
       return
@@ -394,7 +393,6 @@ class RoseCond(RoseRegion):
   
   # An abstraction can be an operation and region
   def addAbstraction(self, Abstraction, Key):
-    assert self.isChildValid(Abstraction)
     assert Key == "then" or Key == "else"
     if isinstance(Abstraction, RoseRegion):
       self.addRegion(Abstraction, Key)
