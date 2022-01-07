@@ -1,5 +1,5 @@
 
-from RoseType import RoseType
+from RoseType import RoseBooleanType, RoseType
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
@@ -11,12 +11,8 @@ class RoseConstant(RoseValue):
     super().__init__(str(Value), Type)
   
   @staticmethod
-  def create(Value, Bitwidth : int):
-    if isinstance(Value, int):
-      return RoseConstant(Value, RoseType.getIntegerTy(Bitwidth))
-    if isinstance(Value, float):
-      return RoseConstant(Value, RoseType.getFloatTy())
-    assert False
+  def create(Value, Type :  RoseType):
+    return RoseConstant(Value, Type)
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseConstant)
@@ -25,6 +21,9 @@ class RoseConstant(RoseValue):
   def __ne__(self, Other):
     assert isinstance(Other, RoseConstant)
     return self.Val != Other.Val or super().__ne__(Other)
+  
+  def __str__(self):
+    return str(self.Val)
 
   def getValue(self):
     return self.Val
@@ -38,6 +37,9 @@ class RoseUndefValue(RoseValue):
   def __init__(self):
     super().__init__("undef", RoseType.getUndefTy())
   
+  def __str__(self):
+    return self.getName()
+  
   def print(self):
     print(self.getName())
 
@@ -45,6 +47,11 @@ class RoseUndefValue(RoseValue):
 class RoseUndefRegion(RoseRegion):
   def __init__(self):
     super().__init__(None, None)
+  
+  def __str__(self):
+    return "undef_region"
 
   def print(self):
-    print("undef_reg")
+    print("undef_region")
+
+ 
