@@ -5,7 +5,7 @@ from RoseConstants import RoseConstant, RoseUndefRegion
 from RoseOperation import RoseOperation
 
 
-class RoseSignExtendOp(RoseOperation):
+class RoseBVSignExtendOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
@@ -13,12 +13,12 @@ class RoseSignExtendOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseSignExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
+    return RoseBVSignExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
     TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseSignExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+    return RoseBVSignExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -27,7 +27,7 @@ class RoseSignExtendOp(RoseOperation):
     return self.getOperand(1)
 
 
-class RoseZeroExtendOp(RoseOperation):
+class RoseBVZeroExtendOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
@@ -36,12 +36,12 @@ class RoseZeroExtendOp(RoseOperation):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
             ParentBlock = RoseUndefRegion()):
-    return RoseZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
+    return RoseBVZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
     TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseZeroExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+    return RoseBVZeroExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -50,7 +50,7 @@ class RoseZeroExtendOp(RoseOperation):
     return self.getOperand(1)
 
 
-class RoseExtractSliceOp(RoseOperation):
+class RoseBVExtractSliceOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, Low, High]
@@ -59,7 +59,7 @@ class RoseExtractSliceOp(RoseOperation):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
             ParentBlock = RoseUndefRegion()):
-    return RoseExtractSliceOp(Name, Bitvector, Low, High, ParentBlock)
+    return RoseBVExtractSliceOp(Name, Bitvector, Low, High, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -71,7 +71,7 @@ class RoseExtractSliceOp(RoseOperation):
     return self.getOperand(2)
 
 
-class RoseInsertSliceOp(RoseOperation):
+class RoseBVInsertSliceOp(RoseOperation):
   def __init__(self, InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, \
               High : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
@@ -82,7 +82,7 @@ class RoseInsertSliceOp(RoseOperation):
   @staticmethod
   def create(InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
             ParentBlock = RoseUndefRegion()):
-    return RoseInsertSliceOp(InsertVal, Bitvector, Low, High, ParentBlock)
+    return RoseBVInsertSliceOp(InsertVal, Bitvector, Low, High, ParentBlock)
 
   def getInsertValue(self):
     return self.getOperand(0)
@@ -97,72 +97,9 @@ class RoseInsertSliceOp(RoseOperation):
     return self.getOperand(3)
 
 
-class RoseReturnOp(RoseOperation):
-  def __init__(self, Value : RoseValue, ParentBlock):
-    OperandList = [Value]
-    super().__init__(RoseOpcode.ret, "", OperandList, ParentBlock)
-
-  @staticmethod  
-  def create(*args):
-    if len(args) == 2:
-      if isinstance(args[0], RoseValue):
-        return RoseReturnOp(args[0], args[1])
-    if len(args) == 1:
-      if isinstance(args[0], RoseValue):
-        return RoseReturnOp(args[0], RoseUndefRegion())
-      if not isinstance(args[0], RoseValue):
-        Value = RoseValue.create("", RoseType.getVoidTy())
-        return RoseReturnOp(Value, args[0])
-    if len(args) == 0:
-      Value = RoseValue.create("", RoseType.getVoidTy())
-      return RoseReturnOp(Value, RoseUndefRegion())
-    assert False
-
-  def getReturnedValue(self):
-    return self.getOperands(0)
-
-
-class RoseCallOp(RoseOperation):
-  def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
-    assert Callee.getType().isFunctionTy()
-    Operands = [Callee]
-    Operands.extend(OperandList)
-    super().__init__(RoseOpcode.call, Name, Operands, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
-    return RoseCallOp(Name, Callee, OperandList, ParentBlock)
-  
-  def getCallee(self):
-    return self.getOperands()[0]
-  
-  def getCallOperands(self):
-    return self.getOperands()[1:]
-  
-
-class RoseSelectOp(RoseOperation):
-  def __init__(self, Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, ParentBlock):
-    OperandList = [Cond, Then, Else]
-    super().__init__(RoseOpcode.select, Name, OperandList, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, 
-            ParentBlock = RoseUndefRegion()):
-    return RoseSelectOp(Name, Cond, Then, Else, ParentBlock)
-  
-  def getCondition(self):
-    return self.getOperands()[0]
-  
-  def getThenValue(self):
-    return self.getOperands()[1]
-  
-  def getElseValue(self):
-    return self.getOperands()[2]
-
-
 ######################################## BITWISE OPERATORS ###########################
 
-class RoseNotOp(RoseOperation):
+class RoseBVNotOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -170,13 +107,13 @@ class RoseNotOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseNotOp(Name, Bitvector, ParentBlock)
+    return RoseBVNotOp(Name, Bitvector, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
 
 
-class RoseAndOp(RoseOperation):
+class RoseBVAndOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -184,10 +121,10 @@ class RoseAndOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseAndOp(Name, Operands, ParentBlock)
+    return RoseBVAndOp(Name, Operands, ParentBlock)
 
 
-class RoseOrOp(RoseOperation):
+class RoseBVOrOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -195,21 +132,21 @@ class RoseOrOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseOrOp(Name, Operands, ParentBlock)
+    return RoseBVOrOp(Name, Operands, ParentBlock)
 
 
-class RoseXorOp(RoseOperation):
+class RoseBVXorOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
     super().__init__(RoseOpcode.bvxor, Name, Operands, ParentBlock)
-    
+  
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseXorOp(Name, Operands, ParentBlock)
+    return RoseBVXorOp(Name, Operands, ParentBlock)
 
 
-class RoseShlOp(RoseOperation):
+class RoseBVShlOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -219,10 +156,10 @@ class RoseShlOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseShlOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVShlOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseLshrOp(RoseOperation):
+class RoseBVLshrOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -232,10 +169,10 @@ class RoseLshrOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseLshrOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVLshrOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseAshrOp(RoseOperation):
+class RoseBVAshrOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -245,14 +182,14 @@ class RoseAshrOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseAshrOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVAshrOp(Name, Operand1, Operand2, ParentBlock)
 
 
 
 ######################################## ARITHMETIC OPERATORS ###########################
 
 
-class RoseNegOp(RoseOperation):
+class RoseBVNegOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -260,13 +197,13 @@ class RoseNegOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseNegOp(Name, Bitvector, ParentBlock)
-
+    return RoseBVNegOp(Name, Bitvector, ParentBlock)
+  
   def getInputBitVector(self):
     return self.getOperand(0)
 
 
-class RoseAddOp(RoseOperation):
+class RoseBVAddOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -274,10 +211,10 @@ class RoseAddOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseAddOp(Name, Operands, ParentBlock)
+    return RoseBVAddOp(Name, Operands, ParentBlock)
 
 
-class RoseSubOp(RoseOperation):
+class RoseBVSubOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -285,10 +222,10 @@ class RoseSubOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseSubOp(Name, Operands, ParentBlock)
+    return RoseBVSubOp(Name, Operands, ParentBlock)
 
 
-class RoseMulOp(RoseOperation):
+class RoseBVMulOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -296,10 +233,10 @@ class RoseMulOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseMulOp(Name, Operands, ParentBlock)
+    return RoseBVMulOp(Name, Operands, ParentBlock)
 
   
-class RoseUdivOp(RoseOperation):
+class RoseBVUdivOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -309,10 +246,10 @@ class RoseUdivOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUdivOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUdivOp(Name, Operand1, Operand2, ParentBlock)
   
 
-class RoseSdivOp(RoseOperation):
+class RoseBVSdivOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -322,10 +259,10 @@ class RoseSdivOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSdivOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSdivOp(Name, Operand1, Operand2, ParentBlock)
   
   
-class RoseUremOp(RoseOperation):
+class RoseBVUremOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -335,10 +272,10 @@ class RoseUremOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUremOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUremOp(Name, Operand1, Operand2, ParentBlock)
   
 
-class RoseSremOp(RoseOperation):
+class RoseBVSremOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -348,10 +285,10 @@ class RoseSremOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSremOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSremOp(Name, Operand1, Operand2, ParentBlock)
   
 
-class RoseSmodOp(RoseOperation):
+class RoseBVSmodOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -361,13 +298,13 @@ class RoseSmodOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSmodOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSmodOp(Name, Operand1, Operand2, ParentBlock)
 
 
 
 ############################# COMPARISON OPERATORS ###################################
 
-class RoseEqOp(RoseOperation):
+class RoseBVEqOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -377,10 +314,10 @@ class RoseEqOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseEqOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVEqOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseSltOp(RoseOperation):
+class RoseBVSltOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -390,10 +327,10 @@ class RoseSltOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSltOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSltOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseUltOp(RoseOperation):
+class RoseBVUltOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -403,10 +340,10 @@ class RoseUltOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUltOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUltOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseSleOp(RoseOperation):
+class RoseBVSleOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -416,10 +353,10 @@ class RoseSleOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSleOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSleOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseUleOp(RoseOperation):
+class RoseBVUleOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -429,10 +366,10 @@ class RoseUleOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUleOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUleOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseSgtOp(RoseOperation):
+class RoseBVSgtOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -442,10 +379,10 @@ class RoseSgtOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSgtOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSgtOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseUgtOp(RoseOperation):
+class RoseBVUgtOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -455,10 +392,10 @@ class RoseUgtOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUgtOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUgtOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseSgeOp(RoseOperation):
+class RoseBVSgeOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -468,10 +405,10 @@ class RoseSgeOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseSgeOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVSgeOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseUgeOp(RoseOperation):
+class RoseBVUgeOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -481,13 +418,13 @@ class RoseUgeOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseUgeOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVUgeOp(Name, Operand1, Operand2, ParentBlock)
 
 
 
 ######################################## ADDITIONAL OPERATORS ###########################
 
-class RoseAdd1Op(RoseOperation):
+class RoseBVAdd1Op(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -495,10 +432,10 @@ class RoseAdd1Op(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseAdd1Op(Name, Bitvector, ParentBlock)
+    return RoseBVAdd1Op(Name, Bitvector, ParentBlock)
 
 
-class RoseSub1Op(RoseOperation):
+class RoseBVSub1Op(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -506,10 +443,10 @@ class RoseSub1Op(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseSub1Op(Name, Bitvector, ParentBlock)
+    return RoseBVSub1Op(Name, Bitvector, ParentBlock)
 
 
-class RoseSminOp(RoseOperation):
+class RoseBVSminOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -517,10 +454,10 @@ class RoseSminOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseSminOp(Name, Operands, ParentBlock)
+    return RoseBVSminOp(Name, Operands, ParentBlock)
 
 
-class RoseUminOp(RoseOperation):
+class RoseBVUminOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -528,10 +465,10 @@ class RoseUminOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseUminOp(Name, Operands, ParentBlock)
+    return RoseBVUminOp(Name, Operands, ParentBlock)
 
 
-class RoseSmaxOp(RoseOperation):
+class RoseBVSmaxOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -539,10 +476,10 @@ class RoseSmaxOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseSmaxOp(Name, Operands, ParentBlock)
+    return RoseBVSmaxOp(Name, Operands, ParentBlock)
 
 
-class RoseUmaxOp(RoseOperation):
+class RoseBVUmaxOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -550,10 +487,10 @@ class RoseUmaxOp(RoseOperation):
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseUmaxOp(Name, Operands, ParentBlock)
+    return RoseBVUmaxOp(Name, Operands, ParentBlock)
 
 
-class RoseRolOp(RoseOperation):
+class RoseBVRolOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -563,10 +500,10 @@ class RoseRolOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseRolOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVRolOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseRorOp(RoseOperation):
+class RoseBVRorOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -576,10 +513,10 @@ class RoseRorOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
-    return RoseRorOp(Name, Operand1, Operand2, ParentBlock)
+    return RoseBVRorOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseZeroOp(RoseOperation):
+class RoseBVZeroOp(RoseOperation):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -587,5 +524,5 @@ class RoseZeroOp(RoseOperation):
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseZeroOp(Name, Bitvector, ParentBlock)
+    return RoseBVZeroOp(Name, Bitvector, ParentBlock)
 
