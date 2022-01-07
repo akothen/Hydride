@@ -6,6 +6,7 @@ class RoseType:
     class RoseTypeEnum(Enum):
         Integer = auto()
         Float = auto()
+        Boolean = auto()
         BitVector = auto()
         Vector = auto()
         List = auto()
@@ -15,7 +16,7 @@ class RoseType:
 
     # SubClassData is data necessary for different types
     # Its used by different derived types differently.
-    def __init__(self, Enum, SubClassData):
+    def __init__(self, Enum, SubClassData = None):
         self.TypeEnum = Enum
         self.SubClassData = SubClassData
     
@@ -34,6 +35,10 @@ class RoseType:
     @staticmethod
     def getIntegerTy(Bitwidth : int):
         return RoseIntegerType.create(Bitwidth)
+    
+    @staticmethod
+    def getBooleanTy():
+        return RoseBooleanType.create()
 
     @staticmethod
     def getGenericFloatTy(Mantissa : int, Exponent : int, IsSigned : bool = True):
@@ -78,6 +83,9 @@ class RoseType:
     def isIntegerTy(self):
         return isinstance(self, RoseIntegerType)
     
+    def isBooleanTy(self):
+        return isinstance(self, RoseBooleanType)
+    
     def isGenericFloatTy(self):
         return isinstance(self, RoseGenericFloatType)
 
@@ -106,6 +114,8 @@ class RoseType:
 
 class RoseBitVectorType(RoseType):
     def __init__(self, Bitwidth : int):
+        # Bitwidth of a bitvector must be more than 1.
+        assert Bitwidth > 1
         super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
     
     @staticmethod
@@ -115,6 +125,7 @@ class RoseBitVectorType(RoseType):
     def getBitwidth(self):
         Bitwidth = self.getSubClassData()
         assert type(Bitwidth) == int
+        assert Bitwidth > 1
         return Bitwidth
     
     def print(self):
@@ -123,6 +134,8 @@ class RoseBitVectorType(RoseType):
 
 class RoseIntegerType(RoseType):
     def __init__(self, Bitwidth : int):
+        # Bitwidth of an integer must be more than 1.
+        assert Bitwidth > 1
         super().__init__(RoseType.RoseTypeEnum.Integer, Bitwidth)
     
     @staticmethod
@@ -132,14 +145,30 @@ class RoseIntegerType(RoseType):
     def getBitwidth(self):
         Bitwidth = self.getSubClassData()
         assert type(Bitwidth) == int
+        assert Bitwidth > 1
         return Bitwidth
     
     def print(self):
         print("int" + str(self.getBitwidth()))
     
 
+class RoseBooleanType(RoseType):
+    def __init__(self):
+        super().__init__(RoseType.RoseTypeEnum.Boolean)
+    
+    @staticmethod
+    def create():
+        return RoseBooleanType()
+    
+    def print(self):
+        print("bool")
+
+
 class RoseGenericFloatType(RoseType):
     def __init__(self, Mantissa : int, Exponent : int):
+        # Some sanity checks
+        assert Mantissa > 1
+        assert Exponent > 1
         SubClassData = {}
         SubClassData["mantissa"] = Mantissa
         SubClassData["exponent"] = Exponent
@@ -154,16 +183,20 @@ class RoseGenericFloatType(RoseType):
         Exponent = self.getSubClassData()["exponent"]
         assert type(Mantissa) == int
         assert type(Exponent) == int
+        assert Mantissa > 1
+        assert Exponent > 1
         return (Mantissa + Exponent + 1)
     
     def getMantissaWidth(self):
         Mantissa = self.getSubClassData()["mantissa"]
         assert type(Mantissa) == int
+        assert Mantissa > 1
         return Mantissa
 
     def getExponentWidth(self):
         Exponent = self.getSubClassData()["exponent"]
         assert type(Exponent) == int
+        assert Exponent > 1
         return Exponent
     
     def print(self):
