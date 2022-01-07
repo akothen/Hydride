@@ -115,7 +115,7 @@ class RoseType:
 class RoseBitVectorType(RoseType):
     def __init__(self, Bitwidth : int):
         # Bitwidth of a bitvector must be more than 1.
-        assert Bitwidth > 1
+        assert Bitwidth >= 1
         super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
     
     @staticmethod
@@ -125,7 +125,7 @@ class RoseBitVectorType(RoseType):
     def getBitwidth(self):
         Bitwidth = self.getSubClassData()
         assert type(Bitwidth) == int
-        assert Bitwidth > 1
+        assert Bitwidth >= 1
         return Bitwidth
     
     def print(self):
@@ -346,4 +346,5 @@ class RoseFunctionType(RoseType):
 if __name__ == '__main__':
     BVType = RoseType.getBitVectorTy(8)
     print(BVType)
+ 
 
