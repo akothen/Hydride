@@ -1,8 +1,10 @@
+
 import ply.yacc as yacc
 from lex import tokens
 import xml.etree.ElementTree as ET
 from AST import *
 from collections import defaultdict
+
 
 # Expressions have unique IDs
 def GenUniqueID(parser):
@@ -160,7 +162,8 @@ def p_args(p):
 
 def p_expr_bit_index(p):
   'expr : expr LBRACE expr RBRACE'
-  p[0] = Index(p[1], p[3])
+  expr_id = "index." + GenUniqueID(parser)
+  p[0] = Index(p[1], p[3], expr_id)
 
 def p_expr_bit_slice(p):
   'expr : expr LBRACE expr COLON expr RBRACE'
@@ -485,3 +488,5 @@ def Parsex86Semantics(FileName):
 
 if __name__ == '__main__':
   Parsex86Semantics("intel_sema.xml")
+
+
