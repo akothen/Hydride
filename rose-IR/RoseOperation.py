@@ -1,7 +1,9 @@
+
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseConstants import RoseUndefRegion, RoseUndefValue
+from RoseConstants import RoseConstant, RoseUndefRegion, RoseUndefValue
 import RoseAbstractions 
+from RoseArgument import RoseArgument
 
 # An operation in Rosette
 # An operation is either an instruction.
@@ -19,28 +21,27 @@ class RoseOperation(RoseValue):
         # Sanity check to see that the operand list is complete
         self.assertValidationOfInputs()
     
-    @staticmethod
-    def create(Opcode : RoseOpcode, Name : str, OperandList : list, ParentBlock = RoseUndefRegion()):
-        return RoseOperation(Opcode, Name, OperandList, ParentBlock)
-    
-    # Overridable function
     def assertValidationOfInputs(self):
         assert self.getOpcode().inputsAreValid(self.getOperands())
     
     def __eq__(self, Other):
-        if isinstance(Other, RoseUndefValue):
+        if isinstance(Other, RoseUndefValue) \
+        or isinstance(Other, RoseArgument) \
+        or isinstance(Other, RoseConstant):
             return False
         assert isinstance(Other, RoseOperation)
         return self.Opcode == Other.Opcode and self.OperandList == Other.OperandList \
            and self.ParentBlock != Other.ParentBlock and super().__eq__(Other)
 
     def __ne__(self, Other):
-        if isinstance(Other, RoseUndefValue):
+        if isinstance(Other, RoseUndefValue) \
+        or isinstance(Other, RoseArgument) \
+        or isinstance(Other, RoseConstant):
             return True
         assert isinstance(Other, RoseOperation)
         return self.Opcode != Other.Opcode or self.OperandList != Other.OperandList \
             or self.ParentBlock != Other.ParentBlock or super().__ne__(Other)
-
+    
     def getOpcode(self):
         return self.Opcode
     
@@ -63,10 +64,13 @@ class RoseOperation(RoseValue):
         self.ParentBlock = Block
 
     def print(self):
-        Op = "(define (" + self.getName() + " (" + str(self.getOpcode())
+        Name = super().getName()
+        String = ""
+        if Name != "":
+            String = Name + " = "
+        String += str(self.Opcode)
         for Operand in self.getOperands():
-            Op += (" " + Operand.getName())
-        Op += ")"
-        print(Op)
-  
+            String += " " + Operand.getName()
+        print(String)
 
+  
