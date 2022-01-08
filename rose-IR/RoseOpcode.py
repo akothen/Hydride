@@ -1,3 +1,4 @@
+
 from enum import Enum, auto
 from RoseType import RoseType
 from  RoseValue import RoseValue
@@ -180,7 +181,8 @@ class RoseOpcode(Enum):
             #assert isinstance(Inputs[1], RoseConstant)
             #assert isinstance(Inputs[2], RoseConstant)
             #Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
-            return RoseType.getBitVectorTy(Inputs[3].getType().getBitwidth())
+            assert isinstance(Inputs[3], RoseConstant)
+            return RoseType.getBitVectorTy(Inputs[3].getValue())
         if self.value == self.add.value \
         or self.value == self.sub.value \
         or self.value == self.mul.value \
@@ -235,6 +237,8 @@ class RoseOpcode(Enum):
             BVInputs = self.getBVOpInputs(Inputs)
             print("BVInputs:")
             print(BVInputs)
+            if not isinstance(Inputs[3], RoseConstant):
+                return False
             if len(BVInputs) == 1:
                 return True
             else:
@@ -472,4 +476,5 @@ class HighOrderFunctions(Enum):
     def __str__(self):
         return self.name
 
-  
+
+ 
