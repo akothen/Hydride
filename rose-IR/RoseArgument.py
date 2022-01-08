@@ -1,7 +1,8 @@
 
 from RoseType import RoseType, RoseUndefinedType
 from RoseValue import RoseValue
-from RoseConstants import RoseUndefValue
+from RoseConstants import RoseConstant, RoseUndefValue
+import RoseOperation
 import RoseAbstractions
 
 
@@ -21,14 +22,18 @@ class RoseArgument(RoseValue):
     return RoseArgument(Name, Type, Function, ArgIndex)
 
   def __eq__(self, Other):
-      if isinstance(Other, RoseUndefValue):
+      if isinstance(Other, RoseUndefValue) \
+      or isinstance(Other, RoseOperation.RoseOperation) \
+      or isinstance(Other, RoseConstant):
         return False
       assert isinstance(Other, RoseArgument)
       return self.ArgIndex == Other.ArgIndex and self.Callee == Other.Callee \
               and super().__eq__(Other)
 
   def __ne__(self, Other):
-      if isinstance(Other, RoseUndefValue):
+      if isinstance(Other, RoseUndefValue) \
+      or isinstance(Other, RoseOperation.RoseOperation) \
+      or isinstance(Other, RoseConstant):
         return True
       assert isinstance(Other, RoseArgument)
       return self.ArgIndex != Other.ArgIndex or self.Callee != Other.Callee \
