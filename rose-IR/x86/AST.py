@@ -26,7 +26,8 @@ Match = namedtuple('Match', ['val', 'cases', 'id'])
 Case = namedtuple('Case', ['val', 'stmts', 'id'])
 
 Lookup = namedtuple('Lookup', ['obj', 'key'])
-Index = namedtuple('Index', ['obj', 'idx'])
+
+Index = namedtuple('Index', ['obj', 'idx', 'id'])
 
 Break = namedtuple('Break', [])
 
@@ -37,7 +38,7 @@ Sema = namedtuple('Sema', [
   'spec', 'rettype',
   'inst_form',
   'cpuids',
-  'imm_width', # None of this instruction doesn't have imm8
+  'imm_width',
   'xed',
   'elem_type',
   ])
