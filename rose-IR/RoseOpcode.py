@@ -1,4 +1,3 @@
-
 from enum import Enum, auto
 from RoseType import RoseType
 from  RoseValue import RoseValue
@@ -178,10 +177,10 @@ class RoseOpcode(Enum):
             assert(len(BVInputs) == 1)
             assert Inputs[1].getType() == Inputs[2].getType()
             # TODO: This is temporary. This needs to be fixed.
-            assert isinstance(Inputs[1], RoseConstant)
-            assert isinstance(Inputs[2], RoseConstant)
-            Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
-            return RoseType.getBitVectorTy(Bitwidth)
+            #assert isinstance(Inputs[1], RoseConstant)
+            #assert isinstance(Inputs[2], RoseConstant)
+            #Bitwidth = (Inputs[2].getValue() - Inputs[1].getValue() + 1)
+            return RoseType.getBitVectorTy(Inputs[3].getType().getBitwidth())
         if self.value == self.add.value \
         or self.value == self.sub.value \
         or self.value == self.mul.value \
@@ -389,7 +388,7 @@ class RoseOpcode(Enum):
         or self.value == self.rotateright.value:
             return (NumInputs == 2)
         if self.value == self.bvextract.value:
-            return (NumInputs == 3)
+            return (NumInputs == 4)
         if self.value == self.bvinsert.value:
             return (NumInputs == 4)
         if self.value == self.select.value:
@@ -452,9 +451,11 @@ class RoseOpcode(Enum):
         Else = Inputs[2]
         if Then.getType() != Else.getType():
             return False
-        if Then.getType() == RoseType.isVoidTy() or Then.getType() == RoseType.isUndefTy():
+        if Then.getType().isVoidTy() \
+        or Then.getType().isUndefTy():
             return False
-        if not Cond.getType().isBitVectorTy() and not Cond.getType().isBooleanTy():
+        if not Cond.getType().isBitVectorTy() \
+        and not Cond.getType().isBooleanTy():
             return False
         if Cond.getType().isBitVectorTy():
             if Cond.getType().getBitwidth() != 1:
@@ -470,3 +471,5 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
+  
