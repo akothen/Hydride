@@ -31,7 +31,7 @@ class RoseOperation(RoseValue):
             return False
         assert isinstance(Other, RoseOperation)
         return self.Opcode == Other.Opcode and self.OperandList == Other.OperandList \
-           and self.ParentBlock != Other.ParentBlock and super().__eq__(Other)
+           and self.ParentBlock == Other.ParentBlock and super().__eq__(Other)
 
     def __ne__(self, Other):
         if isinstance(Other, RoseUndefValue) \
@@ -52,7 +52,7 @@ class RoseOperation(RoseValue):
         return self.ParentBlock
     
     def getOperand(self, Index):
-        assert Index < self.len(self.OperandList)
+        assert Index < len(self.OperandList)
         return self.OperandList[Index]
     
     def setOperand(self, Index, Operand):
@@ -73,4 +73,3 @@ class RoseOperation(RoseValue):
             String += " " + Operand.getName()
         print(String)
 
-  
