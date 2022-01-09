@@ -52,15 +52,16 @@ class RoseBVZeroExtendOp(RoseOperation):
 
 
 class RoseBVExtractSliceOp(RoseOperation):
-  def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
+              Bitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
-    OperandList = [Bitvector, Low, High]
+    OperandList = [Bitvector, Low, High, Bitwidth]
     RoseOperation.__init__(self, RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVExtractSliceOp(Name, Bitvector, Low, High, ParentBlock)
+            Bitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVExtractSliceOp(Name, Bitvector, Low, High, Bitwidth, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
