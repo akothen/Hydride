@@ -328,6 +328,8 @@ def GetLHSType(LHS, Context : x86RoseContext):
       if Context.isVariableDefined(LHS.name):
         ID = Context.getVariableID(LHS.name)
         return Context.getCompiledAbstractionForID(ID).getType()
+      else:
+        return RoseType.getUndefTy()
   if type(LHS) == Index:
     return RoseType.getBitVectorTy(1)
   if type(LHS) == BitSlice:
@@ -1145,7 +1147,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test5()
+  sema = test6()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
@@ -1292,8 +1294,27 @@ ENDFOR
   '''
 #k[MAX:16] := 0
 
+
+def test6():
+  return '''
+<intrinsic tech="AVX" name="_mm256_setr_m128i">
+	<type>Integer</type>
+	<CPUID>AVX</CPUID>
+	<category>Set</category>
+	<return type="__m256i" varname="dst" etype="M128"/>
+	<parameter type="__m128i" varname="lo" etype="M128"/>
+	<parameter type="__m128i" varname="hi" etype="M128"/>
+	<description>Set packed __m256i vector "dst" with the supplied values.</description>
+	<operation>
+dst[127:0] := lo[127:0]
+dst[255:128] := hi[127:0]
+	</operation>
+	<instruction name="VINSERTF128" form="ymm, ymm, xmm, imm8" xed="VINSERTF128_YMMqq_YMMqq_XMMdq_IMMb"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:256] := 0
+
 if __name__ == '__main__':
   Compile()
-
-
 
