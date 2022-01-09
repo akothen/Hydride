@@ -323,6 +323,9 @@ def CompileIndex(IndexExpr, Context : x86RoseContext):
 
 
 def GetLHSType(LHS, Context : x86RoseContext):
+  print("GET LHS TYPE:")
+  print("LHS:")
+  print(LHS)
   # First try to get the type of the LHS
   if type(LHS) == Var:
       if Context.isVariableDefined(LHS.name):
@@ -338,7 +341,7 @@ def GetLHSType(LHS, Context : x86RoseContext):
       Low = RoseConstant.create(LHS.lo.val, RoseType.getIntegerTy(32))
     else:
       if type(LHS.lo) == Var:
-        if Context.isVariableDefined(LHS.name):
+        if Context.isVariableDefined(LHS.lo.name):
           ID = Context.getVariableID(LHS.lo.name)
           Low = Context.getCompiledAbstractionForID(ID)
         else:
@@ -348,20 +351,50 @@ def GetLHSType(LHS, Context : x86RoseContext):
             Low = Context.getCompiledAbstractionForID(LHS.lo.id)
         else:
           return RoseType.getUndefTy()
+    print("LOW:")
+    Low.print()
     if type(LHS.hi) == Number:
       High = RoseConstant.create(LHS.hi.val, RoseType.getIntegerTy(32))
     else:
       if type(LHS.hi) == Var:
-        if Context.isVariableDefined(LHS.name):
+        if Context.isVariableDefined(LHS.hi.name):
           ID = Context.getVariableID(LHS.hi.name)
           High = Context.getCompiledAbstractionForID(ID)
         else:
           return RoseType.getUndefTy()
       else:
         if Context.isCompiledAbstraction(LHS.hi.id):
-            High = Context.getCompiledAbstractionForID(LHS.hi.id)
+          High = Context.getCompiledAbstractionForID(LHS.hi.id)
+        elif type(LHS.hi) == BinaryExpr:
+          # Now this binary operations may have operands that are variables
+          # and/or constant numbers.
+          if type(LHS.hi.a) == Var:
+            if Context.isVariableDefined(LHS.hi.a.name):
+              ID = Context.getVariableID(LHS.hi.a.name)
+              Operand1 = Context.getCompiledAbstractionForID(ID)
+            else:
+              return RoseType.getUndefTy()
+          elif type(LHS.hi.a) == Number:
+            Operand1 = RoseConstant.create(LHS.hi.a.val, RoseType.getIntegerTy(32))
+          else:
+            return RoseType.getUndefTy()
+          if type(LHS.hi.b) == Var:
+            if Context.isVariableDefined(LHS.hi.b.name):
+              ID = Context.getVariableID(LHS.hi.b.name)
+              Operand2 = Context.getCompiledAbstractionForID(ID)
+            else:
+              return RoseType.getUndefTy()
+          elif type(LHS.hi.b) == Number:
+            Operand2 = RoseConstant.create(LHS.hi.b.val, RoseType.getIntegerTy(32))
+          else:
+            return RoseType.getUndefTy()
+          # Now thar we have the operands of the binary operation,
+          # we get compile the binary operation.
+          High =  BinaryOps[LHS.hi.op]()(LHS.hi.id, Operand1, Operand2)
         else:
           High = RoseUndefValue()
+    print("HIGH:")
+    High.print()
     Bitwidth = ComputeBitSliceWidth(Low, High)
     return RoseType.getBitVectorTy(Bitwidth)
   return RoseType.getUndefTy()
@@ -918,6 +951,30 @@ def HandleToZeroExtend(Bitwidth : int):
   return LamdaImplFunc
 
 
+# TODO: Take into account signedness
+def HandleToMin(_):
+  def LamdaImplFunc(Name : str, Operands : list):
+    assert len(Operands) == 2
+    if Operands[0].getType().isBitVectorTy() \
+    and Operands[1].getType().isBitVectorTy():
+      return RoseBVSminOp.create(Name, Operands)
+    return RoseMinOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
+# TODO: Take into account signedness
+def HandleToMax(_):
+  def LamdaImplFunc(Name : str, Operands : list):
+    assert len(Operands) == 2
+    if Operands[0].getType().isBitVectorTy() \
+    and Operands[1].getType().isBitVectorTy():
+      return RoseBVSmaxOp.create(Name, Operands)
+    return RoseMaxOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
+
 # Builtin functions
 Builtins = {
   #'Saturate32': gen_saturation_func(32, True),
@@ -935,6 +992,9 @@ Builtins = {
   'SignExtend16': HandleToSignExtend(16),
   'SignExtend32': HandleToSignExtend(32),
   'SignExtend64': HandleToSignExtend(64),
+
+  'MIN' : HandleToMin(None),
+  'MAX' : HandleToMax(None),
 
   #'APPROXIMATE': lambda args, _: args[0], # noop
 
@@ -1147,7 +1207,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test6()
+  sema = test9()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
@@ -1180,7 +1240,7 @@ DEFINE INTERLEAVE_BYTES(src1[127:0], src2[127:0]) {
 	dst[87:80] := src1[47:40] 
 	dst[95:88] := src2[47:40] 
 	dst[103:96] := src1[55:48] 
-	dst[111:104] := src2[55:48] 
+	dst[111:104] := src2[55:48]
 	dst[119:112] := src1[63:56] 
 	dst[127:120] := src2[63:56] 
 	RETURN dst[127:0]	
@@ -1315,6 +1375,83 @@ dst[255:128] := hi[127:0]
 '''
 #dst[MAX:256] := 0
 
+
+def test7():
+  return '''
+<intrinsic tech="AVX-512" name="_mm256_permutex2var_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512VL</CPUID>
+	<CPUID>AVX512BW</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m256i" varname="dst" etype="UI16"/>
+	<parameter type="__m256i" varname="a" etype="UI16"/ >
+	<parameter type="__m256i" varname="idx" etype="UI16"/>
+	<parameter type="__m256i" varname="b" etype="UI16"/>
+	<description>Shuffle 16-bit integers in "a" and "b" across lanes using the corresponding selector and index in "idx", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*16
+	off := 16*idx[i+3:i]
+	dst[i+15:i] := idx[i+4] ? b[off+15:off] : a[off+15:off]
+ENDFOR
+	</operation>
+	<instruction name="VPERMI2W" form="ymm, ymm, ymm" xed="VPERMI2W_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
+	<instruction name="VPERMT2W" form="ymm, ymm, ymm" xed="VPERMT2W_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:256] := 0
+
+
+def test8():
+  return '''
+<intrinsic tech="AVX-512" name="_mm256_permutexvar_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512VL</CPUID>
+	<CPUID>AVX512BW</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m256i" varname="dst" etype="UI16"/>
+	<parameter type="__m256i" varname="idx" etype="UI16"/>
+	<parameter type="__m256i" varname="a" etype="UI16"/>
+	<description>Shuffle 16-bit integers in "a" across lanes using the corresponding index in "idx", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*16
+	id := idx[i+3:i]*16
+	dst[i+15:i] := a[id+15:id]
+ENDFOR
+	</operation>
+	<instruction name="VPERMW" form="ymm, ymm, ymm" xed="VPERMW_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:256] := 0
+
+
+def test9():
+  return '''
+<intrinsic tech="AVX-512" name="_mm512_min_epi8">
+	<type>Integer</type>
+	<CPUID>AVX512BW</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI8"/>
+	<parameter type="__m512i" varname="a" etype="SI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Compare packed signed 8-bit integers in "a" and "b", and store packed minimum values in "dst".</description>
+	<operation>
+FOR j := 0 to 63
+	i := j*8
+	dst[i+7:i] := MIN(a[i+7:i], b[i+7:i])
+ENDFOR
+	</operation>
+	<instruction name="VPMINSB" form="zmm, zmm, zmm" xed="VPMINSB_ZMMi8_MASKmskw_ZMMi8_ZMMi8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+
 if __name__ == '__main__':
   Compile()
+
 
