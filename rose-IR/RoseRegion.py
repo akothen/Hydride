@@ -1,6 +1,5 @@
 
 import RoseAbstractions
-import RoseConstants
 
 
 # Abstract class representing a region.
@@ -24,18 +23,18 @@ class RoseRegion:
     return self.Children != Other.Children or self.Parent != Other.Parent
 
   def areChildrenValid(self):
-    if isinstance(self, RoseConstants.RoseUndefRegion):
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
       return True
     return False
 
   def isParentValid(self, Parent):
-    if isinstance(self, RoseConstants.RoseUndefRegion):
+    if isinstance(self, RoseAbstractions.RoseUndefRegion):
       return True
     if isinstance(Parent, RoseAbstractions.RoseForLoop) \
     or isinstance(Parent, RoseAbstractions.RoseFunction) \
     or isinstance(Parent, RoseAbstractions.RoseCond):
       return True
-    if Parent == RoseConstants.RoseUndefRegion():
+    if Parent == RoseAbstractions.RoseUndefRegion():
       return True
     return False
   
@@ -47,7 +46,7 @@ class RoseRegion:
   
   def getTailChild(self, Key = None):
     if self.isEmpty(Key):
-      return RoseConstants.RoseUndefRegion()
+      return RoseAbstractions.RoseUndefRegion()
     if Key == None:
       return self.Children[len(self.Children) - 1]
     else:
