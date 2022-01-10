@@ -80,6 +80,10 @@ class RoseOpcode(Enum):
     call = auto()
     ret = auto()
 
+    # And IR opcode for casting between 
+    # Integers, bitvectors and booleans.
+    cast = auto()
+
     def __str__(self):
         return self.name
     
@@ -218,6 +222,12 @@ class RoseOpcode(Enum):
         if self.value == self.boolxor.value:
             assert(len(Inputs) == 2)
             return RoseType.getBooleanTy()
+        if self.value == self.cast.value:
+            assert(len(Inputs) == 2)
+            assert isinstance(Inputs[0], RoseValue)
+            assert isinstance(Inputs[1], RoseType)
+            assert Inputs[0].getType() != Inputs[1]
+            return Inputs[1]
         return None
 
     def inputsAreValid(self, Inputs : list): 
@@ -346,6 +356,8 @@ class RoseOpcode(Enum):
             if not Inputs[1].getType().isBooleanTy():
                 return False
             return True
+        if self.value == self.cast.value:
+            return self.castInputsAreValid(Inputs)       
         return None
 
     def typesOfInputsAndOutputEqual(self):
@@ -410,7 +422,8 @@ class RoseOpcode(Enum):
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
+        or self.value == self.greaterthanequal.value\
+        or self.value == self.cast.value:
             return False
         return None
     
@@ -469,7 +482,8 @@ class RoseOpcode(Enum):
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
-        or self.value == self.greaterthanequal.value:
+        or self.value == self.greaterthanequal.value\
+        or self.value == self.cast.value:
             return True
         if self.value == self.bvextract.value \
         or self.value == self.bvinsert.value \
@@ -555,6 +569,8 @@ class RoseOpcode(Enum):
             return (NumInputs > 1)
         if self.value == self.boolxor.value:
            return (NumInputs == 2)
+        if self.value == self.cast.value:
+           return (NumInputs == 2)      
         return None
 
     def callInputsAreValid(self, Callee, Inputs : list):
@@ -597,6 +613,28 @@ class RoseOpcode(Enum):
             if Cond.getType().getBitwidth() != 1:
                 return False
         return True
+    
+    def castInputsAreValid(self, Inputs: list):
+        assert self.value == self.cast.value
+        if len(Inputs) != 2:
+            return False
+        if not isinstance(Inputs[0], RoseValue):
+            return False
+        if not isinstance(Inputs[1], RoseType):
+            return False
+        # If the types of inputs are equal, then this operation is not valid
+        if Inputs[0].getType() != Inputs[1]:
+            return False
+        # Valid input types are integers, bitvectors and booleans
+        if not (Inputs[0].getType().isBooleanTy() or Inputs[0].getType().isBitVectorTy() \
+            or Inputs[0].getType().isIntegerTy()):
+            return False
+        if not (Inputs[1].isBooleanTy() or Inputs[1].isBitVectorTy() \
+            or Inputs[1].isIntegerTy()):
+            return False
+        if Inputs[0].getType().getBitwidth() != Inputs[1].getBitwidth():
+            return False
+        return True
 
 
 # Let's see how this could be useful
@@ -607,3 +645,4 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
