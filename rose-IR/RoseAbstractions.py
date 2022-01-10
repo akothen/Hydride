@@ -93,14 +93,14 @@ class RoseFunction(RoseValue, RoseRegion):
     if isinstance(Other, RoseUndefRegion):
         return False
     assert isinstance(Other, RoseFunction)
-    return self.RetVal == Other.RetVal and self.ArgsList == Other.ArgsList \
+    return self.RetVal == Other.RetVal and self.ArgList == Other.ArgList \
         and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefRegion):
         return True
     assert isinstance(Other, RoseFunction)
-    return self.RetVal != Other.RetVal or self.ArgsList != Other.ArgsList \
+    return self.RetVal != Other.RetVal or self.ArgList != Other.ArgList \
         or RoseValue.__ne__(self, Other) or RoseRegion.__ne__(self, Other)
   
   def getNumArgs(self):
@@ -384,15 +384,13 @@ class RoseCond(RoseRegion):
     if isinstance(Other, RoseUndefRegion):
         return False
     assert isinstance(Other, RoseCond)
-    return self.Condition == Other.Condition and self.Start == Other.Start \
-        and self.End == Other.End and self.Step == Other.Step and super().__eq__(Other)
+    return self.Condition == Other.Condition and super().__eq__(Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefRegion):
         return True
     assert isinstance(Other, RoseCond)
-    return self.Condition != Other.Condition or self.Start != Other.Start \
-        or self.End != Other.End or self.Step != Other.Step or super().__ne__(Other)
+    return self.Condition != Other.Condition or super().__ne__(Other)
 
   def getCondition(self):
     return self.Condition
