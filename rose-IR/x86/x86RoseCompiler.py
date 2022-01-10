@@ -12,8 +12,6 @@ import math
 from copy import deepcopy
 
 
-MaxVectorLength = 512
-
 # This is a generic context that could be used across
 # different architectures.
 class RoseContext:
@@ -100,6 +98,8 @@ class RoseContext:
 # This defines rules specifically for x86 to RoseIR convertion
 class x86RoseContext(RoseContext):
   def __init__(self):
+    # Maximum vector length
+    self.MaxVectorLength = 512
     # Cache function definitions. This is needed because functions are
     # compiled when a call is compiled.
     self.FunctionDefs = dict()  # Function name --> FuncDef
@@ -110,6 +110,9 @@ class x86RoseContext(RoseContext):
     self.CompileIndexFlag = False
     super().__init__()
   
+  def getMaxVectorLength(self):
+    return self.MaxVectorLength
+
   def addFunctionDef(self, FunctionDef):
     assert(type(FunctionDef) == FuncDef)
     self.FunctionDefs[FunctionDef.name] = FunctionDef
@@ -183,7 +186,8 @@ def CompileVar(Variable, Context):
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  Var = RoseValue.create(Variable.name, RoseType.getBitVectorTy(MaxVectorLength))
+  Var = RoseValue.create(Variable.name, \
+          RoseType.getBitVectorTy(Context.getMaxVectorLength()))
 
   # Add the variable info to the context
   Context.addVariable(Variable.name, Variable.id)
@@ -273,6 +277,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   OriginalNumberTy = Context.getIndexNumberType()
   Context.setIndexNumberType(Low.getType())
   if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
+    MaxVectorLength = Context.getMaxVectorLength()
     High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
     High = CompileIndex(BitSliceExpr.hi, Context)
@@ -552,11 +557,18 @@ def CompileUpdate(Update, Context : x86RoseContext):
     print(Context.getDefinedVariables())
     print("*************************************")
     # Compile the LHS Bitslice
+    # Compile the low index
     Low = CompileExpression(Update.lhs.lo, Context)
+    # Compile the high index
+    OriginalNumberTy = Context.getIndexNumberType()
+    Context.setIndexNumberType(Low.getType())
     if (type(Update.lhs.hi) == Var and Update.lhs.hi.name == 'MAX'):
+      MaxVectorLength = Context.getMaxVectorLength()
       High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
     else:
       High = CompileExpression(Update.lhs.hi, Context)
+    Context.setIndexNumberType(OriginalNumberTy)
+    # Compile the bitvector
     BitVector = CompileExpression(Update.lhs.bv, Context)
     print("BITVECTOR======:")
     BitVector.print()
@@ -1330,7 +1342,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test2()
+  sema = test8()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
