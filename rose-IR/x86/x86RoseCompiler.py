@@ -2,8 +2,6 @@
 from RoseValue import RoseValue
 from RoseType import RoseType
 from RoseAbstractions import *
-from RoseConstants import RoseConstant, RoseUndefValue, RoseUndefRegion
-from RoseArgument import RoseArgument
 from RoseOperations import *
 from RoseBitVectorOperations import *
 
@@ -108,6 +106,7 @@ class x86RoseContext(RoseContext):
     # Integer constant length can change depending on the context in which 
     # is used.
     self.NumberType = RoseType.getIntegerTy(32)
+    self.IndexNumberType = RoseType.getIntegerTy(32)
     self.CompileIndexFlag = False
     super().__init__()
   
@@ -126,6 +125,12 @@ class x86RoseContext(RoseContext):
   
   def setCompileIndexFlag(self, Flag : bool):
     self.CompileIndexFlag = Flag
+
+  def setIndexNumberType(self, Type : RoseType):
+    self.IndexNumberType = Type
+
+  def getIndexNumberType(self):
+    return self.IndexNumberType
   
   def isCompileIndexFlagSet(self):
     return self.CompileIndexFlag == True
@@ -158,7 +163,7 @@ def CompileNumber(Num, Context : x86RoseContext):
   print(Num)
   if isinstance(Num.val, int):
     if Context.isCompileIndexFlagSet():
-      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+      ConstantVal = RoseConstant.create(Num.val, Context.getIndexNumberType())
     else:
       ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
     return ConstantVal
@@ -215,10 +220,40 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   # TODO: Make this more general.
   print("IndexValue:")
   IndexValue.print()
+  IndexValue.getType().print()
   print("Low:")
   Low.print()
+  Low.getType().print()
   assert IndexValue == Low
   return (ConstantHighIndex.getValue() + 1)
+
+
+def CompileIndex(IndexExpr, Context : x86RoseContext):
+  print("COMPILING AN INDEX EXPRESSION:")
+  print("IndexExpr:")
+  print(IndexExpr)
+  Context.setCompileIndexFlag(True)
+  CompiledIndex = CompileExpression(IndexExpr, Context)
+  Context.setCompileIndexFlag(False)
+  # The compiled indices are supposed to be integer values
+  # and not bitvectors. However, in some cases it can be a bitvector
+  # where indices are in a bitvector. We just change cast the index value.
+  if CompiledIndex.getType().isBitVectorTy():
+    print("GENERATING CAST")
+    # Indices can only be variables for them to be cast
+    assert type(IndexExpr) == Var
+    assert Context.isVariableDefined(IndexExpr.name)
+    ID = Context.getVariableID(IndexExpr.name)
+    assert Context.getCompiledAbstractionForID(ID) == CompiledIndex
+    # Generate the casting op
+    Name = "cast." + CompiledIndex.getName()
+    CastOp = RoseCastOp.create(Name, CompiledIndex, \
+                  RoseType.getIntegerTy(CompiledIndex.getType().getBitwidth()))
+    # Add this op to the IR and to the context
+    Context.addAbstractionToIR(CastOp)
+    Context.addCompiledAbstraction(ID, CastOp)
+    return CastOp
+  return CompiledIndex
 
 
 def CompileBitSlice(BitSliceExpr, Context : RoseContext):
@@ -227,18 +262,21 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   print(BitSliceExpr)
   # First compile low and high expressions
   print("COMPILING LOW")
-  Context.setCompileIndexFlag(True)
-  Low = CompileExpression(BitSliceExpr.lo, Context)
+  Low = CompileIndex(BitSliceExpr.lo, Context)
   print("COMPILED LOW")
   Low.print()
 
   # Special case for the magic variable 'MAX' 
   print("COMPILING HIGH")
+  # Set the new index number type for the high index since
+  # it should have the same type as the low index.
+  OriginalNumberTy = Context.getIndexNumberType()
+  Context.setIndexNumberType(Low.getType())
   if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
     High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
-    High = CompileExpression(BitSliceExpr.hi, Context)
-  Context.setCompileIndexFlag(False)
+    High = CompileIndex(BitSliceExpr.hi, Context)
+  Context.setIndexNumberType(OriginalNumberTy)
   print("COMPILED HIGH")
   High.print()
   
@@ -281,14 +319,12 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   return Operation
 
 
-def CompileIndex(IndexExpr, Context : x86RoseContext):
+def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   print("COMPILING INDX EXPR")
   print("INDEX EXPR:")
   print(IndexExpr)
   # Compile the index first
-  Context.setCompileIndexFlag(True)
-  IndexVal = CompileExpression(IndexExpr.idx, Context)
-  Context.setCompileIndexFlag(False)
+  IndexVal = CompileIndex(IndexExpr.idx, Context)
   print("INDEX:")
   print(IndexVal)
   IndexVal.print()
@@ -328,7 +364,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
         return Context.getCompiledAbstractionForID(ID).getType()
       else:
         return RoseType.getUndefTy()
-  if type(Expr) == Index:
+  if type(Expr) == BitIndex:
     return RoseType.getBitVectorTy(1)
   if type(Expr) == BitSlice:
     # The high and low indices can be a compiled variable or a constant
@@ -348,8 +384,22 @@ def GetExpressionType(Expr, Context : x86RoseContext):
           return RoseType.getUndefTy()
     print("LOW:")
     Low.print()
+    if Low.getType().isBitVectorTy():
+      print("---GENERATING CAST")
+      # Indices can only be variables for them to be cast
+      assert type(Expr.lo) == Var
+      assert Context.isVariableDefined(Expr.lo.name)
+      ID = Context.getVariableID(Expr.lo.name)
+      assert Context.getCompiledAbstractionForID(ID) == Low
+      # Generate the casting op
+      Name = "cast." + Low.getName()
+      CastLow = RoseCastOp.create(Name, Low, RoseType.getIntegerTy(Low.getType().getBitwidth()))
+      # Add this op to the context
+      #Context.addCompiledAbstraction(ID, CastLow)
+    else:
+      CastLow = Low
     if type(Expr.hi) == Number:
-      High = RoseConstant.create(Expr.hi.val, RoseType.getIntegerTy(32))
+      High = RoseConstant.create(Expr.hi.val, CastLow.getType())
     else:
       if type(Expr.hi) == Var:
         if Context.isVariableDefined(Expr.hi.name):
@@ -370,7 +420,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
             else:
               return RoseType.getUndefTy()
           elif type(Expr.hi.a) == Number:
-            Operand1 = RoseConstant.create(Expr.hi.a.val, RoseType.getIntegerTy(32))
+            Operand1 = RoseConstant.create(Expr.hi.a.val, CastLow.getType())
           else:
             return RoseType.getUndefTy()
           if type(Expr.hi.b) == Var:
@@ -380,9 +430,25 @@ def GetExpressionType(Expr, Context : x86RoseContext):
             else:
               return RoseType.getUndefTy()
           elif type(Expr.hi.b) == Number:
-            Operand2 = RoseConstant.create(Expr.hi.b.val, RoseType.getIntegerTy(32))
+            Operand2 = RoseConstant.create(Expr.hi.b.val, CastLow.getType())
           else:
             return RoseType.getUndefTy()
+          # Now either of Operand1 or Operand2 have to be equal to low index
+          print("Operand1:")
+          Operand1.print()
+          print("Operand2:")
+          Operand2.print()
+          if Operand1 == Low:
+            print("HERE1")
+            print(CastLow)
+            CastLow.print()
+            Operand1 = CastLow
+          if Operand2 == Low:
+            print("HERE2")
+            Operand2 = CastLow
+          print("--TYPE:")
+          Operand1.getType().print()
+          Operand2.getType().print()
           # Now thar we have the operands of the binary operation,
           # we get compile the binary operation.
           High =  BinaryOps[Expr.hi.op]()(Expr.hi.id, Operand1, Operand2)
@@ -390,7 +456,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
           High = RoseUndefValue()
     print("HIGH:")
     High.print()
-    Bitwidth = ComputeBitSliceWidth(Low, High)
+    Bitwidth = ComputeBitSliceWidth(CastLow, High)
     return RoseType.getBitVectorTy(Bitwidth)
   return RoseType.getUndefTy()
 
@@ -408,7 +474,7 @@ def GetRHSNumberType(Update, Context : x86RoseContext):
 
   # If the RHS is just a variable or a bitslice,
   # Just get its type
-  if type(RHS) == Var or type(RHS) == Index \
+  if type(RHS) == Var or type(RHS) == BitIndex \
   or type(RHS) == BitSlice:
     RHSType = GetExpressionType(RHS, Context)
     if not RHSType.isUndefTy():
@@ -509,7 +575,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
     LHSOp.print()
   else:
     # This could be a mask generator
-    assert type(Update.lhs) == Index
+    assert type(Update.lhs) == BitIndex
     # Compile the LHS mask
     IndexVal = CompileExpression(Update.lhs.idx, Context)
     print("---INDEX:")
@@ -976,7 +1042,7 @@ CompileAbstractions = {
   Select: CompileSelect,
   If: CompileIf,
   BinaryExpr: CompileBinaryExpr,
-  Index : CompileIndex,
+  BitIndex : CompileBitIndex,
   #While: CompileWhile,
   #Match: CompileMatch,
   #Lookup: CompileLookup,
@@ -1264,7 +1330,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test8()
+  sema = test2()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
@@ -1435,33 +1501,6 @@ dst[255:128] := hi[127:0]
 
 def test7():
   return '''
-<intrinsic tech="AVX-512" name="_mm256_permutex2var_epi16">
-	<type>Integer</type>
-	<CPUID>AVX512VL</CPUID>
-	<CPUID>AVX512BW</CPUID>
-	<category>Miscellaneous</category>
-	<return type="__m256i" varname="dst" etype="UI16"/>
-	<parameter type="__m256i" varname="a" etype="UI16"/ >
-	<parameter type="__m256i" varname="idx" etype="UI16"/>
-	<parameter type="__m256i" varname="b" etype="UI16"/>
-	<description>Shuffle 16-bit integers in "a" and "b" across lanes using the corresponding selector and index in "idx", and store the results in "dst".</description>
-	<operation>
-FOR j := 0 to 15
-	i := j*16
-	off := 16*idx[i+3:i]
-	dst[i+15:i] := idx[i+4] ? b[off+15:off] : a[off+15:off]
-ENDFOR
-	</operation>
-	<instruction name="VPERMI2W" form="ymm, ymm, ymm" xed="VPERMI2W_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
-	<instruction name="VPERMT2W" form="ymm, ymm, ymm" xed="VPERMT2W_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-#dst[MAX:256] := 0
-
-
-def test8():
-  return '''
 <intrinsic tech="AVX-512" name="_mm256_permutexvar_epi16">
 	<type>Integer</type>
 	<CPUID>AVX512VL</CPUID>
@@ -1485,7 +1524,7 @@ ENDFOR
 #dst[MAX:256] := 0
 
 
-def test9():
+def test8():
   return '''
 <intrinsic tech="AVX-512" name="_mm512_min_epi8">
 	<type>Integer</type>
