@@ -10,7 +10,7 @@
 ;(current-bitwidth 32)
 
 
-(custodian-limit-memory (current-custodian) (* 6000 1024 1024))
+(custodian-limit-memory (current-custodian) (* 10000 1024 1024))
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -312,7 +312,7 @@
 ; so they get merged into a union rather than field-wise.
 (struct reg (id)   #:transparent #:mutable)
 (struct lit (val)  #:transparent )
-(struct vec-concat (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12) #:transparent)
+(struct vec-concat (v1 v2 v3 v4 v5 v6 v7 v8 v9) #:transparent)
 (struct dot-prod ([vacc #:mutable] [v1 #:mutable] [v2 #:mutable] i j IP OP) #:transparent )
 (struct vec-mul ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
 (struct vec-add ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
@@ -338,11 +338,10 @@
             [(vec-add v1 v2 len prec)
              (+ cost-vec-add (cost v1) (cost v2))
              ]
-            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9)
              (+ cost-vec-concat   (cost v1) (cost v2) (cost v3)
                 (cost v4) (cost v5) (cost v6)
                 (cost v7 ) (cost v8) (cost v9)
-                (cost v10) (cost v11) (cost v12)
                 )
              ]
             [(dot-prod vacc v1 v2 i j IP OP)
@@ -378,7 +377,7 @@
 
 (define (get-length val)
   (destruct val
-            [(reg id) (list-ref (list 64 192) id)]
+            [(reg id) (list-ref (list 128 32) id)]
             [(lit val) (bvlength val)]
             [(vec-mul v1 v2 len prec) (* len prec)]
             [(vec-add v1 v2 len prec) (* len prec)]
@@ -410,11 +409,10 @@
             [(reg id) (vector-ref env id)]
             [(nop v1) (interpret v1 env)]
             [(lit val) val]
-            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9)
              (concat (interpret v1 env) (interpret v2 env) (interpret v3 env)
                      (interpret v4 env) (interpret v5 env) (interpret v6 env)
                      (interpret v7 env) (interpret v8 env) (interpret v9 env)
-                     (interpret v10 env) (interpret v11 env) (interpret v12 env)
                      )
              ]
             [(dot-prod vacc v1 v2 i j IP OP)
@@ -469,12 +467,11 @@
              (println id)]
             [(nop v1) (print-prog v1)]
             [(lit val) (println val)]
-            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+            [(vec-concat v1 v2 v3 v4 v5 v6 v7 v8 v9)
              (displayln "(concat ")
              (print-prog v1) (print-prog v2) (print-prog v3)
              (print-prog v4) (print-prog v5) (print-prog v6)
              (print-prog v7) (print-prog v8) (print-prog v9)
-             (print-prog v10) (print-prog v11) (print-prog v12)
              (displayln ")")
              ]
             [(dot-prod vacc v1 v2 i j IP OP)
@@ -533,6 +530,15 @@
              (println prec )
              (displayln ")")
              ]
+            [
+             (vec-mul v1 v2 len prec)
+             (displayln "(vector-mul ")
+             (print-prog v1)
+             (print-prog v2)
+             (println len)
+             (println prec)
+             (displayln ")")
+             ]
             ))
 
 (define (mem vars #:depth k)
@@ -541,22 +547,34 @@
     [(choose* #t #f)
      (apply choose* vars)]
     [(choose* #t #f)
-     (vec-load (mem vars #:depth (- k 1)) 64 0 4 8)
+     ;(vec-load (mem vars #:depth (- k 1)) 128 0 4 8)
+     ;(vec-load (reg 0) 128 0 4 8)
+     (vec-load (apply choose* vars) 128 0 4 8)
      ]
     [(choose* #t #f)
-     (vec-load (mem vars #:depth (- k 1)) 64 4 4 8)
+     ;(vec-load (mem vars #:depth (- k 1)) 128 4 4 8)
+     ;(vec-load (reg 0) 128 4 4 8)
+     (vec-load (apply choose* vars) 128 4 4 8)
      ]
     [(choose* #t #f)
-     (vec-load (mem vars #:depth (- k 1)) 192 0 6 8)
+     ;(vec-load (mem vars #:depth (- k 1)) 128 8 4 8)
+     ;(vec-load (reg 0) 128 8 4 8)
+     (vec-load (apply choose* vars) 128 8 4 8)
      ]
     [(choose* #t #f)
-     (vec-load (mem vars #:depth (- k 1)) 192 6 6 8)
+     ;(vec-load (mem vars #:depth (- k 1)) 128 12 4 8)
+     ;(vec-load (reg 0) 128 12 4 8)
+     (vec-load (apply choose* vars) 128 12 4 8)
      ]
     [(choose* #t #f)
-     (vec-load (mem vars #:depth (- k 1)) 192 12 6 8)
+     ;(vec-load (mem vars #:depth (- k 1)) 32 0 2 8)
+     ;(vec-load (reg 1) 32 0 2 8)
+     (vec-load (apply choose* vars) 32 0 2 8)
      ]
     [else
-      (vec-load (mem vars #:depth (- k 1)) 192 18 6 8)
+      ;(vec-load (mem vars #:depth (- k 1)) 32 2 2 8)
+      ;(vec-load (reg 1) 32 2 2 8)
+      (vec-load (apply choose* vars) 32 2 2 8)
       ]
     )
   )
@@ -566,86 +584,96 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-special
+    ;   (mem vars #:depth (- k 1))
+    ;   (mem vars #:depth (- k 1))
+    ;   4 8
+    ;   )]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-special
+    ;   (mem vars #:depth (- k 1))
+    ;   (mem vars #:depth (- k 1))
+    ;   2 8
+    ;   )]
     [(choose* #t #f)
-     (vec-shuffle-special
+     (vec-shuffle-ext-special
        (mem vars #:depth (- k 1))
        (mem vars #:depth (- k 1))
-       6 8
+       4 8 0 2
        )]
     [(choose* #t #f)
      (vec-shuffle-ext-special
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       12 8 0 2
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       4 8 1 2
        )]
     [(choose* #t #f)
      (vec-shuffle-ext-special
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       12 8 2 2
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       4 8 2 2
        )]
-    [(choose* #t #f)
-     (vec-shuffle-ext-special
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       12 8 4 2
-       )]
-    [(choose* #t #f)
-     (vec-shuffle-ext-special
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       12 8 6 2
-       )]
-    [(choose* #t #f)
-     (vec-shuffle-ext-special
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       12 8 8 2
-       )]
-    [(choose* #t #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     ;(assert (equal? (get-length left_operand) (* 4 8)))
-     (vec-strided-gather left_operand 
-                         192 0 6 4 8
-                         )]
-    [(choose* #t  #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     ;(assert (equal? (get-length left_operand) (* 4 8)))
-     (vec-strided-gather left_operand 
-                         192 1 6 4 8
-                         )]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-ext-special
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+    ;   8 8 0 4
+    ;   )]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-ext-special
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+   ;    8 8 4 4
+    ;   )]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-ext-special
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+    ;   8 8 6 2
+    ;   )]
+    ;[(choose* #t #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; ;(assert (equal? (get-length left_operand) (* 4 8)))
+    ; (vec-strided-gather left_operand 
+    ;                     128 0 4 4 8
+    ;                     )]
+    ;[(choose* #t  #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; ;(assert (equal? (get-length left_operand) (* 4 8)))
+    ; (vec-strided-gather left_operand 
+    ;                     128 1 4 4 8
+    ;                     )]
 
-    [(choose* #t #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     (vec-strided-gather left_operand 
-                         192 2 6 4 8
+    ;[(choose* #t #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; (vec-strided-gather left_operand 
+    ;                     128 2 4 4 8
+    ;                     )]
+    ;[(choose* #t #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; ;(assert (equal? (get-length left_operand) (* 4 8)))
+    ; (vec-strided-gather left_operand 
+    ;                     128 3 4 4 8
+    ;                     )]
+    ;[(choose* #t #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; ;(assert (equal? (get-length left_operand) (* 4 8)))
+    ; (vec-strided-gather left_operand 
+    ;                     32 0 2 2 8
+    ;                     )]
+    ;[(choose* #t #f)
+    ; (define left_operand (shufl vars #:depth (- k 1) ) )
+    ; ;(assert (equal? (get-length left_operand) (* 4 8)))
+    ; (vec-strided-gather left_operand 
+    ;                     32 1 2 2 8
+    ;                     )]
+    [else ;(choose* #t #f)
+     (vec-mul  (shufl vars #:depth (- k 1))  (shufl vars #:depth (- k 1))
+                         4 8 
                          )]
-    [(choose* #t #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     ;(assert (equal? (get-length left_operand) (* 4 8)))
-     (vec-strided-gather left_operand 
-                         192 3 6 4 8
-                         )]
-
-    [(choose* #t #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     ;(assert (equal? (get-length left_operand) (* 4 8)))
-     (vec-strided-gather left_operand 
-                         192 4 6 4 8
-                         )]
-
-    [(choose* #t #f)
-     (define left_operand (shufl vars #:depth (- k 1) ) )
-     ;(assert (equal? (get-length left_operand) (* 4 8)))
-     (vec-strided-gather left_operand 
-                         192 5 6 4 8
-                         )]
-    [else
-      (vec-shuffle-ext-special
-        (shufl vars #:depth (- k 1))
-        (shufl vars #:depth (- k 1))
-        12 8 10 2
-        )]
+    ;[else
+    ;  (mem vars #:depth k)]
 
     )
   )
@@ -656,20 +684,23 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
+    ;[(choose* #t #f)
+    ; (dot-prod (expr vars #:depth (- k 1))
+    ;           (mem vars #:depth (- k 1))
+    ;           (shufl vars #:depth (- k 1))
+    ;           2 2 8 8
+    ;           )]
+    ;[(choose* #t #f)
+    ; (vec-reduction (expr vars #:depth (- k 1)) 4 8
+    ;                )]
     [(choose* #t #f)
-     (dot-prod (expr vars #:depth (- k 1))
-               (mem vars #:depth (- k 1))
-               (shufl vars #:depth (- k 1))
-               2 2 8 8
-               )]
-    [(choose* #t #f)
-     (vec-reduction (expr vars #:depth (- k 1)) 2 8
+     (vec-reduction (shufl vars #:depth (- k 1)) 4 8
                     )]
     [(choose* #t #f)
      (nop (expr vars #:depth (- k 1))
           )]
     [else
-      (lit (bv 0 (bitvector 16)))
+      (lit (bv 0 (bitvector 8)))
       ]
     )
   )
@@ -683,14 +714,11 @@
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
-    (expr vars #:depth (- k 1)) 
 
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
-    (expr vars #:depth (- k 1)) 
 
-    (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
     (expr vars #:depth (- k 1)) 
@@ -702,11 +730,109 @@
 (define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 5))
 
 
-(define cex_arg0 (bv #x1111111111111111 64))
-(define cex_arg1 (bv #x222222222222222222222222222222222222222222222222 192))
+(define (alt-tensor-conv img filt)
+  (define row_1 (vector-load img 128 0 4 8))
+  (define row_2 (vector-load img 128 4 4 8))
+  (define row_3 (vector-load img 128 8 4 8))
+  (define row_4 (vector-load img 128 12 4 8))
+
+  (define slice_1 (vector-shuffle-ext-special row_1 row_2 4 8 0 2))
+  (define slice_2 (vector-shuffle-ext-special row_1 row_2 4 8 1 2))
+  (define slice_3 (vector-shuffle-ext-special row_1 row_2 4 8 2 2))
+  
+  
+  (define slice_4 (vector-shuffle-ext-special row_2 row_3 4 8 0 2))
+  (define slice_5 (vector-shuffle-ext-special row_2 row_3 4 8 1 2))
+  (define slice_6 (vector-shuffle-ext-special row_2 row_3 4 8 2 2))
+  
+  
+  (define slice_7 (vector-shuffle-ext-special row_3 row_4 4 8 0 2))
+  (define slice_8 (vector-shuffle-ext-special row_3 row_4 4 8 1 2))
+  (define slice_9 (vector-shuffle-ext-special row_3 row_4 4 8 2 2))
 
 
-(define env (vector cex_arg0 cex_arg1))
+  (define prod_1 (vector-mul slice_1 filt 4 8))
+  (define prod_2 (vector-mul slice_2 filt 4 8))
+  (define prod_3 (vector-mul slice_3 filt 4 8))
+
+  (define prod_4 (vector-mul slice_4 filt 4 8))
+  (define prod_5 (vector-mul slice_5 filt 4 8))
+  (define prod_6 (vector-mul slice_6 filt 4 8))
+
+  (define prod_7 (vector-mul slice_7 filt 4 8))
+  (define prod_8 (vector-mul slice_8 filt 4 8))
+  (define prod_9 (vector-mul slice_9 filt 4 8))
+
+
+  (define result (concat
+                   (dsl_inst_1 prod_1 4 8)
+                   (dsl_inst_1 prod_2 4 8)
+                   (dsl_inst_1 prod_3 4 8)
+
+
+                   (dsl_inst_1 prod_4 4 8)
+                   (dsl_inst_1 prod_5 4 8)
+                   (dsl_inst_1 prod_6 4 8)
+
+                   (dsl_inst_1 prod_7 4 8)
+                   (dsl_inst_1 prod_8 4 8)
+                   (dsl_inst_1 prod_9 4 8)
+                   ))
+  result
+
+  )
+
+
+
+  (define row_1 (vec-load (reg 0) 128 0 4 8))
+  (define row_2 (vec-load (reg 0) 128 4 4 8))
+  (define row_3 (vec-load (reg 0) 128 8 4 8))
+  (define row_4 (vec-load (reg 0) 128 12 4 8))
+
+  (define slice_1 (vec-shuffle-ext-special row_1 row_2 4 8 0 2))
+  (define slice_2 (vec-shuffle-ext-special row_1 row_2 4 8 1 2))
+  (define slice_3 (vec-shuffle-ext-special row_1 row_2 4 8 2 2))
+  
+  
+  (define slice_4 (vec-shuffle-ext-special row_2 row_3 4 8 0 2))
+  (define slice_5 (vec-shuffle-ext-special row_2 row_3 4 8 1 2))
+  (define slice_6 (vec-shuffle-ext-special row_2 row_3 4 8 2 2))
+  
+  
+  (define slice_7 (vec-shuffle-ext-special row_3 row_4 4 8 0 2))
+  (define slice_8 (vec-shuffle-ext-special row_3 row_4 4 8 1 2))
+  (define slice_9 (vec-shuffle-ext-special row_3 row_4 4 8 2 2))
+
+
+  (define prod_1 (vec-mul slice_1 (reg 1) 4 8))
+  (define prod_2 (vec-mul slice_2 (reg 1) 4 8))
+  (define prod_3 (vec-mul slice_3 (reg 1) 4 8))
+
+  (define prod_4 (vec-mul slice_4 (reg 1) 4 8))
+  (define prod_5 (vec-mul slice_5 (reg 1) 4 8))
+  (define prod_6 (vec-mul slice_6 (reg 1) 4 8))
+
+  (define prod_7 (vec-mul slice_7 (reg 1) 4 8))
+  (define prod_8 (vec-mul slice_8 (reg 1) 4 8))
+  (define prod_9 (vec-mul slice_9 (reg 1) 4 8))
+
+
+
+(define alt-tensor-conv-dsl
+   (vec-concat
+                   (vec-reduction prod_1 4 8)
+                   (vec-reduction prod_2 4 8)
+                   (vec-reduction prod_3 4 8)
+
+
+                   (vec-reduction prod_4 4 8)
+                   (vec-reduction prod_5 4 8)
+                   (vec-reduction prod_6 4 8)
+
+                   (vec-reduction prod_7 4 8)
+                   (vec-reduction prod_8 4 8)
+                   (vec-reduction prod_9 4 8)
+                   ))
 
 (println "Starting")
 
@@ -717,20 +843,22 @@
 (define image (apply concat 
                 (for/list ([i (range (* 4 4))]) 
                           (bv (+ i 1) (bitvector 8))
-                          )
+                         )
                 )
   )
 
-(displayln "Image")
-(print-mat image 4 4 8)
+;(displayln "Image")
+;(print-mat image 4 4 8)
 
 
 (define kernel (apply concat 
                 (for/list ([i (range (* 2 2))]) 
-                          (bv 1 (bitvector 8))
+                          (bv i (bitvector 8))
                           )
                 )
   )
+
+(define test-env (vector image kernel))
 
 (displayln "Kernel")
 (print-mat kernel 2 2 8)
@@ -738,3 +866,50 @@
 (define output (tensor-conv2D image kernel 4 4 2 2 8))
 (displayln "Convolution Output")
 (print-mat output 3 3 8)
+
+
+;(define alt_output (alt-tensor-conv image kernel))
+;(displayln "Alt Convolution Output")
+;(print-mat alt_output 3 3 8)
+
+
+(define alt_output (interpret alt-tensor-conv-dsl test-env))
+(displayln "Alt Convolution Output (DSL)")
+(print-mat alt_output 3 3 8)
+
+
+(define cex_arg0 (bv -1 (bitvector 128)))
+(define cex_arg1 (bv -1 (bitvector 32)))
+
+
+(define env (vector cex_arg0 cex_arg1))
+
+
+
+
+
+;(define-symbolic sym2_arg0 (bitvector 128))
+;(define-symbolic sym2_arg1 (bitvector 32))
+
+;(clear-vc!)
+;(define senv (vector sym2_arg0 sym2_arg1))
+
+;(define cex2 (time
+;               (verify
+;  (assert (equal? (interpret alt-tensor-conv-dsl senv);(tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8)  
+;                  (alt-tensor-conv sym2_arg0 sym2_arg1)))
+;  )
+;))
+
+;(assert (sat? cex2) "Verified")
+;(println cex2)
+
+;(define v1 (evaluate sym2_arg0 cex2))
+;(define v2 (evaluate sym2_arg1 cex2))
+
+;(display "v1 ")
+;(displayln v1)
+
+
+;(display "v2 ")
+;(displayln v2)
