@@ -62,6 +62,9 @@ class RoseContext:
   def destroyContext(self, ID : str):
     self.Contexts[ID] = None
   
+  def getChildContext(self, ID : str):
+    return self.Contexts[ID] 
+
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
     
@@ -85,15 +88,27 @@ class RoseContext:
   
   def getCompiledAbstractions(self):
     return self.CompiledAbstractions
+  
+  def getDefinedVariables(self):
+    return self.Variables
 
   def copyAbstractionsFromParent(self):
     assert not self.isRootContext()
     assert isinstance(self.ParentContext, RoseContext)
     self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
+    # Copy the variables too
+    for Name, ID in self.ParentContext.getDefinedVariables().items():
+      print("VARIABLE NAME:")
+      print(Name)
+      self.Variables[Name] = ID
 
-  # Only needed for debugging purposes.
-  def getDefinedVariables(self):
-    return self.Variables
+  
+  def replaceParentAbstractionsWithChild(self):
+    for Name, ID in self.ParentContext.getDefinedVariables().items():
+      # Get the ID for the same variable name in curreent context
+      ChildVarID = self.Variables[Name]
+      Abstraction = self.CompiledAbstractions[ChildVarID]
+      self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
 
 
 # This defines rules specifically for x86 to RoseIR convertion
@@ -147,16 +162,24 @@ class x86RoseContext(RoseContext):
     if isinstance(Abstraction, RoseFunction):
       # A function accepts no external variables besides arguments
       super().createContext(ID, ChildContext)
-    elif isinstance(Abstraction, RoseForLoop):
+    elif isinstance(Abstraction, RoseForLoop) \
+      or isinstance(Abstraction, RoseCond):
       # Copy all the compiled abstractions from this context to the child
       ChildContext.setParentContext(self)
       ChildContext.copyAbstractionsFromParent()
       super().createContext(ID, ChildContext)
   
   def destroyContext(self, ContextName : str):
-    if isinstance(self.getRootAbstraction(), RoseFunction):
+    print("ROOT ABSTRACTION:")
+    print(self.getRootAbstraction())
+    self.getRootAbstraction().print()
+    ChildContext = self.getChildContext(ContextName)
+    if isinstance(ChildContext.getRootAbstraction(), RoseFunction):
       super().destroyContext(ContextName)
-    elif isinstance(self.getRootAbstraction(), RoseForLoop):
+    elif isinstance(ChildContext.getRootAbstraction(), RoseForLoop) \
+       or isinstance(ChildContext.getRootAbstraction(), RoseCond):
+      print("HERE")
+      ChildContext.replaceParentAbstractionsWithChild()
       super().destroyContext(ContextName)
     
 
@@ -679,9 +702,7 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   print("BINARY OP GENERATED")
 
   # Add the operation to the IR
-  RootAbstraction = Context.popRootAbstraction()
-  RootAbstraction.addAbstraction(Operation)
-  Context.pushRootAbstraction(RootAbstraction)
+  Context.addAbstractionToIR(Operation)
 
   # Add the operation to the context
   Context.addCompiledAbstraction(BinaryExpr.id, Operation)
@@ -814,7 +835,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     print("FUNCTION GENERATED")
 
     # Pop the root function from the child context 
-    CompiledFunction = ChildContext.popRootAbstraction()
+    CompiledFunction = ChildContext.getRootAbstraction()
 
     # Set the return value for this function
     CompiledFunction.setRetVal(ReturnValue)
@@ -894,7 +915,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     CompileStatement(Stmt, ChildContext)
   
   # Pop the root loop from the child context 
-  CompiledLoop = ChildContext.popRootAbstraction()
+  CompiledLoop = ChildContext.getRootAbstraction()
 
   # Add loop to the root abstraction
   Context.addAbstractionToIR(CompiledLoop)
@@ -903,6 +924,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Context.updateCompiledAbstraction(ForStmt.id, CompiledLoop)
 
   # Remove the child context now
+  print("REMOVE CHILD CONTEXT")
   Context.destroyContext(ForStmt.id)
 
 
@@ -928,7 +950,7 @@ def CompileIf(IfStmt, Context : x86RoseContext):
     CompileStatement(Stmt, ChildContext)
 
   # Pop the root cond region from the child context 
-  CompiledCondRegion = ChildContext.popRootAbstraction()
+  CompiledCondRegion = ChildContext.getRootAbstraction()
 
   # Add cond region to the root abstraction
   Context.addAbstractionToIR(CompiledCondRegion)
@@ -1028,7 +1050,7 @@ def CompileSemantics(Sema):
     CompileStatement(Stmt, RootContext)
   
   # Get the compiled function
-  CompiledFunction = RootContext.popRootAbstraction()
+  CompiledFunction = RootContext.getRootAbstraction()
 
   # See if the function returns anything, if not add a return op
   if CompiledRetVal == RoseUndefValue():
