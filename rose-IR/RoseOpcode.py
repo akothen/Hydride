@@ -1,9 +1,11 @@
 
-from enum import Enum, auto
 from RoseType import RoseType
 from  RoseValue import RoseValue
-from RoseConstants import RoseConstant
 import RoseAbstractions
+from RoseOperation import RoseConstant
+
+from enum import Enum, auto
+
 
 # List of all operations that
 # involve bitvectors.
@@ -623,7 +625,9 @@ class RoseOpcode(Enum):
         if not isinstance(Inputs[1], RoseType):
             return False
         # If the types of inputs are equal, then this operation is not valid
-        if Inputs[0].getType() != Inputs[1]:
+        print(Inputs[0].getType())
+        print(Inputs[1])
+        if Inputs[0].getType() == Inputs[1]:
             return False
         # Valid input types are integers, bitvectors and booleans
         if not (Inputs[0].getType().isBooleanTy() or Inputs[0].getType().isBitVectorTy() \
