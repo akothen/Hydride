@@ -9,7 +9,6 @@ from RoseBitVectorOperations import *
 from AST import *
 from x86Types import x86Types
 
-import math
 from copy import deepcopy
 
 
@@ -91,7 +90,8 @@ class RoseContext:
     assert not self.isRootContext()
     assert isinstance(self.ParentContext, RoseContext)
     self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
-  
+
+  # Only needed for debugging purposes.
   def getDefinedVariables(self):
     return self.Variables
 
@@ -1250,6 +1250,15 @@ def HandleToEqual():
   return LamdaImplFunc
 
 
+def HandleToNotEqual():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    assert Operand1.getType().isBitVectorTy() == True
+    assert Operand2.getType().isBitVectorTy() == True
+    return RoseNotOp.create(Name, RoseBVEQOp.create("eq." + Name, Operand1, Operand2))
+  
+  return LamdaImplFunc
+
+
 def HandleToLessThan():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
     assert Operand1.getType().isBitVectorTy() == True
@@ -1314,7 +1323,7 @@ BinaryOps = {
     '>' : HandleToGreaterThan,
     '>=' : HandleToGreaterThanEqual,
     '==' : HandleToEqual,
-    #'!=' : binary_float_cmp('ne'),
+    '!=' : HandleToNotEqual,
     '>>' : HandleToAshr,
     '<<' : HandleToLshr,
     '&' : HandleToAnd,
