@@ -51,6 +51,9 @@ class RoseContext:
   def destroyContext(self, ID : str):
     self.Contexts[ID] = None
   
+  def getChildContext(self, ID : str):
+    return self.Contexts[ID] 
+
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
     
@@ -74,9 +77,23 @@ class RoseContext:
   
   def getCompiledAbstractions(self):
     return self.CompiledAbstractions
+  
+  def getDefinedVariables(self):
+    return self.Variables
 
   def copyAbstractionsFromParent(self):
     assert not self.isRootContext()
     assert isinstance(self.ParentContext, RoseContext)
     self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
-
+    # Copy the variables too
+    for Name, ID in self.ParentContext.getDefinedVariables().items():
+      print("VARIABLE NAME:")
+      print(Name)
+      self.Variables[Name] = ID
+  
+  def replaceParentAbstractionsWithChild(self):
+    for Name, ID in self.ParentContext.getDefinedVariables().items():
+      # Get the ID for the same variable name in curreent context
+      ChildVarID = self.Variables[Name]
+      Abstraction = self.CompiledAbstractions[ChildVarID]
+      self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
