@@ -107,7 +107,7 @@ class x86RoseContext(RoseContext):
     self.FunctionDefs = dict()  # Function name --> FuncDef
     # Integer constant length can change depending on the context in which 
     # is used.
-    self.IntegerBitwidth = 32
+    self.NumberType = RoseType.getIntegerTy(32)
     self.CompileIndexFlag = False
     super().__init__()
   
@@ -118,11 +118,11 @@ class x86RoseContext(RoseContext):
   def getFunctionDef(self, Name : str):
     return self.FunctionDefs[Name]
   
-  def setIntegerBitwidth(self, Bitwidth : int):
-    self.IntegerBitwidth = Bitwidth
+  def setNumberType(self, Type : RoseType):
+    self.NumberType = Type
 
-  def getIntegerBitwidth(self):
-    return self.IntegerBitwidth
+  def getNumberType(self):
+    return self.NumberType
   
   def setCompileIndexFlag(self, Flag : bool):
     self.CompileIndexFlag = Flag
@@ -160,12 +160,7 @@ def CompileNumber(Num, Context : x86RoseContext):
     if Context.isCompileIndexFlagSet():
       ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
     else:
-      if Context.getIntegerBitwidth() == 1:
-        ConstantVal = RoseConstant.create(Num.val, \
-                      RoseType.getBitVectorTy(Context.getIntegerBitwidth()))
-      else:
-        ConstantVal = RoseConstant.create(Num.val, \
-                      RoseType.getIntegerTy(Context.getIntegerBitwidth()))
+      ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
     return ConstantVal
   else:
     # TODO: These needs fixing
@@ -322,75 +317,75 @@ def CompileIndex(IndexExpr, Context : x86RoseContext):
   return Operation
 
 
-def GetLHSType(LHS, Context : x86RoseContext):
-  print("GET LHS TYPE:")
-  print("LHS:")
-  print(LHS)
-  # First try to get the type of the LHS
-  if type(LHS) == Var:
-      if Context.isVariableDefined(LHS.name):
-        ID = Context.getVariableID(LHS.name)
+def GetExpressionType(Expr, Context : x86RoseContext):
+  print("GET EXPRESSION TYPE:")
+  print("EXPRESSION:")
+  print(Expr)
+  # First try to get the type of the Expr
+  if type(Expr) == Var:
+      if Context.isVariableDefined(Expr.name):
+        ID = Context.getVariableID(Expr.name)
         return Context.getCompiledAbstractionForID(ID).getType()
       else:
         return RoseType.getUndefTy()
-  if type(LHS) == Index:
+  if type(Expr) == Index:
     return RoseType.getBitVectorTy(1)
-  if type(LHS) == BitSlice:
+  if type(Expr) == BitSlice:
     # The high and low indices can be a compiled variable or a constant
-    if type(LHS.lo) == Number:
-      Low = RoseConstant.create(LHS.lo.val, RoseType.getIntegerTy(32))
+    if type(Expr.lo) == Number:
+      Low = RoseConstant.create(Expr.lo.val, RoseType.getIntegerTy(32))
     else:
-      if type(LHS.lo) == Var:
-        if Context.isVariableDefined(LHS.lo.name):
-          ID = Context.getVariableID(LHS.lo.name)
+      if type(Expr.lo) == Var:
+        if Context.isVariableDefined(Expr.lo.name):
+          ID = Context.getVariableID(Expr.lo.name)
           Low = Context.getCompiledAbstractionForID(ID)
         else:
           Low = RoseUndefValue()
       else:
-        if Context.isCompiledAbstraction(LHS.lo.id):
-            Low = Context.getCompiledAbstractionForID(LHS.lo.id)
+        if Context.isCompiledAbstraction(Expr.lo.id):
+            Low = Context.getCompiledAbstractionForID(Expr.lo.id)
         else:
           return RoseType.getUndefTy()
     print("LOW:")
     Low.print()
-    if type(LHS.hi) == Number:
-      High = RoseConstant.create(LHS.hi.val, RoseType.getIntegerTy(32))
+    if type(Expr.hi) == Number:
+      High = RoseConstant.create(Expr.hi.val, RoseType.getIntegerTy(32))
     else:
-      if type(LHS.hi) == Var:
-        if Context.isVariableDefined(LHS.hi.name):
-          ID = Context.getVariableID(LHS.hi.name)
+      if type(Expr.hi) == Var:
+        if Context.isVariableDefined(Expr.hi.name):
+          ID = Context.getVariableID(Expr.hi.name)
           High = Context.getCompiledAbstractionForID(ID)
         else:
           return RoseType.getUndefTy()
       else:
-        if Context.isCompiledAbstraction(LHS.hi.id):
-          High = Context.getCompiledAbstractionForID(LHS.hi.id)
-        elif type(LHS.hi) == BinaryExpr:
+        if Context.isCompiledAbstraction(Expr.hi.id):
+          High = Context.getCompiledAbstractionForID(Expr.hi.id)
+        elif type(Expr.hi) == BinaryExpr:
           # Now this binary operations may have operands that are variables
           # and/or constant numbers.
-          if type(LHS.hi.a) == Var:
-            if Context.isVariableDefined(LHS.hi.a.name):
-              ID = Context.getVariableID(LHS.hi.a.name)
+          if type(Expr.hi.a) == Var:
+            if Context.isVariableDefined(Expr.hi.a.name):
+              ID = Context.getVariableID(Expr.hi.a.name)
               Operand1 = Context.getCompiledAbstractionForID(ID)
             else:
               return RoseType.getUndefTy()
-          elif type(LHS.hi.a) == Number:
-            Operand1 = RoseConstant.create(LHS.hi.a.val, RoseType.getIntegerTy(32))
+          elif type(Expr.hi.a) == Number:
+            Operand1 = RoseConstant.create(Expr.hi.a.val, RoseType.getIntegerTy(32))
           else:
             return RoseType.getUndefTy()
-          if type(LHS.hi.b) == Var:
-            if Context.isVariableDefined(LHS.hi.b.name):
-              ID = Context.getVariableID(LHS.hi.b.name)
+          if type(Expr.hi.b) == Var:
+            if Context.isVariableDefined(Expr.hi.b.name):
+              ID = Context.getVariableID(Expr.hi.b.name)
               Operand2 = Context.getCompiledAbstractionForID(ID)
             else:
               return RoseType.getUndefTy()
-          elif type(LHS.hi.b) == Number:
-            Operand2 = RoseConstant.create(LHS.hi.b.val, RoseType.getIntegerTy(32))
+          elif type(Expr.hi.b) == Number:
+            Operand2 = RoseConstant.create(Expr.hi.b.val, RoseType.getIntegerTy(32))
           else:
             return RoseType.getUndefTy()
           # Now thar we have the operands of the binary operation,
           # we get compile the binary operation.
-          High =  BinaryOps[LHS.hi.op]()(LHS.hi.id, Operand1, Operand2)
+          High =  BinaryOps[Expr.hi.op]()(Expr.hi.id, Operand1, Operand2)
         else:
           High = RoseUndefValue()
     print("HIGH:")
@@ -400,18 +395,77 @@ def GetLHSType(LHS, Context : x86RoseContext):
   return RoseType.getUndefTy()
 
 
+# We try to work out the type of the numbers in RHS.
+# This is not meant to be deep. We will extend this
+# if we need to.
+def GetRHSNumberType(Update, Context : x86RoseContext):
+  RHS = Update.rhs
+  LHS = Update.lhs
+
+  # If the RHS is just a number, use the LHS type.
+  if type(RHS) == Number:
+    return GetExpressionType(LHS, Context)
+
+  # If the RHS is just a variable or a bitslice,
+  # Just get its type
+  if type(RHS) == Var or type(RHS) == Index \
+  or type(RHS) == BitSlice:
+    RHSType = GetExpressionType(RHS, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    return GetExpressionType(LHS, Context)
+
+  if type(RHS) == UnaryExpr:
+    RHSType = GetExpressionType(RHS.a, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    return GetExpressionType(LHS, Context)
+  
+  if type(RHS) == BinaryExpr:
+    RHSType = GetExpressionType(RHS.a, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    RHSType = GetExpressionType(RHS.b, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    # Binary ops outside of comparison ops have the 
+    # same type as operands, so we could try that.
+    if RHS.op not in ComparisonOps:
+      return GetExpressionType(LHS, Context)
+    return RoseType.getUndefTy()
+  
+  # See if the RHS is a select op
+  if type(RHS) == Select:
+    # The condition cannot be a number. Assert that here.
+    assert type(RHS.cond) != Number
+    RHSType = GetExpressionType(RHS.then, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    RHSType = GetExpressionType(RHS.otherwise, Context)
+    if not RHSType.isUndefTy():
+      return RHSType
+    print("SELECT LHS BEING ANALYZED")
+    return GetExpressionType(LHS, Context)
+
+  # If we do not know what the RHS is, we just give up.
+  return RoseType.getUndefTy()
+
+
 def CompileUpdate(Update, Context : x86RoseContext):
-  # We may need a different type
-  PredictedType = GetLHSType(Update.lhs, Context)
-  if PredictedType != RoseType.getUndefTy():
-    Context.setIntegerBitwidth(PredictedType.getBitwidth())
+  # We need to get the type of numbers on the RHS
+  OriginalNumberTy = Context.getNumberType()
+  PredictedType = GetRHSNumberType(Update, Context)
+  if not PredictedType.isUndefTy():
+    Context.setNumberType(PredictedType)
+  else:
+    print("!!!!!!! LHS TYPE UNDEFINED")
   
   print("COMPILE UPDATE")
   print("UPDATE:")
   print(Update)
   print("COMPILING RHS")
   RHSExprVal = CompileExpression(Update.rhs, Context)
-  Context.setIntegerBitwidth(32)
+  Context.setNumberType(OriginalNumberTy)
   print(type(RHSExprVal))
   print("COMPILED RHS")
   RHSExprVal.print()
@@ -1191,6 +1245,9 @@ BinaryOps = {
     'XOR' : HandleToXor,
 }
 
+# These are binary ops whose output type is not the same
+# as the operand types.
+ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
 # Strides definitions
 Strides = {
@@ -1207,7 +1264,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test9()
+  sema = test8()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
