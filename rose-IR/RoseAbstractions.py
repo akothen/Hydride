@@ -1,10 +1,24 @@
 
 from RoseType import RoseType, RoseFunctionType
 from RoseValue import RoseValue
-from RoseConstants import RoseUndefValue, RoseUndefRegion
-from RoseOperation import RoseOperation
-from RoseArgument import RoseArgument
 from RoseRegion import RoseRegion
+
+
+
+####################################### ROSE UNDEF REGION #######################################
+
+class RoseUndefRegion(RoseRegion):
+  def __init__(self):
+    super().__init__(None, None)
+  
+  def __str__(self):
+    return "undef_region"
+
+  def print(self):
+    print("undef_region")
+
+
+from RoseValues import RoseUndefValue, RoseOperation, RoseArgument
 
 
 ####################################### ROSE FUNCTION ############################################
@@ -318,9 +332,13 @@ class RoseForLoop(RoseRegion):
     return False
   
   def print(self):
+    print(self.getStartIndex())
+    self.getStartIndex().print()
+    print(self.getEndIndex())
+    self.getEndIndex().print()
     LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
-        + self.getStartIndex().print() + " " + self.getEndIndex().print() \
-        + " " + self.getStep().print() + ")])"
+        + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
+        + " " + str(self.getStep()) + ")])"
     print(LoopHeader)
     # Print regions in this loop
     super().print()
