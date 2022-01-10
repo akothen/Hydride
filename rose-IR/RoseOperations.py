@@ -71,6 +71,22 @@ class RoseSelectOp(RoseOperation):
     return self.getOperands()[2]
 
 
+class RoseCastOp(RoseOperation):
+  def __init__(self, Name : str, Operand : RoseValue, TargetType : RoseType, ParentBlock):
+    assert TargetType.isBitVectorTy() or TargetType.isBooleanTy() or TargetType.isIntegerTy()
+    assert Operand.getType().isBitVectorTy() or Operand.getType().isBooleanTy() \
+        or Operand.getType().isIntegerTy()
+    assert Operand.getType() != TargetType
+    OperandList = [Operand, TargetType]
+    super().__init__(RoseOpcode.cast, Name, OperandList, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Operand : RoseValue, TargetType : RoseType, 
+            ParentBlock = RoseUndefRegion()):
+    return RoseRemOp(Name, Operand, TargetType, ParentBlock)
+
+
+
 ######################################## ARITHMETIC OPERATORS ###########################
 
 
