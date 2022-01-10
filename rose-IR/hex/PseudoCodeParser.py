@@ -162,7 +162,8 @@ def p_args(p):
 
 def p_expr_bit_index(p):
   'expr : expr LBRACE expr RBRACE'
-  p[0] = Index(p[1], p[3])
+  expr_id = "index." + GenUniqueID(parser)
+  p[0] = BitIndex(p[1], p[3], expr_id)
 
 def p_expr_bit_slice(p):
   'expr : expr LBRACE expr COLON expr RBRACE'
@@ -377,9 +378,11 @@ def Parsex86Semantics(FileName):
     inst_form = None
     if inst is None:
       Categories['NO-INST'] += 1
+      NumSkipped += 1
       continue
 
     if debug and intrin.attrib['name'] != debug:
+      NumSkipped += 1
       continue
 
     inst_form = inst.attrib['name'], inst.attrib.get('form')
@@ -390,6 +393,7 @@ def Parsex86Semantics(FileName):
           'INVPCID', 'RTM', 'XSAVE', 
           'FSGSBASE', 'RDRAND', 'RDSEED'):
         Categories[cpuid.text] += 1
+        NumSkipped += 1
         continue
       cpuid_text = cpuid.text
 
@@ -413,16 +417,19 @@ def Parsex86Semantics(FileName):
         Categories['mask'] += 1
       else:
         Categories['zero/fp-manip'] += 1
+      NumSkipped += 1
       continue
     cat = intrin.find('category')
     if cat is not None and cat.text in (
         'Elementary Math Functions', 
         'General Support', 
         'Load', 'Store'):
+      NumSkipped += 1
       Categories[cat.text] += 1
       continue
     if SkipTo is not None and not Skipped:
       if intrin.attrib['name'] != SkipTo:
+        NumSkipped += 1
         continue
       else:
         Skipped = True
@@ -446,6 +453,7 @@ def Parsex86Semantics(FileName):
         'SignBit' in operation.text or
         'SSP' in operation.text):
       Categories['MISC'] += 1
+      NumSkipped += 1
       continue
     if 'str' in intrin.attrib['name']:
       if inst is not None:

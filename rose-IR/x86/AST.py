@@ -3,6 +3,7 @@ from collections import namedtuple
 
 Number = namedtuple('Number', ['val'])
 BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo', 'id'])
+BitIndex = namedtuple('BitIndex', ['obj', 'idx', 'id'])
 Var = namedtuple('Var', ['name', 'id'])
 
 Update = namedtuple('Update', ['lhs', 'rhs'])
@@ -26,8 +27,6 @@ Match = namedtuple('Match', ['val', 'cases', 'id'])
 Case = namedtuple('Case', ['val', 'stmts', 'id'])
 
 Lookup = namedtuple('Lookup', ['obj', 'key'])
-
-Index = namedtuple('Index', ['obj', 'idx', 'id'])
 
 Break = namedtuple('Break', [])
 
