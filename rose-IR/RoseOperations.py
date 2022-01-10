@@ -2,9 +2,8 @@
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
-from RoseConstants import RoseUndefRegion
-from RoseOperation import RoseOperation
-
+from RoseAbstractions import RoseUndefRegion
+from RoseValues import RoseOperation
 
 
 class RoseReturnOp(RoseOperation):
@@ -83,8 +82,14 @@ class RoseCastOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand : RoseValue, TargetType : RoseType, 
             ParentBlock = RoseUndefRegion()):
-    return RoseRemOp(Name, Operand, TargetType, ParentBlock)
+    return RoseCastOp(Name, Operand, TargetType, ParentBlock)
 
+  def print(self):
+    Name = super().getName()
+    String = Name + " = "
+    String += str(self.Opcode)
+    String += " " + self.getOperand(0).getName() + " " + str(self.getOperand(1))
+    print(String)
 
 
 ######################################## ARITHMETIC OPERATORS ###########################
@@ -308,6 +313,7 @@ class RoseXorOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
+
 
 
 

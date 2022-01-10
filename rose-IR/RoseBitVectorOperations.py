@@ -2,8 +2,8 @@
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
-from RoseConstants import RoseConstant, RoseUndefRegion
-from RoseOperation import RoseOperation
+from RoseAbstractions import RoseUndefRegion
+from RoseValues import RoseOperation, RoseConstant
 
 
 class RoseBVSignExtendOp(RoseOperation):
@@ -527,4 +527,5 @@ class RoseBVZeroOp(RoseOperation):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVZeroOp(Name, Bitvector, ParentBlock)
+
 
