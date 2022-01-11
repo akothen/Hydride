@@ -214,6 +214,10 @@ class RoseBlock(RoseRegion):
   def create(OpList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseBlock(OpList, ParentRegion)
   
+  # Make rose blocks hashable
+  def __hash__(self):
+    return hash(tuple(self.getOperations()))
+  
   def areChildrenValid(self):
     # Children do not have to be instances of regions
     for Child in self.getChildren():
