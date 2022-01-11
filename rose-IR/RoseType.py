@@ -28,7 +28,10 @@ class RoseType:
     def __ne__(self, Other):
         assert isinstance(Other, RoseType)
         return self.TypeEnum != Other.TypeEnum or self.SubClassData != Other.SubClassData
-    
+
+    def __hash__(self):
+        return hash(self.TypeEnum)
+
     @staticmethod
     def getBitVectorTy(Bitwidth : int):
        return RoseBitVectorType.create(Bitwidth)
