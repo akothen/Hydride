@@ -181,6 +181,14 @@ class RoseFunction(RoseValue, RoseRegion):
       if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
         return True
     return False
+  
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Operation, NewOperation):
+    assert isinstance(Operation, RoseOperation)
+    assert isinstance(NewOperation, RoseOperation)
+    assert Operation.getType() == NewOperation.getType()
+    for Child in self.getChildren():
+      Child.replaceUsesWith(Operation, NewOperation)
 
   def print(self):
     # Print function signature first
@@ -232,7 +240,28 @@ class RoseBlock(RoseRegion):
 
   def getOperations(self):
     return self.getChildren()
- 
+
+  def getOperation(self, Index):
+    return self.getChild(Index) 
+  
+  def getNumOperations(self):
+    return self.getNumChildren()
+  
+  def getPosOfOperation(self, Operation):
+    return self.getPosOfChild(Operation)
+  
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Operation, NewOperation):
+    assert isinstance(Operation, RoseOperation)
+    assert isinstance(NewOperation, RoseOperation)
+    assert Operation.getType() == NewOperation.getType()
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      Child.replaceUsesWith(Operation, NewOperation)
+  
+  def eraseOperation(self, Operation):
+    assert isinstance(Operation, RoseOperation)
+    self.eraseChild(Operation)
 
 
 ####################################### ROSE LOOP ############################################
@@ -330,6 +359,14 @@ class RoseForLoop(RoseRegion):
       if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
         return True
     return False
+  
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Operation, NewOperation):
+    assert isinstance(Operation, RoseOperation)
+    assert isinstance(NewOperation, RoseOperation)
+    assert Operation.getType() == NewOperation.getType()
+    for Child in self.getChildren():
+      Child.replaceUsesWith(Operation, NewOperation)
   
   def print(self):
     print(self.getStartIndex())
