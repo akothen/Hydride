@@ -1,3 +1,4 @@
+
 from RoseType import RoseType
 
 
@@ -20,6 +21,9 @@ class RoseValue:
         assert isinstance(Other, RoseValue)
         return self.Name != Other.Name or self.Type != Other.Type
 
+    def __hash__(self):
+        return hash((self.Name, self.Type))
+
     def getType(self):
         return self.Type
 
@@ -39,3 +43,4 @@ class RoseValue:
         print(self.Name)
         if Debug == True:
             self.Type.print()
+
