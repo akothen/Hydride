@@ -20,11 +20,15 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
       continue
     # Skip call instructions
     if isinstance(KeyOperation, RoseCallOp):
-      Visited.insert(KeyOperation)
+      Visited.add(KeyOperation)
       continue
     # Iterate ahead and see if we find a matching instruction
     for CheckIndex in range(Index + 1, TotalNumInsts):
       Operation = Block.getOperation(CheckIndex)
+      print("KEY OEPRATION:")
+      KeyOperation.print()
+      print("OEPRATION:")
+      Operation.print()
       if Operation in Visited:
         continue
       # Skip call instructions
