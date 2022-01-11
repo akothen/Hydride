@@ -1,7 +1,7 @@
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType
+from RoseType import RoseType, RoseVoidType
 import RoseAbstractions 
 
 
@@ -33,6 +33,10 @@ class RoseConstant(RoseValue):
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseArgument):
       return False
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseConstant) \
+    and isinstance(Other, RoseValue):
+        return False
     assert isinstance(Other, RoseConstant)
     return self.Val == Other.Val and super().__eq__(Other)
 
@@ -41,6 +45,10 @@ class RoseConstant(RoseValue):
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseArgument):
       return True
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseConstant) \
+    and isinstance(Other, RoseValue):
+        return True
     assert isinstance(Other, RoseConstant)
     return self.Val != Other.Val or super().__ne__(Other)
   
@@ -75,6 +83,10 @@ class RoseArgument(RoseValue):
       or isinstance(Other, RoseOperation) \
       or isinstance(Other, RoseConstant):
         return False
+      # Rule out the cases where we just compare agains plain ol' values
+      if not isinstance(Other, RoseArgument) \
+      and isinstance(Other, RoseValue):
+          return False
       assert isinstance(Other, RoseArgument)
       return self.ArgIndex == Other.ArgIndex and self.Callee == Other.Callee \
               and super().__eq__(Other)
@@ -84,6 +96,10 @@ class RoseArgument(RoseValue):
       or isinstance(Other, RoseOperation) \
       or isinstance(Other, RoseConstant):
         return True
+      # Rule out the cases where we just compare agains plain ol' values
+      if not isinstance(Other, RoseArgument) \
+      and isinstance(Other, RoseValue):
+          return True
       assert isinstance(Other, RoseArgument)
       return self.ArgIndex != Other.ArgIndex or self.Callee != Other.Callee \
           or super().__ne__(Other)
@@ -109,16 +125,15 @@ class RoseArgument(RoseValue):
 # An operation in Rosette
 # An operation is either an instruction.
 class RoseOperation(RoseValue):
-  def __init__(self, Opcode : RoseOpcode, Name : str, OperandList : list, \
+  def __init__(self, Opcode : RoseOpcode, Name : str, Operands : list, \
               ParentBlock = RoseAbstractions.RoseUndefRegion()):
     if not isinstance(ParentBlock, RoseAbstractions.RoseUndefRegion):
       assert isinstance(ParentBlock, RoseAbstractions.RoseBlock)
-    print(OperandList)
     self.Opcode = Opcode
-    self.OperandList = OperandList
+    self.Operands = Operands
     self.ParentBlock = ParentBlock
     # The result of an operation is a RoseValue
-    super().__init__(Name, Opcode.getOutputType(OperandList))
+    super().__init__(Name, Opcode.getOutputType(Operands))
     # Sanity check to see that the operand list is complete
     self.assertValidationOfInputs()
   
@@ -130,39 +145,87 @@ class RoseOperation(RoseValue):
     or isinstance(Other, RoseArgument) \
     or isinstance(Other, RoseConstant):
       return False
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseOperation) \
+    and isinstance(Other, RoseValue):
+        return False
     assert isinstance(Other, RoseOperation)
-    return self.Opcode == Other.Opcode and self.OperandList == Other.OperandList \
-        and self.ParentBlock == Other.ParentBlock and super().__eq__(Other)
+    return self.Opcode == Other.Opcode and self.Operands == Other.Operands \
+        and self.ParentBlock == Other.ParentBlock and super().__eq__(Other) #\
+        #and self.__key() == Other.__key()
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseArgument) \
     or isinstance(Other, RoseConstant):
       return True
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseOperation) \
+    and isinstance(Other, RoseValue):
+        return True
     assert isinstance(Other, RoseOperation)
-    return self.Opcode != Other.Opcode or self.OperandList != Other.OperandList \
-        or self.ParentBlock != Other.ParentBlock or super().__ne__(Other)
+    return self.Opcode != Other.Opcode or self.Operands != Other.Operands \
+        or self.ParentBlock != Other.ParentBlock or super().__ne__(Other) #\
+        #or self.__key() != Other.__key()
   
+  def __hash__(self):
+    Name = self.getName()
+    Type = self.getType()
+    #return hash(tuple(Name, Type, self.Opcode, self.Operands))
+    return hash((Name, Type, self.Opcode))
+  
+  # This is different from __eq__ because here we want to see if 
+  # the compuations are the same.
+  def isSameAs(self, Other):
+    if isinstance(Other, RoseUndefValue) \
+    or isinstance(Other, RoseArgument) \
+    or isinstance(Other, RoseConstant):
+      return False
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseOperation) \
+    and isinstance(Other, RoseValue):
+        return False
+    assert isinstance(Other, RoseOperation)
+    return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
+        and self.ParentBlock == Other.getParent() and self.getType() == Other.getType()
+
   def getOpcode(self):
     return self.Opcode
   
   def getOperands(self):
-    return self.OperandList
+    return self.Operands
   
   def getParent(self):
     return self.ParentBlock
   
   def getOperand(self, Index):
-    assert Index < len(self.OperandList)
-    return self.OperandList[Index]
+    assert Index < len(self.Operands)
+    return self.Operands[Index]
   
   def setOperand(self, Index, Operand):
-    assert Index < self.len(self.OperandList)
-    self.OperandList[Index] = Operand
+    assert Index < len(self.Operands)
+    self.Operands[Index] = Operand
   
   def setParent(self, Block):
     assert isinstance(Block, RoseAbstractions.RoseBlock)
     self.ParentBlock = Block
+
+  # This is used to query if this operation uses
+  #  the given value as an operand.
+  def usesValue(self, Value):
+    for Operand in self.Operands:
+      if type(Value) != type(Operand):
+        continue
+      if Operand == Value:
+        return True
+    return False
+  
+  def replaceUsesWith(self, Value, NewValue):
+    for Index, Operand in enumerate(self.Operands):
+      if type(Value) != type(Operand):
+          continue
+      if Operand == Value:
+        self.setOperand(Index, NewValue)
 
   def print(self):
     Name = super().getName()
