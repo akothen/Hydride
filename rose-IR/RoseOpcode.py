@@ -99,6 +99,9 @@ class RoseOpcode(Enum):
         assert isinstance(Other, RoseOpcode)
         return self.value != Other.value
     
+    def __hash__(self):
+        return hash(self.value)
+
     def getBVOpInputs(self, Inputs : list):
         BVInputs = []
         for Input in Inputs:
@@ -649,5 +652,4 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
-
 
