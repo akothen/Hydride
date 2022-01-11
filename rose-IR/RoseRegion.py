@@ -44,6 +44,29 @@ class RoseRegion:
   def getParent(self):
     return self.Parent
   
+  def getChild(self, Index, Key = None):
+    assert not self.isEmpty(Key)
+    if Key == None:
+      assert Index < len(self.Children)
+      return self.Children[Index]
+    else:
+      assert Index < len(self.Children[Key])
+      return self.Children[Key][Index]
+  
+  def getNumChildren(self, Key = None):
+    if Key == None:
+      return len(self.Children)
+    else:
+      return len(self.Children[Key])
+  
+  def getPosOfChild(self, Child, Key = None):
+    if Key == None:
+      assert Child in self.Children
+      return self.Children.index(Child)
+    else:
+      assert Child in self.Children[Key]
+      return self.Children[Key].index(Child)
+
   def getTailChild(self, Key = None):
     if self.isEmpty(Key):
       return RoseAbstractions.RoseUndefRegion()
@@ -89,6 +112,12 @@ class RoseRegion:
     else:
       assert Index >= 0 and Index < len(self.Children[Key])
       self.Children[Key][Index] = Region
+    
+  def eraseChild(self, Child):
+    assert self.isChildValid(Child)
+    assert Child in self.Children
+    self.Children.remove(Child)
+
 
   def print(self):
     for Child in self.Children:
