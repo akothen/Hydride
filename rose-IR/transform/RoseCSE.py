@@ -11,6 +11,7 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
   print("RUN CSE ON BLOCK")
   print("BLOCK:")
   print(Block)
+  Block.print()
   Visited = set()
   TotalNumInsts = Block.getNumOperations()
   for Index in range(TotalNumInsts):
@@ -22,24 +23,24 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
       Visited.insert(KeyOperation)
       continue
     # Iterate ahead and see if we find a matching instruction
-    for CheckIndex in range(Index, TotalNumInsts):
+    for CheckIndex in range(Index + 1, TotalNumInsts):
       Operation = Block.getOperation(CheckIndex)
       if Operation in Visited:
         continue
       # Skip call instructions
       if isinstance(KeyOperation, RoseCallOp):
-        Visited.insert(KeyOperation)
+        Visited.add(KeyOperation)
         continue
-      if KeyOperation == Operation:
+      if KeyOperation.isSameAs(Operation):
         print("EQUAL INSTRUCTIONS:")
         KeyOperation.print()
         Operation.print()
-        if OpToOpMap.get(Operation, None) == None:
+        if OpToOpMap.get(KeyOperation, []) == []:
           OpToOpMap[KeyOperation] = [Operation]
         else:
           OpToOpMap[KeyOperation].append(Operation)
-        Visited.insert(Operation)
-    Visited.insert(KeyOperation)
+        Visited.add(Operation)
+    Visited.add(KeyOperation)
   print(OpToOpMap)
   return OpToOpMap
 
@@ -73,26 +74,34 @@ def RunCSEOnFunction(Function : RoseFunction):
   OpToOpMap = RunCSEOnRegion(Function, OpToOpMap)
   
   # Now that the map is populated, modify the given block
+  print("MAPPINGS:")
+  print(OpToOpMap)
   RemovedOps = list()
   if Function.isTopLevelFunction():
     ParentRegion = Function
   else:
     ParentRegion = Function.getParent()
   for KeyOperation, OpList in OpToOpMap.items():
+    print(KeyOperation)
+    print(type(KeyOperation))
     for Operation in OpList:
       # Replace the uses this operation
-      ParentRegion.replacesUsesWith(KeyOperation, Operation)
+      ParentRegion.replaceUsesWith(Operation, KeyOperation)
       RemovedOps.append(Operation)
 
   # Remove the dead operations
   for Operation in RemovedOps:
     Block = Operation.getParent()
-    Block.erase(Operation)
+    print("OPERATION TO BE ERASED:")
+    Operation.print()
+    Block.eraseOperation(Operation)
+    Block.print()
 
 
 # Runs a transformation
 def Run(Function : RoseFunction):
   RunCSEOnFunction(Function)
+  Function.print()
 
 
 
