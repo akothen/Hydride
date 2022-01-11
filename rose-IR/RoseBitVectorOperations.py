@@ -3,10 +3,11 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 from RoseAbstractions import RoseUndefRegion
-from RoseValues import RoseOperation, RoseConstant
+from RoseValues import RoseConstant
+from RoseBitVectorOperation import RoseBitVectorOp
 
 
-class RoseBVSignExtendOp(RoseOperation):
+class RoseBVSignExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
@@ -24,11 +25,8 @@ class RoseBVSignExtendOp(RoseOperation):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getTargetBitwidth(self):
-    return self.getOperand(1)
 
-
-class RoseBVZeroExtendOp(RoseOperation):
+class RoseBVZeroExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
@@ -47,16 +45,13 @@ class RoseBVZeroExtendOp(RoseOperation):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getTargetBitwidth(self):
-    return self.getOperand(1)
 
-
-class RoseBVExtractSliceOp(RoseOperation):
+class RoseBVExtractSliceOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
               Bitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, Low, High, Bitwidth]
-    RoseOperation.__init__(self, RoseOpcode.bvextract, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
@@ -73,13 +68,13 @@ class RoseBVExtractSliceOp(RoseOperation):
     return self.getOperand(2)
 
 
-class RoseBVInsertSliceOp(RoseOperation):
+class RoseBVInsertSliceOp(RoseBitVectorOp):
   def __init__(self, InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, \
               High : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     assert InsertVal.getType().isBitVectorTy()
     OperandList = [InsertVal, Bitvector, Low, High]
-    RoseOperation.__init__(self, RoseOpcode.bvinsert, "", OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvinsert, "", OperandList, ParentBlock)
 
   @staticmethod
   def create(InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
@@ -101,7 +96,7 @@ class RoseBVInsertSliceOp(RoseOperation):
 
 ######################################## BITWISE OPERATORS ###########################
 
-class RoseBVNotOp(RoseOperation):
+class RoseBVNotOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -115,7 +110,7 @@ class RoseBVNotOp(RoseOperation):
     return self.getOperand(0)
 
 
-class RoseBVAndOp(RoseOperation):
+class RoseBVAndOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -124,9 +119,9 @@ class RoseBVAndOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVAndOp(Name, Operands, ParentBlock)
+  
 
-
-class RoseBVOrOp(RoseOperation):
+class RoseBVOrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -137,7 +132,7 @@ class RoseBVOrOp(RoseOperation):
     return RoseBVOrOp(Name, Operands, ParentBlock)
 
 
-class RoseBVXorOp(RoseOperation):
+class RoseBVXorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -148,7 +143,7 @@ class RoseBVXorOp(RoseOperation):
     return RoseBVXorOp(Name, Operands, ParentBlock)
 
 
-class RoseBVShlOp(RoseOperation):
+class RoseBVShlOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -161,7 +156,7 @@ class RoseBVShlOp(RoseOperation):
     return RoseBVShlOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVLshrOp(RoseOperation):
+class RoseBVLshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -174,7 +169,7 @@ class RoseBVLshrOp(RoseOperation):
     return RoseBVLshrOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVAshrOp(RoseOperation):
+class RoseBVAshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -191,7 +186,7 @@ class RoseBVAshrOp(RoseOperation):
 ######################################## ARITHMETIC OPERATORS ###########################
 
 
-class RoseBVNegOp(RoseOperation):
+class RoseBVNegOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -205,7 +200,7 @@ class RoseBVNegOp(RoseOperation):
     return self.getOperand(0)
 
 
-class RoseBVAddOp(RoseOperation):
+class RoseBVAddOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -216,7 +211,7 @@ class RoseBVAddOp(RoseOperation):
     return RoseBVAddOp(Name, Operands, ParentBlock)
 
 
-class RoseBVSubOp(RoseOperation):
+class RoseBVSubOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -227,7 +222,7 @@ class RoseBVSubOp(RoseOperation):
     return RoseBVSubOp(Name, Operands, ParentBlock)
 
 
-class RoseBVMulOp(RoseOperation):
+class RoseBVMulOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -238,7 +233,7 @@ class RoseBVMulOp(RoseOperation):
     return RoseBVMulOp(Name, Operands, ParentBlock)
 
   
-class RoseBVUdivOp(RoseOperation):
+class RoseBVUdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -249,9 +244,9 @@ class RoseBVUdivOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUdivOp(Name, Operand1, Operand2, ParentBlock)
-  
 
-class RoseBVSdivOp(RoseOperation):
+
+class RoseBVSdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -263,8 +258,8 @@ class RoseBVSdivOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSdivOp(Name, Operand1, Operand2, ParentBlock)
   
-  
-class RoseBVUremOp(RoseOperation):
+
+class RoseBVUremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -275,9 +270,9 @@ class RoseBVUremOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUremOp(Name, Operand1, Operand2, ParentBlock)
-  
 
-class RoseBVSremOp(RoseOperation):
+
+class RoseBVSremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -288,9 +283,9 @@ class RoseBVSremOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVSremOp(Name, Operand1, Operand2, ParentBlock)
-  
 
-class RoseBVSmodOp(RoseOperation):
+
+class RoseBVSmodOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -306,7 +301,7 @@ class RoseBVSmodOp(RoseOperation):
 
 ############################# COMPARISON OPERATORS ###################################
 
-class RoseBVEQOp(RoseOperation):
+class RoseBVEQOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -319,7 +314,7 @@ class RoseBVEQOp(RoseOperation):
     return RoseBVEQOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVSLTOp(RoseOperation):
+class RoseBVSLTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -332,7 +327,7 @@ class RoseBVSLTOp(RoseOperation):
     return RoseBVSLTOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVULTOp(RoseOperation):
+class RoseBVULTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -345,7 +340,7 @@ class RoseBVULTOp(RoseOperation):
     return RoseBVULTOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVSLEOp(RoseOperation):
+class RoseBVSLEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -358,7 +353,7 @@ class RoseBVSLEOp(RoseOperation):
     return RoseBVSLEOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVULEOp(RoseOperation):
+class RoseBVULEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -371,7 +366,7 @@ class RoseBVULEOp(RoseOperation):
     return RoseBVULEOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVSGTOp(RoseOperation):
+class RoseBVSGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -384,7 +379,7 @@ class RoseBVSGTOp(RoseOperation):
     return RoseBVSGTOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVUGTOp(RoseOperation):
+class RoseBVUGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -397,7 +392,7 @@ class RoseBVUGTOp(RoseOperation):
     return RoseBVUGTOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVSGEOp(RoseOperation):
+class RoseBVSGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -410,7 +405,7 @@ class RoseBVSGEOp(RoseOperation):
     return RoseBVSGEOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVUGEOp(RoseOperation):
+class RoseBVUGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -421,12 +416,12 @@ class RoseBVUGEOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUGEOp(Name, Operand1, Operand2, ParentBlock)
-
+  
 
 
 ######################################## ADDITIONAL OPERATORS ###########################
 
-class RoseBVAdd1Op(RoseOperation):
+class RoseBVAdd1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -435,9 +430,12 @@ class RoseBVAdd1Op(RoseOperation):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVAdd1Op(Name, Bitvector, ParentBlock)
+  
+  def getInputBitVector(self):
+    return self.getOperand(0)
 
 
-class RoseBVSub1Op(RoseOperation):
+class RoseBVSub1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
@@ -447,8 +445,11 @@ class RoseBVSub1Op(RoseOperation):
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVSub1Op(Name, Bitvector, ParentBlock)
 
+  def getInputBitVector(self):
+    return self.getOperand(0)
 
-class RoseBVSminOp(RoseOperation):
+
+class RoseBVSminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -459,7 +460,7 @@ class RoseBVSminOp(RoseOperation):
     return RoseBVSminOp(Name, Operands, ParentBlock)
 
 
-class RoseBVUminOp(RoseOperation):
+class RoseBVUminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -470,7 +471,7 @@ class RoseBVUminOp(RoseOperation):
     return RoseBVUminOp(Name, Operands, ParentBlock)
 
 
-class RoseBVSmaxOp(RoseOperation):
+class RoseBVSmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -481,7 +482,7 @@ class RoseBVSmaxOp(RoseOperation):
     return RoseBVSmaxOp(Name, Operands, ParentBlock)
 
 
-class RoseBVUmaxOp(RoseOperation):
+class RoseBVUmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBitVectorTy()
@@ -492,7 +493,7 @@ class RoseBVUmaxOp(RoseOperation):
     return RoseBVUmaxOp(Name, Operands, ParentBlock)
 
 
-class RoseBVRolOp(RoseOperation):
+class RoseBVRolOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -505,7 +506,7 @@ class RoseBVRolOp(RoseOperation):
     return RoseBVRolOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVRorOp(RoseOperation):
+class RoseBVRorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
     assert Operand2.getType().isBitVectorTy()
@@ -518,7 +519,7 @@ class RoseBVRorOp(RoseOperation):
     return RoseBVRorOp(Name, Operand1, Operand2, ParentBlock)
 
 
-class RoseBVZeroOp(RoseOperation):
+class RoseBVZeroOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector]
