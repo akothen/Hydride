@@ -728,20 +728,15 @@ def CompileReturn(ReturnStmt, Context : x86RoseContext):
   return Operation
 
 
-def CompileCall(CallStmt, Context : x86RoseContext):
+def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   # If the call is compiled, no need to recompile
   if Context.isCompiledAbstraction(CallStmt.id):
-    Call = Context.getCompiledAbstractionForID(CallStmt.id)
-    if Call.getType() == RoseType.isVoidTy():
-      return 
-    else:
-      return Call
+    return Context.getCompiledAbstractionForID(CallStmt.id)
 
-  print("COMPILE CALL")
-  assert type(CallStmt.func) == str
   FunctionName = CallStmt.func
+  assert FunctionName in Builtins
 
-  # Compile arguments first
+  # Compile function call arguments first
   print("COMPILE ARGUMENTS")
   ArgValuesList = list()
   for Arg in CallStmt.args:
@@ -750,15 +745,54 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
     ArgValuesList.append(CompiledArg)
   print("ARGUMENTS COMPILED")
-
+  
   # Check if this is a call to a builtin function
+  Operation = Builtins[FunctionName](CallStmt.id, ArgValuesList)
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  # Add the operation to the context
+  Context.addCompiledAbstraction(CallStmt.id, Operation)
+  return Operation
+
+
+def CompileCall(CallStmt, Context : x86RoseContext):
+   # If the call is compiled, no need to recompile
+  if Context.isCompiledAbstraction(CallStmt.id):
+    return Context.getCompiledAbstractionForID(CallStmt.id)
+
+  print("COMPILE CALL")
+  assert type(CallStmt.func) == str
+  FunctionName = CallStmt.func
+
+  # If this is a builtin function call, just compile it.
   if FunctionName in Builtins:
-    Operation = Builtins[FunctionName](CallStmt.id, ArgValuesList)
-    # Add the operation to the IR
-    Context.addAbstractionToIR(Operation)
-    # Add the operation to the context
-    Context.addCompiledAbstraction(CallStmt.id, Operation)
-    return Operation
+    return CompileBuiltIn(CallStmt, Context)
+
+  # Try to get the types of the arguments first
+  print("TRYING TO GET TYPES OF ARGUMENTS")
+  ArgTypesUndefined = False
+  ArgsTypeList = list()
+  for Arg in CallStmt.args:
+    ArgType = GetExpressionType(Arg, Context)
+    # Argument type cannot be undefined or void
+    assert not ArgType.isVoidTy()
+    if ArgType.isUndefTy():
+      ArgTypesUndefined = True
+      break
+    ArgsTypeList.append(ArgType)
+  print("ARGUMENTS TYPES FOUND")
+
+  # Compile the arguments (we have no other choice)
+  ArgValuesList = list()
+  if ArgTypesUndefined == True:
+    print("COMPILE ARGUMENTS")
+    for Arg in CallStmt.args:
+      CompiledArg = CompileExpression(Arg, Context)
+      # Argument type cannot be undefined or void
+      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
+      ArgValuesList.append(CompiledArg)
+    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
+    print("ARGUMENTS COMPILED")
 
   # This is a function call
   FunctionDef = Context.getFunctionDef(FunctionName)
@@ -771,11 +805,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     FuncArgList = []
     for Index  in range(len(FunctionDef.params)):
       Param = FunctionDef.params[Index]
-      Arg = ArgValuesList[Index]
-      print("PARAM:")
-      print(Param)
-      print("ARG:")
-      Arg.print()
+      ArgType = ArgsTypeList[Index]
       if type(Param) == BitSlice:
         # Some sanity checks
         assert type(Param.bv) == Var
@@ -787,13 +817,13 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       else:
         assert type(Param) == Var
         ParamName = Param.name
-        ParamWidth = Arg.getType().getBitwidth()
+        ParamWidth = ArgType.getBitwidth()
       print("ParamWidth:")
       print(ParamWidth)
       print("Arg.getType().getBitwidth():")
-      print(Arg.getType().getBitwidth())
-      assert Arg.getType().getBitwidth() == ParamWidth
-      ArgVal = RoseArgument.create(ParamName, Arg.getType(), RoseUndefValue(), Index)
+      print(ArgType.getBitwidth())
+      assert ArgType.getBitwidth() == ParamWidth
+      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue(), Index)
       ChildContext.addVariable(ParamName, Param.id)
       FuncArgList.append(ArgVal)
       print("PARAM NAME:")
@@ -850,6 +880,17 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     Context.destroyContext(FunctionDef.id)
     print("COMPILED FUNCITON:")
     CompiledFunction.print()
+  
+  # Compile the function call arguments now
+  if ArgTypesUndefined == False:
+    print("COMPILE ARGUMENTS")
+    ArgValuesList = list()
+    for Arg in CallStmt.args:
+      CompiledArg = CompileExpression(Arg, Context)
+      # Argument type cannot be undefined or void
+      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
+      ArgValuesList.append(CompiledArg)
+    print("ARGUMENTS COMPILED")
 
   # Compile call statement now.
   Function = Context.getCompiledAbstractionForID(FunctionDef.id)
@@ -1374,7 +1415,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test8()
+  sema = test2()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
