@@ -4,7 +4,7 @@ from  RoseValue import RoseValue
 import RoseAbstractions
 import RoseValues
 
-from enum import Enum, auto
+from enum import Enum, Flag, auto
 
 
 # List of all operations that
@@ -50,7 +50,6 @@ class RoseOpcode(Enum):
     bvsub1 = auto()
     rotateleft = auto()
     rotateright = auto()
-    concat = auto()
     bvextract = auto()
     bvinsert = auto()
     bvsignextend = auto()
@@ -577,6 +576,51 @@ class RoseOpcode(Enum):
         if self.value == self.cast.value:
            return (NumInputs == 2)      
         return None
+    
+    def isBitVectorOpcode(self):
+        if self.value == self.bvzero.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value \
+        or self.value == self.bvneg.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value \
+        or self.value == self.bvadd.value \
+        or self.value == self.bvsub.value \
+        or self.value == self.bvmul.value \
+        or self.value == self.bvor.value \
+        or self.value == self.bvxor.value \
+        or self.value == self.bvand.value \
+        or self.value == self.bvshl.value \
+        or self.value == self.bvlshr.value \
+        or self.value == self.bvashr.value \
+        or self.value == self.bvsmin.value \
+        or self.value == self.bvumin.value \
+        or self.value == self.bvsmax.value \
+        or self.value == self.bvumax.value \
+        or self.value == self.bvsdiv.value \
+        or self.value == self.bvudiv.value \
+        or self.value == self.bvsrem.value \
+        or self.value == self.bvurem.value \
+        or self.value == self.bvsmod.value \
+        or self.value == self.bvrol.value \
+        or self.value == self.bvror.value \
+        or self.value == self.bit.value \
+        or self.value == self.bveq.value \
+        or self.value == self.bvslt.value \
+        or self.value == self.bvult.value \
+        or self.value == self.bvsle.value \
+        or self.value == self.bvule.value \
+        or self.value == self.bvsgt.value \
+        or self.value == self.bvugt.value \
+        or self.value == self.bvsge.value \
+        or self.value == self.bvuge.value \
+        or self.value == self.rotateleft.value \
+        or self.value == self.rotateright.value \
+        or self.value == self.bvextract.value \
+        or self.value == self.bvinsert.value:
+            return True
+        return False
 
     def callInputsAreValid(self, Callee, Inputs : list):
         assert self.value == self.call.value
