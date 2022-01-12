@@ -66,20 +66,26 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
   
   def getHighIndex(self):
     return self.getOperand(2)
+  
+  def getLowIndexPos(self):
+    return 1
+  
+  def getHighIndexPos(self):
+    return 2
 
 
 class RoseBVInsertSliceOp(RoseBitVectorOp):
   def __init__(self, InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, \
-              High : RoseValue, ParentBlock):
+              High : RoseValue, Bitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     assert InsertVal.getType().isBitVectorTy()
-    OperandList = [InsertVal, Bitvector, Low, High]
+    OperandList = [InsertVal, Bitvector, Low, High, Bitwidth]
     super().__init__(RoseOpcode.bvinsert, "", OperandList, ParentBlock)
 
   @staticmethod
   def create(InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVInsertSliceOp(InsertVal, Bitvector, Low, High, ParentBlock)
+            Bitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVInsertSliceOp(InsertVal, Bitvector, Low, High, Bitwidth, ParentBlock)
 
   def getInsertValue(self):
     return self.getOperand(0)
@@ -92,6 +98,17 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   
   def getHighIndex(self):
     return self.getOperand(3)
+
+  def getLowIndexPos(self):
+    return 2
+  
+  def getHighIndexPos(self):
+    return 3
+
+  def getBitwidthHandled(self):
+    BitwidthVal = self.getOperand(4)
+    assert isinstance(BitwidthVal, RoseConstant)
+    return BitwidthVal.getValue()
 
 
 ######################################## BITWISE OPERATORS ###########################
