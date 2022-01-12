@@ -171,6 +171,8 @@ class RoseOpcode(Enum):
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
+            # The bitwidth inserted by is a constant value
+            assert isinstance(Inputs[4], RoseValues.RoseConstant)
             return RoseType.getVoidTy()
         if self.value == self.call.value:
             Callee = Inputs[0]
@@ -293,6 +295,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvuge.value \
         or self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
+            if not isinstance(Inputs[4], RoseValues.RoseConstant):
+                return False
             if len(BVInputs) == 2:
                 return True
             else:
