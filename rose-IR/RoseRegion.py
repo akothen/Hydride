@@ -21,7 +21,7 @@ class RoseRegion:
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
     return self.Children != Other.Children or self.Parent != Other.Parent
-
+  
   def areChildrenValid(self):
     if isinstance(self, RoseAbstractions.RoseUndefRegion):
       return True
@@ -103,6 +103,16 @@ class RoseRegion:
       self.Children.append(Region)
     else:
       self.Children[Key].append(Region)
+  
+  def addRegionBefore(self, Index, Region, Key = None):
+    assert self.isChildValid(Region)
+    Region.setParent(self)
+    if Key == None:
+      assert Index < len(self.Children)
+      self.Children.insert(Index, Region)
+    else:
+      assert Index < len(self.Children[Key])
+      self.Children[Key].insert(Index, Region)
     
   def replaceRegion(self, Region, Index, Key = None):
     assert self.isChildValid(Region)
@@ -117,7 +127,6 @@ class RoseRegion:
     assert self.isChildValid(Child)
     assert Child in self.Children
     self.Children.remove(Child)
-
 
   def print(self):
     for Child in self.Children:
