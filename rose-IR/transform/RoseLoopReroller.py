@@ -1,4 +1,5 @@
 
+from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -26,25 +27,27 @@ def GetOffsetsBetweenWindows(Window1 : list, Window2 : list, OffsetsList : list 
         return None
       if not isinstance(NonBVOperands2[OperandIndex], RoseConstant):
         return None
-      NewOffsetsList.append(NonBVOperands2[OperandIndex].getValue() - NonBVOperands1[OperandIndex].getValue())
+      NewOffsetsList.append(NonBVOperands2[OperandIndex].getValue() \
+                          - NonBVOperands1[OperandIndex].getValue())
     # Check if the given offsets match the newly computed offsets
-    print(OffsetsList)
     if OffsetsList[Index] == []:
       OffsetsList[Index] = NewOffsetsList
       continue
     if OffsetsList[Index] != NewOffsetsList:
       return None
+  print(OffsetsList)
   return OffsetsList
 
 
 def GetValidRerollableCandidates(RerollableCandidateWindows : list):
+  print("++++++++++++++++++++++++++++++++++++++++++++++++")
   # Collect list of rerollable windows in a set.
   RerollableCandidatesList = list()
   WindowsList = list()
   OffsetsList = list()
   for Window in RerollableCandidateWindows:
     if WindowsList == []:
-      WindowsList.append(Window)
+      WindowsList = [Window]
       continue
     # Now check if the window should be added to the current window list.
     # If the window lenghts different, they cannot be part of a set.
@@ -55,10 +58,11 @@ def GetValidRerollableCandidates(RerollableCandidateWindows : list):
         # Add the window list to the candidate list
         RerollableCandidatesList.append(WindowsList)
       # Empty the list and continue
-      WindowsList = list()
+      WindowsList = [Window]
       continue
     # Now lets see if the window should be added to the window list
-    NewOffsetsList = GetOffsetsBetweenWindows(WindowsList[0], Window, OffsetsList)
+    CheckWindow = WindowsList[len(WindowsList) - 1]
+    NewOffsetsList = GetOffsetsBetweenWindows(CheckWindow, Window, OffsetsList)
     if NewOffsetsList == None:
       # This is the end of the window list.
       # If we didn't capture multiple windows, we must discard the list
@@ -66,14 +70,22 @@ def GetValidRerollableCandidates(RerollableCandidateWindows : list):
         # Add the window list to the candidate list
         RerollableCandidatesList.append(WindowsList)
       # Empty the list and continue
-      WindowsList = list()
+      WindowsList = [Window]
       continue
     # If the offsets list is empty. Fill it up.
     if OffsetsList == []:
       OffsetsList = NewOffsetsList
     assert OffsetsList == NewOffsetsList
     # Add the window to the list
+    print("ADD WINDOW TO THE LIST")
     WindowsList.append(Window)
+  RerollableCandidatesList.append(WindowsList)
+  for WindowList in RerollableCandidatesList:
+    print("--WINDOW LIST:")
+    for Window in WindowList:
+      print("--WINDOW:")
+      for Op in Window:
+        Op.print()
   return RerollableCandidatesList
 
 
@@ -122,7 +134,12 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
       assert isinstance(LastOp, RoseBVInsertSliceOp)
       # Insert the window to the candidates list and empty the window
       RerollableCandidateWindows.append(Window)
-      Window = []
+      Window = [Operation]
+
+  for Window in RerollableCandidateWindows:
+    print("--WINDOW:")
+    for Op in Window:
+      Op.print()
 
   # Get a set of rerollable sets
   RerollableCandidatesList = GetValidRerollableCandidates(RerollableCandidateWindows)
