@@ -329,7 +329,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   Bitwidth = ComputeBitSliceWidth(Low, High, BitVector.getType().getBitwidth())
   print("^^^^^Bitwidth:")
   print(Bitwidth)
-  BitwidthValue = RoseConstant.create(Bitwidth, RoseType.getIntegerTy(32))
+  BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
 
   # Add an bitslice operation
   Operation = RoseBVExtractSliceOp.create(BitSliceExpr.id, BitVector, Low, High, BitwidthValue)
@@ -365,7 +365,7 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   Vector.print()
 
   # The bit slice size here is 1 bit
-  BitwidthValue = RoseConstant.create(1, RoseType.getIntegerTy(32))
+  BitwidthValue = RoseConstant.create(1, IndexVal.getType())
 
   # Now, generate the extract op. 
   Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, IndexVal, IndexVal, BitwidthValue)
@@ -605,8 +605,13 @@ def CompileUpdate(Update, Context : x86RoseContext):
       assert High.getValue() >= 0 and High.getValue() < BitVector.getType().getBitwidth()
     if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
       assert High.getValue() >= Low.getValue()
+    # Compute the bitwidth that is inserted in this slice
+    Bitwidth = ComputeBitSliceWidth(Low, High, BitVector.getType().getBitwidth())
+    print("^^^^^Bitwidth:")
+    print(Bitwidth)
+    BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
     # Add an bitslice operation
-    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High)
+    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
     print("BIT SLICE INSERT OP:")
     LHSOp.print()
   else:
@@ -626,8 +631,10 @@ def CompileUpdate(Update, Context : x86RoseContext):
     print(RHSExprVal)
     RHSExprVal.print()
     RHSExprVal.getType().print()
+    # The bit slice size here is 1 bit
+    BitwidthValue = RoseConstant.create(1, IndexVal.getType())
     # Compile the op
-    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal)
+    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal, BitwidthValue)
     print("---BIT SLICE INSERT OP:")
     LHSOp.print()
 
