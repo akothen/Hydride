@@ -10,8 +10,8 @@
 
 (define cex2 (time
                (verify
-  (assert (equal? (tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8)  
-                  (synth_check sym2_arg0 sym2_arg1)))
+(assert (equal? (tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8)   (synth_check sym2_arg0 sym2_arg1)))
+;(assert (equal? (ext-bv (tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8) 0 8)   (ext-bv (synth_check sym2_arg0 sym2_arg1) 0 8)))
   )
 ))
 

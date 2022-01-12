@@ -6,8 +6,8 @@
 (require rosette/lib/destruct)
 (require rosette/solver/smt/boolector)
 
-; (current-solver (boolector))
-;(current-bitwidth 32)
+(current-solver (boolector))
+(current-bitwidth 32)
 
 
 (custodian-limit-memory (current-custodian) (* 10000 1024 1024))
@@ -175,6 +175,10 @@
   result
   )
 
+(define (vector-shuffle-lrotate v1 num_rot prec)
+  (rotate-left (* prec num_rot) v1)
+  )
+
 (define (dsl_inst_0 vreg-acc vreg1 vreg2 conc_i_bound conc_j_bound conc_in_precision conc_out_precision)
   ;(assert (equal? (bvlength vreg-acc) (* conc_i_bound conc_out_precision))) 
   ;(assert (equal? (bvlength vreg1) (* (* conc_i_bound conc_j_bound) conc_in_precision)))
@@ -306,6 +310,7 @@
 (define cost-nop 1)
 (define cost-vec-shuffle-special 2)
 (define cost-vec-shuffle-ext-special 2)
+(define cost-vec-shuffle-rotate 2)
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
@@ -318,6 +323,7 @@
 (struct vec-add ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
 (struct vec-reduction ([v1 #:mutable] len prec) #:transparent )
 (struct vec-load ([v1 #:mutable] vsize start num prec) #:transparent )
+(struct vec-shuffle-rotate ([v1 #:mutable] num_rot prec) #:transparent )
 (struct vec-shuffle-special ([v1 #:mutable] [v2 #:mutable] len prec)  #:transparent )
 (struct vec-shuffle-ext-special ([v1 #:mutable] [v2 #:mutable] len prec index lump)  #:transparent )
 (struct vec-strided-gather ([v1 #:mutable] vsize start stride num prec) #:transparent )
@@ -364,6 +370,9 @@
             [(vec-shuffle-ext-special v1 v2 len prec index lump)
              (+ cost-vec-shuffle-ext-special (cost v1) (cost v2))
              ]
+            [(vec-shuffle-rotate v1 num_rot prec)
+            (+ cost-vec-shuffle-rotate (cost v1))
+            ]
             ))
 
 
@@ -389,6 +398,7 @@
             [(nop v1) (get-length v1)]
             [(vec-shuffle-special v1 v2 len prec) (* 2 len prec)]
             [(vec-shuffle-ext-special v1 v2 len prec index lump) (* 2 lump prec)]
+            [(vec-shuffle-rotate v1 num_rot prec) (get-length v1)]
             [_ -1]
             )
   )
@@ -456,6 +466,10 @@
 
              (assert (equal? (get-length v1) vsize))
              (strided-gather (interpret v1 env) vsize start stride num prec)
+             ]
+            [
+             (vec-shuffle-rotate v1 num_rot prec)
+             (vector-shuffle-lrotate (interpret v1 env) num_rot prec)
              ]
             ))
 
@@ -539,6 +553,14 @@
              (println prec)
              (displayln ")")
              ]
+            [
+             (vec-shuffle-rotate v1 num_rot prec)
+             (displayln "(vector-shuffle-lrotate")
+             (print-prog v1)
+             (println num_rot)
+             (println prec)
+             (displayln ")")
+             ]
             ))
 
 (define (mem vars #:depth k)
@@ -548,33 +570,33 @@
      (apply choose* vars)]
     [(choose* #t #f)
      ;(vec-load (mem vars #:depth (- k 1)) 128 0 4 8)
-     ;(vec-load (reg 0) 128 0 4 8)
-     (vec-load (apply choose* vars) 128 0 4 8)
+     (vec-load (reg 0) 128 0 4 8)
+     ;(vec-load (apply choose* vars) 128 0 4 8)
      ]
     [(choose* #t #f)
      ;(vec-load (mem vars #:depth (- k 1)) 128 4 4 8)
-     ;(vec-load (reg 0) 128 4 4 8)
-     (vec-load (apply choose* vars) 128 4 4 8)
+     (vec-load (reg 0) 128 4 4 8)
+     ;(vec-load (apply choose* vars) 128 4 4 8)
      ]
     [(choose* #t #f)
      ;(vec-load (mem vars #:depth (- k 1)) 128 8 4 8)
-     ;(vec-load (reg 0) 128 8 4 8)
-     (vec-load (apply choose* vars) 128 8 4 8)
+     (vec-load (reg 0) 128 8 4 8)
+     ;(vec-load (apply choose* vars) 128 8 4 8)
      ]
     [(choose* #t #f)
      ;(vec-load (mem vars #:depth (- k 1)) 128 12 4 8)
-     ;(vec-load (reg 0) 128 12 4 8)
-     (vec-load (apply choose* vars) 128 12 4 8)
+     (vec-load (reg 0) 128 12 4 8)
+     ;(vec-load (apply choose* vars) 128 12 4 8)
      ]
     [(choose* #t #f)
      ;(vec-load (mem vars #:depth (- k 1)) 32 0 2 8)
-     ;(vec-load (reg 1) 32 0 2 8)
-     (vec-load (apply choose* vars) 32 0 2 8)
+     (vec-load (reg 1) 32 0 2 8)
+     ;(vec-load (apply choose* vars) 32 0 2 8)
      ]
     [else
       ;(vec-load (mem vars #:depth (- k 1)) 32 2 2 8)
-      ;(vec-load (reg 1) 32 2 2 8)
-      (vec-load (apply choose* vars) 32 2 2 8)
+      (vec-load (reg 1) 32 2 2 8)
+      ;(vec-load (apply choose* vars) 32 2 2 8)
       ]
     )
   )
@@ -586,32 +608,32 @@
      (apply choose* vars)]
     ;[(choose* #t #f)
     ; (vec-shuffle-special
-    ;   (mem vars #:depth (- k 1))
-    ;   (mem vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
     ;   4 8
     ;   )]
     ;[(choose* #t #f)
     ; (vec-shuffle-special
-    ;   (mem vars #:depth (- k 1))
-    ;   (mem vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
     ;   2 8
     ;   )]
     [(choose* #t #f)
      (vec-shuffle-ext-special
-       (mem vars #:depth (- k 1))
-       (mem vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
        4 8 0 2
        )]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-ext-special
+    ;   (shufl vars #:depth (- k 1))
+    ;   (shufl vars #:depth (- k 1))
+    ;   4 8 1 2
+    ;   )]
     [(choose* #t #f)
      (vec-shuffle-ext-special
-       (mem vars #:depth (- k 1))
-       (mem vars #:depth (- k 1))
-       4 8 1 2
-       )]
-    [(choose* #t #f)
-     (vec-shuffle-ext-special
-       (mem vars #:depth (- k 1))
-       (mem vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
        4 8 2 2
        )]
     ;[(choose* #t #f)
@@ -624,7 +646,7 @@
     ; (vec-shuffle-ext-special
     ;   (shufl vars #:depth (- k 1))
     ;   (shufl vars #:depth (- k 1))
-   ;    8 8 4 4
+    ;   8 8 4 4
     ;   )]
     ;[(choose* #t #f)
     ; (vec-shuffle-ext-special
@@ -632,6 +654,12 @@
     ;   (shufl vars #:depth (- k 1))
     ;   8 8 6 2
     ;   )]
+    [(choose* #t #f)
+     (vec-shuffle-rotate 
+       (shufl vars #:depth (- k 1))
+       1 8
+       )
+     ]
     ;[(choose* #t #f)
     ; (define left_operand (shufl vars #:depth (- k 1) ) )
     ; ;(assert (equal? (get-length left_operand) (* 4 8)))
@@ -668,12 +696,12 @@
     ; (vec-strided-gather left_operand 
     ;                     32 1 2 2 8
     ;                     )]
-    [else ;(choose* #t #f)
+    [(choose* #t #f)
      (vec-mul  (shufl vars #:depth (- k 1))  (shufl vars #:depth (- k 1))
                          4 8 
                          )]
-    ;[else
-    ;  (mem vars #:depth k)]
+    [else
+      (mem vars #:depth k)]
 
     )
   )
@@ -727,7 +755,7 @@
   )
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 5))
+(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 6))
 
 
 (define (alt-tensor-conv img filt)
@@ -790,17 +818,21 @@
   (define row_4 (vec-load (reg 0) 128 12 4 8))
 
   (define slice_1 (vec-shuffle-ext-special row_1 row_2 4 8 0 2))
-  (define slice_2 (vec-shuffle-ext-special row_1 row_2 4 8 1 2))
+  ;(define slice_2 (vec-shuffle-ext-special row_1 row_2 4 8 1 2))
+  (define slice_2 (vec-shuffle-ext-special (vec-shuffle-rotate row_1 1 8) (vec-shuffle-rotate row_2 1 8)  4 8 0 2))
+
   (define slice_3 (vec-shuffle-ext-special row_1 row_2 4 8 2 2))
   
   
   (define slice_4 (vec-shuffle-ext-special row_2 row_3 4 8 0 2))
-  (define slice_5 (vec-shuffle-ext-special row_2 row_3 4 8 1 2))
+  ;(define slice_5 (vec-shuffle-ext-special row_2 row_3 4 8 1 2))
+  (define slice_5 (vec-shuffle-ext-special (vec-shuffle-rotate row_2 1 8) (vec-shuffle-rotate row_3 1 8)  4 8 0 2))
   (define slice_6 (vec-shuffle-ext-special row_2 row_3 4 8 2 2))
   
   
   (define slice_7 (vec-shuffle-ext-special row_3 row_4 4 8 0 2))
-  (define slice_8 (vec-shuffle-ext-special row_3 row_4 4 8 1 2))
+  ;(define slice_8 (vec-shuffle-ext-special row_3 row_4 4 8 1 2))
+  (define slice_8 (vec-shuffle-ext-special (vec-shuffle-rotate row_3 1 8) (vec-shuffle-rotate row_4 1 8)  4 8 0 2))
   (define slice_9 (vec-shuffle-ext-special row_3 row_4 4 8 2 2))
 
 
@@ -834,6 +866,7 @@
                    (vec-reduction prod_9 4 8)
                    ))
 
+(println (cost alt-tensor-conv-dsl))
 (println "Starting")
 
 
@@ -858,24 +891,21 @@
                 )
   )
 
-(define test-env (vector image kernel))
+;(define test-env (vector image kernel))
 
-(displayln "Kernel")
-(print-mat kernel 2 2 8)
+;(displayln "Kernel")
+;(print-mat kernel 2 2 8)
 
-(define output (tensor-conv2D image kernel 4 4 2 2 8))
-(displayln "Convolution Output")
-(print-mat output 3 3 8)
+;(define output (tensor-conv2D image kernel 4 4 2 2 8))
+;(displayln "Convolution Output")
+;(print-mat output 3 3 8)
 
 
-;(define alt_output (alt-tensor-conv image kernel))
-;(displayln "Alt Convolution Output")
+
+
+;(define alt_output (interpret alt-tensor-conv-dsl test-env))
+;(displayln "Alt Convolution Output (DSL)")
 ;(print-mat alt_output 3 3 8)
-
-
-(define alt_output (interpret alt-tensor-conv-dsl test-env))
-(displayln "Alt Convolution Output (DSL)")
-(print-mat alt_output 3 3 8)
 
 
 (define cex_arg0 (bv -1 (bitvector 128)))

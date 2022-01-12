@@ -15,10 +15,15 @@ def get_cex_defs(cex_ls):
 def get_synth_asserts(cex_ls):
     strs = []
 
+    var_list = []
     for idx,cex in enumerate(cex_ls):
         str_ = "(assume (equal? (interpret sketch-grammar env_{}) (tensor-conv2D v0_{} v1_{} 4 4 2 2 8)))".format(idx,idx,idx)
+
+        ## str_ = "(assume (equal? (ext-bv (interpret sketch-grammar env_{}) 1 8) (ext-bv (tensor-conv2D v0_{} v1_{} 4 4 2 2 8) 1 8)))".format(idx,idx,idx)
         strs.append(str_)
-    return "\n".join(strs)
+        var_list.append("v0_"+str(idx))
+        var_list.append("v1_"+str(idx))
+    return " ".join(var_list), "\n".join(strs)
 
 
 
@@ -54,7 +59,8 @@ for i in range(0,100):
     with open(exec_file, "w+") as WriteFile:
         WriteFile.write(common_str+"\n")
         WriteFile.write(get_cex_defs(cex)+"\n")
-        synth_copy = synth_str.format(get_synth_asserts(cex), i+1)
+        synth_app = get_synth_asserts(cex)
+        synth_copy = synth_str.format(synth_app[0],synth_app[1], i+1)
         WriteFile.write(synth_copy)
 
 
