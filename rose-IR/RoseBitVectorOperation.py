@@ -37,6 +37,11 @@ class RoseBitVectorOp(RoseOperation):
 
   def getOutputBitwidth(self):
     Type = self.getType()
+    print("OUTPUT TYPE:")
+    print(Type)
+    Type.print()
+    if Type.isVoidTy():
+      return 0
     if Type.isBitVectorTy():
       return Type.getBitwidth()
     assert Type.isBooleanTy()
