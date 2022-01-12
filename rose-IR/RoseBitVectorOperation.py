@@ -27,13 +27,20 @@ class RoseBitVectorOp(RoseOperation):
         BVOperands.append(Operand)
     return BVOperands
   
-  def getNonBitVectorOperands(self):
+  def getNonBVOperands(self):
     Operands = self.getOperands()
     NonBVOperands = []
     for Operand in Operands:
       if not Operand.getType().isBitVectorTy():
         NonBVOperands.append(Operand)
     return NonBVOperands
+  
+  def getNumNonBVOperands(self):
+    return len(self.getNonBVOperands())
+  
+  # It is used by getOutputBitwidth
+  def getBitwidthHandled(self):
+    return 0
 
   def getOutputBitwidth(self):
     Type = self.getType()
@@ -41,7 +48,7 @@ class RoseBitVectorOp(RoseOperation):
     print(Type)
     Type.print()
     if Type.isVoidTy():
-      return 0
+      return self.getBitwidthHandled()
     if Type.isBitVectorTy():
       return Type.getBitwidth()
     assert Type.isBooleanTy()
