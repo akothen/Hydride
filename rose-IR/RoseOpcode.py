@@ -544,7 +544,7 @@ class RoseOpcode(Enum):
         if self.value == self.bvextract.value:
             return (NumInputs == 4)
         if self.value == self.bvinsert.value:
-            return (NumInputs == 4)
+            return (NumInputs == 5)
         if self.value == self.select.value:
             return (NumInputs == 3)
         if self.value == self.call.value:
