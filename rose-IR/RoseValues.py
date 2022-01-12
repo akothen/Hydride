@@ -1,7 +1,7 @@
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType, RoseVoidType
+from RoseType import RoseType
 import RoseAbstractions 
 
 
@@ -79,30 +79,36 @@ class RoseArgument(RoseValue):
     return RoseArgument(Name, Type, Function, ArgIndex)
 
   def __eq__(self, Other):
-      if isinstance(Other, RoseUndefValue) \
-      or isinstance(Other, RoseOperation) \
-      or isinstance(Other, RoseConstant):
+    if isinstance(Other, RoseUndefValue) \
+    or isinstance(Other, RoseOperation) \
+    or isinstance(Other, RoseConstant):
+      return False
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseArgument) \
+    and isinstance(Other, RoseValue):
         return False
-      # Rule out the cases where we just compare agains plain ol' values
-      if not isinstance(Other, RoseArgument) \
-      and isinstance(Other, RoseValue):
-          return False
-      assert isinstance(Other, RoseArgument)
-      return self.ArgIndex == Other.ArgIndex and self.Callee == Other.Callee \
-              and super().__eq__(Other)
+    assert isinstance(Other, RoseArgument)
+    return self.ArgIndex == Other.ArgIndex and self.Callee == Other.Callee \
+            and super().__eq__(Other)
 
   def __ne__(self, Other):
-      if isinstance(Other, RoseUndefValue) \
-      or isinstance(Other, RoseOperation) \
-      or isinstance(Other, RoseConstant):
+    if isinstance(Other, RoseUndefValue) \
+    or isinstance(Other, RoseOperation) \
+    or isinstance(Other, RoseConstant):
+      return True
+    # Rule out the cases where we just compare agains plain ol' values
+    if not isinstance(Other, RoseArgument) \
+    and isinstance(Other, RoseValue):
         return True
-      # Rule out the cases where we just compare agains plain ol' values
-      if not isinstance(Other, RoseArgument) \
-      and isinstance(Other, RoseValue):
-          return True
-      assert isinstance(Other, RoseArgument)
-      return self.ArgIndex != Other.ArgIndex or self.Callee != Other.Callee \
-          or super().__ne__(Other)
+    assert isinstance(Other, RoseArgument)
+    return self.ArgIndex != Other.ArgIndex or self.Callee != Other.Callee \
+        or super().__ne__(Other)
+
+  # TODO: Should we also include callee in the hash?
+  def __hash__(self):
+    Name = self.getName()
+    Type = self.getType()
+    return hash((Name, Type, self.ArgIndex))
 
   def getArgIndex(self):
     assert self.ArgIndex < self.Callee.getArg(self.getArgIndex()).getType()
@@ -171,7 +177,6 @@ class RoseOperation(RoseValue):
   def __hash__(self):
     Name = self.getName()
     Type = self.getType()
-    #return hash(tuple(Name, Type, self.Opcode, self.Operands))
     return hash((Name, Type, self.Opcode))
   
   # This is different from __eq__ because here we want to see if 
