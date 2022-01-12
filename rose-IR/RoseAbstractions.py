@@ -18,7 +18,7 @@ class RoseUndefRegion(RoseRegion):
     print("undef_region")
 
 
-from RoseValues import RoseUndefValue, RoseOperation, RoseArgument
+from RoseValues import RoseUndefValue, RoseOperation, RoseArgument, RoseConstant
 
 
 ####################################### ROSE FUNCTION ############################################
@@ -280,11 +280,45 @@ class RoseForLoop(RoseRegion):
     self.End = End
     self.Step = Step
     super().__init__(RegionList, ParentRegion)
-  
+    
+  # Multiple constructors packaged into one
   @staticmethod
-  def create(IteratorName : str, End : RoseValue, Start : RoseValue, Step : RoseValue, 
-                RegionList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
-    return RoseForLoop(IteratorName, Start, End, Step, RegionList, ParentRegion)
+  def create(*args):
+    if len(args) == 6:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseValue) \
+      and isinstance(args[4], list) and isinstance(args[5], RoseRegion):
+        return RoseForLoop(args[0], args[1], args[2], args[3], args[4], args[5])
+      if isinstance(args[0], str) and isinstance(args[1], int) \
+      and isinstance(args[2], int) and isinstance(args[3], int) \
+      and isinstance(args[4], list) and isinstance(args[5], RoseRegion):
+        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        return RoseForLoop(args[0], Start, End, Step, args[4], args[5])
+    if len(args) == 5:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseValue) \
+      and isinstance(args[4], list):
+        return RoseForLoop(args[0], args[1], args[2], args[3], args[4], RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], int) \
+      and isinstance(args[2], int) and isinstance(args[3], int) \
+      and isinstance(args[4], list):
+        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion())
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseValue):
+        return RoseForLoop(args[0], args[1], args[2], args[3], args[4], RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], int) \
+      and isinstance(args[2], int) and isinstance(args[3], int):
+        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion()) 
+    assert(False)
   
   def areChildrenValid(self):
     # Children do not have to be instances of regions
