@@ -119,6 +119,9 @@ class RoseFunction(RoseValue, RoseRegion):
   def getNumArgs(self):
     return len(self.ArgList)
   
+  def getArgs(self):
+    return self.ArgList
+  
   def getArg(self, Index):
     return self.ArgList[Index]
   
@@ -216,6 +219,17 @@ class RoseFunction(RoseValue, RoseRegion):
         return True
     return False
 
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    Users = []
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      Users.extend(Child.getUsersOf(Abstraction))
+    return Users
+
   def print(self):
     # Print function signature first
     Func_Sig = "function " + self.getName() + " ("
@@ -298,13 +312,6 @@ class RoseBlock(RoseRegion):
   def getPosOfOperation(self, Operation):
     return self.getPosOfChild(Operation)
   
-  # Get the first function enclosing this block
-  def getFunction(self):
-    Function = self.getParent()
-    while not isinstance(Function, RoseFunction):
-      Function = Function.getParent()
-    return Function
-  
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Operation, NewOperation):
     assert isinstance(Operation, RoseOperation)
@@ -324,6 +331,38 @@ class RoseBlock(RoseRegion):
       if Child.usesValue(Abstraction) == True:
         return True
     return False
+
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    Users = []
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      if Child.usesValue(Abstraction):
+        Users.append(Child)
+    return Users
+  
+  # Split this block at the given point
+  def splitAt(self, Index):
+    assert Index < len(self.getOperations())
+    # Get this position of this block in the parent region
+    ParentRegion = self.getParent()
+    BlockIndex = ParentRegion.getPosOfChild(self)
+    # Create the new block first
+    OpsForNewBlock = self.getOperations()[Index:]
+    NewBlock = self.create(OpsForNewBlock)
+    assert isinstance(NewBlock, RoseBlock)
+    # Remove the ops after the split point from this Block
+    for Op in OpsForNewBlock:
+      self.eraseChild(Op)
+    # Add this new block to the parent region
+    if BlockIndex == ParentRegion.getNumChildren() - 1:
+      ParentRegion.addRegion(NewBlock)
+    else:
+      ParentRegion.addRegionBefore(BlockIndex + 1, NewBlock)
+    return NewBlock
 
   def eraseOperation(self, Operation):
     assert isinstance(Operation, RoseOperation)
@@ -433,7 +472,7 @@ class RoseForLoop(RoseRegion):
 
   def getStep(self):
     return self.Step
-  
+
   def setIteratorName(self, Name):
     self.Iterator = RoseValue.create(Name, self.Iterator.getType())
   
@@ -490,6 +529,17 @@ class RoseForLoop(RoseRegion):
       if Child.hasUsesOf(Abstraction) == True:
         return True
     return False
+
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    Users = []
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      Users.extend(Child.getUsersOf(Abstraction))
+    return Users
 
   def print(self):
     LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
