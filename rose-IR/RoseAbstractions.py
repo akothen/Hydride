@@ -200,13 +200,16 @@ class RoseFunction(RoseValue, RoseRegion):
     return False
   
   # Replaces the uses of an operation 
-  def replaceUsesWith(self, Operation, NewOperation):
-    assert isinstance(Operation, RoseOperation)
-    assert isinstance(NewOperation, RoseOperation)
-    assert Operation.getType() == NewOperation.getType()
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    print("REPLACES USES IN FUNCTION")
+    assert isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    assert isinstance(NewAbstraction, RoseOperation) \
+        or isinstance(NewAbstraction, RoseArgument)
+    assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
-      Child.replaceUsesWith(Operation, NewOperation)
+      Child.replaceUsesWith(Abstraction, NewAbstraction)
 
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
@@ -313,13 +316,20 @@ class RoseBlock(RoseRegion):
     return self.getPosOfChild(Operation)
   
   # Replaces the uses of an operation 
-  def replaceUsesWith(self, Operation, NewOperation):
-    assert isinstance(Operation, RoseOperation)
-    assert isinstance(NewOperation, RoseOperation)
-    assert Operation.getType() == NewOperation.getType()
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    print("REPLACE USES IN BLOCK")
+    assert isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    assert isinstance(NewAbstraction, RoseOperation) \
+        or isinstance(NewAbstraction, RoseArgument)
+    assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
-      Child.replaceUsesWith(Operation, NewOperation)
+      print("INSTRUCTION BEFORE:")
+      Child.print()
+      Child.replaceUsesWith(Abstraction, NewAbstraction)
+      print("INSTRUCTION AFTER:")
+      Child.print()
 
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
@@ -511,13 +521,16 @@ class RoseForLoop(RoseRegion):
     return False
   
   # Replaces the uses of an operation 
-  def replaceUsesWith(self, Operation, NewOperation):
-    assert isinstance(Operation, RoseOperation)
-    assert isinstance(NewOperation, RoseOperation)
-    assert Operation.getType() == NewOperation.getType()
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    print("REPLACE USES IN LOOP")
+    assert isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    assert isinstance(NewAbstraction, RoseOperation) \
+        or isinstance(NewAbstraction, RoseArgument)
+    assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
-      Child.replaceUsesWith(Operation, NewOperation)
+      Child.replaceUsesWith(Abstraction, NewAbstraction)
   
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
