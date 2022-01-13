@@ -1,6 +1,8 @@
 
 from RoseType import RoseType
 
+from copy import deepcopy
+
 
 # Base class for Rosette values. The values have name
 # and type. Keeping this simple for now.
@@ -39,8 +41,12 @@ class RoseValue:
         assert not Type.isUndefTy()
         self.Type = Type
     
+    def clone(self):
+        return deepcopy(self)
+
     def print(self, Debug = False):
         print(self.Name)
         if Debug == True:
             self.Type.print()
 
+ 
