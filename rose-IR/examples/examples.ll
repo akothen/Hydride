@@ -52,9 +52,9 @@ function _mm256_unpacklo_epi8 ( %a, %b ) {
 
 
 ;; ROSE IR AFTER LOOP REROLLING
-function _mm256_unpacklo_epi8 ( %a %b ) {
-  function INTERLEAVE_BYTES ( %src1 %src2 ) {
-    (for ([%i (range 0 64 8)]) {
+function _mm256_unpacklo_epi8 ( %a, %b ) {
+  function INTERLEAVE_BYTES ( %src1, %src2 ) {
+    for ([%i (range 0 64 8)]) {
       %1 = add %i, 7
       %2 = bvextract %src1, %i, %1, 8
       %3 = add %i, 7
@@ -84,9 +84,9 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 
 
 ;; ROSE IR AFTER CSE
-function _mm256_unpacklo_epi8 ( %a %b ) {
-  function INTERLEAVE_BYTES ( %src1 %src2 ) {
-    (for ([%i (range 0 64 8)]) {
+function _mm256_unpacklo_epi8 ( %a, %b ) {
+  function INTERLEAVE_BYTES ( %src1, %src2 ) {
+    for ([%i (range 0 64 8)]) {
       %1 = add %i, 7
       %2 = bvextract %src1, %i, %1, 8
       bvinsert %2, %dst, %i, %1, 8
@@ -111,12 +111,12 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 
 
 ;; ROSE IR AFTER FUNCTION INLINING
-function _mm256_unpacklo_epi8 ( %a %b ) {
+function _mm256_unpacklo_epi8 ( %a, %b ) {
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
     %2 = bvextract %a, %i, %1, 128
     %4 = bvextract %b, %i, %1, 128
-    (for ([%j (range 0 64 8)]) {
+    for ([%j (range 0 64 8)]) {
       %5 = add %j, 7
       %6 = bvextract %2, %j, %5, 8
       bvinsert %6, %var, %j, %5, 8
