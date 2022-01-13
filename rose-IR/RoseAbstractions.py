@@ -186,6 +186,7 @@ class RoseFunction(RoseValue, RoseRegion):
     assert type(OldAbstraction) == type(NewAbstraction)
     assert self.isChildValid(NewAbstraction)
     for Child in self.getChildren():
+      assert self.isChildValid(Child)
       if type(OldAbstraction) == type(Child):
         if Child == OldAbstraction:
           Index = self.getChildren().index(OldAbstraction)
@@ -201,7 +202,19 @@ class RoseFunction(RoseValue, RoseRegion):
     assert isinstance(NewOperation, RoseOperation)
     assert Operation.getType() == NewOperation.getType()
     for Child in self.getChildren():
+      assert self.isChildValid(Child)
       Child.replaceUsesWith(Operation, NewOperation)
+
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      if Child.hasUsesOf(Abstraction) == True:
+        return True
+    return False
 
   def print(self):
     # Print function signature first
@@ -285,6 +298,13 @@ class RoseBlock(RoseRegion):
   def getPosOfOperation(self, Operation):
     return self.getPosOfChild(Operation)
   
+  # Get the first function enclosing this block
+  def getFunction(self):
+    Function = self.getParent()
+    while not isinstance(Function, RoseFunction):
+      Function = Function.getParent()
+    return Function
+  
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Operation, NewOperation):
     assert isinstance(Operation, RoseOperation)
@@ -294,12 +314,24 @@ class RoseBlock(RoseRegion):
       assert self.isChildValid(Child)
       Child.replaceUsesWith(Operation, NewOperation)
 
-  # TODO: Ensure the uses have been removed.
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      if Child.usesValue(Abstraction) == True:
+        return True
+    return False
+
   def eraseOperation(self, Operation):
     assert isinstance(Operation, RoseOperation)
     # Ensure this operation does not have any uses left.
     # This is to prevent deletion of operations before their
     # uses are removed/fixed.
+    Function = self.getFunction()
+    assert not Function.hasUsesOf(Operation)
     self.eraseChild(Operation)
 
 
@@ -445,8 +477,20 @@ class RoseForLoop(RoseRegion):
     assert isinstance(NewOperation, RoseOperation)
     assert Operation.getType() == NewOperation.getType()
     for Child in self.getChildren():
+      assert self.isChildValid(Child)
       Child.replaceUsesWith(Operation, NewOperation)
   
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction):
+    assert isinstance(Abstraction, RoseFunction) \
+        or isinstance(Abstraction, RoseOperation) \
+        or isinstance(Abstraction, RoseArgument)
+    for Child in self.getChildren():
+      assert self.isChildValid(Child)
+      if Child.hasUsesOf(Abstraction) == True:
+        return True
+    return False
+
   def print(self):
     LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
         + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
