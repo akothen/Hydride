@@ -6,6 +6,12 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 
+# Kinds of operations CSE must be skipped on
+def SkipOperation(Operation : RoseOperation):
+  return isinstance(Operation, RoseCallOp) \
+      or isinstance(Operation, RoseBVInsertSliceOp) \
+      or isinstance(Operation, RoseBVExtractSliceOp)
+
 
 def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
   print("RUN CSE ON BLOCK")
@@ -13,17 +19,17 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
   print(Block)
   Block.print()
   Visited = set()
-  TotalNumInsts = Block.getNumOperations()
-  for Index in range(TotalNumInsts):
+  TotalNumOps = Block.getNumOperations()
+  for Index in range(TotalNumOps):
     KeyOperation = Block.getOperation(Index)
     if KeyOperation in Visited:
       continue
-    # Skip call instructions
-    if isinstance(KeyOperation, RoseCallOp):
+    # Skip certain operations
+    if SkipOperation(KeyOperation):
       Visited.add(KeyOperation)
       continue
     # Iterate ahead and see if we find a matching instruction
-    for CheckIndex in range(Index + 1, TotalNumInsts):
+    for CheckIndex in range(Index + 1, TotalNumOps):
       Operation = Block.getOperation(CheckIndex)
       print("KEY OEPRATION:")
       KeyOperation.print()
@@ -31,8 +37,8 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
       Operation.print()
       if Operation in Visited:
         continue
-      # Skip call instructions
-      if isinstance(KeyOperation, RoseCallOp):
+      # Skip certain operations
+      if SkipOperation(KeyOperation):
         Visited.add(KeyOperation)
         continue
       if KeyOperation.isSameAs(Operation):
