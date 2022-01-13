@@ -387,7 +387,9 @@ def RunRerollerOnFunction(Function : RoseFunction):
         for Op in Pack:
           RemovedOps.append(Op)
 
-  # Finaly, remove the ops
+  # Finaly, remove the ops.
+  # Reverse the list of ops since we want to remove
+  # uses of ops before the ops themselves.
   RemovedOps.reverse()
   for Operation in RemovedOps:
     Block = Operation.getParent()
@@ -395,6 +397,10 @@ def RunRerollerOnFunction(Function : RoseFunction):
     Operation.print()
     Block.eraseOperation(Operation)
     Block.print()
+    # If the block is empty now, we can remove it
+    if Block.isEmpty():
+      ParentRegion = Block.getParent()
+      ParentRegion.eraseChild(Block)
 
 
 # Runs Loop reroller
