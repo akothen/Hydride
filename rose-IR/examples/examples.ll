@@ -70,7 +70,7 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
   }
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
-    %2 = bvextract %a %i %1 128
+    %2 = bvextract %a, %i, %1, 128
     %3 = add %i, 127
     %4 = bvextract %b, %i, %3, 128
     %5 = call INTERLEAVE_BYTES(%2, %4)
@@ -100,7 +100,7 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
   }
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
-    %2 = bvextract %a %i %1 128
+    %2 = bvextract %a, %i, %1, 128
     %4 = bvextract %b, %i, %1, 128
     %5 = call INTERLEAVE_BYTES(%2, %4)
     bvinsert %5, %dst, %i, %1, 128
@@ -114,7 +114,7 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 function _mm256_unpacklo_epi8 ( %a %b ) {
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
-    %2 = bvextract %a %i %1 128
+    %2 = bvextract %a, %i, %1, 128
     %4 = bvextract %b, %i, %1, 128
     (for ([%j (range 0 64 8)]) {
       %5 = add %j, 7
