@@ -1,4 +1,4 @@
-
+;; RAW ROSE IR
 function _mm256_unpacklo_epi8 ( %a, %b ) {
   function INTERLEAVE_BYTES ( %src1, %src2 ) {
     %1 = bvextract %src1, 0, 7, 8
@@ -51,7 +51,7 @@ function _mm256_unpacklo_epi8 ( %a, %b ) {
 
 
 
-
+;; ROSE IR AFTER LOOP REROLLING
 function _mm256_unpacklo_epi8 ( %a %b ) {
   function INTERLEAVE_BYTES ( %src1 %src2 ) {
     (for ([%i (range 0 64 8)]) {
@@ -83,7 +83,7 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 
 
 
-
+;; ROSE IR AFTER CSE
 function _mm256_unpacklo_epi8 ( %a %b ) {
   function INTERLEAVE_BYTES ( %src1 %src2 ) {
     (for ([%i (range 0 64 8)]) {
@@ -109,6 +109,8 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 }
 
 
+
+;; ROSE IR AFTER FUNCTION INLINING
 function _mm256_unpacklo_epi8 ( %a %b ) {
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
@@ -130,7 +132,7 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 }
 
 
-
+;; Corresponding Rosette code
 (define (_mm256_unpacklo_epi8 v1 v2)
   (define %dst
     (apply
