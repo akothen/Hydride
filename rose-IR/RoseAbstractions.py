@@ -294,10 +294,12 @@ class RoseBlock(RoseRegion):
       assert self.isChildValid(Child)
       Child.replaceUsesWith(Operation, NewOperation)
 
-  
-  
+  # TODO: Ensure the uses have been removed.
   def eraseOperation(self, Operation):
     assert isinstance(Operation, RoseOperation)
+    # Ensure this operation does not have any uses left.
+    # This is to prevent deletion of operations before their
+    # uses are removed/fixed.
     self.eraseChild(Operation)
 
 
@@ -344,7 +346,7 @@ class RoseForLoop(RoseRegion):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseValue):
-        return RoseForLoop(args[0], args[1], args[2], args[3], args[4], RoseUndefRegion())
+        return RoseForLoop(args[0], args[1], args[2], args[3], [], RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int):
         End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
