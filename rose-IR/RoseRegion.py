@@ -1,6 +1,8 @@
 
 import RoseAbstractions
 
+from copy import deepcopy
+
 
 # Abstract class representing a region.
 # Regions can contain loops, function, blocks, etc.
@@ -87,6 +89,13 @@ class RoseRegion:
       self.Children[len(self.Children) - 1] = UpdatedChild
     else:
       self.Children[Key][len(self.Children) - 1] = UpdatedChild
+  
+  # Get the first function enclosing this region
+  def getFunction(self):
+    Function = self.getParent()
+    while not isinstance(Function, RoseAbstractions.RoseFunction):
+      Function = Function.getParent()
+    return Function
 
   def setParent(self, Parent):
     assert isinstance(Parent, RoseRegion)
@@ -127,6 +136,9 @@ class RoseRegion:
     assert self.isChildValid(Child)
     assert Child in self.Children
     self.Children.remove(Child)
+  
+  def clone(self):
+    return deepcopy(self)
 
   def print(self):
     for Child in self.Children:
