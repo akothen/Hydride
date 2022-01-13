@@ -133,6 +133,27 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 
 
 
+(define (_mm256_unpacklo_epi8 v1 v2)
+  (define result
+    (apply
+     concat
+     (for/list ([i (reverse (range 2))])
+       (apply
+        concat
+        (for/list ([j (reverse (range 8 16))])
+          (define low_index (* (+ j (* i 16)) 8))
+          (define high_index (+ low_index 7))
+          (concat (extract high_index low_index v1) (extract high_index low_index v2))
+         )
+        )
+       )
+     )
+    )
+    result
+)
+
+
+
 
 
 
