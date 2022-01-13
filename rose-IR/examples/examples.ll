@@ -116,18 +116,17 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
     %1 = add %i, 127
     %2 = bvextract %a %i %1 128
     %4 = bvextract %b, %i, %1, 128
-    %5 = call INTERLEAVE_BYTES(%2, %4)
     (for ([%j (range 0 64 8)]) {
-      %6 = add %j, 7
-      %7 = bvextract %2, %j, %6, 8
-      bvinsert %7, %var, %j, %6, 8
-      %8 = bvextract %4, %j, %6, 8
-      %9 = add %j, 8
-      %10 = add %9, 7
-      bvinsert %8, %var, %9, %10, 8
+      %5 = add %j, 7
+      %6 = bvextract %2, %j, %5, 8
+      bvinsert %6, %var, %j, %5, 8
+      %7 = bvextract %4, %j, %5, 8
+      %8 = add %j, 8
+      %9 = add %8, 7
+      bvinsert %7, %var, %8, %9, 8
     }
-    %11 = bvextract %var, 0, 127, 128
-    bvinsert %11, %dst, %i, %1, 128
+    %10 = bvextract %var, 0, 127, 128
+    bvinsert %10, %dst, %i, %1, 128
   }
   ret %dst
 }
