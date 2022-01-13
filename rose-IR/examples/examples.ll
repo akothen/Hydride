@@ -109,8 +109,6 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 }
 
 
-
-
 function _mm256_unpacklo_epi8 ( %a %b ) {
   for ([%i (range 0 256 128)]) {
     %1 = add %i, 127
@@ -134,22 +132,30 @@ function _mm256_unpacklo_epi8 ( %a %b ) {
 
 
 (define (_mm256_unpacklo_epi8 v1 v2)
-  (define result
+  (define %dst
     (apply
      concat
-     (for/list ([i (reverse (range 2))])
+     (for/list ([i (reverse (range 0 256 128))])
        (apply
         concat
-        (for/list ([j (reverse (range 8 16))])
-          (define low_index (* (+ j (* i 16)) 8))
-          (define high_index (+ low_index 7))
-          (concat (extract high_index low_index v1) (extract high_index low_index v2))
+        (define %1 (+ i 127))
+        (define %2 (extract %1 i v1))
+        (define %4 (extract %1 i v2))
+        ;;(for/list ([j (reverse (range 8 16))])
+        (for/list ([j (reverse (range 0 64 8))])
+          ;;(define low_index (* (+ j (* i 16)) 8))
+          ;;(define high_index (+ low_index 7))
+          ;;(concat (extract high_index low_index v1) (extract high_index low_index v2))
+          (define %5 (+ j 7))
+          (define %6 (extract %5 j %2)
+          (define %7 (extract %5 j %4)
+          (concat %6 %7)
          )
         )
        )
      )
     )
-    result
+    %dst
 )
 
 
