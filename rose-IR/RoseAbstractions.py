@@ -90,19 +90,32 @@ class RoseFunction(RoseValue, RoseRegion):
     return False
   
   def __eq__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseUndefValue) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseForLoop) \
+    or isinstance(Other, RoseCond):
         return False
+    print(type(Other))
     assert isinstance(Other, RoseFunction)
     return self.RetVal == Other.RetVal and self.ArgList == Other.ArgList \
         and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
 
   def __ne__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseUndefValue) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseForLoop) \
+    or isinstance(Other, RoseCond):
         return True
     assert isinstance(Other, RoseFunction)
     return self.RetVal != Other.RetVal or self.ArgList != Other.ArgList \
         or RoseValue.__ne__(self, Other) or RoseRegion.__ne__(self, Other)
   
+  # Make rose functions hashable
+  def __hash__(self):
+    return hash((self.getName(), self.getType()))
+
   def getNumArgs(self):
     return len(self.ArgList)
   
@@ -146,7 +159,7 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     self.ArgsList[ArgIndex].setName(Name)
 
-  # An abstraction can be an operation and region
+  # An abstraction can be an operation or a region
   def addAbstraction(self, Abstraction):
     print("METHOD ADDING ABSTRACTION:")
     print(Abstraction)
@@ -214,6 +227,24 @@ class RoseBlock(RoseRegion):
   def create(OpList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseBlock(OpList, ParentRegion)
   
+  def __eq__(self, Other):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseForLoop) \
+    or isinstance(Other, RoseCond):
+        return False
+    assert isinstance(Other, RoseBlock)
+    return super().__eq__(Other)
+
+  def __ne__(self, Other):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseForLoop) \
+    or isinstance(Other, RoseCond):
+        return True
+    assert isinstance(Other, RoseBlock)
+    return super().__ne__(Other)
+
   # Make rose blocks hashable
   def __hash__(self):
     return hash(tuple(self.getOperations()))
@@ -262,6 +293,8 @@ class RoseBlock(RoseRegion):
     for Child in self.getChildren():
       assert self.isChildValid(Child)
       Child.replaceUsesWith(Operation, NewOperation)
+
+  
   
   def eraseOperation(self, Operation):
     assert isinstance(Operation, RoseOperation)
@@ -336,14 +369,20 @@ class RoseForLoop(RoseRegion):
     return False
 
   def __eq__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseCond):
         return False
     assert isinstance(Other, RoseForLoop)
     return self.Iterator == Other.Iterator and self.Start == Other.Start \
         and self.End == Other.End and self.Step == Other.Step and super().__eq__(Other)
 
   def __ne__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseCond):
         return True
     assert isinstance(Other, RoseForLoop)
     return self.Iterator != Other.Iterator or self.Start != Other.Start \
@@ -407,10 +446,6 @@ class RoseForLoop(RoseRegion):
       Child.replaceUsesWith(Operation, NewOperation)
   
   def print(self):
-    print(self.getStartIndex())
-    self.getStartIndex().print()
-    print(self.getEndIndex())
-    self.getEndIndex().print()
     LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
         + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
         + " " + str(self.getStep()) + ")])"
@@ -456,13 +491,19 @@ class RoseCond(RoseRegion):
     return False
   
   def __eq__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseForLoop):
         return False
     assert isinstance(Other, RoseCond)
     return self.Condition == Other.Condition and super().__eq__(Other)
 
   def __ne__(self, Other):
-    if isinstance(Other, RoseUndefRegion):
+    if isinstance(Other, RoseUndefRegion) \
+    or isinstance(Other, RoseFunction) \
+    or isinstance(Other, RoseBlock) \
+    or isinstance(Other, RoseForLoop):
         return True
     assert isinstance(Other, RoseCond)
     return self.Condition != Other.Condition or super().__ne__(Other)
