@@ -610,6 +610,8 @@ def CompileUpdate(Update, Context : x86RoseContext):
     print("^^^^^Bitwidth:")
     print(Bitwidth)
     BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
+    print("!!!!!RHSExprVal:")
+    RHSExprVal.getType().print()
     # Add an bitslice operation
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
     print("BIT SLICE INSERT OP:")
@@ -677,7 +679,7 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   print(UnaryExpr)
   # Compile the operation
   Value = CompileExpression(UnaryExpr.a, Context)
-  Operation = UnaryOps[UnaryExpr.op](UnaryExpr.id, Value)
+  Operation = UnaryOps[UnaryExpr.op]()(UnaryExpr.id, Value)
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -1178,15 +1180,35 @@ def HandleToMax(_):
   return LamdaImplFunc
 
 
+def HandleToSSaturate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args):
+    [Value] = Args
+    assert Value.getType().isBitVectorTy() == True
+    assert Value.getType().getBitwidth() >= Bitwidth
+    return RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+  
+  return LamdaImplFunc
+
+
+def HandleToUSaturate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args):
+    [Value] = Args
+    assert Value.getType().isBitVectorTy() == True
+    assert Value.getType().getBitwidth() >= Bitwidth
+    return RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+  
+  return LamdaImplFunc
+
+
 # Builtin functions
 Builtins = {
-  #'Saturate32': gen_saturation_func(32, True),
-  #'Saturate16': gen_saturation_func(16, True),
-  #'Saturate8': gen_saturation_func(8, True),
+  'Saturate32': HandleToSSaturate(32),
+  'Saturate16': HandleToSSaturate(16),
+  'Saturate8': HandleToSSaturate(8),
 
-  #'SaturateU32': gen_saturation_func(32, False),
-  #'SaturateU16': gen_saturation_func(16, False),
-  #'SaturateU8': gen_saturation_func(8, False),
+  'SaturateU32': HandleToUSaturate(32),
+  'SaturateU16': HandleToUSaturate(16),
+  'SaturateU8': HandleToUSaturate(8),
 
   'ZeroExtend16': HandleToZeroExtend(16),
   'ZeroExtend32': HandleToZeroExtend(32),
@@ -1422,7 +1444,7 @@ def Compile():
   from PseudoCodeParser import GetSemaFromXML
   import xml.etree.ElementTree as ET
 
-  sema = test2()
+  sema = test11()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
@@ -1637,6 +1659,77 @@ ENDFOR
 </intrinsic>
 '''
 #dst[MAX:512] := 0
+
+
+def test9():
+  return '''
+<intrinsic tech="AVX-512" name="_mm_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2
+ENDFOR
+	</operation>
+	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+#dst[MAX:128] := 0
+
+
+def test10():
+  return '''
+;;<intrinsic tech="AVX-512/KNC" sequence="TRUE" name="_mm512_reduce_add_epi64">
+;;	<type>Integer</type>
+;;	<CPUID>AVX512F/KNCNI</CPUID>
+;;	<category>Arithmetic</category>
+;;	<return type="__int64" varname="dst" etype="UI64"/>
+;;	<parameter type="__m512i" varname="a" etype="UI64"/>
+;;	<description>Reduce the packed 64-bit integers in "a" by addition. Returns the sum of all elements in "a".</description>
+;;	<operation>
+;;dst[63:0] := 0
+;;FOR j := 0 to 7
+;;	i := j*64
+;;	dst[63:0] := dst[63:0] + a[i+63:i]
+;;ENDFOR
+;;	</operation>
+;;	<header>immintrin.h</header>
+;;</intrinsic>
+'''
+
+def test11():
+  return '''
+<intrinsic tech="Other" name="_bswap64">
+	<type>Integer</type>
+	<category>Bit Manipulation</category>
+	<return type="__int64" varname="dst" etype="UI64"/>
+	<parameter type="__int64" varname="a" etype="UI64"/>
+	<description>Reverse the byte order of 64-bit integer "a", and store the result in "dst". This intrinsic is provided for conversion between little and big endian values.</description>
+	<operation>
+dst[7:0] := a[63:56]
+dst[15:8] := a[55:48]
+dst[23:16] := a[47:40]
+dst[31:24] := a[39:32]
+dst[39:32] := a[31:24]
+dst[47:40] := a[23:16]
+dst[55:48] := a[15:8]
+dst[63:56] := a[7:0]
+	</operation>
+	<instruction name="BSWAP" form="r64" xed="BSWAP_GPRv"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
 
 
 if __name__ == '__main__':
