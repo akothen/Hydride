@@ -37,6 +37,11 @@ class RoseBitVectorOp(RoseOperation):
   
   def getNumNonBVOperands(self):
     return len(self.getNonBVOperands())
+
+  def isIndexingBVOp(self):
+    # Generally this is false except a few
+    # exceptions
+    return False
   
   # It is used by getOutputBitwidth
   def getBitwidthHandled(self):
