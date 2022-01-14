@@ -46,21 +46,41 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     return self.getOperand(0)
 
 
-class RoseBVSaturateOp(RoseBitVectorOp):
+class RoseBVSSaturateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
-    super().__init__(RoseOpcode.bvsat, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvssat, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
             ParentBlock = RoseUndefRegion()):
-    return RoseBVSaturateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
+    return RoseBVSSaturateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
     
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
     TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVSaturateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+    return RoseBVSSaturateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+
+class RoseBVUSaturateOp(RoseBitVectorOp):
+  def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
+    assert Bitvector.getType().isBitVectorTy()
+    OperandList = [Bitvector, TargetBitwidth]
+    super().__init__(RoseOpcode.bvusat, Name, OperandList, ParentBlock)
+
+  @staticmethod
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
+            ParentBlock = RoseUndefRegion()):
+    return RoseBVUSaturateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
+    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
+    return RoseBVUSaturateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -92,6 +112,9 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
   
   def getHighIndexPos(self):
     return 2
+
+  def isIndexingBVOp(self):
+    return True
 
 
 class RoseBVInsertSliceOp(RoseBitVectorOp):
@@ -129,6 +152,9 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
     BitwidthVal = self.getOperand(4)
     assert isinstance(BitwidthVal, RoseConstant)
     return BitwidthVal.getValue()
+
+  def isIndexingBVOp(self):
+    return True
 
 
 ######################################## BITWISE OPERATORS ###########################
