@@ -85,8 +85,9 @@ class RoseOpcode(Enum):
     # Integers, bitvectors and booleans.
     cast = auto()
 
-    # An op to represent saturation
-    bvsat = auto()
+    # Ops to represent saturation
+    bvssat = auto()
+    bvusat = auto()
 
 
     def __str__(self):
@@ -204,11 +205,12 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() > BVInputs[0].getType().getBitwidth()
             return RoseType.getBitVectorTy(Inputs[1].getValue())
-        if self.value == self.bvsat.value:
+        if self.value == self.bvssat.value \
+        or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
-            assert Inputs[1].getValue() == BVInputs[0].getType().getBitwidth()
+            assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
             return RoseType.getBitVectorTy(Inputs[1].getValue())
         if self.value == self.add.value \
         or self.value == self.sub.value \
@@ -302,11 +304,12 @@ class RoseOpcode(Enum):
                 return True
             else:
                 return False
-        if self.value == self.bvsat.value:
+        if self.value == self.bvssat.value \
+        or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
-            if Inputs[1].getValue() != BVInputs[0].getType().getBitwidth():
+            if Inputs[1].getValue() > BVInputs[0].getType().getBitwidth():
                 return False
             if len(BVInputs) == 1:
                 return True
@@ -443,7 +446,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvsmod.value \
         or self.value == self.bvrol.value \
         or self.value == self.bvror.value \
-        or self.value == self.bvsat.value \
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value \
         or self.value == self.boolnot.value \
         or self.value == self.boolnand.value \
         or self.value == self.boolnor.value \
@@ -550,7 +554,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsat.value \
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value \
         or self.value == self.call.value \
         or self.value == self.select.value \
         or self.value == self.rotateleft.value \
@@ -607,7 +612,8 @@ class RoseOpcode(Enum):
             return (NumInputs == 5)
         if self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsat.value:
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value:
             return (NumInputs == 2)
         if self.value == self.select.value:
             return (NumInputs == 3)
@@ -685,7 +691,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
-        or self.value == self.bvsat.value:
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value:
             return True
         return False
 
