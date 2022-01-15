@@ -1200,6 +1200,26 @@ def HandleToUSaturate(Bitwidth : int):
   return LamdaImplFunc
 
 
+def HandleToAbs(_):
+  def LamdaImplFunc(Name : str, Operands : list):
+    assert len(Operands) == 1
+    [Value] = Operands
+    return RoseAbsOp.create(Name, Value)
+  
+  return LamdaImplFunc
+
+
+def HandleToInt(_):
+  def LamdaImplFunc(_, Operands : list):
+    assert len(Operands) == 1
+    [Value] = Operands
+    assert Value.getType().isBitVectorTy() == True
+    return Value
+  
+  return LamdaImplFunc
+
+
+
 # Builtin functions
 Builtins = {
   'Saturate32': HandleToSSaturate(32),
@@ -1221,9 +1241,11 @@ Builtins = {
   'MIN' : HandleToMin(None),
   'MAX' : HandleToMax(None),
 
-  #'APPROXIMATE': lambda args, _: args[0], # noop
+  'ABS' : HandleToAbs(None),
 
-  #'ABS': builtin_abs,
+  'Int' : HandleToInt(None),
+
+  #'APPROXIMATE': lambda args, _: args[0], # noop
 
   #'concat': builtin_concat,
   #'PopCount': builtin_popcount,
