@@ -92,6 +92,18 @@ class RoseCastOp(RoseOperation):
     print(String)
 
 
+class RoseAbsOp(RoseOperation):
+  def __init__(self, Name : str, Operand : RoseValue, ParentBlock):
+    assert Operand.getType().isBitVectorTy() or Operand.getType().isIntegerTy()
+    OperandList = [Operand]
+    super().__init__(RoseOpcode.abs, Name, OperandList, ParentBlock)
+
+  @staticmethod
+  def create(Name : str, Operand : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseAbsOp(Name, Operand, ParentBlock)
+
+
+
 ######################################## ARITHMETIC OPERATORS ###########################
 
 
@@ -313,7 +325,6 @@ class RoseXorOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
-
 
 
 
