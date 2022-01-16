@@ -240,7 +240,7 @@ class RoseGEOp(RoseOperation):
     assert not Operand1.getType().isBitVectorTy()
     assert not Operand2.getType().isBitVectorTy()
     OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.greaterthanqeual, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.greaterthanequal, Name, OperandList, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -292,6 +292,17 @@ class RoseNotOp(RoseOperation):
     return self.getOperand(0)
 
 
+class RoseAndOp(RoseOperation):
+  def __init__(self, Name : str, Operands : list, ParentBlock):
+    for Operand in Operands:
+      assert Operand.getType().isBooleanTy()
+    super().__init__(RoseOpcode.booland, Name, Operands, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseAndOp(Name, Operands, ParentBlock)
+
+
 class RoseNandOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
@@ -303,11 +314,22 @@ class RoseNandOp(RoseOperation):
     return RoseNandOp(Name, Operands, ParentBlock)
 
 
+class RoseOrOp(RoseOperation):
+  def __init__(self, Name : str, Operands : list, ParentBlock):
+    for Operand in Operands:
+      assert Operand.getType().isBooleanTy()
+    super().__init__(RoseOpcode.boolor, Name, Operands, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseOrOp(Name, Operands, ParentBlock)
+
+
 class RoseNorOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
       assert Operand.getType().isBooleanTy()
-    super().__init__(RoseOpcode.add, Name, Operands, ParentBlock)
+    super().__init__(RoseOpcode.boolnor, Name, Operands, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
@@ -319,7 +341,7 @@ class RoseXorOp(RoseOperation):
     assert Operand1.getType().isBooleanTy()
     assert Operand2.getType().isBooleanTy()
     OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.greaterthanqeual, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.boolxor, Name, OperandList, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
