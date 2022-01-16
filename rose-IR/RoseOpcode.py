@@ -92,6 +92,11 @@ class RoseOpcode(Enum):
     bvssat = auto()
     bvusat = auto()
 
+    # Racket/Rosette doesn't have these ops
+    # but its convenient to have them here.
+    bvneq = auto()
+    notequal = auto()
+
 
     def __str__(self):
         return self.name
@@ -165,6 +170,7 @@ class RoseOpcode(Enum):
             assert(len(BVInputs) == 2)
             return RoseType.getBitVectorTy(BVInputs[0].getType().getBitwidth())
         if self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
@@ -241,6 +247,7 @@ class RoseOpcode(Enum):
             if Inputs[0].getType().isBitVectorTy():
                 return RoseType.getBitVectorTy(Inputs[0].getType().getBitwidth())
         if self.value == self.equal.value \
+        or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
@@ -353,6 +360,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvrol.value \
         or self.value == self.bvror.value \
         or self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
@@ -395,6 +403,7 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value \
         or self.value == self.equal.value \
+        or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
@@ -491,6 +500,7 @@ class RoseOpcode(Enum):
         or self.value == self.msb.value \
         or self.value == self.bit.value \
         or self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
@@ -506,6 +516,7 @@ class RoseOpcode(Enum):
         or self.value == self.rotateleft.value \
         or self.value == self.rotateright.value \
         or self.value == self.equal.value \
+        or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
@@ -543,6 +554,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvror.value \
         or self.value == self.bvzero.value \
         or self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
@@ -571,6 +583,7 @@ class RoseOpcode(Enum):
         or self.value == self.ret.value \
         or self.value == self.abs.value \
         or self.value == self.equal.value \
+        or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
@@ -622,6 +635,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvror.value \
         or self.value == self.bit.value \
         or self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
@@ -659,6 +673,7 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value \
         or self.value == self.equal.value \
+        or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
         or self.value == self.greaterthan.value \
@@ -707,6 +722,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvror.value \
         or self.value == self.bit.value \
         or self.value == self.bveq.value \
+        or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
         or self.value == self.bvult.value \
         or self.value == self.bvsle.value \
