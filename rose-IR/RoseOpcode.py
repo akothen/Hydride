@@ -64,6 +64,7 @@ class RoseOpcode(Enum):
     rem = auto()
     max = auto()
     min = auto()
+    abs = auto()
     equal = auto()
     lessthan = auto()
     lessthanequal = auto()
@@ -72,7 +73,9 @@ class RoseOpcode(Enum):
 
     # Boolean ops
     boolnot = auto()
+    booland = auto()
     boolnand = auto()
+    boolor = auto()
     boolnor = auto()
     boolxor = auto()
 
@@ -230,6 +233,13 @@ class RoseOpcode(Enum):
                 return RoseType.getIntegerTy(Inputs[0].getType().getBitwidth())
             assert Inputs[0].getType().isFloatTy()
             return RoseType.getFloatTy(Inputs[0].getType().getBitwidth())
+        if self.value == self.abs.value:
+            assert(len(Inputs) == 1)
+            assert Inputs[0].getType().isBitVectorTy() or Inputs[0].getType().isIntegerTy()
+            if Inputs[0].getType().isIntegerTy():
+                return RoseType.getIntegerTy(Inputs[0].getType().getBitwidth())
+            if Inputs[0].getType().isBitVectorTy():
+                return RoseType.getBitVectorTy(Inputs[0].getType().getBitwidth())
         if self.value == self.equal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
@@ -240,7 +250,9 @@ class RoseOpcode(Enum):
         if self.value == self.boolnot.value:
             assert(len(Inputs) == 1)
             return RoseType.getBooleanTy()
-        if self.value == self.boolnand.value \
+        if self.value == self.booland.value \
+        or self.value == self.boolnand.value \
+        or self.value == self.boolor.value \
         or self.value == self.boolnor.value:
              assert(len(Inputs) > 1)
              return RoseType.getBooleanTy()
@@ -395,13 +407,22 @@ class RoseOpcode(Enum):
             and not Inputs[0].getType().isFloatTy():
                 return False
             return True
+        if self.value == self.abs.value:
+            if len(Inputs) != 1:
+                return False
+            if not Inputs[0].getType().isIntegerTy() \
+            and not Inputs[0].getType().isBitVectorTy():
+                return False
+            return True
         if self.value == self.boolnot.value:
             if len(Inputs) != 1:
                 return False
             if not Inputs[0].getType().isBooleanTy():
                 return False
             return True
-        if self.value == self.boolnand.value \
+        if self.value == self.booland.value \
+        or self.value == self.boolnand.value \
+        or self.value == self.boolor.value \
         or self.value == self.boolnor.value:
             if not (len(Inputs) > 1):
                 return False
@@ -449,7 +470,9 @@ class RoseOpcode(Enum):
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.boolnot.value \
+        or self.value == self.booland.value \
         or self.value == self.boolnand.value \
+        or self.value == self.boolor.value \
         or self.value == self.boolnor.value \
         or self.value == self.boolxor.value \
         or self.value == self.add.value \
@@ -460,6 +483,7 @@ class RoseOpcode(Enum):
         or self.value == self.div.value \
         or self.value == self.rem.value \
         or self.value == self.mod.value \
+        or self.value == self.abs.value \
         or self.value == self.ret.value:
             return True
         if self.value == self.bvzero.value \
@@ -531,7 +555,9 @@ class RoseOpcode(Enum):
         or self.value == self.msb.value \
         or self.value == self.bit.value \
         or self.value == self.boolnot.value \
+        or self.value == self.booland.value \
         or self.value == self.boolnand.value \
+        or self.value == self.boolor.value \
         or self.value == self.boolnor.value \
         or self.value == self.boolxor.value \
         or self.value == self.add.value \
@@ -543,6 +569,7 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value \
         or self.value == self.ret.value \
+        or self.value == self.abs.value \
         or self.value == self.equal.value \
         or self.value == self.lessthan.value \
         or self.value == self.lessthanequal.value \
@@ -619,7 +646,8 @@ class RoseOpcode(Enum):
             return (NumInputs == 3)
         if self.value == self.call.value:
             return (NumInputs >= 1)
-        if self.value == self.ret.value:
+        if self.value == self.ret.value \
+        or self.value == self.abs.value:
             return (NumInputs == 1)
         if self.value == self.add.value \
         or self.value == self.sub.value \
@@ -638,7 +666,9 @@ class RoseOpcode(Enum):
             return (NumInputs == 2)
         if self.value == self.boolnot.value:
             return (NumInputs == 1)
-        if self.value == self.boolnand.value \
+        if self.value == self.booland.value \
+        or self.value == self.boolnand.value \
+        or self.value == self.boolor.value \
         or self.value == self.boolnor.value:
             return (NumInputs > 1)
         if self.value == self.boolxor.value:
