@@ -1369,54 +1369,60 @@ def HandleToAnd():
 
 def HandleToEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVEQOp.create(Name, Operand1, Operand2)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVEQOp.create(Name, Operand1, Operand2)
+    return RoseEQOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToNotEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseNotOp.create(Name, RoseBVEQOp.create("eq." + Name, Operand1, Operand2))
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVNEQOp.create(Name, Operand1, Operand2)
+    return RoseNEQOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToLessThan():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVSLTOp.create(Name, Operand1, Operand2)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSLTOp.create(Name, Operand1, Operand2)
+    return RoseLTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToLessThanEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVSLEOp.create(Name, Operand1, Operand2)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSLEOp.create(Name, Operand1, Operand2)
+    return RoseLEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToGreaterThan():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVSGTOp.create(Name, Operand1, Operand2)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSGTOp.create(Name, Operand1, Operand2)
+    return RoseGTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToGreaterThanEqual():
   def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
-    assert Operand1.getType().isBitVectorTy() == True
-    assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVSGEOp.create(Name, Operand1, Operand2)
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSGEOp.create(Name, Operand1, Operand2)
+    return RoseGEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
