@@ -194,6 +194,18 @@ class RoseEQOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseEQOp(Name, Operand1, Operand2, ParentBlock)
 
+class RoseNEQOp(RoseOperation):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+    assert not Operand1.getType().isBitVectorTy()
+    assert not Operand2.getType().isBitVectorTy()
+    OperandList = [Operand1, Operand2]
+    super().__init__(RoseOpcode.notequal, Name, OperandList, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
+            ParentBlock = RoseUndefRegion()):
+    return RoseNEQOp(Name, Operand1, Operand2, ParentBlock)
+
 
 class RoseLTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -347,7 +359,6 @@ class RoseXorOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
-
 
 
 
