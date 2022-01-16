@@ -1219,6 +1219,16 @@ def HandleToInt(_):
   return LamdaImplFunc
 
 
+def HandleToRemainder(_):
+  def LamdaImplFunc(Name : str, Operands : list):
+    assert len(Operands) == 2
+    if Operands[0].getType().isBitVectorTy() \
+    and Operands[1].getType().isBitVectorTy():
+      return RoseBVSremOp.create(Name, Operands[0], Operands[1])
+    return RoseRemOp.create(Name, Operands)
+  
+  return LamdaImplFunc
+
 
 # Builtin functions
 Builtins = {
@@ -1244,6 +1254,8 @@ Builtins = {
   'ABS' : HandleToAbs(None),
 
   'Int' : HandleToInt(None),
+
+  'REMAINDER' : HandleToRemainder(None),
 
   #'APPROXIMATE': lambda args, _: args[0], # noop
 
@@ -1328,7 +1340,7 @@ def HandleToOr():
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       return RoseBVOrOp.create(Name, Operands)
-    return RoseNotOp.create(Name, RoseNorOp.create("nand." + Name, Operands))
+    return RoseOrOp.create(Name, Operands)
   
   return LamdaImplFunc
 
@@ -1350,7 +1362,7 @@ def HandleToAnd():
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       return RoseBVAndOp.create(Name, Operands)
-    return RoseNotOp.create(Name, RoseNandOp.create("nand." + Name, Operands))
+    return RoseAndOp.create(Name, Operands)
   
   return LamdaImplFunc
 
