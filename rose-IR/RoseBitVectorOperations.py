@@ -377,6 +377,19 @@ class RoseBVEQOp(RoseBitVectorOp):
     return RoseBVEQOp(Name, Operand1, Operand2, ParentBlock)
 
 
+class RoseBVNEQOp(RoseBitVectorOp):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+    assert Operand1.getType().isBitVectorTy()
+    assert Operand2.getType().isBitVectorTy()
+    OperandList = [Operand1, Operand2]
+    super().__init__(RoseOpcode.bvneq, Name, OperandList, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
+            ParentBlock = RoseUndefRegion()):
+    return RoseBVNEQOp(Name, Operand1, Operand2, ParentBlock)
+
+
 class RoseBVSLTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
