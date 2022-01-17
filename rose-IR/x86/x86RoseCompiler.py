@@ -119,6 +119,8 @@ class x86RoseContext(RoseContext):
     # Cache function definitions. This is needed because functions are
     # compiled when a call is compiled.
     self.FunctionDefs = dict()  # Function name --> FuncDef
+    # Track the ids that have been extended.
+    self.SizeExtended = dict()
     # Integer constant length can change depending on the context in which 
     # is used.
     self.NumberType = RoseType.getIntegerTy(32)
@@ -135,6 +137,16 @@ class x86RoseContext(RoseContext):
   
   def getFunctionDef(self, Name : str):
     return self.FunctionDefs[Name]
+
+  def addSizeExtended(self, Operation : RoseValue, Bitwidth : int):
+    self.SizeExtended[Operation] = Bitwidth
+  
+  def getExtendedSize(self, Operation : str):
+    assert Operation in self.SizeExtended
+    return self.SizeExtended[Operation]
+  
+  def isSizeExtended(self, Operation : str):
+    return Operation in self.SizeExtended
   
   def setNumberType(self, Type : RoseType):
     self.NumberType = Type
@@ -222,6 +234,12 @@ def CompileVar(Variable, Context):
 
 # Always assume that the bitwidth returned by this function is a constant
 def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int = None):
+  # Strip any casts away
+  if isinstance(Low, RoseCastOp):
+    Low = Low.getOperand(0)
+  if isinstance(High, RoseCastOp):
+    High = High.getOperand(0)
+  
   # Handle easiest case first
   if isinstance(Low, RoseConstant) and isinstance(High, RoseConstant):
     if TotalBitwidth != None:
@@ -236,6 +254,7 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   assert not isinstance(High, RoseConstant)
 
   # Just handle one _very_ common case where high = i + some_constant
+  # Strip away any cast first
   assert isinstance(High, RoseAddOp)
   if isinstance(High.getOperand(0), RoseConstant):
     HighIndexValue = High.getOperand(1)
@@ -244,6 +263,9 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
     assert isinstance(High.getOperand(1), RoseConstant)
     HighIndexValue = High.getOperand(0)
     ConstantHighIndex = High.getOperand(1)
+  # Strip any casts away
+  if isinstance(HighIndexValue, RoseCastOp):
+    HighIndexValue = HighIndexValue.getOperand(0)
   # High index is expressed in terms of low index
   # TODO: Make this more general.
   print("HighIndexValue:")
@@ -252,9 +274,13 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   print("Low:")
   Low.print()
   Low.getType().print()
+
   # Just handle one _very_ common case where low = i
-  if HighIndexValue == Low:
+  assert isinstance(HighIndexValue, RoseOperation)
+  assert isinstance(Low, RoseOperation)
+  if Low.isSameAs(HighIndexValue):
     return (ConstantHighIndex.getValue() + 1)
+  
   # Now handle a rare case where low = i + some_constant
   assert isinstance(Low, RoseAddOp)
   if isinstance(Low.getOperand(0), RoseConstant):
@@ -264,7 +290,10 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
     assert isinstance(Low.getOperand(1), RoseConstant)
     LowIndexValue = Low.getOperand(0)
     ConstantLowIndex = Low.getOperand(1)
-  assert LowIndexValue == HighIndexValue
+  # Strip any casts away
+  if isinstance(LowIndexValue, RoseCastOp):
+    LowIndexValue = LowIndexValue.getOperand(0)
+  assert LowIndexValue.isSameAs(HighIndexValue)
   assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
   return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
 
@@ -395,6 +424,66 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   return Operation
 
 
+def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
+  # The given bitslice index could be a number
+  if type(ExprIndex) == Number:
+    return RoseConstant.create(ExprIndex.val, RoseType.getIntegerTy(32))
+  
+  # The given bitslice index could be a variable
+  if type(ExprIndex) == Var:
+    if Context.isVariableDefined(ExprIndex.name):
+      ID = Context.getVariableID(ExprIndex.name)
+      Index = Context.getCompiledAbstractionForID(ID)
+      if Index.getType().isBitVectorTy():
+        return RoseCastOp.create("cast." + Index.getName(), Index, \
+                            RoseType.getIntegerTy(Index.getType().getBitwidth()))
+      return Index
+    return RoseUndefValue()
+  
+  # The given bitslice index could be a binary operation
+  if type(ExprIndex) == BinaryExpr:
+    # Try the first operand
+    if type(ExprIndex.a) == Var:
+      if Context.isVariableDefined(ExprIndex.a.name):
+        ID = Context.getVariableID(ExprIndex.a.name)
+        Operand1 = Context.getCompiledAbstractionForID(ID)
+        if Operand1.getType().isBitVectorTy():
+          Operand1 = RoseCastOp.create("cast." + Operand1.getName(), Operand1, \
+                              RoseType.getIntegerTy(Operand1.getType().getBitwidth()))
+      else:
+        return RoseUndefValue()
+    elif type(ExprIndex.a) == Number:
+      Operand1 = RoseConstant.create(ExprIndex.a.val, RoseType.getIntegerTy(32))
+    elif Context.isCompiledAbstraction(ExprIndex.a.id):
+      Operand1 = Context.getCompiledAbstractionForID(ExprIndex.a.id)
+    else:
+      return RoseUndefValue()
+    # Try the second operand
+    if type(ExprIndex.b) == Var:
+      if Context.isVariableDefined(ExprIndex.b.name):
+        ID = Context.getVariableID(ExprIndex.b.name)
+        Operand2 = Context.getCompiledAbstractionForID(ID)
+        if Operand2.getType().isBitVectorTy():
+          Operand2 = RoseCastOp.create("cast." + Operand2.getName(), Operand2, \
+                              RoseType.getIntegerTy(Operand2.getType().getBitwidth()))
+      else:
+        return RoseType.getUndefTy()
+    elif type(ExprIndex.b) == Number:
+      Operand2 = RoseConstant.create(ExprIndex.b.val, RoseType.getIntegerTy(32))
+    elif Context.isCompiledAbstraction(ExprIndex.b.id):
+      Operand2 = Context.getCompiledAbstractionForID(ExprIndex.b.id)
+    else:
+      return RoseUndefValue()
+    # Generate the index
+    return BinaryOps[ExprIndex.op]()(ExprIndex.id, Operand1, Operand2)
+
+  # The given bitslice index could be a compiled expression
+  if Context.isCompiledAbstraction(ExprIndex.id):
+    return Context.getCompiledAbstractionForID(ExprIndex.id)
+  
+  return RoseUndefValue()
+
+
 def GetExpressionType(Expr, Context : x86RoseContext):
   print("GET EXPRESSION TYPE:")
   print("EXPRESSION:")
@@ -406,133 +495,24 @@ def GetExpressionType(Expr, Context : x86RoseContext):
         return Context.getCompiledAbstractionForID(ID).getType()
       else:
         return RoseType.getUndefTy()
+  
   if type(Expr) == BitIndex:
     return RoseType.getBitVectorTy(1)
+  
   if type(Expr) == BitSlice:
-    # The high and low indices can be a compiled variable or a constant
-    if type(Expr.lo) == Number:
-      Low = RoseConstant.create(Expr.lo.val, RoseType.getIntegerTy(32))
-    else:
-      if type(Expr.lo) == Var:
-        if Context.isVariableDefined(Expr.lo.name):
-          ID = Context.getVariableID(Expr.lo.name)
-          Low = Context.getCompiledAbstractionForID(ID)
-        else:
-          Low = RoseUndefValue()
-      else:
-        if Context.isCompiledAbstraction(Expr.lo.id):
-            Low = Context.getCompiledAbstractionForID(Expr.lo.id)
-        elif type(Expr.lo) == BinaryExpr:
-          # Now this binary operations may have operands that are variables
-          # and/or constant numbers.
-          if type(Expr.lo.a) == Var:
-            if Context.isVariableDefined(Expr.lo.a.name):
-              ID = Context.getVariableID(Expr.lo.a.name)
-              Operand1 = Context.getCompiledAbstractionForID(ID)
-            else:
-              return RoseType.getUndefTy()
-          elif type(Expr.lo.a) == Number:
-            Operand1 = RoseConstant.create(Expr.lo.a.val, RoseType.getIntegerTy(32))
-          else:
-            return RoseType.getUndefTy()
-          if type(Expr.lo.b) == Var:
-            if Context.isVariableDefined(Expr.lo.b.name):
-              ID = Context.getVariableID(Expr.lo.b.name)
-              Operand2 = Context.getCompiledAbstractionForID(ID)
-            else:
-              return RoseType.getUndefTy()
-          elif type(Expr.lo.b) == Number:
-            Operand2 = RoseConstant.create(Expr.lo.b.val, RoseType.getIntegerTy(32))
-          else:
-            return RoseType.getUndefTy()
-          print("Operand1:")
-          Operand1.print()
-          print("Operand2:")
-          Operand2.print()
-          print("--TYPE:")
-          Operand1.getType().print()
-          Operand2.getType().print()
-          # Now thar we have the operands of the binary operation,
-          # we get compile the binary operation.
-          Low =  BinaryOps[Expr.lo.op]()(Expr.lo.id, Operand1, Operand2)
-        else:
-          Low = RoseUndefValue()
+    Low = GetBitSliceIndex(Expr.lo, Context)
+    if Low == RoseUndefValue():
+      return RoseType.getUndefTy()
+    High = GetBitSliceIndex(Expr.hi, Context)
+    if High == RoseUndefValue():
+      return RoseType.getUndefTy()
     print("LOW:")
     Low.print()
-    if Low.getType().isBitVectorTy():
-      print("---GENERATING CAST")
-      # Indices can only be variables for them to be cast
-      assert type(Expr.lo) == Var
-      assert Context.isVariableDefined(Expr.lo.name)
-      ID = Context.getVariableID(Expr.lo.name)
-      assert Context.getCompiledAbstractionForID(ID) == Low
-      # Generate the casting op
-      Name = "cast." + Low.getName()
-      CastLow = RoseCastOp.create(Name, Low, RoseType.getIntegerTy(Low.getType().getBitwidth()))
-      # Add this op to the context
-      #Context.addCompiledAbstraction(ID, CastLow)
-    else:
-      CastLow = Low
-    if type(Expr.hi) == Number:
-      High = RoseConstant.create(Expr.hi.val, CastLow.getType())
-    else:
-      if type(Expr.hi) == Var:
-        if Context.isVariableDefined(Expr.hi.name):
-          ID = Context.getVariableID(Expr.hi.name)
-          High = Context.getCompiledAbstractionForID(ID)
-        else:
-          return RoseType.getUndefTy()
-      else:
-        if Context.isCompiledAbstraction(Expr.hi.id):
-          High = Context.getCompiledAbstractionForID(Expr.hi.id)
-        elif type(Expr.hi) == BinaryExpr:
-          # Now this binary operations may have operands that are variables
-          # and/or constant numbers.
-          if type(Expr.hi.a) == Var:
-            if Context.isVariableDefined(Expr.hi.a.name):
-              ID = Context.getVariableID(Expr.hi.a.name)
-              Operand1 = Context.getCompiledAbstractionForID(ID)
-            else:
-              return RoseType.getUndefTy()
-          elif type(Expr.hi.a) == Number:
-            Operand1 = RoseConstant.create(Expr.hi.a.val, CastLow.getType())
-          else:
-            return RoseType.getUndefTy()
-          if type(Expr.hi.b) == Var:
-            if Context.isVariableDefined(Expr.hi.b.name):
-              ID = Context.getVariableID(Expr.hi.b.name)
-              Operand2 = Context.getCompiledAbstractionForID(ID)
-            else:
-              return RoseType.getUndefTy()
-          elif type(Expr.hi.b) == Number:
-            Operand2 = RoseConstant.create(Expr.hi.b.val, CastLow.getType())
-          else:
-            return RoseType.getUndefTy()
-          # Now either of Operand1 or Operand2 have to be equal to low index
-          print("Operand1:")
-          Operand1.print()
-          print("Operand2:")
-          Operand2.print()
-          if Operand1 == Low:
-            print("HERE1")
-            print(CastLow)
-            CastLow.print()
-            Operand1 = CastLow
-          if Operand2 == Low:
-            print("HERE2")
-            Operand2 = CastLow
-          print("--TYPE:")
-          Operand1.getType().print()
-          Operand2.getType().print()
-          # Now thar we have the operands of the binary operation,
-          # we get compile the binary operation.
-          High =  BinaryOps[Expr.hi.op]()(Expr.hi.id, Operand1, Operand2)
-        else:
-          High = RoseUndefValue()
     print("HIGH:")
     High.print()
-    Bitwidth = ComputeBitSliceWidth(CastLow, High)
+    Bitwidth = ComputeBitSliceWidth(Low, High)
     return RoseType.getBitVectorTy(Bitwidth)
+  
   return RoseType.getUndefTy()
 
 
@@ -744,6 +724,27 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # Compile the operands
   Operand1 = CompileExpression(BinaryExpr.a, Context)
   Operand2 = CompileExpression(BinaryExpr.b, Context)
+
+  # We have to deal with the special ase
+  ExtendOperandSize = False
+  OperandBitwidth = None
+  if type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice:
+    if needToExtendOperandSize(BinaryExpr.op):
+      # We need to sign extend the operands first. Double the operands' bitwidths
+      assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
+      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      Operand1 = RoseBVSignExtendOp.create("sext." + Operand1.getName(), \
+                          Operand1, OperandBitwidth)
+      Operand2 = RoseBVSignExtendOp.create("sext." + Operand2.getName(), \
+                          Operand2, OperandBitwidth)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+
   print('OPERAND1:')
   Operand1.print()
   print(Operand1.getType())
@@ -762,6 +763,10 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # Add the operation to the context
   Context.addCompiledAbstraction(BinaryExpr.id, Operation)
   print("BINARY OP COMPILED")
+
+  # Now add the operation as an op that has already extended operand sizes
+  if ExtendOperandSize == True:
+    Context.addSizeExtended(Operation, OperandBitwidth)
   return Operation
 
 
@@ -783,13 +788,34 @@ def CompileReturn(ReturnStmt, Context : x86RoseContext):
   return Operation
 
 
+def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext):
+  if CallStmt.funcname not in BuiltinExtendsSize:
+    return False
+  # Builtin extends size. Check if we have already done that.
+  [Operation] = ArgValuesList
+  if not Context.isSizeExtended(Operation):
+    return False
+  # So the operands have alrady been extended. 
+  # Now we need to ensure the size of operation is the same
+  # as what we intend to extend using the builtin.
+  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
+  if BuiltinExtendSize != Context.getExtendedSize(Operation):
+    # The size to which the builtin will extend has to be greater
+    # than the size to which extension has already taken place.
+    assert BuiltinExtendSize > Context.getExtendedSize(Operation)
+    return False
+  # So thefre is nothing to do
+  print("SKIP BUILTIN")
+  return True
+  
+
 def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   # If the call is compiled, no need to recompile
   if Context.isCompiledAbstraction(CallStmt.id):
     return Context.getCompiledAbstractionForID(CallStmt.id)
 
-  FunctionName = CallStmt.func
-  assert FunctionName in Builtins
+  # Function name has to be one of the bultins
+  assert CallStmt.funcname in Builtins
 
   # Compile function call arguments first
   print("COMPILE ARGUMENTS")
@@ -800,9 +826,18 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
     assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
     ArgValuesList.append(CompiledArg)
   print("ARGUMENTS COMPILED")
+
+  # Now we have to deal with one special case
+  # where we hvae already performed the buitin operation.
+  if BuiltinOpPerformed(CallStmt, ArgValuesList, Context) == True:
+    # Nothing to do. Just map this operation id to its operand's operation.
+    # There is nothing new to add to the IR.
+    [Operation] = ArgValuesList
+    Context.addCompiledAbstraction(CallStmt.id, Operation)
+    return Operation
   
   # Check if this is a call to a builtin function
-  Operation = Builtins[FunctionName](CallStmt.id, ArgValuesList)
+  Operation = Builtins[CallStmt.funcname](CallStmt.id, ArgValuesList)
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -811,17 +846,14 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
 
 
 def CompileCall(CallStmt, Context : x86RoseContext):
+  print("COMPILE CALL")
+  # If this is a builtin function call, just compile it.
+  if CallStmt.funcname in Builtins:
+    return CompileBuiltIn(CallStmt, Context)
+
    # If the call is compiled, no need to recompile
   if Context.isCompiledAbstraction(CallStmt.id):
     return Context.getCompiledAbstractionForID(CallStmt.id)
-
-  print("COMPILE CALL")
-  assert type(CallStmt.func) == str
-  FunctionName = CallStmt.func
-
-  # If this is a builtin function call, just compile it.
-  if FunctionName in Builtins:
-    return CompileBuiltIn(CallStmt, Context)
 
   # Try to get the types of the arguments first
   print("TRYING TO GET TYPES OF ARGUMENTS")
@@ -850,7 +882,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     print("ARGUMENTS COMPILED")
 
   # This is a function call
-  FunctionDef = Context.getFunctionDef(FunctionName)
+  FunctionDef = Context.getFunctionDef(CallStmt.funcname)
   assert len(FunctionDef.params) == len(CallStmt.args)
 
   # Check if we are compiling this function for the first time
@@ -886,7 +918,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     
     # Compile the function and its arguments
     print("GENERATE FUNCTION")
-    Function = RoseFunction.create(FunctionName, FuncArgList, RoseType.getUndefTy())
+    Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseType.getUndefTy())
     print("FUNCTION:")
     print(Function)
     print(FunctionDef.params)
@@ -1304,6 +1336,16 @@ Builtins = {
   'REMAINDER' : HandleToRemainder(None),
 }
 
+# Extends size
+BuiltinExtendsSize = {
+   'ZeroExtend16' : 16, 
+   'ZeroExtend32' : 32, 
+   'ZeroExtend64' : 64,
+   'SignExtend16' : 16, 
+   'SignExtend32' : 32, 
+   'SignExtend64' : 64, 
+}
+
 
 def HandleToNot():
   def LamdaImplFunc(Name : str, Value):
@@ -1514,6 +1556,11 @@ BinaryOps = {
     'OR' : HandleToOr,
     'XOR' : HandleToXor,
 }
+
+def needToExtendOperandSize(Op):
+  if Op == "*" or Op == '/':
+    return True
+  return False
 
 # These are binary ops whose output type is not the same
 # as the operand types.
