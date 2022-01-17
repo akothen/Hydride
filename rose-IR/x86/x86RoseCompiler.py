@@ -235,25 +235,38 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   assert not isinstance(Low, RoseConstant)
   assert not isinstance(High, RoseConstant)
 
-  # Just handle one _very_ common case where low = i and high = i + some_constant
+  # Just handle one _very_ common case where high = i + some_constant
   assert isinstance(High, RoseAddOp)
   if isinstance(High.getOperand(0), RoseConstant):
-    IndexValue = High.getOperand(1)
+    HighIndexValue = High.getOperand(1)
     ConstantHighIndex = High.getOperand(0)
   else:
     assert isinstance(High.getOperand(1), RoseConstant)
-    IndexValue = High.getOperand(0)
+    HighIndexValue = High.getOperand(0)
     ConstantHighIndex = High.getOperand(1)
   # High index is expressed in terms of low index
   # TODO: Make this more general.
-  print("IndexValue:")
-  IndexValue.print()
-  IndexValue.getType().print()
+  print("HighIndexValue:")
+  HighIndexValue.print()
+  HighIndexValue.getType().print()
   print("Low:")
   Low.print()
   Low.getType().print()
-  assert IndexValue == Low
-  return (ConstantHighIndex.getValue() + 1)
+  # Just handle one _very_ common case where low = i
+  if HighIndexValue == Low:
+    return (ConstantHighIndex.getValue() + 1)
+  # Now handle a rare case where low = i + some_constant
+  assert isinstance(Low, RoseAddOp)
+  if isinstance(Low.getOperand(0), RoseConstant):
+    LowIndexValue = Low.getOperand(1)
+    ConstantLowIndex = Low.getOperand(0)
+  else:
+    assert isinstance(Low.getOperand(1), RoseConstant)
+    LowIndexValue = Low.getOperand(0)
+    ConstantLowIndex = Low.getOperand(1)
+  assert LowIndexValue == HighIndexValue
+  assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
+  return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
 
 
 def CompileIndex(IndexExpr, Context : x86RoseContext):
@@ -409,8 +422,41 @@ def GetExpressionType(Expr, Context : x86RoseContext):
       else:
         if Context.isCompiledAbstraction(Expr.lo.id):
             Low = Context.getCompiledAbstractionForID(Expr.lo.id)
+        elif type(Expr.lo) == BinaryExpr:
+          # Now this binary operations may have operands that are variables
+          # and/or constant numbers.
+          if type(Expr.lo.a) == Var:
+            if Context.isVariableDefined(Expr.lo.a.name):
+              ID = Context.getVariableID(Expr.lo.a.name)
+              Operand1 = Context.getCompiledAbstractionForID(ID)
+            else:
+              return RoseType.getUndefTy()
+          elif type(Expr.lo.a) == Number:
+            Operand1 = RoseConstant.create(Expr.lo.a.val, RoseType.getIntegerTy(32))
+          else:
+            return RoseType.getUndefTy()
+          if type(Expr.lo.b) == Var:
+            if Context.isVariableDefined(Expr.lo.b.name):
+              ID = Context.getVariableID(Expr.lo.b.name)
+              Operand2 = Context.getCompiledAbstractionForID(ID)
+            else:
+              return RoseType.getUndefTy()
+          elif type(Expr.lo.b) == Number:
+            Operand2 = RoseConstant.create(Expr.lo.b.val, RoseType.getIntegerTy(32))
+          else:
+            return RoseType.getUndefTy()
+          print("Operand1:")
+          Operand1.print()
+          print("Operand2:")
+          Operand2.print()
+          print("--TYPE:")
+          Operand1.getType().print()
+          Operand2.getType().print()
+          # Now thar we have the operands of the binary operation,
+          # we get compile the binary operation.
+          Low =  BinaryOps[Expr.lo.op]()(Expr.lo.id, Operand1, Operand2)
         else:
-          return RoseType.getUndefTy()
+          Low = RoseUndefValue()
     print("LOW:")
     Low.print()
     if Low.getType().isBitVectorTy():
@@ -1256,13 +1302,6 @@ Builtins = {
   'Int' : HandleToInt(None),
 
   'REMAINDER' : HandleToRemainder(None),
-
-  #'APPROXIMATE': lambda args, _: args[0], # noop
-
-  #'concat': builtin_concat,
-  #'PopCount': builtin_popcount,
-  #'POPCNT': builtin_popcount,
-  #'select': builtin_select,
 }
 
 
@@ -1330,6 +1369,16 @@ def HandleToDiv():
     and Operand2.getType().isBitVectorTy():
       return RoseBVSdivOp.create(Name, Operand1, Operand2)
     return RoseDivOp.create(Name, Operand1, Operand2)
+  
+  return LamdaImplFunc
+
+
+def HandleToMod():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+    if Operand1.getType().isBitVectorTy() \
+    and Operand2.getType().isBitVectorTy():
+      return RoseBVSmodOp.create(Name, Operand1, Operand2)
+    return RoseModOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
@@ -1450,6 +1499,7 @@ BinaryOps = {
     '-' : HandleToSub,
     '*' : HandleToMul,
     '/' : HandleToDiv,
+    '%' : HandleToMod,
     '<' : HandleToLessThan,
     '<=' : HandleToLessThanEqual,
     '>' : HandleToGreaterThan,
