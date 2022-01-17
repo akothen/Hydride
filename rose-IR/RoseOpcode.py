@@ -300,18 +300,22 @@ class RoseOpcode(Enum):
             print(BVInputs)
             if not isinstance(Inputs[3], RoseValues.RoseConstant):
                 return False
-            if len(BVInputs) == 1:
-                return True
-            else:
+            if len(BVInputs) != 1:
                 return False
+            if BVInputs[0].getType().getBitwidth() < Inputs[3].getValue():
+                return False
+            return True
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[4], RoseValues.RoseConstant):
                 return False
-            if len(BVInputs) == 2:
-                return True
-            else:
+            if len(BVInputs) != 2:
                 return False
+            if BVInputs[0].getType().getBitwidth() != Inputs[4].getValue():
+                return False
+            if BVInputs[1].getType().getBitwidth() < Inputs[4].getValue():
+                return False
+            return True
         if self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
