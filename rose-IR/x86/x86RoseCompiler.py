@@ -725,7 +725,7 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   Operand1 = CompileExpression(BinaryExpr.a, Context)
   Operand2 = CompileExpression(BinaryExpr.b, Context)
 
-  # We have to deal with the special ase
+  # We have to deal with the special case
   ExtendOperandSize = False
   OperandBitwidth = None
   if type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice:
@@ -737,6 +737,25 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
                           Operand1, OperandBitwidth)
       Operand2 = RoseBVSignExtendOp.create("sext." + Operand2.getName(), \
                           Operand2, OperandBitwidth)
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+  
+  # Thee are caes where zero_extend(x) * zero_extend(y) need to be extended further.
+  if type(BinaryExpr.a) == Call and type(BinaryExpr.b) == Call:
+    if BinaryExpr.a.funcname in ZeroExtendsSize \
+   and BinaryExpr.b.funcname in ZeroExtendsSize:
+      # Double the operands' bitwidths
+      assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
+      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+      Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+                          Operand1, OperandBitwidth)
+      Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+                          Operand2, OperandBitwidth)      
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       Context.addAbstractionToIR(Operand2)
@@ -788,6 +807,8 @@ def CompileReturn(ReturnStmt, Context : x86RoseContext):
   return Operation
 
 
+# Checks if extension has been performed already
+# sign_extend(x * y) = sign_extend(x) * sign_extend(y)
 def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext):
   if CallStmt.funcname not in BuiltinExtendsSize:
     return False
@@ -1345,6 +1366,8 @@ BuiltinExtendsSize = {
    'SignExtend32' : 32, 
    'SignExtend64' : 64, 
 }
+
+ZeroExtendsSize = [ 'ZeroExtend16', 'ZeroExtend32', 'ZeroExtend64' ]
 
 
 def HandleToNot():
