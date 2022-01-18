@@ -1,33 +1,16 @@
-
 import ply.lex as lex
 from AST import Number, Var
 
 
 reserved = {
     'FOR',
-    'ENDFOR',
-
-    'CASE',
-    'OF',
-    'ESAC',
 
     'IF',
-    'THEN',
     'ELSE',
-    'FI',
 
-    'DO',
     'WHILE',
-    'OD',
-
-    'TO',
-    'DOWNTO',
 
     'BREAK',
-
-    'RETURN',
-    'DEFINE',
-
     'OP',
 
     'AND', 'OR', 'XOR', 'NOT',
@@ -64,7 +47,7 @@ binary_ops = {
     }
 
 tokens = [
-    'PSEUDO', 'ID', 'COMMENT', 'NUMBER',
+    'ID', 'COMMENT', 'NUMBER',
     'LBRACE', 'RBRACE', 'COLON',
     'UPDATE', 'SEMICOLON',
     'LPAREN', 'RPAREN', 'COMMA',
@@ -72,7 +55,9 @@ tokens = [
     'LBRACKET', 'RBRACKET',
     'QUEST',
 
-    'CASE_HEADER',
+
+    # unary ops
+    'INC',
 
     # pseudo token
     'NEG'
@@ -80,23 +65,10 @@ tokens = [
 
 binary_regexp = r'|'.join(binary_ops)
 
-def t_pseudo(t):
-  r'\n\s*//.*'
-  lexed = t.value 
-  t.value = lexed[lexed.index('/') + 2:]
-  t.type = 'PSEUDO'
-  return t
 
-def t_CASE_HEADER(t):
-  r'\n\s*\d+:|\n\s*DEFAULT:|\n\s*[a-zA-Z_][a-zA-Z_0-9]*:'
-  if t.value.strip().startswith('DEFAULT'):
-    t.value = None
-  else:
-    try:
-      value = int(t.value[:-1])
-      t.value = Number(value)
-    except:
-      t.value = Var(t.value[:-1])
+def t_inc(t):
+  r'\+\+'
+  t.type = 'INC'
   return t
 
 def t_binary(t):
@@ -134,7 +106,7 @@ def t_ID(t):
   return t
 
 def t_COMMENT(t):
-  r'//.*|;'
+  r'//.*'
   pass
 
 # TODO: multiline comment?
@@ -161,7 +133,7 @@ t_LBRACKET = r'{'
 t_RBRACKET = r'}'
 t_COLON = r':'
 t_UPDATE = r'←|=|:='
-t_SEMICOLON = ';'
+t_SEMICOLON = r';'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_DOT = r'\.'
@@ -172,22 +144,16 @@ t_ignore  = ' \t'
 lexer = lex.lex()
 if __name__ == '__main__':
   test_spec = '''
-  CASE 0 OF
-0: // individual-address invalidation retaining global translations
-	OP_PCID := descriptor[11:0]
-	ADDR := descriptor[127:64]
-	BREAK
-//1: // single PCID invalidation retaining globals
-//	OP_PCID := descriptor[11:0]
-//	// invalidate all mappings tagged with OP_PCID except global translations
-//	BREAK
-//2: // all PCID invalidation
-//	// invalidate all mappings tagged with any PCID
-//	BREAK
-//3: // all PCID invalidation retaining global translations
-//	// invalidate all mappings tagged with any PCID except global translations
-//	BREAK
-ESAC
+  for (i = 0; i < VELEM(32); i++) {
+    Vx.uw[i] += (Vu.uw[i].ub[0] *
+  Vv.uw[i].ub[0]);
+    Vx.uw[i] += (Vu.uw[i].ub[1] *
+  Vv.uw[i].ub[1]);
+    Vx.uw[i] += (Vu.uw[i].ub[2] *
+  Vv.uw[i].ub[2]);
+    Vx.uw[i] += (Vu.uw[i].ub[3] *
+  Vv.uw[i].ub[3]) ;
+  }
       '''
   lexer.input(test_spec)
   for token in iter(lexer.token, None):

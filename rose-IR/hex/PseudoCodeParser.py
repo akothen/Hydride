@@ -1,17 +1,15 @@
 
 import ply.yacc as yacc
 from lex import tokens
-import xml.etree.ElementTree as ET
+import json
 from AST import *
 from collections import defaultdict
-
 
 # Expressions have unique IDs
 def GenUniqueID(parser):
   ID = parser.id_counter
   parser.id_counter += 1
   return str(ID)
-
 
 def new_binary_expr(parser, op, a, b):
   expr_id = "binexpr." + GenUniqueID(parser)
@@ -30,6 +28,12 @@ if __name__ != '__main__':
   def p_error(p):
     raise SyntaxError('Parser error: {}'.format(p))
 
+def p_stmt_semi(p):
+  '''
+  stmt : stmt SEMICOLON
+  '''
+  p[0] = p[1]
+
 def p_stmts(p):
   '''stmts : stmt
            | stmts stmt
@@ -39,12 +43,6 @@ def p_stmts(p):
   else:
     p[0] = p[1] + [p[2]]
 
-def p_func_decl(p):
-  '''stmt : DEFINE ID LPAREN args RPAREN LBRACKET stmts RBRACKET
-  '''
-  expr_id = "funcdef." + GenUniqueID(parser)
-  p[0] = FuncDef(p[2], p[4], p[7], expr_id)
-
 def p_stmt_break(p):
   'stmt : BREAK'
   p[0] = Break()
@@ -53,35 +51,11 @@ def p_stmt_expr(p):
   'stmt : expr'
   p[0] = p[1]
 
-def p_match(p):
-  '''stmt : CASE expr OF cases ESAC
-  '''
-  expr_id = "match." + GenUniqueID(parser)
-  p[0] = Match(p[2], p[4], expr_id)
-
-def p_single_case(p):
-  '''cases : CASE_HEADER stmts
-           | cases CASE_HEADER stmts
-  '''
-  expr_id = "case." + GenUniqueID(parser)
-  if len(p) == 3:
-    p[0] = [Case(p[1], p[2], expr_id)]
-  else:
-    p[0] = p[1] + [Case(p[2], p[3], expr_id)]
-
-def p_return(p):
-  'stmt : RETURN expr'
-  expr_id = GenUniqueID(parser)
-  p[0] = Return(p[2], expr_id)
-
 def p_expr_assign(p):
   'expr : expr UPDATE expr'
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], p[3])
 
-#def p_expr_assign_op(p):
-#  'expr : OP UPDATE ID'
-#  p[0] = OpUpdate(p[3])
 
 def p_expr_plus_equal(p):
   'expr : expr PLUS_EQUAL expr'
@@ -93,47 +67,13 @@ def p_expr_or_equal(p):
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], new_binary_expr(p.parser, op='|', a=p[1], b=p[3]))
 
-def p_stmt_while(p):
-  'stmt : DO WHILE expr stmts OD'
-  expr_id = "while." + GenUniqueID(parser)
-  p[0] = While(p[3], p[4], expr_id)
 
 def p_stmt_for(p):
-  'stmt : FOR ID UPDATE expr TO expr stmts ENDFOR'
+  'stmt : FOR LPAREN ID UPDATE expr SEMICOLON expr SEMICOLON expr RPAREN LBRACKET stmts RBRACKET'
   it_id = "iterator." + GenUniqueID(parser)
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], True, expr_id)
+  p[0] = For(Var(p[3], it_id), p[5], p[7], p[12], True, expr_id)
 
-def p_stmt_for_dec(p):
-  'stmt : FOR ID UPDATE expr DOWNTO expr stmts ENDFOR'
-  it_id = "iterator." + GenUniqueID(parser)
-  expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(Var(p[2], it_id), p[4], p[6], p[7], False, expr_id)
-
-def p_stmt_if(p):
-  'stmt : IF expr THEN stmts FI'
-  expr_id = "if." + GenUniqueID(parser)
-  p[0] = If(p[2], p[4], [], expr_id)
-
-def p_stmt_if2(p):
-  'stmt : IF expr THEN stmts ELSE stmts FI'
-  expr_id = "if." + GenUniqueID(parser)
-  p[0] = If(p[2], p[4], p[6], expr_id)
-
-def p_stmt_if_no_then(p):
-  'stmt : IF expr stmts FI'
-  expr_id = "if." + GenUniqueID(parser)
-  p[0] = If(p[2], p[3], [], expr_id)
-
-def p_stmt_if2_no_then(p):
-  'stmt : IF expr stmts ELSE stmts FI'
-  expr_id = "if." + GenUniqueID(parser)
-  p[0] = If(p[2], p[3], p[5], expr_id)
-
-def p_stmt_if2_no_then_no_fi(p):
-  'stmt : IF expr stmts ELSE stmts'
-  expr_id = "if." + GenUniqueID(parser)
-  p[0] = If(p[2], p[3], p[5], expr_id)
 
 
 def p_expr_call(p):
@@ -148,7 +88,10 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  p[0] = Lookup(p[1], p[3])
+  if p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw']:
+    p[0] = TypeLookup(p[1], p[3])
+  else:
+    p[0] = Lookup(p[1], p[3])
 
 def p_args(p):
   '''args : expr
@@ -174,6 +117,10 @@ def p_expr_select(p):
   'expr : expr QUEST expr COLON expr'
   expr_id = "select." + GenUniqueID(parser)
   p[0] = Select(p[1], p[3], p[5], expr_id)
+
+def p_expr_increment(p):
+  'expr : expr INC'
+  parse_unary('INC', p)
 
 def p_expr_not(p):
   'expr : NOT expr'
@@ -267,10 +214,6 @@ def p_expr_not_equal(p):
   'expr : expr NOT_EQUAL expr'
   parse_binary('!=', p)
 
-def p_expr_xor(p):
-  'expr : expr XOR expr'
-  parse_binary('XOR', p)
-
 def p_expr_wrapped(p):
   '''expr : LPAREN expr RPAREN
   '''
@@ -278,7 +221,19 @@ def p_expr_wrapped(p):
 
 def p_expr_var(p):
   'expr : ID'
-  expr_id = "var." + GenUniqueID(parser)
+  if p[1] in ['Vs', 'Vu', 'Vv', 'Vss', 'Vuu', 'Vvv']:
+    expr_id = 'var.vec_src.' + GenUniqueID(parser)
+  elif p[1] in ['Vd', 'Vdd']:
+    expr_id = 'var.vec_dst.' + GenUniqueID(parser)
+  elif p[1] in ['Vx', 'Vxx']:
+    expr_id = 'var.vec.' + GenUniqueID(parser)
+  elif p[1] in ['Rs', 'Rt', 'Ru']:
+    expr_id = 'var.reg_src.' + GenUniqueID(parser)
+  elif p[1] == 'Rd':
+    expr_id = 'var.reg_dst.' + GenUniqueID(parser)
+  
+  else:
+    expr_id = "var." + GenUniqueID(parser)
   p[0] = Var(p[1], expr_id)
 
 def p_expr_num(p):
@@ -313,54 +268,24 @@ def Parse(src):
   AST = parser.parse(src)
   return AST
 
+from pprint import pformat
 
-def ParseCpuId(CPUID):
-    CPUID = CPUID.text.lower().replace('_', '')
-    if '/' in CPUID:
-        return CPUID.split('/')[0]
-    return CPUID
+def pretty_print(root):
+  def to_dict(root):
+    if isinstance(root, tuple):
+      out = dict(root._asdict())
+      for elem, val in out.items():
+        out[elem] = to_dict(val)
+      return {type(root).__name__ : out}
+    elif isinstance(root, list):
+      out = list(map(to_dict, root))
+      return out
+    else:
+      return root
+  return pformat(to_dict(root), indent=1)
 
-
-def GetSemaFromXML(node):
-    Params = []
-    imm_width = None
-    ID = 0
-    for param_node in node.findall('parameter'):
-      name = param_node.attrib.get('varname', '')
-      type = param_node.attrib['type']
-      if name == '':
-          continue
-      is_signed = param_node.attrib.get('etype', '').startswith('SI')
-      is_imm = param_node.attrib.get('etype') == 'IMM'
-      if is_imm:
-          imm_width = int(param_node.attrib.get('immwidth', '8'))
-      id = "param" + "." + name + "." + str(ID)
-      Params.append(Parameter(name, type, is_signed, is_imm, id))
-      ID += 1
-    CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
-    inst = node.find('instruction')
-    assert (inst is not None)
-    operation = node.find('operation')
-    assert (operation is not None)
-    spec = Parse(operation.text)
-    output = node.find('return')
-    assert (output is not None)
-    return Sema(
-        intrin=node.attrib['name'],
-        inst=inst.attrib.get('name'),
-        spec=spec,
-        params=Params,
-        rettype=output.attrib['type'],
-        cpuids=CPUIDs,
-        inst_form=inst.attrib.get('form', ''),
-        imm_width=imm_width,
-        elem_type=output.attrib['etype'],
-        xed=inst.attrib.get('xed')
-      )
-
-
-def Parsex86Semantics(FileName):
-  DataRoot = ET.parse(FileName)
+def ParseHVXSemantics(FileName):
+  semantics = json.load(open(FileName, "r"))
   NumSkipped = 0
   SkippedInsts = set()
   Skipped = False
@@ -371,6 +296,34 @@ def Parsex86Semantics(FileName):
   Categories = defaultdict(int)
 
   InstructionList = []
+  for inst, psuedocode in list(semantics.items()):
+    assign = Parse(inst)
+    # SIMD instruction
+    if isinstance(assign.lhs, TypeLookup):
+      var = assign.lhs.obj
+    elif isinstance(assign.lhs, Var):
+      var = assign.lhs
+    else:
+      print("Unknown lhs:", assign.lhs)
+    
+    if var.name in ['Vx', 'Vd']:
+      lanes = 1
+    elif var.name in ['Vxx', 'Vdd']:
+      lanes = 2
+    else:
+      print("Unknown variable type:", var)
+
+    # += or *=
+    if isinstance(assign.rhs, BinaryExpr):
+      rhs = assign.rhs.b
+    elif isinstance(assign.rhs, Call):
+      rhs = assign.rhs
+    
+    name = rhs.func
+    sema = Sema(intrin=name, inst="TODO", params=rhs.args, spec=Parse(psuedocode), rettype=var.id.split(".")[1])
+    print(sema)
+  return None
+
   for intrin in DataRoot.iter('intrinsic'):
     cpuid = intrin.find('CPUID')
     operation = intrin.find('operation') 
@@ -484,16 +437,12 @@ def Parsex86Semantics(FileName):
     if inst is not None and operation is not None:
       InstructionList.append(intrin)
 
-  # Parse every instruction
-  for Instruction in InstructionList:
-    Sema = GetSemaFromXML(Instruction)
-    print(Sema)
-    print(Sema.intrin, Sema.cpuids, flush=True)
+  
   print("NUM SKIPPED INSTRUCTIONS:")
   print(NumSkipped)
 
 
 if __name__ == '__main__':
-  Parsex86Semantics("intel_sema.xml")
+  ParseHVXSemantics("hexagon_sema.json")
 
 
