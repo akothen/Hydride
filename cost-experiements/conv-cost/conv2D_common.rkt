@@ -10,7 +10,7 @@
 (current-bitwidth 32)
 
 
-(custodian-limit-memory (current-custodian) (* 10000 1024 1024))
+(custodian-limit-memory (current-custodian) (* 12000 1024 1024))
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -712,15 +712,12 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
-    ;[(choose* #t #f)
-    ; (dot-prod (expr vars #:depth (- k 1))
-    ;           (mem vars #:depth (- k 1))
-    ;           (shufl vars #:depth (- k 1))
-    ;           2 2 8 8
-    ;           )]
-    ;[(choose* #t #f)
-    ; (vec-reduction (expr vars #:depth (- k 1)) 4 8
-    ;                )]
+    [(choose* #t #f)
+     (dot-prod (lit (bv 0 (bitvector 8)))
+               (shufl vars #:depth (- k 1))
+               (shufl vars #:depth (- k 1))
+               1 4 8 8
+               )]
     [(choose* #t #f)
      (vec-reduction (shufl vars #:depth (- k 1)) 4 8
                     )]
@@ -755,7 +752,7 @@
   )
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 6))
+(define sketch-grammar (top-grammar (list (reg 0) (reg 1)) #:depth 5))
 
 
 (define (alt-tensor-conv img filt)

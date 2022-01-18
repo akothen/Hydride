@@ -4,13 +4,13 @@
 
 (pretty-print "SYNTHESIZE----")
 (define sol
-   (synthesize
-    ;(optimize
+     (synthesize
+     ;(optimize
       #:forall forall-list ; (list  env )
-      ;#:minimize (list (cost sketch-grammar) )
-      #:guarantee ;(forall (list cex_arg0 cex_arg1 env) 
+     ; #:minimize (list (cost sketch-grammar) )
+      #:guarantee 
                                                      (begin 
-                                                       ;(assume (< (cost sketch-grammar) 400))  
+                                                       ;(assume (< (cost sketch-grammar) 390 ))
                                                        (assume (equal? (interpret sketch-grammar env) (tensor-conv2D cex_arg0 cex_arg1 4 4 2 2 8)))
                                                        ;(assume (equal? (ext-bv (interpret sketch-grammar env) 0 8) (ext-bv (tensor-conv2D cex_arg0 cex_arg1 4 4 2 2 8) 0 8)))
                                                        {}

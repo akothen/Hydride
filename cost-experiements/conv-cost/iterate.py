@@ -17,7 +17,7 @@ def get_synth_asserts(cex_ls):
 
     var_list = []
     for idx,cex in enumerate(cex_ls):
-        str_ = "(assume (equal? (interpret sketch-grammar env_{}) (tensor-conv2D v0_{} v1_{} 4 4 2 2 8)))".format(idx,idx,idx)
+        str_ = "(assert (equal? (interpret sketch-grammar env_{}) (tensor-conv2D v0_{} v1_{} 4 4 2 2 8)))".format(idx,idx,idx)
 
         ## str_ = "(assume (equal? (ext-bv (interpret sketch-grammar env_{}) 1 8) (ext-bv (tensor-conv2D v0_{} v1_{} 4 4 2 2 8) 1 8)))".format(idx,idx,idx)
         strs.append(str_)
