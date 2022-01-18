@@ -477,7 +477,7 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
         return RoseType.getUndefTy()
     elif type(ExprIndex.b) == Number:
       print("EXPRESSION B IS A NUMBER")
-      Operand2 = RoseConstant.create(ExprIndex.b.val, Operand1.getType())
+      Operand2 = RoseConstant.create(ExprIndex.b.val, RoseType.getIntegerTy(32))
     elif Context.isCompiledAbstraction(ExprIndex.b.id):
       Operand2 = Context.getCompiledAbstractionForID(ExprIndex.b.id)
     else:
@@ -489,6 +489,23 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
     print("Operand2:")
     Operand2.print()
     Operand2.getType().print()
+    # The operands of a binary op may need some fixing up
+    if type(ExprIndex.a) == Number and type(ExprIndex.b) == BitSlice:
+      NumIntBits = ExprIndex.a.val.bit_length()
+      if NumIntBits > Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+                                              Operand2, NumIntBits)
+    if type(ExprIndex.b) == Number and type(ExprIndex.a) == BitSlice:
+      NumIntBits = ExprIndex.b.val.bit_length()
+      if NumIntBits > Operand1.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+                                              Operand1, NumIntBits)
+    # Fix the constants' bitwidths
+    Operand1 = FixConstantBinaryOpBitwidth(Operand1, Operand2.getType().getBitwidth())
+    Operand2 = FixConstantBinaryOpBitwidth(Operand2, Operand1.getType().getBitwidth())
+    # Perform the binary operation
     return BinaryOps[ExprIndex.op]()(ExprIndex.id, Operand1, Operand2)
 
   # The given bitslice index could be a compiled expression
@@ -782,6 +799,19 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   return Operation
 
 
+def FixConstantBinaryOpBitwidth(Operand : RoseValue, Bitwidth : int):
+  if Operand.getType().getBitwidth() != Bitwidth:
+    if isinstance(Operand, RoseConstant):
+      if Operand.getType().isBitVectorTy():
+        Operand = RoseConstant.create(Operand.getValue(), \
+                              RoseType.getBitVectorTy(Bitwidth))
+      else:
+        assert Operand.getType().isIntegerTy()
+        Operand = RoseConstant.create(Operand.getValue(), \
+                              RoseType.getIntegerTy(Bitwidth))
+  return Operand
+
+
 def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
     # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(BinaryExpr.id):
@@ -840,9 +870,6 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to extend the size of the other operand
       Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
                                             Operand2, NumIntBits)
-      if Operand1.getType().getBitwidth() != NumIntBits:
-        Operand1 = RoseConstant.create(Operand1.getValue(), \
-                                  RoseType.getBitVectorTy(NumIntBits))
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand2)
       # Add operations to the context
@@ -854,14 +881,15 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to extend the size of the other operand
       Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
                                             Operand1, NumIntBits)
-      if Operand2.getType().getBitwidth() != NumIntBits:
-        Operand2 = RoseConstant.create(Operand2.getValue(), \
-                                  RoseType.getBitVectorTy(NumIntBits))
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       # Add operations to the context
       Context.addCompiledAbstraction(Operand1.getName(), Operand1)
       ExtendOperandSize = True
+  
+  # Fix the constants' bitwidths
+  Operand1 = FixConstantBinaryOpBitwidth(Operand1, Operand2.getType().getBitwidth())
+  Operand2 = FixConstantBinaryOpBitwidth(Operand2, Operand1.getType().getBitwidth())
 
   print('OPERAND1:')
   Operand1.print()
