@@ -1506,6 +1506,16 @@ def HandleToUSaturate(Bitwidth : int):
   return LamdaImplFunc
 
 
+def HandleToTruncate(Bitwidth : int):
+  def LamdaImplFunc(Name : str, Args):
+    [Value] = Args
+    assert Value.getType().isBitVectorTy() == True
+    assert Value.getType().getBitwidth() > Bitwidth
+    return RoseBVTruncateOp.create(Name, Value, Bitwidth)
+
+  return LamdaImplFunc
+
+
 def HandleToAbs(_):
   def LamdaImplFunc(Name : str, Operands : list):
     assert len(Operands) == 1
@@ -1553,6 +1563,10 @@ Builtins = {
   'SignExtend16': HandleToSignExtend(16),
   'SignExtend32': HandleToSignExtend(32),
   'SignExtend64': HandleToSignExtend(64),
+
+  'Truncate8' : HandleToTruncate(8),
+  'Truncate16': HandleToTruncate(16),
+  'Truncate32' : HandleToTruncate(32),
 
   'MIN' : HandleToMin(None),
   'MAX' : HandleToMax(None),
