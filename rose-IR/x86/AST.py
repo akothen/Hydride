@@ -13,7 +13,7 @@ While = namedtuple('While', ['cond', 'body', 'id'])
 
 If = namedtuple('If', ['cond', 'then', 'otherwise', 'id'])
 
-Call = namedtuple('Call', ['func', 'args', 'id'])
+Call = namedtuple('Call', ['funcname', 'args', 'id'])
 
 BinaryExpr = namedtuple('BinaryExpr', ['op', 'a', 'b', 'id'])
 UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'id'])
