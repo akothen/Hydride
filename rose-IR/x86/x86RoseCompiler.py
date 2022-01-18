@@ -10,6 +10,7 @@ from AST import *
 from x86Types import x86Types
 
 from copy import deepcopy
+import math
 
 
 # This is a generic context that could be used across
@@ -130,6 +131,9 @@ class x86RoseContext(RoseContext):
   
   def getMaxVectorLength(self):
     return self.MaxVectorLength
+  
+  def setMaxVectorLength(self, Length : int):
+    self.MaxVectorLength = Length
 
   def addFunctionDef(self, FunctionDef):
     assert(type(FunctionDef) == FuncDef)
@@ -748,6 +752,14 @@ def CompileUpdate(Update, Context : x86RoseContext):
     else:
       High = CompileIndex(Update.lhs.hi, Context)
     #Context.setIndexNumberType(OriginalNumberTy)
+    # Somtimes the maximum allowable vector length has to be increased
+    if isinstance(High, RoseConstant):
+      if High.getValue() > Context.getMaxVectorLength():
+        NewLength = Context.getMaxVectorLength() \
+                * math.ceil(High.getValue()/Context.getMaxVectorLength())
+        print("NEW LENGTH:")
+        print(NewLength)
+        Context.setMaxVectorLength(NewLength)
     # Compile the bitvector
     BitVector = CompileExpression(Update.lhs.bv, Context)
     print("BITVECTOR======:")
