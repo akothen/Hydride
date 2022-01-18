@@ -124,7 +124,7 @@ class x86RoseContext(RoseContext):
     # Integer constant length can change depending on the context in which 
     # is used.
     self.NumberType = RoseType.getIntegerTy(32)
-    self.IndexNumberType = RoseType.getIntegerTy(32)
+    #self.IndexNumberType = RoseType.getIntegerTy(32)
     self.CompileIndexFlag = False
     super().__init__()
   
@@ -157,11 +157,11 @@ class x86RoseContext(RoseContext):
   def setCompileIndexFlag(self, Flag : bool):
     self.CompileIndexFlag = Flag
 
-  def setIndexNumberType(self, Type : RoseType):
-    self.IndexNumberType = Type
+  #def setIndexNumberType(self, Type : RoseType):
+  #  self.IndexNumberType = Type
 
-  def getIndexNumberType(self):
-    return self.IndexNumberType
+  #def getIndexNumberType(self):
+  #  return self.IndexNumberType
   
   def isCompileIndexFlagSet(self):
     return self.CompileIndexFlag == True
@@ -202,7 +202,8 @@ def CompileNumber(Num, Context : x86RoseContext):
   print(Num)
   if isinstance(Num.val, int):
     if Context.isCompileIndexFlagSet():
-      ConstantVal = RoseConstant.create(Num.val, Context.getIndexNumberType())
+      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+      #Context.getIndexNumberType())
     else:
       ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
     return ConstantVal
@@ -234,10 +235,14 @@ def CompileVar(Variable, Context):
 
 # Always assume that the bitwidth returned by this function is a constant
 def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int = None):
-  # Strip any casts away
-  if isinstance(Low, RoseCastOp):
+  # Strip any casts and size extensions away
+  if isinstance(Low, RoseCastOp) \
+  or isinstance(Low, RoseBVSignExtendOp) \
+  or isinstance(Low, RoseBVZeroExtendOp):
     Low = Low.getOperand(0)
-  if isinstance(High, RoseCastOp):
+  if isinstance(High, RoseCastOp) \
+  or isinstance(High, RoseBVSignExtendOp) \
+  or isinstance(High, RoseBVZeroExtendOp):
     High = High.getOperand(0)
   
   # Handle easiest case first
@@ -264,7 +269,9 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
     HighIndexValue = High.getOperand(0)
     ConstantHighIndex = High.getOperand(1)
   # Strip any casts away
-  if isinstance(HighIndexValue, RoseCastOp):
+  if isinstance(HighIndexValue, RoseCastOp) \
+  or isinstance(HighIndexValue, RoseBVSignExtendOp) \
+  or isinstance(HighIndexValue, RoseBVZeroExtendOp):
     HighIndexValue = HighIndexValue.getOperand(0)
   # High index is expressed in terms of low index
   # TODO: Make this more general.
@@ -291,7 +298,9 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
     LowIndexValue = Low.getOperand(0)
     ConstantLowIndex = Low.getOperand(1)
   # Strip any casts away
-  if isinstance(LowIndexValue, RoseCastOp):
+  if isinstance(LowIndexValue, RoseCastOp) \
+  or isinstance(LowIndexValue, RoseBVSignExtendOp) \
+  or isinstance(LowIndexValue, RoseBVZeroExtendOp):
     LowIndexValue = LowIndexValue.getOperand(0)
   assert LowIndexValue.isSameAs(HighIndexValue)
   assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
@@ -340,14 +349,14 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   print("COMPILING HIGH")
   # Set the new index number type for the high index since
   # it should have the same type as the low index.
-  OriginalNumberTy = Context.getIndexNumberType()
-  Context.setIndexNumberType(Low.getType())
+  #OriginalNumberTy = Context.getIndexNumberType()
+  #Context.setIndexNumberType(Low.getType())
   if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
     MaxVectorLength = Context.getMaxVectorLength()
     High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
   else:
     High = CompileIndex(BitSliceExpr.hi, Context)
-  Context.setIndexNumberType(OriginalNumberTy)
+  #Context.setIndexNumberType(OriginalNumberTy)
   print("COMPILED HIGH")
   High.print()
   
@@ -489,22 +498,29 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
     print("Operand2:")
     Operand2.print()
     Operand2.getType().print()
+    # Account for all special cases
     # The operands of a binary op may need some fixing up
-    if type(ExprIndex.a) == Number and type(ExprIndex.b) == BitSlice:
+    if type(ExprIndex.a) == Number \
+    and (type(ExprIndex.b) == BitSlice or type(ExprIndex.b) == BitIndex):
       NumIntBits = ExprIndex.a.val.bit_length()
       if NumIntBits > Operand2.getType().getBitwidth():
         # We need to extend the size of the other operand
         Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
                                               Operand2, NumIntBits)
-    if type(ExprIndex.b) == Number and type(ExprIndex.a) == BitSlice:
+    if type(ExprIndex.b) == Number \
+    and (type(ExprIndex.a) == BitSlice or type(ExprIndex.a) == BitIndex):
       NumIntBits = ExprIndex.b.val.bit_length()
       if NumIntBits > Operand1.getType().getBitwidth():
         # We need to extend the size of the other operand
         Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
                                               Operand1, NumIntBits)
     # Fix the constants' bitwidths
-    Operand1 = FixConstantBinaryOpBitwidth(Operand1, Operand2.getType().getBitwidth())
-    Operand2 = FixConstantBinaryOpBitwidth(Operand2, Operand1.getType().getBitwidth())
+    if Operand1.getType() != Operand2.getType():
+      if isinstance(Operand1, RoseConstant):
+        Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
+      else:
+        assert isinstance(Operand2, RoseConstant)
+        Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
     # Perform the binary operation
     return BinaryOps[ExprIndex.op]()(ExprIndex.id, Operand1, Operand2)
 
@@ -550,10 +566,12 @@ def GetExpressionType(Expr, Context : x86RoseContext):
 
 
 def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
+  print("GET RHS TYPE SPECIAL CASES")
   assert type(RHS) == BinaryExpr
   # Check if the operands size is extended. If yes, we return
   # the type with extended size.
-  if (type(RHS.a) == BitSlice and type(RHS.b) == BitSlice \
+  if (((type(RHS.a) == BitSlice and type(RHS.b) == BitSlice) \
+  or (type(RHS.a) == BitIndex and type(RHS.b) == BitIndex)) \
   and NeedToExtendOperandSize(RHS.op)) \
   or (type(RHS.a) == Call and type(RHS.b) == Call \
   and BinaryExpr.a.funcname in ZeroExtendsSize \
@@ -568,7 +586,8 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
   # Now if we have a binary op performed with constant (integer),
   # we must take into account the minimum bitwidth required to
   # represent that constant.
-  if type(RHS.a) == Number and type(RHS.b) == BitSlice:
+  if type(RHS.a) == Number \
+  and (type(RHS.b) == BitSlice or type(RHS.b) == BitIndex):
     RHSType = GetExpressionType(RHS.b, Context)
     if RHSType.isUndefTy():
       return RoseType.getUndefTy()
@@ -582,13 +601,18 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
       assert RHSType.isIntegerTy()
       return RoseType.getIntegerTy(NumIntBits)
   # Handle the other case
-  if type(RHS.b) == Number and type(RHS.a) == BitSlice:
+  if type(RHS.b) == Number \
+   and (type(RHS.a) == BitSlice or type(RHS.a) == BitIndex):
     RHSType = GetExpressionType(RHS.a, Context)
+    print("RHS TYPE:")
+    RHSType.print()
     if RHSType.isUndefTy():
       return RoseType.getUndefTy()
     # Binary operation can only be performed on bitvectors and integers
     # so getting bitwidth is OK.
     NumIntBits = RHS.b.val.bit_length()
+    print("NumIntBits:")
+    print(NumIntBits)
     if NumIntBits > RHSType.getBitwidth():
       # We need to extend the size of the other operand
       if RHSType.isBitVectorTy():
@@ -694,16 +718,16 @@ def CompileUpdate(Update, Context : x86RoseContext):
     print("*************************************")
     # Compile the LHS Bitslice
     # Compile the low index
-    Low = CompileExpression(Update.lhs.lo, Context)
+    Low = CompileIndex(Update.lhs.lo, Context)
     # Compile the high index
-    OriginalNumberTy = Context.getIndexNumberType()
-    Context.setIndexNumberType(Low.getType())
+    #OriginalNumberTy = Context.getIndexNumberType()
+    #Context.setIndexNumberType(Low.getType())
     if (type(Update.lhs.hi) == Var and Update.lhs.hi.name == 'MAX'):
       MaxVectorLength = Context.getMaxVectorLength()
       High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
     else:
-      High = CompileExpression(Update.lhs.hi, Context)
-    Context.setIndexNumberType(OriginalNumberTy)
+      High = CompileIndex(Update.lhs.hi, Context)
+    #Context.setIndexNumberType(OriginalNumberTy)
     # Compile the bitvector
     BitVector = CompileExpression(Update.lhs.bv, Context)
     print("BITVECTOR======:")
@@ -799,19 +823,6 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   return Operation
 
 
-def FixConstantBinaryOpBitwidth(Operand : RoseValue, Bitwidth : int):
-  if Operand.getType().getBitwidth() != Bitwidth:
-    if isinstance(Operand, RoseConstant):
-      if Operand.getType().isBitVectorTy():
-        Operand = RoseConstant.create(Operand.getValue(), \
-                              RoseType.getBitVectorTy(Bitwidth))
-      else:
-        assert Operand.getType().isIntegerTy()
-        Operand = RoseConstant.create(Operand.getValue(), \
-                              RoseType.getIntegerTy(Bitwidth))
-  return Operand
-
-
 def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
     # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(BinaryExpr.id):
@@ -823,11 +834,18 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # Compile the operands
   Operand1 = CompileExpression(BinaryExpr.a, Context)
   Operand2 = CompileExpression(BinaryExpr.b, Context)
+  print("--Operand1:")
+  Operand1.print()
+  Operand1.getType().print()
+  print("--Operand2:")
+  Operand2.print()
+  Operand2.getType().print()
 
   # We have to deal with the special case
   ExtendOperandSize = False
   OperandBitwidth = None
-  if type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice:
+  if (type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice) \
+  or (type(BinaryExpr.a) == BitIndex and type(BinaryExpr.b) == BitIndex):
     if NeedToExtendOperandSize(BinaryExpr.op):
       # We need to sign extend the operands first. Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
@@ -864,7 +882,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       ExtendOperandSize = True
   
   # There are cases where bitvectors are multiplied to larger numbers
-  if type(BinaryExpr.a) == Number and type(BinaryExpr.b) == BitSlice:
+  if type(BinaryExpr.a) == Number \
+  and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
     NumIntBits = BinaryExpr.a.val.bit_length()
     if NumIntBits > Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
@@ -875,7 +894,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # Add operations to the context
       Context.addCompiledAbstraction(Operand2.getName(), Operand2)
       ExtendOperandSize = True
-  if type(BinaryExpr.b) == Number and type(BinaryExpr.a) == BitSlice:
+  if type(BinaryExpr.b) == Number \
+  and (type(BinaryExpr.a) == BitSlice or type(BinaryExpr.a) == BitIndex):
     NumIntBits = BinaryExpr.b.val.bit_length()
     if NumIntBits > Operand1.getType().getBitwidth():
       # We need to extend the size of the other operand
@@ -886,10 +906,19 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # Add operations to the context
       Context.addCompiledAbstraction(Operand1.getName(), Operand1)
       ExtendOperandSize = True
-  
+  print("Operand1:")
+  Operand1.print()
+  Operand1.getType().print()
+  print("Operand2:")
+  Operand2.print()
+  Operand2.getType().print()
   # Fix the constants' bitwidths
-  Operand1 = FixConstantBinaryOpBitwidth(Operand1, Operand2.getType().getBitwidth())
-  Operand2 = FixConstantBinaryOpBitwidth(Operand2, Operand1.getType().getBitwidth())
+  if Operand1.getType() != Operand2.getType():
+    if isinstance(Operand1, RoseConstant):
+      Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
+    else:
+      assert isinstance(Operand2, RoseConstant)
+      Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
 
   print('OPERAND1:')
   Operand1.print()
