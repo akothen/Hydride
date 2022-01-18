@@ -86,6 +86,26 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     return self.getOperand(0)
 
 
+class RoseBVTruncateOp(RoseBitVectorOp):
+  def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
+    assert Bitvector.getType().isBitVectorTy()
+    OperandList = [Bitvector, TargetBitwidth]
+    super().__init__(RoseOpcode.bvtrunc, Name, OperandList, ParentBlock)
+
+  @staticmethod
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
+            ParentBlock = RoseUndefRegion()):
+    return RoseBVTruncateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
+    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
+    return RoseBVTruncateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+
 class RoseBVExtractSliceOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
               Bitwidth : RoseValue, ParentBlock):
