@@ -518,9 +518,16 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
     if Operand1.getType() != Operand2.getType():
       if isinstance(Operand1, RoseConstant):
         Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
-      else:
-        assert isinstance(Operand2, RoseConstant)
+      elif isinstance(Operand2, RoseConstant):
         Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
+      elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+                                        Operand1, Operand2.getType().getBitwidth())
+      elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+                                        Operand2, Operand1.getType().getBitwidth())
     # Perform the binary operation
     return BinaryOps[ExprIndex.op]()(ExprIndex.id, Operand1, Operand2)
 
@@ -619,7 +626,20 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
         return RoseType.getBitVectorTy(NumIntBits)
       assert RHSType.isIntegerTy()
       return RoseType.getIntegerTy(NumIntBits)
-  
+
+  # Account for the operands' bitwidths
+  RHSAType = GetExpressionType(RHS.a, Context)
+  if RHSAType == RoseType.getUndefTy():
+    return RoseType.getUndefTy()
+  RHSBType = GetExpressionType(RHS.b, Context)
+  if RHSBType == RoseType.getUndefTy():
+    return RoseType.getUndefTy()
+  # Shorter type will be extended
+  if RHSAType.getBitwidth() < RHSBType.getBitwidth():
+    return RHSBType
+  if RHSAType.getBitwidth() > RHSBType.getBitwidth():
+    return RHSAType
+
   return RoseType.getUndefTy()
 
 
@@ -882,6 +902,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       ExtendOperandSize = True
   
   # There are cases where bitvectors are multiplied to larger numbers
+  # TODO: Make this more general if need be. Right now, we deal with this
+  # as a special case.
   if type(BinaryExpr.a) == Number \
   and (type(BinaryExpr.b) == BitSlice or type(BinaryExpr.b) == BitIndex):
     NumIntBits = BinaryExpr.a.val.bit_length()
@@ -912,14 +934,31 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   print("Operand2:")
   Operand2.print()
   Operand2.getType().print()
-  # Fix the constants' bitwidths
-  if Operand1.getType() != Operand2.getType():
+  # Fix the operands' bitwidths
+  if Operand1.getType().getBitwidth() != Operand2.getType().getBitwidth():
     if isinstance(Operand1, RoseConstant):
       Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
-    else:
-      assert isinstance(Operand2, RoseConstant)
+    elif isinstance(Operand2, RoseConstant):
       Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
-
+    elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+                                      Operand1, Operand2.getType().getBitwidth())
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand1)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+      ExtendOperandSize = True
+    elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+      # We need to extend the size of the other operand
+      Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+                                      Operand2, Operand1.getType().getBitwidth())
+      # Add the operations to the IR
+      Context.addAbstractionToIR(Operand2)
+      # Add operations to the context
+      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+      ExtendOperandSize = True
+  
   print('OPERAND1:')
   Operand1.print()
   print(Operand1.getType())
