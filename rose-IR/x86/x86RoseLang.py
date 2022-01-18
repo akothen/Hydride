@@ -1,5 +1,4 @@
 
-import re
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
 from x86RoseCompiler import CompileSemantics
@@ -542,7 +541,6 @@ ENDFOR
 '''
 
 
-# Compilation fails
 def test25():
   return '''
 <intrinsic tech="SSE4.1" vexEq="TRUE" name="_mm_insert_epi64">
@@ -708,7 +706,6 @@ ENDFOR
 </intrinsic>
 '''
 
-# Compilation fails
 def test33():
   return '''
 <intrinsic tech="SSE2" vexEq="TRUE" name="_mm_avg_epu16">
@@ -1048,7 +1045,6 @@ ENDFOR
 #dst[MAX:256] := 0
 
 
-# Compilation fails
 def test49():
   return '''
 <intrinsic tech="AVX-512" name="_mm256_madd52hi_epu64">
@@ -1152,7 +1148,6 @@ ENDFOR
 #k[MAX:16] := 0
 
 
-# Compiles but needs fixing
 def test54():
   return '''
 <intrinsic tech="AVX-512" name="_mm512_permutex2var_epi64">
@@ -2074,7 +2069,7 @@ ENDFOR
 
 
 def Compile():
-  sema = test88()
+  sema = test33()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
