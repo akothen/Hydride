@@ -52,6 +52,9 @@ class RoseConstant(RoseValue):
     assert isinstance(Other, RoseConstant)
     return self.Val != Other.Val or super().__ne__(Other)
   
+  def __hash__(self):
+    return hash((self.getValue(), self.getType()))
+
   def __str__(self):
     return str(self.Val)
 
@@ -88,8 +91,8 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return False
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex == Other.ArgIndex and self.Callee == Other.Callee \
-            and super().__eq__(Other)
+    return self.ArgIndex == Other.ArgIndex and self.Callee.getName() == Other.Callee.getName() \
+       and self.Callee.getType() == Other.Callee.getType()  and super().__eq__(Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefValue) \
@@ -101,14 +104,12 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return True
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex != Other.ArgIndex or self.Callee != Other.Callee \
-        or super().__ne__(Other)
+    return self.ArgIndex != Other.ArgIndex or self.Callee.getName() != Other.Callee.getName() \
+        or self.Callee.getType() != Other.Callee.getType() or super().__ne__(Other)
 
   # TODO: Should we also include callee in the hash?
   def __hash__(self):
-    Name = self.getName()
-    Type = self.getType()
-    return hash((Name, Type, self.ArgIndex))
+    return hash((self.getName(), self.getType(), self.ArgIndex))
 
   def getArgIndex(self):
     assert self.ArgIndex < self.Callee.getArg(self.getArgIndex()).getType()
@@ -175,9 +176,7 @@ class RoseOperation(RoseValue):
         #or self.__key() != Other.__key()
   
   def __hash__(self):
-    Name = self.getName()
-    Type = self.getType()
-    return hash((Name, Type, self.Opcode))
+    return hash((self.getName(), self.getType(), self.Opcode))
   
   # This is different from __eq__ because here we want to see if 
   # the compuations are the same.
@@ -238,8 +237,10 @@ class RoseOperation(RoseValue):
     if Name != "":
         String = Name + " = "
     String += str(self.Opcode)
-    for Operand in self.getOperands():
-        String += " " + Operand.getName()
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += ","
     print(String)
 
 
