@@ -210,17 +210,12 @@ def CompileNumber(Num, Context : x86RoseContext):
   print("COMPILE NUMBER")
   print("NUM:")
   print(Num)
-  if isinstance(Num.val, int):
-    if Context.isCompileIndexFlagSet():
-      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
-      #Context.getIndexNumberType())
-    else:
-      ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
-    return ConstantVal
+  if Context.isCompileIndexFlagSet():
+    ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+    #Context.getIndexNumberType())
   else:
-    # TODO: These needs fixing
-    NonConstantVal = Num.val
-    return NonConstantVal
+    ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  return ConstantVal
 
 
 def CompileVar(Variable, Context):
@@ -731,6 +726,14 @@ def CompileUpdate(Update, Context : x86RoseContext):
   print("COMPILED RHS")
   RHSExprVal.print()
 
+  # There are some cases where RHS is just a constant value.
+  # This has to handled especially because constants' IDs are not
+  # cached into the context, but here we have to.
+  #if isinstance(RHSExprVal, RoseConstant):
+  # We add this assignment to the 
+  # Add the constant ID to the context
+  #Context.addCompiledAbstraction(Update.rhs.id, RHSExprVal)
+
   if type(Update.lhs) == Var:
     # Get the ID associated with the RHS value
     ID = Update.rhs.id
@@ -1027,12 +1030,18 @@ def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext)
     return False
   # Builtin extends size. Check if we have already done that.
   [Operation] = ArgValuesList
+
+  # If the operation extends the size, if the bitwidth is already large enough, 
+  # it needs not extension, in which case there is nothing to do.
+  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
+  if Operation.getType().getBitwidth() >= BuiltinExtendSize:
+    return True
+
   if not Context.isSizeExtended(Operation):
     return False
   # So the operands have alrady been extended. 
   # Now we need to ensure the size of operation is the same
   # as what we intend to extend using the builtin.
-  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
   if BuiltinExtendSize != Context.getExtendedSize(Operation):
     # The size to which the builtin will extend has to be greater
     # than the size to which extension has already taken place.
@@ -1072,6 +1081,7 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   
   # Check if this is a call to a builtin function
   Operation = Builtins[CallStmt.funcname](CallStmt.id, ArgValuesList)
+
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -1461,8 +1471,7 @@ def HandleToSignExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
-    if Value.getType().getBitwidth() > Bitwidth:
-      return Value
+    assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
@@ -1472,8 +1481,7 @@ def HandleToZeroExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
-    if Value.getType().getBitwidth() > Bitwidth:
-      return Value
+    assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
