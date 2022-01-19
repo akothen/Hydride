@@ -1,5 +1,4 @@
 
-from typing import AbstractSet
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -592,8 +591,8 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
   or (type(RHS.a) == BitIndex and type(RHS.b) == BitIndex)) \
   and NeedToExtendOperandSize(RHS.op)) \
   or (type(RHS.a) == Call and type(RHS.b) == Call \
-  and BinaryExpr.a.funcname in ZeroExtendsSize \
-   and BinaryExpr.b.funcname in ZeroExtendsSize):
+  and RHS.a.funcname in ZeroExtendsSize \
+   and RHS.b.funcname in ZeroExtendsSize):
       RHSType = GetExpressionType(RHS.a, Context)
       if not RHSType.isUndefTy():
         return RoseType.getBitVectorTy(RHSType.getBitwidth() * 2)
