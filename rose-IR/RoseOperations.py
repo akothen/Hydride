@@ -47,6 +47,20 @@ class RoseCallOp(RoseOperation):
   
   def getCallOperands(self):
     return self.getOperands()[1:]
+
+  def print(self):
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Name + " = "
+    String += str(self.Opcode)
+    String += " " + self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+      String += " " + str(Operand.getType()) + " " + Operand.getName() 
+      if Index != len(self.getCallOperands()) - 1:
+        String += ","
+    String += " )"
+    print(String)
   
 
 class RoseSelectOp(RoseOperation):
@@ -359,6 +373,7 @@ class RoseXorOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
+
 
 
 
