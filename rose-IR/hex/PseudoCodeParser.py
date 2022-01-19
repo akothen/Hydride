@@ -297,6 +297,11 @@ def ParseHVXSemantics(FileName):
 
   InstructionList = []
   for inst, psuedocode in list(semantics.items()):
+
+    # Still need to handle predicate functions/vectors
+    if "vand" in inst:
+      continue
+    
     assign = Parse(inst)
     # SIMD instruction
     if isinstance(assign.lhs, TypeLookup):
