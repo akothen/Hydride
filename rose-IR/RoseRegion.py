@@ -70,12 +70,14 @@ class RoseRegion:
       return self.Children[Key].index(Child)
 
   def getTailChild(self, Key = None):
+    print("KEY:")
+    print(Key)
     if self.isEmpty(Key):
       return RoseAbstractions.RoseUndefRegion()
     if Key == None:
       return self.Children[len(self.Children) - 1]
     else:
-      return self.Children[Key][len(self.Children) - 1]
+      return self.Children[Key][len(self.Children[Key]) - 1]
   
   def isEmpty(self, Key = None):
     if Key == None:
@@ -88,7 +90,7 @@ class RoseRegion:
     if Key == None:
       self.Children[len(self.Children) - 1] = UpdatedChild
     else:
-      self.Children[Key][len(self.Children) - 1] = UpdatedChild
+      self.Children[Key][len(self.Children[Key]) - 1] = UpdatedChild
   
   # Get the first function enclosing this region
   def getFunction(self):
