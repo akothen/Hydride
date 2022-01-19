@@ -1,4 +1,5 @@
 
+from typing import AbstractSet
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -26,6 +27,8 @@ class RoseContext:
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
     self.Variables = dict()    # Name --> ID
+    # Map abstractions to the key
+    self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
   
   def isCompiledAbstraction(self, ID : str):
     if ID in self.CompiledAbstractions:
@@ -34,7 +37,10 @@ class RoseContext:
   
   def addCompiledAbstraction(self, ID : str, Abstraction):
     self.CompiledAbstractions[ID] = Abstraction
-  
+
+  def addKeyForCompiledAbstraction(self, Key, Abstraction):
+    self.CompiledAbstractionsKeys[Abstraction] = Key
+    
   def updateCompiledAbstraction(self, ID : str, NewAbstraction):
       assert ID in self.CompiledAbstractions
       self.CompiledAbstractions[ID] = NewAbstraction
@@ -68,16 +74,18 @@ class RoseContext:
 
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
-    
-  def popRootAbstraction(self):
-    return self.RootAbstractions.pop()
   
   def getRootAbstraction(self):
     return self.RootAbstractions[len(self.RootAbstractions) - 1]
   
   def addAbstractionToIR(self, Abstraction):
-    TailAbstraction = self.popRootAbstraction()
-    TailAbstraction.addAbstraction(Abstraction)
+    TailAbstraction = self.RootAbstractions.pop()
+    if TailAbstraction in self.CompiledAbstractionsKeys:
+      Key = self.CompiledAbstractionsKeys[TailAbstraction]
+      TailAbstraction.addAbstraction(Abstraction, Key)
+      self.CompiledAbstractionsKeys[TailAbstraction] = Key
+    else:
+      TailAbstraction.addAbstraction(Abstraction)
     self.pushRootAbstraction(TailAbstraction)
 
   def setParentContext(self, Context):
@@ -102,8 +110,7 @@ class RoseContext:
       print("VARIABLE NAME:")
       print(Name)
       self.Variables[Name] = ID
-
-  
+ 
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
       # Get the ID for the same variable name in curreent context
@@ -1293,15 +1300,26 @@ def CompileIf(IfStmt, Context : x86RoseContext):
   ChildContext = x86RoseContext()
   ChildContext.pushRootAbstraction(CondRegion)
 
+  # Add the then key for this cond region
+  ThenRegionKey = CondRegion.getKeyForThenRegion()
+  ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
   # Add the generated cond region to the current context
   Context.addCompiledAbstraction(IfStmt.id, CondRegion)
 
-  # Add a new context for this loop
+  # Add a new context for this cond region
   Context.createContext(IfStmt.id, ChildContext)
 
-  # Compile all the statements in this cond region
+  # Compile all the statements in then cond region
   for Stmt in IfStmt.then:
     CompileStatement(Stmt, ChildContext)
+  
+  # Update the key for the cond key
+  UpdatedCondRegion = ChildContext.getRootAbstraction()
+  ElseRegionKey = CondRegion.getKeyForElseRegion()
+  ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
+ 
+  # Compile all the statement in the otherwise cond region
   for Stmt in IfStmt.otherwise:
     CompileStatement(Stmt, ChildContext)
 
