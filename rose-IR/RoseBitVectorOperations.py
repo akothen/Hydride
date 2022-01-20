@@ -153,7 +153,7 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def getInsertValue(self):
     return self.getOperand(0)
 
-  def getBitVector(self):
+  def getInputBitVector(self):
     return self.getOperand(1)
   
   def getLowIndex(self):
