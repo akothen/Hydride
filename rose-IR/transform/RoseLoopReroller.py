@@ -399,11 +399,26 @@ def GetLowOffsetsWithinPack(Pack1 : list, Pack2 : list):
     assert isinstance(LowIndex1, RoseConstant)
     assert isinstance(LowIndex2, RoseConstant)
     # Solve the linear equations
-    Cofactor = int((LowIndex2.getValue() - LowIndex1.getValue())\
+    Cofactor = (LowIndex2.getValue() - LowIndex1.getValue())\
+                           / (StartIndex2 - StartIndex1)
+    if Cofactor == int(Cofactor):
+      Cofactor = int(Cofactor)
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
+    print("LowIndex1.getValue():")
+    print(LowIndex1.getValue())
+    print("LowIndex2.getValue():")
+    print(LowIndex2.getValue())
+    print("FLOAT COFACTOR:")
+    print((LowIndex2.getValue() - LowIndex1.getValue())\
                            / (StartIndex2 - StartIndex1))
     print("Cofactor:")
     print(Cofactor)
     Offset = LowIndex1.getValue() - (Cofactor * StartIndex1)
+    assert Offset == int(Offset)
+    Offset = int(Offset)
     print("Offset:")
     print(Offset)
     LowOffsetsList.append(Offset)
@@ -473,7 +488,9 @@ def RunRerollerOnFunction(Function : RoseFunction):
       print(Step)
       print("LowOffsetsList:")
       print(LowOffsetsList)
-      # Generate a loop
+      # Because of the way ranges in Rosette work, we have to add step to end before
+      # generating a loop
+      End += Step
       Loop = RoseForLoop.create("iterator." + str(IteratorSuffix), End, Start, Step)
       IteratorSuffix += 1
       Iterator = Loop.getIterator()
@@ -502,8 +519,13 @@ def RunRerollerOnFunction(Function : RoseFunction):
         LowCofactor = CoFactactorsList[OpIndex]
         assert LowCofactor != None
         if LowCofactor != 1:
-          LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-          ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [LowCofactorVal, Iterator])
+          if type(LowCofactor) != int:
+            LowCofactor = int(1 / LowCofactor)
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+          else:
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
           Loop.addAbstraction(ScaledIterator)
         else:
           ScaledIterator = Iterator
