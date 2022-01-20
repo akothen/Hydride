@@ -956,7 +956,7 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   Operand2.print()
   Operand2.getType().print()
   # Fix the operands' bitwidths
-  if Operand1.getType().getBitwidth() != Operand2.getType().getBitwidth():
+  if Operand1.getType() != Operand2.getType():
     if isinstance(Operand1, RoseConstant):
       Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
     elif isinstance(Operand2, RoseConstant):
@@ -1253,7 +1253,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   if Context.isCompiledAbstraction(ForStmt.id):
     return
 
-  # Generate an empty for loop
+  # Compile the loop bounds and step
   print("COMPILING FOR LOOP")
   print("FOR EXPR:")
   print(ForStmt)
@@ -1262,6 +1262,22 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Step = One if ForStmt.inc else MinusOne
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
+
+  # Modify the end bound of the loop by adding 1 to it.
+  # This is because of the way loop bounds are expressed in
+  # in x86 pseudocode and rosette.
+  if isinstance(End, RoseConstant):
+    End = RoseConstant.create(End.getValue() + 1, End.getType())
+  else:
+    # Add an add instruction
+    One = RoseConstant.create(1, End.getType())
+    End = RoseAddOp.create("end.bound." + End.getName(), [End, One])
+    # Add this op to the IR
+    Context.addAbstractionToIR(End)
+    # Add this updated value to the context
+    Context.updateCompiledAbstraction(ForStmt.end, End)
+
+  # Generate the loop
   Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
 
   # Add loop as root abstraction 
