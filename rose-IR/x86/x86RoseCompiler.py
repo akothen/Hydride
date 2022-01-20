@@ -1257,11 +1257,12 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   print("COMPILING FOR LOOP")
   print("FOR EXPR:")
   print(ForStmt)
-  One = RoseConstant.create(1, RoseType.getIntegerTy(32))
-  MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
-  Step = One if ForStmt.inc else MinusOne
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
+  assert Begin.getType() == End.getType()
+  One = RoseConstant.create(1, Begin.getType())
+  MinusOne = RoseConstant.create(-1, Begin.getType())
+  Step = One if ForStmt.inc else MinusOne
 
   # Modify the end bound of the loop by adding 1 to it.
   # This is because of the way loop bounds are expressed in
@@ -1270,8 +1271,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     End = RoseConstant.create(End.getValue() + 1, End.getType())
   else:
     # Add an add instruction
-    One = RoseConstant.create(1, End.getType())
-    End = RoseAddOp.create("end.bound." + End.getName(), [End, One])
+    End = RoseAddOp.create("end.bound." + End.getName(), [End, Step])
     # Add this op to the IR
     Context.addAbstractionToIR(End)
     # Add this updated value to the context
