@@ -582,7 +582,7 @@ class RoseCond(RoseRegion):
     Children["then"] = ThenRegionList
     Children["else"] = ElseRegionList
     self.Condition = Condition
-    super().__init__(Children, ParentRegion)
+    super().__init__(Children, ParentRegion, ["then", "else"])
   
   @staticmethod
   def create(Condition : RoseValue, ThenRegionList : list = [], ElseRegionList : list = [], 
@@ -610,7 +610,7 @@ class RoseCond(RoseRegion):
   # Make rose loops hashable
   def __hash__(self):
     return hash((self.Condition))
-
+  
   def areChildrenValid(self):
     # Children do not have to be instances of regions
     for Child in self.getChildren()["then"]:
@@ -691,11 +691,60 @@ class RoseCond(RoseRegion):
         if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
           return True
     else:
-      if self.replaceAbstraction(self, OldAbstraction, NewAbstraction, "then"):
+      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "then"):
         return True
-      if self.replaceAbstraction(self, OldAbstraction, NewAbstraction, "else"):
+      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "else"):
         return True
     return False
+
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Abstraction, NewAbstraction, Key = None):
+    if Key != None:
+      print("REPLACES USES IN FUNCTION")
+      assert isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      assert isinstance(NewAbstraction, RoseOperation) \
+          or isinstance(NewAbstraction, RoseArgument)
+      assert Abstraction.getType() == NewAbstraction.getType()
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        Child.replaceUsesWith(Abstraction, NewAbstraction)
+    else:
+      self.replaceUsesWith(Abstraction, NewAbstraction, "then")
+      self.replaceUsesWith(Abstraction, NewAbstraction, "else")
+
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction, Key = None):
+    if Key != None:
+      assert isinstance(Abstraction, RoseFunction) \
+          or isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        if Child.hasUsesOf(Abstraction) == True:
+          return True
+    else:
+      if self.hasUsesOf(Abstraction, "then"):
+        return True
+      if self.hasUsesOf(Abstraction, "else"):
+        return True
+    return False
+
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction, Key = None):
+    if Key != None:
+      assert isinstance(Abstraction, RoseFunction) \
+          or isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      Users = []
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        Users.extend(Child.getUsersOf(Abstraction))
+    else:
+      Users = []
+      Users.extend(self.getUsersOf(self, Abstraction, "then"))
+      Users.extend(self.getUsersOf(self, Abstraction, "else"))
+    return Users
 
   def print(self):
     Condtiion = "if (" + self.Condition.getName() + ") {"
