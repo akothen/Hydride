@@ -1,5 +1,4 @@
 
-from types import prepare_class
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -10,6 +9,13 @@ from RoseOperations import *
 
 
 def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
+  print("GetOffsetsBetweenPacks:")
+  print("PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("PACK2:")
+  for Op in Pack2:
+    Op.print()
   assert len(Pack1) == len(Pack2)
   if OffsetsList == []:
     #OffsetsList = list() * len(Pack1)
@@ -29,9 +35,21 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
       OffsetsList[Index] =  None
       continue
     # If this operation has not indexing operands, add None
-    if Pack1[Index].getNumNonBVOperands() == 0:
+    if Pack1[Index].isIndexingBVOp() == False:
       OffsetsList[Index] =  None
       continue
+    # If the bitvector values for the bitvector ops are
+    # different, offset compuation is meaningless.
+    print(Pack1[Index].getBitVectorOperands())
+    print(Pack2[Index].getBitVectorOperands())
+    if Pack1[Index].getInputBitVector() != Pack2[Index].getInputBitVector():
+      print("^^^^^^^^^^")
+      print("PACK1:")
+      Pack1[Index].print()
+      print("PACK2:")
+      Pack2[Index].print()
+      print("HERE")
+      return None
     # Output bitwidths for bitvector ops must be equal
     if Pack1[Index].getOutputBitwidth() != Pack2[Index].getOutputBitwidth():
       return None
@@ -127,6 +145,7 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
   
   NewCandidatePacks = []
   NewPack = []
+  AllowPackExtension = None  # We do not know yet
   for Pack in RerollableCandidatePacks:
     LastOp = Pack[len(Pack) - 1]
     assert isinstance(LastOp, RoseBVInsertSliceOp)
@@ -149,9 +168,19 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
               MergePacks = False
               break
     if MergePacks == True:
-      NewPack.extend(Pack)
+      if AllowPackExtension != False:
+        NewPack.extend(Pack)
+        AllowPackExtension = True
+      else:
+        # Since packs are not allowed to extend,
+        # create a new pack.
+        NewCandidatePacks.append(NewPack)
+        NewPack = Pack
     else:
       # Add the new pack to the list of new candidate packs
+      if AllowPackExtension == None:
+        print("FUSION OF PACKS NOT ALLOWD!!")
+        AllowPackExtension = False
       NewCandidatePacks.append(NewPack)
       NewPack = Pack
   
@@ -221,7 +250,7 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
 def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
-  for Abstraction in Region.getChildren():
+  for Abstraction in Region: #Region.getChildren():
     # Run reroller on a nested function
     if isinstance(Abstraction, RoseFunction):
       RunRerollerOnFunction(Abstraction)
@@ -242,7 +271,7 @@ def GetLowOffsetsWithinPack(Pack : list):
   LowOffsetsList = list()
   StartIndex = None
   for Op in Pack:
-    if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
+    if isinstance(Op, RoseCallOp) or Op.isIndexingBVOp() == 0:
       LowOffsetsList.append(None)
       continue
     # Now we are dealing with bitvector ops that index into bitvectors
@@ -257,7 +286,7 @@ def GetLowOffsetsWithinPack(Pack : list):
 
 def GetFirstLowIndexInPack(Pack : list):
   for Op in Pack:
-    if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
+    if isinstance(Op, RoseCallOp) or Op.isIndexingBVOp() == 0:
       continue
     # Now we are dealing with bitvector ops that index into bitvectors
     # First get the start index and get offsets relative to
@@ -275,7 +304,7 @@ def GetStepForRerolledLoop(Pack1 : list, Pack2 : list):
     if isinstance(Pack1[Index], RoseCallOp):
       continue
     assert Pack1[Index].getOutputBitwidth() == Pack2[Index].getOutputBitwidth()
-    if Pack1[Index].getNumNonBVOperands() == 0:
+    if Pack1[Index].isIndexingBVOp() == 0:
       continue
     # Get low offsets between instructions
     LowIndex1 = Pack1[Index].getLowIndex()
@@ -324,14 +353,18 @@ def RunRerollerOnFunction(Function : RoseFunction):
       # Insert operations in the generated loop.
       for OpIndex, Op in enumerate(PackList[0]):
         # Handle ops that do not have indices in operands
-        if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
+        if isinstance(Op, RoseCallOp) or Op.isIndexingBVOp() == 0:
           NewOp = Op.clone()
           for Index, Operand in enumerate(Op.getOperands()):
-            NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
-            if NewOperand == RoseUndefValue():
-              # Operand is coming from some other source, just use 
-              # the same operand as the old op.
+            # If the operand is a constant value, we just copy constants over
+            if isinstance(Operand, RoseConstant):
               NewOperand = Op.getOperand(Index)
+            else:
+              NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+              if NewOperand == RoseUndefValue():
+                # Operand is coming from some other source, just use 
+                # the same operand as the old op.
+                NewOperand = Op.getOperand(Index)
             NewOp.setOperand(Index, NewOperand)
           OldToNewOPsMap[Op] = NewOp
           Loop.addAbstraction(NewOp)
@@ -346,7 +379,7 @@ def RunRerollerOnFunction(Function : RoseFunction):
           Loop.addAbstraction(LowIndex)
         else:
           LowIndex = Iterator
-        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth(), Iterator.getType())
+        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, Iterator.getType())
         HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
         Loop.addAbstraction(HighIndex)
         NewOp = Op.clone()
