@@ -91,8 +91,8 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return False
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex == Other.ArgIndex and self.Callee.getName() == Other.Callee.getName() \
-       and self.Callee.getType() == Other.Callee.getType()  and super().__eq__(Other)
+    return self.ArgIndex == Other.ArgIndex \
+      and self.Callee.getRegionID() == Other.Callee.getRegionID() and super().__eq__(Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefValue) \
@@ -104,8 +104,8 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return True
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex != Other.ArgIndex or self.Callee.getName() != Other.Callee.getName() \
-        or self.Callee.getType() != Other.Callee.getType() or super().__ne__(Other)
+    return self.ArgIndex != Other.ArgIndex \
+      or self.Callee.getRegionID() != Other.Callee.getRegionID() or super().__ne__(Other)
 
   # TODO: Should we also include callee in the hash?
   def __hash__(self):
@@ -158,8 +158,8 @@ class RoseOperation(RoseValue):
         return False
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.Opcode and self.Operands == Other.Operands \
-        and self.ParentBlock == Other.ParentBlock and super().__eq__(Other) #\
-        #and self.__key() == Other.__key()
+        and self.ParentBlock.getRegionID() == Other.ParentBlock.getRegionID() \
+        and super().__eq__(Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefValue) \
@@ -172,8 +172,8 @@ class RoseOperation(RoseValue):
         return True
     assert isinstance(Other, RoseOperation)
     return self.Opcode != Other.Opcode or self.Operands != Other.Operands \
-        or self.ParentBlock != Other.ParentBlock or super().__ne__(Other) #\
-        #or self.__key() != Other.__key()
+        or self.ParentBlock.getRegionID() != Other.ParentBlock.getRegionID() \
+        or super().__ne__(Other)
   
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.Opcode))
@@ -191,7 +191,8 @@ class RoseOperation(RoseValue):
         return False
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
-        and self.ParentBlock == Other.getParent() and self.getType() == Other.getType()
+        and self.ParentBlock.getRegionID() == Other.getParent().getRegionID() \
+        and self.getType() == Other.getType()
 
   def getOpcode(self):
     return self.Opcode
