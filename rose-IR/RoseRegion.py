@@ -2,6 +2,7 @@
 import RoseAbstractions
 
 from copy import deepcopy
+import uuid
 
 
 # Abstract class representing a region.
@@ -16,6 +17,8 @@ class RoseRegion:
     if self.Children is not None:
       assert self.areChildrenValid()
     self.Keys = Keys
+    # This is a unique ID to identify this instance of rose region
+    self.ID = uuid.uuid4()
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
@@ -64,6 +67,9 @@ class RoseRegion:
     if Parent == RoseAbstractions.RoseUndefRegion():
       return True
     return False
+
+  def getRegionID(self):
+    return self.ID
   
   def getChildren(self):
     return self.Children
