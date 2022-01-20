@@ -8,13 +8,14 @@ from copy import deepcopy
 # Regions can contain loops, function, blocks, etc.
 # Regions can be contained in functions and loops.
 class RoseRegion:
-  def __init__(self, Children, Parent):
+  def __init__(self, Children, Parent, Keys = None):
     self.Parent = Parent
     if self.Parent is not None:
       assert self.isParentValid(Parent)
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
+    self.Keys = Keys
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
@@ -23,6 +24,30 @@ class RoseRegion:
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
     return self.Children != Other.Children or self.Parent != Other.Parent
+  
+  def __iter__(self):
+    # Undef region is not iterable
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    self.KeyIndex = 0
+    self.ChildIndex = -1
+    return self
+  
+  def __next__(self):
+    self.ChildIndex += 1
+    if self.Keys != None:
+      while self.ChildIndex == self.getNumChildren(self.Keys[self.KeyIndex]):
+        if self.KeyIndex == len(self.Keys) - 1:
+          # We are done iterating this cond region
+          raise StopIteration
+        # Now we move on to the next subregion
+        self.KeyIndex += 1
+        self.ChildIndex = 0
+      return self.getChild(self.ChildIndex, self.Keys[self.KeyIndex])
+    else:
+      if self.ChildIndex == self.getNumChildren():
+        raise StopIteration
+      return self.getChild(self.ChildIndex)
+    
   
   def areChildrenValid(self):
     if isinstance(self, RoseAbstractions.RoseUndefRegion):
