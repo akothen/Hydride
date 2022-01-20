@@ -99,6 +99,19 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
       continue
     # Now lets see if the window should be added to the window list
     CheckPack = PacksList[len(PacksList) - 1]
+    # The DFGs for the packs have to be the same
+    CheckDFGsAreIsomorphic = DFGsAreIsomorphic(CheckPack, Pack)
+    print("CheckDFGsAreIsomorphic:")
+    print(CheckDFGsAreIsomorphic)
+    if CheckDFGsAreIsomorphic == False:
+      # This is the end of the window list.
+      # If we didn't capture multiple windows, we must discard the list
+      if len(PacksList) != 1:
+        # Add the window list to the candidate list
+        RerollableCandidatesList.append(PacksList)
+      # Empty the list and continue
+      PacksList = [Pack]
+      continue
     NewOffsetsList = GetOffsetsBetweenPacks(CheckPack, Pack, OffsetsList)
     if NewOffsetsList == None:
       # This is the end of the window list.
@@ -134,6 +147,84 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
       for Op in Pack:
         Op.print()
   return RerollableCandidatesList
+
+
+# This is necessary to ensure that 2 packs are rerollable.
+def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
+  print("DATAFLOW PATTERNS ARE SAME")
+  if len(Pack1) != len(Pack2):
+    return False
+  print("PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("PACK2:")
+  for Op in Pack2:
+    Op.print()
+  # Reverse iterate the packs
+  OpsList1 =[Pack1[len(Pack1) - 1]]
+  OpsList2 =[Pack2[len(Pack2) - 1]]
+  Visited = set()
+  while len(OpsList1) != 0:
+    print("OpsList1:")
+    print(OpsList1)
+    print("OpsList2:")
+    print(OpsList2)
+    assert len(OpsList1) == len(OpsList2)
+    Op1 = OpsList1.pop()
+    Op2 = OpsList2.pop()
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    if not isinstance(Op1, RoseOperation):
+      if isinstance(Op2, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    if not isinstance(Op2, RoseOperation):
+      if isinstance(Op1, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    print("OP1:")
+    Op1.print()
+    print("OP2:")
+    Op2.print()
+    # If the operations have different opcodes or types, skip
+    if Op1.getOpcode() != Op2.getOpcode():
+      return False
+    if Op1.getType() != Op2.getType():
+      return False
+    # Deal with call operations
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      # Make sure that the callees for the operations are equal.
+      if Op1.getCallee().getName() != Op2.getCallee().getName():
+        return False
+      OpsList1.extend(Op1.getCallOperands())
+      OpsList2.extend(Op2.getCallOperands())
+      continue
+    # If this operation has not indexing operands, add None
+    if Op1.isIndexingBVOp() ==  True:
+      # Output bitwidths for bitvector ops must be equal
+      if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
+        return False
+      OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList2.extend(Op2.getBitVectorOperands())
+      continue
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(Op2.getOperands())
+  # We are done exploring the DFGs
+  return True
 
 
 def FuseCandidatePacks(RerollableCandidatePacks : list):  
@@ -330,6 +421,7 @@ def RunRerollerOnFunction(Function : RoseFunction):
   print("MAPPINGS:")
   print(BlockToRerollableCandidatesMap)
   RemovedOps = []
+  IteratorSuffix = 0
   for Block, RerollableCandidatesList in BlockToRerollableCandidatesMap.items():
     for PackList in RerollableCandidatesList:
       # Lets get the offsets across windows and other info for generating a loop
@@ -346,7 +438,8 @@ def RunRerollerOnFunction(Function : RoseFunction):
       print("LowOffsetsList:")
       print(LowOffsetsList)
       # Generate a loop
-      Loop = RoseForLoop.create("iterator", End, Start, Step)
+      Loop = RoseForLoop.create("iterator." + str(IteratorSuffix), End, Start, Step)
+      IteratorSuffix += 1
       Iterator = Loop.getIterator()
       # Map to track old and new ops.
       OldToNewOPsMap = dict()
