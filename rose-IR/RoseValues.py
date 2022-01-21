@@ -232,11 +232,16 @@ class RoseOperation(RoseValue):
       if Operand == Value:
         self.setOperand(Index, NewValue)
 
-  def print(self):
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
     Name = super().getName()
     String = ""
     if Name != "":
-        String = Name + " = "
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
     String += str(self.Opcode)
     for Index, Operand in enumerate(self.getOperands()):
         String += " " + str(Operand.getType()) + " " + Operand.getName() 
