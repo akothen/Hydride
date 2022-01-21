@@ -18,7 +18,11 @@ class RoseRegion:
       assert self.areChildrenValid()
     self.Keys = Keys
     # This is a unique ID to identify this instance of rose region
-    self.ID = uuid.uuid4()
+    # If this is an instance of undef region, then the ID used is 0.
+    if not isinstance(self, RoseAbstractions.RoseUndefRegion):
+      self.ID = uuid.uuid4()
+    else:
+      self.ID = 0
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
@@ -173,8 +177,8 @@ class RoseRegion:
   def clone(self):
     return deepcopy(self)
 
-  def print(self):
+  def print(self, NumSpace = 0):
     for Child in self.Children:
-        Child.print()
+        Child.print(NumSpace)
 
 
