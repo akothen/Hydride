@@ -1,0 +1,133 @@
+377
+"Starting"
+"SYNTHESIZE----"
+(vec-concat
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 0 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 8 4 8) 0 8)
+   4
+   8
+   2
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 0 4 8) 1 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 12 4 8) 1 8)
+   4
+   8
+   0
+   2)
+  (vec-shuffle-rotate (reg 1) 1 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 0 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 4 4 8) 0 8)
+   4
+   8
+   2
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 4 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 0 4 8) 0 8)
+   4
+   8
+   0
+   2)
+  (vec-shuffle-rotate (reg 1) 1 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 12 4 8) 1 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 0 4 8) 1 8)
+   4
+   8
+   2
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 8 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 12 4 8) 0 8)
+   4
+   8
+   2
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 8 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 4 4 8) 0 8)
+   4
+   8
+   0
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 8 4 8) 1 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 4 4 8) 1 8)
+   4
+   8
+   0
+   2)
+  (vec-shuffle-rotate (reg 1) 1 8)
+  1
+  4
+  8
+  8)
+ (dot-prod
+  (lit (bv #x00 8))
+  (vec-shuffle-ext-special
+   (vec-shuffle-rotate (vec-load (reg 0) 128 4 4 8) 0 8)
+   (vec-shuffle-rotate (vec-load (reg 0) 128 8 4 8) 0 8)
+   4
+   8
+   2
+   2)
+  (vec-shuffle-rotate (reg 1) 0 8)
+  1
+  4
+  8
+  8))
+synth cost: 347
+Does Solution have a symmetric structure?
+#t
