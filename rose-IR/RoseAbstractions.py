@@ -114,7 +114,7 @@ class RoseFunction(RoseValue, RoseRegion):
   
   # Make rose functions hashable
   def __hash__(self):
-    return hash((self.getName(), self.getType()))
+    return hash((self.getName(), self.getType(), self.getRegionID()))
 
   def getNumArgs(self):
     return len(self.ArgList)
@@ -233,15 +233,18 @@ class RoseFunction(RoseValue, RoseRegion):
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
-  def print(self):
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
     # Print function signature first
-    Func_Sig = "function " + self.getName() + " ("
+    Func_Sig = Spaces + "function " + self.getName() + " ("
     for Arg in self.ArgList:
       Func_Sig += (" " + Arg.getName())
     Func_Sig += " ) {"
     print(Func_Sig)
-    RoseRegion.print(self)
-    print("}")
+    RoseRegion.print(self, NumSpace + 1)
+    print(Spaces + "}")
 
 
 
@@ -277,7 +280,7 @@ class RoseBlock(RoseRegion):
 
   # Make rose blocks hashable
   def __hash__(self):
-    return hash(tuple(self.getOperations()))
+    return hash((tuple(self.getOperations()), self.getRegionID()))
   
   def areChildrenValid(self):
     # Children do not have to be instances of regions
@@ -458,7 +461,7 @@ class RoseForLoop(RoseRegion):
 
   # Make rose loops hashable
   def __hash__(self):
-    return hash((self.Iterator, self.Start, self.End, self.Step))
+    return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
 
   def areChildrenValid(self):
     # Children do not have to be instances of regions
@@ -558,14 +561,17 @@ class RoseForLoop(RoseRegion):
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
-  def print(self):
-    LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    LoopHeader = Spaces + "for ([" + self.Iterator.getName() + " (range " \
         + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
-        + " " + str(self.getStep()) + ")])"
+        + " " + str(self.getStep()) + ")]) {"
     print(LoopHeader)
     # Print regions in this loop
-    super().print()
-    print(")")
+    super().print(NumSpace + 1)
+    print(Spaces + "}")
 
 
 ####################################### ROSE IF-THEN ############################################
@@ -609,7 +615,7 @@ class RoseCond(RoseRegion):
 
   # Make rose loops hashable
   def __hash__(self):
-    return hash((self.Condition))
+    return hash((self.Condition, self.getRegionID()))
   
   def areChildrenValid(self):
     # Children do not have to be instances of regions
@@ -746,14 +752,17 @@ class RoseCond(RoseRegion):
       Users.extend(self.getUsersOf(self, Abstraction, "else"))
     return Users
 
-  def print(self):
-    Condtiion = "if (" + self.Condition.getName() + ") {"
+  def print(self, NumSpace = 0):
+    Condtiion = ""
+    for _ in range(NumSpace):
+      Condtiion += " "
+    Condtiion += "if (" + self.Condition.getName() + ") {"
     print(Condtiion)
     # Print regions in this if-else blocks
     for Region in self.getThenRegions():
-      Region.print()
+      Region.print(NumSpace + 1)
     print("} else {")
     for Region in self.getElseRegions():
-      Region.print()
+      Region.print(NumSpace + 1)
     print("}")
 
