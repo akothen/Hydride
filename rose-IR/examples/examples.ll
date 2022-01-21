@@ -158,6 +158,29 @@ function _mm256_unpacklo_epi8 ( %a, %b ) {
 
 
 
+;; Another example
+function _mm512_unpackhi_epi32 ( %a, %b ) {
+  for ([%i (range 0 512 128)]) {
+    %1 = add %i, 127
+    %2 = bvextract %a, %i, %1, 128
+    %4 = bvextract %b, %i, %1, 128
+    for ([%j (range 64 128 32)]) {
+      %5 = add %j, 31
+      %6 = bvextract %2, %j, %5, 32
+      bvinsert %6, %var, %j, %5, 32
+      %7 = bvextract %4, %j, %5, 32
+      %8 = add %j, 32
+      %9 = add %8, 31
+      bvinsert %7, %var, %8, %9, 32
+    }
+    %10 = bvextract %var, 0, 127, 128
+    bvinsert %10, %dst, %i, %1, 128
+  }
+  ret %dst
+}
+
+
+
 
 
 
