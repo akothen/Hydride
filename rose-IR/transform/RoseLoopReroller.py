@@ -592,26 +592,26 @@ def RunRerollerOnFunction(Function : RoseFunction):
         # Handle instructions with indices as operands
         LowCofactor = CoFactactorsList[OpIndex]
         assert LowCofactor != None
-        #if LowCofactor != 1:
-        if type(LowCofactor) != int:
-          LowCofactor = int(1 / LowCofactor)
-          LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-          ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+        if LowCofactor != 1:
+          if type(LowCofactor) != int:
+            LowCofactor = int(1 / LowCofactor)
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+          else:
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
+          Loop.addAbstraction(ScaledIterator)
         else:
-          LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-          ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
-        Loop.addAbstraction(ScaledIterator)
-        #else:
-          #ScaledIterator = Iterator
+          ScaledIterator = Iterator
         LowOffset = LowOffsetsList[OpIndex]
         assert LowOffset != None
-        #if LowOffset != 0:
+        if LowOffset != 0:
         # Generate an add instruction
-        LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
-        LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
-        Loop.addAbstraction(LowIndex)
-        #else:
-          #LowIndex = ScaledIterator
+          LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
+          LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
+          Loop.addAbstraction(LowIndex)
+        else:
+          LowIndex = ScaledIterator
         OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
         HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
         Loop.addAbstraction(HighIndex)
