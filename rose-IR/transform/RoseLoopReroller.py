@@ -1,5 +1,6 @@
 
-from types import prepare_class
+from copy import deepcopy
+from os import confstr
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -8,8 +9,17 @@ from RoseBitVectorOperation import *
 from RoseBitVectorOperations import *
 from RoseOperations import *
 
+import numpy as np
+
 
 def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
+  #print("GetOffsetsBetweenPacks:")
+  #print("PACK1:")
+  #for Op in Pack1:
+  #  Op.print()
+  #print("PACK2:")
+  #for Op in Pack2:
+  #  Op.print()
   assert len(Pack1) == len(Pack2)
   if OffsetsList == []:
     #OffsetsList = list() * len(Pack1)
@@ -29,9 +39,21 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
       OffsetsList[Index] =  None
       continue
     # If this operation has not indexing operands, add None
-    if Pack1[Index].getNumNonBVOperands() == 0:
+    if Pack1[Index].isIndexingBVOp() == False:
       OffsetsList[Index] =  None
       continue
+    # If the bitvector values for the bitvector ops are
+    # different, offset compuation is meaningless.
+    #print(Pack1[Index].getBitVectorOperands())
+    #print(Pack2[Index].getBitVectorOperands())
+    if Pack1[Index].getInputBitVector() != Pack2[Index].getInputBitVector():
+      #print("^^^^^^^^^^")
+      #print("PACK1:")
+      #Pack1[Index].print()
+      #print("PACK2:")
+      #Pack2[Index].print()
+      #print("HERE")
+      return None
     # Output bitwidths for bitvector ops must be equal
     if Pack1[Index].getOutputBitwidth() != Pack2[Index].getOutputBitwidth():
       return None
@@ -54,7 +76,7 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
       continue
     if OffsetsList[Index] != NewOffsetsList:
       return None
-  print(OffsetsList)
+  #print(OffsetsList)
   return OffsetsList
 
 
@@ -81,6 +103,19 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
       continue
     # Now lets see if the window should be added to the window list
     CheckPack = PacksList[len(PacksList) - 1]
+    # The DFGs for the packs have to be the same
+    CheckDFGsAreIsomorphic = DFGsAreIsomorphic(CheckPack, Pack)
+    print("CheckDFGsAreIsomorphic:")
+    print(CheckDFGsAreIsomorphic)
+    if CheckDFGsAreIsomorphic == False:
+      # This is the end of the window list.
+      # If we didn't capture multiple windows, we must discard the list
+      if len(PacksList) != 1:
+        # Add the window list to the candidate list
+        RerollableCandidatesList.append(PacksList)
+      # Empty the list and continue
+      PacksList = [Pack]
+      continue
     NewOffsetsList = GetOffsetsBetweenPacks(CheckPack, Pack, OffsetsList)
     if NewOffsetsList == None:
       # This is the end of the window list.
@@ -118,6 +153,84 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
+# This is necessary to ensure that 2 packs are rerollable.
+def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
+  #print("DATAFLOW PATTERNS ARE SAME")
+  if len(Pack1) != len(Pack2):
+    return False
+  #print("PACK1:")
+  #for Op in Pack1:
+  #  Op.print()
+  #print("PACK2:")
+  #for Op in Pack2:
+  #  Op.print()
+  # Reverse iterate the packs
+  OpsList1 =[Pack1[len(Pack1) - 1]]
+  OpsList2 =[Pack2[len(Pack2) - 1]]
+  Visited = set()
+  while len(OpsList1) != 0:
+    #print("OpsList1:")
+    #print(OpsList1)
+    #print("OpsList2:")
+    #print(OpsList2)
+    assert len(OpsList1) == len(OpsList2)
+    Op1 = OpsList1.pop()
+    Op2 = OpsList2.pop()
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    if not isinstance(Op1, RoseOperation):
+      if isinstance(Op2, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    if not isinstance(Op2, RoseOperation):
+      if isinstance(Op1, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    #print("OP1:")
+    #Op1.print()
+    #print("OP2:")
+    #Op2.print()
+    # If the operations have different opcodes or types, skip
+    if Op1.getOpcode() != Op2.getOpcode():
+      return False
+    if Op1.getType() != Op2.getType():
+      return False
+    # Deal with call operations
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      # Make sure that the callees for the operations are equal.
+      if Op1.getCallee().getName() != Op2.getCallee().getName():
+        return False
+      OpsList1.extend(Op1.getCallOperands())
+      OpsList2.extend(Op2.getCallOperands())
+      continue
+    # If this operation has not indexing operands, add None
+    if Op1.isIndexingBVOp() ==  True:
+      # Output bitwidths for bitvector ops must be equal
+      if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
+        return False
+      OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList2.extend(Op2.getBitVectorOperands())
+      continue
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(Op2.getOperands())
+  # We are done exploring the DFGs
+  return True
+
+
 def FuseCandidatePacks(RerollableCandidatePacks : list):  
   print("BEFORE FUSING:")
   for Pack in RerollableCandidatePacks:
@@ -127,6 +240,7 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
   
   NewCandidatePacks = []
   NewPack = []
+  AllowPackExtension = None  # We do not know yet
   for Pack in RerollableCandidatePacks:
     LastOp = Pack[len(Pack) - 1]
     assert isinstance(LastOp, RoseBVInsertSliceOp)
@@ -149,9 +263,19 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
               MergePacks = False
               break
     if MergePacks == True:
-      NewPack.extend(Pack)
+      if AllowPackExtension != False:
+        NewPack.extend(Pack)
+        AllowPackExtension = True
+      else:
+        # Since packs are not allowed to extend,
+        # create a new pack.
+        NewCandidatePacks.append(NewPack)
+        NewPack = Pack
     else:
       # Add the new pack to the list of new candidate packs
+      if AllowPackExtension == None:
+        print("FUSION OF PACKS NOT ALLOWD!!")
+        AllowPackExtension = False
       NewCandidatePacks.append(NewPack)
       NewPack = Pack
   
@@ -211,7 +335,6 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
 
   # Get a set of rerollable sets
   RerollableCandidatesList = GetValidRerollableCandidates(RerollableCandidatePacks)
-  print(RerollableCandidatesList)
 
   # Add the set to the block map
   BlockToRerollableCandidatesMap[Block] = RerollableCandidatesList
@@ -221,7 +344,7 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
 def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
-  for Abstraction in Region.getChildren():
+  for Abstraction in Region: #Region.getChildren():
     # Run reroller on a nested function
     if isinstance(Abstraction, RoseFunction):
       RunRerollerOnFunction(Abstraction)
@@ -238,52 +361,174 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
   return BlockToRerollableCandidatesMap
 
 
-def GetLowOffsetsWithinPack(Pack : list):
+# The assumption here is that the relationship between the 
+# indices is of the form: A * iterator + B. 
+# We need to find A and B for every indexed bitvector operation.
+def GetLowOffsetsWithinPack(Pack1 : list, Pack2 : list):
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  # Get the low index for the first bvinsert op in the pack
+  StartIndex1 = None
+  StartIndex2 = None
+  for Index in range(len(Pack1)):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    if isinstance(Op1, RoseBVInsertSliceOp):
+      assert isinstance(Op2, RoseBVInsertSliceOp)
+      assert isinstance(Op1.getLowIndex(), RoseConstant)
+      assert isinstance(Op2.getLowIndex(), RoseConstant)
+      StartIndex1 = Op1.getLowIndex().getValue()
+      StartIndex2 = Op2.getLowIndex().getValue()
+      break
+  assert StartIndex1 != None
+  assert StartIndex2 != None
+  print("StartIndex1:")
+  print(StartIndex1)
+  print("StartIndex2:")
+  print(StartIndex2)
   LowOffsetsList = list()
-  StartIndex = None
-  for Op in Pack:
-    if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
+  CoFactactorsList = list()
+  for Index in range(len(Pack1)):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == 0:
+      assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == 0
       LowOffsetsList.append(None)
+      CoFactactorsList.append(None)
       continue
     # Now we are dealing with bitvector ops that index into bitvectors
     # First get the start index and get offsets relative to
-    LowIndex = Op.getLowIndex()
-    assert isinstance(LowIndex, RoseConstant)
-    if StartIndex == None:
-      StartIndex = LowIndex.getValue()
-    LowOffsetsList.append(LowIndex.getValue() - StartIndex)
-  return LowOffsetsList
+    LowIndex1 = Op1.getLowIndex()
+    LowIndex2 = Op2.getLowIndex()
+    assert isinstance(LowIndex1, RoseConstant)
+    assert isinstance(LowIndex2, RoseConstant)
+    # Solve the linear equations
+    # C1 * outer_iterator + C2 * innner_iterator + Offset = 
+    Cofactor = (LowIndex2.getValue() - LowIndex1.getValue())\
+                           / (StartIndex2 - StartIndex1)
+    if Cofactor == int(Cofactor):
+      Cofactor = int(Cofactor)
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
+    print("LowIndex1.getValue():")
+    print(LowIndex1.getValue())
+    print("LowIndex2.getValue():")
+    print(LowIndex2.getValue())
+    print("FLOAT COFACTOR:")
+    print((LowIndex2.getValue() - LowIndex1.getValue())\
+                           / (StartIndex2 - StartIndex1))
+    print("Cofactor:")
+    print(Cofactor)
+    Offset = LowIndex1.getValue() - (Cofactor * StartIndex1)
+    assert Offset == int(Offset)
+    Offset = int(Offset)
+    print("Offset:")
+    print(Offset)
+    LowOffsetsList.append(Offset)
+    CoFactactorsList.append(Cofactor)
+  return LowOffsetsList, CoFactactorsList
 
 
 def GetFirstLowIndexInPack(Pack : list):
+  print("GetFirstLowIndexInPack:")
   for Op in Pack:
-    if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
-      continue
-    # Now we are dealing with bitvector ops that index into bitvectors
-    # First get the start index and get offsets relative to
-    assert isinstance(Op.getLowIndex(), RoseConstant)
-    return Op.getLowIndex().getValue()
-  return None
+    Op.print()
+  StartIndex = None
+  for Op in Pack:
+    if isinstance(Op, RoseBVInsertSliceOp):
+      assert isinstance(Op.getLowIndex(), RoseConstant)
+      StartIndex = Op.getLowIndex().getValue()
+      break
+  assert StartIndex != None
+  return StartIndex
 
 
 # We just get the difference between 2 different packs
 def GetStepForRerolledLoop(Pack1 : list, Pack2 : list):
-  assert len(Pack1) == len(Pack2)
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  Offset = None
   for Index in range(len(Pack1)):
-    assert Pack1[Index].getOpcode() == Pack2[Index].getOpcode()
-    assert Pack1[Index].getType() == Pack2[Index].getType()
-    if isinstance(Pack1[Index], RoseCallOp):
+    if isinstance(Pack1[Index], RoseBVInsertSliceOp):
+      assert isinstance(Pack2[Index], RoseBVInsertSliceOp)
+      LowIndex1 = Pack1[Index].getLowIndex()
+      LowIndex2 = Pack2[Index].getLowIndex()
+      assert isinstance(LowIndex1, RoseConstant)
+      assert isinstance(LowIndex2, RoseConstant)
+      Offset = (LowIndex2.getValue() - LowIndex1.getValue())
+      break
+  assert Offset != None
+  return Offset
+
+
+# This aims to see if the rerollable packs can be rerolled more again
+def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
+  print("****************************************************")
+  print("RerollableCandidatesList:")
+  for PackList in RerollableCandidatesList:
+    print("PACKLIST:")
+    for Pack in PackList:
+      print("PACK:")
+      for Op in Pack:
+        Op.print()
+  # Puts packlists that are isomorphic together
+  CandidateListsOfIsomorphicPackLists = []
+  IsomorphicPackLists = []
+  MergedPackList = []
+  OffsetsList = []
+  for  PackListIndex in range(len(RerollableCandidatesList)):
+    if PackListIndex in MergedPackList:
       continue
-    assert Pack1[Index].getOutputBitwidth() == Pack2[Index].getOutputBitwidth()
-    if Pack1[Index].getNumNonBVOperands() == 0:
-      continue
-    # Get low offsets between instructions
-    LowIndex1 = Pack1[Index].getLowIndex()
-    LowIndex2 = Pack2[Index].getLowIndex()
-    assert isinstance(LowIndex1, RoseConstant)
-    assert isinstance(LowIndex2, RoseConstant)
-    return (LowIndex2.getValue() - LowIndex1.getValue())
-  return None
+    PackList = RerollableCandidatesList[PackListIndex]
+    if IsomorphicPackLists == []:
+      IsomorphicPackLists = [PackList]
+      MergedPackList.append(PackListIndex)
+    for CheckPackListIndex in range((PackListIndex + 1), len(RerollableCandidatesList)):
+      if CheckPackListIndex in MergedPackList:
+        continue
+      CheckPackList = RerollableCandidatesList[CheckPackListIndex]
+      # We try to look for isomorphism between the data flows
+      # of packlists.
+      TailPackList = IsomorphicPackLists[len(IsomorphicPackLists) - 1]
+      print("TailPackList:")
+      for Op in TailPackList[0]:
+          Op.print()
+      print("CheckPackList[0]:")
+      for Op in CheckPackList[0]:
+          Op.print()
+      CheckDFGsAreIsomorphic = DFGsAreIsomorphic(TailPackList[0], CheckPackList[0])
+      print("++++CheckDFGsAreIsomorphic:")
+      print(CheckDFGsAreIsomorphic)
+      if CheckDFGsAreIsomorphic == False:
+        # Nothing to do here, just skip this pack list
+        continue
+      # Now we get if the offsets are equal
+      NewOffsetsList = GetOffsetsBetweenPacks(TailPackList[0], CheckPackList[0], OffsetsList)
+      print("++++NewOffsetsList:")
+      print(NewOffsetsList)
+      if NewOffsetsList == None:
+        # Nothing to do here, just skip this pack list
+        continue
+      # If the offsets list is empty. Fill it up.
+      if OffsetsList == []:
+        OffsetsList = NewOffsetsList
+      assert OffsetsList == NewOffsetsList
+      MergedPackList.append(CheckPackListIndex)
+      IsomorphicPackLists.append(CheckPackList)
+    if len(IsomorphicPackLists) != 1:
+      CandidateListsOfIsomorphicPackLists.append(IsomorphicPackLists)
+    IsomorphicPackLists = []
+    OffsetsList = []
+  print("================================================")
+  for PackLists in CandidateListsOfIsomorphicPackLists:
+    print("+++++++PACKLISTS:")
+    for PackList in PackLists:
+      print("-------PACKLIST:")
+      for Pack in PackList:
+        print("PACK:")
+        for Op in Pack:
+          Op.print()
+  return CandidateListsOfIsomorphicPackLists
 
 
 def RunRerollerOnFunction(Function : RoseFunction):
@@ -298,13 +543,14 @@ def RunRerollerOnFunction(Function : RoseFunction):
                                     BlockToRerollableCandidatesMap)
   
   # Now that the map is populated, we reroll all the candidates
-  print("MAPPINGS:")
-  print(BlockToRerollableCandidatesMap)
   RemovedOps = []
+  IteratorSuffix = 0
   for Block, RerollableCandidatesList in BlockToRerollableCandidatesMap.items():
+    CandidateListsOfIsomorphicPackLists = GetValidCandidatesRerollableTwice(RerollableCandidatesList)
+
     for PackList in RerollableCandidatesList:
       # Lets get the offsets across windows and other info for generating a loop
-      LowOffsetsList = GetLowOffsetsWithinPack(PackList[0])
+      LowOffsetsList, CoFactactorsList = GetLowOffsetsWithinPack(PackList[0], PackList[1])
       Step = GetStepForRerolledLoop(PackList[0], PackList[1])
       Start = GetFirstLowIndexInPack(PackList[0])
       End = GetFirstLowIndexInPack(PackList[len(PackList) - 1])
@@ -316,37 +562,57 @@ def RunRerollerOnFunction(Function : RoseFunction):
       print(Step)
       print("LowOffsetsList:")
       print(LowOffsetsList)
-      # Generate a loop
-      Loop = RoseForLoop.create("iterator", End, Start, Step)
+      # Because of the way ranges in Rosette work, we have to add step to end before
+      # generating a loop
+      End += Step
+      Loop = RoseForLoop.create("iterator." + str(IteratorSuffix), End, Start, Step)
+      IteratorSuffix += 1
       Iterator = Loop.getIterator()
       # Map to track old and new ops.
       OldToNewOPsMap = dict()
       # Insert operations in the generated loop.
       for OpIndex, Op in enumerate(PackList[0]):
         # Handle ops that do not have indices in operands
-        if isinstance(Op, RoseCallOp) or Op.getNumNonBVOperands() == 0:
+        if isinstance(Op, RoseCallOp) or Op.isIndexingBVOp() == 0:
           NewOp = Op.clone()
           for Index, Operand in enumerate(Op.getOperands()):
-            NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
-            if NewOperand == RoseUndefValue():
-              # Operand is coming from some other source, just use 
-              # the same operand as the old op.
+            # If the operand is a constant value, we just copy constants over
+            if isinstance(Operand, RoseConstant):
               NewOperand = Op.getOperand(Index)
+            else:
+              NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+              if NewOperand == RoseUndefValue():
+                # Operand is coming from some other source, just use 
+                # the same operand as the old op.
+                NewOperand = Op.getOperand(Index)
             NewOp.setOperand(Index, NewOperand)
           OldToNewOPsMap[Op] = NewOp
           Loop.addAbstraction(NewOp)
           continue
         # Handle instructions with indices as operands
+        LowCofactor = CoFactactorsList[OpIndex]
+        assert LowCofactor != None
+        if LowCofactor != 1:
+          if type(LowCofactor) != int:
+            LowCofactor = int(1 / LowCofactor)
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+          else:
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
+          Loop.addAbstraction(ScaledIterator)
+        else:
+          ScaledIterator = Iterator
         LowOffset = LowOffsetsList[OpIndex]
         assert LowOffset != None
         if LowOffset != 0:
-          # Generate an add instruction
-          LowOffsetVal = RoseConstant(LowOffset, Iterator.getType())
-          LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [Iterator, LowOffsetVal]) 
+        # Generate an add instruction
+          LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
+          LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
           Loop.addAbstraction(LowIndex)
         else:
-          LowIndex = Iterator
-        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth(), Iterator.getType())
+          LowIndex = ScaledIterator
+        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
         HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
         Loop.addAbstraction(HighIndex)
         NewOp = Op.clone()
@@ -402,11 +668,16 @@ def RunRerollerOnFunction(Function : RoseFunction):
       ParentRegion = Block.getParent()
       ParentRegion.eraseChild(Block)
 
+  
+  
+
 
 # Runs Loop reroller
 def Run(Function : RoseFunction):
   print("RUN LOOP REROLLER")
   RunRerollerOnFunction(Function)
+  print("___________")
+  print("\n\n\n\n")
   Function.print()
 
 

@@ -58,7 +58,7 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
 def RunCSEOnRegion(Region, OpToOpMap : dict):
   # Iterate over all the contents of this function
   assert not isinstance(Region, RoseBlock)
-  for Abstraction in Region.getChildren():
+  for Abstraction in Region:
     # Run CSE on a nested function
     if isinstance(Abstraction, RoseFunction):
       RunCSEOnFunction(Abstraction)
@@ -66,6 +66,7 @@ def RunCSEOnRegion(Region, OpToOpMap : dict):
     # CSE only happens on blocks
     if not isinstance(Abstraction, RoseBlock):
       print("REGION:")
+      print(Abstraction)
       Abstraction.print()
       OpToOpMap = RunCSEOnRegion(Abstraction, OpToOpMap)
       continue

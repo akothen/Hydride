@@ -276,6 +276,13 @@
                                                       (vector-load img img_size (+ (* s imgC) offset) filtC prec)
                                                       )
                                             ))
+                          ;(displayln "Slice")
+                          ;(display "(")
+                          ;(display i)
+                          ;(display ", ")
+                          ;(display j)
+                          ;(displayln ")")
+                          ;(print-mat imgSlice filtR filtC prec)
                           (apply bvadd
                             (for/list ([k (reverse (range numFilt))])
                                       (bvmul 
@@ -1004,3 +1011,360 @@
 
 ;(display "v2 ")
 ;(displayln v2)
+(clear-vc!)
+(define (synth_check arg0 arg1)
+  (concat 
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+12
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+0
+8
+)
+4
+8
+0
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+0
+4
+8
+)
+1
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+4
+4
+8
+)
+1
+8
+)
+4
+8
+0
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+4
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+0
+4
+8
+)
+0
+8
+)
+4
+8
+2
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+0
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+12
+4
+8
+)
+0
+8
+)
+4
+8
+0
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+4
+4
+8
+)
+1
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+1
+8
+)
+4
+8
+0
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+4
+4
+8
+)
+0
+8
+)
+4
+8
+2
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+12
+4
+8
+)
+0
+8
+)
+4
+8
+0
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+1
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+12
+4
+8
+)
+1
+8
+)
+4
+8
+2
+2
+)
+1
+4
+8
+8
+)
+(dsl_inst_0 
+(bv #x00 8)
+arg1
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+12
+4
+8
+)
+0
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+8
+4
+8
+)
+0
+8
+)
+4
+8
+2
+2
+)
+1
+4
+8
+8
+)
+)
+
+  )
+
+(println "Post verify---")
+
+(define-symbolic sym2_arg0 (bitvector 128))
+(define-symbolic sym2_arg1 (bitvector 32))
+
+(define cex2 (time
+               (verify
+(assert (equal? (tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8)   (synth_check sym2_arg0 sym2_arg1)))
+;(assert (equal? (ext-bv (tensor-conv2D sym2_arg0 sym2_arg1 4 4 2 2 8) 0 8)   (ext-bv (synth_check sym2_arg0 sym2_arg1) 0 8)))
+  )
+))
+
+(assert (sat? cex2) "Verified")
+(println cex2)
+
+(define v1 (evaluate sym2_arg0 cex2))
+(define v2 (evaluate sym2_arg1 cex2))
+
+(display "v1 ")
+(displayln v1)
+
+
+(display "v2 ")
+(displayln v2)
+
+

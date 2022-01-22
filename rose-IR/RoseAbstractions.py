@@ -114,7 +114,7 @@ class RoseFunction(RoseValue, RoseRegion):
   
   # Make rose functions hashable
   def __hash__(self):
-    return hash((self.getName(), self.getType()))
+    return hash((self.getName(), self.getType(), self.getRegionID()))
 
   def getNumArgs(self):
     return len(self.ArgList)
@@ -233,15 +233,18 @@ class RoseFunction(RoseValue, RoseRegion):
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
-  def print(self):
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
     # Print function signature first
-    Func_Sig = "function " + self.getName() + " ("
+    Func_Sig = Spaces + "function " + self.getName() + " ("
     for Arg in self.ArgList:
       Func_Sig += (" " + Arg.getName())
     Func_Sig += " ) {"
     print(Func_Sig)
-    RoseRegion.print(self)
-    print("}")
+    RoseRegion.print(self, NumSpace + 1)
+    print(Spaces + "}")
 
 
 
@@ -277,7 +280,7 @@ class RoseBlock(RoseRegion):
 
   # Make rose blocks hashable
   def __hash__(self):
-    return hash(tuple(self.getOperations()))
+    return hash((tuple(self.getOperations()), self.getRegionID()))
   
   def areChildrenValid(self):
     # Children do not have to be instances of regions
@@ -435,21 +438,6 @@ class RoseForLoop(RoseRegion):
         Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
         return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion()) 
     assert(False)
-  
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren():
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseFunction) \
-    or isinstance(Child, RoseForLoop) \
-    or isinstance(Child, RoseCond) \
-    or isinstance(Child, RoseBlock):
-      return True
-    return False
 
   def __eq__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
@@ -470,6 +458,25 @@ class RoseForLoop(RoseRegion):
     assert isinstance(Other, RoseForLoop)
     return self.Iterator != Other.Iterator or self.Start != Other.Start \
         or self.End != Other.End or self.Step != Other.Step or super().__ne__(Other)
+
+  # Make rose loops hashable
+  def __hash__(self):
+    return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
+
+  def areChildrenValid(self):
+    # Children do not have to be instances of regions
+    for Child in self.getChildren():
+      if self.isChildValid(Child) == False:
+        return False
+    return True
+  
+  def isChildValid(self, Child):
+    if isinstance(Child, RoseFunction) \
+    or isinstance(Child, RoseForLoop) \
+    or isinstance(Child, RoseCond) \
+    or isinstance(Child, RoseBlock):
+      return True
+    return False
 
   def getIterator(self):
     return self.Iterator
@@ -554,14 +561,17 @@ class RoseForLoop(RoseRegion):
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
-  def print(self):
-    LoopHeader = "(for ([" + self.Iterator.getName() + " (range " \
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    LoopHeader = Spaces + "for ([" + self.Iterator.getName() + " (range " \
         + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
-        + " " + str(self.getStep()) + ")])"
+        + " " + str(self.getStep()) + ")]) {"
     print(LoopHeader)
     # Print regions in this loop
-    super().print()
-    print(")")
+    super().print(NumSpace + 1)
+    print(Spaces + "}")
 
 
 ####################################### ROSE IF-THEN ############################################
@@ -570,34 +580,20 @@ class RoseForLoop(RoseRegion):
 class RoseCond(RoseRegion):
   def __init__(self, Condition : RoseValue, ThenRegionList : list, ElseRegionList : list, 
               ParentRegion : RoseRegion):
+    # Condition must be a 1-bit bitvector or a boolean
+    assert Condition.getType().isBitVectorTy() or Condition.getType().isBooleanTy()
+    if Condition.getType().isBitVectorTy():
+      assert Condition.getType().getBitwidth() == 1
     Children = {}
     Children["then"] = ThenRegionList
     Children["else"] = ElseRegionList
     self.Condition = Condition
-    super().__init__(Children, ParentRegion)
+    super().__init__(Children, ParentRegion, ["then", "else"])
   
   @staticmethod
   def create(Condition : RoseValue, ThenRegionList : list = [], ElseRegionList : list = [], 
               ParentRegion : RoseRegion = RoseUndefRegion()):
     return RoseCond(Condition, ThenRegionList, ElseRegionList, ParentRegion)
-  
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren()["then"]:
-      if self.isChildValid(Child) == False:
-        return False
-    for Child in self.getChildren()["else"]:
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseFunction) \
-    or isinstance(Child, RoseForLoop) \
-    or isinstance(Child, RoseCond) \
-    or isinstance(Child, RoseBlock):
-      return True
-    return False
   
   def __eq__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
@@ -616,6 +612,28 @@ class RoseCond(RoseRegion):
         return True
     assert isinstance(Other, RoseCond)
     return self.Condition != Other.Condition or super().__ne__(Other)
+
+  # Make rose loops hashable
+  def __hash__(self):
+    return hash((self.Condition, self.getRegionID()))
+  
+  def areChildrenValid(self):
+    # Children do not have to be instances of regions
+    for Child in self.getChildren()["then"]:
+      if self.isChildValid(Child) == False:
+        return False
+    for Child in self.getChildren()["else"]:
+      if self.isChildValid(Child) == False:
+        return False
+    return True
+  
+  def isChildValid(self, Child):
+    if isinstance(Child, RoseFunction) \
+    or isinstance(Child, RoseForLoop) \
+    or isinstance(Child, RoseCond) \
+    or isinstance(Child, RoseBlock):
+      return True
+    return False
 
   def getCondition(self):
     return self.Condition
@@ -659,6 +677,12 @@ class RoseCond(RoseRegion):
   def addAbstrctionInElseRegion(self, Abstraction):
     return self.addAbstraction(Abstraction, "else")
   
+  def getKeyForThenRegion(self):
+    return "then"
+
+  def getKeyForElseRegion(self):
+    return "else"  
+
   # Replace the given abstraction with a new one
   def replaceAbstraction(self, OldAbstraction, NewAbstraction, Key = None):
     if Key != None:
@@ -673,17 +697,72 @@ class RoseCond(RoseRegion):
         if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
           return True
     else:
-      if self.replaceAbstraction(self, OldAbstraction, NewAbstraction, "then"):
+      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "then"):
         return True
-      if self.replaceAbstraction(self, OldAbstraction, NewAbstraction, "else"):
+      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "else"):
         return True
     return False
 
-  def print(self):
-    Condtiion = "(if (" + self.Condition.getName() + ")"
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Abstraction, NewAbstraction, Key = None):
+    if Key != None:
+      print("REPLACES USES IN FUNCTION")
+      assert isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      assert isinstance(NewAbstraction, RoseOperation) \
+          or isinstance(NewAbstraction, RoseArgument)
+      assert Abstraction.getType() == NewAbstraction.getType()
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        Child.replaceUsesWith(Abstraction, NewAbstraction)
+    else:
+      self.replaceUsesWith(Abstraction, NewAbstraction, "then")
+      self.replaceUsesWith(Abstraction, NewAbstraction, "else")
+
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction, Key = None):
+    if Key != None:
+      assert isinstance(Abstraction, RoseFunction) \
+          or isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        if Child.hasUsesOf(Abstraction) == True:
+          return True
+    else:
+      if self.hasUsesOf(Abstraction, "then"):
+        return True
+      if self.hasUsesOf(Abstraction, "else"):
+        return True
+    return False
+
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction, Key = None):
+    if Key != None:
+      assert isinstance(Abstraction, RoseFunction) \
+          or isinstance(Abstraction, RoseOperation) \
+          or isinstance(Abstraction, RoseArgument)
+      Users = []
+      for Child in self.getChildren()[Key]:
+        assert self.isChildValid(Child)
+        Users.extend(Child.getUsersOf(Abstraction))
+    else:
+      Users = []
+      Users.extend(self.getUsersOf(self, Abstraction, "then"))
+      Users.extend(self.getUsersOf(self, Abstraction, "else"))
+    return Users
+
+  def print(self, NumSpace = 0):
+    Condtiion = ""
+    for _ in range(NumSpace):
+      Condtiion += " "
+    Condtiion += "if (" + self.Condition.getName() + ") {"
     print(Condtiion)
     # Print regions in this if-else blocks
-    self.ThenRegionList.print()
-    self.ElseRegionList.print()
-    print(")")
+    for Region in self.getThenRegions():
+      Region.print(NumSpace + 1)
+    print("} else {")
+    for Region in self.getElseRegions():
+      Region.print(NumSpace + 1)
+    print("}")
 

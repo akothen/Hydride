@@ -2,19 +2,27 @@
 import RoseAbstractions
 
 from copy import deepcopy
+import uuid
 
 
 # Abstract class representing a region.
 # Regions can contain loops, function, blocks, etc.
 # Regions can be contained in functions and loops.
 class RoseRegion:
-  def __init__(self, Children, Parent):
+  def __init__(self, Children, Parent, Keys = None):
     self.Parent = Parent
     if self.Parent is not None:
       assert self.isParentValid(Parent)
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
+    self.Keys = Keys
+    # This is a unique ID to identify this instance of rose region
+    # If this is an instance of undef region, then the ID used is 0.
+    if not isinstance(self, RoseAbstractions.RoseUndefRegion):
+      self.ID = uuid.uuid4()
+    else:
+      self.ID = 0
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
@@ -23,6 +31,30 @@ class RoseRegion:
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
     return self.Children != Other.Children or self.Parent != Other.Parent
+  
+  def __iter__(self):
+    # Undef region is not iterable
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    self.KeyIndex = 0
+    self.ChildIndex = -1
+    return self
+  
+  def __next__(self):
+    self.ChildIndex += 1
+    if self.Keys != None:
+      while self.ChildIndex == self.getNumChildren(self.Keys[self.KeyIndex]):
+        if self.KeyIndex == len(self.Keys) - 1:
+          # We are done iterating this cond region
+          raise StopIteration
+        # Now we move on to the next subregion
+        self.KeyIndex += 1
+        self.ChildIndex = 0
+      return self.getChild(self.ChildIndex, self.Keys[self.KeyIndex])
+    else:
+      if self.ChildIndex == self.getNumChildren():
+        raise StopIteration
+      return self.getChild(self.ChildIndex)
+    
   
   def areChildrenValid(self):
     if isinstance(self, RoseAbstractions.RoseUndefRegion):
@@ -39,6 +71,9 @@ class RoseRegion:
     if Parent == RoseAbstractions.RoseUndefRegion():
       return True
     return False
+
+  def getRegionID(self):
+    return self.ID
   
   def getChildren(self):
     return self.Children
@@ -70,12 +105,14 @@ class RoseRegion:
       return self.Children[Key].index(Child)
 
   def getTailChild(self, Key = None):
+    print("KEY:")
+    print(Key)
     if self.isEmpty(Key):
       return RoseAbstractions.RoseUndefRegion()
     if Key == None:
       return self.Children[len(self.Children) - 1]
     else:
-      return self.Children[Key][len(self.Children) - 1]
+      return self.Children[Key][len(self.Children[Key]) - 1]
   
   def isEmpty(self, Key = None):
     if Key == None:
@@ -88,7 +125,7 @@ class RoseRegion:
     if Key == None:
       self.Children[len(self.Children) - 1] = UpdatedChild
     else:
-      self.Children[Key][len(self.Children) - 1] = UpdatedChild
+      self.Children[Key][len(self.Children[Key]) - 1] = UpdatedChild
   
   # Get the first function enclosing this region
   def getFunction(self):
@@ -140,8 +177,8 @@ class RoseRegion:
   def clone(self):
     return deepcopy(self)
 
-  def print(self):
+  def print(self, NumSpace = 0):
     for Child in self.Children:
-        Child.print()
+        Child.print(NumSpace)
 
 

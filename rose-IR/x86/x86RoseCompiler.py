@@ -26,6 +26,8 @@ class RoseContext:
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
     self.Variables = dict()    # Name --> ID
+    # Map abstractions to the key
+    self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
   
   def isCompiledAbstraction(self, ID : str):
     if ID in self.CompiledAbstractions:
@@ -34,7 +36,10 @@ class RoseContext:
   
   def addCompiledAbstraction(self, ID : str, Abstraction):
     self.CompiledAbstractions[ID] = Abstraction
-  
+
+  def addKeyForCompiledAbstraction(self, Key, Abstraction):
+    self.CompiledAbstractionsKeys[Abstraction] = Key
+    
   def updateCompiledAbstraction(self, ID : str, NewAbstraction):
       assert ID in self.CompiledAbstractions
       self.CompiledAbstractions[ID] = NewAbstraction
@@ -68,16 +73,18 @@ class RoseContext:
 
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
-    
-  def popRootAbstraction(self):
-    return self.RootAbstractions.pop()
   
   def getRootAbstraction(self):
     return self.RootAbstractions[len(self.RootAbstractions) - 1]
   
   def addAbstractionToIR(self, Abstraction):
-    TailAbstraction = self.popRootAbstraction()
-    TailAbstraction.addAbstraction(Abstraction)
+    TailAbstraction = self.RootAbstractions.pop()
+    if TailAbstraction in self.CompiledAbstractionsKeys:
+      Key = self.CompiledAbstractionsKeys[TailAbstraction]
+      TailAbstraction.addAbstraction(Abstraction, Key)
+      self.CompiledAbstractionsKeys[TailAbstraction] = Key
+    else:
+      TailAbstraction.addAbstraction(Abstraction)
     self.pushRootAbstraction(TailAbstraction)
 
   def setParentContext(self, Context):
@@ -102,8 +109,7 @@ class RoseContext:
       print("VARIABLE NAME:")
       print(Name)
       self.Variables[Name] = ID
-
-  
+ 
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
       # Get the ID for the same variable name in curreent context
@@ -204,17 +210,12 @@ def CompileNumber(Num, Context : x86RoseContext):
   print("COMPILE NUMBER")
   print("NUM:")
   print(Num)
-  if isinstance(Num.val, int):
-    if Context.isCompileIndexFlagSet():
-      ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
-      #Context.getIndexNumberType())
-    else:
-      ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
-    return ConstantVal
+  if Context.isCompileIndexFlagSet():
+    ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+    #Context.getIndexNumberType())
   else:
-    # TODO: These needs fixing
-    NonConstantVal = Num.val
-    return NonConstantVal
+    ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  return ConstantVal
 
 
 def CompileVar(Variable, Context):
@@ -585,8 +586,8 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
   or (type(RHS.a) == BitIndex and type(RHS.b) == BitIndex)) \
   and NeedToExtendOperandSize(RHS.op)) \
   or (type(RHS.a) == Call and type(RHS.b) == Call \
-  and BinaryExpr.a.funcname in ZeroExtendsSize \
-   and BinaryExpr.b.funcname in ZeroExtendsSize):
+  and RHS.a.funcname in ZeroExtendsSize \
+   and RHS.b.funcname in ZeroExtendsSize):
       RHSType = GetExpressionType(RHS.a, Context)
       if not RHSType.isUndefTy():
         return RoseType.getBitVectorTy(RHSType.getBitwidth() * 2)
@@ -724,6 +725,14 @@ def CompileUpdate(Update, Context : x86RoseContext):
   print(type(RHSExprVal))
   print("COMPILED RHS")
   RHSExprVal.print()
+
+  # There are some cases where RHS is just a constant value.
+  # This has to handled especially because constants' IDs are not
+  # cached into the context, but here we have to.
+  #if isinstance(RHSExprVal, RoseConstant):
+  # We add this assignment to the 
+  # Add the constant ID to the context
+  #Context.addCompiledAbstraction(Update.rhs.id, RHSExprVal)
 
   if type(Update.lhs) == Var:
     # Get the ID associated with the RHS value
@@ -947,7 +956,7 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   Operand2.print()
   Operand2.getType().print()
   # Fix the operands' bitwidths
-  if Operand1.getType().getBitwidth() != Operand2.getType().getBitwidth():
+  if Operand1.getType() != Operand2.getType():
     if isinstance(Operand1, RoseConstant):
       Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
     elif isinstance(Operand2, RoseConstant):
@@ -1021,12 +1030,18 @@ def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext)
     return False
   # Builtin extends size. Check if we have already done that.
   [Operation] = ArgValuesList
+
+  # If the operation extends the size, if the bitwidth is already large enough, 
+  # it needs not extension, in which case there is nothing to do.
+  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
+  if Operation.getType().getBitwidth() >= BuiltinExtendSize:
+    return True
+
   if not Context.isSizeExtended(Operation):
     return False
   # So the operands have alrady been extended. 
   # Now we need to ensure the size of operation is the same
   # as what we intend to extend using the builtin.
-  BuiltinExtendSize = BuiltinExtendsSize[CallStmt.funcname]
   if BuiltinExtendSize != Context.getExtendedSize(Operation):
     # The size to which the builtin will extend has to be greater
     # than the size to which extension has already taken place.
@@ -1066,6 +1081,7 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   
   # Check if this is a call to a builtin function
   Operation = Builtins[CallStmt.funcname](CallStmt.id, ArgValuesList)
+
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -1237,15 +1253,31 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   if Context.isCompiledAbstraction(ForStmt.id):
     return
 
-  # Generate an empty for loop
+  # Compile the loop bounds and step
   print("COMPILING FOR LOOP")
   print("FOR EXPR:")
   print(ForStmt)
-  One = RoseConstant.create(1, RoseType.getIntegerTy(32))
-  MinusOne = RoseConstant.create(-1, RoseType.getIntegerTy(32))
-  Step = One if ForStmt.inc else MinusOne
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
+  assert Begin.getType() == End.getType()
+  One = RoseConstant.create(1, Begin.getType())
+  MinusOne = RoseConstant.create(-1, Begin.getType())
+  Step = One if ForStmt.inc else MinusOne
+
+  # Modify the end bound of the loop by adding 1 to it.
+  # This is because of the way loop bounds are expressed in
+  # in x86 pseudocode and rosette.
+  if isinstance(End, RoseConstant):
+    End = RoseConstant.create(End.getValue() + 1, End.getType())
+  else:
+    # Add an add instruction
+    End = RoseAddOp.create("end.bound." + End.getName(), [End, Step])
+    # Add this op to the IR
+    Context.addAbstractionToIR(End)
+    # Add this updated value to the context
+    Context.updateCompiledAbstraction(ForStmt.end, End)
+
+  # Generate the loop
   Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
 
   # Add loop as root abstraction 
@@ -1293,15 +1325,26 @@ def CompileIf(IfStmt, Context : x86RoseContext):
   ChildContext = x86RoseContext()
   ChildContext.pushRootAbstraction(CondRegion)
 
+  # Add the then key for this cond region
+  ThenRegionKey = CondRegion.getKeyForThenRegion()
+  ChildContext.addKeyForCompiledAbstraction(ThenRegionKey, CondRegion)
+
   # Add the generated cond region to the current context
   Context.addCompiledAbstraction(IfStmt.id, CondRegion)
 
-  # Add a new context for this loop
+  # Add a new context for this cond region
   Context.createContext(IfStmt.id, ChildContext)
 
-  # Compile all the statements in this cond region
+  # Compile all the statements in then cond region
   for Stmt in IfStmt.then:
     CompileStatement(Stmt, ChildContext)
+  
+  # Update the key for the cond key
+  UpdatedCondRegion = ChildContext.getRootAbstraction()
+  ElseRegionKey = CondRegion.getKeyForElseRegion()
+  ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
+ 
+  # Compile all the statement in the otherwise cond region
   for Stmt in IfStmt.otherwise:
     CompileStatement(Stmt, ChildContext)
 
@@ -1444,8 +1487,7 @@ def HandleToSignExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
-    if Value.getType().getBitwidth() > Bitwidth:
-      return Value
+    assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
@@ -1455,8 +1497,7 @@ def HandleToZeroExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
-    if Value.getType().getBitwidth() > Bitwidth:
-      return Value
+    assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
   
   return LamdaImplFunc
