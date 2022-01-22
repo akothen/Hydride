@@ -28,17 +28,14 @@ if __name__ != '__main__':
   def p_error(p):
     raise SyntaxError('Parser error: {}'.format(p))
 
-def p_stmt_semi(p):
-  '''
-  stmt : stmt SEMICOLON
-  '''
-  p[0] = p[1]
-
+# TODO: There is probably a better way to handle this? 
 def p_stmts(p):
   '''stmts : stmt
+           | stmt SEMICOLON
            | stmts stmt
+           | stmts stmt SEMICOLON
   '''
-  if len(p) == 2:
+  if not isinstance(p[1], list):
     p[0] = [p[1]]
   else:
     p[0] = p[1] + [p[2]]
@@ -51,11 +48,15 @@ def p_stmt_expr(p):
   'stmt : expr'
   p[0] = p[1]
 
+# TODO: Store type information? 
+def p_stmt_decl(p):
+  '''stmt : TYPE ID UPDATE expr'''
+  p[0] = Update(p[2], p[4])
+
 def p_expr_assign(p):
   'expr : expr UPDATE expr'
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], p[3])
-
 
 def p_expr_plus_equal(p):
   'expr : expr PLUS_EQUAL expr'
@@ -67,24 +68,48 @@ def p_expr_or_equal(p):
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], new_binary_expr(p.parser, op='|', a=p[1], b=p[3]))
 
+def p_expr_empty(p):
+  '''expr_empty : expr 
+              | '''
+  if len(p) == 2:
+    p[0] = p[1]
+  else:
+    p[0] = None
+
+def p_stmt_if(p):
+  'stmt : IF LPAREN expr RPAREN LBRACKET stmts RBRACKET'
+  expr_id = "if." + GenUniqueID(parser)
+  p[0] = If(p[3], p[6], None, expr_id)
+
+def p_stmt_if_single(p):
+  'stmt : IF LPAREN expr RPAREN stmt '
+  expr_id = "if." + GenUniqueID(parser)
+  p[0] = If(p[3], [p[5]], None, expr_id)
 
 def p_stmt_for(p):
-  'stmt : FOR LPAREN ID UPDATE expr SEMICOLON expr SEMICOLON expr RPAREN LBRACKET stmts RBRACKET'
-  it_id = "iterator." + GenUniqueID(parser)
+  'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN LBRACKET stmts RBRACKET'
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(Var(p[3], it_id), p[5], p[7], p[12], True, expr_id)
+  p[0] = For(p[3], p[5], p[7], p[10], expr_id)
 
-
+def p_stmt_for_single(p):
+  'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN stmt'
+  expr_id = "for." + GenUniqueID(parser)
+  p[0] = For(p[3], p[5], p[7], [p[9]], expr_id)
 
 def p_expr_call(p):
-  'expr : ID LPAREN args RPAREN'
+  '''expr : ID LPAREN args RPAREN
+          | ID LPAREN args RPAREN COLON ID'''
   expr_id = "call." + GenUniqueID(parser)
-  p[0] = Call(p[1], p[3], expr_id)
+  if len(p) == 5:
+    p[0] = Call(p[1], p[3], None, expr_id)
+  else:
+    p[0] = Call(p[1], p[3], p[6], expr_id)
+  
 
 def p_expr_call_no_args(p):
   'expr : ID LPAREN RPAREN'
   expr_id = "call." + GenUniqueID(parser)
-  p[0] = Call(p[1], [], expr_id)
+  p[0] = Call(p[1], [], None, expr_id)
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
@@ -120,7 +145,8 @@ def p_expr_select(p):
 
 def p_expr_increment(p):
   'expr : expr INC'
-  parse_unary('INC', p)
+  expr_id = "unaryexpr." + GenUniqueID(parser)
+  p[0] = UnaryExpr('INC', p[1], expr_id)
 
 def p_expr_not(p):
   'expr : NOT expr'
@@ -141,6 +167,10 @@ def p_expr_bitwise_and(p):
 def p_expr_bitwise_or(p):
   'expr : expr BITWISE_OR expr'
   parse_binary('|', p)
+
+def p_expr_bitwise_xor(p):
+  'expr : expr BITWISE_XOR expr'
+  parse_binary('^', p)
 
 def p_indirect_binary_op(p):
   'expr : expr OP expr'
@@ -181,6 +211,16 @@ def p_expr_lshift(p):
 def p_expr_rshift(p):
   'expr : expr RSHIFT expr'
   parse_binary('>>', p)
+
+def p_expr_rshift_equal(p):
+  'expr : expr RSHIFT_EQUAL expr'
+  #expr_id = GenUniqueID(parser)
+  p[0] = Update(p[1], new_binary_expr(p.parser, op='>>', a=p[1], b=p[3]))
+
+def p_expr_lshift_equal(p):
+  'expr : expr LSHIFT_EQUAL expr'
+  #expr_id = GenUniqueID(parser)
+  p[0] = Update(p[1], new_binary_expr(p.parser, op='<<', a=p[1], b=p[3]))
 
 def p_expr_lshift_logical(p):
   'expr : expr LSHIFT_LOGICAL expr'
@@ -225,7 +265,7 @@ def p_expr_var(p):
     expr_id = 'var.vec_src.' + GenUniqueID(parser)
   elif p[1] in ['Vd', 'Vdd']:
     expr_id = 'var.vec_dst.' + GenUniqueID(parser)
-  elif p[1] in ['Vx', 'Vxx']:
+  elif p[1] in ['Vx', 'Vxx', 'Vy', 'Vyy']:
     expr_id = 'var.vec.' + GenUniqueID(parser)
   elif p[1] in ['Rs', 'Rt', 'Ru']:
     expr_id = 'var.reg_src.' + GenUniqueID(parser)
@@ -245,6 +285,7 @@ def p_expr_num(p):
 precedence = (
     ('left', 'BITWISE_OR'),
     ('left', 'BITWISE_AND'),
+    ('left', 'BITWISE_XOR'),
     ('left', 'OR'),
     ('left', 'AND'),
     ('left', 'XOR'),
@@ -254,7 +295,8 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIV', 'MOD'),
     ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
-    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE'),
+    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE',),
+    ('nonassoc', 'COLON')
 )
 
 parser = yacc.yacc()
@@ -286,165 +328,55 @@ def pretty_print(root):
 
 def ParseHVXSemantics(FileName):
   semantics = json.load(open(FileName, "r"))
-  NumSkipped = 0
-  SkippedInsts = set()
-  Skipped = False
-  #SkipTo = '_mm512_popcnt_epi16'
-  SkipTo = None
-  #debug = '_mm_sad_epu8'
-  debug = None
-  Categories = defaultdict(int)
 
-  InstructionList = []
   for inst, psuedocode in list(semantics.items()):
 
+    # We currently ignore any instructions that are just assembler syntactic sugar
+    if psuedocode.startswith("Assembler mapped to"):
+      continue 
     # Still need to handle predicate functions/vectors
     if "vand" in inst:
       continue
     
     assign = Parse(inst)
-    # SIMD instruction
-    if isinstance(assign.lhs, TypeLookup):
-      var = assign.lhs.obj
-    elif isinstance(assign.lhs, Var):
-      var = assign.lhs
-    else:
-      print("Unknown lhs:", assign.lhs)
+    # print(assign)
+    if isinstance(assign, list):
+      assign = assign[0]
     
-    if var.name in ['Vx', 'Vd']:
+
+    # This is either an if statement or standard function call then
+    if not isinstance(assign, Update):
+      if isinstance(assign, Call):
+        lhs = assign.args[0]
+        rhs = assign
+    else: 
+      lhs = assign.lhs
+      # += or *=
+      if isinstance(assign.rhs, BinaryExpr):
+        rhs = assign.rhs.b
+      elif isinstance(assign.rhs, Call):
+        rhs = assign.rhs
+
+    # SIMD instruction
+    if isinstance(lhs, TypeLookup):
+      var = lhs.obj
+    elif isinstance(lhs, Var):
+      var = lhs
+    else:
+      print("Unknown lhs:", lhs)
+    
+    if var.name in ['Vx', 'Vy', 'Vd']:
       lanes = 1
-    elif var.name in ['Vxx', 'Vdd']:
+    elif var.name in ['Vxx', 'Vyy', 'Vdd']:
       lanes = 2
     else:
+      lanes = 0
       print("Unknown variable type:", var)
-
-    # += or *=
-    if isinstance(assign.rhs, BinaryExpr):
-      rhs = assign.rhs.b
-    elif isinstance(assign.rhs, Call):
-      rhs = assign.rhs
     
     name = rhs.func
-    sema = Sema(intrin=name, inst="TODO", params=rhs.args, spec=Parse(psuedocode), rettype=var.id.split(".")[1])
+    sema = Sema(intrin=name, inst="TODO", params=rhs.args, spec=Parse(psuedocode), rettype=var.id.split(".")[1], lanes=lanes)
     print(sema)
   return None
-
-  for intrin in DataRoot.iter('intrinsic'):
-    cpuid = intrin.find('CPUID')
-    operation = intrin.find('operation') 
-    inst = intrin.find('instruction')
-    inst_form = None
-    if inst is None:
-      Categories['NO-INST'] += 1
-      NumSkipped += 1
-      continue
-
-    if debug and intrin.attrib['name'] != debug:
-      NumSkipped += 1
-      continue
-
-    inst_form = inst.attrib['name'], inst.attrib.get('form')
-    cpuid_text = 'Unknown'
-    if cpuid is not None:
-      if cpuid.text in ('MMX', 'AES', 'SHA', 'MPX', 'KNCNI', 
-          'AVX512_4FMAPS', 'AVX512_BF16',
-          'INVPCID', 'RTM', 'XSAVE', 
-          'FSGSBASE', 'RDRAND', 'RDSEED'):
-        Categories[cpuid.text] += 1
-        NumSkipped += 1
-        continue
-      cpuid_text = cpuid.text
-
-    if (intrin.attrib['name'].endswith('getcsr') or
-        intrin.attrib['name'].endswith('setcsr') or
-        '_cmp_' in intrin.attrib['name'] or
-        'zeroall' in intrin.attrib['name'] or
-        'zeroupper' in intrin.attrib['name'] or
-        intrin.attrib['name'] == '_mm_sha1rnds4_epu32' or
-        'mant' in intrin.attrib['name'] or
-        'ord' in intrin.attrib['name'] or
-        '4dpwss' in intrin.attrib['name'] or
-        'ternarylogic' in intrin.attrib['name'] or
-        #'cvt' in intrin.attrib['name'] or
-        intrin.attrib['name'].startswith('_bit') or
-        intrin.attrib['name'] in ('_rdpmc', '_rdtsc') or
-        'lzcnt' in intrin.attrib['name'] or
-        'popcnt' in intrin.attrib['name']
-        ):
-      if 'mask' in intrin.attrib['name']:
-        Categories['mask'] += 1
-      else:
-        Categories['zero/fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    cat = intrin.find('category')
-    if cat is not None and cat.text in (
-        'Elementary Math Functions', 
-        'General Support', 
-        'Load', 'Store'):
-      NumSkipped += 1
-      Categories[cat.text] += 1
-      continue
-    if SkipTo is not None and not Skipped:
-      if intrin.attrib['name'] != SkipTo:
-        NumSkipped += 1
-        continue
-      else:
-        Skipped = True
-    if operation is not None and (
-        'MEM' in operation.text or
-        'FP16' in operation.text or
-        'Float16' in operation.text or
-        'MOD2' in operation.text or
-        'affine_inverse_byte' in operation.text or
-        'ShiftRows' in operation.text or
-        'MANTISSA' in operation.text or
-        'ConvertExpFP' in operation.text or
-        '<<<' in operation.text or
-        ' MXCSR ' in operation.text or
-        'ZF' in operation.text or
-        'CF' in operation.text or
-        'NaN' in operation.text or 
-        'CheckFPClass' in operation.text or
-        'ROUND' in operation.text or
-        'carry_out' in operation.text or
-        'SignBit' in operation.text or
-        'SSP' in operation.text):
-      Categories['MISC'] += 1
-      NumSkipped += 1
-      continue
-    if 'str' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      NumSkipped += 1
-      Categories['STR'] += 1
-      continue
-
-    if 'fixup' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      Categories['fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    if 'round' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      Categories['fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    if 'prefetch' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      NumSkipped += 1
-      Categories['PREFETCH'] += 1
-      continue
-
-    if inst is not None and operation is not None:
-      InstructionList.append(intrin)
-
-  
-  print("NUM SKIPPED INSTRUCTIONS:")
-  print(NumSkipped)
 
 
 if __name__ == '__main__':

@@ -8,11 +8,11 @@ Var = namedtuple('Var', ['name', 'id'])
 
 Update = namedtuple('Update', ['lhs', 'rhs'])
 
-For = namedtuple('For', ['iterator', 'begin', 'end', 'body', 'inc', 'id'])
+For = namedtuple('For', ['init', 'condition', 'update', 'body', 'id'])
 
 If = namedtuple('If', ['cond', 'then', 'otherwise', 'id'])
 
-Call = namedtuple('Call', ['func', 'args', 'id'])
+Call = namedtuple('Call', ['func', 'args', 'special', 'id'])
 
 BinaryExpr = namedtuple('BinaryExpr', ['op', 'a', 'b', 'id'])
 UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'id'])
@@ -26,5 +26,5 @@ Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'
 
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params',
-  'spec', 'rettype',
+  'spec', 'rettype', 'lanes',
   ])

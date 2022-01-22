@@ -19,6 +19,8 @@ reserved = {
 binary_ops = {
     r'<<': 'LSHIFT',
     r'>>' : 'RSHIFT',
+    r'<<=': 'LSHIFT_EQUAL',
+    r'>>=': 'RSHIFT_EQUAL',
     r'<<<': 'LSHIFT_LOGICAL',
     r'>>>' : 'RSHIFT_LOGICAL',
 
@@ -44,10 +46,11 @@ binary_ops = {
 
     r'&':  'BITWISE_AND',
     r'|':  'BITWISE_OR',
+    r'^': 'BITWISE_XOR'
     }
 
 tokens = [
-    'ID', 'COMMENT', 'NUMBER',
+    'ID', 'TYPE', 'COMMENT', 'NUMBER',
     'LBRACE', 'RBRACE', 'COLON',
     'UPDATE', 'SEMICOLON',
     'LPAREN', 'RPAREN', 'COMMA',
@@ -65,14 +68,13 @@ tokens = [
 
 binary_regexp = r'|'.join(binary_ops)
 
-
 def t_inc(t):
   r'\+\+'
   t.type = 'INC'
   return t
 
 def t_binary(t):
-  r'\|=|\+=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)'
+  r'\|=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^'
   t.type = binary_ops[t.value]
   return t
 
@@ -97,8 +99,14 @@ def t_PSEUDO(t):
   t.value = t.value[1:-1]
   return t
 
+def t_TYPE(t):
+  r'unsigned'
+  t.type = 'TYPE'
+  
+  return t
+
 def t_ID(t):
-  r'[a-zA-Z_][a-zA-Z_0-9]*'
+  r'[a-zA-Z_#][a-zA-Z_0-9]*'
   lexed = t.value.upper()
   if lexed in reserved:
     t.type = lexed
@@ -144,16 +152,7 @@ t_ignore  = ' \t'
 lexer = lex.lex()
 if __name__ == '__main__':
   test_spec = '''
-  for (i = 0; i < VELEM(32); i++) {
-    Vx.uw[i] += (Vu.uw[i].ub[0] *
-  Vv.uw[i].ub[0]);
-    Vx.uw[i] += (Vu.uw[i].ub[1] *
-  Vv.uw[i].ub[1]);
-    Vx.uw[i] += (Vu.uw[i].ub[2] *
-  Vv.uw[i].ub[2]);
-    Vx.uw[i] += (Vu.uw[i].ub[3] *
-  Vv.uw[i].ub[3]) ;
-  }
+  Vd.b=vpack(Vu.h,Vv.h):sat
       '''
   lexer.input(test_spec)
   for token in iter(lexer.token, None):
