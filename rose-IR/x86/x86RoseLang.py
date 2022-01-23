@@ -103,7 +103,7 @@ ENDFOR
   '''
 #dst[MAX:128] := 0
 
-
+# Fix rerolling
 def test4():
   return '''
 <intrinsic tech="SSSE3" vexEq="TRUE" name="_mm_hadd_epi16">
@@ -1072,11 +1072,39 @@ ENDFOR
 #dst[MAX:256] := 0
 
 
-# Parsing 
 def test50():
   return '''
-
+<intrinsic tech="AVX2" name="_mm256_packs_epi32">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m256i" varname="dst" etype="SI16"/>
+	<parameter type="__m256i" varname="a" etype="SI32"/>
+	<parameter type="__m256i" varname="b" etype="SI32"/>
+	<description>Convert packed signed 32-bit integers from "a" and "b" to packed 16-bit integers using signed saturation, and store the results in "dst".</description>
+	<operation>
+dst[15:0] := Saturate16(a[31:0])
+dst[31:16] := Saturate16(a[63:32])
+dst[47:32] := Saturate16(a[95:64])
+dst[63:48] := Saturate16(a[127:96])
+dst[79:64] := Saturate16(b[31:0])
+dst[95:80] := Saturate16(b[63:32])
+dst[111:96] := Saturate16(b[95:64])
+dst[127:112] := Saturate16(b[127:96])
+dst[143:128] := Saturate16(a[159:128])
+dst[159:144] := Saturate16(a[191:160])
+dst[175:160] := Saturate16(a[223:192])
+dst[191:176] := Saturate16(a[255:224])
+dst[207:192] := Saturate16(b[159:128])
+dst[223:208] := Saturate16(b[191:160])
+dst[239:224] := Saturate16(b[223:192])
+dst[255:240] := Saturate16(b[255:224])
+	</operation>
+	<instruction name="VPACKSSDW" form="ymm, ymm, ymm" xed="VPACKSSDW_YMMqq_YMMqq_YMMqq"/>
+	<header>immintrin.h</header>
+</intrinsic>
 '''
+#dst[MAX:256] := 0
 
 
 def test51():
@@ -1567,7 +1595,7 @@ ENDFOR
 #dst[MAX:256] := 0
 
 
-# Fix CSE. Compilation works
+# Fix rerolling
 def test70():
   return '''
 <intrinsic tech="AVX2" name="_mm256_hadds_epi16">
@@ -4102,8 +4130,122 @@ ENDFOR
 #dst[MAX:128] := 0
 
 
+def test158():
+  return '''
+<intrinsic tech="AVX-512/KNC" name="_mm512_mask_and_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512F/KNCNI</CPUID>
+	<category>Logical</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="src" etype="UI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="v2" etype="UI32"/>
+	<parameter type="__m512i" varname="v3" etype="UI32"/>
+	<description>Performs element-by-element bitwise AND between packed 32-bit integer elements of "v2" and "v3", storing the results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	IF k[j]
+		dst[i+31:i] := v2[i+31:i] &amp; v3[i+31:i]
+	ELSE
+		dst[i+31:i] := src[i+31:i]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPANDD" form="zmm {k}, zmm, zmm" xed="VPANDD_ZMMu32_MASKmskw_ZMMu32_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails!!!
+def test159():
+  return '''
+<intrinsic tech="KNC" name="_mm512_addsets_epi32">
+	<type>Integer</type>
+	<CPUID>KNCNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="v2" etype="UI32"/>
+	<parameter type="__m512i" varname="v3" etype="UI32"/>
+	<parameter type="__mmask16 *" varname="sign" etype="MASK" memwidth="16"/>
+	<description>Performs an element-by-element addition of packed 32-bit integer elements in "v2" and "v3", storing the results in "dst" and the sign of the sum in "sign" (sign flag).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	dst[i+31:i] := v2[i+31:i] + v3[i+31:i]
+	sign[j] := v2[i+31:i] &amp; v3[i+31:i] &amp; 0x80000000
+ENDFOR
+	</operation>
+	<instruction name="VPADDSETSD" form="zmm, zmm, zmm"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails!!!
+def test160():
+  return '''
+<intrinsic tech="KNC" name="_mm512_mask_mulhi_epu32">
+	<type>Integer</type>
+	<CPUID>KNCNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="src" etype="UI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI32"/>
+	<parameter type="__m512i" varname="b" etype="UI32"/>
+	<description>Performs element-by-element multiplication between packed unsigned 32-bit integer elements in "a" and "b" and stores the high 32 bits of each result into "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	IF k[j]
+		dst[i+31:i] := (a[i+31:i] * b[i+31:i]) &gt;&gt; 32
+	ELSE
+		dst[i+31:i] := src[i+31:i]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPMULHUD" form="zmm {k}, zmm, m512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+def test161():
+  return '''
+<intrinsic tech="KNC" name="_mm512_mask_addsetc_epi32">
+	<type>Integer</type>
+	<CPUID>KNCNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="v2" etype="UI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__mmask16" varname="k_old" etype="MASK"/>
+	<parameter type="__m512i" varname="v3" etype="UI32"/>
+	<parameter type="__mmask16 *" varname="k2_res" etype="MASK" memwidth="16"/>
+	<description>Performs element-by-element addition of packed 32-bit integer elements in "v2" and "v3", storing the resultant carry in "k2_res" (carry flag) and the addition results in "dst" using writemask "k" (elements are copied from "v2" and "k_old" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	IF k[j]
+		dst[i+31:i] := v2[i+31:i] + v3[i+31:i]
+	ELSE
+		dst[i+31:i] := v2[i+31:i]
+		k2_res[j] := k_old[j]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPADDSETCD" form="zmm {k}, k, zmm"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+
 def Compile():
-  sema = test157()#test70()
+  #sema = test134()#test70() #test68()
+  sema = test50() #test68() #test77()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
