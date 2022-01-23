@@ -14,7 +14,9 @@ class Builtin_Type():
     def __init__(self, name, size, signed, vec, base_type):
         self.name = name
         self.size = size
+
         self.signed = signed
+        
         self.vec = vec
         self.base_type = base_type
         self.sliced = False
@@ -46,6 +48,12 @@ class Builtin_Type():
         self.valid_T()
         return self.signed
 
+    def base_type_copy(self):
+        if self.is_vec() or self.bit_based():
+            return Base_Type.BITS
+        else:
+            return self.base_type
+    
     def bit_based(self):
         self.valid_T()
         return (self.base_type

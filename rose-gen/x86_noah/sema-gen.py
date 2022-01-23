@@ -158,6 +158,7 @@ for intrin in intrins:
 
     do_skip = False
     for skip in skips:
+        break
         if skip in spec.intrin:
             do_skip = True
     if do_skip:
@@ -186,6 +187,7 @@ for intrin in intrins:
     vvprint("configs -> \n{}\n".format(spec.configs))
     vvprint("TEST -> \n{}\n".format(
         sema_ast.FuncDef(spec.intrin, spec.params, spec.spec)))
+
 
     cvt = x86_to_rosette2.x86_CVT(spec)
 

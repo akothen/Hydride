@@ -1,5 +1,6 @@
 import copy
 import builtin_types
+import math
 from builtin_types import Base_Type
 import x86_types
 import print_rosette
@@ -7,6 +8,8 @@ import sema_ast
 from vprint import vprint, vvprint
 
 
+# Can only define variable once. Class is essentially for getting new
+# unique name for each definition.
 class VarNamer():
     def __init__(self):
         self.names = {}
@@ -27,9 +30,11 @@ class VarNamer():
         self.names[base_name] = new_pair
 
 
+# Global state, reset
 in_appliable = 0
 tmp_count = 0
 var_namer = VarNamer()
+bitslice_vars = {}
 
 
 def make_tmp_name(base_name):
@@ -39,18 +44,21 @@ def make_tmp_name(base_name):
     return new_name
 
 
+# Find less restrictive type
 def lct(a, b):
     if a.base_type.value < b.base_type.value:
         return a
     return b
 
 
+# Find more restrictive type
 def gct(a, b):
     if a.base_type.value < b.base_type.value:
         return b
     return a
 
 
+# Check if two types are compatible. If not throw assert.
 def compatible(a, b):
     if a.bit_based() and b.bit_based():
         return True
@@ -67,6 +75,7 @@ def compatible(a, b):
     return True
 
 
+# Table for varname -> type info
 class Var_Info():
     def __init__(self, name, type_info):
         self.name = name
@@ -82,6 +91,11 @@ class Var_Info():
         return "{}-{}".format(self.name, self.def_count)
 
 
+# Scope. Essentially pointless for variables because intel doesn't
+# have a consistent defintion of scope in their ISA description. For
+# functions its useful. Functions like "SELECT4" are essentially
+# re-implemented in either intrinsic. This is so we have the right
+# type info. The scope defintion of the function is useful here.
 class Scope():
     def __init__(self):
         self.funcs = {}
@@ -176,12 +190,20 @@ class Scope():
                                              self.scope_list[i][name].dump()))
 
 
+# For upcasting when operation might otherwise cause overflow
+def optional_cast(expr, cast_to):
+    if cast_to is None:
+        return expr
+    return print_rosette.print_zero_extend(expr, cast_to)
+
+
+# Occasionally useful for verbosity stuff
 class Rosette_Stmt():
     def __init__(self, args, builtin_type):
         self.args
         self.builtin_type = builtin_type
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         return self.val
 
     def get_type_info(self):
@@ -197,7 +219,8 @@ class Rosette_Stmt():
         return fmt_out.format(self.builtin_type.dump(), str(self.args))
 
 
-def list_to_str(_list, delim):
+# Poor mans version of apply
+def list_to_str(_list, delim, cast_to=None):
     out = ""
     for l in _list:
         assert isinstance(l, Node)
@@ -205,12 +228,13 @@ def list_to_str(_list, delim):
     return out
 
 
-def any_list_to_str(_list, delim):
+# Poorer mans version of apply
+def any_list_to_str(_list, delim, cast_to=None):
     assert isinstance(_list, list)
     if len(_list) == 0:
         return ""
     elif isinstance(_list[0], Node):
-        return list_to_str(_list, delim)
+        return list_to_str(_list, delim, cast_to)
     elif isinstance(_list[0], str):
         return delim.join(_list)
     else:
@@ -221,6 +245,7 @@ def get_typename(T):
     return type(T).__name__.lower()
 
 
+# Base class for all printable nodes
 class Node():
     def get_node_typename(self):
         return get_typename(self).lower()
@@ -239,10 +264,11 @@ class Empty(Node):
     def returnable(self):
         return False
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         return ""
 
 
+# Bitslice that is ready to be printed
 class Bitslice(Node):
     def __init__(self, bv, hi, lo, type_info):
         self.bv = bv
@@ -256,15 +282,37 @@ class Bitslice(Node):
     def get_var(self):
         return self.bv
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.bv, Node)
         assert isinstance(self.hi, Node)
         assert isinstance(self.lo, Node)
 
-        return print_rosette.print_bitslice(self.bv.to_str(), self.hi.to_str(),
-                                            self.lo.to_str())
+        # lo/hi index must be integer types. If thats not the case we
+        # build (as bitslice) and cast
+        lo_idx = None
+        hi_idx = None
+
+        if (self.lo.type_info.base_type != Base_Type.INT) and (
+                self.lo.type_info.base_type != Base_Type.ICONST):
+            lo_idx = self.lo.to_str(32)
+            lo_idx = print_rosette.print_cast_to_int(lo_idx)
+        else:
+            lo_idx = self.lo.to_str()
+
+        if (self.hi.type_info.base_type != Base_Type.INT) and (
+                self.hi.type_info.base_type != Base_Type.ICONST):
+
+            hi_idx = self.hi.to_str(32)
+            hi_idx = print_rosette.print_cast_to_int(hi_idx)
+        else:
+            hi_idx = self.hi.to_str()
+
+        return optional_cast(
+            print_rosette.print_bitslice(self.bv.to_str(), hi_idx, lo_idx),
+            cast_to)
 
 
+# Just var def, only a name
 class Var(Node):
     def __init__(self, name, type_info):
         self.name = name
@@ -279,11 +327,19 @@ class Var(Node):
     def update(self):
         var_namer.update_name(self.name)
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.name, str)
-        return print_rosette.print_var(var_namer.get_name(self.name))
+
+        if self.name in bitslice_vars:
+            assert True or False, "{} -> {}".format(self.name,
+                                                    bitslice_vars[self.name])
+            return optional_cast(bitslice_vars[self.name], cast_to)
+
+        return optional_cast(
+            print_rosette.print_var(var_namer.get_name(self.name)), cast_to)
 
 
+# Number (really any imm). Can be for bitslice or int
 class Number(Node):
     def __init__(self, val, type_info):
         self.val = val
@@ -292,17 +348,17 @@ class Number(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.val, int) or isinstance(self.val, float)
-        if self.type_info.sliced:
-            #            _call = Call("max", [new_Number(8), self.type_info.sliced_sz],
-            #                         builtin_types.Builtin_Type_I32(""))
 
-            return print_rosette.print_const_bv(
-                str(self.val), self.type_info.sliced_sz.to_str())
-        elif self.type_info.bit_based():
-            return print_rosette.print_const_bv(str(self.val),
-                                                self.type_info.get_size)
+        # Possibly worth it to compute bits
+        # int(math.log2((self.val + self.val) - 1))
+        if self.type_info.sliced:
+            return print_rosette.print_const_bv_min_size(
+                str(self.val), self.type_info.sliced_sz.to_str(), cast_to)
+        elif self.type_info.bit_based() or self.type_info.is_vec():
+            return print_rosette.print_const_bv_min_size(
+                str(self.val), self.type_info.get_size(), cast_to)
         else:
             return print_rosette.print_number(str(self.val))
 
@@ -320,12 +376,13 @@ class Define(Node):
     def returnable(self):
         return False
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.var, Var)
         return print_rosette.print_new_bv_define(self.var.to_str(),
                                                  self.type_info.get_size())
 
 
+# Used in logic for update when we need to concat [lo, payload, hi]
 class MultiSlice(Node):
     def __init__(self, lhs, slices):
         self.lhs = lhs
@@ -334,12 +391,12 @@ class MultiSlice(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.lhs, Var)
         assert isinstance(self.slices, list)
 
-        return print_rosette.print_concat_update(self.lhs.to_str(),
-                                                 list_to_str(self.slices, " "))
+        return print_rosette.print_concat_update(
+            self.lhs.to_str(), list_to_str(self.slices, " ", cast_to))
 
 
 class Update(Node):
@@ -357,12 +414,14 @@ class Update(Node):
     def update_lhs_var(self):
         return self.lhs.get_var().update()
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.lhs, Node)
         assert isinstance(self.rhs, Node)
 
         global in_appliable
 
+        # Update logic for non-sliced is straight forward, for sliced
+        # we have several cases.
         if self.lhs.get_type_info().sliced is True:
             assert (self.lhs.get_node_typename()
                     == "bitslice") or (self.lhs.get_node_typename()
@@ -376,12 +435,27 @@ class Update(Node):
             lo = Empty(None)
             hi = Empty(None)
             empty_cnt = 2
-            if in_appliable != 0:
+
+            # If we are either eliminating a bitslice index or in an
+            # appliable expression (for loop) we just return the rhs
+            # of the update
+            if in_appliable != 0 or (self.lhs.get_var().name in bitslice_vars):
+                if (self.lhs.get_var().name in bitslice_vars):
+                    bitslice_vars[self.lhs.get_var().name] = self.rhs.to_str(
+                        32)
+                    return ""
+                if isinstance(self.rhs, Number):
+                    self.rhs.type_info = copy.deepcopy(
+                        self.lhs.type_info.inner_T)
+                    self.rhs.type_info.base_type = self.lhs.type_info.base_type_copy(
+                    )
                 return self.rhs.to_str()
 
+            # Otherwise need to concatinate non-updated part of the lhs
             elif isinstance(self.lhs, Var):
                 update_list = [self.lhs, self.rhs]
             else:
+                # Best case we know exact index for concat
                 if isinstance(self.lhs.lo, Number):
                     if self.lhs.lo.val != 0:
                         lo = Bitslice(self.lhs.bv,
@@ -389,6 +463,8 @@ class Update(Node):
                                       new_Number(0), self.type_info)
                         empty_cnt -= 1
 
+                # Otherwise will need an if statement incase lo ==
+                # 0. Lo is an expression that evaluates to an integer
                 else:
                     need_if = True
                     lo = Bitslice(
@@ -398,6 +474,7 @@ class Update(Node):
                         new_Number(0), self.type_info)
                     empty_cnt -= 1
 
+                # Duplicate above for hi
                 if isinstance(self.lhs.hi, Number):
                     if self.lhs.hi.val != self.type_info.get_size() - 1:
                         hi = Bitslice(
@@ -414,6 +491,8 @@ class Update(Node):
                     empty_cnt -= 1
 
                 update_list = [hi, self.rhs, lo]
+
+            # If statement case
             if need_if:
                 rhs_s = Bitslice(
                     If(
@@ -429,19 +508,23 @@ class Update(Node):
 
                 if in_appliable != 0:
                     return rhs_s
+
+            # No if (our indexes where numbers)
             else:
                 if len(update_list) - empty_cnt != 1:
                     rhs_s = print_rosette.print_sliced_update(
-                        list_to_str(update_list, " "))
+                        list_to_str(update_list, " ", cast_to))
                     if in_appliable != 0:
                         return rhs_s
 
                 else:
-                    rhs_s = list_to_str(update_list, " ")
+                    rhs_s = list_to_str(update_list, " ", cast_to)
 
             self.update_lhs_var()
             lhs_s = self.get_var().to_str()
             return print_rosette.print_update(lhs_s, rhs_s)
+
+        # Simple case where we are just updating a non-sliced var
         else:
             assert (self.lhs.get_node_typename() == "var"
                     ), "Invalid typename: {}\n{}".format(
@@ -466,18 +549,19 @@ class For(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.iterator, Node)
         assert isinstance(self.begin, Node)
         assert isinstance(self.end, Node)
         assert isinstance(self.body, list)
         assert isinstance(self.incr, Node)
         global in_appliable
+        # Start appliable.
         in_appliable += 1
         out = print_rosette.print_for(self.iterator.to_str(),
                                       self.begin.to_str(), self.end.to_str(),
                                       self.incr.to_str(),
-                                      list_to_str(self.body, " "))
+                                      list_to_str(self.body, " ", cast_to))
         in_appliable -= 1
         if isinstance(self.body[len(self.body) - 1], Update):
             self.body[len(self.body) - 1].update_lhs_var()
@@ -495,13 +579,14 @@ class While(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.cond, Node)
         assert isinstance(self.body, list)
         return print_rosette.print_while(self.cond.to_str(),
-                                         list_to_str(self.body, " "))
+                                         list_to_str(self.body, " ", cast_to))
 
 
+# Used to essentially upcast one side of binary expression
 class BV_Expand(Node):
     def __init__(self, expr, type_info):
         self.expr = expr
@@ -513,7 +598,7 @@ class BV_Expand(Node):
     def get_var(self):
         return self.expr.get_var()
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         if not (self.expr.type_info.bit_based()
                 and self.type_info.bit_based()):
 
@@ -528,10 +613,11 @@ class BV_Expand(Node):
             else:
                 missing_sz = new_Number(missing_sz -
                                         self.expr.type_info.get_size())
-            return print_rosette.print_bv_expand(missing_sz.to_str(),
-                                                 self.expr.to_str())
+            return optional_cast(
+                print_rosette.print_bv_expand(missing_sz.to_str(),
+                                              self.expr.to_str()), cast_to)
         else:
-            return self.expr.to_str()
+            return self.expr.to_str(cast_to)
 
 
 class Binaryexpr(Node):
@@ -545,9 +631,11 @@ class Binaryexpr(Node):
         return True
 
     def get_var(self):
+        if isinstance(self.a, Number):
+            return self.b.get_var()
         return self.a.get_var()
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.op, str)
         assert isinstance(self.a, Node)
         assert isinstance(self.b, Node)
@@ -560,11 +648,15 @@ class Binaryexpr(Node):
             return print_rosette.print_fp_binaryexpr(self.op, self.a.to_str(),
                                                      self.b.to_str())
         else:
+
+            # BV case may need to adjust sizes of a/b.
             _a = BV_Expand(self.a, self.type_info)
             _b = BV_Expand(self.b, self.type_info)
-            return print_rosette.print_bv_binaryexpr(self.op, _a.to_str(),
-                                                     _b.to_str(),
-                                                     self.type_info.signed)
+            return optional_cast(
+                print_rosette.print_bv_binaryexpr(
+                    self.op, optional_cast(_a.to_str(cast_to), cast_to),
+                    optional_cast(_b.to_str(cast_to), cast_to),
+                    self.type_info.signed), cast_to)
 
 
 class Unaryexpr(Node):
@@ -576,7 +668,7 @@ class Unaryexpr(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.op, str)
         assert isinstance(self.a, Node)
 
@@ -587,7 +679,9 @@ class Unaryexpr(Node):
         elif (self.type_info.base_type == Base_Type.FP):
             return print_rosette.print_fp_unaryexpr(self.op, self.a.to_str())
         else:
-            return print_rosette.print_bv_unaryexpr(self.op, self.a.to_str())
+            return optional_cast(
+                print_rosette.print_bv_unaryexpr(self.op, self.a.to_str()),
+                cast_to)
 
 
 class If(Node):
@@ -600,14 +694,28 @@ class If(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.cond, Node)
         assert isinstance(self.then, list)
         assert isinstance(self.otherwise, list)
 
-        return print_rosette.print_if(self.cond.to_str(),
-                                      list_to_str(self.then, " "),
-                                      list_to_str(self.otherwise, " "))
+        # It turns out that all ifs with imm lhs/rhs need to be numbers
+        if (len(self.then) == 1) and (isinstance(self.then[0], Number)):
+
+            self.then[0].type_info = copy.deepcopy(self.cond.type_info.inner_T)
+            self.then[
+                0].type_info.base_type = self.cond.type_info.base_type_copy()
+
+        if (len(self.otherwise) == 1) and (isinstance(self.otherwise[0],
+                                                      Number)):
+            self.otherwise[0].type_info = copy.deepcopy(
+                self.cond.type_info.inner_T)
+            self.otherwise[
+                0].type_info.base_type = self.cond.type_info.base_type_copy()
+
+        return print_rosette.print_if(
+            self.cond.to_str(), list_to_str(self.then, " ", cast_to),
+            list_to_str(self.otherwise, " ", cast_to))
 
 
 class Call(Node):
@@ -624,11 +732,11 @@ class Call(Node):
     def get_var(self):
         return self
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.func, str)
         assert isinstance(self.args, list)
-
-        return print_rosette.print_call(self.func, list_to_str(self.args, " "))
+        return print_rosette.print_call(self.func,
+                                        list_to_str(self.args, " ", cast_to))
 
 
 class Select(If):
@@ -656,7 +764,7 @@ class Case(Node):
         assert self.is_update()
         return self.stmts[len(self.stmts) - 1].get_var()
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert self.cond_val is not None
         assert isinstance(self.cond_val, Node)
         assert isinstance(self.val, Node)
@@ -665,7 +773,7 @@ class Case(Node):
         cond = Binaryexpr("==", self.cond_val, self.val,
                           self.cond_val.get_type_info())
         return print_rosette.print_case(cond.to_str(),
-                                        list_to_str(self.stmts, " "))
+                                        list_to_str(self.stmts, " ", cast_to))
 
 
 class Match(Node):
@@ -677,13 +785,13 @@ class Match(Node):
     def returnable(self):
         return True
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.val, Node)
         assert isinstance(self.cases, list)
         global in_appliable
         in_appliable += 1
         out = print_rosette.print_match(self.val.to_str(),
-                                        list_to_str(self.cases, " "))
+                                        list_to_str(self.cases, " ", cast_to))
         in_appliable -= 1
 
         if self.cases[len(self.cases) - 1].is_update():
@@ -700,14 +808,14 @@ class Funcdef(Node):
         self.body = body
         self.type_info = type_info
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.name, str)
         assert isinstance(self.params, list)
         assert isinstance(self.body, list)
 
-        return print_rosette.print_funcdef(self.name,
-                                           list_to_str(self.params, " "),
-                                           list_to_str(self.body, " "))
+        return print_rosette.print_funcdef(
+            self.name, list_to_str(self.params, " ", cast_to),
+            list_to_str(self.body, " ", cast_to))
 
 
 class Return(Node):
@@ -715,7 +823,7 @@ class Return(Node):
         self.val = val
         self.type_info = type_info
 
-    def to_str(self):
+    def to_str(self, cast_to=None):
         assert isinstance(self.val, Node)
         assert self.val.returnable()
         return print_rosette.print_return(self.val.to_str())
@@ -733,12 +841,15 @@ class Func_Info():
         self.initializers = initializers
 
 
+# What ends up all the printable nodes
 class Builder():
     def __init__(self, UID, init_func_list, init_var_list, converter):
         self.UID = UID
         self.converter = converter
         self.scope = Scope()
         self.stmts = []
+
+        self.bitslice_vars = {}
 
         self.init_params = []
 
@@ -754,6 +865,7 @@ class Builder():
     def do_nothing(arg):
         return arg
 
+    # Name mangling for internal functions (i.e SELECT4)
     def internal_func(self, name, params):
         mangled_name = "{}{}".format(name, self.UID)
         initializers = []
@@ -780,14 +892,26 @@ class Builder():
                 params, self.internal_func[name].initializers)
         return params
 
+    def add_index_var(self, node):
+        if not isinstance(node, Number):
+            node_t = self.scope.get_var_info(node.get_var().name)
+            if node_t.base_type != Base_Type.INT:
+                bitslice_vars[node.get_var().name] = node.get_var().name
+
     def build_empty(self):
         return Empty(builtin_types.Builtin_Type_Empty("EMPTY"))
+
+    # Logic to build all the nodes. we go Converter.cvt_X ->
+    # Builder.build_X. Builder will return object of type X.
 
     def build_bitslice(self, bv, hi, lo):
         bv = self.converter.cvt(bv)
         hi = self.converter.cvt(hi)
         lo = self.converter.cvt(lo)
+
         vvprint("Bitslice: ({})".format(bv.get_var().name))
+
+        # Create type info if this was anonymous variable.
         bv_t = self.scope.get_var_info(bv.get_var().name)
         if bv_t is None:
             bv_t = bv.get_type_info()
@@ -795,14 +919,23 @@ class Builder():
         assert bv_t is not None
         assert not bv_t.fp_pure()
 
+        # Since we are slicing this MUST be a vec type. Create inner type.
         if bv_t.inner_T is None:
             tmp = copy.deepcopy(bv_t)
             tmp.name = tmp.name + "-inner"
             bv_t.inner_T = tmp
 
+        # Add info if lo/hi are bv type (necessary for inserting
+        # proper upcasts / type casts)
+        self.add_index_var(lo)
+        self.add_index_var(hi)
+
         bv_t.vec = True
         bv_t.base_type = Base_Type.VEC_OF
         bv_t.sliced = True
+
+        # Don't always know expression size, so store expression that
+        # computes size (used in the update + multislice case)
         bv_t.sliced_sz = Binaryexpr(
             "+",
             Binaryexpr("-", hi, lo,
@@ -837,9 +970,18 @@ class Builder():
     def build_number(self, val):
         return Number(val, builtin_types.Builtin_Type_ICONST(val))
 
+
+    # Build update
     def build_update(self, lhs, rhs):
         lhs = self.converter.cvt(lhs)
         rhs = self.converter.cvt(rhs)
+
+        # This is somewhat of a special case for x86 ISA. Intel refers
+        # to 'MAX' in many ways, including as #define for max vector
+        # bits the physical register could be a partial register
+        # of. Its breaks things because we don't have a clear
+        # definition for the value of this. So, we delete the
+        # expression.
         if isinstance(rhs, Number):
             if isinstance(lhs, Bitslice):
                 if isinstance(lhs.hi, Var):
@@ -859,6 +1001,8 @@ class Builder():
             self.scope.add_var_info(lhs.get_var().name, lhs_t)
         assert lhs_t is not None
 
+
+        # If lhs doesn't have complete type info, use info from rhs
         do_rest = False
         if lhs_t.base_type == Base_Type.UNKNOWN:
             do_rest = True
@@ -962,6 +1106,11 @@ class Builder():
         if len(otherwise) != 0:
             otherwise_t = otherwise[len(otherwise) - 1].get_type_info()
 
+        # There is implied "true" for non-zero, so wrap.
+        if not isinstance(cond, Binaryexpr):
+            cond = Binaryexpr("!=", cond, Number(0, cond.get_type_info()),
+                              cond.get_type_info())
+
         # Return most generic type from possibilities
         return If(cond, then, otherwise, lct(then_t, otherwise_t))
 
@@ -970,8 +1119,18 @@ class Builder():
         args = ensure_list(args)
         args = self.converter.cvt_list(args)
 
-        internal_func_name = self.func_name(func)
+        # MAX/MIN need sign info
+        if func == "MAX" or func == "MIN":
+            ret_t = self.scope.get_var_or_func_info(args[0].get_var().name)
+            assert ret_t is not None
 
+            # Library for max/min are SMAX or UMAX for signed/unsigned
+            if ret_t.is_signed():
+                func = "S" + func
+            else:
+                func = "U" + func
+
+        internal_func_name = self.func_name(func)
         vvprint("Building Call: {}({})".format(func, str(args)))
         ret_t = self.scope.get_func_info(internal_func_name)
         if ret_t is None or ret_t.base_type == Base_Type.UNKNOWN:
@@ -1049,11 +1208,12 @@ class Builder():
         assert isinstance(key, str)
         obj = self.converter.cvt(obj)
         obj.get_type_info().valid_T()
-        
+
         T = x86_types.str_to_type(key)
         T.name = make_tmp_name(obj.get_type_info().name)
         return self.build_typed_var(T.name, T)
 
+    # We essentially do bitslice here but use type info from inner_T
     def build_index(self, obj, idx):
         obj = self.converter.cvt(obj)
         vvprint("Build_Index!")
@@ -1088,6 +1248,9 @@ class Builder():
                         ret_t)
 
 
+    # Driver for build_ logic. Just performs some cleanup on
+    # input/output. Mostly wrapping the stmts in the proper function
+    # name and finding all the variables.
 class Converter():
     def __init__(self, init_func_list, init_var_list, func_name):
         self.func_name = func_name
@@ -1133,9 +1296,9 @@ class Converter():
         body += list_to_str(nodes, " ")
         return print_rosette.print_funcdef(func_name, params, body)
 
-    def to_str(self):
-        out = print_rosette.print_provide(self.func_name,
-                                          list_to_str(self.params, " "))
+    def to_str(self, cast_to=None):
+        out = print_rosette.print_provide(
+            self.func_name, list_to_str(self.params, " ", cast_to))
         out = ""
         for func in self.funcs:
             out += self.func_to_str(func.name, func.params, func.body)
@@ -1231,6 +1394,7 @@ class Converter():
             node_list[i] = self.cvt(node_list[i])
         return node_list
 
+    # Main driver.
     def cvt(self, node):
         lookup_cvt_funcs = {
             "bitslice": self.cvt_bitslice,

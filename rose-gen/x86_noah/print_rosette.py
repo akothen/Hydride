@@ -38,6 +38,20 @@ def print_const_bv(val, sz):
     return "(bv {} {})".format(val, sz)
 
 
+def print_const_bv_min_size(val, sz, min_sz):
+    if min_sz is None:
+        return print_const_bv(val, sz)
+    return "(bv {} (max {} {}))".format(val, sz, min_sz)
+
+
+def print_zero_extend(expr, sz):
+    return "(zero-extend {} (bitvector {}))".format(expr, sz)
+
+
+def print_cast_to_int(expr):
+    return "(bitvector->integer {})".format(expr)
+
+
 def print_define(name, val):
     return "(define {} {})".format(name, val)
 
@@ -99,6 +113,10 @@ def print_bv_binaryexpr(op, a, b, signed):
         "/": ["bv[SIGNED]div", "s", "u"]
     }
 
+    lookup_special_bv_op = {
+        "!=": "==",
+    }
+
     lookup_bv_op = {
         "AND": "bvand",
         "&": "bvand",
@@ -108,26 +126,28 @@ def print_bv_binaryexpr(op, a, b, signed):
         "XOR": "bvxor",
         "^": "bvxor",
         "==": "bveq",
-        "!=": "not bveq",
         "*": "bvmul",
         "+": "bvadd",
         "-": "bvsub",
         # Signed or unsigned
         "%": "bvsmod",
     }
-    assert op in lookup_bv_op or op in lookup_signed_bv_op, "Unknown bv op: \"{}\"".format(
-        op)
+    assert (op in lookup_bv_op) or (op in lookup_signed_bv_op) or (
+        op in lookup_special_bv_op), "Unknown bv op: \"{}\"".format(op)
 
     bv_op = None
     if op in lookup_bv_op:
         bv_op = lookup_bv_op[op]
-    else:
+    elif op in lookup_signed_bv_op:
         bv_op_info = lookup_signed_bv_op[op]
         bv_op = bv_op_info[0]
         sign_replace = bv_op_info[1]
         if not signed:
             sign_replace = bv_op_info[2]
         bv_op = bv_op.replace("[SIGNED]", sign_replace)
+    else:
+        bv_op = lookup_special_bv_op[op]
+        return "({} {})".format("not", print_bv_binaryexpr(bv_op, a, b, signed))
     return "({} {} {})".format(bv_op, a, b)
 
 

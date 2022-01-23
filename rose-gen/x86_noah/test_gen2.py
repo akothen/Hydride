@@ -6,7 +6,7 @@ from enum import Enum
 from x86_to_rosette3 import x86_t_to_build_type
 from copy import deepcopy
 
-DIR_PATH = "rosette-tests2"
+DIR_PATH = "rosette-tests5"
 ARGS = []
 arg_base = []
 for i in range(0, 64):
@@ -444,7 +444,6 @@ class Out():
             f.write(rose_out)
             f.write(c_out)
             f.write(res)
-
             f.close()
         except IOError:
             print("Error writing output to: {}".format(outf))
@@ -473,9 +472,9 @@ class R_Out(Out):
 
     def make_file_content(self, args):
         content = [
-            "#lang rosette", "(require rosette/lib/synthax)",
-            "(require rosette/lib/angelic)", "(require racket/pretty)",
-            self.extra
+            "#lang rosette", "(require \"../librosette.rkt\")",
+            "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
+            "(require racket/pretty)", self.extra
         ]
 
         pargs = []
