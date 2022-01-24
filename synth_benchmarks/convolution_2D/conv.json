@@ -1,0 +1,10 @@
+{
+"SPEC_NAME": "tensor-conv2D",
+"ARG_SIZES": [128, 32],
+"SPEC_INVOKE_STR": "(tensor-conv2D {} 4 4 2 2 8)",
+"SOLVER": "Z3",
+"BITWIDTH": -1,
+"DO_OPTIMIZE": 1,
+"SPEC_IMPL": "conv_spec.rkt",
+"GRAMMAR_IMPL": "conv_grammar.rkt"
+}
