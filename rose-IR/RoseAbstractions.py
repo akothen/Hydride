@@ -411,8 +411,8 @@ class RoseForLoop(RoseRegion):
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int) \
       and isinstance(args[4], list) and isinstance(args[5], RoseRegion):
-        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
         Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
         return RoseForLoop(args[0], Start, End, Step, args[4], args[5])
     if len(args) == 5:
@@ -423,8 +423,8 @@ class RoseForLoop(RoseRegion):
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int) \
       and isinstance(args[4], list):
-        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
         Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
         return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion())
     if len(args) == 4:
@@ -433,8 +433,8 @@ class RoseForLoop(RoseRegion):
         return RoseForLoop(args[0], args[1], args[2], args[3], [], RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int):
-        End = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        Start = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
+        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
         Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
         return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion()) 
     assert(False)
