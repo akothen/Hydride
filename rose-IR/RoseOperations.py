@@ -48,17 +48,22 @@ class RoseCallOp(RoseOperation):
   def getCallOperands(self):
     return self.getOperands()[1:]
 
-  def print(self):
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
     Name = super().getName()
     String = ""
     if Name != "":
-        String = Name + " = "
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
     String += str(self.Opcode)
     String += " " + self.getCallee().getName() + "("
     for Index, Operand in enumerate(self.getCallOperands()):
-      String += " " + str(Operand.getType()) + " " + Operand.getName() 
-      if Index != len(self.getCallOperands()) - 1:
-        String += ","
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += ","
     String += " )"
     print(String)
   
@@ -98,9 +103,12 @@ class RoseCastOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseCastOp(Name, Operand, TargetType, ParentBlock)
 
-  def print(self):
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
     Name = super().getName()
-    String = Name + " = "
+    String = Spaces + Name + " = "
     String += str(self.Opcode)
     String += " " + self.getOperand(0).getName() + " " + str(self.getOperand(1))
     print(String)
