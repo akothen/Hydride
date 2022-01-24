@@ -51,7 +51,6 @@ class RoseOpcode(Enum):
     rotateleft = auto()
     rotateright = auto()
     bvextract = auto()
-    bvinsert = auto()
     bvsignextend = auto()
     bvzeroextend = auto()
 
@@ -78,6 +77,10 @@ class RoseOpcode(Enum):
     boolor = auto()
     boolnor = auto()
     boolxor = auto()
+
+    # This op has no direct convertion to Rosette
+    # but important for SSA representation in IR.
+    bvinsert = auto()
 
     # Some important IR ops
     select = auto()
@@ -768,6 +771,108 @@ class RoseOpcode(Enum):
         or self.value == self.bvtrunc.value:
             return True
         return False
+
+    def getRosetteOp(self):
+        # Some opcodes have the same name as Rosette ops
+        if self.value == self.bvadd.value \
+        or self.value == self.bvsub.value \
+        or self.value == self.bvmul.value \
+        or self.value == self.bvor.value \
+        or self.value == self.bvxor.value \
+        or self.value == self.bvand.value \
+        or self.value == self.bvshl.value \
+        or self.value == self.bvlshr.value \
+        or self.value == self.bvashr.value \
+        or self.value == self.bvsmin.value \
+        or self.value == self.bvumin.value \
+        or self.value == self.bvsmax.value \
+        or self.value == self.bvumax.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvneg.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value \
+        or self.value == self.bvsdiv.value \
+        or self.value == self.bvudiv.value \
+        or self.value == self.bvsrem.value \
+        or self.value == self.bvurem.value \
+        or self.value == self.bvsmod.value \
+        or self.value == self.bvrol.value \
+        or self.value == self.bvror.value \
+        or self.value == self.bvzero.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value \
+        or self.value == self.bit.value \
+        or self.value == self.bveq.value \
+        or self.value == self.bvslt.value \
+        or self.value == self.bvult.value \
+        or self.value == self.bvsle.value \
+        or self.value == self.bvule.value \
+        or self.value == self.bvsgt.value \
+        or self.value == self.bvugt.value \
+        or self.value == self.bvsge.value \
+        or self.value == self.bvuge.value \
+        or self.value == self.abs.value \
+        or self.value == self.min.value \
+        or self.value == self.max.value:
+            return self.name
+        # Hand code some of the names of rosette ops
+        if self.value == self.boolnot.value:
+            return "not"
+        if self.value == self.booland.value:
+            return "and"
+        if self.value == self.boolnand.value:
+            return "nand"
+        if self.value == self.boolor.value:
+            return "or"
+        if self.value == self.boolnor.value:
+            return "nor"
+        if self.value == self.boolxor.value:
+            return "xor"
+        if self.value == self.add.value:
+            return "+"
+        if self.value == self.sub.value:
+            return "-"
+        if self.value == self.mul.value:
+            return "*"
+        if self.value == self.div.value:
+            return "/"
+        if self.value == self.rem.value:
+            return "remainder"
+        if self.value == self.mod.value:
+            return "modulo"
+        if self.value == self.bvextract.value:
+            return "extract"
+        if self.value == self.rotateleft.value:
+            return "rotate-left"
+        if self.value == self.rotateright.value:
+            return "rotate-right"
+        if self.value == self.bvsignextend.value:
+            return "sign-extend"
+        if self.value == self.bvzeroextend.value:
+            return "zero-extend"
+        if self.value == self.equal.value:
+            return "equal?"
+        if self.value == self.lessthan.value:
+            return "<"
+        if self.value == self.lessthanequal.value:
+            return "<="
+        if self.value == self.greaterthan.value:
+            return ">"
+        if self.value == self.greaterthanequal.value:
+            return ">="
+        # These ops exist in Rose IR but not in Rosette
+        if self.value == self.bvssat.value \
+        or self.value == self.bvusat.value \
+        or self.value == self.bvtrunc.value \
+        or self.value == self.bvinsert.value \
+        or self.value == self.call.value \
+        or self.value == self.select.value \
+        or self.value == self.ret.value \
+        or self.value == self.cast.value \
+        or self.value == self.bvneq.value \
+        or self.value == self.notequal.value:
+            assert False, "No direct conversion to Rosette Ops"
+        return None
 
     def callInputsAreValid(self, Callee, Inputs : list):
         assert self.value == self.call.value
