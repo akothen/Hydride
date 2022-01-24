@@ -753,15 +753,15 @@ class RoseCond(RoseRegion):
     return Users
 
   def print(self, NumSpace = 0):
-    Condtiion = ""
+    Spaces = ""
     for _ in range(NumSpace):
-      Condtiion += " "
-    Condtiion += "if (" + self.Condition.getName() + ") {"
+      Spaces += " "
+    Condtiion = Spaces + "if (" + self.Condition.getName() + ") {"
     print(Condtiion)
     # Print regions in this if-else blocks
     for Region in self.getThenRegions():
       Region.print(NumSpace + 1)
-    print("} else {")
+    print(Spaces + "} else {")
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print("}")
