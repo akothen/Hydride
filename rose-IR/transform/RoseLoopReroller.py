@@ -16,6 +16,13 @@ def Truncate(number, digits) -> float:
     return math.trunc(stepper * number) / stepper
 
 
+# Useful for debugging
+def PrintPack(Pack : list):
+  print("PRINTING PACK:")
+  for Op in Pack:
+    Op.print()
+
+
 def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
   #print("GetOffsetsBetweenPacks:")
   #print("PACK1:")
@@ -448,10 +455,7 @@ def GetFirstLowIndexInPack(Pack : list):
   return StartIndex
 
 
-def GetStepForRerolledLoop(PackList : list):
-  # Get the step between two consecutive packs
-  Pack1 = PackList[0]
-  Pack2 = PackList[1]
+def GetStepForRerolledLoop(Pack1 : list, Pack2 : list):
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
   # We just get the difference between 2 different packs
   Offset = None
@@ -538,126 +542,13 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
   return CandidateListsOfIsomorphicPackLists
 
 
-# Useful for debugging
-def PrintPack(Pack : list):
-  print("PRINTING PACK:")
-  for Op in Pack:
-    Op.print()
-
-
-# The assumption here is that the relationship between the 
-# indices is of the form: A * iterator + B. 
-# We need to find A and B for every indexed bitvector operation.
-def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
-  print("GetIndexRelationsAcrossPacks:")
-  print(ListOfCandidatePackLists)
-#Pack1 : list, Pack2 : list, Pack3 : list):
-  Pack1 = ListOfCandidatePackLists[0][0]
-  Pack2 = ListOfCandidatePackLists[0][1]
-  Pack3 = ListOfCandidatePackLists[1][0]
-  Pack1LaneIndex = 0
-  Pack2LaneIndex = 0
-  Pack3LaneIndex = 1
-  print("------------------")
-  print(Pack1)
-  PrintPack(Pack1)
-  PrintPack(Pack2)
-  PrintPack(Pack3)
-  # Check if the candidate packs are isomorphic.
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
-  assert DFGsAreIsomorphic(Pack1, Pack3) == True
-  # Get the low index for the first bvinsert op in the pack
-  StartIndex1 = None
-  StartIndex2 = None
-  StartIndex3 = None
-  for Index in range(len(Pack1)):
-    Op1 = Pack1[Index]
-    Op2 = Pack2[Index]
-    Op3 = Pack3[Index]
-    if isinstance(Op1, RoseBVInsertSliceOp):
-      assert isinstance(Op2, RoseBVInsertSliceOp)
-      assert isinstance(Op1.getLowIndex(), RoseConstant)
-      assert isinstance(Op2.getLowIndex(), RoseConstant)
-      assert isinstance(Op3.getLowIndex(), RoseConstant)
-      StartIndex1 = Op1.getLowIndex().getValue()
-      StartIndex2 = Op2.getLowIndex().getValue()
-      StartIndex3 = Op3.getLowIndex().getValue()
-      break
-  assert StartIndex1 != None
-  assert StartIndex2 != None
-  assert StartIndex3 != None
-  print("StartIndex1:")
-  print(StartIndex1)
-  print("StartIndex2:")
-  print(StartIndex2)
-  print("StartIndex3:")
-  print(StartIndex3)
-  LowOffsetsList = list()
-  CoFactactorsList1 = list()
-  CoFactactorsList2 = list()
-  for Index in range(len(Pack1)):
-    Op1 = Pack1[Index]
-    Op2 = Pack2[Index]
-    Op3 = Pack3[Index]
-    if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == False:
-      assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == False
-      assert isinstance(Op3, RoseCallOp) or Op3.isIndexingBVOp() == False
-      LowOffsetsList.append(None)
-      CoFactactorsList1.append(None)
-      CoFactactorsList2.append(None)
-      continue
-    # Now we are dealing with bitvector ops that index into bitvectors
-    # First get the start index and get offsets relative to
-    LowIndex1 = Op1.getLowIndex()
-    LowIndex2 = Op2.getLowIndex()
-    LowIndex3 = Op3.getLowIndex()
-    assert isinstance(LowIndex1, RoseConstant)
-    assert isinstance(LowIndex2, RoseConstant)
-    assert isinstance(LowIndex3, RoseConstant)
-    # Solve the linear equations
-    # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
-    A = np.array([[Pack1LaneIndex,  StartIndex1, 1], [Pack2LaneIndex, StartIndex2, 1], \
-                 [Pack3LaneIndex, StartIndex3, 1]])
-    B = np.array([LowIndex1.getValue(), LowIndex2.getValue(), LowIndex3.getValue()])
-    X =  np.linalg.solve(A, B)
-    Cofactor1 = Truncate(X[0], 2)
-    Cofactor2 = Truncate(X[1], 2)
-    Offset = Truncate(X[2], 2)
-    print("--OP1:")
-    Op1.print()
-    print("--OP2:")
-    Op2.print()
-    print("LowIndex1.getValue():")
-    print(LowIndex1.getValue())
-    print("LowIndex2.getValue():")
-    print(LowIndex2.getValue())
-    print("LowIndex3.getValue():")
-    print(LowIndex3.getValue())
-    print("Cofactor1:")
-    print(Cofactor1)
-    print("Cofactor2:")
-    print(Cofactor2)
-    print("Offset:")
-    print(Offset)
-    if Cofactor1 == int(Cofactor1):
-      Cofactor1 = int(Cofactor1)
-    if Cofactor2 == int(Cofactor2):
-      Cofactor2 = int(Cofactor2)
-    assert Offset == int(Offset)
-    Offset = int(Offset)
-    LowOffsetsList.append(Offset)
-    CoFactactorsList1.append(Cofactor1)
-    CoFactactorsList2.append(Cofactor2)
-  return LowOffsetsList, CoFactactorsList1, CoFactactorsList2
-
-
 def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
                          IteratorSuffix : int, RemovedOps : list):
   # Reroll the candidares in the list
   for PackList in RerollableCandidatesList:
     # Lets get the offsets across windows and other info for generating a loop
     LowOffsetsList, CoFactactorsList = GetLowOffsetsWithinPack(PackList[0], PackList[1])
-    Step = GetStepForRerolledLoop(PackList)
+    Step = GetStepForRerolledLoop(PackList[0], PackList[1])
     Start = GetFirstLowIndexInPack(PackList[0])
     End = GetFirstLowIndexInPack(PackList[len(PackList) - 1])
     print("START:")
@@ -761,10 +652,129 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         RemovedOps.append(Op)
 
 
+# Assumption here is that the indices are expressed as:
+# C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
+# We try to find C1, C2 and Offset for every bitslice.
+def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
+  print("GetIndexRelationsAcrossPacks:")
+  print(ListOfCandidatePackLists)
+  Pack1 = ListOfCandidatePackLists[0][0]
+  Pack2 = ListOfCandidatePackLists[0][1]
+  Pack3 = ListOfCandidatePackLists[1][0]
+  print("------------------")
+  print(Pack1)
+  PrintPack(Pack1)
+  PrintPack(Pack2)
+  PrintPack(Pack3)
+  # Check if the candidate packs are isomorphic.
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  assert DFGsAreIsomorphic(Pack1, Pack3) == True
+  # Get the low index for the first bvinsert op in the pack
+  StartIndex1 = None
+  StartIndex2 = None
+  StartIndex3 = None
+  for Index in range(len(Pack1)):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    Op3 = Pack3[Index]
+    if isinstance(Op1, RoseBVInsertSliceOp):
+      assert isinstance(Op2, RoseBVInsertSliceOp)
+      assert isinstance(Op1.getLowIndex(), RoseConstant)
+      assert isinstance(Op2.getLowIndex(), RoseConstant)
+      assert isinstance(Op3.getLowIndex(), RoseConstant)
+      StartIndex1 = Op1.getLowIndex().getValue()
+      StartIndex2 = Op2.getLowIndex().getValue()
+      StartIndex3 = Op3.getLowIndex().getValue()
+      break
+  assert StartIndex1 != None
+  assert StartIndex2 != None
+  assert StartIndex3 != None
+  print("StartIndex1:")
+  print(StartIndex1)
+  print("StartIndex2:")
+  print(StartIndex2)
+  print("StartIndex3:")
+  print(StartIndex3)
+  Pack1LaneIndex = 0
+  Pack2LaneIndex = 0
+  # StartIndex is total index into the vector. It is supposed
+  # to be the index into a lane. So adjust for that by dividing
+  # StartIndex3 by 2 since it corresponds to the second lane.
+  Pack3LaneIndex = StartIndex3 - StartIndex1
+  StartIndex3 = StartIndex3 / 2
+
+  LowOffsetsList = list()
+  CoFactactorsList1 = list()
+  CoFactactorsList2 = list()
+  for Index in range(len(Pack1)):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    Op3 = Pack3[Index]
+    if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == False:
+      assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == False
+      assert isinstance(Op3, RoseCallOp) or Op3.isIndexingBVOp() == False
+      LowOffsetsList.append(None)
+      CoFactactorsList1.append(None)
+      CoFactactorsList2.append(None)
+      continue
+    # Now we are dealing with bitvector ops that index into bitvectors
+    # First get the start index and get offsets relative to
+    LowIndex1 = Op1.getLowIndex()
+    LowIndex2 = Op2.getLowIndex()
+    LowIndex3 = Op3.getLowIndex()
+    assert isinstance(LowIndex1, RoseConstant)
+    assert isinstance(LowIndex2, RoseConstant)
+    assert isinstance(LowIndex3, RoseConstant)
+    # Solve the linear equations
+    # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
+    A = np.array([[Pack1LaneIndex,  StartIndex1, 1], [Pack2LaneIndex, StartIndex2, 1], \
+                 [Pack3LaneIndex, StartIndex3, 1]])
+    B = np.array([LowIndex1.getValue(), LowIndex2.getValue(), LowIndex3.getValue()])
+    X =  np.linalg.solve(A, B)
+    Cofactor1 = Truncate(X[0], 2)
+    Cofactor2 = Truncate(X[1], 2)
+    Offset = Truncate(X[2], 2)
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
+    print("LowIndex1.getValue():")
+    print(LowIndex1.getValue())
+    print("LowIndex2.getValue():")
+    print(LowIndex2.getValue())
+    print("LowIndex3.getValue():")
+    print(LowIndex3.getValue())
+    print("Cofactor1:")
+    print(Cofactor1)
+    print("Cofactor2:")
+    print(Cofactor2)
+    print("Offset:")
+    print(Offset)
+    if Cofactor1 == int(Cofactor1):
+      Cofactor1 = int(Cofactor1)
+    if Cofactor2 == int(Cofactor2):
+      Cofactor2 = int(Cofactor2)
+    assert Offset == int(Offset)
+    Offset = int(Offset)
+    LowOffsetsList.append(Offset)
+    CoFactactorsList1.append(Cofactor1)
+    CoFactactorsList2.append(Cofactor2)
+  return LowOffsetsList, CoFactactorsList1, CoFactactorsList2
+
+
 def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists : list, \
                           IteratorSuffix : int, RemovedOps : list):
   # Generate the outer loop that wraps around all the packlists
-  OuterLoop = RoseForLoop.create("iterator.lane", 0, len(ListOfCandidateIsomorphicPackLists), 1)
+  ListOfCandidatePackLists = ListOfCandidateIsomorphicPackLists[0]
+  FirstLoopPack = ListOfCandidatePackLists[0][0]
+  SecondLoopPack = ListOfCandidatePackLists[1][0]
+  LastLoopPack = ListOfCandidatePackLists[len(ListOfCandidatePackLists) - 1][0]
+  OutStart = GetFirstLowIndexInPack(FirstLoopPack)
+  OutEnd = GetFirstLowIndexInPack(LastLoopPack)
+  OutStep = GetStepForRerolledLoop(FirstLoopPack, SecondLoopPack)
+  # Account for how Rosette expects the loop bounds to be expressed.
+  OutEnd += OutStep
+  OuterLoop = RoseForLoop.create("iterator.lane", OutStart, OutEnd, OutStep)
   OutIterator = OuterLoop.getIterator()
   # Now pack the code for inner loops
   for ListOfPackLists in ListOfCandidateIsomorphicPackLists: 
@@ -778,7 +788,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
     print("CoFactactorsList2:")
     print(CoFactactorsList2)
     PackList = ListOfPackLists[0]
-    Step = GetStepForRerolledLoop(PackList)
+    Step = GetStepForRerolledLoop(PackList[0], PackList[1])
     Start = GetFirstLowIndexInPack(PackList[0])
     End = GetFirstLowIndexInPack(PackList[len(PackList) - 1])
     print("START:")
