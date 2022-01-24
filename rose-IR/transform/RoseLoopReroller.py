@@ -362,7 +362,6 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
       continue
     # Reroller only operates on blocks
     if not isinstance(Abstraction, RoseBlock):
-      print("REGION:")
       Abstraction.print()
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap)
@@ -513,7 +512,7 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
       if CheckDFGsAreIsomorphic == False:
         # Nothing to do here, just skip this pack list
         continue
-      # Now we get if the offsets are equal
+      # Now we check if the offsets are equal
       NewOffsetsList = GetOffsetsBetweenPacks(TailPackList[0], CheckPackList[0], OffsetsList)
       print("++++NewOffsetsList:")
       print(NewOffsetsList)
@@ -528,8 +527,10 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
       IsomorphicPackLists.append(CheckPackList)
     if len(IsomorphicPackLists) != 1:
       CandidateListsOfIsomorphicPackLists.append(IsomorphicPackLists)
+    # Reset the lists. Note that we do not reset the offset list because we expect
+    # the offset list to be the same across rerolled loops.
     IsomorphicPackLists = []
-    OffsetsList = []
+    #OffsetsList = []
   print("================================================")
   for PackLists in CandidateListsOfIsomorphicPackLists:
     print("+++++++PACKLISTS:")
