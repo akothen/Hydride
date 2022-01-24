@@ -177,8 +177,15 @@ class RoseRegion:
   def clone(self):
     return deepcopy(self)
 
+  def to_rosette(self, NumSpace = 0):
+    String = ""
+    for Child in self.Children:
+      String += Child.to_rosette(NumSpace)
+    return String
+
   def print(self, NumSpace = 0):
     for Child in self.Children:
-        Child.print(NumSpace)
+      Child.print(NumSpace)
+
 
 

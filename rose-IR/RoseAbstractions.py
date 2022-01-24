@@ -1,5 +1,4 @@
 
-from tokenize import String
 from RoseType import RoseType, RoseFunctionType
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion

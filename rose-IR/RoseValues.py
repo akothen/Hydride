@@ -1,5 +1,4 @@
 
-from lib2to3.pgen2.token import OP
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
@@ -62,6 +61,9 @@ class RoseConstant(RoseValue):
   def getValue(self):
     return self.Val
   
+  def to_rosette(self):
+    return str(self.Val)
+
   def print(self):
     print(self.Val)
 
@@ -258,6 +260,20 @@ class RoseOperation(RoseValue):
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += (self.Opcode.getRosetteOp() + " ")
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += ")\n"
+    return String
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -276,4 +292,4 @@ class RoseOperation(RoseValue):
     print(String)
 
 
-  
+
