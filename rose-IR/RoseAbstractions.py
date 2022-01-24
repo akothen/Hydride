@@ -239,8 +239,10 @@ class RoseFunction(RoseValue, RoseRegion):
       Spaces += " "
     # Print function signature first
     Func_Sig = Spaces + "function " + self.getName() + " ("
-    for Arg in self.ArgList:
-      Func_Sig += (" " + Arg.getName())
+    for Index, Arg in enumerate(self.ArgList):
+      Func_Sig += (" " + str(Arg.getType()) + Arg.getName())
+      if Index != len(self.ArgList) - 1:
+        Func_Sig += ","
     Func_Sig += " ) {"
     print(Func_Sig)
     RoseRegion.print(self, NumSpace + 1)
@@ -318,6 +320,10 @@ class RoseBlock(RoseRegion):
   def getPosOfOperation(self, Operation):
     return self.getPosOfChild(Operation)
   
+  def addOperationBefore(self, Operation : RoseOperation, InsertBefore : RoseOperation):
+    Index = self.getPosOfOperation(InsertBefore)
+    self.addRegionBefore(Index, Operation)
+  
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN BLOCK")
@@ -382,6 +388,9 @@ class RoseBlock(RoseRegion):
     # Ensure this operation does not have any uses left.
     # This is to prevent deletion of operations before their
     # uses are removed/fixed.
+    print("OPERATION TO BE ERASED:")
+    Operation.print()
+    self.print()
     Function = self.getFunction()
     assert not Function.hasUsesOf(Operation)
     self.eraseChild(Operation)
@@ -764,5 +773,5 @@ class RoseCond(RoseRegion):
     print(Spaces + "} else {")
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
-    print("}")
+    print(Spaces + "}")
 
