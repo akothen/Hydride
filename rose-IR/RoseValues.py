@@ -1,4 +1,5 @@
 
+from lib2to3.pgen2.token import OP
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
@@ -218,19 +219,44 @@ class RoseOperation(RoseValue):
   # This is used to query if this operation uses
   #  the given value as an operand.
   def usesValue(self, Value):
+    if Value == self:
+      return False
     for Operand in self.Operands:
       if type(Value) != type(Operand):
         continue
       if Operand == Value:
         return True
     return False
+
+  def getUsers(self):
+    Block = self.getParent()
+    assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
+    return Block.getUsersOf(self)
   
-  def replaceUsesWith(self, Value, NewValue):
-    for Index, Operand in enumerate(self.Operands):
-      if type(Value) != type(Operand):
-          continue
-      if Operand == Value:
-        self.setOperand(Index, NewValue)
+  # This is an overloaded function
+  def replaceUsesWith(self, *args):
+    if len(args) == 1:
+      # This means that we need to replace the uses of this operation
+      # with the new value.
+      NewValue = args[0]
+      assert isinstance(NewValue, RoseValue)
+      Function = self.getParent().getFunction()
+      assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
+      return Function.replaceUsesWith(self, NewValue)
+    if len(args) == 2:
+      # This means that the operands of this operation need to be replaced
+      # with the new value.
+      OldValue = args[0]
+      NewValue = args[1]
+      assert isinstance(OldValue, RoseValue)
+      assert isinstance(NewValue, RoseValue)
+      for Index, Operand in enumerate(self.Operands):
+        if type(OldValue) != type(Operand):
+            continue
+        if Operand == OldValue:
+          self.setOperand(Index, NewValue)
+      return
+    assert False, "Illegal number of arguments to replaceUsesWith"
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -250,3 +276,4 @@ class RoseOperation(RoseValue):
     print(String)
 
 
+  
