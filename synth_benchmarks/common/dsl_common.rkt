@@ -286,6 +286,7 @@
 (define id-vec-shuffle-ext-special 10)
 (define id-vec-strided-gather 11)
 (define id-no-op 12)
+(define id-vec-div 13)
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
@@ -297,6 +298,7 @@
 (struct vec-concat-16 (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12 v13 v14 v15 v16) #:transparent) 
 (struct dot-prod ([vacc #:mutable] [v1 #:mutable] [v2 #:mutable] i j IP OP) #:transparent )
 (struct vec-mul ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
+(struct vec-div ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
 (struct vec-add ([v1 #:mutable] [v2 #:mutable] len prec) #:transparent )
 (struct vec-reduction ([v1 #:mutable] len prec) #:transparent )
 (struct vec-load ([v1 #:mutable] vsize start num prec) #:transparent )
@@ -313,6 +315,7 @@
             [(lit val) id-lit]
             [(vec-mul v1 v2 len prec) id-vec-mul]
             [(vec-add v1 v2 len prec) id-vec-add]
+            [(vec-div v1 v2 len prec) id-vec-div]
             [(dot-prod vacc v1 v2 i j IP OP) id-dot-prod]
             [(vec-reduction v1 len prec) id-vec-reduction]
             [(vec-load v1 vsize start num prec) id-vec-load]
@@ -335,6 +338,9 @@
             [(reg _) (list id-reg)]
             [(vec-mul v1 v2 len prec)
              (append (list id-vec-mul) (get-structure-list v1) (get-structure-list v2))
+             ]
+            [(vec-div v1 v2 len prec)
+             (append (list id-vec-div) (get-structure-list v1) (get-structure-list v2))
              ]
             [(vec-add v1 v2 len prec)
              (append (list id-vec-add) (get-structure-list v1) (get-structure-list v2))
@@ -462,6 +468,7 @@
             [(reg id) (list-ref (list {}) id)]
             [(lit val) (bvlength val)]
             [(vec-mul v1 v2 len prec) (* len prec)]
+            [(vec-div v1 v2 len prec) (* len prec)]
             [(vec-add v1 v2 len prec) (* len prec)]
             ;[(vec-mac v1 v2 v3 len prec) (* len prec)]
             [(dot-prod vacc v1 v2 i j IP OP) (* i OP)]
@@ -472,6 +479,32 @@
             [(vec-shuffle-special v1 v2 len prec) (* 2 len prec)]
             [(vec-shuffle-ext-special v1 v2 len prec index lump) (* 2 lump prec)]
             [(vec-shuffle-rotate v1 num_rot prec) (get-length v1)]
+            [(vec-concat-9 v1 v2 v3 v4 v5 v6 v7 v8 v9)
+             (+    
+                (get-length v1) (get-length v2) (get-length v3)
+                (get-length v4) (get-length v5) (get-length v6)
+                (get-length v7 ) (get-length v8) (get-length v9)
+                )
+             ]
+            [(vec-concat-12 v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
+             (+    
+                (get-length v1) (get-length v2) (get-length v3)
+                (get-length v4) (get-length v5) (get-length v6)
+                (get-length v7 ) (get-length v8) (get-length v9)
+                (get-length v10 ) (get-length v11) (get-length v12)
+                )
+             ]
+            [(vec-concat-16 v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12 v13 v14 v15 v16)
+             (+    
+                (get-length v1) (get-length v2) (get-length v3)
+                (get-length v4) (get-length v5) (get-length v6)
+                (get-length v7 ) (get-length v8) (get-length v9)
+                (get-length v10 ) (get-length v11) (get-length v12)
+                (get-length v13 ) (get-length v14) (get-length v15)
+                (get-length v16 )
+                )
+             ]
+
             [_ -1]
             )
   )
@@ -484,6 +517,9 @@
             [(reg _) 5]
             [(vec-mul v1 v2 len prec)
              (+ cost-vec-mul (cost v1) (cost v2))
+             ]
+            [(vec-div v1 v2 len prec)
+             (+ cost-vec-div (cost v1) (cost v2))
              ]
             [(vec-add v1 v2 len prec)
              (+ cost-vec-add (cost v1) (cost v2))
@@ -606,6 +642,11 @@
              (assert (equal? (get-length v1) (* len prec)))
              (vector-mul (interpret v1 env) (interpret v2 env) len prec)
              ]
+            [(vec-div v1 v2 len prec)
+             (assert (equal? (get-length v1) (get-length v2)))
+             (assert (equal? (get-length v1) (* len prec)))
+             (vector-div (interpret v1 env) (interpret v2 env) len prec)
+             ]
             [(vec-add v1 v2 len prec)
              (assert (equal? (get-length v1) (get-length v2)))
              (assert (equal? (get-length v1) (* len prec)))
@@ -716,6 +757,24 @@
             [
              (vec-mul v1 v2 len prec)
              (displayln "(vector-mul ")
+             (print-prog v1)
+             (print-prog v2)
+             (println len)
+             (println prec)
+             (displayln ")")
+             ]
+            [
+             (vec-div v1 v2 len prec)
+             (displayln "(vector-div ")
+             (print-prog v1)
+             (print-prog v2)
+             (println len)
+             (println prec)
+             (displayln ")")
+             ]
+            [
+             (vec-add v1 v2 len prec)
+             (displayln "(vector-add ")
              (print-prog v1)
              (print-prog v2)
              (println len)

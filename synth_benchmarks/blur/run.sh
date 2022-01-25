@@ -1,3 +1,5 @@
 bash clean.sh
 echo "*** Running Iterative Synthesis ***"
-python3 iterate.py
+
+echo "python3 ../common/iterate.py blur.json"
+python3 ../common/iterate.py blur.json

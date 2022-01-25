@@ -5,6 +5,11 @@ import sys
 import json
 import os
 
+def clean_up():
+    clean_up_script = os.path.dirname(os.path.abspath(__file__))+"/clean.sh"
+    sb.call("bash "+clean_up_script, shell = True)
+
+
 
 def get_cex_defs(cex_ls, arg_sizes):
     strs = []
@@ -266,6 +271,7 @@ if __name__ == "__main__":
 
 
 
+    clean_up()
 
     start_time = time.time()
     for i in range(0,100):
