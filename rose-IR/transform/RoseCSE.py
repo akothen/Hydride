@@ -50,6 +50,53 @@ def RunCSEOnBlock(Block : RoseBlock, OpToOpMap : dict):
         else:
           OpToOpMap[KeyOperation].append(Operation)
         Visited.add(Operation)
+      else:
+        # Now we try a little harder by iterating the 
+        # operands of the instructions and see if the 
+        # the operands have been determined to be performing
+        # similar computations.
+        if len(KeyOperation.getOperands()) == len(Operation.getOperands()):
+          Match = True
+          for OperandIndex, Operand in enumerate(Operation.getOperands()):
+            KeyOperand = KeyOperation.getOperand(OperandIndex)
+            if isinstance(Operand, RoseConstant):
+              # See if the constants in key and check operations are equal
+              if not isinstance(KeyOperand, RoseConstant):
+                Match = False
+                break
+              if KeyOperand.getValue() != Operand.getValue():
+                Match = False
+                break
+              continue
+            # See if the operands are similar/equivalent. if yes, just continue
+            if isinstance(Operand, RoseOperation) or isinstance(Operand, RoseArgument):
+              if isinstance(KeyOperand, RoseOperation) \
+              or isinstance(KeyOperand, RoseArgument):
+                if KeyOperand.isSameAs(Operand):
+                  continue
+              else:
+                Match = False
+                break
+            else:
+              if KeyOperand == Operand:
+                continue
+              else:
+                Match = False
+                break
+            # Try to see if the operands are already mapped in the OpToOpMap
+            if OpToOpMap.get(KeyOperand, []) == []:
+              Match = False
+              break
+            if Operand not in OpToOpMap[KeyOperand]:
+              Match = False
+              break
+          if Match == True:
+            # Match found!
+            if OpToOpMap.get(KeyOperation, []) == []:
+              OpToOpMap[KeyOperation] = [Operation]
+            else:
+              OpToOpMap[KeyOperation].append(Operation)
+            Visited.add(Operation)
     Visited.add(KeyOperation)
   print(OpToOpMap)
   return OpToOpMap
@@ -112,6 +159,7 @@ def RunCSEOnFunction(Function : RoseFunction):
 # Runs a transformation
 def Run(Function : RoseFunction):
   RunCSEOnFunction(Function)
+  print("\n\n\n\n\n")
   Function.print()
 
 
