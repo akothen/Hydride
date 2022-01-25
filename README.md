@@ -30,7 +30,7 @@ Hydride has two major components:
 - `halide-examples` contains tensor and stencil kernels implemented in Halide.
 - `rose-IR` contains the custom compiler to generate target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
 - `rosette` tracks all the changes made to Rosette to synthesize code for Hydride.
-- `synth-benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions.
+- `benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions.
 
 ## Targets Supported (WIP)
 - x86 (AVX, SSE, VNNI)
