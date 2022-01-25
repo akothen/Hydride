@@ -11,11 +11,6 @@ import numpy as np
 import math
 
 
-def Truncate(number, digits) -> float:
-    stepper = 10.0 ** digits
-    return math.trunc(stepper * number) / stepper
-
-
 # Useful for debugging
 def PrintPack(Pack : list):
   print("PRINTING PACK:")
@@ -694,15 +689,39 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
   print(StartIndex1)
   print("StartIndex2:")
   print(StartIndex2)
-  print("StartIndex3:")
+  print("------StartIndex3:")
   print(StartIndex3)
   Pack1LaneIndex = 0
   Pack2LaneIndex = 0
   # StartIndex is total index into the vector. It is supposed
-  # to be the index into a lane. So adjust for that by dividing
-  # StartIndex3 by 2 since it corresponds to the second lane.
+  # to be the index into a lane. So adjust for that.
   Pack3LaneIndex = StartIndex3 - StartIndex1
-  StartIndex3 = StartIndex3 / 2
+  StartIndex3 = StartIndex1
+
+  # Function to round numbers
+  def Round(X):
+    def Truncate(number, digits) -> float:
+      stepper = 10.0 ** digits
+      return math.trunc(stepper * number) / stepper
+    # Truncate first
+    print("X: ")
+    print(X)
+    X = Truncate(X, 2)
+    # See if more rounding is needed
+    print("TRUNCATED X: ")
+    print(X)
+    if X == 0:
+      return X
+    if (1/X) % 2 == 0:
+      return X
+    if X != int(X):
+      if (X + 0.01) == int(X + 0.01):
+        X = X + 0.01
+        return X
+      assert (X - 0.01) == int(X - 0.01)
+      X = X - 0.01
+      return X
+    return X
 
   LowOffsetsList = list()
   CoFactactorsList1 = list()
@@ -726,15 +745,6 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
     assert isinstance(LowIndex1, RoseConstant)
     assert isinstance(LowIndex2, RoseConstant)
     assert isinstance(LowIndex3, RoseConstant)
-    # Solve the linear equations
-    # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
-    A = np.array([[Pack1LaneIndex,  StartIndex1, 1], [Pack2LaneIndex, StartIndex2, 1], \
-                 [Pack3LaneIndex, StartIndex3, 1]])
-    B = np.array([LowIndex1.getValue(), LowIndex2.getValue(), LowIndex3.getValue()])
-    X =  np.linalg.solve(A, B)
-    Cofactor1 = Truncate(X[0], 2)
-    Cofactor2 = Truncate(X[1], 2)
-    Offset = Truncate(X[2], 2)
     print("--OP1:")
     Op1.print()
     print("--OP2:")
@@ -745,6 +755,21 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
     print(LowIndex2.getValue())
     print("LowIndex3.getValue():")
     print(LowIndex3.getValue())
+    print("StartIndex1:")
+    print(StartIndex1)
+    print("StartIndex2:")
+    print(StartIndex2)
+    print("StartIndex3:")
+    print(StartIndex3)
+    # Solve the linear equations
+    # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
+    A = np.array([[Pack1LaneIndex,  StartIndex1, 1], [Pack2LaneIndex, StartIndex2, 1], \
+                 [Pack3LaneIndex, StartIndex3, 1]])
+    B = np.array([LowIndex1.getValue(), LowIndex2.getValue(), LowIndex3.getValue()])
+    X =  np.linalg.solve(A, B)
+    Cofactor1 = Round(X[0])
+    Cofactor2 = Round(X[1])
+    Offset = Round(X[2])
     print("Cofactor1:")
     print(Cofactor1)
     print("Cofactor2:")
