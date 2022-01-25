@@ -65,6 +65,20 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += "Saturate("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))"
+    return String
+
 
 class RoseBVUSaturateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -85,6 +99,20 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += "USaturate("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))"
+    return String
+
 
 class RoseBVTruncateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -104,6 +132,10 @@ class RoseBVTruncateOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+
+  def to_rosette(self, NumSpace = 0):
+    assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
+    NotImplemented
 
 
 class RoseBVExtractSliceOp(RoseBitVectorOp):
@@ -175,6 +207,11 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
 
   def isIndexingBVOp(self):
     return True
+
+  def to_rosette(self, NumSpace = 0):
+    assert "No direction convertion of BVInsert to Rosette!"
+    NotImplemented
+
 
 
 ######################################## BITWISE OPERATORS ###########################
@@ -408,6 +445,20 @@ class RoseBVNEQOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVNEQOp(Name, Operand1, Operand2, ParentBlock)
+
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += "bvnot (bveq " 
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + Operand.getName()
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))"
+    return String
 
 
 class RoseBVSLTOp(RoseBitVectorOp):
