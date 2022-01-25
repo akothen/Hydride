@@ -169,7 +169,28 @@ def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str):
 
 
 
+def print_benchmark_desc(desc):
+    print("=" * 50)
 
+    print(" "* 15, "Iterative Synthesis")
+
+    print("=" * 50)
+
+    print("Benchmark:\t", desc['SPEC_NAME'])
+    print("Argument Sizes (bits):\t\t", desc['ARG_SIZES'])
+    print("Solver:\t\t\t\t", desc['SOLVER'])
+
+    if desc['BITWIDTH'] != -1 :
+        print("Integer Bitwidth:\t\t", desc['BITWIDTH'])
+
+    print("Cost Optimizations:\t\t", desc['DO_OPTIMIZE'] )
+
+    print("[Additional Constraint] Symmetric:\t", desc['SYMMETRY'])
+
+    if desc['COST_BOUND'] != -1:
+        print("[Additional Constraint] Cost Upper Bound :\t", desc['COST_BOUND'])
+
+    print("=" * 50)
 
 
 
@@ -184,6 +205,8 @@ if __name__ == "__main__":
     desc = {}
     with open(sys.argv[1],"r") as DescriptionFile:
         desc = json.load(DescriptionFile)
+        print_benchmark_desc(desc)
+
     SPEC_NAME = desc['SPEC_NAME']
     ARG_SIZES = desc['ARG_SIZES']
     INVOKE_STR = desc['SPEC_INVOKE_STR']
@@ -298,6 +321,7 @@ if __name__ == "__main__":
                 print("Synthesis completed succesfully")
                 break
             cex.append(new_cex)
+        print("="*50,"\n")
 
 
     end_time = time.time()

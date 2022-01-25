@@ -58,7 +58,7 @@ symbolic bitvectors (e.g. during verification).
 To execute each benchmark, the following command should be run (from within the specific benchmark directory):
 
 ```
-python3 ../common/iteration.py <benchmark>.json
+python3 ../common/iterate.py <benchmark>.json
 ```
 
 
@@ -69,7 +69,7 @@ Certain configurations of parameters are not-valid due to the limitations of the
 1. The `DO_OPTIMIZE` flag can not be used with the `SOLVER` set to `Boolector`. This is due to lack of native optimizations support in the `Boolector`. To control the cost of the synthesized function, users may set the `COST_BOUND` field to a positive value
 to enforce an upper bound on the cost.
 
-2. When the `Solver` is set tot `Boolector`, the `BITWIDTH` field must be set to some positive value k. This is due to the fact that `Boolector` can not model infinite precision Integers (as it's specialized to operation on bitvectors).
+2. When the `Solver` is set to `Boolector`, the `BITWIDTH` field must be set to some positive value k. This is due to the fact that `Boolector` can not model infinite precision Integers (as it's specialized to operation on bitvectors).
 
 
 
