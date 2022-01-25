@@ -30,6 +30,13 @@ class RoseReturnOp(RoseOperation):
   def getReturnedValue(self):
     return self.getOperands(0)
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    String = Spaces + "(" + self.getReturnedValue().getName() + ")"
+    return String
+
 
 class RoseCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
@@ -47,6 +54,20 @@ class RoseCallOp(RoseOperation):
   
   def getCallOperands(self):
     return self.getOperands()[1:]
+
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))"
+    return String
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -88,6 +109,10 @@ class RoseSelectOp(RoseOperation):
   def getElseValue(self):
     return self.getOperands()[2]
 
+  def to_rosette(self, NumSpace = 0):
+    assert "No direction convertion of Select Op to Rosette!"
+    NotImplemented
+
 
 class RoseCastOp(RoseOperation):
   def __init__(self, Name : str, Operand : RoseValue, TargetType : RoseType, ParentBlock):
@@ -102,6 +127,24 @@ class RoseCastOp(RoseOperation):
   def create(Name : str, Operand : RoseValue, TargetType : RoseType, 
             ParentBlock = RoseUndefRegion()):
     return RoseCastOp(Name, Operand, TargetType, ParentBlock)
+
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    if self.getOperand().getType().isBitVectorTy() and self.getType().isIntegerTy():
+      String += "bitvector->integer " + self.getOperand().getName() + "))"
+    elif self.getOperand().getType().isIntegerTy() and self.getType().isBitVectorTy():
+      String += "integer->bitvector " + self.getOperand().getName() + " " \
+              "(bitvector " + self.getType().getBitwidth() + "))"
+    elif self.getOperand().getType().isBitVectorTy() and self.getType().isBooleanTy():
+      String += "bitvector->bool " + self.getOperand().getName() + "))"
+    elif self.getOperand().getType().isBooleanTy() and self.getType().isBitVectorTy():
+      String += "bool->bitvector " + self.getOperand().getName() + " " \
+              "(bitvector " + self.getType().getBitwidth() + "))"
+    return String
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -228,6 +271,20 @@ class RoseNEQOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseNEQOp(Name, Operand1, Operand2, ParentBlock)
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += "not (equal? " 
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))"
+    return String
+
 
 class RoseLTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -331,7 +388,7 @@ class RoseAndOp(RoseOperation):
     for Operand in Operands:
       assert Operand.getType().isBooleanTy()
     super().__init__(RoseOpcode.booland, Name, Operands, ParentBlock)
-    
+  
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseAndOp(Name, Operands, ParentBlock)
