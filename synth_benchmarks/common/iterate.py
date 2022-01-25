@@ -40,7 +40,7 @@ def get_synth_asserts(invoke_str, envs, args):
     return  "\n".join(strs)
 
 
-def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str,  do_optimize = False):
+def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str,  do_optimize = False, additional_constraints = []):
     synth_file_name = "synth_iter_"+str(iter_num)+".rkt"
 
 
@@ -53,6 +53,9 @@ def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str, 
 
 
         synth_assert_calls = get_synth_asserts(invoke_str, envs, args)
+
+        synth_assert_calls += "\n".join(["\n"]+additional_constraints)
+
 
         forall_ls = "(list {} {})".format(" ".join(args), " ".join(envs))
 
@@ -190,6 +193,8 @@ if __name__ == "__main__":
     DO_OPTIMIZE = desc["DO_OPTIMIZE"]
     SPEC_IMPL = desc["SPEC_IMPL"]
     GRAMMAR_IMPL = desc["GRAMMAR_IMPL"]
+    SYMMETRY = desc['SYMMETRY']
+    COST_BOUND = desc['COST_BOUND']
     dsl_common_str = ""
 
     with open(os.path.dirname(os.path.abspath(__file__))+"/dsl_common.rkt","r") as DSLFile:
@@ -222,10 +227,27 @@ if __name__ == "__main__":
 
     cex = [init_cex]
 
+
+    # Adding additional constraints
+    additional_constraints = []
+
+    if SYMMETRY == 1:
+        symmetry_ctr = "(assert (has-symmetric-structure sketch-grammar))"
+        additional_constraints.append(symmetry_ctr)
+
+
+    if COST_BOUND != -1:
+        cost_ctr = "(assert (< (cost sketch-grammar) {} ))".format(COST_BOUND)
+        additional_constraints.append(cost_ctr)
+
+
+
+
+
     start_time = time.time()
     for i in range(0,100):
         print("Iteration "+str(i+1))
-        synth_file_name = gen_synth_file(i+1, dsl_common_str, cex, ARG_SIZES, INVOKE_STR, do_optimize = (DO_OPTIMIZE == 1))
+        synth_file_name = gen_synth_file(i+1, dsl_common_str, cex, ARG_SIZES, INVOKE_STR, do_optimize = (DO_OPTIMIZE == 1), additional_constraints = additional_constraints)
 
         synth_log_name = "synth_{}.log".format(i+1)
 

@@ -6,5 +6,7 @@
 "BITWIDTH": -1,
 "DO_OPTIMIZE": 1,
 "SPEC_IMPL": "conv_spec.rkt",
-"GRAMMAR_IMPL": "conv_grammar.rkt"
+"GRAMMAR_IMPL": "conv_grammar.rkt",
+"SYMMETRY": 1,
+"COST_BOUND": -1
 }
