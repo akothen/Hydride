@@ -9,19 +9,19 @@ Hydride has two major components:
 ## Prerequisites
 
 ### Python
-- Install [Python][] > 3.0.
+- Install [Python][https://www.python.org/downloads/] > 3.0.
 
 ### Rosette
-- Install [Racket][] > 8.0.
-- Install [Rosette][] by running `raco pkg install rosette`.
+- Install [Racket][https://github.com/racket/racket] > 8.0.
+- Install [Rosette][https://docs.racket-lang.org/rosette-guide/index.html] by running `raco pkg install rosette`.
 
 ### Z3
-- Install [z3][]:
+- Install [z3][https://github.com/Z3Prover/z3]:
     - MacOS: `brew install z3`
     - Linux example: `sudo apt-get install -y z3`
 
 ### LLVM
-- Install [LLVM][]:
+- Install [LLVM][https://github.com/llvm/llvm-project.git]:
     - Source: `git clone -b release/13.x https://github.com/llvm/llvm-project.git`
 
 ## Directory Structure (WIP)
