@@ -202,18 +202,18 @@ function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %prec
   ret %dst
 }
 
-(define (interleave_shuffle a b offset vector-length lane-size precision)
+(define (interleave_shuffle %a %b %offset %vector_length %lane_size %precision)
   (define %dst
     (apply
      concat
-     (for/list ([i (reverse (range 0 vector-length lane-size))])
+     (for/list ([i (reverse (range 0 %vector_length %lane_size))])
        (apply
         concat
-        (for/list ([j (reverse (range offset lane-size precision))])
-          (define %1 (+ i (- lane-size 1)))
-          (define %2 (extract %1 i a))
-          (define %4 (extract %1 i b))
-          (define %5 (+ j (- precision 1)))
+        (for/list ([j (reverse (range offset %lane_size %precision))])
+          (define %1 (+ i (- %lane_size 1)))
+          (define %2 (extract %1 i %a))
+          (define %4 (extract %1 i %b))
+          (define %5 (+ j (- %precision 1)))
           (define %6 (extract %5 j %2))
           (define %7 (extract %5 j %4))
           (concat %6 %7)
