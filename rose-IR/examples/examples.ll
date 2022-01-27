@@ -209,7 +209,7 @@ function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %prec
      (for/list ([i (reverse (range 0 %vector_length %lane_size))])
        (apply
         concat
-        (for/list ([j (reverse (range offset %lane_size %precision))])
+        (for/list ([j (reverse (range %offset %lane_size %precision))])
           (define %1 (+ i (- %lane_size 1)))
           (define %2 (extract %1 i %a))
           (define %4 (extract %1 i %b))
