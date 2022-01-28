@@ -4,7 +4,6 @@ from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
 
-
 ####################################### ROSE UNDEF REGION #######################################
 
 class RoseUndefRegion(RoseRegion):
@@ -133,8 +132,9 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     assert self.ArgsList[ArgIndex].getType() == NewArg.getType()
     Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), self, ArgIndex)
+    OldArg = self.ArgsList[ArgIndex]
     self.ArgsList[ArgIndex] = Arg
-    # TODO: Replace uses as well
+    self.replaceUsesWith(OldArg, Arg)
 
   def isTopLevelFunction(self):
     return (self.getParent() == RoseUndefRegion())
@@ -232,20 +232,6 @@ class RoseFunction(RoseValue, RoseRegion):
       assert self.isChildValid(Child)
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
-
-  def to_rosette(self, NumSpace = 0):
-    Spaces = ""
-    for _ in range(NumSpace):
-      Spaces += " "
-    String = Spaces + "(define (" + self.getName() + " ("
-    for Index, Arg in enumerate(self.ArgList):
-      String += Arg.getName()
-      if Index != len(self.ArgList) - 1:
-        String += " "
-    String += " )\n"
-    String += RoseRegion.to_rosette(self, NumSpace + 1)
-    String += (Spaces + ")\n")
-    return String
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -584,17 +570,6 @@ class RoseForLoop(RoseRegion):
       Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
-  def to_rosette(self, NumSpace = 0):
-    Spaces = ""
-    for _ in range(NumSpace):
-      Spaces += " "
-    String = Spaces + "(for/list ([" + self.Iterator.getName() + " (range " \
-        + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
-        + " " + str(self.getStep()) + ")])\n"
-    String += RoseRegion.to_rosette(self, NumSpace + 1)
-    String += (Spaces + ")\n")
-    return String
-
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -785,19 +760,6 @@ class RoseCond(RoseRegion):
       Users.extend(self.getUsersOf(self, Abstraction, "then"))
       Users.extend(self.getUsersOf(self, Abstraction, "else"))
     return Users
-
-  def to_rosette(self, NumSpace = 0):
-    Spaces = ""
-    for _ in range(NumSpace):
-      Spaces += " "
-    String = Spaces + "(if (" + self.Condition.getName() + ") \n"
-    # Print regions in this if-else blocks
-    for Region in self.getThenRegions():
-      String += Region.to_rosette(NumSpace + 1)
-    for Region in self.getElseRegions():
-      String += Region.to_rosette(NumSpace + 1)
-    String += (Spaces + ")\n")
-    return String
 
   def print(self, NumSpace = 0):
     Spaces = ""
