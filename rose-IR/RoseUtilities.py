@@ -6,7 +6,6 @@
 ###################################################################
 
 
-from operator import truediv
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -159,7 +158,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   else:
     assert isinstance(Low1.getOperand(1), RoseConstant)
     Low1IndexValue = Low1.getOperand(0)
-    ConstantLow1Index = Low1.getOperand(1)
+    ConstantLow1Index = Low1.getOperand(1) 
   # Strip any casts away
   Low1IndexValue = StripCastsAndSizeExtensiosn(Low1IndexValue)
   assert Low1IndexValue.isSameAs(Low2IndexValue)
@@ -169,4 +168,43 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   return False
 
 
+
+def GetOpsInLoopsWithInvariants(Loop : RoseForLoop, Invariants :list = []):
+  assert not isinstance(Loop, RoseUndefRegion)
+  # Now iterate over all operations and extract all the invariants
+  for Region in Loop:
+    if isinstance(Region, RoseForLoop):
+      Invariants = GetOpsInLoopsWithInvariants(Region, Invariants)
+      continue
+    if isinstance(Region, RoseBlock):
+      # Iterate over the block in reverse order and see 
+      # if indexing operations are iterator independent.
+      OpList = Region.getOperations()
+      OpList.reverse()
+      IndexingOp = set()
+      for Op in OpList:
+        # Skip call and cast ops
+        if isinstance(Op, RoseCallOp) or isinstance(Op, RoseCastOp):
+          continue
+        # Sign extending ops are considered to contain invariants
+        if Op.isSizeChangingBVOp():
+          Invariants.append(Op)
+          if Op in IndexingOp:
+            IndexingOp.add(Op.getInputBitVector())
+          continue
+        if Op in IndexingOp:
+          continue
+        if Op.isIndexingBVOp():
+          IndexingOp.add(Op)
+        for OpIndex, Operand in enumerate(Op.getOperands()):
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if Op.getInsertValue() == Operand:
+              continue
+          if isinstance(Operand, RoseConstant):
+            if Op.isIndexingBVOp() and (OpIndex == len(Op.getOperands()) - 1):
+              continue
+            Invariants.append(Op)
+          break
+  return Invariants
+          
 
