@@ -210,6 +210,8 @@ class RoseRegion:
           if Region1.isStructurallyIsomorphicWith(Region2) == False:
             return False
     else:
+      if self.getNumChildren() != CheckRegion.getNumChildren():
+        return False
       for Index in range(self.getNumChildren()):
         Region1 = self.getChild(Index)
         Region2 = CheckRegion.getChild(Index)
