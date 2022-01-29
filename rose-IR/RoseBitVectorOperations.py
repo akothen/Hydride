@@ -25,6 +25,9 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def isSizeChangingBVOp(self):
+    return True
+
 
 class RoseBVZeroExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -44,6 +47,9 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+
+  def isSizeChangingBVOp(self):
+    return True
 
 
 class RoseBVSSaturateOp(RoseBitVectorOp):
@@ -65,6 +71,9 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def isSizeChangingBVOp(self):
+    return True
+
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -76,7 +85,7 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
         String += " " + Operand.getName() 
         if Index != len(self.getOperands()) - 1:
           String += " "
-    String += " )))"
+    String += " )))\n"
     return String
 
 
@@ -99,6 +108,9 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def isSizeChangingBVOp(self):
+    return True
+
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -110,7 +122,7 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
         String += " " + Operand.getName() 
         if Index != len(self.getOperands()) - 1:
           String += " "
-    String += " )))"
+    String += " )))\n"
     return String
 
 
@@ -132,6 +144,9 @@ class RoseBVTruncateOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+  
+  def isSizeChangingBVOp(self):
+    return True
 
   def to_rosette(self, NumSpace = 0):
     assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
@@ -457,7 +472,7 @@ class RoseBVNEQOp(RoseBitVectorOp):
         String += " " + Operand.getName()
         if Index != len(self.getOperands()) - 1:
           String += " "
-    String += " )))"
+    String += " )))\n"
     return String
 
 
