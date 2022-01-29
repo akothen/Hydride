@@ -16,6 +16,7 @@ class RoseRegion:
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
+    # Tracks keys for this region
     self.Keys = Keys
     # This is a unique ID to identify this instance of rose region
     # If this is an instance of undef region, then the ID used is 0.
@@ -74,6 +75,9 @@ class RoseRegion:
 
   def getRegionID(self):
     return self.ID
+  
+  def getKeys(self):
+    return self.Keys
   
   def getChildren(self):
     return self.Children
@@ -158,7 +162,6 @@ class RoseRegion:
       self.Children.insert(Index, Region)
     else:
       assert Index < len(self.Children[Key])
-      
       self.Children[Key].insert(Index, Region)
     
   def replaceRegion(self, Region, Index, Key = None):
@@ -177,6 +180,42 @@ class RoseRegion:
   
   def clone(self):
     return deepcopy(self)
+
+  # This could be used for checking structural isomorphism
+  # i.e. this region's and given region's types match up as
+  # we sequentially iterate over them.
+  # Note that this does not check whether two regions are
+  # equivalent or isomorphic in any other respect.
+  def isStructurallyIsomorphicWith(self, CheckRegion):
+    # Check if the regions types are the same.
+    if type(self) != type(CheckRegion):
+      return False
+    # If the regions are block, we stop here
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return True
+    # Check if the keys are the same
+    if self.Keys != CheckRegion.getKeys():
+      return False
+    # Number of children in this and given region is the same
+    # for all keys.
+    if self.Keys != None:
+      for Key in self.Keys:
+        if self.getNumChildren(Key) != CheckRegion.getNumChildren(Key):
+          return False
+      # Now iterate over all children for each key
+      for Key in self.Keys:
+        for Index in range(self.getNumChildren(Key)):
+          Region1 = self.getChild(Index, Key)
+          Region2 = CheckRegion.getChild(Index, Key)
+          if Region1.isStructurallyIsomorphicWith(Region2) == False:
+            return False
+    else:
+      for Index in range(self.getNumChildren()):
+        Region1 = self.getChild(Index)
+        Region2 = CheckRegion.getChild(Index)
+        if Region1.isStructurallyIsomorphicWith(Region2) == False:
+          return False
+    return True
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
