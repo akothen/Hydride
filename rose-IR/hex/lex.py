@@ -11,9 +11,9 @@ reserved = {
     'WHILE',
 
     'BREAK',
-    'OP',
+    'NOP', 'OP',
 
-    'AND', 'OR', 'XOR', 'NOT',
+    # 'AND', 'OR', 'XOR', 'NOT',
     }
 
 binary_ops = {
@@ -23,12 +23,18 @@ binary_ops = {
     r'>>=': 'RSHIFT_EQUAL',
     r'<<<': 'LSHIFT_LOGICAL',
     r'>>>' : 'RSHIFT_LOGICAL',
+    r'&&' : 'AND',
+    r'||' : 'OR',
+    r'\^' : 'XOR',
+
 
     r'+':  'PLUS',
     r'-':  'MINUS',
 
     r'+=': 'PLUS_EQUAL',
     r'|=': 'OR_EQUAL',
+    r'&=': 'AND_EQUAL',
+    r'^=': 'XOR_EQUAL',
 
     r'*':  'TIMES',
     r'/':  'DIV',
@@ -57,10 +63,10 @@ tokens = [
     'DOT',
     'LBRACKET', 'RBRACKET',
     'QUEST',
-
+    'MODULE',
 
     # unary ops
-    'INC',
+    'INC', 'NOT',
 
     # pseudo token
     'NEG'
@@ -74,7 +80,7 @@ def t_inc(t):
   return t
 
 def t_binary(t):
-  r'\|=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^'
+  r'&=|\^=|\|=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^|&&|\|\||\^'
   t.type = binary_ops[t.value]
   return t
 
@@ -97,6 +103,16 @@ def t_or(t):
 def t_PSEUDO(t):
   r'\*.*\*'
   t.value = t.value[1:-1]
+  return t
+
+def t_NOP(t):
+  r'NOP'
+  t.type = 'NOP'
+  return t
+
+def t_MODULE(t):
+  r'vcmp'
+  t.type = 'MODULE'
   return t
 
 def t_TYPE(t):
@@ -152,7 +168,7 @@ t_ignore  = ' \t'
 lexer = lex.lex()
 if __name__ == '__main__':
   test_spec = '''
-  Vd.b=vpack(Vu.h,Vv.h):sat
+  Qx4&=vcmp.eq(Vu.b,Vv.b) ;
       '''
   lexer.input(test_spec)
   for token in iter(lexer.token, None):

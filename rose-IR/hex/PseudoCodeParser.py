@@ -1,4 +1,3 @@
-
 import ply.yacc as yacc
 from lex import tokens
 import json
@@ -58,6 +57,10 @@ def p_expr_assign(p):
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], p[3])
 
+def p_tuple_assign(p):
+  'stmt : expr COMMA expr UPDATE expr'
+  p[0] = Update([p[1], p[3]], p[5])
+
 def p_expr_plus_equal(p):
   'expr : expr PLUS_EQUAL expr'
   #expr_id = GenUniqueID(parser)
@@ -67,6 +70,16 @@ def p_expr_or_equal(p):
   'expr : expr OR_EQUAL expr'
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], new_binary_expr(p.parser, op='|', a=p[1], b=p[3]))
+
+def p_expr_xor_equal(p):
+  'expr : expr XOR_EQUAL expr'
+  #expr_id = GenUniqueID(parser)
+  p[0] = Update(p[1], new_binary_expr(p.parser, op='^', a=p[1], b=p[3]))
+
+def p_expr_and_equal(p):
+  'expr : expr AND_EQUAL expr'
+  #expr_id = GenUniqueID(parser)
+  p[0] = Update(p[1], new_binary_expr(p.parser, op='&', a=p[1], b=p[3]))
 
 def p_expr_empty(p):
   '''expr_empty : expr 
@@ -80,6 +93,11 @@ def p_stmt_if(p):
   'stmt : IF LPAREN expr RPAREN LBRACKET stmts RBRACKET'
   expr_id = "if." + GenUniqueID(parser)
   p[0] = If(p[3], p[6], None, expr_id)
+
+def p_stmt_if_else(p):
+  'stmt : IF LPAREN expr RPAREN LBRACKET stmts RBRACKET ELSE LBRACKET stmts RBRACKET'
+  expr_id = "if." + GenUniqueID(parser)
+  p[0] = If(p[3], p[6], p[10], expr_id)
 
 def p_stmt_if_single(p):
   'stmt : IF LPAREN expr RPAREN stmt '
@@ -98,13 +116,20 @@ def p_stmt_for_single(p):
 
 def p_expr_call(p):
   '''expr : ID LPAREN args RPAREN
-          | ID LPAREN args RPAREN COLON ID'''
+          | ID LPAREN args RPAREN COLON ID
+          | ID LPAREN args RPAREN COLON ID COLON ID'''
   expr_id = "call." + GenUniqueID(parser)
   if len(p) == 5:
     p[0] = Call(p[1], p[3], None, expr_id)
-  else:
+  elif len(p) == 7:
     p[0] = Call(p[1], p[3], p[6], expr_id)
-  
+  else:
+    p[0] = Call(p[1], p[3], [p[6], p[8]], expr_id)
+
+def p_expr_call_module(p):
+  'expr : MODULE DOT ID LPAREN args RPAREN'
+  expr_id = "call." + GenUniqueID(parser)
+  p[0] = Call(p[1] + "." + p[3], p[5], None, expr_id)
 
 def p_expr_call_no_args(p):
   'expr : ID LPAREN RPAREN'
@@ -259,6 +284,10 @@ def p_expr_wrapped(p):
   '''
   p[0] = p[2]
 
+def p_expr_nop(p):
+  'expr : NOP'
+  p[0] = None
+
 def p_expr_var(p):
   'expr : ID'
   if p[1] in ['Vs', 'Vu', 'Vv', 'Vss', 'Vuu', 'Vvv']:
@@ -267,11 +296,16 @@ def p_expr_var(p):
     expr_id = 'var.vec_dst.' + GenUniqueID(parser)
   elif p[1] in ['Vx', 'Vxx', 'Vy', 'Vyy']:
     expr_id = 'var.vec.' + GenUniqueID(parser)
+  elif p[1].startswith("Qd"):
+    expr_id = 'var.pred_dst.' + GenUniqueID(parser)
+  elif p[1].startswith("Qs"):
+    expr_id = 'var.pred_src.' + GenUniqueID(parser)
+  elif p[1].startswith("Qt"):
+    expr_id = 'var.pred.' + GenUniqueID(parser)
   elif p[1] in ['Rs', 'Rt', 'Ru']:
     expr_id = 'var.reg_src.' + GenUniqueID(parser)
   elif p[1] == 'Rd':
     expr_id = 'var.reg_dst.' + GenUniqueID(parser)
-  
   else:
     expr_id = "var." + GenUniqueID(parser)
   p[0] = Var(p[1], expr_id)
@@ -283,6 +317,9 @@ def p_expr_num(p):
 
 # in increasing order
 precedence = (
+    ('right', 'UPDATE'),
+    ('right', 'QUEST'),
+
     ('left', 'BITWISE_OR'),
     ('left', 'BITWISE_AND'),
     ('left', 'BITWISE_XOR'),
@@ -295,8 +332,11 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIV', 'MOD'),
     ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
-    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE',),
-    ('nonassoc', 'COLON')
+    ('left', 'DOT', 'LPAREN', 'RPAREN'),
+    ('nonassoc', 'COLON'),
+    ('left', 'LBRACE', 'RBRACE',),
+
+    
 )
 
 parser = yacc.yacc()
@@ -326,17 +366,13 @@ def pretty_print(root):
       return root
   return pformat(to_dict(root), indent=1)
 
-def ParseHVXSemantics(FileName):
-  semantics = json.load(open(FileName, "r"))
+def ParseHVXSemantics(semantics):
 
-  for inst, psuedocode in list(semantics.items()):
-
+  for inst, pseudocode in semantics.items():
+    print(inst)
     # We currently ignore any instructions that are just assembler syntactic sugar
-    if psuedocode.startswith("Assembler mapped to"):
+    if pseudocode.startswith("Assembler mapped to"):
       continue 
-    # Still need to handle predicate functions/vectors
-    if "vand" in inst:
-      continue
     
     assign = Parse(inst)
     # print(assign)
@@ -351,6 +387,8 @@ def ParseHVXSemantics(FileName):
         rhs = assign
     else: 
       lhs = assign.lhs
+      if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
+        lhs = lhs[0]
       # += or *=
       if isinstance(assign.rhs, BinaryExpr):
         rhs = assign.rhs.b
@@ -367,6 +405,8 @@ def ParseHVXSemantics(FileName):
     
     if var.name in ['Vx', 'Vy', 'Vd']:
       lanes = 1
+    elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
+      lanes = 1
     elif var.name in ['Vxx', 'Vyy', 'Vdd']:
       lanes = 2
     else:
@@ -374,12 +414,12 @@ def ParseHVXSemantics(FileName):
       print("Unknown variable type:", var)
     
     name = rhs.func
-    sema = Sema(intrin=name, inst="TODO", params=rhs.args, spec=Parse(psuedocode), rettype=var.id.split(".")[1], lanes=lanes)
+    sema = Sema(intrin="TODO", inst=name, params=rhs.args, spec=Parse(pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
     print(sema)
+    # print(pretty_print(sema))
   return None
 
 
 if __name__ == '__main__':
-  ParseHVXSemantics("hexagon_sema.json")
-
-
+  from insts import insts
+  ParseHVXSemantics(insts)
