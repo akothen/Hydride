@@ -1,0 +1,12 @@
+{
+"SPEC_NAME": "blur",
+"ARG_SIZES": [288],
+"SPEC_INVOKE_STR": "(blur {} 6 6 3 3 8)",
+"SOLVER": "Boolector",
+"BITWIDTH": 32,
+"DO_OPTIMIZE": 0,
+"SPEC_IMPL": "blur_spec.rkt",
+"GRAMMAR_IMPL": "blur_grammar.rkt",
+"SYMMETRY": -1,
+"COST_BOUND": -1
+}

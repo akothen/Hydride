@@ -1,0 +1,12 @@
+{
+"SPEC_NAME": "tensor-matmul",
+"ARG_SIZES": [64,192],
+"SPEC_INVOKE_STR": "(tensor-matmul {})",
+"SOLVER": "Boolector",
+"BITWIDTH": 16,
+"DO_OPTIMIZE": 0,
+"SPEC_IMPL": "matmul_spec.rkt",
+"GRAMMAR_IMPL": "matmul_grammar.rkt",
+"SYMMETRY": 1,
+"COST_BOUND": 450 
+}

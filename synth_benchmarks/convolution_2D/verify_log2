@@ -1,9 +1,0 @@
-377
-"Starting"
-"Post verify---"
-cpu time: 38 real time: 398 gc time: 6
-(model
- [sym2_arg0 (bv #xa33cf79f2755d0e4ff665f01bbffa53f 128)]
- [sym2_arg1 (bv #x9bfefa3f 32)])
-v1 (bv #xa33cf79f2755d0e4ff665f01bbffa53f 128)
-v2 (bv #x9bfefa3f 32)
