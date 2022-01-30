@@ -4,7 +4,7 @@ pdf = open("hexagon_v66.pdf", 'rb')
 
 # dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(161, 222)))
 dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40, 89)))
-# dfs = tabula.read_pdf(pdf, lattice=True, pages=74)
+# dfs = tabula.read_pdf(pdf, lattice=True, pages=80)
 
 
 insts = []

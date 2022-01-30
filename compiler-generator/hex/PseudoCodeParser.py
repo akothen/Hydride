@@ -66,6 +66,11 @@ def p_expr_plus_equal(p):
   #expr_id = GenUniqueID(parser)
   p[0] = Update(p[1], new_binary_expr(p.parser, op='+', a=p[1], b=p[3]))
 
+def p_expr_minus_equal(p):
+  'expr : expr MINUS_EQUAL expr'
+  #expr_id = GenUniqueID(parser)
+  p[0] = Update(p[1], new_binary_expr(p.parser, op='-', a=p[1], b=p[3]))
+
 def p_expr_or_equal(p):
   'expr : expr OR_EQUAL expr'
   #expr_id = GenUniqueID(parser)
@@ -158,6 +163,10 @@ def p_expr_bit_index(p):
   expr_id = "index." + GenUniqueID(parser)
   p[0] = BitIndex(p[1], p[3], expr_id)
 
+def p_expr_bit_extension(p):
+  'expr : expr COLON expr'
+  p[0] = BitExtend(p[1], p[3])
+
 def p_expr_bit_slice(p):
   'expr : expr LBRACE expr COLON expr RBRACE'
   expr_id = "bitslice." + GenUniqueID(parser)
@@ -172,6 +181,11 @@ def p_expr_increment(p):
   'expr : expr INC'
   expr_id = "unaryexpr." + GenUniqueID(parser)
   p[0] = UnaryExpr('INC', p[1], expr_id)
+
+def p_expr_decrement(p):
+  'expr : expr DEC'
+  expr_id = "unaryexpr." + GenUniqueID(parser)
+  p[0] = UnaryExpr('DEC', p[1], expr_id)
 
 def p_expr_not(p):
   'expr : NOT expr'
@@ -319,6 +333,7 @@ def p_expr_num(p):
 precedence = (
     ('right', 'UPDATE'),
     ('right', 'QUEST'),
+    ('left', 'COLON'),
 
     ('left', 'BITWISE_OR'),
     ('left', 'BITWISE_AND'),
@@ -333,7 +348,6 @@ precedence = (
     ('left', 'TIMES', 'DIV', 'MOD'),
     ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
     ('left', 'DOT', 'LPAREN', 'RPAREN'),
-    ('nonassoc', 'COLON'),
     ('left', 'LBRACE', 'RBRACE',),
 
     
@@ -369,6 +383,8 @@ def pretty_print(root):
 def ParseHVXSemantics(semantics):
 
   for inst, pseudocode in semantics.items():
+    if 'vmax' not in inst:
+      continue
     print(inst)
     # We currently ignore any instructions that are just assembler syntactic sugar
     if pseudocode.startswith("Assembler mapped to"):
@@ -378,7 +394,8 @@ def ParseHVXSemantics(semantics):
     # print(assign)
     if isinstance(assign, list):
       assign = assign[0]
-    
+    if isinstance(assign, If):
+        assign = assign.then[0]
 
     # This is either an if statement or standard function call then
     if not isinstance(assign, Update):
@@ -413,8 +430,13 @@ def ParseHVXSemantics(semantics):
       lanes = 0
       print("Unknown variable type:", var)
     
-    name = rhs.func
-    sema = Sema(intrin="TODO", inst=name, params=rhs.args, spec=Parse(pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
+    if isinstance(rhs, Call):
+      name = rhs.func
+      params = rhs.args
+    else:
+      name = "TODO"
+      params = []
+    sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
     print(sema)
     # print(pretty_print(sema))
   return None

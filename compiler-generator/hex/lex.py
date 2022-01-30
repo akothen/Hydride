@@ -32,6 +32,7 @@ binary_ops = {
     r'-':  'MINUS',
 
     r'+=': 'PLUS_EQUAL',
+    r'-=': 'MINUS_EQUAL',
     r'|=': 'OR_EQUAL',
     r'&=': 'AND_EQUAL',
     r'^=': 'XOR_EQUAL',
@@ -66,7 +67,7 @@ tokens = [
     'MODULE',
 
     # unary ops
-    'INC', 'NOT',
+    'INC', 'DEC', 'NOT',
 
     # pseudo token
     'NEG'
@@ -78,9 +79,14 @@ def t_inc(t):
   r'\+\+'
   t.type = 'INC'
   return t
+  
+def t_dec(t):
+  r'--'
+  t.type = 'DEC'
+  return t
 
 def t_binary(t):
-  r'&=|\^=|\|=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^|&&|\|\||\^'
+  r'&=|\^=|\|=|-=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^|&&|\|\||\^'
   t.type = binary_ops[t.value]
   return t
 

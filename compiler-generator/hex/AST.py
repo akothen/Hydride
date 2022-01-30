@@ -3,6 +3,7 @@ from collections import namedtuple
 
 Number = namedtuple('Number', ['val'])
 BitSlice = namedtuple('BitSlice', ['bv', 'hi', 'lo', 'id'])
+BitExtend = namedtuple('BitExtend', ['hi', 'lo'])
 BitIndex = namedtuple('BitIndex', ['obj', 'idx', 'id'])
 Var = namedtuple('Var', ['name', 'id'])
 
