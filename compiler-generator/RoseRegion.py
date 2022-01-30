@@ -74,18 +74,28 @@ class RoseRegion:
     return False
 
   def getRegionID(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     return self.ID
   
   def getKeys(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     return self.Keys
   
   def getChildren(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     return self.Children
   
   def getParent(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     return self.Parent
   
   def getChild(self, Index, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert not self.isEmpty(Key)
     if Key == None:
       assert Index < len(self.Children)
@@ -95,12 +105,16 @@ class RoseRegion:
       return self.Children[Key][Index]
   
   def getNumChildren(self, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     if Key == None:
       return len(self.Children)
     else:
       return len(self.Children[Key])
   
   def getPosOfChild(self, Child, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     if Key == None:
       assert Child in self.Children
       return self.Children.index(Child)
@@ -109,6 +123,8 @@ class RoseRegion:
       return self.Children[Key].index(Child)
 
   def getTailChild(self, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     print("KEY:")
     print(Key)
     if self.isEmpty(Key):
@@ -119,12 +135,16 @@ class RoseRegion:
       return self.Children[Key][len(self.Children[Key]) - 1]
   
   def isEmpty(self, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     if Key == None:
       return len(self.Children) == 0
     else:
       return len(self.Children[Key]) == 0
   
   def updateTailChild(self, UpdatedChild, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert not self.isEmpty(Key)
     if Key == None:
       self.Children[len(self.Children) - 1] = UpdatedChild
@@ -133,6 +153,8 @@ class RoseRegion:
   
   # Get the first function enclosing this region
   def getFunction(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     Function = self.getParent()
     while not isinstance(Function, RoseAbstractions.RoseFunction):
       Function = Function.getParent()
@@ -147,6 +169,8 @@ class RoseRegion:
     pass
 
   def addRegion(self, Region, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Region)
     Region.setParent(self)
     if Key == None:
@@ -155,6 +179,8 @@ class RoseRegion:
       self.Children[Key].append(Region)
   
   def addRegionBefore(self, Index, Region, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Region)
     Region.setParent(self)
     if Key == None:
@@ -165,6 +191,8 @@ class RoseRegion:
       self.Children[Key].insert(Index, Region)
     
   def replaceRegion(self, Region, Index, Key = None):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Region)
     if Key == None:
       assert Index >= 0 and Index < len(self.Children)
@@ -174,6 +202,8 @@ class RoseRegion:
       self.Children[Key][Index] = Region
     
   def eraseChild(self, Child):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Child)
     assert Child in self.Children
     self.Children.remove(Child)
@@ -187,6 +217,9 @@ class RoseRegion:
   # Note that this does not check whether two regions are
   # equivalent or isomorphic in any other respect.
   def isStructurallyIsomorphicWith(self, CheckRegion):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not isinstance(CheckRegion, RoseAbstractions.RoseUndefRegion)
     # Check if the regions types are the same.
     if type(self) != type(CheckRegion):
       return False
@@ -218,6 +251,23 @@ class RoseRegion:
         if Region1.isStructurallyIsomorphicWith(Region2) == False:
           return False
     return True
+
+  def containsRegionOfType(self, SubRegionTypes):
+    # Some sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not SubRegionTypes == RoseAbstractions.RoseUndefRegion
+    assert SubRegionTypes == RoseAbstractions.RoseFunction \
+        or SubRegionTypes == RoseAbstractions.RoseForLoop \
+        or SubRegionTypes == RoseAbstractions.RoseCond \
+        or SubRegionTypes == RoseAbstractions.RoseBlock
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return False
+    for SubRegion in self:
+      if isinstance(SubRegion, SubRegionTypes):
+        return True
+      if self.containsRegionOfType(SubRegionTypes) == True:
+        return True
+    return False
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
