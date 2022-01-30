@@ -169,7 +169,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
 
 
 
-def GetOpsInLoopsWithInvariants(Loop : RoseForLoop, Invariants :list = []):
+def GetOpsInLoopsWithInvariants(Loop : RoseForLoop, Invariants = dict()):
   assert not isinstance(Loop, RoseUndefRegion)
   # Now iterate over all operations and extract all the invariants
   for Region in Loop:
@@ -188,23 +188,38 @@ def GetOpsInLoopsWithInvariants(Loop : RoseForLoop, Invariants :list = []):
           continue
         # Sign extending ops are considered to contain invariants
         if Op.isSizeChangingBVOp():
-          Invariants.append(Op)
+          # Since this op is an indexing op, we can safely ignore it
           if Op in IndexingOp:
             IndexingOp.add(Op.getInputBitVector())
-          continue
-        if Op in IndexingOp:
+            continue
+          # This op can be an invariant if it is not
+          # directly used in a bvinsert op.
+          Invariants[Op] = [Op.getOperand(1)]
           continue
         if Op.isIndexingBVOp():
           IndexingOp.add(Op)
-        for OpIndex, Operand in enumerate(Op.getOperands()):
-          if isinstance(Op, RoseBVInsertSliceOp):
-            if Op.getInsertValue() == Operand:
-              continue
+          Low = Op.getLowIndex()
+          High = Op.getHighIndex()
+          if isinstance(Low, RoseConstant):
+            Invariants[Op] = [Op.getLowIndexPos()]
+          else:
+            IndexingOp.add(Low)
+          if isinstance(High, RoseConstant):
+            if Invariants.get(Op, []) == []:
+              Invariants[Op] = [Op.getHighIndexPos()]
+            else:
+              Invariants[Op].append(Op.getHighIndexPos())
+          else:
+            IndexingOp.add(High)      
+          continue
+        if Op in IndexingOp:
+          continue
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
           if isinstance(Operand, RoseConstant):
-            if Op.isIndexingBVOp() and (OpIndex == len(Op.getOperands()) - 1):
-              continue
-            Invariants.append(Op)
-          break
+            if Invariants.get(Op, []) == []:
+              Invariants[Op] = [OperandIndex]
+            else:
+              Invariants[Op].append(OperandIndex)
   return Invariants
           
 
