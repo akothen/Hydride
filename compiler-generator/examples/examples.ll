@@ -196,7 +196,7 @@ function _mm256_unpacklo_epi8 ( %a, %b, %offset, %vector_length, %lane_size, %pr
       %9 = add %8, %elem_last_idx
       bvinsert %7, %var, %8, %9, %precision
     }
-    %10 = bvextract %var, 0, 127, %lane_size
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
     bvinsert %10, %dst, %i, %1, %lane_size
   }
   ret %dst
@@ -219,7 +219,7 @@ function _mm512_unpackhi_epi32 ( %a, %b, %offset, %vector_length, %lane_size, %p
       %9 = add %8, %elem_last_idx
       bvinsert %7, %var, %8, %9, %precision
     }
-    %10 = bvextract %var, 0, 127, %lane_size
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
     bvinsert %10, %dst, %i, %1, %lane_size
   }
   ret %dst
@@ -242,7 +242,7 @@ function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %prec
       %9 = add %8, %elem_last_idx
       bvinsert %7, %var, %8, %9, %precision
     }
-    %10 = bvextract %var, 0, 127, %lane_size
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
     bvinsert %10, %dst, %i, %1, %lane_size
   }
   ret %dst
