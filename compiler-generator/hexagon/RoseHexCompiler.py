@@ -225,14 +225,14 @@ def CompileVar(Variable, Context):
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  Var = RoseValue.create(Variable.name, \
+  CompiledVar = RoseValue.create(Variable.name, \
           RoseType.getBitVectorTy(Context.getMaxVectorLength()))
 
   # Add the variable info to the context
   Context.addVariable(Variable.name, Variable.id)
-  Context.addCompiledAbstraction(Variable.id, Var)
+  Context.addCompiledAbstraction(Variable.id, CompiledVar)
   
-  return Var
+  return CompiledVar
 
 
 # Always assume that the bitwidth returned by this function is a constant
@@ -1190,6 +1190,27 @@ def CompileIf(IfStmt, Context : HexRoseContext):
   Context.destroyContext(IfStmt.id)
 
 
+def CompileTypeLookup(TypeLookup, Context : HexRoseContext):
+  print("COMPILE TYPELOOKUP")
+  print("TYPELOOKUP:")
+  print(TypeLookup)
+  # TypeLookup tracks types of variables
+  assert type(TypeLookup.obj) == Var
+
+  # Check if the variable is already defined and cached. If yes, just return that.
+  if Context.isVariableDefined(TypeLookup.obj.name):
+    ID = Context.getVariableID(TypeLookup.obj.name)
+    return Context.getCompiledAbstractionForID(ID)
+
+  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+  CompiledVar = RoseValue.create(TypeLookup.obj.name, HexTypes[TypeLookup.type])
+
+  # Add the variable info to the context
+  Context.addVariable(TypeLookup.obj.name, TypeLookup.obj.id)
+  Context.addCompiledAbstraction(TypeLookup.obj.id, CompiledVar)
+  return CompiledVar
+
+
 def CompileExpression(Expr, Context : HexRoseContext):
   print("COMPILE EXPRESSION")
   print("EXPR:")
@@ -1224,10 +1245,11 @@ def CompileSemantics(Sema):
     else:
         ParamType = HexTypes[Param.type]
     # Create a new rosette value
-    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+    assert type(Param) == TypeLookup
+    ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
     if not IsOutParam:
-      ParamsIDs.append(Param.id)
+      ParamsIDs.append(Param.obj.id)
       ParamValues.append(ParamVal)
 
   ReturnsMask = Sema.rettype.startswith('__mmask')
@@ -1293,6 +1315,7 @@ def CompileSemantics(Sema):
 
 
 CompileAbstractions = {
+  TypeLookup : CompileTypeLookup, 
   For: CompileForLoop,
   Number: CompileNumber,
   Var: CompileVar,
@@ -1677,12 +1700,12 @@ ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
 
 
-
 def Compile():
-  from PseudoCodeParser import ParseHVXSemantics
-  spec = ParseHVXSemantics(HexInsts)
-  print(spec)
-  CompiledFunction = CompileSemantics(spec)
+  from PseudoCodeParser import GetSpecFrom
+  for Inst, Pseudocode in HexInsts.items():
+    Spec = GetSpecFrom(Inst, Pseudocode)
+    print(Spec)
+    CompiledFunction = CompileSemantics(Spec)
 
 
 HexInsts ={
