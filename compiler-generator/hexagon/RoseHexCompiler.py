@@ -1040,13 +1040,6 @@ def CompileCall(CallStmt, Context : HexRoseContext):
   # This must be a builtin function call.
   assert CallStmt.funcname in Builtins
 
-  # If the call is compiled, no need to recompile
-  if Context.isCompiledAbstraction(CallStmt.id):
-    return Context.getCompiledAbstractionForID(CallStmt.id)
-
-  # Function name has to be one of the bultins
-  assert CallStmt.funcname in Builtins
-
   # Compile function call arguments first
   print("COMPILE ARGUMENTS")
   ArgValuesList = list()
@@ -1076,7 +1069,6 @@ def CompileCall(CallStmt, Context : HexRoseContext):
   return Operation
 
 
-
 def CompileForLoop(ForStmt, Context : HexRoseContext):
   # If the loop has been compiled already, no need to recomplie
   if Context.isCompiledAbstraction(ForStmt.id):
@@ -1086,25 +1078,15 @@ def CompileForLoop(ForStmt, Context : HexRoseContext):
   print("COMPILING FOR LOOP")
   print("FOR EXPR:")
   print(ForStmt)
+  
+  # We only handle the common loops, not complex yet.
+  assert type(ForStmt) != ComplexFor
+
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
   assert Begin.getType() == End.getType()
-  One = RoseConstant.create(1, Begin.getType())
-  MinusOne = RoseConstant.create(-1, Begin.getType())
-  Step = One if ForStmt.inc else MinusOne
-
-  # Modify the end bound of the loop by adding 1 to it.
-  # This is because of the way loop bounds are expressed in
-  # in x86 pseudocode and rosette.
-  if isinstance(End, RoseConstant):
-    End = RoseConstant.create(End.getValue() + 1, End.getType())
-  else:
-    # Add an add instruction
-    End = RoseAddOp.create("end.bound." + End.getName(), [End, Step])
-    # Add this op to the IR
-    Context.addAbstractionToIR(End)
-    # Add this updated value to the context
-    Context.updateCompiledAbstraction(ForStmt.end, End)
+  Step = CompileExpression(ForStmt.step, Context)
+  assert Step.getType() == End.getType()
 
   # Generate the loop
   Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
@@ -1254,6 +1236,7 @@ def CompileSemantics(Sema):
 
   ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
+    print(Sema.rettype)
     RetType = HexTypes[Sema.rettype]
     if not ReturnsMask:
       print("adding dst to context")
@@ -1290,23 +1273,16 @@ def CompileSemantics(Sema):
   RootContext.pushRootAbstraction(RootFunction)
 
   # Compile all the statements
-  CompiledRetVal = RoseUndefValue()
   for Stmt in Sema.spec:
-    if type(Stmt) == Return:
-      #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
-      #CompileStatement(Dst, RootContext)
-      CompiledRetVal = CompileStatement(Stmt, RootContext)
-      break
     CompileStatement(Stmt, RootContext)
   
   # Get the compiled function
   CompiledFunction = RootContext.getRootAbstraction()
 
-  # See if the function returns anything, if not add a return op
-  if CompiledRetVal == RoseUndefValue():
-      Op = RoseReturnOp.create(RetValue)
-      # NO meed to add this operation to the context but add it to the function
-      CompiledFunction.addAbstraction(Op)
+  # Generate return op
+  Op = RoseReturnOp.create(RetValue)
+  # NO meed to add this operation to the context but add it to the function
+  CompiledFunction.addAbstraction(Op)
 
   print("\n\n\n\n\n")
   CompiledFunction.print()
@@ -1699,6 +1675,9 @@ def NeedToExtendOperandSize(Op):
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
 
+LogicalOps = ['&', '|']
+
+
 
 def Compile():
   from PseudoCodeParser import GetSpecFrom
@@ -1709,8 +1688,8 @@ def Compile():
 
 
 HexInsts ={
-'Qd4.b=vshuffe(Qs4.h,Qt4.h)': 'for (i = 0; i < VELEM(8); i++) '
-                               '{QdV[i]=(i & 1) ? QsV[i-1] : QtV[i] ;}',
+ 'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i]) ;}',
 }
 
 
