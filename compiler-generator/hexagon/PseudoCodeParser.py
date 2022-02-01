@@ -113,8 +113,11 @@ def p_stmt_if_single(p):
 
 # Try to detect the common case
 def HandleLoopHeader(Init, Condition, ItUpdate):
+  print("Init:")
   print(Init)
+  print("Condition:")
   print(Condition)
+  print("ItUpdate:")
   print(ItUpdate)
   # Check if Init is just an update.
   Iterator = None
@@ -123,32 +126,31 @@ def HandleLoopHeader(Init, Condition, ItUpdate):
   Step = None
   if type(Init) == Update:
     assert type(Init.lhs) == Var
-    Iterator = Init.lhs.name
+    expr_id = "iterator." + GenUniqueID(parser)
+    Iterator = Var(Init.lhs.name, expr_id)
     assert type(Init.rhs) == Number
-    Begin = str(Init.rhs.val)
+    Begin = Init.rhs
   if type(Condition) == BinaryExpr:
     if Condition.op == "<":
       assert type(Condition.a) == Var
-      assert Iterator == Condition.a.name
-      if type(Condition.b) == Number:
-        End = str(Condition.b.val)
-      else:
-        assert type(Condition.b) == Var
-        End = Condition.b.name
+      assert Iterator.name == Condition.a.name
+      assert type(Condition.b) == Number \
+          or type(Condition.b) == Var
+      End = Condition.b
   if type(ItUpdate) ==  UnaryExpr:
     assert ItUpdate.op == "INC"
     assert type(ItUpdate.a) == Var
-    assert Iterator == ItUpdate.a.name
-    Step = str("1")
+    assert Iterator.name == ItUpdate.a.name
+    Step = Number(1)
   elif type(ItUpdate) == Update:
     if Iterator != None:
       assert type(ItUpdate.lhs) == Var
-      assert Iterator == ItUpdate.lhs.name
+      assert Iterator.name == ItUpdate.lhs.name
       assert type(ItUpdate.rhs) == BinaryExpr
       assert type(ItUpdate.rhs.a) == Var
-      assert Iterator == ItUpdate.rhs.a.name
+      assert Iterator.name == ItUpdate.rhs.a.name
       assert type(ItUpdate.rhs.b) == Number
-      Step = str(ItUpdate.rhs.b.val)
+      Step = ItUpdate.rhs.b
   return Iterator, Begin, End, Step
 
 
@@ -178,7 +180,7 @@ def p_expr_call(p):
           | ID LPAREN args RPAREN COLON ID COLON ID'''
   if len(p) == 5:
     if p[1] == "VELEM":
-      p[0] = Number(p[3])
+      p[0] = p[3][0]
     else:
       expr_id = "call." + GenUniqueID(parser)
       p[0] = Call(p[1], p[3], None, expr_id)
