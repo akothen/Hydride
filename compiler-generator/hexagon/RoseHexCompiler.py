@@ -1234,16 +1234,11 @@ def CompileSemantics(Sema):
       ParamsIDs.append(Param.obj.id)
       ParamValues.append(ParamVal)
 
-  ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
     print(Sema.rettype)
     RetType = HexTypes[Sema.rettype]
-    if not ReturnsMask:
-      print("adding dst to context")
-      RetValue = RoseValue.create('dst', RetType)
-    else:
-      print("adding k to context")
-      RetValue = RoseValue.create('k', RetType)
+    print("adding dst to context")
+    RetValue = RoseValue.create(Sema.retname, RetType)
   else:
     ReturnsVoid = True
     RetType = RoseType.getVoidTy()
@@ -1674,26 +1669,31 @@ def NeedToExtendOperandSize(Op):
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
-
 LogicalOps = ['&', '|']
 
 
 
 def Compile():
   from PseudoCodeParser import GetSpecFrom
-  for Inst, Pseudocode in HexInsts.items():
+  for Inst, Pseudocode in test1.items():
     Spec = GetSpecFrom(Inst, Pseudocode)
     print(Spec)
     CompiledFunction = CompileSemantics(Spec)
 
 
-HexInsts ={
+test1 ={
  'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
                          '(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test2 = {
+   'Vd.b=vmax(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (Vu.b[i] > '
+                         'Vv.b[i]) ? Vu.b[i] :Vv.b[i] ;}',
 }
 
 
 if __name__ == '__main__':
   Compile()
+
 
 

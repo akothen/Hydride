@@ -473,12 +473,15 @@ def GetSpecFrom(inst, Pseudocode):
   if isinstance(lhs, TypeLookup):
     var = lhs.obj
     rettype = lhs.type 
+    retname = var.name
   elif isinstance(lhs, Var):
     var = lhs
     rettype = var.id.split(".")[1]
+    retname = var.name
   else:
     print("Unknown lhs:", lhs)
     rettype = None
+    retname = None
 
   if var.name in ['Vx', 'Vy', 'Vd']:
     lanes = 1
@@ -496,7 +499,8 @@ def GetSpecFrom(inst, Pseudocode):
   else:
     name = "TODO"
     params = []
-  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), rettype=rettype, lanes=lanes)
+  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), \
+    retname =retname, rettype=rettype, lanes=lanes)
   return sema
 
 
@@ -512,5 +516,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 

@@ -30,6 +30,8 @@ TypeLookup = namedtuple('TypeLookup', ['obj', 'type'])
 Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'])
 
 Sema = namedtuple('Sema', [
-  'intrin', 'inst', 'params',
-  'spec', 'rettype', 'lanes',
+  'intrin', 'inst', 'params', 'spec', 
+  'retname', 'rettype', 'lanes',
   ])
+
+
