@@ -383,66 +383,65 @@ def pretty_print(root):
       return root
   return pformat(to_dict(root), indent=1)
 
-def ParseHVXSemantics(semantics):
 
-  for inst, pseudocode in semantics.items():
-    if 'vmax' not in inst:
-      continue
-    print(inst)
+def GetSpecFrom(inst, Pseudocode):
+  assign = Parse(inst)
+  # print(assign)
+  if isinstance(assign, list):
+    assign = assign[0]
+  if isinstance(assign, If):
+      assign = assign.then[0]
+
+  # This is either an if statement or standard function call then
+  if not isinstance(assign, Update):
+    if isinstance(assign, Call):
+      lhs = assign.args[0]
+      rhs = assign
+  else: 
+    lhs = assign.lhs
+    if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
+      lhs = lhs[0]
+    # += or *=
+    if isinstance(assign.rhs, BinaryExpr):
+      rhs = assign.rhs.b
+    elif isinstance(assign.rhs, Call):
+      rhs = assign.rhs
+
+  # SIMD instruction
+  if isinstance(lhs, TypeLookup):
+    var = lhs.obj
+  elif isinstance(lhs, Var):
+    var = lhs
+  else:
+    print("Unknown lhs:", lhs)
+  
+  if var.name in ['Vx', 'Vy', 'Vd']:
+    lanes = 1
+  elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
+    lanes = 1
+  elif var.name in ['Vxx', 'Vyy', 'Vdd']:
+    lanes = 2
+  else:
+    lanes = 0
+    print("Unknown variable type:", var)
+  
+  if isinstance(rhs, Call):
+    name = rhs.func
+    params = rhs.args
+  else:
+    name = "TODO"
+    params = []
+  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
+  return sema
+
+
+def ParseHVXSemantics(Semantics):
+  for inst, Pseudocode in Semantics.items():
     # We currently ignore any instructions that are just assembler syntactic sugar
-    if pseudocode.startswith("Assembler mapped to"):
+    if Pseudocode.startswith("Assembler mapped to"):
       continue 
-    
-    assign = Parse(inst)
-    # print(assign)
-    if isinstance(assign, list):
-      assign = assign[0]
-    if isinstance(assign, If):
-        assign = assign.then[0]
-
-    # This is either an if statement or standard function call then
-    if not isinstance(assign, Update):
-      if isinstance(assign, Call):
-        lhs = assign.args[0]
-        rhs = assign
-    else: 
-      lhs = assign.lhs
-      if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
-        lhs = lhs[0]
-      # += or *=
-      if isinstance(assign.rhs, BinaryExpr):
-        rhs = assign.rhs.b
-      elif isinstance(assign.rhs, Call):
-        rhs = assign.rhs
-
-    # SIMD instruction
-    if isinstance(lhs, TypeLookup):
-      var = lhs.obj
-    elif isinstance(lhs, Var):
-      var = lhs
-    else:
-      print("Unknown lhs:", lhs)
-    
-    if var.name in ['Vx', 'Vy', 'Vd']:
-      lanes = 1
-    elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
-      lanes = 1
-    elif var.name in ['Vxx', 'Vyy', 'Vdd']:
-      lanes = 2
-    else:
-      lanes = 0
-      print("Unknown variable type:", var)
-    
-    if isinstance(rhs, Call):
-      name = rhs.func
-      params = rhs.args
-    else:
-      name = "TODO"
-      params = []
-    sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
-    print(sema)
-    # print(pretty_print(sema))
-  return None
+    Sema = GetSpecFrom(inst, Pseudocode)
+    print(Sema)
 
 
 if __name__ == '__main__':
