@@ -322,7 +322,10 @@ def p_expr_var(p):
     expr_id = 'var.reg_dst.' + GenUniqueID(parser)
   else:
     expr_id = "var." + GenUniqueID(parser)
-  p[0] = Var(p[1], expr_id)
+  NewName = ''.join(i for i in p[1] if not i.isdigit())
+  if NewName != p[1]:
+    NewName += "V"
+  p[0] = Var(NewName, expr_id)
 
 def p_expr_num(p):
   'expr : NUMBER'
@@ -445,3 +448,5 @@ def ParseHVXSemantics(semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
+
