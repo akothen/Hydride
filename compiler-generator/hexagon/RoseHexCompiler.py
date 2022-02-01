@@ -13,8 +13,8 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 
-from AST import *
-from x86Types import x86Types
+from HexAST import *
+from RoseHexTypes import *
 
 from copy import deepcopy
 import math
@@ -126,13 +126,10 @@ class RoseContext:
 
 
 # This defines rules specifically for x86 to RoseIR convertion
-class x86RoseContext(RoseContext):
+class HexRoseContext(RoseContext):
   def __init__(self):
     # Maximum vector length
-    self.MaxVectorLength = 512
-    # Cache function definitions. This is needed because functions are
-    # compiled when a call is compiled.
-    self.FunctionDefs = dict()  # Function name --> FuncDef
+    self.MaxVectorLength = 1024
     # Track the ids that have been extended.
     self.SizeExtended = dict()
     # Integer constant length can change depending on the context in which 
@@ -147,13 +144,6 @@ class x86RoseContext(RoseContext):
   
   def setMaxVectorLength(self, Length : int):
     self.MaxVectorLength = Length
-
-  def addFunctionDef(self, FunctionDef):
-    assert(type(FunctionDef) == FuncDef)
-    self.FunctionDefs[FunctionDef.name] = FunctionDef
-  
-  def getFunctionDef(self, Name : str):
-    return self.FunctionDefs[Name]
 
   def addSizeExtended(self, Operation : RoseValue, Bitwidth : int):
     self.SizeExtended[Operation] = Bitwidth
@@ -185,7 +175,7 @@ class x86RoseContext(RoseContext):
 
   def createContext(self, ID : str, ChildContext):
     print("CREATING CONTEXT")
-    assert isinstance(ChildContext, x86RoseContext)
+    assert isinstance(ChildContext, HexRoseContext)
     assert self.isCompiledAbstraction(ID)
     Abstraction = self.getCompiledAbstractionForID(ID)
     if isinstance(Abstraction, RoseFunction):
@@ -213,7 +203,7 @@ class x86RoseContext(RoseContext):
     
 
 
-def CompileNumber(Num, Context : x86RoseContext):
+def CompileNumber(Num, Context : HexRoseContext):
   print("COMPILE NUMBER")
   print("NUM:")
   print(Num)
@@ -319,7 +309,7 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
 
 
-def CompileIndex(IndexExpr, Context : x86RoseContext):
+def CompileIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING AN INDEX EXPRESSION:")
   print("IndexExpr:")
   print(IndexExpr)
@@ -411,7 +401,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   return Operation
 
 
-def CompileBitIndex(IndexExpr, Context : x86RoseContext):
+def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING INDX EXPR")
   print("INDEX EXPR:")
   print(IndexExpr)
@@ -445,7 +435,7 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   return Operation
 
 
-def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
+def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
   # The given bitslice index could be a number
   if type(ExprIndex) == Number:
     print("--NUMBER")
@@ -550,7 +540,7 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
   return RoseUndefValue()
 
 
-def GetExpressionType(Expr, Context : x86RoseContext):
+def GetExpressionType(Expr, Context : HexRoseContext):
   print("GET EXPRESSION TYPE:")
   print("EXPRESSION:")
   print(Expr)
@@ -584,7 +574,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
   return RoseType.getUndefTy()
 
 
-def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
+def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
   print("GET RHS TYPE SPECIAL CASES")
   assert type(RHS) == BinaryExpr
   # Check if the operands size is extended. If yes, we return
@@ -658,7 +648,7 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
 # We try to work out the type of the numbers in RHS.
 # This is not meant to be deep. We will extend this
 # if we need to.
-def GetRHSNumberType(Update, Context : x86RoseContext):
+def GetRHSNumberType(Update, Context : HexRoseContext):
   RHS = Update.rhs
   LHS = Update.lhs
 
@@ -714,7 +704,7 @@ def GetRHSNumberType(Update, Context : x86RoseContext):
   return RoseType.getUndefTy()
 
 
-def CompileUpdate(Update, Context : x86RoseContext):
+def CompileUpdate(Update, Context : HexRoseContext):
   # We need to get the type of numbers on the RHS
   OriginalNumberTy = Context.getNumberType()
   PredictedType = GetRHSNumberType(Update, Context)
@@ -833,7 +823,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   return LHSOp
   
 
-def CompileSelect(Select, Context : x86RoseContext):
+def CompileSelect(Select, Context : HexRoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(Select.id):
     return Context.getCompiledAbstractionForID(Select.id)
@@ -853,7 +843,7 @@ def CompileSelect(Select, Context : x86RoseContext):
   return Operation
 
 
-def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
+def CompileUnaryExpr(UnaryExpr, Context : HexRoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(UnaryExpr.id):
     return Context.getCompiledAbstractionForID(UnaryExpr.id)
@@ -871,7 +861,7 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   return Operation
 
 
-def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
+def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
     # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(BinaryExpr.id):
     return Context.getCompiledAbstractionForID(BinaryExpr.id)
@@ -1012,27 +1002,10 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   return Operation
 
 
-def CompileReturn(ReturnStmt, Context : x86RoseContext):
-  # If this expression is compiled, no need to recompile
-  if Context.isCompiledAbstraction(ReturnStmt.id):
-    return Context.getCompiledAbstractionForID(ReturnStmt.id)  
-  
-  print("COMPILE RETURN EXPRESSION")
-  print("RETURN EXPR:")
-  print(ReturnStmt)
-  # Compile the return op
-  Operand = CompileExpression(ReturnStmt.val, Context)
-  Operation = RoseReturnOp.create(Operand)
-  # Add the operation to the IR
-  Context.addAbstractionToIR(Operation)
-  # Add the operation to the context (although this is unnecessary)
-  Context.addCompiledAbstraction(ReturnStmt.id, Operation)
-  return Operation
-
 
 # Checks if extension has been performed already
 # sign_extend(x * y) = sign_extend(x) * sign_extend(y)
-def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext):
+def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : HexRoseContext):
   if CallStmt.funcname not in BuiltinExtendsSize:
     return False
   # Builtin extends size. Check if we have already done that.
@@ -1059,7 +1032,14 @@ def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext)
   return True
   
 
-def CompileBuiltIn(CallStmt, Context : x86RoseContext):
+def CompileCall(CallStmt, Context : HexRoseContext):
+  print("COMPILE CALL")
+  if Context.isCompiledAbstraction(CallStmt.id):
+    return Context.getCompiledAbstractionForID(CallStmt.id)
+
+  # This must be a builtin function call.
+  assert CallStmt.funcname in Builtins
+
   # If the call is compiled, no need to recompile
   if Context.isCompiledAbstraction(CallStmt.id):
     return Context.getCompiledAbstractionForID(CallStmt.id)
@@ -1096,166 +1076,8 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   return Operation
 
 
-def CompileCall(CallStmt, Context : x86RoseContext):
-  print("COMPILE CALL")
-  # If this is a builtin function call, just compile it.
-  if CallStmt.funcname in Builtins:
-    return CompileBuiltIn(CallStmt, Context)
 
-   # If the call is compiled, no need to recompile
-  if Context.isCompiledAbstraction(CallStmt.id):
-    return Context.getCompiledAbstractionForID(CallStmt.id)
-
-  # Try to get the types of the arguments first
-  print("TRYING TO GET TYPES OF ARGUMENTS")
-  ArgTypesUndefined = False
-  ArgsTypeList = list()
-  for Arg in CallStmt.args:
-    ArgType = GetExpressionType(Arg, Context)
-    # Argument type cannot be undefined or void
-    assert not ArgType.isVoidTy()
-    if ArgType.isUndefTy():
-      ArgTypesUndefined = True
-      break
-    ArgsTypeList.append(ArgType)
-  print("ARGUMENTS TYPES FOUND")
-
-  # Compile the arguments (we have no other choice)
-  ArgValuesList = list()
-  if ArgTypesUndefined == True:
-    print("COMPILE ARGUMENTS")
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
-      ArgValuesList.append(CompiledArg)
-    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
-    print("ARGUMENTS COMPILED")
-
-  # This is a function call
-  FunctionDef = Context.getFunctionDef(CallStmt.funcname)
-  assert len(FunctionDef.params) == len(CallStmt.args)
-
-  # Check if we are compiling this function for the first time
-  if Context.isCompiledAbstraction(FunctionDef.id) == False:
-    print("COMPILING FUNCTION")
-    ChildContext = x86RoseContext()
-    FuncArgList = []
-    for Index  in range(len(FunctionDef.params)):
-      Param = FunctionDef.params[Index]
-      ArgType = ArgsTypeList[Index]
-      if type(Param) == BitSlice:
-        # Some sanity checks
-        assert type(Param.bv) == Var
-        assert type(Param.lo) == Number
-        assert type(Param.hi) == Number
-        assert Param.lo.val == 0
-        ParamName = Param.bv.name
-        ParamWidth = Param.hi.val + 1
-      else:
-        assert type(Param) == Var
-        ParamName = Param.name
-        ParamWidth = ArgType.getBitwidth()
-      print("ParamWidth:")
-      print(ParamWidth)
-      print("Arg.getType().getBitwidth():")
-      print(ArgType.getBitwidth())
-      assert ArgType.getBitwidth() == ParamWidth
-      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue(), Index)
-      ChildContext.addVariable(ParamName, Param.id)
-      FuncArgList.append(ArgVal)
-      print("PARAM NAME:")
-      print(ParamName)
-    
-    # Compile the function and its arguments
-    print("GENERATE FUNCTION")
-    Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseType.getUndefTy())
-    print("FUNCTION:")
-    print(Function)
-    print(FunctionDef.params)
-    print(type(FunctionDef.params))
-
-    # Add arguments to the child context
-    for Index  in range(len(FunctionDef.params)):
-      Param = FunctionDef.params[Index]
-      Arg = Function.getArg(Index)
-      ChildContext.addCompiledAbstraction(Param.id, Arg)
-    print("ADDED ARGUMENTS TO THE CHILD CONTEXT")
-    
-    # Add the generated function to the current context
-    Context.addCompiledAbstraction(FunctionDef.id, Function)
-    
-    # Add this function as the root abstraction for this this child context
-    ChildContext.pushRootAbstraction(Function)
-
-    # Create a new context for this funtcion
-    Context.createContext(FunctionDef.id, ChildContext)
-    print("FUNCTION ADDED TO CONTEXT")
-    
-    # Compile the function body
-    ReturnValue = RoseUndefValue()
-    for Stmt in FunctionDef.body:
-      if type(Stmt) == Return:
-        ReturnValue = CompileExpression(Stmt, ChildContext)
-        break
-      CompileStatement(Stmt, ChildContext)
-    assert ReturnValue != RoseUndefValue()
-    print("FUNCTION GENERATED")
-
-    # Pop the root function from the child context 
-    CompiledFunction = ChildContext.getRootAbstraction()
-
-    # Set the return value for this function
-    CompiledFunction.setRetVal(ReturnValue)
-
-    # Add this function to the root abstraction and update context
-    Context.addAbstractionToIR(CompiledFunction)
-
-    # Update the compiled function in this context now
-    Context.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
-
-    # Destroy the child context now
-    Context.destroyContext(FunctionDef.id)
-    print("COMPILED FUNCITON:")
-    CompiledFunction.print()
-  
-  # Compile the function call arguments now
-  if ArgTypesUndefined == False:
-    print("COMPILE ARGUMENTS")
-    ArgValuesList = list()
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
-      ArgValuesList.append(CompiledArg)
-    print("ARGUMENTS COMPILED")
-
-  # Compile call statement now.
-  Function = Context.getCompiledAbstractionForID(FunctionDef.id)
-  FunctionCall = RoseCallOp.create(CallStmt.id, Function, ArgValuesList)
-  print(FunctionCall)
-  # Add the op to the IR
-  Context.addAbstractionToIR(FunctionCall)
-  # Add the operation to the context
-  Context.addCompiledAbstraction(CallStmt.id, FunctionCall)
-  print("COMPILED CALL OPERATION:")
-  FunctionCall.print()
-
-  return FunctionCall
-
-
-# Function will be compiled later
-def CompileFunction(FunctionDef, Context : x86RoseContext):
-  assert(type(FunctionDef) == FuncDef)
-  print("COMPILE FUNCTION")
-  print("FUNCDEF:")
-  print(FunctionDef)
-  # Add the function definiton to the current context
-  # This function will be compiled later.
-  Context.addFunctionDef(FunctionDef)
-
-
-def CompileForLoop(ForStmt, Context : x86RoseContext):
+def CompileForLoop(ForStmt, Context : HexRoseContext):
   # If the loop has been compiled already, no need to recomplie
   if Context.isCompiledAbstraction(ForStmt.id):
     return
@@ -1288,7 +1110,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
 
   # Add loop as root abstraction 
-  ChildContext = x86RoseContext()
+  ChildContext = HexRoseContext()
   ChildContext.pushRootAbstraction(Loop)
 
   # Add the generated loop to the current context
@@ -1323,13 +1145,13 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Context.destroyContext(ForStmt.id)
 
 
-def CompileIf(IfStmt, Context : x86RoseContext):
+def CompileIf(IfStmt, Context : HexRoseContext):
   # Generate a cond region
   Cond = CompileExpression(IfStmt.cond, Context)
   CondRegion = RoseCond.create(Cond)
 
   # Add cond region as root abstraction 
-  ChildContext = x86RoseContext()
+  ChildContext = HexRoseContext()
   ChildContext.pushRootAbstraction(CondRegion)
 
   # Add the then key for this cond region
@@ -1368,7 +1190,7 @@ def CompileIf(IfStmt, Context : x86RoseContext):
   Context.destroyContext(IfStmt.id)
 
 
-def CompileExpression(Expr, Context : x86RoseContext):
+def CompileExpression(Expr, Context : HexRoseContext):
   print("COMPILE EXPRESSION")
   print("EXPR:")
   print(Expr)
@@ -1377,7 +1199,7 @@ def CompileExpression(Expr, Context : x86RoseContext):
   return CompiledExpr
 
 
-def CompileStatement(Stmt, Context : x86RoseContext):
+def CompileStatement(Stmt, Context : HexRoseContext):
   StmtTy = type(Stmt)
   print("STATEMENT:")
   print(Stmt)
@@ -1388,7 +1210,7 @@ def CompileStatement(Stmt, Context : x86RoseContext):
 
 def CompileSemantics(Sema):
   # Create the root context
-  RootContext = x86RoseContext()
+  RootContext = HexRoseContext()
   OutParams = []
   ReturnsVoid = False
   ParamValues = []
@@ -1396,11 +1218,11 @@ def CompileSemantics(Sema):
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
     if Param.type.endswith('*'):
-        ParamType = x86Types[Param.type[:-1].strip()]
+        ParamType = HexTypes[Param.type[:-1].strip()]
         OutParams.append(Param.name)
         IsOutParam = True
     else:
-        ParamType = x86Types[Param.type]
+        ParamType = HexTypes[Param.type]
     # Create a new rosette value
     ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
@@ -1410,7 +1232,7 @@ def CompileSemantics(Sema):
 
   ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
-    RetType = x86Types[Sema.rettype]
+    RetType = HexTypes[Sema.rettype]
     if not ReturnsMask:
       print("adding dst to context")
       RetValue = RoseValue.create('dst', RetType)
@@ -1474,8 +1296,6 @@ CompileAbstractions = {
   For: CompileForLoop,
   Number: CompileNumber,
   Var: CompileVar,
-  Return : CompileReturn,
-  FuncDef: CompileFunction,
   Call: CompileCall,
   BitSlice: CompileBitSlice,
   Update: CompileUpdate,
@@ -1484,9 +1304,6 @@ CompileAbstractions = {
   If: CompileIf,
   BinaryExpr: CompileBinaryExpr,
   BitIndex : CompileBitIndex,
-  #While: CompileWhile,
-  #Match: CompileMatch,
-  #Lookup: CompileLookup,
 }
 
 
@@ -1858,69 +1675,23 @@ def NeedToExtendOperandSize(Op):
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
-# Strides definitions
-Strides = {
-  'bit': 1,
-  'byte': 8,
-  'word': 16,
-  'dword': 32,
-  'qword': 64,
-  'm128': 128,
-}
+
 
 
 def Compile():
-  from PseudoCodeParser import GetSemaFromXML
-  import xml.etree.ElementTree as ET
-
-  sema = test11()
-  print(sema)
-  intrin_node = ET.fromstring(sema)
-  spec = GetSemaFromXML(intrin_node)
+  from PseudoCodeParser import ParseHVXSemantics
+  spec = ParseHVXSemantics(HexInsts)
   print(spec)
   CompiledFunction = CompileSemantics(spec)
 
 
-def test1():
-  return '''
-<intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
-	<type>Integer</type>
-	<CPUID>SSE2</CPUID>
-	<category>Swizzle</category>
-	<return type="__m128i" varname="dst" etype="UI8"/>
-	<parameter type="__m128i" varname="a" etype="UI8"/>
-	<parameter type="__m128i" varname="b" etype="UI8"/>
-	<description>Unpack and interleave 8-bit integers from the low half of "a" and "b", and store the results in "dst".</description>
-	<operation>
-DEFINE INTERLEAVE_BYTES(src1[127:0], src2[127:0]) {
-	dst[7:0] := src1[7:0] 
-	dst[15:8] := src2[7:0] 
-	dst[23:16] := src1[15:8] 
-	dst[31:24] := src2[15:8] 
-	dst[39:32] := src1[23:16] 
-	dst[47:40] := src2[23:16] 
-	dst[55:48] := src1[31:24] 
-	dst[63:56] := src2[31:24] 
-	dst[71:64] := src1[39:32]
-	dst[79:72] := src2[39:32] 
-	dst[87:80] := src1[47:40] 
-	dst[95:88] := src2[47:40] 
-	dst[103:96] := src1[55:48] 
-	dst[111:104] := src2[55:48]
-	dst[119:112] := src1[63:56] 
-	dst[127:120] := src2[63:56] 
-	RETURN dst[127:0]	
+HexInsts ={
+'Qd4.b=vshuffe(Qs4.h,Qt4.h)': 'for (i = 0; i < VELEM(8); i++) '
+                               '{QdV[i]=(i & 1) ? QsV[i-1] : QtV[i] ;}',
 }
-dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
-	</operation>
-	<instruction name="PUNPCKLBW" form="xmm, xmm" xed="PUNPCKLBW_XMMdq_XMMq"/>
-	<header>emmintrin.h</header>
-</intrinsic>
-  '''
 
 
 if __name__ == '__main__':
   Compile()
-
 
 
