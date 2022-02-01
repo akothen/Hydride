@@ -325,6 +325,8 @@ def p_expr_var(p):
   NewName = ''.join(i for i in p[1] if not i.isdigit())
   if NewName != p[1]:
     NewName += "V"
+  print("NewName:")
+  print(NewName)
   p[0] = Var(NewName, expr_id)
 
 def p_expr_num(p):
@@ -410,11 +412,14 @@ def GetSpecFrom(inst, Pseudocode):
   # SIMD instruction
   if isinstance(lhs, TypeLookup):
     var = lhs.obj
+    rettype = lhs.type 
   elif isinstance(lhs, Var):
     var = lhs
+    rettype = var.id.split(".")[1]
   else:
     print("Unknown lhs:", lhs)
-  
+    rettype = None
+
   if var.name in ['Vx', 'Vy', 'Vd']:
     lanes = 1
   elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
@@ -431,7 +436,7 @@ def GetSpecFrom(inst, Pseudocode):
   else:
     name = "TODO"
     params = []
-  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
+  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), rettype=rettype, lanes=lanes)
   return sema
 
 
