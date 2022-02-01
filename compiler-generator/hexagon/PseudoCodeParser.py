@@ -1,3 +1,4 @@
+
 import ply.yacc as yacc
 from lex import tokens
 import json
@@ -109,26 +110,83 @@ def p_stmt_if_single(p):
   expr_id = "if." + GenUniqueID(parser)
   p[0] = If(p[3], [p[5]], None, expr_id)
 
+
+# Try to detect the common case
+def HandleLoopHeader(Init, Condition, ItUpdate):
+  print(Init)
+  print(Condition)
+  print(ItUpdate)
+  # Check if Init is just an update.
+  Iterator = None
+  Begin = None
+  End = None
+  Step = None
+  if type(Init) == Update:
+    assert type(Init.lhs) == Var
+    Iterator = Init.lhs.name
+    assert type(Init.rhs) == Number
+    Begin = str(Init.rhs.val)
+  if type(Condition) == BinaryExpr:
+    if Condition.op == "<":
+      assert type(Condition.a) == Var
+      assert Iterator == Condition.a.name
+      if type(Condition.b) == Number:
+        End = str(Condition.b.val)
+      else:
+        assert type(Condition.b) == Var
+        End = Condition.b.name
+  if type(ItUpdate) ==  UnaryExpr:
+    assert ItUpdate.op == "INC"
+    assert type(ItUpdate.a) == Var
+    assert Iterator == ItUpdate.a.name
+    Step = str("1")
+  elif type(ItUpdate) == Update:
+    if Iterator != None:
+      assert type(ItUpdate.lhs) == Var
+      assert Iterator == ItUpdate.lhs.name
+      assert type(ItUpdate.rhs) == BinaryExpr
+      assert type(ItUpdate.rhs.a) == Var
+      assert Iterator == ItUpdate.rhs.a.name
+      assert type(ItUpdate.rhs.b) == Number
+      Step = str(ItUpdate.rhs.b.val)
+  return Iterator, Begin, End, Step
+
+
 def p_stmt_for(p):
   'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN LBRACKET stmts RBRACKET'
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(p[3], p[5], p[7], p[10], expr_id)
+  Iterator, Begin, End, Step = HandleLoopHeader(p[3], p[5], p[7])
+  if Iterator == None or Begin == None or End == None or Step == None:
+    p[0] = ComplexFor(p[3], p[5], p[7], p[10], expr_id)
+  else:
+    p[0] = For(Iterator, Begin, End, Step, p[10], expr_id)
+
 
 def p_stmt_for_single(p):
   'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN stmt'
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(p[3], p[5], p[7], [p[9]], expr_id)
+  Iterator, Begin, End, Step = HandleLoopHeader(p[3], p[5], p[7])
+  if Iterator == None or Begin == None or End == None or Step == None:
+    p[0] = ComplexFor(p[3], p[5], p[7], [p[9]], expr_id)
+  else:
+    p[0] = For(Iterator, Begin, End, Step, [p[9]], expr_id)
+
 
 def p_expr_call(p):
   '''expr : ID LPAREN args RPAREN
           | ID LPAREN args RPAREN COLON ID
           | ID LPAREN args RPAREN COLON ID COLON ID'''
-  expr_id = "call." + GenUniqueID(parser)
   if len(p) == 5:
-    p[0] = Call(p[1], p[3], None, expr_id)
+    if p[1] == "VELEM":
+      p[0] = Number(p[3])
+    else:
+      expr_id = "call." + GenUniqueID(parser)
+      p[0] = Call(p[1], p[3], None, expr_id)
   elif len(p) == 7:
+    expr_id = "call." + GenUniqueID(parser)
     p[0] = Call(p[1], p[3], p[6], expr_id)
   else:
+    expr_id = "call." + GenUniqueID(parser)
     p[0] = Call(p[1], p[3], [p[6], p[8]], expr_id)
 
 def p_expr_call_module(p):
