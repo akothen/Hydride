@@ -1,5 +1,5 @@
 import ply.lex as lex
-from AST import Number, Var
+from HexAST import Number, Var
 
 
 reserved = {

@@ -3,7 +3,7 @@ import tabula
 pdf = open("hexagon_v66.pdf", 'rb')
 
 # dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(161, 222)))
-dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40, 89)))
+dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40, 89)) + list(range(161, 222)))
 # dfs = tabula.read_pdf(pdf, lattice=True, pages=80)
 
 
@@ -69,5 +69,5 @@ for inst_df in insts:
         # inst_dict.update(dict(zip(inst_df.iloc[:, 0].str.replace("\r", "\n"), inst_df.iloc[:, 1].str.replace("\r", "\n"))))
 print(len(inst_dict))
 from pprint import pformat
-with open("insts.py", "w") as f:
-    f.write("insts = " + pformat(inst_dict))
+with open("HexInsts.py", "w") as f:
+    f.write("HexInsts = " + pformat(inst_dict))
