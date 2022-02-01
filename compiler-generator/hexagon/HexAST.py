@@ -9,7 +9,11 @@ Var = namedtuple('Var', ['name', 'id'])
 
 Update = namedtuple('Update', ['lhs', 'rhs'])
 
-For = namedtuple('For', ['init', 'condition', 'update', 'body', 'id'])
+# This takes care of simple loops
+For = namedtuple('For', ['iterator', 'begin', 'end', 'step', 'body', 'id'])
+# This takes care of complex loops
+ComplexFor = namedtuple('ComplexFor', ['init', 'condition', 'update', 'body', 'id'])
+
 
 If = namedtuple('If', ['cond', 'then', 'otherwise', 'id'])
 
