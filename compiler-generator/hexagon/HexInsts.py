@@ -1,4 +1,4 @@
-insts = {'Qd4.b=vshuffe(Qs4.h,Qt4.h)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=(i & 1) '
+HexInsts = {'Qd4.b=vshuffe(Qs4.h,Qt4.h)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=(i & 1) '
                                '? QsV[i-1] : QtV[i] ;}',
  'Qd4.h=vshuffe(Qs4.w,Qt4.w)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=(i & 2) '
                                '? QsV[i-2] : QtV[i] ;}',

@@ -180,8 +180,8 @@ function _mm512_unpackhi_epi32 ( %a, %b ) {
 }
 
 
-function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
-  for ([%i (range 0 512 %lane_size)]) {
+function _mm256_unpacklo_epi8 ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
+  for ([%i (range 0 %vector_length %lane_size)]) {
     %lane_last_idx = sub %lane_size, 1
     %1 = add %i, %lane_last_idx
     %2 = bvextract %a, %i, %1, %lane_size
@@ -196,7 +196,53 @@ function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %prec
       %9 = add %8, %elem_last_idx
       bvinsert %7, %var, %8, %9, %precision
     }
-    %10 = bvextract %var, 0, 127, %lane_size
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
+    bvinsert %10, %dst, %i, %1, %lane_size
+  }
+  ret %dst
+}
+
+
+function _mm512_unpackhi_epi32 ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
+  for ([%i (range 0 %vector_length %lane_size)]) {
+    %lane_last_idx = sub %lane_size, 1
+    %1 = add %i, %lane_last_idx
+    %2 = bvextract %a, %i, %1, %lane_size
+    %4 = bvextract %b, %i, %1, %lane_size
+    for ([%j (range  %offset %lane_size %precision)]) {
+      %elem_last_idx = sub %precision, 1 
+      %5 = add %j, %elem_last_idx
+      %6 = bvextract %2, %j, %5, %precision
+      bvinsert %6, %var, %j, %5, %precision
+      %7 = bvextract %4, %j, %5, %precision
+      %8 = add %j, %precision
+      %9 = add %8, %elem_last_idx
+      bvinsert %7, %var, %8, %9, %precision
+    }
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
+    bvinsert %10, %dst, %i, %1, %lane_size
+  }
+  ret %dst
+}
+
+
+function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
+  for ([%i (range 0 %vector_length %lane_size)]) {
+    %lane_last_idx = sub %lane_size, 1
+    %1 = add %i, %lane_last_idx
+    %2 = bvextract %a, %i, %1, %lane_size
+    %4 = bvextract %b, %i, %1, %lane_size
+    for ([%j (range  %offset %lane_size %precision)]) {
+      %elem_last_idx = sub %precision, 1 
+      %5 = add %j, %elem_last_idx
+      %6 = bvextract %2, %j, %5, %precision
+      bvinsert %6, %var, %j, %5, %precision
+      %7 = bvextract %4, %j, %5, %precision
+      %8 = add %j, %precision
+      %9 = add %8, %elem_last_idx
+      bvinsert %7, %var, %8, %9, %precision
+    }
+    %10 = bvextract %var, 0, %lane_last_idx, %lane_size
     bvinsert %10, %dst, %i, %1, %lane_size
   }
   ret %dst

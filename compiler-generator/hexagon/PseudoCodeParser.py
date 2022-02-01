@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 from lex import tokens
 import json
-from AST import *
+from HexAST import *
 from collections import defaultdict
 
 # Expressions have unique IDs
@@ -443,5 +443,5 @@ def ParseHVXSemantics(semantics):
 
 
 if __name__ == '__main__':
-  from insts import insts
-  ParseHVXSemantics(insts)
+  from HexInsts import HexInsts
+  ParseHVXSemantics(HexInsts)

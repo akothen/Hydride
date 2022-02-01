@@ -169,57 +169,69 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
 
 
 
-def GetOpsInLoopsWithInvariants(Loop : RoseForLoop, Invariants = dict()):
-  assert not isinstance(Loop, RoseUndefRegion)
-  # Now iterate over all operations and extract all the invariants
-  for Region in Loop:
-    if isinstance(Region, RoseForLoop):
-      Invariants = GetOpsInLoopsWithInvariants(Region, Invariants)
+def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
+  assert not isinstance(Block, RoseUndefRegion)
+  # Iterate over the block in reverse order and see 
+  # if indexing operations are iterator independent.
+  OpList = Block.getOperations()
+  OpList.reverse()
+  IndexingOp = set()
+  for Op in OpList:
+    # Skip call and cast ops
+    if isinstance(Op, RoseCallOp) or isinstance(Op, RoseCastOp):
+      continue
+    # Sign extending ops are considered to contain invariants
+    if Op.isSizeChangingBVOp():
+      # Since this op is an indexing op, we can safely ignore it
+      if Op in IndexingOp:
+        IndexingOp.add(Op.getInputBitVector())
+        continue
+      # This op can be an invariant if it is not
+      # directly used in a bvinsert op.
+      Invariants[Op] = [Op.getOperand(1)]
+      continue
+    if Op.isIndexingBVOp():
+      IndexingOp.add(Op)
+      Low = Op.getLowIndex()
+      High = Op.getHighIndex()
+      if isinstance(Low, RoseConstant):
+        Invariants[Op] = [Op.getLowIndexPos()]
+      else:
+        IndexingOp.add(Low)
+      if isinstance(High, RoseConstant):
+        if Invariants.get(Op, []) == []:
+          Invariants[Op] = [Op.getHighIndexPos()]
+        else:
+          Invariants[Op].append(Op.getHighIndexPos())
+      else:
+        IndexingOp.add(High)      
+      continue
+    if Op in IndexingOp:
+      continue
+    for OperandIndex, Operand in enumerate(Op.getOperands()):
+      if isinstance(Operand, RoseConstant):
+        if Invariants.get(Op, []) == []:
+          Invariants[Op] = [OperandIndex]
+        else:
+          Invariants[Op].append(OperandIndex)
+  return Invariants
+
+
+def GetInvariantsInRegion(Abstraction, Invariants = dict()):
+  assert not isinstance(Abstraction, RoseUndefRegion)
+  if isinstance(Abstraction, RoseBlock):
+    return GetInvariantsInBlock(Abstraction, Invariants)
+  # Now iterate over all regions and extract all the invariants
+  for Region in Abstraction:
+    if isinstance(Region, RoseForLoop) \
+    or isinstance(Region, RoseFunction):
+      Invariants = GetInvariantsInRegion(Region, Invariants)
       continue
     if isinstance(Region, RoseBlock):
-      # Iterate over the block in reverse order and see 
-      # if indexing operations are iterator independent.
-      OpList = Region.getOperations()
-      OpList.reverse()
-      IndexingOp = set()
-      for Op in OpList:
-        # Skip call and cast ops
-        if isinstance(Op, RoseCallOp) or isinstance(Op, RoseCastOp):
-          continue
-        # Sign extending ops are considered to contain invariants
-        if Op.isSizeChangingBVOp():
-          # Since this op is an indexing op, we can safely ignore it
-          if Op in IndexingOp:
-            IndexingOp.add(Op.getInputBitVector())
-            continue
-          # This op can be an invariant if it is not
-          # directly used in a bvinsert op.
-          Invariants[Op] = [Op.getOperand(1)]
-          continue
-        if Op.isIndexingBVOp():
-          IndexingOp.add(Op)
-          Low = Op.getLowIndex()
-          High = Op.getHighIndex()
-          if isinstance(Low, RoseConstant):
-            Invariants[Op] = [Op.getLowIndexPos()]
-          else:
-            IndexingOp.add(Low)
-          if isinstance(High, RoseConstant):
-            if Invariants.get(Op, []) == []:
-              Invariants[Op] = [Op.getHighIndexPos()]
-            else:
-              Invariants[Op].append(Op.getHighIndexPos())
-          else:
-            IndexingOp.add(High)      
-          continue
-        if Op in IndexingOp:
-          continue
-        for OperandIndex, Operand in enumerate(Op.getOperands()):
-          if isinstance(Operand, RoseConstant):
-            if Invariants.get(Op, []) == []:
-              Invariants[Op] = [OperandIndex]
-            else:
-              Invariants[Op].append(OperandIndex)
+      GetInvariantsInBlock(Region, Invariants)
   return Invariants
-          
+
+
+
+
 
