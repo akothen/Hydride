@@ -367,6 +367,11 @@ def p_expr_nop(p):
 
 def p_expr_var(p):
   'expr : ID'
+  if p[1] == "VBITS":
+    p[0] = Number(VBITS())
+    return
+  if p[1] == "VWIDTH":
+    p[0] = Number(VWIDTH())
   if p[1] in ['Vs', 'Vu', 'Vv', 'Vss', 'Vuu', 'Vvv']:
     expr_id = 'var.vec_src.' + GenUniqueID(parser)
   elif p[1] in ['Vd', 'Vdd']:
@@ -458,8 +463,6 @@ def GetSpecFrom(inst, Pseudocode):
       assign = assign.then[0]
 
   # This is either an if statement or standard function call then
-  print("assign:")
-  print(assign)
   if not isinstance(assign, Update):
     if isinstance(assign, Call):
       lhs = assign.args[0]
@@ -523,5 +526,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 
