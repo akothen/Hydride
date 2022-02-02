@@ -12,6 +12,7 @@ def VWIDTH():
   return HVXVectorWidth
 
 
-def VELEM(Width):
+def VELEM(Width : int):
   assert Width % 2 == 0
-  return ((HVXVectorWidth * 8) / Width)
+  return int(((HVXVectorWidth * 8) / Width))
+
