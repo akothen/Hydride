@@ -13,6 +13,7 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 
+from RoseHexCommon import *
 from HexAST import *
 from RoseHexTypes import *
 
@@ -33,6 +34,8 @@ class RoseContext:
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
     self.Variables = dict()    # Name --> ID
+    # Map variable names to the element types
+    self.VariablesToElemTypes = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
   
@@ -66,6 +69,21 @@ class RoseContext:
     if Name in self.Variables:
       return True
     return False
+  
+  def addElemTypeOfVariable(self, Name : str, ElemType : RoseType):
+    self.VariablesToElemTypes[Name] = ElemType
+  
+  def isElemTypeOfVariableKnown(self, Name : str):
+    if Name in self.VariablesToElemTypes:
+      return True
+    return False
+
+  def getVariablesToElemTypes(self):
+    return self.VariablesToElemTypes
+  
+  def getElemTypeOfVariable(self, Name : str):
+    assert Name in self.VariablesToElemTypes
+    return self.VariablesToElemTypes[Name]
   
   def createContext(self, ID : str, ChildContext):
     assert isinstance(ChildContext, RoseContext)
@@ -116,6 +134,9 @@ class RoseContext:
       print("VARIABLE NAME:")
       print(Name)
       self.Variables[Name] = ID
+    # Copy over the element type information as well
+    for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
+      self.VariablesToElemTypes[Name] = ElemType
  
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
@@ -129,7 +150,7 @@ class RoseContext:
 class HexRoseContext(RoseContext):
   def __init__(self):
     # Maximum vector length
-    self.MaxVectorLength = 1024
+    self.MaxVectorLength = HVXVectorWidth
     # Track the ids that have been extended.
     self.SizeExtended = dict()
     # Integer constant length can change depending on the context in which 
@@ -405,11 +426,11 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING INDX EXPR")
   print("INDEX EXPR:")
   print(IndexExpr)
-  # Compile the index first
-  IndexVal = CompileIndex(IndexExpr.idx, Context)
+  # Compile the low index first
+  LowIndex = CompileIndex(IndexExpr.idx, Context)
   print("INDEX:")
-  print(IndexVal)
-  IndexVal.print()
+  print(LowIndex)
+  LowIndex.print()
 
   # Compile the vector object
   Vector = CompileExpression(IndexExpr.obj, Context)
@@ -417,11 +438,21 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   print(Vector)
   Vector.print()
 
-  # The bit slice size here is 1 bit
-  BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+  # Get the high index
+  assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+  ElemType = Context.getElemTypeOfVariable(Vector.getName())
+  assert ElemType.isBitVectorTy()
+  IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+  HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + Vector.getName(), \
+                                      [LowIndex, IndexDiff])
+  Context.addAbstractionToIR(HighIndex)
+  Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+
+  # Get the bitwdith value
+  BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
 
   # Now, generate the extract op. 
-  Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, IndexVal, IndexVal, BitwidthValue)
+  Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, LowIndex, HighIndex, BitwidthValue)
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -553,7 +584,17 @@ def GetExpressionType(Expr, Context : HexRoseContext):
         return RoseType.getUndefTy()
   
   if type(Expr) == BitIndex:
-    return RoseType.getBitVectorTy(1)
+    assert type(Expr.obj) == TypeLookup
+    if not Context.isVariableDefined(Expr.obj.obj.name):
+      return RoseType.getUndefTy()
+    assert Context.isElemTypeOfVariableKnown(Expr.obj.obj.name) == True
+    ID = Context.getVariableID(Expr.obj.obj.name)
+    BitVector = Context.getCompiledAbstractionForID(ID)
+    if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
+      return RoseType.getUndefTy()
+    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+    assert ElemType.isBitVectorTy()
+    return ElemType
   
   if type(Expr) == BitSlice:
     print("GETTING BIT SLICE LOW INDEX")
@@ -793,11 +834,11 @@ def CompileUpdate(Update, Context : HexRoseContext):
   else:
     # This could be a mask generator
     assert type(Update.lhs) == BitIndex
-    # Compile the LHS mask
-    IndexVal = CompileExpression(Update.lhs.idx, Context)
+    # Compile the low index
+    LowIndex = CompileExpression(Update.lhs.idx, Context)
     print("---INDEX:")
-    print(IndexVal)
-    IndexVal.print()
+    print(LowIndex)
+    LowIndex.print()
     # Compile the vector
     BitVector = CompileExpression(Update.lhs.obj, Context)
     print("---VECTOR:")
@@ -807,10 +848,20 @@ def CompileUpdate(Update, Context : HexRoseContext):
     print(RHSExprVal)
     RHSExprVal.print()
     RHSExprVal.getType().print()
+    # Get the high index
+    assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+    assert ElemType.isBitVectorTy()
+    IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+    HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + BitVector.getName(), \
+                                      [LowIndex, IndexDiff])
+    # Add this add op to the IR and the context
+    Context.addAbstractionToIR(HighIndex)
+    Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
     # The bit slice size here is 1 bit
-    BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+    BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
     # Compile the op
-    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal, BitwidthValue)
+    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
     print("---BIT SLICE INSERT OP:")
     LHSOp.print()
 
@@ -1181,11 +1232,17 @@ def CompileTypeLookup(TypeLookup, Context : HexRoseContext):
 
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(TypeLookup.obj.name):
+    # Element type of this variable must already exist
+    assert Context.isElemTypeOfVariableKnown(TypeLookup.obj.name) == True
     ID = Context.getVariableID(TypeLookup.obj.name)
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  CompiledVar = RoseValue.create(TypeLookup.obj.name, HexTypes[TypeLookup.type])
+  CompiledVar = RoseValue.create(TypeLookup.obj.name, Context.getMaxVectorLength())
+
+  # Add the element type info to the context
+  assert Context.isElemTypeOfVariableKnown(TypeLookup.obj.name) == False
+  Context.addElemTypeOfVariable(CompiledVar.getName(), HexTypes[TypeLookup.elemtype])
 
   # Add the variable info to the context
   Context.addVariable(TypeLookup.obj.name, TypeLookup.obj.id)
@@ -1214,29 +1271,25 @@ def CompileStatement(Stmt, Context : HexRoseContext):
 def CompileSemantics(Sema):
   # Create the root context
   RootContext = HexRoseContext()
-  OutParams = []
   ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
-    if Param.type.endswith('*'):
-        ParamType = HexTypes[Param.type[:-1].strip()]
-        OutParams.append(Param.name)
-        IsOutParam = True
-    else:
-        ParamType = HexTypes[Param.type]
+    ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
     # Create a new rosette value
     assert type(Param) == TypeLookup
     ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
+    RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
       ParamsIDs.append(Param.obj.id)
       ParamValues.append(ParamVal)
 
   if Sema.rettype != 'void':
     print(Sema.rettype)
-    RetType = HexTypes[Sema.rettype]
+    RetType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())  
+    #HexTypes[Sema.rettype]
     print("adding dst to context")
     RetValue = RoseValue.create(Sema.retname, RetType)
   else:
@@ -1253,6 +1306,8 @@ def CompileSemantics(Sema):
   # Add return value to the root context
   ReturnID = "return." + RootFunction.getReturnValue().getName()
   RootContext.addVariable(RootFunction.getReturnValue().getName(), ReturnID)
+  RootContext.addElemTypeOfVariable(RootFunction.getReturnValue().getName(), \
+                                    HexTypes[Sema.rettype])
   RootContext.addCompiledAbstraction(ReturnID, RootFunction.getReturnValue())
 
   # Add the parameter values to the root context
@@ -1681,6 +1736,8 @@ def Compile():
     CompiledFunction = CompileSemantics(Spec)
 
 
+#VELEM(WIDTH) = fVECSIZE()*8)/WIDTH
+
 test1 ={
  'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
                          '(Vu.b[i]+Vv.b[i]) ;}',
@@ -1691,9 +1748,20 @@ test2 = {
                          'Vv.b[i]) ? Vu.b[i] :Vv.b[i] ;}',
 }
 
+test3 = {
+   'Vd.b=vnavg(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                          '(Vu.b[i]-Vv.b[i])/2 ;}',
+}
+
+# Fails
+test4 = {
+   'Qd4=or(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] || QtV[i] '
+                    ';}',
+}
+
+
 
 if __name__ == '__main__':
   Compile()
-
 
 
