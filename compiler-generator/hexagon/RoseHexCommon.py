@@ -4,15 +4,15 @@
 #
 ###################################################################
 
-
+# HVX vector width in bits
 HVXVectorWidth = 1024
 
-
 def VWIDTH():
-  return HVXVectorWidth
+  return (HVXVectorWidth / 8)
 
 
 def VELEM(Width : int):
   assert Width % 2 == 0
-  return int(((HVXVectorWidth * 8) / Width))
+  return int(HVXVectorWidth / Width)
+
 
