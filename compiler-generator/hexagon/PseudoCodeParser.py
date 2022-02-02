@@ -1,8 +1,12 @@
+
 import ply.yacc as yacc
 from lex import tokens
 import json
 from HexAST import *
 from collections import defaultdict
+
+from RoseHexCommon import *
+
 
 # Expressions have unique IDs
 def GenUniqueID(parser):
@@ -109,26 +113,85 @@ def p_stmt_if_single(p):
   expr_id = "if." + GenUniqueID(parser)
   p[0] = If(p[3], [p[5]], None, expr_id)
 
+
+# Try to detect the common case
+def HandleLoopHeader(Init, Condition, ItUpdate):
+  print("Init:")
+  print(Init)
+  print("Condition:")
+  print(Condition)
+  print("ItUpdate:")
+  print(ItUpdate)
+  # Check if Init is just an update.
+  Iterator = None
+  Begin = None
+  End = None
+  Step = None
+  if type(Init) == Update:
+    assert type(Init.lhs) == Var
+    expr_id = "iterator." + GenUniqueID(parser)
+    Iterator = Var(Init.lhs.name, expr_id)
+    assert type(Init.rhs) == Number
+    Begin = Init.rhs
+  if type(Condition) == BinaryExpr:
+    if Condition.op == "<":
+      assert type(Condition.a) == Var
+      assert Iterator.name == Condition.a.name
+      assert type(Condition.b) == Number \
+          or type(Condition.b) == Var
+      End = Condition.b
+  if type(ItUpdate) ==  UnaryExpr:
+    assert ItUpdate.op == "INC"
+    assert type(ItUpdate.a) == Var
+    assert Iterator.name == ItUpdate.a.name
+    Step = Number(1)
+  elif type(ItUpdate) == Update:
+    if Iterator != None:
+      assert type(ItUpdate.lhs) == Var
+      assert Iterator.name == ItUpdate.lhs.name
+      assert type(ItUpdate.rhs) == BinaryExpr
+      assert type(ItUpdate.rhs.a) == Var
+      assert Iterator.name == ItUpdate.rhs.a.name
+      assert type(ItUpdate.rhs.b) == Number
+      Step = ItUpdate.rhs.b
+  return Iterator, Begin, End, Step
+
+
 def p_stmt_for(p):
   'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN LBRACKET stmts RBRACKET'
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(p[3], p[5], p[7], p[10], expr_id)
+  Iterator, Begin, End, Step = HandleLoopHeader(p[3], p[5], p[7])
+  if Iterator == None or Begin == None or End == None or Step == None:
+    p[0] = ComplexFor(p[3], p[5], p[7], p[10], expr_id)
+  else:
+    p[0] = For(Iterator, Begin, End, Step, p[10], expr_id)
+
 
 def p_stmt_for_single(p):
   'stmt : FOR LPAREN expr_empty SEMICOLON expr_empty SEMICOLON expr_empty RPAREN stmt'
   expr_id = "for." + GenUniqueID(parser)
-  p[0] = For(p[3], p[5], p[7], [p[9]], expr_id)
+  Iterator, Begin, End, Step = HandleLoopHeader(p[3], p[5], p[7])
+  if Iterator == None or Begin == None or End == None or Step == None:
+    p[0] = ComplexFor(p[3], p[5], p[7], [p[9]], expr_id)
+  else:
+    p[0] = For(Iterator, Begin, End, Step, [p[9]], expr_id)
+
 
 def p_expr_call(p):
   '''expr : ID LPAREN args RPAREN
           | ID LPAREN args RPAREN COLON ID
           | ID LPAREN args RPAREN COLON ID COLON ID'''
-  expr_id = "call." + GenUniqueID(parser)
   if len(p) == 5:
-    p[0] = Call(p[1], p[3], None, expr_id)
+    if p[1] == "VELEM":
+      p[0] = Number(VELEM(p[3][0].val))
+    else:
+      expr_id = "call." + GenUniqueID(parser)
+      p[0] = Call(p[1], p[3], None, expr_id)
   elif len(p) == 7:
+    expr_id = "call." + GenUniqueID(parser)
     p[0] = Call(p[1], p[3], p[6], expr_id)
   else:
+    expr_id = "call." + GenUniqueID(parser)
     p[0] = Call(p[1], p[3], [p[6], p[8]], expr_id)
 
 def p_expr_call_module(p):
@@ -143,10 +206,8 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  if p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw']:
-    p[0] = TypeLookup(p[1], p[3])
-  else:
-    p[0] = Lookup(p[1], p[3])
+  assert p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw', 'v']
+  p[0] = ElemTypeInfo(p[1], p[3])
 
 def p_args(p):
   '''args : expr
@@ -304,6 +365,11 @@ def p_expr_nop(p):
 
 def p_expr_var(p):
   'expr : ID'
+  if p[1] == "VBITS":
+    p[0] = Number(VBITS())
+    return
+  if p[1] == "VWIDTH":
+    p[0] = Number(VWIDTH())
   if p[1] in ['Vs', 'Vu', 'Vv', 'Vss', 'Vuu', 'Vvv']:
     expr_id = 'var.vec_src.' + GenUniqueID(parser)
   elif p[1] in ['Vd', 'Vdd']:
@@ -322,7 +388,12 @@ def p_expr_var(p):
     expr_id = 'var.reg_dst.' + GenUniqueID(parser)
   else:
     expr_id = "var." + GenUniqueID(parser)
-  p[0] = Var(p[1], expr_id)
+  NewName = ''.join(i for i in p[1] if not i.isdigit())
+  if NewName != p[1]:
+    NewName += "V"
+  print("NewName:")
+  print(NewName)
+  p[0] = Var(NewName, expr_id)
 
 def p_expr_num(p):
   'expr : NUMBER'
@@ -380,68 +451,79 @@ def pretty_print(root):
       return root
   return pformat(to_dict(root), indent=1)
 
-def ParseHVXSemantics(semantics):
 
-  for inst, pseudocode in semantics.items():
-    if 'vmax' not in inst:
-      continue
-    print(inst)
+def GetSpecFrom(inst, Pseudocode):
+  assign = Parse(inst)
+  # print(assign)
+  if isinstance(assign, list):
+    assign = assign[0]
+  if isinstance(assign, If):
+      assign = assign.then[0]
+
+  # This is either an if statement or standard function call then
+  if not isinstance(assign, Update):
+    if isinstance(assign, Call):
+      lhs = assign.args[0]
+      rhs = assign
+  else: 
+    lhs = assign.lhs
+    if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
+      lhs = lhs[0]
+    # += or *=
+    if isinstance(assign.rhs, BinaryExpr):
+      rhs = assign.rhs.b
+    elif isinstance(assign.rhs, Call):
+      rhs = assign.rhs
+    elif isinstance(assign.rhs, BitExtend):
+      rhs = assign.rhs.hi
+
+  # SIMD instruction
+  if isinstance(lhs, ElemTypeInfo):
+    var = lhs.obj
+    rettype = lhs.elemtype 
+    retname = var.name
+  elif isinstance(lhs, Var):
+    var = lhs
+    rettype = var.id.split(".")[1]
+    retname = var.name
+  else:
+    print("Unknown lhs:", lhs)
+    rettype = None
+    retname = None
+
+  if var.name in ['Vx', 'Vy', 'Vd']:
+    lanes = 1
+  elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
+    lanes = 1
+  elif var.name in ['Vxx', 'Vyy', 'Vdd']:
+    lanes = 2
+  else:
+    lanes = 0
+    print("Unknown variable type:", var)
+  
+  if isinstance(rhs, Call):
+    name = rhs.funcname
+    params = rhs.args
+  else:
+    name = "TODO"
+    params = []
+  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), \
+    retname =retname, rettype=rettype, lanes=lanes)
+  return sema
+
+
+def ParseHVXSemantics(Semantics):
+  for inst, Pseudocode in Semantics.items():
     # We currently ignore any instructions that are just assembler syntactic sugar
-    if pseudocode.startswith("Assembler mapped to"):
+    if Pseudocode.startswith("Assembler mapped to"):
       continue 
-    
-    assign = Parse(inst)
-    # print(assign)
-    if isinstance(assign, list):
-      assign = assign[0]
-    if isinstance(assign, If):
-        assign = assign.then[0]
-
-    # This is either an if statement or standard function call then
-    if not isinstance(assign, Update):
-      if isinstance(assign, Call):
-        lhs = assign.args[0]
-        rhs = assign
-    else: 
-      lhs = assign.lhs
-      if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
-        lhs = lhs[0]
-      # += or *=
-      if isinstance(assign.rhs, BinaryExpr):
-        rhs = assign.rhs.b
-      elif isinstance(assign.rhs, Call):
-        rhs = assign.rhs
-
-    # SIMD instruction
-    if isinstance(lhs, TypeLookup):
-      var = lhs.obj
-    elif isinstance(lhs, Var):
-      var = lhs
-    else:
-      print("Unknown lhs:", lhs)
-    
-    if var.name in ['Vx', 'Vy', 'Vd']:
-      lanes = 1
-    elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
-      lanes = 1
-    elif var.name in ['Vxx', 'Vyy', 'Vdd']:
-      lanes = 2
-    else:
-      lanes = 0
-      print("Unknown variable type:", var)
-    
-    if isinstance(rhs, Call):
-      name = rhs.func
-      params = rhs.args
-    else:
-      name = "TODO"
-      params = []
-    sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(pseudocode), rettype=var.id.split(".")[1], lanes=lanes)
-    print(sema)
-    # print(pretty_print(sema))
-  return None
+    Sema = GetSpecFrom(inst, Pseudocode)
+    print(Sema)
 
 
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
+
+

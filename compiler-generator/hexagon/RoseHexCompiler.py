@@ -13,8 +13,9 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 
-from AST import *
-from x86Types import x86Types
+from RoseHexCommon import *
+from HexAST import *
+from RoseHexTypes import *
 
 from copy import deepcopy
 import math
@@ -33,6 +34,8 @@ class RoseContext:
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
     self.Variables = dict()    # Name --> ID
+    # Map variable names to the element types
+    self.VariablesToElemTypes = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
   
@@ -66,6 +69,21 @@ class RoseContext:
     if Name in self.Variables:
       return True
     return False
+  
+  def addElemTypeOfVariable(self, Name : str, ElemType : RoseType):
+    self.VariablesToElemTypes[Name] = ElemType
+  
+  def isElemTypeOfVariableKnown(self, Name : str):
+    if Name in self.VariablesToElemTypes:
+      return True
+    return False
+
+  def getVariablesToElemTypes(self):
+    return self.VariablesToElemTypes
+  
+  def getElemTypeOfVariable(self, Name : str):
+    assert Name in self.VariablesToElemTypes
+    return self.VariablesToElemTypes[Name]
   
   def createContext(self, ID : str, ChildContext):
     assert isinstance(ChildContext, RoseContext)
@@ -116,6 +134,9 @@ class RoseContext:
       print("VARIABLE NAME:")
       print(Name)
       self.Variables[Name] = ID
+    # Copy over the element type information as well
+    for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
+      self.VariablesToElemTypes[Name] = ElemType
  
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
@@ -126,13 +147,10 @@ class RoseContext:
 
 
 # This defines rules specifically for x86 to RoseIR convertion
-class x86RoseContext(RoseContext):
+class HexRoseContext(RoseContext):
   def __init__(self):
     # Maximum vector length
-    self.MaxVectorLength = 512
-    # Cache function definitions. This is needed because functions are
-    # compiled when a call is compiled.
-    self.FunctionDefs = dict()  # Function name --> FuncDef
+    self.MaxVectorLength = HVXVectorWidth
     # Track the ids that have been extended.
     self.SizeExtended = dict()
     # Integer constant length can change depending on the context in which 
@@ -147,13 +165,6 @@ class x86RoseContext(RoseContext):
   
   def setMaxVectorLength(self, Length : int):
     self.MaxVectorLength = Length
-
-  def addFunctionDef(self, FunctionDef):
-    assert(type(FunctionDef) == FuncDef)
-    self.FunctionDefs[FunctionDef.name] = FunctionDef
-  
-  def getFunctionDef(self, Name : str):
-    return self.FunctionDefs[Name]
 
   def addSizeExtended(self, Operation : RoseValue, Bitwidth : int):
     self.SizeExtended[Operation] = Bitwidth
@@ -185,7 +196,7 @@ class x86RoseContext(RoseContext):
 
   def createContext(self, ID : str, ChildContext):
     print("CREATING CONTEXT")
-    assert isinstance(ChildContext, x86RoseContext)
+    assert isinstance(ChildContext, HexRoseContext)
     assert self.isCompiledAbstraction(ID)
     Abstraction = self.getCompiledAbstractionForID(ID)
     if isinstance(Abstraction, RoseFunction):
@@ -213,7 +224,7 @@ class x86RoseContext(RoseContext):
     
 
 
-def CompileNumber(Num, Context : x86RoseContext):
+def CompileNumber(Num, Context : HexRoseContext):
   print("COMPILE NUMBER")
   print("NUM:")
   print(Num)
@@ -235,14 +246,14 @@ def CompileVar(Variable, Context):
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  Var = RoseValue.create(Variable.name, \
+  CompiledVar = RoseValue.create(Variable.name, \
           RoseType.getBitVectorTy(Context.getMaxVectorLength()))
 
   # Add the variable info to the context
   Context.addVariable(Variable.name, Variable.id)
-  Context.addCompiledAbstraction(Variable.id, Var)
+  Context.addCompiledAbstraction(Variable.id, CompiledVar)
   
-  return Var
+  return CompiledVar
 
 
 # Always assume that the bitwidth returned by this function is a constant
@@ -319,7 +330,7 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
 
 
-def CompileIndex(IndexExpr, Context : x86RoseContext):
+def CompileIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING AN INDEX EXPRESSION:")
   print("IndexExpr:")
   print(IndexExpr)
@@ -351,6 +362,10 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   print("COMPILE BITSLICE")
   print("BITSLICE:")
   print(BitSliceExpr)
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(BitSliceExpr.id):
+    return Context.getCompiledAbstractionForID(BitSliceExpr.id)
+
   # First compile low and high expressions
   print("COMPILING LOW")
   Low = CompileIndex(BitSliceExpr.lo, Context)
@@ -411,15 +426,19 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   return Operation
 
 
-def CompileBitIndex(IndexExpr, Context : x86RoseContext):
+def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING INDX EXPR")
   print("INDEX EXPR:")
   print(IndexExpr)
-  # Compile the index first
-  IndexVal = CompileIndex(IndexExpr.idx, Context)
-  print("INDEX:")
-  print(IndexVal)
-  IndexVal.print()
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(IndexExpr.id):
+    return Context.getCompiledAbstractionForID(IndexExpr.id)
+
+  # Compile the low index first
+  LowIndex = CompileIndex(IndexExpr.idx, Context)
+  print("LOW INDEX:")
+  print(LowIndex)
+  LowIndex.print()
 
   # Compile the vector object
   Vector = CompileExpression(IndexExpr.obj, Context)
@@ -427,11 +446,23 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   print(Vector)
   Vector.print()
 
-  # The bit slice size here is 1 bit
-  BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+  # Get the high index
+  assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+  ElemType = Context.getElemTypeOfVariable(Vector.getName())
+  assert ElemType.isBitVectorTy()
+  IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+  HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + Vector.getName(), \
+                                      [LowIndex, IndexDiff])
+  print("HIGH INDEX:")
+  HighIndex.print()
+  Context.addAbstractionToIR(HighIndex)
+  Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+
+  # Get the bitwdith value
+  BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
 
   # Now, generate the extract op. 
-  Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, IndexVal, IndexVal, BitwidthValue)
+  Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, LowIndex, HighIndex, BitwidthValue)
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -445,7 +476,7 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   return Operation
 
 
-def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
+def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
   # The given bitslice index could be a number
   if type(ExprIndex) == Number:
     print("--NUMBER")
@@ -550,7 +581,7 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
   return RoseUndefValue()
 
 
-def GetExpressionType(Expr, Context : x86RoseContext):
+def GetExpressionType(Expr, Context : HexRoseContext):
   print("GET EXPRESSION TYPE:")
   print("EXPRESSION:")
   print(Expr)
@@ -563,7 +594,31 @@ def GetExpressionType(Expr, Context : x86RoseContext):
         return RoseType.getUndefTy()
   
   if type(Expr) == BitIndex:
-    return RoseType.getBitVectorTy(1)
+    assert type(Expr.obj) == ElemTypeInfo
+    # Bitindex could be indexing into a variable or another bitslice
+    if type(Expr.obj.obj) == Var:
+      Variable = Expr.obj.obj
+      if not Context.isVariableDefined(Variable.name):
+        return RoseType.getUndefTy()
+      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      ID = Context.getVariableID(Variable.name)
+      BitVector = Context.getCompiledAbstractionForID(ID)
+    else:
+      assert type(Expr.obj.obj) == BitIndex
+      BitIndexVar = Expr.obj.obj
+      assert type(BitIndexVar.obj) == ElemTypeInfo
+      assert type(BitIndexVar.obj.obj) == Var
+      Variable = BitIndexVar.obj.obj
+      if not Context.isVariableDefined(Variable.name):
+        return RoseType.getUndefTy()
+      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      ID = Context.getVariableID(Variable.name)
+      BitVector = Context.getCompiledAbstractionForID(ID)
+    if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
+      return RoseType.getUndefTy()
+    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+    assert ElemType.isBitVectorTy()
+    return ElemType
   
   if type(Expr) == BitSlice:
     print("GETTING BIT SLICE LOW INDEX")
@@ -584,7 +639,7 @@ def GetExpressionType(Expr, Context : x86RoseContext):
   return RoseType.getUndefTy()
 
 
-def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
+def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
   print("GET RHS TYPE SPECIAL CASES")
   assert type(RHS) == BinaryExpr
   # Check if the operands size is extended. If yes, we return
@@ -658,7 +713,7 @@ def GetRHSTypeForSpecialCases(RHS, Context : x86RoseContext):
 # We try to work out the type of the numbers in RHS.
 # This is not meant to be deep. We will extend this
 # if we need to.
-def GetRHSNumberType(Update, Context : x86RoseContext):
+def GetRHSNumberType(Update, Context : HexRoseContext):
   RHS = Update.rhs
   LHS = Update.lhs
 
@@ -714,7 +769,7 @@ def GetRHSNumberType(Update, Context : x86RoseContext):
   return RoseType.getUndefTy()
 
 
-def CompileUpdate(Update, Context : x86RoseContext):
+def CompileUpdate(Update, Context : HexRoseContext):
   # We need to get the type of numbers on the RHS
   OriginalNumberTy = Context.getNumberType()
   PredictedType = GetRHSNumberType(Update, Context)
@@ -796,6 +851,17 @@ def CompileUpdate(Update, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
     print("!!!!!RHSExprVal:")
     RHSExprVal.getType().print()
+    # Sometimes size extension of the RHS is required, so we have to handle it here
+    if RHSExprVal.getType().getBitwidth() < Bitwidth:
+      # Let's sign-extend
+      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                          RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > Bitwidth:
+      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                          RHSExprVal, Bitwidth)
     # Add an bitslice operation
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
     print("BIT SLICE INSERT OP:")
@@ -803,11 +869,11 @@ def CompileUpdate(Update, Context : x86RoseContext):
   else:
     # This could be a mask generator
     assert type(Update.lhs) == BitIndex
-    # Compile the LHS mask
-    IndexVal = CompileExpression(Update.lhs.idx, Context)
+    # Compile the low index
+    LowIndex = CompileExpression(Update.lhs.idx, Context)
     print("---INDEX:")
-    print(IndexVal)
-    IndexVal.print()
+    print(LowIndex)
+    LowIndex.print()
     # Compile the vector
     BitVector = CompileExpression(Update.lhs.obj, Context)
     print("---VECTOR:")
@@ -817,10 +883,34 @@ def CompileUpdate(Update, Context : x86RoseContext):
     print(RHSExprVal)
     RHSExprVal.print()
     RHSExprVal.getType().print()
+    # Get the high index
+    assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+    assert ElemType.isBitVectorTy()
+    IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+    HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + BitVector.getName(), \
+                                      [LowIndex, IndexDiff])
+    # Add this add op to the IR and the context
+    Context.addAbstractionToIR(HighIndex)
+    Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
     # The bit slice size here is 1 bit
-    BitwidthValue = RoseConstant.create(1, IndexVal.getType())
+    BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+    # Sometimes size extension of the RHS is required, so we have to handle it here
+    if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
+      # Let's sign-extend
+      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                    RHSExprVal, ElemType.getBitwidth())
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
+      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                    RHSExprVal, ElemType.getBitwidth())
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     # Compile the op
-    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal, BitwidthValue)
+    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
     print("---BIT SLICE INSERT OP:")
     LHSOp.print()
 
@@ -833,7 +923,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
   return LHSOp
   
 
-def CompileSelect(Select, Context : x86RoseContext):
+def CompileSelect(Select, Context : HexRoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(Select.id):
     return Context.getCompiledAbstractionForID(Select.id)
@@ -853,7 +943,7 @@ def CompileSelect(Select, Context : x86RoseContext):
   return Operation
 
 
-def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
+def CompileUnaryExpr(UnaryExpr, Context : HexRoseContext):
   # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(UnaryExpr.id):
     return Context.getCompiledAbstractionForID(UnaryExpr.id)
@@ -871,7 +961,7 @@ def CompileUnaryExpr(UnaryExpr, Context : x86RoseContext):
   return Operation
 
 
-def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
+def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
     # If this expression is compiled, no need to recompile
   if Context.isCompiledAbstraction(BinaryExpr.id):
     return Context.getCompiledAbstractionForID(BinaryExpr.id)
@@ -1012,27 +1102,10 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   return Operation
 
 
-def CompileReturn(ReturnStmt, Context : x86RoseContext):
-  # If this expression is compiled, no need to recompile
-  if Context.isCompiledAbstraction(ReturnStmt.id):
-    return Context.getCompiledAbstractionForID(ReturnStmt.id)  
-  
-  print("COMPILE RETURN EXPRESSION")
-  print("RETURN EXPR:")
-  print(ReturnStmt)
-  # Compile the return op
-  Operand = CompileExpression(ReturnStmt.val, Context)
-  Operation = RoseReturnOp.create(Operand)
-  # Add the operation to the IR
-  Context.addAbstractionToIR(Operation)
-  # Add the operation to the context (although this is unnecessary)
-  Context.addCompiledAbstraction(ReturnStmt.id, Operation)
-  return Operation
-
 
 # Checks if extension has been performed already
 # sign_extend(x * y) = sign_extend(x) * sign_extend(y)
-def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext):
+def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : HexRoseContext):
   if CallStmt.funcname not in BuiltinExtendsSize:
     return False
   # Builtin extends size. Check if we have already done that.
@@ -1059,12 +1132,12 @@ def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext)
   return True
   
 
-def CompileBuiltIn(CallStmt, Context : x86RoseContext):
-  # If the call is compiled, no need to recompile
+def CompileCall(CallStmt, Context : HexRoseContext):
+  print("COMPILE CALL")
   if Context.isCompiledAbstraction(CallStmt.id):
     return Context.getCompiledAbstractionForID(CallStmt.id)
 
-  # Function name has to be one of the bultins
+  # This must be a builtin function call.
   assert CallStmt.funcname in Builtins
 
   # Compile function call arguments first
@@ -1096,166 +1169,7 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
   return Operation
 
 
-def CompileCall(CallStmt, Context : x86RoseContext):
-  print("COMPILE CALL")
-  # If this is a builtin function call, just compile it.
-  if CallStmt.funcname in Builtins:
-    return CompileBuiltIn(CallStmt, Context)
-
-   # If the call is compiled, no need to recompile
-  if Context.isCompiledAbstraction(CallStmt.id):
-    return Context.getCompiledAbstractionForID(CallStmt.id)
-
-  # Try to get the types of the arguments first
-  print("TRYING TO GET TYPES OF ARGUMENTS")
-  ArgTypesUndefined = False
-  ArgsTypeList = list()
-  for Arg in CallStmt.args:
-    ArgType = GetExpressionType(Arg, Context)
-    # Argument type cannot be undefined or void
-    assert not ArgType.isVoidTy()
-    if ArgType.isUndefTy():
-      ArgTypesUndefined = True
-      break
-    ArgsTypeList.append(ArgType)
-  print("ARGUMENTS TYPES FOUND")
-
-  # Compile the arguments (we have no other choice)
-  ArgValuesList = list()
-  if ArgTypesUndefined == True:
-    print("COMPILE ARGUMENTS")
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
-      ArgValuesList.append(CompiledArg)
-    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
-    print("ARGUMENTS COMPILED")
-
-  # This is a function call
-  FunctionDef = Context.getFunctionDef(CallStmt.funcname)
-  assert len(FunctionDef.params) == len(CallStmt.args)
-
-  # Check if we are compiling this function for the first time
-  if Context.isCompiledAbstraction(FunctionDef.id) == False:
-    print("COMPILING FUNCTION")
-    ChildContext = x86RoseContext()
-    FuncArgList = []
-    for Index  in range(len(FunctionDef.params)):
-      Param = FunctionDef.params[Index]
-      ArgType = ArgsTypeList[Index]
-      if type(Param) == BitSlice:
-        # Some sanity checks
-        assert type(Param.bv) == Var
-        assert type(Param.lo) == Number
-        assert type(Param.hi) == Number
-        assert Param.lo.val == 0
-        ParamName = Param.bv.name
-        ParamWidth = Param.hi.val + 1
-      else:
-        assert type(Param) == Var
-        ParamName = Param.name
-        ParamWidth = ArgType.getBitwidth()
-      print("ParamWidth:")
-      print(ParamWidth)
-      print("Arg.getType().getBitwidth():")
-      print(ArgType.getBitwidth())
-      assert ArgType.getBitwidth() == ParamWidth
-      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue(), Index)
-      ChildContext.addVariable(ParamName, Param.id)
-      FuncArgList.append(ArgVal)
-      print("PARAM NAME:")
-      print(ParamName)
-    
-    # Compile the function and its arguments
-    print("GENERATE FUNCTION")
-    Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseType.getUndefTy())
-    print("FUNCTION:")
-    print(Function)
-    print(FunctionDef.params)
-    print(type(FunctionDef.params))
-
-    # Add arguments to the child context
-    for Index  in range(len(FunctionDef.params)):
-      Param = FunctionDef.params[Index]
-      Arg = Function.getArg(Index)
-      ChildContext.addCompiledAbstraction(Param.id, Arg)
-    print("ADDED ARGUMENTS TO THE CHILD CONTEXT")
-    
-    # Add the generated function to the current context
-    Context.addCompiledAbstraction(FunctionDef.id, Function)
-    
-    # Add this function as the root abstraction for this this child context
-    ChildContext.pushRootAbstraction(Function)
-
-    # Create a new context for this funtcion
-    Context.createContext(FunctionDef.id, ChildContext)
-    print("FUNCTION ADDED TO CONTEXT")
-    
-    # Compile the function body
-    ReturnValue = RoseUndefValue()
-    for Stmt in FunctionDef.body:
-      if type(Stmt) == Return:
-        ReturnValue = CompileExpression(Stmt, ChildContext)
-        break
-      CompileStatement(Stmt, ChildContext)
-    assert ReturnValue != RoseUndefValue()
-    print("FUNCTION GENERATED")
-
-    # Pop the root function from the child context 
-    CompiledFunction = ChildContext.getRootAbstraction()
-
-    # Set the return value for this function
-    CompiledFunction.setRetVal(ReturnValue)
-
-    # Add this function to the root abstraction and update context
-    Context.addAbstractionToIR(CompiledFunction)
-
-    # Update the compiled function in this context now
-    Context.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
-
-    # Destroy the child context now
-    Context.destroyContext(FunctionDef.id)
-    print("COMPILED FUNCITON:")
-    CompiledFunction.print()
-  
-  # Compile the function call arguments now
-  if ArgTypesUndefined == False:
-    print("COMPILE ARGUMENTS")
-    ArgValuesList = list()
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
-      ArgValuesList.append(CompiledArg)
-    print("ARGUMENTS COMPILED")
-
-  # Compile call statement now.
-  Function = Context.getCompiledAbstractionForID(FunctionDef.id)
-  FunctionCall = RoseCallOp.create(CallStmt.id, Function, ArgValuesList)
-  print(FunctionCall)
-  # Add the op to the IR
-  Context.addAbstractionToIR(FunctionCall)
-  # Add the operation to the context
-  Context.addCompiledAbstraction(CallStmt.id, FunctionCall)
-  print("COMPILED CALL OPERATION:")
-  FunctionCall.print()
-
-  return FunctionCall
-
-
-# Function will be compiled later
-def CompileFunction(FunctionDef, Context : x86RoseContext):
-  assert(type(FunctionDef) == FuncDef)
-  print("COMPILE FUNCTION")
-  print("FUNCDEF:")
-  print(FunctionDef)
-  # Add the function definiton to the current context
-  # This function will be compiled later.
-  Context.addFunctionDef(FunctionDef)
-
-
-def CompileForLoop(ForStmt, Context : x86RoseContext):
+def CompileForLoop(ForStmt, Context : HexRoseContext):
   # If the loop has been compiled already, no need to recomplie
   if Context.isCompiledAbstraction(ForStmt.id):
     return
@@ -1264,31 +1178,21 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   print("COMPILING FOR LOOP")
   print("FOR EXPR:")
   print(ForStmt)
+  
+  # We only handle the common loops, not complex yet.
+  assert type(ForStmt) != ComplexFor
+
   Begin = CompileExpression(ForStmt.begin, Context)
   End = CompileExpression(ForStmt.end, Context)
   assert Begin.getType() == End.getType()
-  One = RoseConstant.create(1, Begin.getType())
-  MinusOne = RoseConstant.create(-1, Begin.getType())
-  Step = One if ForStmt.inc else MinusOne
-
-  # Modify the end bound of the loop by adding 1 to it.
-  # This is because of the way loop bounds are expressed in
-  # in x86 pseudocode and rosette.
-  if isinstance(End, RoseConstant):
-    End = RoseConstant.create(End.getValue() + 1, End.getType())
-  else:
-    # Add an add instruction
-    End = RoseAddOp.create("end.bound." + End.getName(), [End, Step])
-    # Add this op to the IR
-    Context.addAbstractionToIR(End)
-    # Add this updated value to the context
-    Context.updateCompiledAbstraction(ForStmt.end, End)
+  Step = CompileExpression(ForStmt.step, Context)
+  assert Step.getType() == End.getType()
 
   # Generate the loop
   Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
 
   # Add loop as root abstraction 
-  ChildContext = x86RoseContext()
+  ChildContext = HexRoseContext()
   ChildContext.pushRootAbstraction(Loop)
 
   # Add the generated loop to the current context
@@ -1323,13 +1227,13 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
   Context.destroyContext(ForStmt.id)
 
 
-def CompileIf(IfStmt, Context : x86RoseContext):
+def CompileIf(IfStmt, Context : HexRoseContext):
   # Generate a cond region
   Cond = CompileExpression(IfStmt.cond, Context)
   CondRegion = RoseCond.create(Cond)
 
   # Add cond region as root abstraction 
-  ChildContext = x86RoseContext()
+  ChildContext = HexRoseContext()
   ChildContext.pushRootAbstraction(CondRegion)
 
   # Add the then key for this cond region
@@ -1368,7 +1272,38 @@ def CompileIf(IfStmt, Context : x86RoseContext):
   Context.destroyContext(IfStmt.id)
 
 
-def CompileExpression(Expr, Context : x86RoseContext):
+def CompileElemTypeInfo(ElemTypeInfo, Context : HexRoseContext):
+  print("COMPILE TYPELOOKUP")
+  print("TYPELOOKUP:")
+  print(ElemTypeInfo)
+  # ElemTypeInfo tracks types of variables
+  if type(ElemTypeInfo.obj) == Var:
+    # Check if the variable is already defined and cached. If yes, just return that.
+    if Context.isVariableDefined(ElemTypeInfo.obj.name):
+      # Element type of this variable must already exist
+      assert Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == True
+      ID = Context.getVariableID(ElemTypeInfo.obj.name)
+      return Context.getCompiledAbstractionForID(ID)
+    # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+    CompiledValue = RoseValue.create(ElemTypeInfo.obj.name, Context.getMaxVectorLength())
+    # Add the element type info to the context
+    assert Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == False
+    Context.addElemTypeOfVariable(CompiledValue.getName(), HexTypes[ElemTypeInfo.elemtype])
+    # Add the variable info to the context
+    Context.addVariable(ElemTypeInfo.obj.name, ElemTypeInfo.obj.id)
+  else:
+    assert type(ElemTypeInfo.obj) == BitIndex or type(ElemTypeInfo.obj) == BitSlice
+    # Compile the bit slice
+    CompiledValue = CompileExpression(ElemTypeInfo.obj, Context)
+    if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
+      Context.addElemTypeOfVariable(CompiledValue.getName(), HexTypes[ElemTypeInfo.elemtype])
+  
+  # Add the typelookup to context
+  Context.addCompiledAbstraction(ElemTypeInfo.obj.id, CompiledValue)
+  return CompiledValue
+
+
+def CompileExpression(Expr, Context : HexRoseContext):
   print("COMPILE EXPRESSION")
   print("EXPR:")
   print(Expr)
@@ -1377,7 +1312,7 @@ def CompileExpression(Expr, Context : x86RoseContext):
   return CompiledExpr
 
 
-def CompileStatement(Stmt, Context : x86RoseContext):
+def CompileStatement(Stmt, Context : HexRoseContext):
   StmtTy = type(Stmt)
   print("STATEMENT:")
   print(Stmt)
@@ -1388,35 +1323,28 @@ def CompileStatement(Stmt, Context : x86RoseContext):
 
 def CompileSemantics(Sema):
   # Create the root context
-  RootContext = x86RoseContext()
-  OutParams = []
+  RootContext = HexRoseContext()
   ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
-    if Param.type.endswith('*'):
-        ParamType = x86Types[Param.type[:-1].strip()]
-        OutParams.append(Param.name)
-        IsOutParam = True
-    else:
-        ParamType = x86Types[Param.type]
+    ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
     # Create a new rosette value
-    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+    assert type(Param) == ElemTypeInfo
+    ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
+    RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
-      ParamsIDs.append(Param.id)
+      ParamsIDs.append(Param.obj.id)
       ParamValues.append(ParamVal)
 
-  ReturnsMask = Sema.rettype.startswith('__mmask')
   if Sema.rettype != 'void':
-    RetType = x86Types[Sema.rettype]
-    if not ReturnsMask:
-      print("adding dst to context")
-      RetValue = RoseValue.create('dst', RetType)
-    else:
-      print("adding k to context")
-      RetValue = RoseValue.create('k', RetType)
+    print(Sema.rettype)
+    RetType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())  
+    #HexTypes[Sema.rettype]
+    print("adding dst to context")
+    RetValue = RoseValue.create(Sema.retname, RetType)
   else:
     ReturnsVoid = True
     RetType = RoseType.getVoidTy()
@@ -1431,6 +1359,8 @@ def CompileSemantics(Sema):
   # Add return value to the root context
   ReturnID = "return." + RootFunction.getReturnValue().getName()
   RootContext.addVariable(RootFunction.getReturnValue().getName(), ReturnID)
+  RootContext.addElemTypeOfVariable(RootFunction.getReturnValue().getName(), \
+                                    HexTypes[Sema.rettype])
   RootContext.addCompiledAbstraction(ReturnID, RootFunction.getReturnValue())
 
   # Add the parameter values to the root context
@@ -1446,23 +1376,16 @@ def CompileSemantics(Sema):
   RootContext.pushRootAbstraction(RootFunction)
 
   # Compile all the statements
-  CompiledRetVal = RoseUndefValue()
   for Stmt in Sema.spec:
-    if type(Stmt) == Return:
-      #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
-      #CompileStatement(Dst, RootContext)
-      CompiledRetVal = CompileStatement(Stmt, RootContext)
-      break
     CompileStatement(Stmt, RootContext)
   
   # Get the compiled function
   CompiledFunction = RootContext.getRootAbstraction()
 
-  # See if the function returns anything, if not add a return op
-  if CompiledRetVal == RoseUndefValue():
-      Op = RoseReturnOp.create(RetValue)
-      # NO meed to add this operation to the context but add it to the function
-      CompiledFunction.addAbstraction(Op)
+  # Generate return op
+  Op = RoseReturnOp.create(RetValue)
+  # NO meed to add this operation to the context but add it to the function
+  CompiledFunction.addAbstraction(Op)
 
   print("\n\n\n\n\n")
   CompiledFunction.print()
@@ -1471,11 +1394,10 @@ def CompileSemantics(Sema):
 
 
 CompileAbstractions = {
+  ElemTypeInfo : CompileElemTypeInfo, 
   For: CompileForLoop,
   Number: CompileNumber,
   Var: CompileVar,
-  Return : CompileReturn,
-  FuncDef: CompileFunction,
   Call: CompileCall,
   BitSlice: CompileBitSlice,
   Update: CompileUpdate,
@@ -1484,9 +1406,6 @@ CompileAbstractions = {
   If: CompileIf,
   BinaryExpr: CompileBinaryExpr,
   BitIndex : CompileBitIndex,
-  #While: CompileWhile,
-  #Match: CompileMatch,
-  #Lookup: CompileLookup,
 }
 
 
@@ -1596,13 +1515,13 @@ def HandleToRemainder(_):
 
 # Builtin functions
 Builtins = {
-  'Saturate32': HandleToSSaturate(32),
-  'Saturate16': HandleToSSaturate(16),
-  'Saturate8': HandleToSSaturate(8),
+  'sat32': HandleToSSaturate(32),
+  'sat16': HandleToSSaturate(16),
+  'sat8': HandleToSSaturate(8),
 
-  'SaturateU32': HandleToUSaturate(32),
-  'SaturateU16': HandleToUSaturate(16),
-  'SaturateU8': HandleToUSaturate(8),
+  'usat32': HandleToUSaturate(32),
+  'usat16': HandleToUSaturate(16),
+  'usat8': HandleToUSaturate(8),
 
   'ZeroExtend16': HandleToZeroExtend(16),
   'ZeroExtend32': HandleToZeroExtend(32),
@@ -1844,6 +1763,7 @@ BinaryOps = {
     '<<' : HandleToLshr,
     '&' : HandleToAnd,
     '|' : HandleToOr,
+    '^' : HandleToXor,
     'AND' : HandleToAnd,
     'OR' : HandleToOr,
     'XOR' : HandleToXor,
@@ -1858,69 +1778,597 @@ def NeedToExtendOperandSize(Op):
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
-# Strides definitions
-Strides = {
-  'bit': 1,
-  'byte': 8,
-  'word': 16,
-  'dword': 32,
-  'qword': 64,
-  'm128': 128,
+LogicalOps = ['&', '|']
+
+
+def Compile(Test):
+  from PseudoCodeParser import GetSpecFrom
+  for Inst, Pseudocode in Test.items():
+    Spec = GetSpecFrom(Inst, Pseudocode)
+    print(Spec)
+    CompiledFunction = CompileSemantics(Spec)
+
+
+test1 ={
+ 'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test2 = {
+   'Vd.b=vmax(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (Vu.b[i] > '
+                         'Vv.b[i]) ? Vu.b[i] :Vv.b[i] ;}',
+}
+
+test3 = {
+   'Vd.b=vnavg(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                          '(Vu.b[i]-Vv.b[i])/2 ;}',
+}
+
+test4 = {
+   'Vd.uw=vadd(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]+Vv.uw[i]) ;}',
+}
+
+# Fails
+test5 = {
+   'Qd4=or(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] || QtV[i] '
+                    ';}',
+}
+
+test6 = {
+   'Vd.uw=vabsdiff(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                              '(Vu.w[i] > Vv.w[i]) ? (Vu.w[i] -Vv.w[i]) : '
+                              '(Vv.w[i] - Vu.w[i]) ;}',
+}
+
+test7 = {
+   'Vd.h=vsub(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]-Vv.h[i]) ;}',
+}
+
+test8 = {
+ 'Vd.b=vmin(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (Vu.b[i] < '
+                         'Vv.b[i]) ? Vu.b[i] :Vv.b[i] ;}',
+}
+
+test9 = {
+ 'Vd.b=vnavg(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                            '(Vu.ub[i]-Vv.ub[i])/2 ;}',
+}
+
+test10 = {
+ 'Vd.b=vavg(Vu.b,Vv.b):rnd': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             '(Vu.b[i]+Vv.b[i]+1)/2 ;}',
+}
+
+test11 = {
+ 'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test12 = {
+ 'Vd.b=vabs(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (ABS(Vu.b[i])) '
+                    ';}',
+}
+
+test13 = {
+ 'Vxx.w|=vunpacko(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vxx.uw[i] |= '
+                          'Vu.uh[i]<<16 ;}',
+}
+
+test14 = {
+ 'Vxx.h|=vunpacko(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vxx.uh[i] |= '
+                          'Vu.ub[i]<<8 ;}',
+}
+
+# Fails
+test15 = {
+   'Vx.w+=vmpyi(Vu.w,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] += '
+                            '(Vu.w[i] * Rt.ub[i % 4]) ;}',
+}
+
+test16 = {
+ 'Vd.ub=vmin(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i] < Vv.ub[i]) ? Vu.ub[i]: Vv.ub[i] ;}',
+}
+
+test17 = {
+ 'Vd.ub=vmax(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i] > Vv.ub[i]) ? Vu.ub[i]: Vv.ub[i] ;}',
+}
+
+test18 = {
+ 'Vd.uh=vabsdiff(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                              '(Vu.h[i] > Vv.h[i]) ? (Vu.h[i] -Vv.h[i]) : '
+                              '(Vv.h[i] - Vu.h[i]) ;}',
+}
+
+test19 = {
+ 'Vd.ub=vavg(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i]+Vv.ub[i])/2 ;}',
+}
+
+# Fails
+test20 = {
+ 'Qd4=xor(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] ^ QtV[i] '
+                     ';}',
+}
+
+test21 = {
+ 'Vd.h=vnavg(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                          '(Vu.h[i]-Vv.h[i])/2 ;}',
+}
+
+test22 = {
+ 'Vd.b=vavg(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i])/2 ;}',
+}
+
+test23 = {
+ 'Vd.b=vabs(Vu.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                        'sat8(ABS(Vu.b[i])) ;}',
+}
+
+test24 = {
+ 'Vd.b=vadd(Vu.b,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             'sat8(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test25 = {
+ 'Vd.ub=vpack(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                               'usat8(Vv.h[i]);Vd.ub[i+VBITS/16] = '
+                               'usat8(Vu.h[i]) ;}',
+}
+
+test26 = {
+ 'Vd.ub=vavg(Vu.ub,Vv.ub):rnd': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                '(Vu.ub[i]+Vv.ub[i]+1)/2 ;}',
+}
+
+test27 = {
+ 'Vd.ub=vsub(Vu.ub,Vv.ub):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                'usat8(Vu.ub[i]-Vv.ub[i]) ;}',
+}
+
+test28 = {
+ 'Vd.ub=vsub(Vu.ub,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                               'usat8(Vu.ub[i] - Vv.b[i]) ;}',
+}
+
+test29 = {
+ 'Vd.ub=vadd(Vu.ub,Vv.ub):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                'usat8(Vu.ub[i]+Vv.ub[i]) ;}',
+}
+
+test30 = {
+ 'Vd.ub=vadd(Vu.ub,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                               'usat8(Vu.ub[i] + Vv.b[i]) ;}',
+}
+
+test31 = {
+ 'Vd.w=vabs(Vu.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (ABS(Vu.w[i])) '
+                    ';}',
+}
+
+test32 = {
+ 'Vd.uw=vsub(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]-Vv.uw[i]) ;}',
+}
+
+test33 = {
+ 'Vd.uw=vavg(Vu.uw,Vv.uw):rnd': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                '(Vu.uw[i]+Vv.uw[i]+1)/2 ;}',
+}
+
+test34 = {
+ 'Vd.uw=vavg(Vu.uw,Vv.uw)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                            '(Vu.uw[i]+Vv.uw[i])/2 ;}',
+}
+
+test35 = {
+ 'Vd.uw=vadd(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]+Vv.uw[i]) ;}',
+}
+
+test36 = {
+ 'Vd.uw=vabsdiff(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                              '(Vu.w[i] > Vv.w[i]) ? (Vu.w[i] -Vv.w[i]) : '
+                              '(Vv.w[i] - Vu.w[i]) ;}',
+}
+
+test37 = {
+ 'Vd.h=vsub(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             'sat16(Vu.h[i]-Vv.h[i]) ;}',
 }
 
 
-def Compile():
-  from PseudoCodeParser import GetSemaFromXML
-  import xml.etree.ElementTree as ET
-
-  sema = test11()
-  print(sema)
-  intrin_node = ET.fromstring(sema)
-  spec = GetSemaFromXML(intrin_node)
-  print(spec)
-  CompiledFunction = CompileSemantics(spec)
-
-
-def test1():
-  return '''
-<intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
-	<type>Integer</type>
-	<CPUID>SSE2</CPUID>
-	<category>Swizzle</category>
-	<return type="__m128i" varname="dst" etype="UI8"/>
-	<parameter type="__m128i" varname="a" etype="UI8"/>
-	<parameter type="__m128i" varname="b" etype="UI8"/>
-	<description>Unpack and interleave 8-bit integers from the low half of "a" and "b", and store the results in "dst".</description>
-	<operation>
-DEFINE INTERLEAVE_BYTES(src1[127:0], src2[127:0]) {
-	dst[7:0] := src1[7:0] 
-	dst[15:8] := src2[7:0] 
-	dst[23:16] := src1[15:8] 
-	dst[31:24] := src2[15:8] 
-	dst[39:32] := src1[23:16] 
-	dst[47:40] := src2[23:16] 
-	dst[55:48] := src1[31:24] 
-	dst[63:56] := src2[31:24] 
-	dst[71:64] := src1[39:32]
-	dst[79:72] := src2[39:32] 
-	dst[87:80] := src1[47:40] 
-	dst[95:88] := src2[47:40] 
-	dst[103:96] := src1[55:48] 
-	dst[111:104] := src2[55:48]
-	dst[119:112] := src1[63:56] 
-	dst[127:120] := src2[63:56] 
-	RETURN dst[127:0]	
+test38 = {
+ 'Vd.b=vpack(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.b[i] = '
+                              'sat8(Vv.h[i]);Vd.b[i+VBITS/16] = sat8(Vu.h[i]) '
+                              ';}',
 }
-dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
-	</operation>
-	<instruction name="PUNPCKLBW" form="xmm, xmm" xed="PUNPCKLBW_XMMdq_XMMq"/>
-	<header>emmintrin.h</header>
-</intrinsic>
-  '''
+
+test39 = {
+ 'Vx.uw+=vmpye(Vu.uh,Rt.uh)': 'for (i = 0; i < VELEM(32); i++) {Vx.uw[i] += '
+                              '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
+}
+
+test40 = {
+ 'Vd.b=vshuffe(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(16); i++) '
+                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[0];'
+                            'Vd.uh[i].b[1]=Vu.uh[i].ub[0];}',
+}
+
+test41 = {
+ 'Vd.w=vnavg(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                          '(Vu.w[i]-Vv.w[i])/2 ;}',
+}
+
+test42 = {
+ 'Vd.b=vsub(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]-Vv.b[i]) ;}',
+}
+
+test43 = {
+ 'Vdd.w=vunpack(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vdd.w[i] = Vu.h[i] '
+                        ';}',
+}
+
+test44 = {
+   'Vd.w=vabs(Vu.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                        'sat32(ABS(Vu.w[i])) ;}',
+}
+
+test45 = {
+ 'Vd.w=vadd(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]+Vv.w[i]) ;}',
+}
+
+test46 = {
+   'Vd.w=vadd(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             'sat32(Vu.w[i]+Vv.w[i]) ;}',
+}
+
+test47 = {
+ 'Vd.w=vavg(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]+Vv.w[i])/2 ;}',
+}
+
+test48 = {
+ 'Vd.w=vavg(Vu.w,Vv.w):rnd': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             '(Vu.w[i]+Vv.w[i]+1)/2 ;}',
+}
+
+test49 = {
+ 'Vd.w=vmax(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (Vu.w[i] '
+                         '> Vv.w[i]) ? Vu.w[i] :Vv.w[i] ;}',
+}
+
+test50 = {
+ 'Vd.w=vmin(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (Vu.w[i] '
+                         '< Vv.w[i]) ? Vu.w[i] :Vv.w[i] ;}',
+}
+
+# Fails
+test51 = {
+ 'Vd.w=vsatdw(Vu.w, Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                            'usat32(Vu.w[i]:Vv.w[i]) ;}',
+}
+
+test52 = {
+ 'Vd.w=vsub(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]-Vv.w[i]) ;}',
+}
+
+test53 = {
+ 'Vd.w=vsub(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             'sat32(Vu.w[i]-Vv.w[i]) ;}',
+}
+
+# Fails
+test54 = {
+ 'if (!Qv4) Vx.b+=Vu.b': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]+Vu.ub[i] ;}',
+}
+
+test55 = {
+ 'Vdd.h=vunpack(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vdd.h[i] = Vu.b[i] ;}',
+}
+
+test56 = {
+   'Vdd.uh=vunpack(Vu.ub)': 'for (i = 0; i < VELEM(8); i++) {Vdd.uh[i] = '
+                          'Vu.ub[i] ;}',
+}
+
+test57 = {
+ 'Vdd.uw=vunpack(Vu.uh)': 'for (i = 0; i < VELEM(16); i++) {Vdd.uw[i] = '
+                          'Vu.uh[i] ;}',
+}
+
+test58 = {
+ 'Vd.h=vmax(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (Vu.h[i] '
+                         '> Vv.h[i]) ? Vu.h[i] :Vv.h[i] ;}',
+}
+
+test59 = {
+ 'Vd.h=vmin(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (Vu.h[i] '
+                         '< Vv.h[i]) ? Vu.h[i] :Vv.h[i] ;}',
+}
+
+test60 = {
+ 'Vd.h=vsat(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) '
+                         '{Vd.w[i].h[0]=sat16(Vv.w[i]);Vd.w[i].h[1]=sat16(Vu.w[i]) '
+                         ';}',
+}
+
+# Fails
+test61 = {
+ 'Vd.w=vmpyi(Vu.w,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.w[i] * Rt.ub[i % 4]) ;}',
+}
+
+test62 = {
+ 'Vd.uh=vsub(Vu.uh,Vv.uh):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                'usat16(Vu.uh[i]-Vv.uh[i]) ;}',
+}
+
+test63 = {
+ 'Vd.uh=vpack(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                               'usat16(Vv.w[i]);Vd.uh[i+VBITS/32] = '
+                               'usat16(Vu.w[i]) ;}',
+}
+
+test64 = {
+ 'Vd.uh=vmin(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i] < Vv.uh[i]) ? Vu.uh[i]: Vv.uh[i] ;}',
+}
+
+test65 = {
+ 'Vd.uh=vmax(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i] > Vv.uh[i]) ? Vu.uh[i]: Vv.uh[i] ;}',
+}
+
+test66 = {
+ 'Vd.uh=vavg(Vu.uh,Vv.uh):rnd': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                '(Vu.uh[i]+Vv.uh[i]+1)/2 ;}',
+}
+
+test67 = {
+ 'Vd.uh=vavg(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i]+Vv.uh[i])/2 ;}',
+}
+
+test68 = {
+ 'Vd.uh=vadd(Vu.uh,Vv.uh):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                'usat16(Vu.uh[i]+Vv.uh[i]) ;}',
+}
+
+test69 = {
+ 'Vd.uh=vabsdiff(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                '(Vu.uh[i] > Vv.uh[i]) ? (Vu.uh[i]- Vv.uh[i]) '
+                                ': (Vv.uh[i] - Vu.uh[i]) ;}',
+}
+
+test70 = {
+ 'Vd.ub=vsat(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) '
+                          '{Vd.uh[i].b[0]=usat8(Vv.h[i]);Vd.uh[i].b[1]=usat8(Vu.h[i]) '
+                          ';}',
+}
+
+test71 = {
+ 'Vd.b=vsub(Vu.b,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             'sat8(Vu.b[i]-Vv.b[i]) ;}',
+}
+
+test72 = {
+ 'Vd.h=vabs(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (ABS(Vu.h[i])) '
+                    ';}',
+}
+
+test73 = {
+ 'Vd.h=vabs(Vu.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                        'sat16(ABS(Vu.h[i])) ;}',
+}
+
+test74 = {
+ 'Vd.h=vadd(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]+Vv.h[i]) ;}',
+}
+
+test75 = {
+ 'Vd.h=vadd(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             'sat16(Vu.h[i]+Vv.h[i]) ;}',
+}
+
+test76 = {
+ 'Vd.h=vavg(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]+Vv.h[i])/2 ;}',
+}
+
+test77 = {
+ 'Vd.h=vavg(Vu.h,Vv.h):rnd': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             '(Vu.h[i]+Vv.h[i]+1)/2 ;}',
+}
+
+test78 = {
+ 'Vd.h=vpack(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.h[i] = '
+                              'sat16(Vv.w[i]);Vd.h[i+VBITS/32] = '
+                              'sat16(Vu.w[i]) ;}',
+}
+
+test79 = {
+ 'Vd.h=vpacko(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                           'Vv.uw[i].uh[1];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[1] '
+                           ';}',
+}
+
+# Fails
+test80 = {
+ 'Vd=vxor(Vu,Vv)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = Vu.uh[i] ^ '
+                   'Vv.h[i] ;}',
+}
+
+# Fails
+test81 = {
+ 'if (!Qv4) Vx.b-=Vu.b': 'for (i = 0; i < VELEM(8); i--) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]-Vu.ub[i] ;}',
+}
+
+# Fails
+test82 = {
+ 'if (!Qv4) Vx.b+=Vu.b': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]+Vu.ub[i] ;}',
+}
+
+test83 = {
+ 'Vd.h=vpacke(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                           'Vv.uw[i].uh[0];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[0] '
+                           ';}',
+}
+
+test84 = {
+ 'Vd.uh=vsat(Vu.uw,Vv.uw)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.w[i].h[0]=usat16(Vv.uw[i]);Vd.w[i].h[1]=usat16(Vu.uw[i]) '
+                            ';}',
+}
+
+test85 = {
+ 'Vd.uw=vmpye(Vu.uh,Rt.uh)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
+}
+
+# Yay! It compiles!
+test86 = {
+   'Vd.uw=vrmpy(Vu.ub,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].ub[0] * Rt.ub[0]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[1] * Rt.ub[1]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[2] * Rt.ub[2]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[3] * Rt.ub[3]) ;}',
+}
+
+test87 = {
+   'Vd.uw=vrmpy(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].ub[0] *Vv.uw[i].ub[0]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[1] *Vv.uw[i].ub[1]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[2] *Vv.uw[i].ub[2]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[3] *Vv.uw[i].ub[3]) ;}',
+}
+
+test88 = {
+ 'Vd.b=vdeal(Vu.b)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i ] = '
+                     'Vu.uh[i].ub[0];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[1] ;}',
+}
+
+test89 = {
+ 'Vd.b=vdeale(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.ub[0+i ] = '
+                           'Vv.uw[i].ub[0];Vd.ub[VBITS/32+i ] = '
+                           'Vv.uw[i].ub[2];Vd.ub[2*VBITS/32+i] = '
+                           'Vu.uw[i].ub[0];Vd.ub[3*VBITS/32+i] = '
+                           'Vu.uw[i].ub[2] ;}',
+}
+
+test90 = {
+ 'Vd.w=vrmpy(Vu.ub,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.uw[i].ub[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;}',
+}
+
+test91 = {
+   'Vd.w=vrmpy(Vu.ub,Rt.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.uw[i].ub[0] * Rt.b[0]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[1] * Rt.b[1]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[2] * Rt.b[2]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[3] * Rt.b[3]) ;}',
+}
+
+test92 = {
+ 'Vd.w=vmpyieo(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                            '(Vu.w[i].h[0]*Vv.w[i].h[1]) << 16;}',
+}
+
+test93 = {
+ 'Vd.w=vrmpy(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                          '(Vu.w[i].b[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                          '(Vu.w[i].b[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                          '(Vu.w[i].b[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                          '(Vu.w[i].b[3] * Vv.w[i].b[3]) ;}',
+}
+
+test94 = {
+   'Vd.h=vdeal(Vu.h)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i ] = '
+                     'Vu.uw[i].uh[0];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[1] ;}',
+}
+
+test95 = {
+ 'Vd.b=vpacke(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                           'Vv.uh[i].ub[0];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[0] '
+                           ';}',
+}
+
+test96 = {
+ 'Vd.b=vpacko(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                           'Vv.uh[i].ub[1];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[1] '
+                           ';}',
+}
+
+test97 = {
+ 'Vd.b=vshuff(Vu.b)': 'for (i = 0; i < VELEM(16); i++) '
+                      '{Vd.uh[i].b[0]=Vu.ub[i];Vd.uh[i].b[1]=Vu.ub[i+VBITS/16] '
+                      ';}',
+}
+
+test98 = {
+ 'Vd.b=vshuffo(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(16); i++) '
+                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[1];Vd.uh[i].b[1]=Vu.uh[i].ub[1] '
+                            ';}',
+}
+
+test99 = {
+ 'Vd.h=vshuff(Vu.h)': 'for (i = 0; i < VELEM(32); i++) '
+                      '{Vd.uw[i].h[0]=Vu.uh[i];Vd.uw[i].h[1]=Vu.uh[i+VBITS/32] '
+                      ';}',
+}
+
+test100 = {
+ 'Vd.h=vshuffe(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.uw[i].h[0]=Vv.uw[i].uh[0];Vd.uw[i].h[1]=Vu.uw[i].uh[0] '
+                            ';}',
+}
+
+test101 = {
+ 'Vd.h=vshuffo(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.uw[i].h[0]=Vv.uw[i].uh[1];Vd.uw[i].h[1]=Vu.uw[i].uh[1] '
+                            ';}',
+}
+
+# Parser fails
+test102 = {
+   'Vd=Vu': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i]=Vu.w[i] ;}',
+}
+
+# Fails
+test103 = {
+ 'Vd=vnot(Vu)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = ~Vu.uh[i] ;}',
+}
+
+# Parser fails
+test104 = {
+ 'Vdd.h=vshuffoe(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                              '{Vdd.v[0].uw[i].h[0]=Vv.uw[i].uh[0];Vdd.v[0].uw[i].h[1]=Vu.uw[i].uh[0];Vdd.v[1].uw[i].h[0]=Vv.uw[i].uh[1];Vdd.v[1].uw[i].h[1]=Vu.uw[i].uh[1] '
+                              ';}',
+}
+
+test105 = {
+ 'Vdd.h=vsub(Vuu.h,Vvv.h)': 'for (i = 0; i < VELEM(16); i++) {Vdd.v[0].h[i] = '
+                            '(Vuu.v[0].h[i]-Vvv.v[0].h[i]);Vdd.v[1].h[i] = '
+                            '(Vuu.v[1].h[i]-Vvv.v[1].h[i]) ;}',
+}
 
 
 if __name__ == '__main__':
-  Compile()
+  Compile(test105)
 
 
 

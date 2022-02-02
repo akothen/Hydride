@@ -10,7 +10,7 @@
 {}
 
 
-(custodian-limit-memory (current-custodian) (* 12000 1024 1024))
+(custodian-limit-memory (current-custodian) (* 16000 1024 1024))
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -317,6 +317,15 @@
   )
 
 
+(define (index-into-mat mat rows cols precision i j)
+  (define row_offsets (* i cols))
+  (define total_offset (+ row_offsets j))
+  (define total_size (* rows cols))
+  (define offset_from_right (- (- total_size 1) total_offset))
+  (ext-bv mat offset_from_right precision)
+  )
+
+
 (define cost-vec-mul 10)
 (define cost-vec-mac 12)
 (define cost-vec-add 5)
@@ -354,11 +363,20 @@
 (define id-vec-div 13)
 (define id-swizzle-single 14)
 (define id-swizzle-double 15)
+(define id-idx-i 16)
+(define id-idx-j 17)
+(define id-idx-add 18)
+(define id-idx-mul 19)
+
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
 ; so they get merged into a union rather than field-wise.
 (struct reg (id)   #:transparent #:mutable)
+(struct idx-i (id)   #:transparent #:mutable)
+(struct idx-j (id)   #:transparent #:mutable)
+(struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
+(struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
 (struct lit (val)  #:transparent )
 (struct vec-concat-9 (v1 v2 v3 v4 v5 v6 v7 v8 v9) #:transparent)
 (struct vec-concat-12 (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12 ) #:transparent) 
@@ -381,6 +399,10 @@
 (define (get-id val)
   (destruct val
             [(reg id) id-reg]
+            [(idx-i id) id-idx-i]
+            [(idx-j id) id-idx-j]
+            [(idx-add i1 i2) id-idx-add]
+            [(idx-mul i1 i2) id-idx-mul]
             [(lit val) id-lit]
             [(vec-mul v1 v2 len prec) id-vec-mul]
             [(vec-add v1 v2 len prec) id-vec-add]
@@ -411,6 +433,10 @@
 ;; right
 (define (get-structure-list expr)
   (destruct expr
+            [(idx-i id) (list id-idx-i)]
+            [(idx-j id) (list id-idx-j)]
+            [(idx-add i1 i2) (append id-idx-add (get-structure-list i1) (get-structure-list i2))]
+            [(idx-mul i1 i2) (append id-idx-mul (get-structure-list i1) (get-structure-list i2))]
             [(lit _) (list id-lit)]
             [(reg _) (list id-reg)]
             [(vec-mul v1 v2 len prec)
@@ -485,6 +511,7 @@
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
                (append (list id-swizzle-double) (get-structure-list v1) (get-structure-list v2)) 
              ]
+            [_ -1]
             ))
 
 
@@ -546,11 +573,16 @@
 ;(println "Struct def")
 ;(pretty-print  struct-sketch-special)
 
+(define register_len_list (list {}))
 
 
 (define (get-length val)
   (destruct val
-            [(reg id) (list-ref (list {}) id)]
+            [(idx-i id) 0] ; Should throw an error as this shouldn't be invoked
+            [(idx-j id) 0]
+            [(idx-add i1 i2) 0]
+            [(idx-mul i1 i2) 0]
+            [(reg id) (list-ref register_len_list id)]
             [(lit val) (bvlength val)]
             [(vec-mul v1 v2 len prec) (* len prec)]
             [(vec-div v1 v2 len prec) (* len prec)]
@@ -610,6 +642,9 @@
 
 (define (cost expr)
   (destruct expr
+            [(idx-i _) 1]
+            [(idx-j _) 1]
+            [(idx-add i1 i2) (+ 1 (cost i1) (cost i2))]
             [(lit _) 3]
             [(reg _) 5]
             [(vec-mul v1 v2 len prec)
@@ -676,6 +711,7 @@
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
               (+ cost-swizzle-double (cost v1) (cost v2))
              ]
+            [_ 0]
             ))
 
 
@@ -686,12 +722,19 @@
             [_ -1]
             ))
 
+(define num-args (length register_len_list))
+(define idx-i-vector-ref (- num-args 2))
+(define idx-j-vector-ref (- num-args 1))
 
 ; Prog is an expression in the above AST.
 ; env is a vector of values; register
 ; identifiers must be in the range 0 ... |env| - 1.
 (define (interpret prog env)
   (destruct prog
+            [(idx-i id) (vector-ref env idx-i-vector-ref)]
+            [(idx-j id) (vector-ref env idx-j-vector-ref)]
+            [(idx-add i1 i2) (+ (interpret i1 env) (interpret i2 env))]
+            [(idx-mul i1 i2) (* (interpret i1 env) (interpret i2 env))]
             [(reg id) (vector-ref env id)]
             [(nop v1) (interpret v1 env)]
             [(lit val) val]
@@ -730,7 +773,7 @@
             [
              (vec-load v1 vsize start num prec)
              (assert (equal? (get-length v1) vsize))
-             (vector-load (interpret v1 env) vsize start num prec)
+             (vector-load (interpret v1 env) vsize (interpret start env) num prec)
              ]
             [
              (vec-shuffle-special v1 v2 len prec)
@@ -766,7 +809,7 @@
              ]
             [
              (vec-shuffle-rotate v1 num_rot prec)
-             (vector-shuffle-lrotate (interpret v1 env) num_rot prec)
+             (vector-shuffle-lrotate (interpret v1 env) (interpret num_rot env) prec)
              ]
             [
             (vec-shuffle-swizzle-single v1   len prec  group_size dis_size rot_factor)
@@ -777,11 +820,37 @@
              (assert (equal? (get-length v1) (get-length v2)))
             (vector-two-input-swizzle (interpret v1 env) (interpret v2 env) len prec lane_offset lane_size group_size fan_size rot_factor)
              ]
+            [v v]
             ))
 
 
 (define (print-prog prog )
   (destruct prog
+
+            [(idx-i id) 
+             (display id)
+             (displayln " ; idx-i")
+             ]
+            [(idx-j id) 
+             (display id)
+             (displayln " ; idx-j")
+             ]
+            [
+             (idx-add i1 i2)
+             (display "(+")
+             (displayln " ; idx-add")
+             (print-prog i1)
+             (print-prog i2)
+             (displayln ")")
+             ]
+            [
+             (idx-mul i1 i2)
+             (display "(*")
+             (displayln " ; idx-mul")
+             (print-prog i1)
+             (print-prog i2)
+             (displayln ")")
+             ]
             [(reg id) 
              (display "arg")
              (println id)]
@@ -830,7 +899,7 @@
              (vec-load v1 vsize start num prec)
              (displayln "(vector-load ")
              (print-prog v1)
-             (println vsize) (println start) (println num) (println prec) 
+             (println vsize) (print-prog start) (println num) (println prec) 
              (displayln ")")
              ]
             [
@@ -899,7 +968,7 @@
              (vec-shuffle-rotate v1 num_rot prec)
              (displayln "(vector-shuffle-lrotate")
              (print-prog v1)
-             (println num_rot)
+             (print-prog num_rot)
              (println prec)
              (displayln ")")
              ]
@@ -929,5 +998,6 @@
             (println rot_factor)
             (displayln ")")
              ]
+            [v (println v)]
             ))
 

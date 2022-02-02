@@ -9,23 +9,26 @@ Var = namedtuple('Var', ['name', 'id'])
 
 Update = namedtuple('Update', ['lhs', 'rhs'])
 
-For = namedtuple('For', ['init', 'condition', 'update', 'body', 'id'])
+# This takes care of simple loops
+For = namedtuple('For', ['iterator', 'begin', 'end', 'step', 'body', 'id'])
+# This takes care of complex loops
+ComplexFor = namedtuple('ComplexFor', ['init', 'condition', 'update', 'body', 'id'])
+
 
 If = namedtuple('If', ['cond', 'then', 'otherwise', 'id'])
 
-Call = namedtuple('Call', ['func', 'args', 'special', 'id'])
+Call = namedtuple('Call', ['funcname', 'args', 'special', 'id'])
 
 BinaryExpr = namedtuple('BinaryExpr', ['op', 'a', 'b', 'id'])
 UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'id'])
 
 Select = namedtuple('Select', ['cond', 'then', 'otherwise', 'id'])
 
-Lookup = namedtuple('Lookup', ['obj', 'key'])
-TypeLookup = namedtuple('TypeLookup', ['obj', 'type'])
-
-Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'])
+ElemTypeInfo = namedtuple('ElemTypeInfo', ['obj', 'elemtype'])
 
 Sema = namedtuple('Sema', [
-  'intrin', 'inst', 'params',
-  'spec', 'rettype', 'lanes',
+  'intrin', 'inst', 'params', 'spec', 
+  'retname', 'rettype', 'lanes',
   ])
+
+

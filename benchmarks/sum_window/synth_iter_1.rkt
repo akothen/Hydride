@@ -7,10 +7,12 @@
 (require rosette/solver/smt/boolector)
 
 
-{}
+(current-solver (boolector))
+(current-bitwidth 16)
 
 
-(custodian-limit-memory (current-custodian) (* 12000 1024 1024))
+
+(custodian-limit-memory (current-custodian) (* 16000 1024 1024))
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -317,6 +319,15 @@
   )
 
 
+(define (index-into-mat mat rows cols precision i j)
+  (define row_offsets (* i cols))
+  (define total_offset (+ row_offsets j))
+  (define total_size (* rows cols))
+  (define offset_from_right (- (- total_size 1) total_offset))
+  (ext-bv mat offset_from_right precision)
+  )
+
+
 (define cost-vec-mul 10)
 (define cost-vec-mac 12)
 (define cost-vec-add 5)
@@ -354,11 +365,20 @@
 (define id-vec-div 13)
 (define id-swizzle-single 14)
 (define id-swizzle-double 15)
+(define id-idx-i 16)
+(define id-idx-j 17)
+(define id-idx-add 18)
+(define id-idx-mul 19)
+
 
 ; Because we'll be using regs to index into a
 ; vector, it is best to make them mutable 
 ; so they get merged into a union rather than field-wise.
 (struct reg (id)   #:transparent #:mutable)
+(struct idx-i (id)   #:transparent #:mutable)
+(struct idx-j (id)   #:transparent #:mutable)
+(struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
+(struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
 (struct lit (val)  #:transparent )
 (struct vec-concat-9 (v1 v2 v3 v4 v5 v6 v7 v8 v9) #:transparent)
 (struct vec-concat-12 (v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12 ) #:transparent) 
@@ -381,6 +401,10 @@
 (define (get-id val)
   (destruct val
             [(reg id) id-reg]
+            [(idx-i id) id-idx-i]
+            [(idx-j id) id-idx-j]
+            [(idx-add i1 i2) id-idx-add]
+            [(idx-mul i1 i2) id-idx-mul]
             [(lit val) id-lit]
             [(vec-mul v1 v2 len prec) id-vec-mul]
             [(vec-add v1 v2 len prec) id-vec-add]
@@ -411,6 +435,10 @@
 ;; right
 (define (get-structure-list expr)
   (destruct expr
+            [(idx-i id) (list id-idx-i)]
+            [(idx-j id) (list id-idx-j)]
+            [(idx-add i1 i2) (append id-idx-add (get-structure-list i1) (get-structure-list i2))]
+            [(idx-mul i1 i2) (append id-idx-mul (get-structure-list i1) (get-structure-list i2))]
             [(lit _) (list id-lit)]
             [(reg _) (list id-reg)]
             [(vec-mul v1 v2 len prec)
@@ -485,6 +513,7 @@
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
                (append (list id-swizzle-double) (get-structure-list v1) (get-structure-list v2)) 
              ]
+            [_ -1]
             ))
 
 
@@ -546,11 +575,16 @@
 ;(println "Struct def")
 ;(pretty-print  struct-sketch-special)
 
+(define register_len_list (list 288 0 0))
 
 
 (define (get-length val)
   (destruct val
-            [(reg id) (list-ref (list {}) id)]
+            [(idx-i id) 0] ; Should throw an error as this shouldn't be invoked
+            [(idx-j id) 0]
+            [(idx-add i1 i2) 0]
+            [(idx-mul i1 i2) 0]
+            [(reg id) (list-ref register_len_list id)]
             [(lit val) (bvlength val)]
             [(vec-mul v1 v2 len prec) (* len prec)]
             [(vec-div v1 v2 len prec) (* len prec)]
@@ -610,6 +644,9 @@
 
 (define (cost expr)
   (destruct expr
+            [(idx-i _) 1]
+            [(idx-j _) 1]
+            [(idx-add i1 i2) (+ 1 (cost i1) (cost i2))]
             [(lit _) 3]
             [(reg _) 5]
             [(vec-mul v1 v2 len prec)
@@ -676,6 +713,7 @@
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
               (+ cost-swizzle-double (cost v1) (cost v2))
              ]
+            [_ 0]
             ))
 
 
@@ -686,12 +724,19 @@
             [_ -1]
             ))
 
+(define num-args (length register_len_list))
+(define idx-i-vector-ref (- num-args 2))
+(define idx-j-vector-ref (- num-args 1))
 
 ; Prog is an expression in the above AST.
 ; env is a vector of values; register
 ; identifiers must be in the range 0 ... |env| - 1.
 (define (interpret prog env)
   (destruct prog
+            [(idx-i id) (vector-ref env idx-i-vector-ref)]
+            [(idx-j id) (vector-ref env idx-j-vector-ref)]
+            [(idx-add i1 i2) (+ (interpret i1 env) (interpret i2 env))]
+            [(idx-mul i1 i2) (* (interpret i1 env) (interpret i2 env))]
             [(reg id) (vector-ref env id)]
             [(nop v1) (interpret v1 env)]
             [(lit val) val]
@@ -730,7 +775,7 @@
             [
              (vec-load v1 vsize start num prec)
              (assert (equal? (get-length v1) vsize))
-             (vector-load (interpret v1 env) vsize start num prec)
+             (vector-load (interpret v1 env) vsize (interpret start env) num prec)
              ]
             [
              (vec-shuffle-special v1 v2 len prec)
@@ -766,7 +811,7 @@
              ]
             [
              (vec-shuffle-rotate v1 num_rot prec)
-             (vector-shuffle-lrotate (interpret v1 env) num_rot prec)
+             (vector-shuffle-lrotate (interpret v1 env) (interpret num_rot env) prec)
              ]
             [
             (vec-shuffle-swizzle-single v1   len prec  group_size dis_size rot_factor)
@@ -777,11 +822,37 @@
              (assert (equal? (get-length v1) (get-length v2)))
             (vector-two-input-swizzle (interpret v1 env) (interpret v2 env) len prec lane_offset lane_size group_size fan_size rot_factor)
              ]
+            [v v]
             ))
 
 
 (define (print-prog prog )
   (destruct prog
+
+            [(idx-i id) 
+             (display id)
+             (displayln " ; idx-i")
+             ]
+            [(idx-j id) 
+             (display id)
+             (displayln " ; idx-j")
+             ]
+            [
+             (idx-add i1 i2)
+             (display "(+")
+             (displayln " ; idx-add")
+             (print-prog i1)
+             (print-prog i2)
+             (displayln ")")
+             ]
+            [
+             (idx-mul i1 i2)
+             (display "(*")
+             (displayln " ; idx-mul")
+             (print-prog i1)
+             (print-prog i2)
+             (displayln ")")
+             ]
             [(reg id) 
              (display "arg")
              (println id)]
@@ -830,7 +901,7 @@
              (vec-load v1 vsize start num prec)
              (displayln "(vector-load ")
              (print-prog v1)
-             (println vsize) (println start) (println num) (println prec) 
+             (println vsize) (print-prog start) (println num) (println prec) 
              (displayln ")")
              ]
             [
@@ -899,7 +970,7 @@
              (vec-shuffle-rotate v1 num_rot prec)
              (displayln "(vector-shuffle-lrotate")
              (print-prog v1)
-             (println num_rot)
+             (print-prog num_rot)
              (println prec)
              (displayln ")")
              ]
@@ -929,5 +1000,453 @@
             (println rot_factor)
             (displayln ")")
              ]
+            [v (println v)]
             ))
 
+
+
+(define image (apply concat (for/list ([k (range 36)])
+                                      (bv (+ k 1) (bitvector 8))
+                        )))
+
+
+(define (check a)
+  (println (interpret a (vector image)))
+  )
+
+
+;; Box blur: Takes the slice and calculates the average of the slice
+(define (box-blur img imgR imgC blurR blurC prec) 
+  (define i_bound (+ (- imgR blurR) 1))
+  (define j_bound (+ (- imgC blurC) 1))
+  (define numBlur (* blurR blurC))
+  (define img_size (* imgR imgC prec))
+  (apply concat
+         (for/list ([i (range i_bound)])
+                   (apply concat
+                          (for/list ([j (range j_bound)])
+                                    (define offset (+ (* i imgC ) j))
+                                    (define imgSlice (apply
+                                                       concat
+                                                       (for/list ([s  (range blurR)])
+                                                                 (vector-load img img_size (+ (* s imgC) offset) blurC prec)
+                                                                 )
+                                                       ))
+                                    (bvsdiv
+                                      (apply bvadd
+                                             (for/list ([k (reverse (range numBlur))])
+                                                       (ext-bv imgSlice k prec)
+                                                       )
+                                             )
+                                      (bv numBlur (bitvector prec))
+                                      )
+                                    )
+                          )
+                   )
+         )
+  )
+
+
+;; Blur used by Halide
+(define (sum img imgR imgC blurR blurC prec) 
+  (define i_bound (+ (- imgR blurR) 1))
+  (define j_bound (+ (- imgC blurC) 1))
+  (define numBlur (* blurR blurC))
+  (define img_size (* imgR imgC prec))
+  (apply concat
+         (for/list ([i (range i_bound)])
+                   (apply concat
+                          (for/list ([j (range j_bound)])
+                                    (define offset (+ (* i imgC ) j))
+                                    (define reduced-vertical-slice  ; tensor of shape (1, blurR)
+                                      (apply
+                                        concat
+                                        (for/list ([s  (range blurR)])
+                                                  (define horizontal-slice (vector-load img img_size (+ (* s imgC) offset) blurC prec))
+                                                    (apply bvadd 
+                                                           (for/list ([t (reverse (range blurC))])
+                                                                     (ext-bv horizontal-slice t prec)
+                                                                     )
+                                                           ) 
+
+
+                                                  )
+                                        )
+                                      )
+
+                                    ;; Now reduce vertical slice and take vertical average
+                                      (apply bvadd
+                                             (for/list ([k (reverse (range blurR))])
+                                                       (ext-bv reduced-vertical-slice k prec)
+                                                       )
+                                             )
+                                    )
+                          )
+                   )
+         )
+  )
+
+
+;; Blur used by Halide
+(define (blur img imgR imgC blurR blurC prec) 
+  (define i_bound (+ (- imgR blurR) 1))
+  (define j_bound (+ (- imgC blurC) 1))
+  (define numBlur (* blurR blurC))
+  (define img_size (* imgR imgC prec))
+  (apply concat
+         (for/list ([i (range i_bound)])
+                   (apply concat
+                          (for/list ([j (range j_bound)])
+                                    (define offset (+ (* i imgC ) j))
+                                    (define reduced-vertical-slice  ; tensor of shape (1, blurR)
+                                      (apply
+                                        concat
+                                        (for/list ([s  (range blurR)])
+                                                  (define horizontal-slice (vector-load img img_size (+ (* s imgC) offset) blurC prec))
+                                                  (bvsdiv
+                                                    (apply bvadd 
+                                                           (for/list ([t (reverse (range blurC))])
+                                                                     (ext-bv horizontal-slice t prec)
+                                                                     )
+                                                           ) 
+                                                    (bv blurC (bitvector prec))
+                                                    )
+
+
+                                                  )
+                                        )
+                                      )
+
+                                    ;; Now reduce vertical slice and take vertical average
+                                    (bvsdiv
+                                      (apply bvadd
+                                             (for/list ([k (reverse (range blurR))])
+                                                       (ext-bv reduced-vertical-slice k prec)
+                                                       )
+                                             )
+                                      (bv blurR (bitvector prec))
+                                      )
+                                    )
+                          )
+                   )
+         )
+  )
+
+
+
+
+
+
+
+(define one 
+  (apply concat (for/list ([i (range 12)])
+                          (bv 1 (bitvector 8))
+                          )
+
+         )
+  )
+
+
+
+(define (idx-exprs vars #:depth k)
+  (assert (> k 0))
+  (cond
+    [(choose* #t #f)
+     (idx-i 0)
+     ]
+    [(choose* #t #f)
+     (idx-j 0)
+     ]
+    [(choose* #t #f)
+     (idx-add 
+       (idx-i 0)
+       1
+       )
+     ]
+    [(choose* #t #f)
+     (idx-add 
+       (idx-i 0)
+       2
+       )
+     ]
+
+    [(choose* #t #f)
+     (idx-mul 
+     (idx-add 
+       (idx-i 0)
+       2
+       ) 6 )
+     ]
+
+    [(choose* #t #f)
+     (idx-mul 
+     (idx-add 
+       (idx-i 0)
+       1
+       ) 6 )
+     ]
+
+    [(choose* #t #f)
+     (idx-mul 
+     (idx-add 
+       (idx-i 0)
+       0
+       ) 6 )
+     ]
+    ;[(choose* #t #f)
+    ; (idx-add 
+    ;   (idx-exprs vars #:depth (- k 1))
+    ;   2
+    ;   )
+    ; ]
+    ;[(choose* #t #f)
+    ; (idx-mul 
+    ;   (idx-exprs vars #:depth (- k 1))
+    ;   6
+    ;   )
+    ; ]
+    ;[(choose* #t #f)
+    ; (nop  
+    ;   (idx-exprs vars #:depth (- k 1))
+    ;   )
+    ; ]
+    [else
+      0 
+      ]
+    )
+  )
+
+(define (mem vars #:depth k)
+  (assert (> k 0))
+  (cond
+    [(choose* #t #f)
+     (apply choose* vars)]
+
+    [(choose* #t #f)
+     (vec-load (reg 0) 288 
+               (idx-mul (idx-add (idx-i 0) 0) 6)
+               6 8)  ; Row 0
+     ]
+    [(choose* #t #f)
+     (vec-load (reg 0) 288 
+               ;(idx-exprs vars #:depth 2) 
+               (idx-mul (idx-add (idx-i 0) 1) 6)
+               6 8)  ; Row 0
+     ]
+    [(choose* #t #f)
+     (vec-load (reg 0) 288 
+               (idx-mul (idx-add (idx-i 0) 2) 6)
+               6 8)  ; Row 0
+     ]
+    [(choose* #t #f)
+     (vec-load (reg 0) 288 
+               (idx-mul (idx-add (idx-i 0) 3) 6)
+               6 8)  ; Row 0
+     ]
+
+    [(choose* #t #f)
+     (vec-load (reg 0) 288 
+               (idx-mul (idx-add (idx-i 0) 4) 6)
+               6 8)  ; Row 0
+     ]
+    [else
+      (lit (bv 0 (bitvector 48)))
+      ]
+    )
+  )
+
+(define (shufl vars #:depth k)
+  (assert (> k 0))
+  (cond
+    [(choose* #t #f)
+     (apply choose* vars)]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       (shufl vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
+       6 8 0 6 3 1 0
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       (shufl vars #:depth (- k 1))
+       (shufl vars #:depth (- k 1))
+       6 8 0 6 6 1 0
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-rotate 
+       (mem vars #:depth (- k 1))
+       (idx-j 0)
+       8
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-rotate 
+       (mem vars #:depth (- k 1))
+       (idx-add (idx-j 0) 1)
+       8
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-rotate 
+       (mem vars #:depth (- k 1))
+       (idx-add (idx-j 0) 2)
+       8
+       )
+     ]
+    ;[
+    ; (choose* #t #f)
+    ; (dot-prod
+    ;   ;(shufl vars #:depth (- k 1))
+    ;   (lit (bv 0 (bitvector 32)))
+    ;   (shufl vars #:depth (- k 1))
+    ;   (lit one)
+    ;   ;(shufl vars #:depth (- k 1))
+    ;   4 3 8 8 
+    ;   )
+    ; ]
+    ;[(choose* #t #f)
+    ; (vec-div  (shufl vars #:depth (- k 1))  
+    ;           (lit (concat 
+    ;                  (bv 3 (bitvector 8))
+    ;                  (bv 3 (bitvector 8))
+    ;                  (bv 3 (bitvector 8))
+    ;                  (bv 3 (bitvector 8))
+    ;                  ))
+    ;           4 8 
+    ;           )]
+
+    ;[(choose* #t #f)
+    ; (vec-div  (shufl vars #:depth (- k 1))  
+    ;           (lit  
+    ;             (bv 3 (bitvector 8))
+    ;             )
+    ;           1 8 
+    ;           )]
+    ;[(choose* #t #f)
+    ; (lit one) ; 16 length vector of 1's
+    ; ]
+    ;[(choose* #t #f)
+    ; (lit (bv 0 (bitvector 32)))
+    ; ]
+    ;[(choose* #t #f)
+    ; (vec-reduction (shufl vars #:depth (- k 1)) 6 8
+    ;                )]
+    [(choose* #t #f)
+     (vec-reduction (shufl vars #:depth (- k 1)) 12 8
+                    )]
+    [(choose* #t #f)
+     (nop (shufl vars #:depth (- k 1))
+          )]
+    [else
+      (mem vars #:depth k)]
+
+    )
+  )
+
+
+;(define (expr vars #:depth k)
+;  (assert (> k 0))
+;  (cond
+;    [(choose* #t #f)
+;     (apply choose* vars)]
+;    ;[(choose* #t #f)
+;    ; (dot-prod (lit (bv 0 (bitvector 8)))
+;    ;           (shufl vars #:depth (- k 1))
+;    ;           (shufl vars #:depth (- k 1))
+;    ;           1 9 8 8
+;    ;           )]
+;    ;[(choose* #t #f)
+;    ; (vec-reduction (shufl vars #:depth (- k 1)) 4 8
+;    ;                )]
+;    [(choose* #t #f)
+;     (nop (expr vars #:depth (- k 1))
+;          )]
+;    [else
+;     (shufl vars #:depth k)
+;          ]
+;    )
+;  )
+
+
+; Get a sketch of depth 5.
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 4))
+
+
+
+
+
+
+
+
+(define row-i (vec-load (reg 0) 288  (idx-mul (idx-add (idx-i 0) 0) 6)  6 8  ))
+(define row-ip1 (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8  ))
+(define row-ip2 (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6  8  ))
+
+(define row_0 (vec-shuffle-rotate row-i (idx-j 0) 8))
+(define row_1 (vec-shuffle-rotate row-ip1 (idx-j 0) 8))
+(define row_2 (vec-shuffle-rotate row-ip2 (idx-j 0) 8))
+
+
+
+(define left-concat (vec-shuffle-swizzle-double
+                      row_0
+                      row_1
+                      6 8 0 6 3 1 0
+                      ))
+(define right-concat (vec-shuffle-swizzle-double
+                       row_2
+                       (lit (bv 0 (bitvector 48)))
+                       6 8 0 6 3 1 0
+                       ))
+(define slice (vec-shuffle-swizzle-double
+                left-concat right-concat
+                6 8 0 6 6 1 0
+                ))
+(define reduction (vec-reduction slice 12 8))
+
+(define  (test val i j)
+  (interpret reduction (vector val i j))
+  )
+
+
+(displayln "Spec On Image:")
+(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
+
+
+(displayln "DSL on Image [0,0]:")
+(println (bitvector->integer (test image 0 0 )))
+
+
+(displayln "DSL on Image [1,1]:")
+(println (bitvector->integer (test image 1 1 )))
+
+
+(displayln "DSL on Image [2,2]:")
+(println (bitvector->integer (test image 2 2 )))
+
+
+(define v0_0 (bv #x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567 288))
+(define env_0 (vector v0_0   0 0))
+(define sol 
+                             (synthesize 
+                            #:forall (list v0_0  env_0)
+                             #:guarantee 
+                            (begin
+                             (assert (equal? (interpret sketch-grammar env_0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 0) ))
+
+                             )))
+(assert (sat? sol)"Unsatisfiable")
+
+        (define synth_res (evaluate sketch-grammar sol))
+        (pretty-print synth_res)
+        (display "synth cost: ")
+        (println (cost synth_res))
+
+        ;(println (get-structure-list synth_res))
+        (displayln "Does Solution have a symmetric structure?")
+        (println (has-symmetric-structure synth_res))
+
+        (with-output-to-file "./body_1.txt" (lambda() (print-prog synth_res)))
+        
