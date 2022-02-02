@@ -458,6 +458,8 @@ def GetSpecFrom(inst, Pseudocode):
       assign = assign.then[0]
 
   # This is either an if statement or standard function call then
+  print("assign:")
+  print(assign)
   if not isinstance(assign, Update):
     if isinstance(assign, Call):
       lhs = assign.args[0]
@@ -471,6 +473,8 @@ def GetSpecFrom(inst, Pseudocode):
       rhs = assign.rhs.b
     elif isinstance(assign.rhs, Call):
       rhs = assign.rhs
+    elif isinstance(assign.rhs, BitExtend):
+      rhs = assign.rhs.hi
 
   # SIMD instruction
   if isinstance(lhs, TypeLookup):
@@ -497,7 +501,7 @@ def GetSpecFrom(inst, Pseudocode):
     print("Unknown variable type:", var)
   
   if isinstance(rhs, Call):
-    name = rhs.func
+    name = rhs.funcname
     params = rhs.args
   else:
     name = "TODO"
@@ -519,6 +523,5 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
-
 
 
