@@ -1462,13 +1462,13 @@ def HandleToRemainder(_):
 
 # Builtin functions
 Builtins = {
-  'Saturate32': HandleToSSaturate(32),
-  'Saturate16': HandleToSSaturate(16),
-  'Saturate8': HandleToSSaturate(8),
+  'sat32': HandleToSSaturate(32),
+  'sat16': HandleToSSaturate(16),
+  'sat8': HandleToSSaturate(8),
 
-  'SaturateU32': HandleToUSaturate(32),
-  'SaturateU16': HandleToUSaturate(16),
-  'SaturateU8': HandleToUSaturate(8),
+  'usat32': HandleToUSaturate(32),
+  'usat16': HandleToUSaturate(16),
+  'usat8': HandleToUSaturate(8),
 
   'ZeroExtend16': HandleToZeroExtend(16),
   'ZeroExtend32': HandleToZeroExtend(32),
@@ -1710,6 +1710,7 @@ BinaryOps = {
     '<<' : HandleToLshr,
     '&' : HandleToAnd,
     '|' : HandleToOr,
+    '^' : HandleToXor,
     'AND' : HandleToAnd,
     'OR' : HandleToOr,
     'XOR' : HandleToXor,
@@ -1727,16 +1728,13 @@ ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 LogicalOps = ['&', '|']
 
 
-
-def Compile():
+def Compile(Test):
   from PseudoCodeParser import GetSpecFrom
-  for Inst, Pseudocode in test1.items():
+  for Inst, Pseudocode in Test.items():
     Spec = GetSpecFrom(Inst, Pseudocode)
     print(Spec)
     CompiledFunction = CompileSemantics(Spec)
 
-
-#VELEM(WIDTH) = fVECSIZE()*8)/WIDTH
 
 test1 ={
  'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
@@ -1753,15 +1751,199 @@ test3 = {
                           '(Vu.b[i]-Vv.b[i])/2 ;}',
 }
 
-# Fails
 test4 = {
+   'Vd.uw=vadd(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]+Vv.uw[i]) ;}',
+}
+
+# Fails
+test5 = {
    'Qd4=or(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] || QtV[i] '
                     ';}',
 }
 
+test6 = {
+   'Vd.uw=vabsdiff(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                              '(Vu.w[i] > Vv.w[i]) ? (Vu.w[i] -Vv.w[i]) : '
+                              '(Vv.w[i] - Vu.w[i]) ;}',
+}
+
+test7 = {
+   'Vd.h=vsub(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]-Vv.h[i]) ;}',
+}
+
+test8 = {
+ 'Vd.b=vmin(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (Vu.b[i] < '
+                         'Vv.b[i]) ? Vu.b[i] :Vv.b[i] ;}',
+}
+
+test9 = {
+ 'Vd.b=vnavg(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                            '(Vu.ub[i]-Vv.ub[i])/2 ;}',
+}
+
+test10 = {
+ 'Vd.b=vavg(Vu.b,Vv.b):rnd': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             '(Vu.b[i]+Vv.b[i]+1)/2 ;}',
+}
+
+test11 = {
+ 'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test12 = {
+ 'Vd.b=vabs(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = (ABS(Vu.b[i])) '
+                    ';}',
+}
+
+test13 = {
+ 'Vxx.w|=vunpacko(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vxx.uw[i] |= '
+                          'Vu.uh[i]<<16 ;}',
+}
+
+test14 = {
+ 'Vxx.h|=vunpacko(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vxx.uh[i] |= '
+                          'Vu.ub[i]<<8 ;}',
+}
+
+# Fails
+test15 = {
+   'Vx.w+=vmpyi(Vu.w,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] += '
+                            '(Vu.w[i] * Rt.ub[i % 4]) ;}',
+}
+
+test16 = {
+ 'Vd.ub=vmin(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i] < Vv.ub[i]) ? Vu.ub[i]: Vv.ub[i] ;}',
+}
+
+test17 = {
+ 'Vd.ub=vmax(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i] > Vv.ub[i]) ? Vu.ub[i]: Vv.ub[i] ;}',
+}
+
+test18 = {
+ 'Vd.uh=vabsdiff(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                              '(Vu.h[i] > Vv.h[i]) ? (Vu.h[i] -Vv.h[i]) : '
+                              '(Vv.h[i] - Vu.h[i]) ;}',
+}
+
+test19 = {
+ 'Vd.ub=vavg(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                            '(Vu.ub[i]+Vv.ub[i])/2 ;}',
+}
+
+# Fails
+test20 = {
+ 'Qd4=xor(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] ^ QtV[i] '
+                     ';}',
+}
+
+test21 = {
+ 'Vd.h=vnavg(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                          '(Vu.h[i]-Vv.h[i])/2 ;}',
+}
+
+test22 = {
+ 'Vd.b=vavg(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]+Vv.b[i])/2 ;}',
+}
+
+test23 = {
+ 'Vd.b=vabs(Vu.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                        'sat8(ABS(Vu.b[i])) ;}',
+}
+
+test24 = {
+ 'Vd.b=vadd(Vu.b,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             'sat8(Vu.b[i]+Vv.b[i]) ;}',
+}
+
+test25 = {
+ 'Vd.ub=vpack(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                               'usat8(Vv.h[i]);Vd.ub[i+VBITS/16] = '
+                               'usat8(Vu.h[i]) ;}',
+}
+
+test26 = {
+ 'Vd.ub=vavg(Vu.ub,Vv.ub):rnd': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                '(Vu.ub[i]+Vv.ub[i]+1)/2 ;}',
+}
+
+test27 = {
+ 'Vd.ub=vsub(Vu.ub,Vv.ub):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                'usat8(Vu.ub[i]-Vv.ub[i]) ;}',
+}
+
+test28 = {
+ 'Vd.ub=vsub(Vu.ub,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                               'usat8(Vu.ub[i] - Vv.b[i]) ;}',
+}
+
+test29 = {
+ 'Vd.ub=vadd(Vu.ub,Vv.ub):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                'usat8(Vu.ub[i]+Vv.ub[i]) ;}',
+}
+
+test30 = {
+ 'Vd.ub=vadd(Vu.ub,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                               'usat8(Vu.ub[i] + Vv.b[i]) ;}',
+}
+
+test31 = {
+ 'Vd.w=vabs(Vu.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (ABS(Vu.w[i])) '
+                    ';}',
+}
+
+test32 = {
+ 'Vd.uw=vsub(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]-Vv.uw[i]) ;}',
+}
+
+test33 = {
+ 'Vd.uw=vavg(Vu.uw,Vv.uw):rnd': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                '(Vu.uw[i]+Vv.uw[i]+1)/2 ;}',
+}
+
+test34 = {
+ 'Vd.uw=vavg(Vu.uw,Vv.uw)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                            '(Vu.uw[i]+Vv.uw[i])/2 ;}',
+}
+
+test35 = {
+ 'Vd.uw=vadd(Vu.uw,Vv.uw):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                'usat32(Vu.uw[i]+Vv.uw[i]) ;}',
+}
+
+test36 = {
+ 'Vd.uw=vabsdiff(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                              '(Vu.w[i] > Vv.w[i]) ? (Vu.w[i] -Vv.w[i]) : '
+                              '(Vv.w[i] - Vu.w[i]) ;}',
+}
+
+test37 = {
+ 'Vd.h=vsub(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             'sat16(Vu.h[i]-Vv.h[i]) ;}',
+}
+
+
+test38 = {
+ 'Vd.b=vpack(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.b[i] = '
+                              'sat8(Vv.h[i]);Vd.b[i+VBITS/16] = sat8(Vu.h[i]) '
+                              ';}',
+}
+
+# Fails
+test39 = {
+ 'Vx.uw+=vmpye(Vu.uh,Rt.uh)': 'for (i = 0; i < VELEM(32); i++) {Vx.uw[i] += '
+                              '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
+}
 
 
 if __name__ == '__main__':
-  Compile()
+  Compile(test39)
+
 
 
