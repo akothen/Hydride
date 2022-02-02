@@ -25,9 +25,7 @@ UnaryExpr = namedtuple('UnaryExpr', ['op', 'a', 'id'])
 Select = namedtuple('Select', ['cond', 'then', 'otherwise', 'id'])
 
 Lookup = namedtuple('Lookup', ['obj', 'key'])
-TypeLookup = namedtuple('TypeLookup', ['obj', 'type'])
-
-Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'])
+TypeLookup = namedtuple('TypeLookup', ['obj', 'elemtype'])
 
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params', 'spec', 

@@ -475,7 +475,7 @@ def GetSpecFrom(inst, Pseudocode):
   # SIMD instruction
   if isinstance(lhs, TypeLookup):
     var = lhs.obj
-    rettype = lhs.type 
+    rettype = lhs.elemtype 
     retname = var.name
   elif isinstance(lhs, Var):
     var = lhs
@@ -519,5 +519,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 
