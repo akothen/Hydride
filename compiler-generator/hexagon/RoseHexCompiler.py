@@ -2325,8 +2325,50 @@ test98 = {
                             ';}',
 }
 
+test99 = {
+ 'Vd.h=vshuff(Vu.h)': 'for (i = 0; i < VELEM(32); i++) '
+                      '{Vd.uw[i].h[0]=Vu.uh[i];Vd.uw[i].h[1]=Vu.uh[i+VBITS/32] '
+                      ';}',
+}
+
+test100 = {
+ 'Vd.h=vshuffe(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.uw[i].h[0]=Vv.uw[i].uh[0];Vd.uw[i].h[1]=Vu.uw[i].uh[0] '
+                            ';}',
+}
+
+test101 = {
+ 'Vd.h=vshuffo(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.uw[i].h[0]=Vv.uw[i].uh[1];Vd.uw[i].h[1]=Vu.uw[i].uh[1] '
+                            ';}',
+}
+
+# Parser fails
+test102 = {
+   'Vd=Vu': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i]=Vu.w[i] ;}',
+}
+
+# Fails
+test103 = {
+ 'Vd=vnot(Vu)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = ~Vu.uh[i] ;}',
+}
+
+# Parser fails
+test104 = {
+ 'Vdd.h=vshuffoe(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) '
+                              '{Vdd.v[0].uw[i].h[0]=Vv.uw[i].uh[0];Vdd.v[0].uw[i].h[1]=Vu.uw[i].uh[0];Vdd.v[1].uw[i].h[0]=Vv.uw[i].uh[1];Vdd.v[1].uw[i].h[1]=Vu.uw[i].uh[1] '
+                              ';}',
+}
+
+test105 = {
+ 'Vdd.h=vsub(Vuu.h,Vvv.h)': 'for (i = 0; i < VELEM(16); i++) {Vdd.v[0].h[i] = '
+                            '(Vuu.v[0].h[i]-Vvv.v[0].h[i]);Vdd.v[1].h[i] = '
+                            '(Vuu.v[1].h[i]-Vvv.v[1].h[i]) ;}',
+}
+
 
 if __name__ == '__main__':
-  Compile(test98)
+  Compile(test105)
+
 
 

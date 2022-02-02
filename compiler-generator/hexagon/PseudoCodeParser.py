@@ -206,10 +206,8 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  if p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw']:
-    p[0] = TypeLookup(p[1], p[3])
-  else:
-    p[0] = Lookup(p[1], p[3])
+  assert p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw', 'v']
+  p[0] = ElemTypeInfo(p[1], p[3])
 
 def p_args(p):
   '''args : expr
@@ -480,7 +478,7 @@ def GetSpecFrom(inst, Pseudocode):
       rhs = assign.rhs.hi
 
   # SIMD instruction
-  if isinstance(lhs, TypeLookup):
+  if isinstance(lhs, ElemTypeInfo):
     var = lhs.obj
     rettype = lhs.elemtype 
     retname = var.name
