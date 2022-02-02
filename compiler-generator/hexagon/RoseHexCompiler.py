@@ -827,6 +827,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
     BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
     print("!!!!!RHSExprVal:")
     RHSExprVal.getType().print()
+    # Sometimes size extension of the RHS is required, so we have to handle it here
+    if RHSExprVal.getType().getBitwidth() < Bitwidth:
+      # Let's sign-extend
+      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                          RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > Bitwidth:
+      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                          RHSExprVal, Bitwidth)
     # Add an bitslice operation
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
     print("BIT SLICE INSERT OP:")
@@ -2038,8 +2049,90 @@ test55 = {
  'Vdd.h=vunpack(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vdd.h[i] = Vu.b[i] ;}',
 }
 
+test56 = {
+   'Vdd.uh=vunpack(Vu.ub)': 'for (i = 0; i < VELEM(8); i++) {Vdd.uh[i] = '
+                          'Vu.ub[i] ;}',
+}
+
+test57 = {
+ 'Vdd.uw=vunpack(Vu.uh)': 'for (i = 0; i < VELEM(16); i++) {Vdd.uw[i] = '
+                          'Vu.uh[i] ;}',
+}
+
+test58 = {
+ 'Vd.h=vmax(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (Vu.h[i] '
+                         '> Vv.h[i]) ? Vu.h[i] :Vv.h[i] ;}',
+}
+
+test59 = {
+ 'Vd.h=vmin(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (Vu.h[i] '
+                         '< Vv.h[i]) ? Vu.h[i] :Vv.h[i] ;}',
+}
+
+# Fails
+test60 = {
+ 'Vd.h=vsat(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) '
+                         '{Vd.w[i].h[0]=sat16(Vv.w[i]);Vd.w[i].h[1]=sat16(Vu.w[i]) '
+                         ';}',
+}
+
+# Fails
+test61 = {
+ 'Vd.w=vmpyi(Vu.w,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.w[i] * Rt.ub[i % 4]) ;}',
+}
+
+test62 = {
+ 'Vd.uh=vsub(Vu.uh,Vv.uh):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                'usat16(Vu.uh[i]-Vv.uh[i]) ;}',
+}
+
+test63 = {
+ 'Vd.uh=vpack(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                               'usat16(Vv.w[i]);Vd.uh[i+VBITS/32] = '
+                               'usat16(Vu.w[i]) ;}',
+}
+
+test64 = {
+ 'Vd.uh=vmin(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i] < Vv.uh[i]) ? Vu.uh[i]: Vv.uh[i] ;}',
+}
+
+test65 = {
+ 'Vd.uh=vmax(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i] > Vv.uh[i]) ? Vu.uh[i]: Vv.uh[i] ;}',
+}
+
+test66 = {
+ 'Vd.uh=vavg(Vu.uh,Vv.uh):rnd': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                '(Vu.uh[i]+Vv.uh[i]+1)/2 ;}',
+}
+
+test67 = {
+ 'Vd.uh=vavg(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                            '(Vu.uh[i]+Vv.uh[i])/2 ;}',
+}
+
+test68 = {
+ 'Vd.uh=vadd(Vu.uh,Vv.uh):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                'usat16(Vu.uh[i]+Vv.uh[i]) ;}',
+}
+
+test69 = {
+ 'Vd.uh=vabsdiff(Vu.uh,Vv.uh)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = '
+                                '(Vu.uh[i] > Vv.uh[i]) ? (Vu.uh[i]- Vv.uh[i]) '
+                                ': (Vv.uh[i] - Vu.uh[i]) ;}',
+}
+
+# Fails
+test70 = {
+ 'Vd.ub=vsat(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) '
+                          '{Vd.uh[i].b[0]=usat8(Vv.h[i]);Vd.uh[i].b[1]=usat8(Vu.h[i]) '
+                          ';}',
+}
+
 
 if __name__ == '__main__':
-  Compile(test55)
+  Compile(test70)
 
 
