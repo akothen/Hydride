@@ -24,7 +24,7 @@ public:
 
         Var xy;
 
-        out .tile(x, y, xi, yi, 48, 48)
+        out .hexagon().tile(x, y, xi, yi, 48, 48)
             .fuse(x, y, xy)
             .parallel(xy)
             .split(yi, yi, yii, 4)
@@ -32,7 +32,7 @@ public:
             .unroll(xi)
             .unroll(yii);
 
-        matrix_mul.compute_at(out, yi)
+        matrix_mul.hexagon().compute_at(out, yi)
            .vectorize(x, 32)
             .unroll(y);
 
@@ -44,7 +44,7 @@ public:
             .unroll(k, 4);
 
         out
-            .bound(x, 0, matrix_size)
+            .hexagon().bound(x, 0, matrix_size)
             .bound(y, 0, matrix_size);
     }
 
