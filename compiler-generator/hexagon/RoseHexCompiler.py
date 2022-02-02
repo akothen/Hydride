@@ -860,6 +860,20 @@ def CompileUpdate(Update, Context : HexRoseContext):
     Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
     # The bit slice size here is 1 bit
     BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+    # Sometimes size extension of the RHS is required, so we have to handle it here
+    if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
+      # Let's sign-extend
+      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                    RHSExprVal, ElemType.getBitwidth())
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
+      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                    RHSExprVal, ElemType.getBitwidth())
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     # Compile the op
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
     print("---BIT SLICE INSERT OP:")
@@ -1941,9 +1955,91 @@ test39 = {
                               '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
 }
 
+# Fails
+test40 = {
+ 'Vd.b=vshuffe(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(16); i++) '
+                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[0];Vd.uh[i].b[1]=Vu.uh[i].ub[0] '
+                            ';}',
+}
+
+test41 = {
+ 'Vd.w=vnavg(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                          '(Vu.w[i]-Vv.w[i])/2 ;}',
+}
+
+test42 = {
+ 'Vd.b=vsub(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                         '(Vu.b[i]-Vv.b[i]) ;}',
+}
+
+test43 = {
+ 'Vdd.w=vunpack(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vdd.w[i] = Vu.h[i] '
+                        ';}',
+}
+
+test44 = {
+   'Vd.w=vabs(Vu.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                        'sat32(ABS(Vu.w[i])) ;}',
+}
+
+test45 = {
+ 'Vd.w=vadd(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]+Vv.w[i]) ;}',
+}
+
+test46 = {
+   'Vd.w=vadd(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             'sat32(Vu.w[i]+Vv.w[i]) ;}',
+}
+
+test47 = {
+ 'Vd.w=vavg(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]+Vv.w[i])/2 ;}',
+}
+
+test48 = {
+ 'Vd.w=vavg(Vu.w,Vv.w):rnd': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             '(Vu.w[i]+Vv.w[i]+1)/2 ;}',
+}
+
+test49 = {
+ 'Vd.w=vmax(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (Vu.w[i] '
+                         '> Vv.w[i]) ? Vu.w[i] :Vv.w[i] ;}',
+}
+
+test50 = {
+ 'Vd.w=vmin(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = (Vu.w[i] '
+                         '< Vv.w[i]) ? Vu.w[i] :Vv.w[i] ;}',
+}
+
+# Fails
+test51 = {
+ 'Vd.w=vsatdw(Vu.w, Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                            'usat32(Vu.w[i]:Vv.w[i]) ;}',
+}
+
+test52 = {
+ 'Vd.w=vsub(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                         '(Vu.w[i]-Vv.w[i]) ;}',
+}
+
+test53 = {
+ 'Vd.w=vsub(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                             'sat32(Vu.w[i]-Vv.w[i]) ;}',
+}
+
+# Fails
+test54 = {
+ 'if (!Qv4) Vx.b+=Vu.b': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]+Vu.ub[i] ;}',
+}
+
+test55 = {
+ 'Vdd.h=vunpack(Vu.b)': 'for (i = 0; i < VELEM(8); i++) {Vdd.h[i] = Vu.b[i] ;}',
+}
+
 
 if __name__ == '__main__':
-  Compile(test39)
-
+  Compile(test55)
 
 
