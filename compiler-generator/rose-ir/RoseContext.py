@@ -1,5 +1,8 @@
 
+from RoseType import RoseType
+
 from copy import deepcopy
+
 
 # This is a generic context that could be used across
 # different architectures.
@@ -14,6 +17,8 @@ class RoseContext:
     self.RootAbstractions = list()
     # Variable names are associated with their IDs
     self.Variables = dict()    # Name --> ID
+    # Map variable names to the element types
+    self.VariablesToElemTypes = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
   
@@ -47,6 +52,18 @@ class RoseContext:
     if Name in self.Variables:
       return True
     return False
+  
+  def addElemTypeOfVariable(self, Name : str, ElemType : RoseType):
+    self.VariablesToElemTypes[Name] = ElemType
+  
+  def isElemTypeOfVariableKnown(self, Name : str):
+    if Name in self.VariablesToElemTypes:
+      return True
+    return False
+  
+  def getElemTypeOfVariable(self, Name : str):
+    assert Name in self.VariablesToElemTypes
+    return self.VariablesToElemTypes[Name]
   
   def createContext(self, ID : str, ChildContext):
     assert isinstance(ChildContext, RoseContext)
@@ -104,3 +121,5 @@ class RoseContext:
       ChildVarID = self.Variables[Name]
       Abstraction = self.CompiledAbstractions[ChildVarID]
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
+
+      
