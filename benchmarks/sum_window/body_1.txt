@@ -1,0 +1,71 @@
+(dsl_inst_1 
+(vector-two-input-swizzle 
+(vector-two-input-swizzle 
+(vector-load 
+arg0
+288
+(* ; idx-mul
+(+ ; idx-add
+0 ; idx-i
+3
+)
+6
+)
+6
+8
+)
+(bv #x000000000000 48)
+6
+8
+0
+6
+3
+1
+0
+)
+(vector-two-input-swizzle 
+(vector-load 
+arg0
+288
+(* ; idx-mul
+(+ ; idx-add
+0 ; idx-i
+3
+)
+6
+)
+6
+8
+)
+(vector-load 
+arg0
+288
+(* ; idx-mul
+(+ ; idx-add
+0 ; idx-i
+1
+)
+6
+)
+6
+8
+)
+6
+8
+0
+6
+3
+1
+0
+)
+6
+8
+0
+6
+6
+1
+0
+)
+12
+8
+)

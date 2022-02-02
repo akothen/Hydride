@@ -10,6 +10,17 @@ def clean_up():
     sb.call("bash "+clean_up_script, shell = True)
 
 
+def get_init_cex_val(size):
+
+    hex_vals = [str(a) for a in range(10)]
+    hex_vals += ["a","b","c","d","e","f"]
+    val="#x"
+    for i in range(0,size//4):
+        val+= hex_vals[i % 16]
+
+    return val
+
+
 
 def get_cex_defs(cex_ls, arg_sizes):
     strs = []
@@ -23,9 +34,16 @@ def get_cex_defs(cex_ls, arg_sizes):
             cex_def = "(define {} (bv {} {}))".format(cex_id, cex[a_idx], size)
             args.append(cex_id)
             strs.append(cex_def)
+
+        idx_i_val = 0
+        idx_j_val = 0
+
+        ij_str = " ".join([" ",str(idx_i_val), str(idx_j_val)])
+
+        args += []
         env_id = "env_{}".format(c_idx)
-        args_str = " ".join(args)+" "
-        env_def = "(define {} (vector {}))".format(env_id, args_str)
+        args_str = " ".join(args )+" "
+        env_def = "(define {} (vector {}))".format(env_id, args_str+ij_str)
         strs.append(env_def)
         envs_ls.append(env_id)
         args_ls.append(args_str)
@@ -39,7 +57,7 @@ def get_synth_asserts(invoke_str, envs, args):
     var_list = []
     for idx,env in enumerate(envs):
         invoke_cmd = invoke_str.format(args[idx])
-        str_ = "(assert (equal? (interpret sketch-grammar {}) {} ))".format(envs[idx],invoke_cmd)
+        str_ = "(assert (equal? (interpret sketch-grammar {}) (index-into-mat {} 4 4 8 0 0) ))".format(envs[idx],invoke_cmd)
 
         strs.append(str_)
     return  "\n".join(strs)
@@ -64,7 +82,7 @@ def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str, 
 
         forall_ls = "(list {} {})".format(" ".join(args), " ".join(envs))
 
-        synth_str = ""
+        synth_str = ""#"(clear-vc!)\n"
 
 
 
@@ -145,7 +163,7 @@ def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str):
         invoke_check = "(synth_check {})".format(" ".join(sym_args))
         invoke_spec = invoke_str.format(" ".join(sym_args))
 
-        verify_cmd = "(define cex (verify (assert (equal? {} {}))))\n".format(invoke_check, invoke_spec)
+        verify_cmd = "(define cex (verify (assert (equal? {} (index-into-mat {} 4 4 8 0 0)))))\n".format(invoke_check, invoke_spec)
 
         verify_file_str += "\n" + verify_cmd
 
@@ -225,7 +243,7 @@ if __name__ == "__main__":
     COST_BOUND = desc['COST_BOUND']
     dsl_common_str = ""
 
-    with open(os.path.dirname(os.path.abspath(__file__))+"/dsl_common.rkt","r") as DSLFile:
+    with open(os.path.dirname(os.path.abspath(__file__))+"/dsl_common_extended.rkt","r") as DSLFile:
         dsl_common_str = DSLFile.read()
 
         solver_str = ""
@@ -242,7 +260,7 @@ if __name__ == "__main__":
             assert False, "Unrecognized solver"
 
         solver_info = solver_str +"\n"+bitwidth_str+"\n"
-        dsl_common_str = dsl_common_str.format(solver_info, " ".join([ str(a) for a in ARG_SIZES]))
+        dsl_common_str = dsl_common_str.format(solver_info, " ".join([ str(a) for a in ARG_SIZES+[0,0]]))
 
     with open(SPEC_IMPL, "r") as SpecImplFile:
         dsl_common_str += "\n" + SpecImplFile.read() + "\n"
@@ -251,7 +269,7 @@ if __name__ == "__main__":
         dsl_common_str += "\n" + GrammarImplFile.read() + "\n"
 
 
-    init_cex = [-1 for i in ARG_SIZES]
+    init_cex =  [get_init_cex_val(i) for i in ARG_SIZES] #[-1 for i in ARG_SIZES]
 
     cex = [init_cex]
 
