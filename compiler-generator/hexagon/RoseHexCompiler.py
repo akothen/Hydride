@@ -362,6 +362,10 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   print("COMPILE BITSLICE")
   print("BITSLICE:")
   print(BitSliceExpr)
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(BitSliceExpr.id):
+    return Context.getCompiledAbstractionForID(BitSliceExpr.id)
+
   # First compile low and high expressions
   print("COMPILING LOW")
   Low = CompileIndex(BitSliceExpr.lo, Context)
@@ -426,9 +430,13 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   print("COMPILING INDX EXPR")
   print("INDEX EXPR:")
   print(IndexExpr)
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(IndexExpr.id):
+    return Context.getCompiledAbstractionForID(IndexExpr.id)
+
   # Compile the low index first
   LowIndex = CompileIndex(IndexExpr.idx, Context)
-  print("INDEX:")
+  print("LOW INDEX:")
   print(LowIndex)
   LowIndex.print()
 
@@ -445,6 +453,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
   HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + Vector.getName(), \
                                       [LowIndex, IndexDiff])
+  print("HIGH INDEX:")
+  HighIndex.print()
   Context.addAbstractionToIR(HighIndex)
   Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
 
@@ -584,12 +594,26 @@ def GetExpressionType(Expr, Context : HexRoseContext):
         return RoseType.getUndefTy()
   
   if type(Expr) == BitIndex:
-    assert type(Expr.obj) == TypeLookup
-    if not Context.isVariableDefined(Expr.obj.obj.name):
-      return RoseType.getUndefTy()
-    assert Context.isElemTypeOfVariableKnown(Expr.obj.obj.name) == True
-    ID = Context.getVariableID(Expr.obj.obj.name)
-    BitVector = Context.getCompiledAbstractionForID(ID)
+    assert type(Expr.obj) == ElemTypeInfo
+    # Bitindex could be indexing into a variable or another bitslice
+    if type(Expr.obj.obj) == Var:
+      Variable = Expr.obj.obj
+      if not Context.isVariableDefined(Variable.name):
+        return RoseType.getUndefTy()
+      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      ID = Context.getVariableID(Variable.name)
+      BitVector = Context.getCompiledAbstractionForID(ID)
+    else:
+      assert type(Expr.obj.obj) == BitIndex
+      BitIndexVar = Expr.obj.obj
+      assert type(BitIndexVar.obj) == ElemTypeInfo
+      assert type(BitIndexVar.obj.obj) == Var
+      Variable = BitIndexVar.obj.obj
+      if not Context.isVariableDefined(Variable.name):
+        return RoseType.getUndefTy()
+      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      ID = Context.getVariableID(Variable.name)
+      BitVector = Context.getCompiledAbstractionForID(ID)
     if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
       return RoseType.getUndefTy()
     ElemType = Context.getElemTypeOfVariable(BitVector.getName())
@@ -1248,31 +1272,35 @@ def CompileIf(IfStmt, Context : HexRoseContext):
   Context.destroyContext(IfStmt.id)
 
 
-def CompileTypeLookup(TypeLookup, Context : HexRoseContext):
+def CompileElemTypeInfo(ElemTypeInfo, Context : HexRoseContext):
   print("COMPILE TYPELOOKUP")
   print("TYPELOOKUP:")
-  print(TypeLookup)
-  # TypeLookup tracks types of variables
-  assert type(TypeLookup.obj) == Var
-
-  # Check if the variable is already defined and cached. If yes, just return that.
-  if Context.isVariableDefined(TypeLookup.obj.name):
-    # Element type of this variable must already exist
-    assert Context.isElemTypeOfVariableKnown(TypeLookup.obj.name) == True
-    ID = Context.getVariableID(TypeLookup.obj.name)
-    return Context.getCompiledAbstractionForID(ID)
-
-  # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
-  CompiledVar = RoseValue.create(TypeLookup.obj.name, Context.getMaxVectorLength())
-
-  # Add the element type info to the context
-  assert Context.isElemTypeOfVariableKnown(TypeLookup.obj.name) == False
-  Context.addElemTypeOfVariable(CompiledVar.getName(), HexTypes[TypeLookup.elemtype])
-
-  # Add the variable info to the context
-  Context.addVariable(TypeLookup.obj.name, TypeLookup.obj.id)
-  Context.addCompiledAbstraction(TypeLookup.obj.id, CompiledVar)
-  return CompiledVar
+  print(ElemTypeInfo)
+  # ElemTypeInfo tracks types of variables
+  if type(ElemTypeInfo.obj) == Var:
+    # Check if the variable is already defined and cached. If yes, just return that.
+    if Context.isVariableDefined(ElemTypeInfo.obj.name):
+      # Element type of this variable must already exist
+      assert Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == True
+      ID = Context.getVariableID(ElemTypeInfo.obj.name)
+      return Context.getCompiledAbstractionForID(ID)
+    # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+    CompiledValue = RoseValue.create(ElemTypeInfo.obj.name, Context.getMaxVectorLength())
+    # Add the element type info to the context
+    assert Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == False
+    Context.addElemTypeOfVariable(CompiledValue.getName(), HexTypes[ElemTypeInfo.elemtype])
+    # Add the variable info to the context
+    Context.addVariable(ElemTypeInfo.obj.name, ElemTypeInfo.obj.id)
+  else:
+    assert type(ElemTypeInfo.obj) == BitIndex or type(ElemTypeInfo.obj) == BitSlice
+    # Compile the bit slice
+    CompiledValue = CompileExpression(ElemTypeInfo.obj, Context)
+    if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
+      Context.addElemTypeOfVariable(CompiledValue.getName(), HexTypes[ElemTypeInfo.elemtype])
+  
+  # Add the typelookup to context
+  Context.addCompiledAbstraction(ElemTypeInfo.obj.id, CompiledValue)
+  return CompiledValue
 
 
 def CompileExpression(Expr, Context : HexRoseContext):
@@ -1303,7 +1331,7 @@ def CompileSemantics(Sema):
     IsOutParam = False
     ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
     # Create a new rosette value
-    assert type(Param) == TypeLookup
+    assert type(Param) == ElemTypeInfo
     ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
     RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
@@ -1366,7 +1394,7 @@ def CompileSemantics(Sema):
 
 
 CompileAbstractions = {
-  TypeLookup : CompileTypeLookup, 
+  ElemTypeInfo : CompileElemTypeInfo, 
   For: CompileForLoop,
   Number: CompileNumber,
   Var: CompileVar,
@@ -1960,17 +1988,15 @@ test38 = {
                               ';}',
 }
 
-# Fails
 test39 = {
  'Vx.uw+=vmpye(Vu.uh,Rt.uh)': 'for (i = 0; i < VELEM(32); i++) {Vx.uw[i] += '
                               '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
 }
 
-# Fails
 test40 = {
  'Vd.b=vshuffe(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(16); i++) '
-                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[0];Vd.uh[i].b[1]=Vu.uh[i].ub[0] '
-                            ';}',
+                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[0];'
+                            'Vd.uh[i].b[1]=Vu.uh[i].ub[0];}',
 }
 
 test41 = {
@@ -2069,7 +2095,6 @@ test59 = {
                          '< Vv.h[i]) ? Vu.h[i] :Vv.h[i] ;}',
 }
 
-# Fails
 test60 = {
  'Vd.h=vsat(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) '
                          '{Vd.w[i].h[0]=sat16(Vv.w[i]);Vd.w[i].h[1]=sat16(Vu.w[i]) '
@@ -2124,15 +2149,184 @@ test69 = {
                                 ': (Vv.uh[i] - Vu.uh[i]) ;}',
 }
 
-# Fails
 test70 = {
  'Vd.ub=vsat(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) '
                           '{Vd.uh[i].b[0]=usat8(Vv.h[i]);Vd.uh[i].b[1]=usat8(Vu.h[i]) '
                           ';}',
 }
 
+test71 = {
+ 'Vd.b=vsub(Vu.b,Vv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
+                             'sat8(Vu.b[i]-Vv.b[i]) ;}',
+}
+
+test72 = {
+ 'Vd.h=vabs(Vu.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = (ABS(Vu.h[i])) '
+                    ';}',
+}
+
+test73 = {
+ 'Vd.h=vabs(Vu.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                        'sat16(ABS(Vu.h[i])) ;}',
+}
+
+test74 = {
+ 'Vd.h=vadd(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]+Vv.h[i]) ;}',
+}
+
+test75 = {
+ 'Vd.h=vadd(Vu.h,Vv.h):sat': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             'sat16(Vu.h[i]+Vv.h[i]) ;}',
+}
+
+test76 = {
+ 'Vd.h=vavg(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                         '(Vu.h[i]+Vv.h[i])/2 ;}',
+}
+
+test77 = {
+ 'Vd.h=vavg(Vu.h,Vv.h):rnd': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                             '(Vu.h[i]+Vv.h[i]+1)/2 ;}',
+}
+
+test78 = {
+ 'Vd.h=vpack(Vu.w,Vv.w):sat': 'for (i = 0; i < VELEM(32); i++) {Vd.h[i] = '
+                              'sat16(Vv.w[i]);Vd.h[i+VBITS/32] = '
+                              'sat16(Vu.w[i]) ;}',
+}
+
+test79 = {
+ 'Vd.h=vpacko(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                           'Vv.uw[i].uh[1];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[1] '
+                           ';}',
+}
+
+# Fails
+test80 = {
+ 'Vd=vxor(Vu,Vv)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = Vu.uh[i] ^ '
+                   'Vv.h[i] ;}',
+}
+
+# Fails
+test81 = {
+ 'if (!Qv4) Vx.b-=Vu.b': 'for (i = 0; i < VELEM(8); i--) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]-Vu.ub[i] ;}',
+}
+
+# Fails
+test82 = {
+ 'if (!Qv4) Vx.b+=Vu.b': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i]=QvV.i ? '
+                         'Vx.ub[i] : Vx.ub[i]+Vu.ub[i] ;}',
+}
+
+test83 = {
+ 'Vd.h=vpacke(Vu.w,Vv.w)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i] = '
+                           'Vv.uw[i].uh[0];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[0] '
+                           ';}',
+}
+
+test84 = {
+ 'Vd.uh=vsat(Vu.uw,Vv.uw)': 'for (i = 0; i < VELEM(32); i++) '
+                            '{Vd.w[i].h[0]=usat16(Vv.uw[i]);Vd.w[i].h[1]=usat16(Vu.uw[i]) '
+                            ';}',
+}
+
+test85 = {
+ 'Vd.uw=vmpye(Vu.uh,Rt.uh)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}',
+}
+
+# Yay! It compiles!
+test86 = {
+   'Vd.uw=vrmpy(Vu.ub,Rt.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].ub[0] * Rt.ub[0]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[1] * Rt.ub[1]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[2] * Rt.ub[2]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[3] * Rt.ub[3]) ;}',
+}
+
+test87 = {
+   'Vd.uw=vrmpy(Vu.ub,Vv.ub)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                             '(Vu.uw[i].ub[0] *Vv.uw[i].ub[0]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[1] *Vv.uw[i].ub[1]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[2] *Vv.uw[i].ub[2]);Vd.uw[i] += '
+                             '(Vu.uw[i].ub[3] *Vv.uw[i].ub[3]) ;}',
+}
+
+test88 = {
+ 'Vd.b=vdeal(Vu.b)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i ] = '
+                     'Vu.uh[i].ub[0];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[1] ;}',
+}
+
+test89 = {
+ 'Vd.b=vdeale(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.ub[0+i ] = '
+                           'Vv.uw[i].ub[0];Vd.ub[VBITS/32+i ] = '
+                           'Vv.uw[i].ub[2];Vd.ub[2*VBITS/32+i] = '
+                           'Vu.uw[i].ub[0];Vd.ub[3*VBITS/32+i] = '
+                           'Vu.uw[i].ub[2] ;}',
+}
+
+test90 = {
+ 'Vd.w=vrmpy(Vu.ub,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.uw[i].ub[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;}',
+}
+
+test91 = {
+   'Vd.w=vrmpy(Vu.ub,Rt.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                           '(Vu.uw[i].ub[0] * Rt.b[0]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[1] * Rt.b[1]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[2] * Rt.b[2]);Vd.w[i] += '
+                           '(Vu.uw[i].ub[3] * Rt.b[3]) ;}',
+}
+
+test92 = {
+ 'Vd.w=vmpyieo(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                            '(Vu.w[i].h[0]*Vv.w[i].h[1]) << 16;}',
+}
+
+test93 = {
+ 'Vd.w=vrmpy(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                          '(Vu.w[i].b[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                          '(Vu.w[i].b[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                          '(Vu.w[i].b[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                          '(Vu.w[i].b[3] * Vv.w[i].b[3]) ;}',
+}
+
+test94 = {
+   'Vd.h=vdeal(Vu.h)': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i ] = '
+                     'Vu.uw[i].uh[0];Vd.uh[i+VBITS/32] = Vu.uw[i].uh[1] ;}',
+}
+
+test95 = {
+ 'Vd.b=vpacke(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                           'Vv.uh[i].ub[0];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[0] '
+                           ';}',
+}
+
+test96 = {
+ 'Vd.b=vpacko(Vu.h,Vv.h)': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i] = '
+                           'Vv.uh[i].ub[1];Vd.ub[i+VBITS/16] = Vu.uh[i].ub[1] '
+                           ';}',
+}
+
+test97 = {
+ 'Vd.b=vshuff(Vu.b)': 'for (i = 0; i < VELEM(16); i++) '
+                      '{Vd.uh[i].b[0]=Vu.ub[i];Vd.uh[i].b[1]=Vu.ub[i+VBITS/16] '
+                      ';}',
+}
+
+test98 = {
+ 'Vd.b=vshuffo(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(16); i++) '
+                            '{Vd.uh[i].b[0]=Vv.uh[i].ub[1];Vd.uh[i].b[1]=Vu.uh[i].ub[1] '
+                            ';}',
+}
+
 
 if __name__ == '__main__':
-  Compile(test70)
+  Compile(test98)
 
 
