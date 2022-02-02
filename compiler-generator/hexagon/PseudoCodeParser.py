@@ -5,6 +5,9 @@ import json
 from HexAST import *
 from collections import defaultdict
 
+from RoseHexCommon import *
+
+
 # Expressions have unique IDs
 def GenUniqueID(parser):
   ID = parser.id_counter
@@ -180,7 +183,7 @@ def p_expr_call(p):
           | ID LPAREN args RPAREN COLON ID COLON ID'''
   if len(p) == 5:
     if p[1] == "VELEM":
-      p[0] = p[3][0]
+      p[0] = Number(VELEM(p[3][0].val))
     else:
       expr_id = "call." + GenUniqueID(parser)
       p[0] = Call(p[1], p[3], None, expr_id)
@@ -516,6 +519,5 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
-
 
 
