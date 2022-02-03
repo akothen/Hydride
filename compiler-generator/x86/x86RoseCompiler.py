@@ -1635,6 +1635,17 @@ def HandleToSignExtend(Bitwidth : int):
   return LamdaImplFunc
 
 
+def HandleToSpecialSignExtend(_):
+  def LamdaImplFunc(Name : str, Args):
+    [Value] = Args
+    assert Value.getType().isBitVectorTy() == True
+    # Increase the bitwidth by 2x. 
+    Bitwidth = 2 * Value.getType().getBitwidth()
+    return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+  
+  return LamdaImplFunc
+
+
 def HandleToZeroExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
@@ -1746,6 +1757,7 @@ Builtins = {
   'SignExtend16': HandleToSignExtend(16),
   'SignExtend32': HandleToSignExtend(32),
   'SignExtend64': HandleToSignExtend(64),
+  'Signed' : HandleToSpecialSignExtend(None),
 
   'Truncate8' : HandleToTruncate(8),
   'Truncate16': HandleToTruncate(16),
