@@ -22,8 +22,7 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Gather all the ops in this block
   OpList = list()
   for Operation in Block:
-    if isinstance(Operation, RoseBVTruncateOp):
-      OpList.append(Operation)
+    OpList.append(Operation)
   # Iterate the list of operations in reverse order
   OpList.reverse()
   for Op in OpList:
