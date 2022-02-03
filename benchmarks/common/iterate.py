@@ -4,6 +4,7 @@ import time
 import sys
 import json
 import os
+import itertools
 
 def clean_up():
     clean_up_script = os.path.dirname(os.path.abspath(__file__))+"/clean.sh"
@@ -22,7 +23,7 @@ def get_init_cex_val(size):
 
 
 
-def get_cex_defs(cex_ls, arg_sizes):
+def get_cex_defs(cex_ls, arg_sizes, output_shape):
     strs = []
     args_ls = []
     envs_ls = []
@@ -38,49 +39,67 @@ def get_cex_defs(cex_ls, arg_sizes):
         idx_i_val = 0
         idx_j_val = 0
 
-        ij_str = " ".join([" ",str(idx_i_val), str(idx_j_val)])
 
-        args += []
-        env_id = "env_{}".format(c_idx)
         args_str = " ".join(args )+" "
-        env_def = "(define {} (vector {}))".format(env_id, args_str+ij_str)
-        strs.append(env_def)
-        envs_ls.append(env_id)
+
+        env_index_space = []
+        for idx_i_val in range(0, output_shape[0]):
+            i_space = []
+            for idx_j_val in range(0, output_shape[1]):
+                ij_str = " ".join([" ",str(idx_i_val), str(idx_j_val)])
+                env_id = "env_{}_i{}_j{}".format(c_idx, idx_i_val, idx_j_val)
+                env_def = "(define {} (vector {}))".format(env_id, args_str+ij_str)
+                strs.append(env_def)
+                i_space.append(env_id)
+            env_index_space.append(i_space)
+
+
+        envs_ls.append(env_index_space)
         args_ls.append(args_str)
 
 
     return ("\n".join(strs), envs_ls, args_ls)
 
-def get_synth_asserts(invoke_str, envs, args):
+def get_synth_asserts(invoke_str, envs, args, output_shape):
     strs = []
 
-    var_list = []
-    for idx,env in enumerate(envs):
-        invoke_cmd = invoke_str.format(args[idx])
-        str_ = "(assert (equal? (interpret sketch-grammar {}) (index-into-mat {} 4 4 8 0 0) ))".format(envs[idx],invoke_cmd)
+    if len(output_shape) == 1:
+        output_shape.append(1) # Two dimensional tensor with one dimension being 1
 
-        strs.append(str_)
+    var_list = []
+    for idx,env_space in enumerate(envs): # For each counter example instance
+
+        for i in range(0, output_shape[0]):
+            for j in range(0, output_shape[1]):
+                invoke_cmd = invoke_str.format(args[idx])
+                str_ = "(assert (equal? (interpret sketch-grammar {}) (index-into-mat {} {} {} 8 {} {}) ))".format(envs[idx][i][j],invoke_cmd, output_shape[0],output_shape[1], i,j)
+
+                strs.append(str_)
+
     return  "\n".join(strs)
 
 
-def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str,  do_optimize = False, additional_constraints = []):
+def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str,  do_optimize = False, additional_constraints = [], output_shape = []):
     synth_file_name = "synth_iter_"+str(iter_num)+".rkt"
 
 
     synth_file_str = dsl_common_str
     with open(synth_file_name, "w+") as SynthFile:
 
-        (cex_defs, envs, args)  = get_cex_defs(cex_ls, arg_sizes_ls)
+        (cex_defs, envs, args)  = get_cex_defs(cex_ls, arg_sizes_ls, output_shape)
 
         synth_file_str += "\n" + cex_defs
 
 
-        synth_assert_calls = get_synth_asserts(invoke_str, envs, args)
+        synth_assert_calls = get_synth_asserts(invoke_str, envs, args, output_shape)
 
         synth_assert_calls += "\n".join(["\n"]+additional_constraints)
 
+        flattened_envs = []
+        for i in range(len(envs)):
+            flattened_envs += list(itertools.chain( *(envs[i]) ))
 
-        forall_ls = "(list {} {})".format(" ".join(args), " ".join(envs))
+        forall_ls = "(list {} {})".format(" ".join(args), " ".join(flattened_envs))
 
         synth_str = ""#"(clear-vc!)\n"
 
@@ -135,7 +154,7 @@ def gen_synth_file(iter_num, dsl_common_str , cex_ls, arg_sizes_ls, invoke_str, 
 
 
 
-def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str):
+def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str, output_shape):
     verify_file_name = "verify_iter_"+str(iter_num)+".rkt"
     verify_file_str = dsl_common_str
 
@@ -147,7 +166,7 @@ def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str):
         verify_file_str += "\n" + "(clear-vc!)"
         formal_args = ["arg"+str(i) for i in range(0,len(arg_sizes_ls))]
 
-        fn_str = "(define (synth_check "+" ".join(formal_args)+")\n"+body_str+"\n)"
+        fn_str = "(define (synth_check "+" ".join(formal_args)+" idx-i idx-j "+")\n"+body_str+"\n)"
 
         verify_file_str += "\n" + fn_str
         sym_def_str = ""
@@ -160,10 +179,26 @@ def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str):
 
         verify_file_str += sym_def_str
 
-        invoke_check = "(synth_check {})".format(" ".join(sym_args))
         invoke_spec = invoke_str.format(" ".join(sym_args))
 
-        verify_cmd = "(define cex (verify (assert (equal? {} (index-into-mat {} 4 4 8 0 0)))))\n".format(invoke_check, invoke_spec)
+        spec_res_def = "(define spec-res {})".format(invoke_spec)
+
+
+        verify_file_str += "\n" + spec_res_def
+
+        verify_index_space = []
+
+        for i in range(0, output_shape[0]):
+            for j in range(0, output_shape[1]):
+
+                invoke_check = "(synth_check {} {} {})".format(" ".join(sym_args), i , j)
+                verify_i_j = "(verify (assert (equal? {} (index-into-mat {} {} {} 8 {} {}))))\n".format(invoke_check, "spec-res", output_shape[0], output_shape[1],i,j)
+                verify_index_space.append(verify_i_j)
+
+
+        #verify_cmd = "(define cex (verify (assert (equal? {} (index-into-mat {} 4 4 8 0 0)))))\n".format(invoke_check, spec_res_def)
+
+        verify_cmd = "(define cex (verify (begin {}) ))".format("\n".join(verify_index_space))
 
         verify_file_str += "\n" + verify_cmd
 
@@ -241,6 +276,7 @@ if __name__ == "__main__":
     GRAMMAR_IMPL = desc["GRAMMAR_IMPL"]
     SYMMETRY = desc['SYMMETRY']
     COST_BOUND = desc['COST_BOUND']
+    OUTPUT_SHAPE = desc['OUTPUT_SHAPE']
     dsl_common_str = ""
 
     with open(os.path.dirname(os.path.abspath(__file__))+"/dsl_common_extended.rkt","r") as DSLFile:
@@ -294,7 +330,7 @@ if __name__ == "__main__":
     start_time = time.time()
     for i in range(0,100):
         print("Iteration "+str(i+1))
-        synth_file_name = gen_synth_file(i+1, dsl_common_str, cex, ARG_SIZES, INVOKE_STR, do_optimize = (DO_OPTIMIZE == 1), additional_constraints = additional_constraints)
+        synth_file_name = gen_synth_file(i+1, dsl_common_str, cex, ARG_SIZES, INVOKE_STR, do_optimize = (DO_OPTIMIZE == 1), additional_constraints = additional_constraints, output_shape = OUTPUT_SHAPE)
 
         synth_log_name = "synth_{}.log".format(i+1)
 
@@ -320,7 +356,7 @@ if __name__ == "__main__":
 
         verify_log_name = "verify_{}.log".format(i+1)
 
-        verify_file_name = gen_verify_file(i+1, dsl_common_str, ARG_SIZES, INVOKE_STR)
+        verify_file_name = gen_verify_file(i+1, dsl_common_str, ARG_SIZES, INVOKE_STR, OUTPUT_SHAPE)
         verify_start = time.time()
         try:
             with open(verify_log_name, "w+") as VerifyLog:

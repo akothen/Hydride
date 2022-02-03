@@ -830,11 +830,11 @@
   (destruct prog
 
             [(idx-i id) 
-             (display id)
+             (display "idx-i")
              (displayln " ; idx-i")
              ]
             [(idx-j id) 
-             (display id)
+             (display "idx-j")
              (displayln " ; idx-j")
              ]
             [
@@ -1371,7 +1371,7 @@
 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 4))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
 
 
 
@@ -1428,24 +1428,35 @@
 
 
 (clear-vc!)
-(define (synth_check arg0)
+(define (synth_check arg0 idx-i idx-j )
 (dsl_inst_1 
 (vector-two-input-swizzle 
 (vector-two-input-swizzle 
+(vector-shuffle-lrotate
 (vector-load 
 arg0
 288
 (* ; idx-mul
 (+ ; idx-add
-0 ; idx-i
-3
+idx-i ; idx-i
+2
 )
 6
 )
 6
 8
 )
+idx-j ; idx-j
+8
+)
+(vector-shuffle-lrotate
 (bv #x000000000000 48)
+(+ ; idx-add
+idx-j ; idx-j
+1
+)
+8
+)
 6
 8
 0
@@ -1455,30 +1466,38 @@ arg0
 0
 )
 (vector-two-input-swizzle 
+(vector-shuffle-lrotate
 (vector-load 
 arg0
 288
 (* ; idx-mul
 (+ ; idx-add
-0 ; idx-i
-3
+idx-i ; idx-i
+0
 )
 6
 )
 6
 8
 )
+idx-j ; idx-j
+8
+)
+(vector-shuffle-lrotate
 (vector-load 
 arg0
 288
 (* ; idx-mul
 (+ ; idx-add
-0 ; idx-i
+idx-i ; idx-i
 1
 )
 6
 )
 6
+8
+)
+idx-j ; idx-j
 8
 )
 6
@@ -1503,8 +1522,39 @@ arg0
 
 )
 (define-symbolic sym_arg0 (bitvector 288))
-(define cex (verify (assert (equal? (synth_check sym_arg0) (index-into-mat (sum sym_arg0 6 6 3 3 8) 4 4 8 0 0)))))
+(define spec-res (sum sym_arg0 6 6 3 3 8))
+(define cex (verify (begin (verify (assert (equal? (synth_check sym_arg0 0 0) (index-into-mat spec-res 4 4 8 0 0))))
 
+(verify (assert (equal? (synth_check sym_arg0 0 1) (index-into-mat spec-res 4 4 8 0 1))))
+
+(verify (assert (equal? (synth_check sym_arg0 0 2) (index-into-mat spec-res 4 4 8 0 2))))
+
+(verify (assert (equal? (synth_check sym_arg0 0 3) (index-into-mat spec-res 4 4 8 0 3))))
+
+(verify (assert (equal? (synth_check sym_arg0 1 0) (index-into-mat spec-res 4 4 8 1 0))))
+
+(verify (assert (equal? (synth_check sym_arg0 1 1) (index-into-mat spec-res 4 4 8 1 1))))
+
+(verify (assert (equal? (synth_check sym_arg0 1 2) (index-into-mat spec-res 4 4 8 1 2))))
+
+(verify (assert (equal? (synth_check sym_arg0 1 3) (index-into-mat spec-res 4 4 8 1 3))))
+
+(verify (assert (equal? (synth_check sym_arg0 2 0) (index-into-mat spec-res 4 4 8 2 0))))
+
+(verify (assert (equal? (synth_check sym_arg0 2 1) (index-into-mat spec-res 4 4 8 2 1))))
+
+(verify (assert (equal? (synth_check sym_arg0 2 2) (index-into-mat spec-res 4 4 8 2 2))))
+
+(verify (assert (equal? (synth_check sym_arg0 2 3) (index-into-mat spec-res 4 4 8 2 3))))
+
+(verify (assert (equal? (synth_check sym_arg0 3 0) (index-into-mat spec-res 4 4 8 3 0))))
+
+(verify (assert (equal? (synth_check sym_arg0 3 1) (index-into-mat spec-res 4 4 8 3 1))))
+
+(verify (assert (equal? (synth_check sym_arg0 3 2) (index-into-mat spec-res 4 4 8 3 2))))
+
+(verify (assert (equal? (synth_check sym_arg0 3 3) (index-into-mat spec-res 4 4 8 3 3))))
+) ))
 (assert (sat? cex) "Verification Passed!")
 (define cex_v0 (evaluate sym_arg0 cex))
 (display "cex_v0 ")

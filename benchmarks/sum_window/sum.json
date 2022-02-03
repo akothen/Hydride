@@ -8,5 +8,6 @@
 "SPEC_IMPL": "sum_spec.rkt",
 "GRAMMAR_IMPL": "sum_grammar.rkt",
 "SYMMETRY": -1,
-"COST_BOUND": -1
+"COST_BOUND": -1,
+"OUTPUT_SHAPE": [4,4]
 }

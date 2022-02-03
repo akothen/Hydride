@@ -830,11 +830,11 @@
   (destruct prog
 
             [(idx-i id) 
-             (display id)
+             (display "idx-i")
              (displayln " ; idx-i")
              ]
             [(idx-j id) 
-             (display id)
+             (display "idx-j")
              (displayln " ; idx-j")
              ]
             [
@@ -1371,7 +1371,7 @@
 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 4))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
 
 
 
@@ -1428,13 +1428,43 @@
 
 
 (define v0_0 (bv #x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567 288))
-(define env_0 (vector v0_0   0 0))
+(define env_0_i0_j0 (vector v0_0   0 0))
+(define env_0_i0_j1 (vector v0_0   0 1))
+(define env_0_i0_j2 (vector v0_0   0 2))
+(define env_0_i0_j3 (vector v0_0   0 3))
+(define env_0_i1_j0 (vector v0_0   1 0))
+(define env_0_i1_j1 (vector v0_0   1 1))
+(define env_0_i1_j2 (vector v0_0   1 2))
+(define env_0_i1_j3 (vector v0_0   1 3))
+(define env_0_i2_j0 (vector v0_0   2 0))
+(define env_0_i2_j1 (vector v0_0   2 1))
+(define env_0_i2_j2 (vector v0_0   2 2))
+(define env_0_i2_j3 (vector v0_0   2 3))
+(define env_0_i3_j0 (vector v0_0   3 0))
+(define env_0_i3_j1 (vector v0_0   3 1))
+(define env_0_i3_j2 (vector v0_0   3 2))
+(define env_0_i3_j3 (vector v0_0   3 3))
 (define sol 
                              (synthesize 
-                            #:forall (list v0_0  env_0)
+                            #:forall (list v0_0  env_0_i0_j0 env_0_i0_j1 env_0_i0_j2 env_0_i0_j3 env_0_i1_j0 env_0_i1_j1 env_0_i1_j2 env_0_i1_j3 env_0_i2_j0 env_0_i2_j1 env_0_i2_j2 env_0_i2_j3 env_0_i3_j0 env_0_i3_j1 env_0_i3_j2 env_0_i3_j3)
                              #:guarantee 
                             (begin
-                             (assert (equal? (interpret sketch-grammar env_0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 0) ))
+                             (assert (equal? (interpret sketch-grammar env_0_i0_j0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j1) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j2) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j3) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 0 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 1 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j1) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 1 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j2) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 1 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j3) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 1 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 2 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j1) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 2 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j2) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 2 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j3) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 2 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j0) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 3 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j1) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 3 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j2) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 3 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j3) (index-into-mat (sum v0_0  6 6 3 3 8) 4 4 8 3 3) ))
 
                              )))
 (assert (sat? sol)"Unsatisfiable")

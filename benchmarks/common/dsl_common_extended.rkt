@@ -828,11 +828,11 @@
   (destruct prog
 
             [(idx-i id) 
-             (display id)
+             (display "idx-i")
              (displayln " ; idx-i")
              ]
             [(idx-j id) 
-             (display id)
+             (display "idx-j")
              (displayln " ; idx-j")
              ]
             [
