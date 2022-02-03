@@ -14,11 +14,36 @@ from RoseOperations import *
 from RoseBitVectorOperations import *
 
 
+def SimplifyConstantOperations(Block : RoseBlock):
+  print("SIMPLIFY CONSTANT OPERATIONS")
+  # Gather mapping between simplifiable ops and the simplified results
+  OpToConstantVal = dict()
+  OpList = list()
+  for Operation in Block:
+    Constant = Operation.simplify()
+    if Constant != None:
+      OpList.append(Operation)
+      # If constant can be an integer, then make it
+      if type(Constant) != int:
+        if int(Constant) == Constant:
+          Constant = int(Constant)
+      OpToConstantVal[Operation] = RoseConstant(Constant, Operation.getType())
+  # Now replace the uses of the ops that can be simplified and delete the ops
+  for Operation in OpList:
+    Constant = OpToConstantVal[Operation]
+    Operation.replaceUsesWith(Constant)
+    Block.eraseOperation(Operation)
+  print("SIMPLIFY CONSTANT OPERATIONS DONE")
+
+
 def RunOpSimplifyOnBlock(Block : RoseBlock):
   print("RUN OP SIMPLIFY ON BLOCK")
   print("BLOCK:")
   print(Block)
   Block.print()
+  # Time to simplify some instructions that can be simplified
+  SimplifyConstantOperations(Block) 
+
   # Gather all the truncate and extract ops in this block
   OpList = list()
   for Operation in Block:
@@ -109,7 +134,7 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
           Block.addOperationBefore(NewHigh, FirstExtractOp)
         # Generate the new operation now
         BitwidthVal = RoseConstant(SecondExtractBitwidth, NewHigh.getType())
-        NewOp = RoseBVExtractSliceOp.create("new." + ExtractOp.getName(), \
+        NewOp = RoseBVExtractSliceOp.create("new." + FirstExtractOp.getName(), \
                               FirstExtractOp.getInputBitVector(), NewLow, NewHigh, BitwidthVal)
         # Add this new operation to the block and replace the uses of older op
         Block.addOperationBefore(NewOp, FirstExtractOp)
