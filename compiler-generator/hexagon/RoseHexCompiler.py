@@ -451,7 +451,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   ElemType = Context.getElemTypeOfVariable(Vector.getName())
   assert ElemType.isBitVectorTy()
   IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-  HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + Vector.getName(), \
+  HighIndex = RoseAddOp.create("high.extract." + LowIndex.getName() + "." \
+                                    + Vector.getName() + "." + IndexExpr.id, \
                                       [LowIndex, IndexDiff])
   print("HIGH INDEX:")
   HighIndex.print()
@@ -890,7 +891,8 @@ def CompileUpdate(Update, Context : HexRoseContext):
     ElemType = Context.getElemTypeOfVariable(BitVector.getName())
     assert ElemType.isBitVectorTy()
     IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-    HighIndex = RoseAddOp.create("high." + LowIndex.getName() + "." + BitVector.getName(), \
+    HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
+                                      + BitVector.getName() + "." + Update.lhs.id, \
                                       [LowIndex, IndexDiff])
     # Add this add op to the IR and the context
     Context.addAbstractionToIR(HighIndex)
