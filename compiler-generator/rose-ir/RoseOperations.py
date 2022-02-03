@@ -3,7 +3,7 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 from RoseAbstractions import RoseUndefRegion
-from RoseValues import RoseOperation, RoseConstant
+from RoseValues import RoseOperation, RoseConstant, RoseUndefValue
 
 
 class RoseReturnOp(RoseOperation):
@@ -40,6 +40,9 @@ class RoseReturnOp(RoseOperation):
   def solve(self):
     # Cannot solve return ops
     return None
+
+  def simplify(self):
+    return RoseUndefValue()
 
 
 class RoseCallOp(RoseOperation):
@@ -96,6 +99,9 @@ class RoseCallOp(RoseOperation):
     # Cannot solve calls
     return None
 
+  def simplify(self):
+    return RoseUndefValue()
+
 
 class RoseSelectOp(RoseOperation):
   def __init__(self, Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, ParentBlock):
@@ -125,6 +131,15 @@ class RoseSelectOp(RoseOperation):
     # Cannot solve select ops.
     # TODO: Support simplification for select ops.
     return None
+
+  def simplify(self):
+    Condition = self.getOperand(0) 
+    if isinstance(Condition, RoseConstant):
+      if Condition.getValue() == 1:
+        return self.getOperand(1)
+      assert  Condition.getValue() == 0
+      return self.getOperand(2)
+    return RoseUndefValue()
 
 
 class RoseCastOp(RoseOperation):
@@ -174,6 +189,10 @@ class RoseCastOp(RoseOperation):
     # TODO: Support simplification for casts
     return None
 
+  def simplify(self):
+    # Cannot simplify
+    return RoseUndefValue()
+
 
 class RoseAbsOp(RoseOperation):
   def __init__(self, Name : str, Operand : RoseValue, ParentBlock):
@@ -191,7 +210,13 @@ class RoseAbsOp(RoseOperation):
       return None
     return abs(self.getOperand(0).getValue())
 
-
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+  
 
 ######################################## ARITHMETIC OPERATORS ###########################
 
@@ -218,6 +243,26 @@ class RoseAddOp(RoseOperation):
         Result += Operand.getValue()
     return Result
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      print("ADD Operand:")
+      Operand.print()
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    return Result
+
 
 class RoseSubOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -241,6 +286,26 @@ class RoseSubOp(RoseOperation):
         Result -= Operand.getValue()
     return Result
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Index, Operand in enumerate(self.getOperands()):
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      # Must be the first operand for this to be simplifiable
+      if isinstance(Result, RoseUndefValue) and Index == 0:
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    # Not the final result
+    return Result
+
 
 class RoseMulOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -258,10 +323,31 @@ class RoseMulOp(RoseOperation):
     for Index, Operand in enumerate(self.getOperands()):
       if not isinstance(Operand, RoseConstant):
         return None
+      # If any operand is zero, we can safely say that result is zero
+      if Operand.getValue() == 0:
+        return 0
       if Index == 0:
         Result = Operand.getValue()
       else:
         Result *= Operand.getValue()
+    return Result
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() != 1:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
     return Result
 
 
@@ -281,10 +367,24 @@ class RoseDivOp(RoseOperation):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
+    # If the numerator is zero, the result is zero
+    if self.getOperand(0).getValue() == 0:
+      return 0
     if not isinstance(self.getOperand(1), RoseConstant):
       return None
     return (self.getOperand(0).getValue() / self.getOperand(1).getValue())
   
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if the denominator is 1, the result is the numerator
+    if isinstance(self.getOperand(1), RoseConstant)  \
+      and self.getOperand(1).getValue() == 1:
+      return self.getOperand(0)
+    return RoseUndefValue()
+
 
 class RoseRemOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -307,6 +407,17 @@ class RoseRemOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() % self.getOperand(1).getValue())
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if the denominator is 1, the result is the numerator
+    if isinstance(self.getOperand(1), RoseConstant)  \
+      and self.getOperand(1).getValue() == 1:
+      return self.getOperand(0)
+    return RoseUndefValue()
+
 
 class RoseModOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -328,6 +439,16 @@ class RoseModOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() % self.getOperand(1).getValue())
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if the denominator is 1, the result is the numerator
+    if isinstance(self.getOperand(1), RoseConstant)  \
+      and self.getOperand(1).getValue() == 1:
+      return self.getOperand(0)
+    return RoseUndefValue()
 
 
 ############################# COMPARISON OPERATORS ###################################
@@ -351,6 +472,13 @@ class RoseEQOp(RoseOperation):
     if not isinstance(self.getOperand(1), RoseConstant):
       return None
     return (self.getOperand(0).getValue() == self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseNEQOp(RoseOperation):
@@ -387,6 +515,13 @@ class RoseNEQOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() != self.getOperand(1).getValue())
 
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseLTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -407,6 +542,13 @@ class RoseLTOp(RoseOperation):
     if not isinstance(self.getOperand(1), RoseConstant):
       return None
     return (self.getOperand(0).getValue() < self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseLEOp(RoseOperation):
@@ -429,6 +571,13 @@ class RoseLEOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() <= self.getOperand(1).getValue())
 
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseGTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -450,6 +599,13 @@ class RoseGTOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() > self.getOperand(1).getValue())
 
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseGEOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -470,6 +626,13 @@ class RoseGEOp(RoseOperation):
     if not isinstance(self.getOperand(1), RoseConstant):
       return None
     return (self.getOperand(0).getValue() >= self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 
@@ -499,6 +662,13 @@ class RoseMinOp(RoseOperation):
           Result = Operand.getValue()
     return Result
 
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseMaxOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -523,6 +693,12 @@ class RoseMaxOp(RoseOperation):
           Result = Operand.getValue()
     return Result
 
+  def simplify(self):
+    # Try solving the operation 
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 ######################################## BOOLEAN OPERATORS ###########################
@@ -547,6 +723,13 @@ class RoseNotOp(RoseOperation):
       return None
     return ~(self.getOperand(0).getValue())
 
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseAndOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -568,6 +751,26 @@ class RoseAndOp(RoseOperation):
         Result = Operand.getValue()
       else:
         Result &= Operand.getValue()
+    return Result
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 0:
+          return RoseConstant(0, self.getType())
+        if Operand.getValue() != 1:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
     return Result
 
 
@@ -594,6 +797,28 @@ class RoseNandOp(RoseOperation):
     # Not the final result
     return ~Result
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 0:
+          # Not the result
+          return RoseConstant(1, self.getType())
+        if Operand.getValue() != 1:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    # Not the result
+    return RoseNotOp.create("not." + Result.getName(), Result)
+
 
 class RoseOrOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -615,6 +840,26 @@ class RoseOrOp(RoseOperation):
         Result = Operand.getValue()
       else:
         Result |= Operand.getValue()
+    return Result
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 1:
+          return RoseConstant(1, self.getType())
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
     return Result
 
 
@@ -641,6 +886,28 @@ class RoseNorOp(RoseOperation):
     # Not the final result
     return ~Result
 
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 1:
+          # Not the result
+          return RoseConstant(0, self.getType())
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    # Not the final result
+    return RoseNotOp.create("not." + Result.getName(), Result)
+
 
 class RoseXorOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -662,8 +929,24 @@ class RoseXorOp(RoseOperation):
       return None
     return (self.getOperand(0).getValue() ^ self.getOperand(1).getValue())
 
-
-
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    # Not the final result
+    return Result
 
 
 

@@ -261,6 +261,10 @@ class RoseOperation(RoseValue):
     assert False, "Illegal number of arguments to replaceUsesWith"
 
   # Subclass must implement this
+  def simplify(self):
+    NotImplemented
+
+  # Subclass must implement this
   def solve(self):
     NotImplemented
 
