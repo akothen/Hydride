@@ -55,5 +55,12 @@ x86Types = {
     'unsigned __int32': RoseType.getBitVectorTy(32),
     'unsigned __int64': RoseType.getBitVectorTy(64),
     '_MM_PERM_ENUM': RoseType.getBitVectorTy(8),
+
+    'bit': RoseType.getBitVectorTy(1),
+    'byte': RoseType.getBitVectorTy(8),
+    'word': RoseType.getBitVectorTy(16),
+    'dword': RoseType.getBitVectorTy(32),
+    'qword': RoseType.getBitVectorTy(64),
+    'm128': RoseType.getBitVectorTy(128),
 }
 
