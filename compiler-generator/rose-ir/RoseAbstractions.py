@@ -202,11 +202,11 @@ class RoseFunction(RoseValue, RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACES USES IN FUNCTION")
+    assert not isinstance(Abstraction, RoseUndefValue)
+    assert not isinstance(NewAbstraction, RoseUndefValue)
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
-    assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument) \
-        or isinstance(NewAbstraction, RoseConstant)
+    assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -328,11 +328,11 @@ class RoseBlock(RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN BLOCK")
+    assert not isinstance(Abstraction, RoseUndefValue)
+    assert not isinstance(NewAbstraction, RoseUndefValue)
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
-    assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument) \
-        or isinstance(NewAbstraction, RoseConstant)
+    assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -541,11 +541,11 @@ class RoseForLoop(RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN LOOP")
+    assert not isinstance(Abstraction, RoseUndefValue)
+    assert not isinstance(NewAbstraction, RoseUndefValue)
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
-    assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument) \
-        or isinstance(NewAbstraction, RoseConstant)
+    assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -719,11 +719,11 @@ class RoseCond(RoseRegion):
   def replaceUsesWith(self, Abstraction, NewAbstraction, Key = None):
     if Key != None:
       print("REPLACES USES IN FUNCTION")
+      assert not isinstance(Abstraction, RoseUndefValue)
+      assert not isinstance(NewAbstraction, RoseUndefValue)
       assert isinstance(Abstraction, RoseOperation) \
           or isinstance(Abstraction, RoseArgument)
-      assert isinstance(NewAbstraction, RoseOperation) \
-          or isinstance(NewAbstraction, RoseArgument) \
-          or isinstance(NewAbstraction, RoseConstant)
+      assert isinstance(NewAbstraction, RoseValue)
       assert Abstraction.getType() == NewAbstraction.getType()
       for Child in self.getChildren()[Key]:
         assert self.isChildValid(Child)
