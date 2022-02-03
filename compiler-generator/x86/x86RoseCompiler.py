@@ -1482,13 +1482,13 @@ def CompileLookup(LookupExpr, Context : x86RoseContext):
       FoundValue = Context.getCompiledAbstractionForID(ID)
       # See if the element type of this variable is known, if not add it.
       if Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False:
-        Context.addElemTypeOfVariable(FoundValue.getName(), Strides[LookupExpr.key])
+        Context.addElemTypeOfVariable(FoundValue.getName(), x86Types[LookupExpr.key])
       return FoundValue
     # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
     CompiledValue = RoseValue.create(LookupExpr.obj.name, Context.getMaxVectorLength())
     # Add the element type info to the context
     assert Context.isElemTypeOfVariableKnown(LookupExpr.obj.name) == False
-    Context.addElemTypeOfVariable(CompiledValue.getName(), Strides[LookupExpr.key])
+    Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
     # Add the variable info to the context
     Context.addVariable(LookupExpr.obj.name, LookupExpr.obj.id)
   else:
@@ -1496,7 +1496,7 @@ def CompileLookup(LookupExpr, Context : x86RoseContext):
     # Compile the bit slice
     CompiledValue = CompileExpression(LookupExpr.obj, Context)
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
-      Context.addElemTypeOfVariable(CompiledValue.getName(), Strides[LookupExpr.key])
+      Context.addElemTypeOfVariable(CompiledValue.getName(), x86Types[LookupExpr.key])
   
   # Add the typelookup to context
   Context.addCompiledAbstraction(LookupExpr.obj.id, CompiledValue)
@@ -1992,16 +1992,6 @@ def NeedToExtendOperandSize(Op):
 # These are binary ops whose output type is not the same
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
-
-# Strides definitions
-Strides = {
-  'bit': RoseType.getBitVectorTy(1),
-  'byte': RoseType.getBitVectorTy(8),
-  'word': RoseType.getBitVectorTy(16),
-  'dword': RoseType.getBitVectorTy(32),
-  'qword': RoseType.getBitVectorTy(64),
-  'm128': RoseType.getBitVectorTy(128),
-}
 
 
 def Compile():
