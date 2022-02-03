@@ -14,26 +14,40 @@ from RoseOperations import *
 from RoseBitVectorOperations import *
 
 
-def SimplifyConstantOperations(Block : RoseBlock):
-  print("SIMPLIFY CONSTANT OPERATIONS")
-  # Gather mapping between simplifiable ops and the simplified results
-  OpToConstantVal = dict()
+def SimplifyOperations(Block : RoseBlock):
+  print("SIMPLIFY OPERATIONS")
+  # Gather mapping between simplifiable ops and the simplified op
+  OpToSimplifiedOp = dict()
   OpList = list()
+  print("==============================================")
   for Operation in Block:
-    Constant = Operation.simplify()
-    if Constant != None:
+    SimplifiedOp = Operation.simplify()
+    Operation.print()
+    print("SIMPLIFIED OP:")
+    print(SimplifiedOp)
+    SimplifiedOp.print()
+    if not isinstance(SimplifiedOp, RoseUndefValue):
+      print("PUT")
       OpList.append(Operation)
-      # If constant can be an integer, then make it
-      if type(Constant) != int:
-        if int(Constant) == Constant:
-          Constant = int(Constant)
-      OpToConstantVal[Operation] = RoseConstant(Constant, Operation.getType())
+      OpToSimplifiedOp[Operation] = SimplifiedOp
+      Operation.print()
+      print("-->")
+      SimplifiedOp.print()
   # Now replace the uses of the ops that can be simplified and delete the ops
   for Operation in OpList:
-    Constant = OpToConstantVal[Operation]
-    Operation.replaceUsesWith(Constant)
+    Operation.print()
+    print("-----SIMPLIFIED OP:")
+    print(SimplifiedOp)
+    SimplifiedOp.print()
+    SimplifiedOp = OpToSimplifiedOp[Operation]
+    Operation.print()
+    print("-->")
+    SimplifiedOp.print()
+    if isinstance(SimplifiedOp, RoseOperation):
+      Block.addOperationBefore(SimplifiedOp, Operation)
+    Operation.replaceUsesWith(SimplifiedOp)
     Block.eraseOperation(Operation)
-  print("SIMPLIFY CONSTANT OPERATIONS DONE")
+  print("SIMPLIFY OPERATIONS DONE")
 
 
 def RunOpSimplifyOnBlock(Block : RoseBlock):
@@ -42,7 +56,7 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
   print(Block)
   Block.print()
   # Time to simplify some instructions that can be simplified
-  SimplifyConstantOperations(Block) 
+  SimplifyOperations(Block) 
 
   # Gather all the truncate and extract ops in this block
   OpList = list()
@@ -142,6 +156,9 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
         # IMPORTANT: Remove the second extract before removing the first one
         Block.eraseOperation(SecondExtractOp)
         Block.eraseOperation(FirstExtractOp)
+
+  # Time to simplify some instructions that can be simplified
+  SimplifyOperations(Block) 
 
 
 def RunOpSimplifyOnRegion(Region):
