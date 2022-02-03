@@ -37,8 +37,8 @@ class RoseReturnOp(RoseOperation):
     String = Spaces + "(" + self.getReturnedValue().getName() + ")\n"
     return String
 
-  def simplify(self):
-    # Cannot simplify return ops
+  def solve(self):
+    # Cannot solve return ops
     return None
 
 
@@ -92,8 +92,8 @@ class RoseCallOp(RoseOperation):
     String += " )"
     print(String)
   
-  def simplify(self):
-    # Cannot simplify calls
+  def solve(self):
+    # Cannot solve calls
     return None
 
 
@@ -121,8 +121,8 @@ class RoseSelectOp(RoseOperation):
     assert "No direction convertion of Select Op to Rosette!"
     NotImplemented
 
-  def simplify(self):
-    # Cannot simplify select ops.
+  def solve(self):
+    # Cannot solve select ops.
     # TODO: Support simplification for select ops.
     return None
 
@@ -169,8 +169,8 @@ class RoseCastOp(RoseOperation):
     String += " " + self.getOperand(0).getName() + " " + str(self.getOperand(1))
     print(String)
 
-  def simplify(self):
-    # Cannot simplify casts.
+  def solve(self):
+    # Cannot solve casts.
     # TODO: Support simplification for casts
     return None
 
@@ -185,7 +185,7 @@ class RoseAbsOp(RoseOperation):
   def create(Name : str, Operand : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseAbsOp(Name, Operand, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operand is constant
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -206,7 +206,7 @@ class RoseAddOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseAddOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -229,7 +229,7 @@ class RoseSubOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseSubOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -252,7 +252,7 @@ class RoseMulOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMulOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -277,7 +277,7 @@ class RoseDivOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseDivOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -299,7 +299,7 @@ class RoseRemOp(RoseOperation):
     return RoseRemOp(Name, Operand1, Operand2, ParentBlock)
   
   # TODO: Double check this
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -320,7 +320,7 @@ class RoseModOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseModOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -344,7 +344,7 @@ class RoseEQOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseEQOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -379,7 +379,7 @@ class RoseNEQOp(RoseOperation):
     String += " )))\n"
     return String
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -400,7 +400,7 @@ class RoseLTOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseLTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -421,7 +421,7 @@ class RoseLEOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseLEOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -442,7 +442,7 @@ class RoseGTOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseGTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -463,7 +463,7 @@ class RoseGEOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseGEOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -486,7 +486,7 @@ class RoseMinOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMinOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -510,7 +510,7 @@ class RoseMaxOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMaxOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -541,7 +541,7 @@ class RoseNotOp(RoseOperation):
   def getInputValue(self):
     return self.getOperand(0)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None
@@ -558,7 +558,7 @@ class RoseAndOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseAndOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -581,7 +581,7 @@ class RoseNandOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseNandOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -605,7 +605,7 @@ class RoseOrOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseOrOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -628,7 +628,7 @@ class RoseNorOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseNorOp(Name, Operands, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if all the operands are constants
     Result = None
     for Index, Operand in enumerate(self.getOperands()):
@@ -654,7 +654,7 @@ class RoseXorOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
 
-  def simplify(self):
+  def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
       return None

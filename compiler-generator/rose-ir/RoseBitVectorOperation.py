@@ -59,9 +59,9 @@ class RoseBitVectorOp(RoseOperation):
     assert Type.isBooleanTy()
     return 1
 
-  # Nothing to simplify for 
+  # Nothing to solve for 
   # bitvector operations
-  def simplify(self):
+  def solve(self):
     return None
 
 
