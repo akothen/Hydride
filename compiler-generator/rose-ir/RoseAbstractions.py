@@ -205,7 +205,8 @@ class RoseFunction(RoseValue, RoseRegion):
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
     assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument)
+        or isinstance(NewAbstraction, RoseArgument) \
+        or isinstance(NewAbstraction, RoseConstant)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -240,7 +241,7 @@ class RoseFunction(RoseValue, RoseRegion):
     # Print function signature first
     Func_Sig = Spaces + "function " + self.getName() + " ("
     for Index, Arg in enumerate(self.ArgList):
-      Func_Sig += (" " + str(Arg.getType()) + Arg.getName())
+      Func_Sig += (" " + str(Arg.getType()) + " " + Arg.getName())
       if Index != len(self.ArgList) - 1:
         Func_Sig += ","
     Func_Sig += " ) {"
@@ -330,7 +331,8 @@ class RoseBlock(RoseRegion):
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
     assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument)
+        or isinstance(NewAbstraction, RoseArgument) \
+        or isinstance(NewAbstraction, RoseConstant)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -542,7 +544,8 @@ class RoseForLoop(RoseRegion):
     assert isinstance(Abstraction, RoseOperation) \
         or isinstance(Abstraction, RoseArgument)
     assert isinstance(NewAbstraction, RoseOperation) \
-        or isinstance(NewAbstraction, RoseArgument)
+        or isinstance(NewAbstraction, RoseArgument) \
+        or isinstance(NewAbstraction, RoseConstant)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -719,7 +722,8 @@ class RoseCond(RoseRegion):
       assert isinstance(Abstraction, RoseOperation) \
           or isinstance(Abstraction, RoseArgument)
       assert isinstance(NewAbstraction, RoseOperation) \
-          or isinstance(NewAbstraction, RoseArgument)
+          or isinstance(NewAbstraction, RoseArgument) \
+          or isinstance(NewAbstraction, RoseConstant)
       assert Abstraction.getType() == NewAbstraction.getType()
       for Child in self.getChildren()[Key]:
         assert self.isChildValid(Child)

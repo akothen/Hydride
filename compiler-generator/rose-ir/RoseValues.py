@@ -260,6 +260,10 @@ class RoseOperation(RoseValue):
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
 
+  # Subclass must implement this
+  def simplify(self):
+    NotImplemented
+
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -271,7 +275,7 @@ class RoseOperation(RoseValue):
         String += " " + Operand.getName() 
         if Index != len(self.getOperands()) - 1:
           String += " "
-    String += ")\n"
+    String += "))\n"
     return String
 
   def print(self, NumSpace = 0):
