@@ -471,7 +471,7 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   Context.addCompiledAbstraction(IndexExpr.id, Operation)
   print(IndexExpr.id)
   print("==================================")
-  Operation.getType().print()
+  Operation.print()
 
   return Operation
 
@@ -600,7 +600,8 @@ def GetExpressionType(Expr, Context : HexRoseContext):
       Variable = Expr.obj.obj
       if not Context.isVariableDefined(Variable.name):
         return RoseType.getUndefTy()
-      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      if not Context.isElemTypeOfVariableKnown(Variable.name):
+        return RoseType.getUndefTy()
       ID = Context.getVariableID(Variable.name)
       BitVector = Context.getCompiledAbstractionForID(ID)
     else:
@@ -611,7 +612,8 @@ def GetExpressionType(Expr, Context : HexRoseContext):
       Variable = BitIndexVar.obj.obj
       if not Context.isVariableDefined(Variable.name):
         return RoseType.getUndefTy()
-      assert Context.isElemTypeOfVariableKnown(Variable.name) == True
+      if not Context.isElemTypeOfVariableKnown(Variable.name):
+        return RoseType.getUndefTy()
       ID = Context.getVariableID(Variable.name)
       BitVector = Context.getCompiledAbstractionForID(ID)
     if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
@@ -1276,14 +1278,17 @@ def CompileElemTypeInfo(ElemTypeInfo, Context : HexRoseContext):
   print("COMPILE TYPELOOKUP")
   print("TYPELOOKUP:")
   print(ElemTypeInfo)
+  print(ElemTypeInfo.elemtype)
   # ElemTypeInfo tracks types of variables
   if type(ElemTypeInfo.obj) == Var:
     # Check if the variable is already defined and cached. If yes, just return that.
     if Context.isVariableDefined(ElemTypeInfo.obj.name):
-      # Element type of this variable must already exist
-      assert Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == True
       ID = Context.getVariableID(ElemTypeInfo.obj.name)
-      return Context.getCompiledAbstractionForID(ID)
+      FoundValue = Context.getCompiledAbstractionForID(ID)
+      # See if the element type of this variable is known, if not add it.
+      if Context.isElemTypeOfVariableKnown(ElemTypeInfo.obj.name) == False:
+        Context.addElemTypeOfVariable(FoundValue.getName(), HexTypes[ElemTypeInfo.elemtype])
+      return FoundValue
     # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
     CompiledValue = RoseValue.create(ElemTypeInfo.obj.name, Context.getMaxVectorLength())
     # Add the element type info to the context
@@ -1295,6 +1300,8 @@ def CompileElemTypeInfo(ElemTypeInfo, Context : HexRoseContext):
     assert type(ElemTypeInfo.obj) == BitIndex or type(ElemTypeInfo.obj) == BitSlice
     # Compile the bit slice
     CompiledValue = CompileExpression(ElemTypeInfo.obj, Context)
+    print("CompiledValue:")
+    CompiledValue.print()
     if Context.isElemTypeOfVariableKnown(CompiledValue.getName()) == False:
       Context.addElemTypeOfVariable(CompiledValue.getName(), HexTypes[ElemTypeInfo.elemtype])
   
@@ -1334,7 +1341,7 @@ def CompileSemantics(Sema):
     assert type(Param) == ElemTypeInfo
     ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
-    RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
+    #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
       ParamsIDs.append(Param.obj.id)
       ParamValues.append(ParamVal)
@@ -1359,8 +1366,8 @@ def CompileSemantics(Sema):
   # Add return value to the root context
   ReturnID = "return." + RootFunction.getReturnValue().getName()
   RootContext.addVariable(RootFunction.getReturnValue().getName(), ReturnID)
-  RootContext.addElemTypeOfVariable(RootFunction.getReturnValue().getName(), \
-                                    HexTypes[Sema.rettype])
+  #RootContext.addElemTypeOfVariable(RootFunction.getReturnValue().getName(), \
+  #                                  HexTypes[Sema.rettype])
   RootContext.addCompiledAbstraction(ReturnID, RootFunction.getReturnValue())
 
   # Add the parameter values to the root context
@@ -2368,7 +2375,6 @@ test105 = {
 
 
 if __name__ == '__main__':
-  Compile(test105)
-
+  Compile(test86)
 
 
