@@ -889,12 +889,15 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                    OuterIndex.getType())
       InnerCoFactor = RoseConstant(InnerBitIndexType.getBitwidth(),\
                                    InnerIndex.getType())
-      OuterLowIndex = RoseMulOp.create("low.insert." + BitVector.getName() + "." \
-                              + OuterIndex.getName(), [OuterCoFactor, OuterIndex])
-      InnerLowIndex = RoseMulOp.create("low.insert." + BitVector.getName() + "." \
-                              + InnerIndex.getName(), [InnerCoFactor, InnerIndex])
+      OuterLowIndex = RoseMulOp.create("low.out.insert." + BitVector.getName() + "." \
+                              + OuterIndex.getName() + "." + InnerBitIndex.id, \
+                                [OuterCoFactor, OuterIndex])
+      InnerLowIndex = RoseMulOp.create("low.in.insert." + BitVector.getName() + "." \
+                              + InnerIndex.getName() + "." + InnerBitIndex.id, \
+                                [InnerCoFactor, InnerIndex])
       LowIndex = RoseAddOp.create("low.insert." + BitVector.getName() + "." \
-                              + OuterIndex.getName() + "." + InnerIndex.getName(), \
+                              + OuterIndex.getName() + "." + InnerIndex.getName() \
+                                + "." + InnerBitIndex.id, \
                                 [OuterLowIndex, InnerLowIndex])
       HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
                                         + BitVector.getName() + "." + Update.lhs.id, \
