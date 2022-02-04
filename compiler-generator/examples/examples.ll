@@ -299,13 +299,35 @@ function vnni_dot_product (%src, %a, %b, %vector_length, %lane_size, %precision,
   ret %dst
 }
 
+function vnni_dot_product (%src, %a, %b) {
+  for ([%i (range 0 512 32)]) {
+    %dst.high.idx = add %i, 31
+    %ext.src = bvextract %src, %i, %dst.high.idx, 32
+    bvinsert %ext.src, %dst, %i, %dst.high.idx, 32
+    for ([%j (range  0 %lane_size %precision)]) {
+      %low.index = add %i, %j
+      %high.index = add %low.index, 7
+      %ext.a = bvextract %a, %low.index, %high.index, 8
+      %zext.a = bvzeroextend %ext.a, 16
+      %ext.b = bvextract %b, %low.index, %high.index, 8
+      %sext.b = bvsignextend %ext.b, 16
+      %dot = bvmul %zext.a, %sext.b
+      %sext.dot = bvsignextend %dot, 32
+      %prev.dst = bvextract %dst, %i, %dst.high.idx, 32
+      %acc = bvadd %prev.dst, %sext.dot
+      bvinsert %acc, %dst, %i, %dst.high.idx, 32
+    }
+  }
+  ret %dst
+}
+
 
 function vrmpy_dot_product (%Vx, %Vu, %Vv, %vector_length, %lane_size, %precision, %extend_size) {
   for ([%i (range 0 %vector_length %lane_size)]) {
     %lane_last_idx = sub %lane_size, 1
-    %Vx.high.idx = add %i, %lane_last_idx
-    %ext.Vx = bvextract %Vx, %i, %Vx.high.idx, %lane_size
-    bvinsert %ext.Vx, %Vx, %i, %Vx.high.idx, %lane_size
+    %dst.high.idx = add %i, %lane_last_idx
+    %ext.Vx = bvextract %Vx, %i, %dst.high.idx, %lane_size
+    bvinsert %ext.Vx, %dst, %i, %dst.high.idx, %lane_size
     for ([%j (range  0 %lane_size %precision)]) {
       %elem_last_idx = sub %precision, 1
       %low.index = add %i, %j
@@ -316,14 +338,36 @@ function vrmpy_dot_product (%Vx, %Vu, %Vv, %vector_length, %lane_size, %precisio
       %sext.Vv = bvsignextend %ext.Vv, %extend_size
       %dot = bvmul %zext.Vu, %sext.Vv
       %sext.dot = bvsignextend %dot, %lane_size
-      %prev.Vx = bvextract %Vx, %i, %Vx.high.idx, %lane_size
-      %acc = bvadd %prev.Vx, %sext.dot
-      bvinsert %acc, %Vx, %i, %Vx.high.idx, %lane_size
+      %prev.dst = bvextract %dst, %i, %dst.high.idx, %lane_size
+      %acc = bvadd %prev.dst, %sext.dot
+      bvinsert %acc, %dst, %i, %dst.high.idx, %lane_size
     }
   }
-  ret %Vx
+  ret %dst
 }
 
+
+function vrmpy_dot_product (%Vx, %Vu, %Vv) {
+  for ([%i (range 0 1024 32)]) {
+    %dst.high.idx = add %i, 31
+    %ext.Vx = bvextract %Vx, %i, %dst.high.idx, 32
+    bvinsert %ext.Vx, %dst, %i, %dst.high.idx, 32
+    for ([%j (range  0 32 8)]) {
+      %low.index = add %i, %j
+      %high.index = add %low.index, 7
+      %ext.Vu = bvextract %Vu, %low.index, %high.index, 8
+      %zext.Vu = bvzeroextend %ext.Vu, 16
+      %ext.Vv = bvextract %Vv, %low.index, %high.index, 8
+      %sext.Vv = bvsignextend %ext.Vv, 16
+      %dot = bvmul %zext.Vu, %sext.Vv
+      %sext.dot = bvsignextend %dot, 32
+      %prev.dst = bvextract %dst, %i, %dst.high.idx, 32
+      %acc = bvadd %prev.dst, %sext.dot
+      bvinsert %acc, %dst, %i, %dst.high.idx, 32
+    }
+  }
+  ret %dst
+}
 
 
 
