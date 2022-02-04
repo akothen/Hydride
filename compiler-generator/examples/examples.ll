@@ -273,6 +273,59 @@ function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %prec
 
 
 
+;; Add some examples of generated dot product instruction semantics
+
+function vnni_dot_product (%src, %a, %b, %vector_length, %lane_size, %precision, %extend_size) {
+  for ([%i (range 0 %vector_length %lane_size)]) {
+    %lane_last_idx = sub %lane_size, 1
+    %dst.high.idx = add %i, %lane_last_idx
+    %ext.src = bvextract %src, %i, %dst.high.idx, %lane_size
+    bvinsert %ext.src, %dst, %i, %dst.high.idx, %lane_size
+    for ([%j (range  0 %lane_size %precision)]) {
+      %elem_last_idx = sub %precision, 1
+      %low.index = add %i, %j
+      %high.index = add %low.index, %elem_last_idx
+      %ext.a = bvextract %a, %low.index, %high.index, %precision
+      %zext.a = bvzeroextend %ext.a, %extend_size
+      %ext.b = bvextract %b, %low.index, %high.index, %precision
+      %sext.b = bvsignextend %ext.b, %extend_size
+      %dot = bvmul %zext.a, %sext.b
+      %sext.dot = bvsignextend %dot, %lane_size
+      %prev.dst = bvextract %dst, %i, %dst.high.idx, %lane_size
+      %acc = bvadd %prev.dst, %sext.dot
+      bvinsert %acc, %dst, %i, %dst.high.idx, %lane_size
+    }
+  }
+  ret %dst
+}
+
+
+function vrmpy_dot_product (%Vx, %Vu, %Vv, %vector_length, %lane_size, %precision, %extend_size) {
+  for ([%i (range 0 %vector_length %lane_size)]) {
+    %lane_last_idx = sub %lane_size, 1
+    %Vx.high.idx = add %i, %lane_last_idx
+    %ext.Vx = bvextract %Vx, %i, %Vx.high.idx, %lane_size
+    bvinsert %ext.Vx, %Vx, %i, %Vx.high.idx, %lane_size
+    for ([%j (range  0 %lane_size %precision)]) {
+      %elem_last_idx = sub %precision, 1
+      %low.index = add %i, %j
+      %high.index = add %low.index, %elem_last_idx
+      %ext.Vu = bvextract %Vu, %low.index, %high.index, %precision
+      %zext.Vu = bvzeroextend %ext.Vu, %extend_size
+      %ext.Vv = bvextract %Vv, %low.index, %high.index, %precision
+      %sext.Vv = bvsignextend %ext.Vv, %extend_size
+      %dot = bvmul %zext.Vu, %sext.Vv
+      %sext.dot = bvsignextend %dot, %lane_size
+      %prev.Vx = bvextract %Vx, %i, %Vx.high.idx, %lane_size
+      %acc = bvadd %prev.Vx, %sext.dot
+      bvinsert %acc, %Vx, %i, %Vx.high.idx, %lane_size
+    }
+  }
+  ret %Vx
+}
+
+
+
 
 
 
