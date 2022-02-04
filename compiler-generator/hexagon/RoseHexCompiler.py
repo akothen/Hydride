@@ -791,14 +791,6 @@ def CompileUpdate(Update, Context : HexRoseContext):
   print("COMPILED RHS")
   RHSExprVal.print()
 
-  # There are some cases where RHS is just a constant value.
-  # This has to handled especially because constants' IDs are not
-  # cached into the context, but here we have to.
-  #if isinstance(RHSExprVal, RoseConstant):
-  # We add this assignment to the 
-  # Add the constant ID to the context
-  #Context.addCompiledAbstraction(Update.rhs.id, RHSExprVal)
-
   if type(Update.lhs) == Var:
     # Get the ID associated with the RHS value
     ID = Update.rhs.id
@@ -872,51 +864,128 @@ def CompileUpdate(Update, Context : HexRoseContext):
   else:
     # This could be a mask generator
     assert type(Update.lhs) == BitIndex
-    # Compile the low index
-    LowIndex = CompileExpression(Update.lhs.idx, Context)
-    print("---INDEX:")
-    print(LowIndex)
-    LowIndex.print()
-    # Compile the vector
-    BitVector = CompileExpression(Update.lhs.obj, Context)
-    print("---VECTOR:")
-    print(BitVector)
-    BitVector.print()
-    print("---RHSExprVal:")
-    print(RHSExprVal)
-    RHSExprVal.print()
-    RHSExprVal.getType().print()
-    # Get the high index
-    assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
-    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
-    assert ElemType.isBitVectorTy()
-    IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-    HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
-                                      + BitVector.getName() + "." + Update.lhs.id, \
-                                      [LowIndex, IndexDiff])
-    # Add this add op to the IR and the context
-    Context.addAbstractionToIR(HighIndex)
-    Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
-    # The bit slice size here is 1 bit
-    BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
-    # Sometimes size extension of the RHS is required, so we have to handle it here
-    if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
-      # Let's sign-extend
-      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
-                    RHSExprVal, ElemType.getBitwidth())
+    assert type(Update.lhs.obj) == ElemTypeInfo
+    # Check for nested bit indices
+    InnerBitIndex = Update.lhs.obj.obj
+    if type(InnerBitIndex) == BitIndex:
+      # Compile the innermost bit index first
+      OuterBitIndex = Update.lhs
+      OuterBitIndexType = HexTypes[OuterBitIndex.obj.elemtype]
+      InnerBitIndexType = HexTypes[InnerBitIndex.obj.elemtype]
+      OuterIndex = CompileExpression(OuterBitIndex.idx, Context)
+      InnerIndex = CompileExpression(InnerBitIndex.idx, Context)
+      print("OuterBitIndex:")
+      print(OuterBitIndex)
+      print("InnerBitIndex:")
+      print(InnerBitIndex)
+      print("OuterBitIndexType:")
+      OuterBitIndexType.print()
+      print("InnerBitIndexType:")
+      InnerBitIndexType.print()
+      assert type(InnerBitIndex.obj.obj) == Var
+      BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
+      # First compute the low index
+      OuterCoFactor = RoseConstant(OuterBitIndexType.getBitwidth(),\
+                                   OuterIndex.getType())
+      InnerCoFactor = RoseConstant(InnerBitIndexType.getBitwidth(),\
+                                   InnerIndex.getType())
+      OuterLowIndex = RoseMulOp.create("low.insert." + BitVector.getName() + "." \
+                              + OuterIndex.getName(), [OuterCoFactor, OuterIndex])
+      InnerLowIndex = RoseMulOp.create("low.insert." + BitVector.getName() + "." \
+                              + InnerIndex.getName(), [InnerCoFactor, InnerIndex])
+      LowIndex = RoseAddOp.create("low.insert." + BitVector.getName() + "." \
+                              + OuterIndex.getName() + "." + InnerIndex.getName(), \
+                                [OuterLowIndex, InnerLowIndex])
+      HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
+                                        + BitVector.getName() + "." + Update.lhs.id, \
+                                        [LowIndex, InnerCoFactor])
+      # Add the generated ops to the IR and the context
+      Context.addAbstractionToIR(OuterLowIndex)
+      Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
+      Context.addAbstractionToIR(InnerLowIndex)
+      Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
+      print("OuterLowIndex:")
+      OuterLowIndex.print()
+      print("InnerLowIndex:")
+      InnerLowIndex.print()
+      print("LOW INDEX: ")
+      LowIndex.print()
+      print("HIGH INDEX:")
+      HighIndex.print()
+      # Generate value for bitwidth
+      BitwidthValue = InnerCoFactor
+      # Now generate the bvinsert op
+      # Sometimes size extension of the RHS is required, so we have to handle it here
+      if RHSExprVal.getType().getBitwidth() < BitwidthValue.getType().getBitwidth():
+        # Let's sign-extend
+        RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                      RHSExprVal, BitwidthValue.getType().getBitwidth())
+        # Add this add op to the IR and the context
+        Context.addAbstractionToIR(RHSExprVal)
+        Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+      elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getType().getBitwidth():
+        RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                      RHSExprVal, BitwidthValue.getType().getBitwidth())
+        # Add this add op to the IR and the context
+        Context.addAbstractionToIR(RHSExprVal)
+        Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+      # Compile the op
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
+      print("---BIT SLICE INSERT OP:")
+      LHSOp.print()
+      # Add this op to context for the inner bitindex
+      print(InnerBitIndex)
+      Context.addCompiledAbstraction(InnerBitIndex.id, LHSOp)
+    else:
+      # Compile the low index
+      LowIndex = CompileExpression(Update.lhs.idx, Context)
+      print("---INDEX:")
+      print(LowIndex)
+      LowIndex.print()
+      BitVector = CompileExpression(Update.lhs.obj, Context)
+      print("---VECTOR:")
+      print(BitVector)
+      BitVector.print()
+      print("---RHSExprVal:")
+      print(RHSExprVal)
+      RHSExprVal.print()
+      RHSExprVal.getType().print()
+      # Get the high index
+      assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+      ElemType = Context.getElemTypeOfVariable(BitVector.getName())
+      assert ElemType.isBitVectorTy()
+      IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+      HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
+                                        + BitVector.getName() + "." + Update.lhs.id, \
+                                        [LowIndex, IndexDiff])
       # Add this add op to the IR and the context
-      Context.addAbstractionToIR(RHSExprVal)
-      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
-    elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
-      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
-                    RHSExprVal, ElemType.getBitwidth())
-      # Add this add op to the IR and the context
-      Context.addAbstractionToIR(RHSExprVal)
-      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
-    # Compile the op
-    LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
-    print("---BIT SLICE INSERT OP:")
-    LHSOp.print()
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+      # Generate value for bitwidth
+      BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+      # Now generate the bvinsert op
+      # Sometimes size extension of the RHS is required, so we have to handle it here
+      if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
+        # Let's sign-extend
+        RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+                      RHSExprVal, ElemType.getBitwidth())
+        # Add this add op to the IR and the context
+        Context.addAbstractionToIR(RHSExprVal)
+        Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+      elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
+        RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+                      RHSExprVal, ElemType.getBitwidth())
+        # Add this add op to the IR and the context
+        Context.addAbstractionToIR(RHSExprVal)
+        Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+      # Compile the op
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
+      print("---BIT SLICE INSERT OP:")
+      LHSOp.print()
 
   # Add the op to the IR
   Context.addAbstractionToIR(LHSOp)
