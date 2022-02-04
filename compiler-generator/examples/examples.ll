@@ -304,7 +304,7 @@ function vnni_dot_product (%src, %a, %b) {
     %dst.high.idx = add %i, 31
     %ext.src = bvextract %src, %i, %dst.high.idx, 32
     bvinsert %ext.src, %dst, %i, %dst.high.idx, 32
-    for ([%j (range  0 %lane_size %precision)]) {
+    for ([%j (range  0 32 8)]) {
       %low.index = add %i, %j
       %high.index = add %low.index, 7
       %ext.a = bvextract %a, %low.index, %high.index, 8
