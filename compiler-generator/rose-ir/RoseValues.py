@@ -4,6 +4,7 @@ from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 import RoseAbstractions 
 
+from enum import Enum, auto
 
 
 class RoseUndefValue(RoseValue):
@@ -15,7 +16,6 @@ class RoseUndefValue(RoseValue):
   
   def print(self):
     print(self.getName())
-
 
 
 # Constant value (integer and float) class
@@ -135,6 +135,11 @@ class RoseArgument(RoseValue):
 # An operation in Rosette
 # An operation is either an instruction.
 class RoseOperation(RoseValue):
+  class Signedness(Enum):
+    Signed = auto()
+    Unsigned = auto()
+    DontCare = auto()
+
   def __init__(self, Opcode : RoseOpcode, Name : str, Operands : list, \
               ParentBlock = RoseAbstractions.RoseUndefRegion()):
     if not isinstance(ParentBlock, RoseAbstractions.RoseUndefRegion):
@@ -266,6 +271,10 @@ class RoseOperation(RoseValue):
 
   # Subclass must implement this
   def solve(self):
+    NotImplemented
+
+  # Subclass is expected to implement this function
+  def isSigned(self):
     NotImplemented
 
   def to_rosette(self, NumSpace = 0):

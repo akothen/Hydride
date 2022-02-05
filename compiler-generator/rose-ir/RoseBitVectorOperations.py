@@ -3,7 +3,7 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 from RoseAbstractions import RoseUndefRegion
-from RoseValues import RoseConstant
+from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 
 
@@ -28,6 +28,9 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def isSizeChangingBVOp(self):
     return True
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
+
 
 class RoseBVZeroExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -51,6 +54,9 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
   def isSizeChangingBVOp(self):
     return True
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVSSaturateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -73,6 +79,9 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
 
   def isSizeChangingBVOp(self):
     return True
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
 
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
@@ -111,6 +120,9 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def isSizeChangingBVOp(self):
     return True
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
+
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -148,6 +160,9 @@ class RoseBVTruncateOp(RoseBitVectorOp):
   def isSizeChangingBVOp(self):
     return True
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
   def to_rosette(self, NumSpace = 0):
     assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
     NotImplemented
@@ -182,6 +197,12 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
 
   def isIndexingBVOp(self):
     return True
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
 
 
 class RoseBVInsertSliceOp(RoseBitVectorOp):
@@ -223,6 +244,12 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def isIndexingBVOp(self):
     return True
 
+  def getSignedness(self):
+    Operand = self.getInsertValue()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
   def to_rosette(self, NumSpace = 0):
     assert "No direction convertion of BVInsert to Rosette!"
     NotImplemented
@@ -244,6 +271,12 @@ class RoseBVNotOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVAndOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -255,6 +288,22 @@ class RoseBVAndOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVAndOp(Name, Operands, ParentBlock)
   
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVOrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -266,6 +315,22 @@ class RoseBVOrOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVOrOp(Name, Operands, ParentBlock)
 
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVXorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -276,6 +341,22 @@ class RoseBVXorOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVXorOp(Name, Operands, ParentBlock)
+
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
 
 
 class RoseBVShlOp(RoseBitVectorOp):
@@ -290,6 +371,15 @@ class RoseBVShlOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVShlOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVLshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -302,6 +392,15 @@ class RoseBVLshrOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVLshrOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
 
 
 class RoseBVAshrOp(RoseBitVectorOp):
@@ -316,6 +415,15 @@ class RoseBVAshrOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVAshrOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+  
 
 
 ######################################## ARITHMETIC OPERATORS ###########################
@@ -334,6 +442,12 @@ class RoseBVNegOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVAddOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -344,6 +458,22 @@ class RoseBVAddOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVAddOp(Name, Operands, ParentBlock)
+
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
 
 
 class RoseBVSubOp(RoseBitVectorOp):
@@ -356,6 +486,22 @@ class RoseBVSubOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSubOp(Name, Operands, ParentBlock)
 
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVMulOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -366,6 +512,22 @@ class RoseBVMulOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVMulOp(Name, Operands, ParentBlock)
+
+  def getSignedness(self):
+    SignedOperandFound = False
+    for Operand in self.getOperands():
+      assert not isinstance(Operand, RoseUndefValue)
+      if not isinstance(Operand, RoseOperation):
+        return RoseOperation.Signedness.DontCare
+      Signedness = Operand.getSignedness()
+      if Signedness == RoseOperation.Signedness.Signed:
+        SignedOperandFound = True
+        continue
+      if Signedness == RoseOperation.Signedness.DontCare:
+        return RoseOperation.Signedness.DontCare
+    if SignedOperandFound == True:
+      return RoseOperation.Signedness.Signed
+    return RoseOperation.Signedness.Unsigned
 
   
 class RoseBVUdivOp(RoseBitVectorOp):
@@ -380,6 +542,9 @@ class RoseBVUdivOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVUdivOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVSdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -393,6 +558,9 @@ class RoseBVSdivOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSdivOp(Name, Operand1, Operand2, ParentBlock)
   
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
+
 
 class RoseBVUremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -405,6 +573,9 @@ class RoseBVUremOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUremOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
 
 
 class RoseBVSremOp(RoseBitVectorOp):
@@ -419,6 +590,9 @@ class RoseBVSremOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSremOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
+
 
 class RoseBVSmodOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -432,6 +606,8 @@ class RoseBVSmodOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSmodOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
 
 
 ############################# COMPARISON OPERATORS ###################################
@@ -448,6 +624,9 @@ class RoseBVEQOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVEQOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 class RoseBVNEQOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -460,6 +639,9 @@ class RoseBVNEQOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVNEQOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
 
   def to_rosette(self, NumSpace = 0):
     Spaces = ""
@@ -488,6 +670,9 @@ class RoseBVSLTOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSLTOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 class RoseBVULTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -500,6 +685,9 @@ class RoseBVULTOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVULTOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
 
 
 class RoseBVSLEOp(RoseBitVectorOp):
@@ -514,6 +702,9 @@ class RoseBVSLEOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSLEOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 class RoseBVULEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -526,6 +717,9 @@ class RoseBVULEOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVULEOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
 
 
 class RoseBVSGTOp(RoseBitVectorOp):
@@ -540,6 +734,9 @@ class RoseBVSGTOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSGTOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 class RoseBVUGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -552,6 +749,9 @@ class RoseBVUGTOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUGTOp(Name, Operand1, Operand2, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
 
 
 class RoseBVSGEOp(RoseBitVectorOp):
@@ -566,6 +766,9 @@ class RoseBVSGEOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSGEOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 class RoseBVUGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -579,6 +782,9 @@ class RoseBVUGEOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVUGEOp(Name, Operand1, Operand2, ParentBlock)
   
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
+
 
 
 ######################################## ADDITIONAL OPERATORS ###########################
@@ -596,6 +802,12 @@ class RoseBVAdd1Op(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVSub1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
@@ -610,6 +822,12 @@ class RoseBVSub1Op(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVSminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -620,6 +838,9 @@ class RoseBVSminOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSminOp(Name, Operands, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
 
 
 class RoseBVUminOp(RoseBitVectorOp):
@@ -632,6 +853,9 @@ class RoseBVUminOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVUminOp(Name, Operands, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
+
 
 class RoseBVSmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -643,6 +867,9 @@ class RoseBVSmaxOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSmaxOp(Name, Operands, ParentBlock)
 
+  def getSignedness(self):
+    return RoseOperation.Signedness.Signed
+
 
 class RoseBVUmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -653,6 +880,9 @@ class RoseBVUmaxOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVUmaxOp(Name, Operands, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.Unsigned
 
 
 class RoseBVRolOp(RoseBitVectorOp):
@@ -667,6 +897,15 @@ class RoseBVRolOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVRolOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVRorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -680,6 +919,15 @@ class RoseBVRorOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVRorOp(Name, Operand1, Operand2, ParentBlock)
 
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def getSignedness(self):
+    Operand = self.getInputBitVector()
+    if not isinstance(Operand, RoseOperation):
+      return RoseOperation.Signedness.DontCare
+    return Operand.getSignedness()
+
 
 class RoseBVZeroOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
@@ -690,5 +938,8 @@ class RoseBVZeroOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVZeroOp(Name, Bitvector, ParentBlock)
+
+  def getSignedness(self):
+    return RoseOperation.Signedness.DontCare
 
 
