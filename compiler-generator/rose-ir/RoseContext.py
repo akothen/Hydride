@@ -7,6 +7,15 @@ from copy import deepcopy
 # This is a generic context that could be used across
 # different architectures.
 class RoseContext:
+  class RoseValueNameGen():
+    def __init__(self):
+      self.Counter = 0
+    
+    def genName(self, Prefix : str = ""):
+      Name = Prefix + str(self.Counter)
+      self.Counter += 1
+      return "%" + Name
+
   def __init__(self):
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
     # Track the contexts we encounter
@@ -19,8 +28,15 @@ class RoseContext:
     self.Variables = dict()    # Name --> ID
     # Map variable names to the element types
     self.VariablesToElemTypes = dict()
+    # Track the rose value --> signedness 
+    self.CompiledValToSignedness = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
+    # Name generator
+    self.NameGenerator = self.RoseValueNameGen()
+
+  def genName(self, Prefix : str = ""):
+    return self.NameGenerator.genName(Prefix)
   
   def isCompiledAbstraction(self, ID : str):
     if ID in self.CompiledAbstractions:
@@ -41,6 +57,17 @@ class RoseContext:
     assert ID in self.CompiledAbstractions
     return self.CompiledAbstractions[ID]
   
+  def addSignednessInfoForValue(self, Value : RoseValue, Signedness : bool):
+    assert not isinstance(Value, RoseUndefValue) \
+       and not isinstance(Value, RoseConstant)
+    self.CompiledValToSignedness[Value] = Signedness
+  
+  def getSignedNessForValue(self, Value : RoseValue):
+    assert not isinstance(Value, RoseUndefValue) \
+       and not isinstance(Value, RoseConstant)
+    assert Value in self.CompiledValToSignedness
+    return self.CompiledValToSignedness[Value]
+
   def addVariable(self, Name : str, ID : str):
     self.Variables[Name] = ID
   
@@ -60,6 +87,9 @@ class RoseContext:
     if Name in self.VariablesToElemTypes:
       return True
     return False
+
+  def getVariablesToElemTypes(self):
+    return self.VariablesToElemTypes
   
   def getElemTypeOfVariable(self, Name : str):
     assert Name in self.VariablesToElemTypes
@@ -114,6 +144,9 @@ class RoseContext:
       print("VARIABLE NAME:")
       print(Name)
       self.Variables[Name] = ID
+    # Copy over the element type information as well
+    for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
+      self.VariablesToElemTypes[Name] = ElemType
  
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
@@ -121,5 +154,4 @@ class RoseContext:
       ChildVarID = self.Variables[Name]
       Abstraction = self.CompiledAbstractions[ChildVarID]
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
-
-      
+ 
