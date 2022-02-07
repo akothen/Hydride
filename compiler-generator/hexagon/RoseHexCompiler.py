@@ -405,11 +405,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   # it should have the same type as the low index.
   #OriginalNumberTy = Context.getIndexNumberType()
   #Context.setIndexNumberType(Low.getType())
-  if (type(BitSliceExpr.hi) == Var and BitSliceExpr.hi.name == 'MAX'):
-    MaxVectorLength = Context.getMaxVectorLength()
-    High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
-  else:
-    High = CompileIndex(BitSliceExpr.hi, Context)
+  High = CompileIndex(BitSliceExpr.hi, Context)
   #Context.setIndexNumberType(OriginalNumberTy)
   print("COMPILED HIGH")
   High.print()
@@ -540,10 +536,17 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
   else:
     # Compile the low index first
-    LowIndex = CompileIndex(IndexExpr.idx, Context)
-    print("LOW INDEX:")
-    print(LowIndex)
-    LowIndex.print()
+    ElemType = HexTypes[IndexExpr.obj.elemtype]
+    CompiledLowIndex = CompileIndex(IndexExpr.idx, Context)
+    print("COMPILED LOW INDEX:")
+    print(CompiledLowIndex)
+    CompiledLowIndex.print()
+    LowCoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                              CompiledLowIndex.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), \
+                              [LowCoFactor, CompiledLowIndex])
+    Context.addAbstractionToIR(LowIndex)
+    Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
 
     # Compile the vector object
     Vector = CompileExpression(IndexExpr.obj, Context)
@@ -1053,6 +1056,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
     else:
       # Compile the low index
       LowIndex = CompileExpression(Update.lhs.idx, Context)
+      ElemType = HexTypes[Update.lhs.obj.elemtype]
+      CompiledLowIndex = CompileIndex(Update.lhs.idx, Context)
+      print("COMPILED LOW INDEX:")
+      print(CompiledLowIndex)
+      CompiledLowIndex.print()
+      LowCoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                CompiledLowIndex.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), \
+                                [LowCoFactor, CompiledLowIndex])
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
       print("---INDEX:")
       print(LowIndex)
       LowIndex.print()
