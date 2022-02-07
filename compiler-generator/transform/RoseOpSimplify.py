@@ -43,7 +43,7 @@ def SimplifyOperations(Block : RoseBlock):
     Operation.print()
     print("-->")
     SimplifiedOp.print()
-    if isinstance(SimplifiedOp, RoseOperation):
+    if isinstance(SimplifiedOp, RoseOperation) and SimplifiedOp not in Block:
       Block.addOperationBefore(SimplifiedOp, Operation)
     Operation.replaceUsesWith(SimplifiedOp)
     Block.eraseOperation(Operation)
@@ -56,7 +56,7 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
   print(Block)
   Block.print()
   # Time to simplify some instructions that can be simplified
-  SimplifyOperations(Block) 
+  SimplifyOperations(Block)
 
   # Gather all the truncate and extract ops in this block
   OpList = list()
@@ -157,7 +157,7 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
         Block.eraseOperation(SecondExtractOp)
         Block.eraseOperation(FirstExtractOp)
 
-  # Time to simplify some instructions that can be simplified
+  # Let's try and simplify the block again since there maybe things to simplify
   SimplifyOperations(Block) 
 
 
