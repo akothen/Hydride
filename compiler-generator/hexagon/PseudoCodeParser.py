@@ -472,11 +472,18 @@ def GetSpecFrom(inst, Pseudocode):
     # += or *=
     if isinstance(assign.rhs, BinaryExpr):
       rhs = assign.rhs.b
+      # Extend args
+      tmp = [assign.rhs.a]
+      tmp.extend(rhs.args)
+      print(type(rhs))
+      if isinstance(rhs, Call):
+        rhs = Call(rhs.funcname, tmp, rhs.special, rhs.id)
+      #rhs.setattr("args", tmp)
     elif isinstance(assign.rhs, Call):
       rhs = assign.rhs
     elif isinstance(assign.rhs, BitExtend):
       rhs = assign.rhs.hi
-
+    
   # SIMD instruction
   if isinstance(lhs, ElemTypeInfo):
     var = lhs.obj
@@ -524,6 +531,5 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
-
 
 
