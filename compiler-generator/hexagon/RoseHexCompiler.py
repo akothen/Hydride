@@ -1561,12 +1561,18 @@ def CompileSemantics(Sema):
     IsOutParam = False
     ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
     # Create a new rosette value
-    assert type(Param) == ElemTypeInfo
-    ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
+    if type(Param) == ElemTypeInfo:
+      ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
+    else:
+      assert type(Param) == Var
+      ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
     ParamVal.print()
     #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
-      ParamsIDs.append(Param.obj.id)
+      if type(Param) == ElemTypeInfo:
+        ParamsIDs.append(Param.obj.id)
+      else:
+        ParamsIDs.append(Param.id)
       ParamValues.append(ParamVal)
 
   if Sema.rettype != 'void':
@@ -2599,6 +2605,5 @@ test105 = {
 
 if __name__ == '__main__':
   Compile(test86)
-
 
 
