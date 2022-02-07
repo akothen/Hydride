@@ -247,9 +247,10 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value:
             assert(len(Inputs) == 2)
-            if Inputs[0].getType().isIntegerTy():
+            if Inputs[0].getType().isIntegerTy() \
+            and Inputs[1].getType().isIntegerTy():
                 return RoseType.getIntegerTy(Inputs[0].getType().getBitwidth())
-            assert Inputs[0].getType().isFloatTy()
+            assert Inputs[0].getType().isFloatTy() or Inputs[1].getType().isFloatTy()
             return RoseType.getFloatTy(Inputs[0].getType().getBitwidth())
         if self.value == self.abs.value:
             assert(len(Inputs) == 1)
@@ -948,4 +949,5 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
 

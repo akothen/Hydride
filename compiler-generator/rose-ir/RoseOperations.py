@@ -479,7 +479,13 @@ class RoseDivOp(RoseOperation):
       return 0
     if not isinstance(self.getOperand(1), RoseConstant):
       return None
-    return (self.getOperand(0).getValue() / self.getOperand(1).getValue())
+    Result = (self.getOperand(0).getValue() / self.getOperand(1).getValue())
+    # If the result is an integer, see if can be cast into an integer
+    if self.getOperand(0).getType().isIntegerTy() \
+      and self.getOperand(1).getType().isIntegerTy():
+      if Result == int(Result):
+        Result = int(Result)
+    return Result
   
   def simplify(self):
     # Try solving the operation first
