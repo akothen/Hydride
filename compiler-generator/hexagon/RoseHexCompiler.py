@@ -24,6 +24,15 @@ import math
 # This is a generic context that could be used across
 # different architectures.
 class RoseContext:
+  class RoseValueNameGen():
+    def __init__(self):
+      self.Counter = 0
+    
+    def genName(self, Prefix : str = ""):
+      Name = Prefix + str(self.Counter)
+      self.Counter += 1
+      return "%" + Name
+
   def __init__(self):
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
     # Track the contexts we encounter
@@ -40,6 +49,11 @@ class RoseContext:
     self.CompiledValToSignedness = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
+    # Name generator
+    self.NameGenerator = self.RoseValueNameGen()
+
+  def genName(self, Prefix : str = ""):
+    return self.NameGenerator.genName(Prefix)
   
   def isCompiledAbstraction(self, ID : str):
     if ID in self.CompiledAbstractions:
@@ -361,8 +375,8 @@ def CompileIndex(IndexExpr, Context : HexRoseContext):
     ID = Context.getVariableID(IndexExpr.name)
     assert Context.getCompiledAbstractionForID(ID) == CompiledIndex
     # Generate the casting op
-    Name = "cast." + CompiledIndex.getName()
-    CastOp = RoseCastOp.create(Name, CompiledIndex, \
+    #Name = "cast." + CompiledIndex.getName()
+    CastOp = RoseCastOp.create(Context.genName(), CompiledIndex, \
                   RoseType.getIntegerTy(CompiledIndex.getType().getBitwidth()))
     # Add this op to the IR and to the context
     Context.addAbstractionToIR(CastOp)
@@ -423,7 +437,8 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   BitwidthValue = RoseConstant.create(Bitwidth, Low.getType())
 
   # Add an bitslice operation
-  Operation = RoseBVExtractSliceOp.create(BitSliceExpr.id, BitVector, Low, High, BitwidthValue)
+  Operation = RoseBVExtractSliceOp.create(Context.genName(), \
+                                  BitVector, Low, High, BitwidthValue)
   print("BIT SLICE EXTRACT OP:")
   Operation.print()
 
@@ -488,19 +503,16 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     print("InnerIndex:")
     InnerIndex.print()
     InnerIndex.getType().print()
-    OuterLowIndex = RoseMulOp.create("low.out.extract." + BitVector.getName() + "." \
-                            + OuterIndex.getName() + "." + InnerBitIndex.id, \
+    OuterLowIndex = RoseMulOp.create(Context.genName(), \
                               [OuterCoFactor, OuterIndex])
-    InnerLowIndex = RoseMulOp.create("low.in.extract." + BitVector.getName() + "." \
-                            + InnerIndex.getName() + "." + InnerBitIndex.id, \
+    InnerLowIndex = RoseMulOp.create(Context.genName(), \
                               [InnerCoFactor, InnerIndex])
-    LowIndex = RoseAddOp.create("low.extract." + BitVector.getName() + "." \
-                            + OuterIndex.getName() + "." + InnerIndex.getName() \
-                              + "." + InnerBitIndex.id, \
+    LowIndex = RoseAddOp.create(Context.genName(), \
                               [OuterLowIndex, InnerLowIndex])
-    HighIndex = RoseAddOp.create("high.extract." + LowIndex.getName() + "." \
-                                      + BitVector.getName() + "." + IndexExpr.id, \
-                                      [LowIndex, InnerCoFactor])
+    # Generate value for bitwidth
+    BitwidthValue = OuterCoFactor
+    HighIndex = RoseAddOp.create(Context.genName(), \
+                                  [LowIndex, BitwidthValue])
     # Add the generated ops to the IR and the context
     Context.addAbstractionToIR(OuterLowIndex)
     Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
@@ -518,10 +530,9 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     LowIndex.print()
     print("HIGH INDEX:")
     HighIndex.print()
-    # Generate value for bitwidth
-    BitwidthValue = InnerCoFactor
     # Now generate the bvextract op
-    Operation = RoseBVExtractSliceOp.create(IndexExpr.id, BitVector, LowIndex, HighIndex, BitwidthValue)
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
+                                      LowIndex, HighIndex, BitwidthValue)
     # Add this op to context for the inner bitindex
     print(InnerBitIndex)
     Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
@@ -543,9 +554,7 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     ElemType = Context.getElemTypeOfVariable(Vector.getName())
     assert ElemType.isBitVectorTy()
     IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-    HighIndex = RoseAddOp.create("high.extract." + LowIndex.getName() + "." \
-                                      + Vector.getName() + "." + IndexExpr.id, \
-                                        [LowIndex, IndexDiff])
+    HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
     print("HIGH INDEX:")
     HighIndex.print()
     Context.addAbstractionToIR(HighIndex)
@@ -555,7 +564,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
 
     # Now, generate the extract op. 
-    Operation = RoseBVExtractSliceOp.create(IndexExpr.id, Vector, LowIndex, HighIndex, BitwidthValue)
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
+                                        LowIndex, HighIndex, BitwidthValue)
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -582,7 +592,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
       ID = Context.getVariableID(ExprIndex.name)
       Index = Context.getCompiledAbstractionForID(ID)
       if Index.getType().isBitVectorTy():
-        return RoseCastOp.create("cast." + Index.getName(), Index, \
+        return RoseCastOp.create(Context.genName(), Index, \
                             RoseType.getIntegerTy(Index.getType().getBitwidth()))
       return Index
     return RoseUndefValue()
@@ -598,7 +608,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
         Operand1 = Context.getCompiledAbstractionForID(ID)
         if Operand1.getType().isBitVectorTy():
           print("CAST")
-          Operand1 = RoseCastOp.create("cast." + Operand1.getName(), Operand1, \
+          Operand1 = RoseCastOp.create(Context.genName(), Operand1, \
                               RoseType.getIntegerTy(Operand1.getType().getBitwidth()))
       else:
         return RoseUndefValue()
@@ -616,7 +626,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
         ID = Context.getVariableID(ExprIndex.b.name)
         Operand2 = Context.getCompiledAbstractionForID(ID)
         if Operand2.getType().isBitVectorTy():
-          Operand2 = RoseCastOp.create("cast." + Operand2.getName(), Operand2, \
+          Operand2 = RoseCastOp.create(Context.genName(), Operand2, \
                               RoseType.getIntegerTy(Operand2.getType().getBitwidth()))
       else:
         return RoseType.getUndefTy()
@@ -641,14 +651,14 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
       NumIntBits = ExprIndex.a.val.bit_length()
       if NumIntBits > Operand2.getType().getBitwidth():
         # We need to extend the size of the other operand
-        Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                               Operand2, NumIntBits)
     if type(ExprIndex.b) == Number \
     and (type(ExprIndex.a) == BitSlice or type(ExprIndex.a) == BitIndex):
       NumIntBits = ExprIndex.b.val.bit_length()
       if NumIntBits > Operand1.getType().getBitwidth():
         # We need to extend the size of the other operand
-        Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                                               Operand1, NumIntBits)
     # Fix the constants' bitwidths
     if Operand1.getType() != Operand2.getType():
@@ -658,14 +668,14 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
         Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
       elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
         # We need to extend the size of the other operand
-        Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                                         Operand1, Operand2.getType().getBitwidth())
       elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
         # We need to extend the size of the other operand
-        Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                         Operand2, Operand1.getType().getBitwidth())
     # Perform the binary operation
-    return BinaryOps[ExprIndex.op]()(ExprIndex.id, Operand1, Operand2)
+    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2)
 
   # The given bitslice index could be a compiled expression
   if Context.isCompiledAbstraction(ExprIndex.id):
@@ -943,13 +953,13 @@ def CompileUpdate(Update, Context : HexRoseContext):
     # Sometimes size extension of the RHS is required, so we have to handle it here
     if RHSExprVal.getType().getBitwidth() < Bitwidth:
       # Let's sign-extend
-      RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+      RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
                           RHSExprVal, Bitwidth)
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     elif RHSExprVal.getType().getBitwidth() > Bitwidth:
-      RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+      RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
                           RHSExprVal, Bitwidth)
     # Add an bitslice operation
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
@@ -983,19 +993,16 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                    OuterIndex.getType())
       InnerCoFactor = RoseConstant(InnerBitIndexType.getBitwidth(),\
                                    InnerIndex.getType())
-      OuterLowIndex = RoseMulOp.create("low.out.insert." + BitVector.getName() + "." \
-                              + OuterIndex.getName() + "." + InnerBitIndex.id, \
+      OuterLowIndex = RoseMulOp.create(Context.genName(), \
                                 [OuterCoFactor, OuterIndex])
-      InnerLowIndex = RoseMulOp.create("low.in.insert." + BitVector.getName() + "." \
-                              + InnerIndex.getName() + "." + InnerBitIndex.id, \
+      InnerLowIndex = RoseMulOp.create(Context.genName(), \
                                 [InnerCoFactor, InnerIndex])
-      LowIndex = RoseAddOp.create("low.insert." + BitVector.getName() + "." \
-                              + OuterIndex.getName() + "." + InnerIndex.getName() \
-                                + "." + InnerBitIndex.id, \
+      LowIndex = RoseAddOp.create(Context.genName(), \
                                 [OuterLowIndex, InnerLowIndex])
-      HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
-                                        + BitVector.getName() + "." + Update.lhs.id, \
-                                        [LowIndex, InnerCoFactor])
+      # Generate value for bitwidth
+      BitwidthValue = OuterCoFactor
+      HighIndex = RoseAddOp.create(Context.genName(), \
+                                        [LowIndex, BitwidthValue])
       # Add the generated ops to the IR and the context
       Context.addAbstractionToIR(OuterLowIndex)
       Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
@@ -1013,25 +1020,27 @@ def CompileUpdate(Update, Context : HexRoseContext):
       LowIndex.print()
       print("HIGH INDEX:")
       HighIndex.print()
-      # Generate value for bitwidth
-      BitwidthValue = InnerCoFactor
       # Now generate the bvinsert op
       # Sometimes size extension of the RHS is required, so we have to handle it here
-      if RHSExprVal.getType().getBitwidth() < BitwidthValue.getType().getBitwidth():
+      if RHSExprVal.getType().getBitwidth() < BitwidthValue.getValue():
         # Let's sign-extend
-        RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
-                      RHSExprVal, BitwidthValue.getType().getBitwidth())
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                      RHSExprVal, BitwidthValue.getValue())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
-      elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getType().getBitwidth():
-        RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
-                      RHSExprVal, BitwidthValue.getType().getBitwidth())
+      elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getValue():
+        RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
+                      RHSExprVal, BitwidthValue.getValue())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
       # Compile the op
-      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
+      print("RHSExprVal:")
+      RHSExprVal.print()
+      BitwidthValue.print()
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, \
+                                    LowIndex, HighIndex, BitwidthValue)
       print("---BIT SLICE INSERT OP:")
       LHSOp.print()
       # Add this op to context for the inner bitindex
@@ -1056,8 +1065,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
       ElemType = Context.getElemTypeOfVariable(BitVector.getName())
       assert ElemType.isBitVectorTy()
       IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-      HighIndex = RoseAddOp.create("high.insert." + LowIndex.getName() + "." \
-                                        + BitVector.getName() + "." + Update.lhs.id, \
+      HighIndex = RoseAddOp.create(Context.genName(), \
                                         [LowIndex, IndexDiff])
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(HighIndex)
@@ -1068,13 +1076,13 @@ def CompileUpdate(Update, Context : HexRoseContext):
       # Sometimes size extension of the RHS is required, so we have to handle it here
       if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
         # Let's sign-extend
-        RHSExprVal = RoseBVSignExtendOp.create("sext." + RHSExprVal.getName(), \
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
                       RHSExprVal, ElemType.getBitwidth())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
       elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
-        RHSExprVal = RoseBVTruncateOp.create("trunc." + RHSExprVal.getName(), \
+        RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
                       RHSExprVal, ElemType.getBitwidth())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
@@ -1105,7 +1113,7 @@ def CompileSelect(Select, Context : HexRoseContext):
   Cond = CompileExpression(Select.cond, Context)
   Then = CompileExpression(Select.then, Context)
   Otherwise = CompileExpression(Select.otherwise, Context)
-  Operation = RoseSelectOp.create(Select.id, Cond, Then, Otherwise)
+  Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -1158,9 +1166,9 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       # We need to sign extend the operands first. Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
       OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVSignExtendOp.create("sext." + Operand1.getName(), \
+      Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
                           Operand1, OperandBitwidth)
-      Operand2 = RoseBVSignExtendOp.create("sext." + Operand2.getName(), \
+      Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
@@ -1177,9 +1185,9 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       # Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
       OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                           Operand1, OperandBitwidth)
-      Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)      
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
@@ -1197,7 +1205,7 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
     NumIntBits = BinaryExpr.a.val.bit_length()
     if NumIntBits > Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                             Operand2, NumIntBits)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand2)
@@ -1209,7 +1217,7 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
     NumIntBits = BinaryExpr.b.val.bit_length()
     if NumIntBits > Operand1.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                                             Operand1, NumIntBits)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
@@ -1230,7 +1238,7 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
     elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand1 = RoseBVZeroExtendOp.create("zext." + Operand1.getName(), \
+      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                                       Operand1, Operand2.getType().getBitwidth())
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
@@ -1239,7 +1247,7 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       ExtendOperandSize = True
     elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand2 = RoseBVZeroExtendOp.create("zext." + Operand2.getName(), \
+      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                       Operand2, Operand1.getType().getBitwidth())
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand2)
@@ -1256,7 +1264,7 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
 
   # Compile the binary operation
   print("GENERATING BINARY OP")
-  Operation = BinaryOps[BinaryExpr.op]()(BinaryExpr.id, Operand1, Operand2)
+  Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), Operand1, Operand2)
   print("BINARY OP GENERATED")
 
   # Add the operation to the IR
@@ -1330,7 +1338,7 @@ def CompileCall(CallStmt, Context : HexRoseContext):
     return Operation
   
   # Check if this is a call to a builtin function
-  Operation = Builtins[CallStmt.funcname](CallStmt.id, ArgValuesList)
+  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList)
 
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
