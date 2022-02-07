@@ -370,6 +370,7 @@ def p_expr_var(p):
     return
   if p[1] == "VWIDTH":
     p[0] = Number(VWIDTH())
+    return
   if p[1] in ['Vs', 'Vu', 'Vv', 'Vss', 'Vuu', 'Vvv']:
     expr_id = 'var.vec_src.' + GenUniqueID(parser)
   elif p[1] in ['Vd', 'Vdd']:
@@ -531,5 +532,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 

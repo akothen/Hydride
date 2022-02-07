@@ -921,11 +921,11 @@ def CompileUpdate(Update, Context : HexRoseContext):
     # Compile the high index
     #OriginalNumberTy = Context.getIndexNumberType()
     #Context.setIndexNumberType(Low.getType())
-    if (type(Update.lhs.hi) == Var and Update.lhs.hi.name == 'MAX'):
-      MaxVectorLength = Context.getMaxVectorLength()
-      High = RoseConstant.create(MaxVectorLength - 1, RoseType.getIntegerTy(32))
-    else:
-      High = CompileIndex(Update.lhs.hi, Context)
+    print("Update.lhs.hi:")
+    print(Update.lhs.hi)
+    High = CompileIndex(Update.lhs.hi, Context)
+    print("HIGH INDEX:")
+    High.print()
     #Context.setIndexNumberType(OriginalNumberTy)
     # Somtimes the maximum allowable vector length has to be increased
     if isinstance(High, RoseConstant):
@@ -1182,19 +1182,35 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   or (type(BinaryExpr.a) == BitIndex and type(BinaryExpr.b) == BitIndex):
     if NeedToExtendOperandSize(BinaryExpr.op):
       # We need to sign extend the operands first. Double the operands' bitwidths
-      assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
-      OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
-                          Operand1, OperandBitwidth)
-      Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
-                          Operand2, OperandBitwidth)
-      # Add the operations to the IR
-      Context.addAbstractionToIR(Operand1)
-      Context.addAbstractionToIR(Operand2)
-      # Add operations to the context
-      Context.addCompiledAbstraction(Operand1.getName(), Operand1)
-      Context.addCompiledAbstraction(Operand2.getName(), Operand2)
-      ExtendOperandSize = True
+      if Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth():
+        OperandBitwidth = 2 * Operand1.getType().getBitwidth()
+        Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+                            Operand2, OperandBitwidth)
+        # Add the operations to the IR
+        Context.addAbstractionToIR(Operand1)
+        Context.addAbstractionToIR(Operand2)
+        # Add operations to the context
+        Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+        Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+        ExtendOperandSize = True
+      elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                            Operand2, Operand1.getType().getBitwidth())      
+        # Add the operations to the IR
+        Context.addAbstractionToIR(Operand2)
+        # Add operations to the context
+        Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+        ExtendOperandSize = True
+      else:
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                            Operand1, Operand2.getType().getBitwidth())      
+        # Add the operations to the IR
+        Context.addAbstractionToIR(Operand1)
+        # Add operations to the context
+        Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+        ExtendOperandSize = True
   
   # There are cases where zero_extend(x) * zero_extend(y) need to be extended further.
   if type(BinaryExpr.a) == Call and type(BinaryExpr.b) == Call:
@@ -1284,6 +1300,16 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   print("GENERATING BINARY OP")
   Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), Operand1, Operand2)
   print("BINARY OP GENERATED")
+
+  # In cases that the indices are being compiled, there are cases where 
+  # they can be simplified.
+  #if Context.isCompileIndexFlagSet():
+  #  SimplifiedOperation = Operation.simplify()
+  #  if not isinstance(SimplifiedOperation, RoseUndefValue):
+  #    # If the simplified operation is a constant, just return that.
+  #    # Otherwise, we do NOT use simplified operation in any way.
+  #    if isinstance(SimplifiedOperation, RoseConstant):
+  #      return SimplifiedOperation
 
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
@@ -2573,5 +2599,6 @@ test105 = {
 
 if __name__ == '__main__':
   Compile(test86)
+
 
 
