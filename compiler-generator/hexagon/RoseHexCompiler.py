@@ -487,9 +487,9 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     assert type(InnerBitIndex.obj.obj) == Var
     BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
     # First compute the low index
-    OuterCoFactor = RoseConstant(OuterBitIndexType.getBitwidth(),\
+    OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
                                   OuterIndex.getType())
-    InnerCoFactor = RoseConstant(InnerBitIndexType.getBitwidth(),\
+    InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
                                   InnerIndex.getType())
     print("OuterCoFactor:")
     OuterCoFactor.print()
@@ -511,8 +511,10 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
                               [OuterLowIndex, InnerLowIndex])
     # Generate value for bitwidth
     BitwidthValue = OuterCoFactor
+    HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
+                                      LowIndex.getType())
     HighIndex = RoseAddOp.create(Context.genName(), \
-                                  [LowIndex, BitwidthValue])
+                                  [LowIndex, HighIndexOff])
     # Add the generated ops to the IR and the context
     Context.addAbstractionToIR(OuterLowIndex)
     Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
@@ -989,9 +991,9 @@ def CompileUpdate(Update, Context : HexRoseContext):
       assert type(InnerBitIndex.obj.obj) == Var
       BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
       # First compute the low index
-      OuterCoFactor = RoseConstant(OuterBitIndexType.getBitwidth(),\
+      OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
                                    OuterIndex.getType())
-      InnerCoFactor = RoseConstant(InnerBitIndexType.getBitwidth(),\
+      InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
                                    InnerIndex.getType())
       OuterLowIndex = RoseMulOp.create(Context.genName(), \
                                 [OuterCoFactor, OuterIndex])
@@ -1001,8 +1003,10 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                 [OuterLowIndex, InnerLowIndex])
       # Generate value for bitwidth
       BitwidthValue = OuterCoFactor
+      HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
+                                        LowIndex.getType())
       HighIndex = RoseAddOp.create(Context.genName(), \
-                                        [LowIndex, BitwidthValue])
+                                        [LowIndex, HighIndexOff])
       # Add the generated ops to the IR and the context
       Context.addAbstractionToIR(OuterLowIndex)
       Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
