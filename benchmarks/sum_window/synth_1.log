@@ -13,30 +13,21 @@ DSL on Image [2,2]:
 (vec-reduction
  (vec-shuffle-swizzle-double
   (vec-shuffle-swizzle-double
-   (vec-shuffle-rotate
-    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6 8)
-    (idx-j 0)
-    8)
-   (vec-shuffle-rotate (lit (bv #x000000000000 48)) (idx-add (idx-j 0) 1) 8)
+   (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 0) 6) 6 8)
+   (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6 8)
    6
    8
-   0
+   (idx-j 0)
    6
    3
    1
    0)
   (vec-shuffle-swizzle-double
-   (vec-shuffle-rotate
-    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 0) 6) 6 8)
-    (idx-j 0)
-    8)
-   (vec-shuffle-rotate
-    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
-    (idx-j 0)
-    8)
+   (lit (bv #x000000000000 48))
+   (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
    6
    8
-   0
+   (idx-j 0)
    6
    3
    1
@@ -50,6 +41,6 @@ DSL on Image [2,2]:
   0)
  12
  8)
-synth cost: 50
+synth cost: 42
 Does Solution have a symmetric structure?
 #f

@@ -1,7 +1,19 @@
 (dsl_inst_1 
 (vector-two-input-swizzle 
 (vector-two-input-swizzle 
-(vector-shuffle-lrotate
+(vector-load 
+arg0
+288
+(* ; idx-mul
+(+ ; idx-add
+idx-i ; idx-i
+0
+)
+6
+)
+6
+8
+)
 (vector-load 
 arg0
 288
@@ -15,44 +27,16 @@ idx-i ; idx-i
 6
 8
 )
-idx-j ; idx-j
-8
-)
-(vector-shuffle-lrotate
-(bv #x000000000000 48)
-(+ ; idx-add
-idx-j ; idx-j
-1
-)
-8
-)
 6
 8
-0
+idx-j ; idx-j
 6
 3
 1
 0
 )
 (vector-two-input-swizzle 
-(vector-shuffle-lrotate
-(vector-load 
-arg0
-288
-(* ; idx-mul
-(+ ; idx-add
-idx-i ; idx-i
-0
-)
-6
-)
-6
-8
-)
-idx-j ; idx-j
-8
-)
-(vector-shuffle-lrotate
+(bv #x000000000000 48)
 (vector-load 
 arg0
 288
@@ -66,12 +50,9 @@ idx-i ; idx-i
 6
 8
 )
-idx-j ; idx-j
-8
-)
 6
 8
-0
+idx-j ; idx-j
 6
 3
 1

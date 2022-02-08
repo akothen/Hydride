@@ -121,7 +121,7 @@
      (vec-shuffle-swizzle-double
        (shufl vars #:depth (- k 1))
        (shufl vars #:depth (- k 1))
-       6 8 0 6 3 1 0
+       6 8 (idx-j 0) 6 3 1 0
        )
      ]
     [(choose* #t #f)
@@ -131,13 +131,13 @@
        6 8 0 6 6 1 0
        )
      ]
-    [(choose* #t #f)
-     (vec-shuffle-rotate 
-       (mem vars #:depth (- k 1))
-       (idx-j 0)
-       8
-       )
-     ]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-rotate 
+    ;   (mem vars #:depth (- k 1))
+    ;   (idx-j 0)
+    ;   8
+    ;   )
+    ; ]
     ;[(choose* #t #f)
     ; (vec-shuffle-rotate 
     ;   (mem vars #:depth (- k 1))
@@ -182,15 +182,15 @@
                  )
                1 8 
                )]
-    [(choose* #t #f)
-     (vec-div  
-                (vec-reduction (shufl vars #:depth (- k 1)) 12 8
-                    )
-               (lit  
-                 (bv 9 (bitvector 8))
-                 )
-               1 8 
-               )]
+    ;[(choose* #t #f)
+    ; (vec-div  
+    ;            (vec-reduction (shufl vars #:depth (- k 1)) 12 8
+    ;                )
+    ;           (lit  
+    ;             (bv 9 (bitvector 8))
+    ;             )
+    ;           1 8 
+    ;           )]
     ;[(choose* #t #f)
     ; (lit one) ; 16 length vector of 1's
     ; ]
@@ -203,11 +203,11 @@
     [(choose* #t #f)
      (vec-reduction (shufl vars #:depth (- k 1)) 12 8
                     )]
-    [else ;(choose* #t #f)
+    [(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
           )]
-    ;[else
-    ;  (mem vars #:depth k)]
+    [else
+      (mem vars #:depth k)]
 
     )
   )

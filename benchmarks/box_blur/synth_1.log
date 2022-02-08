@@ -2,30 +2,21 @@
  (vec-reduction
   (vec-shuffle-swizzle-double
    (vec-shuffle-swizzle-double
-    (vec-shuffle-rotate
-     (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
-     (idx-j 0)
-     8)
-    (vec-shuffle-rotate
-     (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 0) 6) 6 8)
-     (idx-j 0)
-     8)
+    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6 8)
+    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 0) 6) 6 8)
     6
     8
-    0
+    (idx-j 0)
     6
     3
     1
     0)
    (vec-shuffle-swizzle-double
     (lit (bv #x000000000000 48))
-    (vec-shuffle-rotate
-     (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6 8)
-     (idx-j 0)
-     8)
+    (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
     6
     8
-    0
+    (idx-j 0)
     6
     3
     1
@@ -42,6 +33,6 @@
  (lit (bv #x09 8))
  1
  8)
-synth cost: 66
+synth cost: 60
 Does Solution have a symmetric structure?
 #f
