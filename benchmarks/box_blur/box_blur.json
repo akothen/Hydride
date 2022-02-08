@@ -4,7 +4,7 @@
 "SPEC_INVOKE_STR": "(box-blur {} 6 6 3 3 8)",
 "SOLVER": "Boolector",
 "BITWIDTH": 16,
-"DO_OPTIMIZE": 0,
+"DO_OPTIMIZE": 0 ,
 "SPEC_IMPL": "box_blur_spec.rkt",
 "GRAMMAR_IMPL": "box_blur_grammar.rkt",
 "SYMMETRY": -1,

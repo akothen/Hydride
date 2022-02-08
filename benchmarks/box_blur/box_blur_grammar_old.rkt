@@ -93,7 +93,7 @@
                (idx-mul (idx-add (idx-i 0) 1) 6)
                6 8)  ; Row 0
      ]
-    [else ;(choose* #t #f)
+    [(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 2) 6)
                6 8)  ; Row 0
@@ -109,6 +109,9 @@
     ;           (idx-mul (idx-add (idx-i 0) 4) 6)
     ;           6 8)  ; Row 0
     ; ]
+    [else
+      (lit (bv 0 (bitvector 48)))
+      ]
     )
   )
 
@@ -175,17 +178,7 @@
     ;           )]
 
     [(choose* #t #f)
-     (vec-div  
-               (shufl vars #:depth (- k 1))
-               (lit  
-                 (bv 9 (bitvector 8))
-                 )
-               1 8 
-               )]
-    [(choose* #t #f)
-     (vec-div  
-                (vec-reduction (shufl vars #:depth (- k 1)) 12 8
-                    )
+     (vec-div  (shufl vars #:depth (- k 1))  
                (lit  
                  (bv 9 (bitvector 8))
                  )
@@ -194,20 +187,20 @@
     ;[(choose* #t #f)
     ; (lit one) ; 16 length vector of 1's
     ; ]
-    [(choose* #t #f)
-     (lit (bv 0 (bitvector 48)))
-     ]
+    ;[(choose* #t #f)
+    ; (lit (bv 0 (bitvector 32)))
+    ; ]
     ;[(choose* #t #f)
     ; (vec-reduction (shufl vars #:depth (- k 1)) 6 8
     ;                )]
     [(choose* #t #f)
      (vec-reduction (shufl vars #:depth (- k 1)) 12 8
                     )]
-    [else ;(choose* #t #f)
+    [(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
           )]
-    ;[else
-    ;  (mem vars #:depth k)]
+    [else
+      (mem vars #:depth k)]
 
     )
   )
@@ -238,8 +231,7 @@
 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
-
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
 
 
 
@@ -279,17 +271,17 @@
   )
 
 
-;(displayln "Spec On Image:")
-;(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
+(displayln "Spec On Image:")
+(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
 
 
-;(displayln "DSL on Image [0,0]:")
-;(println (bitvector->integer (test image 0 0 )))
+(displayln "DSL on Image [0,0]:")
+(println (bitvector->integer (test image 0 0 )))
 
 
-;(displayln "DSL on Image [1,1]:")
-;(println (bitvector->integer (test image 1 1 )))
+(displayln "DSL on Image [1,1]:")
+(println (bitvector->integer (test image 1 1 )))
 
 
-;(displayln "DSL on Image [2,2]:")
-;(println (bitvector->integer (test image 2 2 )))
+(displayln "DSL on Image [2,2]:")
+(println (bitvector->integer (test image 2 2 )))

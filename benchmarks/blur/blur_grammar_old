@@ -58,7 +58,7 @@
                (idx-mul (idx-add (idx-i 0) 1) 6)
                6 8)  ; Row 0
      ]
-    [else ;(choose* #t #f)
+    [(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 2) 6)
                6 8)  ; Row 0
@@ -73,6 +73,9 @@
     ;           (idx-mul (idx-add (idx-i 0) 4) 6)
     ;           6 8)  ; Row 0
     ; ]
+    [else
+      (lit (bv 0 (bitvector 48)))
+      ]
     )
   )
 
@@ -114,15 +117,7 @@
        )
      ]
     [(choose* #t #f)
-     (vec-div  ;(shufl vars #:depth (- k 1))  
-         (dot-prod
-           ;(shufl vars #:depth (- k 1))
-           (lit (bv 0 (bitvector 32)))
-           (shufl vars #:depth (- k 1))
-           (lit one)
-           ;(shufl vars #:depth (- k 1))
-           4 3 8 8 
-           )
+     (vec-div  (shufl vars #:depth (- k 1))  
                (lit (concat 
                       (bv 3 (bitvector 8))
                       (bv 3 (bitvector 8))
@@ -191,7 +186,7 @@
 ;; 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 7))
 
 
 

@@ -7,8 +7,8 @@
 (require rosette/solver/smt/boolector)
 
 
-(current-solver (boolector))
-(current-bitwidth 16)
+
+
 
 
 
@@ -1233,7 +1233,7 @@
                (idx-mul (idx-add (idx-i 0) 1) 6)
                6 8)  ; Row 0
      ]
-    [(choose* #t #f)
+    [else ;(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 2) 6)
                6 8)  ; Row 0
@@ -1249,9 +1249,6 @@
     ;           (idx-mul (idx-add (idx-i 0) 4) 6)
     ;           6 8)  ; Row 0
     ; ]
-    [else
-      (lit (bv 0 (bitvector 48)))
-      ]
     )
   )
 
@@ -1318,7 +1315,17 @@
     ;           )]
 
     [(choose* #t #f)
-     (vec-div  (shufl vars #:depth (- k 1))  
+     (vec-div  
+               (shufl vars #:depth (- k 1))
+               (lit  
+                 (bv 9 (bitvector 8))
+                 )
+               1 8 
+               )]
+    [(choose* #t #f)
+     (vec-div  
+                (vec-reduction (shufl vars #:depth (- k 1)) 12 8
+                    )
                (lit  
                  (bv 9 (bitvector 8))
                  )
@@ -1327,20 +1334,20 @@
     ;[(choose* #t #f)
     ; (lit one) ; 16 length vector of 1's
     ; ]
-    ;[(choose* #t #f)
-    ; (lit (bv 0 (bitvector 32)))
-    ; ]
+    [(choose* #t #f)
+     (lit (bv 0 (bitvector 48)))
+     ]
     ;[(choose* #t #f)
     ; (vec-reduction (shufl vars #:depth (- k 1)) 6 8
     ;                )]
     [(choose* #t #f)
      (vec-reduction (shufl vars #:depth (- k 1)) 12 8
                     )]
-    [(choose* #t #f)
+    [else ;(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
           )]
-    [else
-      (mem vars #:depth k)]
+    ;[else
+    ;  (mem vars #:depth k)]
 
     )
   )
@@ -1371,7 +1378,8 @@
 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
+
 
 
 
@@ -1411,20 +1419,20 @@
   )
 
 
-(displayln "Spec On Image:")
-(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
+;(displayln "Spec On Image:")
+;(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
 
 
-(displayln "DSL on Image [0,0]:")
-(println (bitvector->integer (test image 0 0 )))
+;(displayln "DSL on Image [0,0]:")
+;(println (bitvector->integer (test image 0 0 )))
 
 
-(displayln "DSL on Image [1,1]:")
-(println (bitvector->integer (test image 1 1 )))
+;(displayln "DSL on Image [1,1]:")
+;(println (bitvector->integer (test image 1 1 )))
 
 
-(displayln "DSL on Image [2,2]:")
-(println (bitvector->integer (test image 2 2 )))
+;(displayln "DSL on Image [2,2]:")
+;(println (bitvector->integer (test image 2 2 )))
 
 
 (define v0_0 (bv #x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567 288))
@@ -1445,13 +1453,26 @@
 (define env_0_i3_j2 (vector v0_0   3 2))
 (define env_0_i3_j3 (vector v0_0   3 3))
 (define sol 
-                             (synthesize 
-                            #:forall (list v0_0  env_0_i0_j0 env_0_i0_j1 env_0_i0_j2 env_0_i0_j3 env_0_i1_j0 env_0_i1_j1 env_0_i1_j2 env_0_i1_j3 env_0_i2_j0 env_0_i2_j1 env_0_i2_j2 env_0_i2_j3 env_0_i3_j0 env_0_i3_j1 env_0_i3_j2 env_0_i3_j3)
+                             (optimize 
+                            #:minimize (list (cost sketch-grammar))
                              #:guarantee 
                             (begin
                              (assert (equal? (interpret sketch-grammar env_0_i0_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 0) ))
 (assert (equal? (interpret sketch-grammar env_0_i0_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 1) ))
 (assert (equal? (interpret sketch-grammar env_0_i0_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 3) ))
 
                              )))
 (assert (sat? sol)"Unsatisfiable")

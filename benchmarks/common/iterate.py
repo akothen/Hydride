@@ -72,9 +72,13 @@ def get_synth_asserts(invoke_str, envs, args, output_shape):
         for i in range(0, output_shape[0]):
             for j in range(0, output_shape[1]):
                 invoke_cmd = invoke_str.format(args[idx])
+                if i*output_shape[1]+j % 3 == 0:
+                    pass
+                    # continue
                 str_ = "(assert (equal? (interpret sketch-grammar {}) (index-into-mat {} {} {} 8 {} {}) ))".format(envs[idx][i][j],invoke_cmd, output_shape[0],output_shape[1], i,j)
 
                 strs.append(str_)
+
 
     return  "\n".join(strs)
 
@@ -192,7 +196,7 @@ def gen_verify_file(iter_num, dsl_common_str, arg_sizes_ls, invoke_str, output_s
             for j in range(0, output_shape[1]):
 
                 invoke_check = "(synth_check {} {} {})".format(" ".join(sym_args), i , j)
-                verify_i_j = "(verify (assert (equal? {} (index-into-mat {} {} {} 8 {} {}))))\n".format(invoke_check, "spec-res", output_shape[0], output_shape[1],i,j)
+                verify_i_j = "(assert (equal? {} (index-into-mat {} {} {} 8 {} {})))\n".format(invoke_check, "spec-res", output_shape[0], output_shape[1],i,j)
                 verify_index_space.append(verify_i_j)
 
 

@@ -1,24 +1,15 @@
-Spec On Image:
-72 81 90 99 
-126 -121 -112 -103 
--76 -67 -58 -49 
--22 -13 -4 5 
-(bv #x48515a637e879099b4bdc6cfeaf3fc05 128)
-DSL on Image [0,0]:
-72
-DSL on Image [1,1]:
--121
-DSL on Image [2,2]:
--58
 (vec-div
  (vec-reduction
   (vec-shuffle-swizzle-double
    (vec-shuffle-swizzle-double
     (vec-shuffle-rotate
+     (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
+     (idx-j 0)
+     8)
+    (vec-shuffle-rotate
      (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 0) 6) 6 8)
      (idx-j 0)
      8)
-    (vec-shuffle-rotate (lit (bv #x000000000000 48)) (idx-j 0) 8)
     6
     8
     0
@@ -27,12 +18,9 @@ DSL on Image [2,2]:
     1
     0)
    (vec-shuffle-swizzle-double
+    (lit (bv #x000000000000 48))
     (vec-shuffle-rotate
      (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6 8)
-     (idx-j 0)
-     8)
-    (vec-shuffle-rotate
-     (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8)
      (idx-j 0)
      8)
     6
@@ -54,6 +42,6 @@ DSL on Image [2,2]:
  (lit (bv #x09 8))
  1
  8)
-synth cost: 68
+synth cost: 66
 Does Solution have a symmetric structure?
 #f

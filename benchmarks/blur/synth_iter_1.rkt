@@ -7,8 +7,8 @@
 (require rosette/solver/smt/boolector)
 
 
-
-
+(current-solver (boolector))
+(current-bitwidth 16)
 
 
 
@@ -1047,45 +1047,6 @@
   )
 
 
-;; Blur used by Halide
-(define (sum img imgR imgC blurR blurC prec) 
-  (define i_bound (+ (- imgR blurR) 1))
-  (define j_bound (+ (- imgC blurC) 1))
-  (define numBlur (* blurR blurC))
-  (define img_size (* imgR imgC prec))
-  (apply concat
-         (for/list ([i (range i_bound)])
-                   (apply concat
-                          (for/list ([j (range j_bound)])
-                                    (define offset (+ (* i imgC ) j))
-                                    (define reduced-vertical-slice  ; tensor of shape (1, blurR)
-                                      (apply
-                                        concat
-                                        (for/list ([s  (range blurR)])
-                                                  (define horizontal-slice (vector-load img img_size (+ (* s imgC) offset) blurC prec))
-                                                    (apply bvadd 
-                                                           (for/list ([t (reverse (range blurC))])
-                                                                     (ext-bv horizontal-slice t prec)
-                                                                     )
-                                                           ) 
-
-
-                                                  )
-                                        )
-                                      )
-
-                                    ;; Now reduce vertical slice and take vertical average
-                                      (apply bvadd
-                                             (for/list ([k (reverse (range blurR))])
-                                                       (ext-bv reduced-vertical-slice k prec)
-                                                       )
-                                             )
-                                    )
-                          )
-                   )
-         )
-  )
-
 
 ;; Blur used by Halide
 (define (blur img imgR imgC blurR blurC prec) 
@@ -1148,6 +1109,7 @@
 
 
 
+
 (define (idx-exprs vars #:depth k)
   (assert (> k 0))
   (cond
@@ -1156,62 +1118,27 @@
      ]
     [(choose* #t #f)
      (idx-j 0)
-     ]
+    ]
     [(choose* #t #f)
      (idx-add 
-       (idx-i 0)
+       (idx-exprs vars #:depth (- k 1))
        1
        )
      ]
     [(choose* #t #f)
      (idx-add 
-       (idx-i 0)
+       (idx-exprs vars #:depth (- k 1))
        2
        )
      ]
-
     [(choose* #t #f)
      (idx-mul 
-     (idx-add 
-       (idx-i 0)
-       2
-       ) 6 )
+       (idx-exprs vars #:depth (- k 1))
+       6
+       )
      ]
-
-    [(choose* #t #f)
-     (idx-mul 
-     (idx-add 
-       (idx-i 0)
-       1
-       ) 6 )
-     ]
-
-    [(choose* #t #f)
-     (idx-mul 
-     (idx-add 
-       (idx-i 0)
-       0
-       ) 6 )
-     ]
-    ;[(choose* #t #f)
-    ; (idx-add 
-    ;   (idx-exprs vars #:depth (- k 1))
-    ;   2
-    ;   )
-    ; ]
-    ;[(choose* #t #f)
-    ; (idx-mul 
-    ;   (idx-exprs vars #:depth (- k 1))
-    ;   6
-    ;   )
-    ; ]
-    ;[(choose* #t #f)
-    ; (nop  
-    ;   (idx-exprs vars #:depth (- k 1))
-    ;   )
-    ; ]
     [else
-      0 
+       0 
       ]
     )
   )
@@ -1221,7 +1148,6 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
-
     [(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 0) 6)
@@ -1243,7 +1169,6 @@
     ;           (idx-mul (idx-add (idx-i 0) 3) 6)
     ;           6 8)  ; Row 0
     ; ]
-
     ;[(choose* #t #f)
     ; (vec-load (reg 0) 288 
     ;           (idx-mul (idx-add (idx-i 0) 4) 6)
@@ -1278,74 +1203,60 @@
        8
        )
      ]
-    ;[(choose* #t #f)
-    ; (vec-shuffle-rotate 
-    ;   (mem vars #:depth (- k 1))
-    ;   (idx-add (idx-j 0) 1)
-    ;   8
-    ;   )
-    ; ]
-    ;[(choose* #t #f)
-    ; (vec-shuffle-rotate 
-    ;   (mem vars #:depth (- k 1))
-    ;   (idx-add (idx-j 0) 2)
-    ;   8
-    ;   )
-    ; ]
-    ;[
-    ; (choose* #t #f)
-    ; (dot-prod
-    ;   ;(shufl vars #:depth (- k 1))
-    ;   (lit (bv 0 (bitvector 32)))
-    ;   (shufl vars #:depth (- k 1))
-    ;   (lit one)
-    ;   ;(shufl vars #:depth (- k 1))
-    ;   4 3 8 8 
-    ;   )
-    ; ]
-    ;[(choose* #t #f)
-    ; (vec-div  (shufl vars #:depth (- k 1))  
-    ;           (lit (concat 
-    ;                  (bv 3 (bitvector 8))
-    ;                  (bv 3 (bitvector 8))
-    ;                  (bv 3 (bitvector 8))
-    ;                  (bv 3 (bitvector 8))
-    ;                  ))
-    ;           4 8 
-    ;           )]
+    [
+     (choose* #t #f)
+     (dot-prod
+       ;(shufl vars #:depth (- k 1))
+       (lit (bv 0 (bitvector 32)))
+       (shufl vars #:depth (- k 1))
+       (lit one)
+       ;(shufl vars #:depth (- k 1))
+       4 3 8 8 
+       )
+     ]
+    [(choose* #t #f)
+     (vec-div  ;(shufl vars #:depth (- k 1))  
+         (dot-prod
+           ;(shufl vars #:depth (- k 1))
+           (lit (bv 0 (bitvector 32)))
+           (shufl vars #:depth (- k 1))
+           (lit one)
+           ;(shufl vars #:depth (- k 1))
+           4 3 8 8 
+           )
+               (lit (concat 
+                      (bv 3 (bitvector 8))
+                      (bv 3 (bitvector 8))
+                      (bv 3 (bitvector 8))
+                      (bv 3 (bitvector 8))
+                      ))
+               4 8 
+               )]
 
     [(choose* #t #f)
-     (vec-div  
-               (shufl vars #:depth (- k 1))
+     (vec-div (vec-reduction (shufl vars #:depth (- k 1)) 4 8)
                (lit  
-                 (bv 9 (bitvector 8))
-                 )
-               1 8 
-               )]
-    [(choose* #t #f)
-     (vec-div  
-                (vec-reduction (shufl vars #:depth (- k 1)) 12 8
-                    )
-               (lit  
-                 (bv 9 (bitvector 8))
+                 (bv 3 (bitvector 8))
                  )
                1 8 
                )]
     ;[(choose* #t #f)
     ; (lit one) ; 16 length vector of 1's
     ; ]
-    [(choose* #t #f)
-     (lit (bv 0 (bitvector 48)))
-     ]
     ;[(choose* #t #f)
-    ; (vec-reduction (shufl vars #:depth (- k 1)) 6 8
+    ; (lit (bv 0 (bitvector 32)))
+    ; ]
+    ;[(choose* #t #f)
+    ; (vec-reduction (shufl vars #:depth (- k 1)) 4 8
     ;                )]
     [(choose* #t #f)
-     (vec-reduction (shufl vars #:depth (- k 1)) 12 8
-                    )]
-    [else ;(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
-          )]
+                    )]
+
+    [else ;(choose* #t #f)
+      (lit (bv 0 (bitvector 48)))
+     ]
+
     ;[else
     ;  (mem vars #:depth k)]
 
@@ -1376,192 +1287,147 @@
 ;    )
 ;  )
 
+;; Define arbritray nesting of grammars.
+;; Top-grammar invokes grammar with depth k-1
+;; 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
 
 
 
 
+(define (blur-dsl-loop img) 
+  (apply concat
+         (for/list ([i (range 4)]) 
+                   (apply concat
+                          (for/list ([j (range 4)]) 
+                                    (define row-i (vec-load (reg 0) 288 (* i 6) 6 8  ))
+                                    (define row-ip1 (vec-load (reg 0) 288 (* (+ i 1) 6) 6 8  ))
+                                    (define row-ip2 (vec-load (reg 0) 288 (* (+ i 2) 6) 6  8  ))
+
+                                    (define row_0 (vec-shuffle-rotate row-i j 8))
+                                    (define row_1 (vec-shuffle-rotate row-ip1 j 8))
+                                    (define row_2 (vec-shuffle-rotate row-ip2 j 8))
+
+
+
+                                    (define left-concat (vec-shuffle-swizzle-double
+                                                          row_0
+                                                          row_1
+                                                          6 8 0 6 3 1 0
+                                                          ))
+
+
+                                    (define right-concat (vec-shuffle-swizzle-double
+                                                           row_2
+                                                           (lit (bv 0 (bitvector 48)))
+                                                           6 8 0 6 3 1 0
+                                                           ))
+
+                                    (define slice (vec-shuffle-swizzle-double
+                                                    left-concat right-concat
+                                                    6 8 0 6 6 1 0
+                                                    ))
 
 
 
 
-
-(define row-i (vec-load (reg 0) 288  (idx-mul (idx-add (idx-i 0) 0) 6)  6 8  ))
-(define row-ip1 (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 1) 6) 6 8  ))
-(define row-ip2 (vec-load (reg 0) 288 (idx-mul (idx-add (idx-i 0) 2) 6) 6  8  ))
-
-(define row_0 (vec-shuffle-rotate row-i (idx-j 0) 8))
-(define row_1 (vec-shuffle-rotate row-ip1 (idx-j 0) 8))
-(define row_2 (vec-shuffle-rotate row-ip2 (idx-j 0) 8))
+                                    (define horizontal-red (dot-prod
+                                                             (lit (bv 0 (bitvector 32)))
+                                                             slice
+                                                             (lit one)
+                                                             4 3 8 8 
+                                                             ))
 
 
 
-(define left-concat (vec-shuffle-swizzle-double
-                      row_0
-                      row_1
-                      6 8 0 6 3 1 0
-                      ))
-(define right-concat (vec-shuffle-swizzle-double
-                       row_2
-                       (lit (bv 0 (bitvector 48)))
-                       6 8 0 6 3 1 0
-                       ))
-(define slice (vec-shuffle-swizzle-double
-                left-concat right-concat
-                6 8 0 6 6 1 0
-                ))
-(define reduction (vec-reduction slice 12 8))
-
-(define  (test val i j)
-  (interpret reduction (vector val i j))
-  )
+                                    (define horizontal-div (vec-div horizontal-red (lit (concat 
+                                        (bv 3 (bitvector 8)) (bv 3 (bitvector 8))  (bv 3 (bitvector 8))(bv 3 (bitvector 8))
+                                                                                          )
+                                                                                        ) 4 8)
+                                      )
 
 
-;(displayln "Spec On Image:")
-;(print-mat (sum image 6 6 3 3 8 ) 4 4 8)
+
+                                    (define vertical-reduction (vec-reduction horizontal-div 4 8))
 
 
-;(displayln "DSL on Image [0,0]:")
-;(println (bitvector->integer (test image 0 0 )))
+
+                                    (define result-i-j (vec-div vertical-reduction (lit (bv 3 (bitvector 8))) 1 8  ))
+
+                                    (interpret result-i-j (vector img))
+                                    )
+                                    )
 
 
-;(displayln "DSL on Image [1,1]:")
-;(println (bitvector->integer (test image 1 1 )))
-
-
-;(displayln "DSL on Image [2,2]:")
-;(println (bitvector->integer (test image 2 2 )))
-
-
-(clear-vc!)
-(define (synth_check arg0 idx-i idx-j )
-(vector-div 
-(dsl_inst_1 
-(vector-two-input-swizzle 
-(vector-two-input-swizzle 
-(vector-shuffle-lrotate
-(vector-load 
-arg0
-288
-(* ; idx-mul
-(+ ; idx-add
-idx-i ; idx-i
-1
-)
-6
-)
-6
-8
-)
-idx-j ; idx-j
-8
-)
-(vector-shuffle-lrotate
-(vector-load 
-arg0
-288
-(* ; idx-mul
-(+ ; idx-add
-idx-i ; idx-i
-0
-)
-6
-)
-6
-8
-)
-idx-j ; idx-j
-8
-)
-6
-8
-0
-6
-3
-1
-0
-)
-(vector-two-input-swizzle 
-(bv #x000000000000 48)
-(vector-shuffle-lrotate
-(vector-load 
-arg0
-288
-(* ; idx-mul
-(+ ; idx-add
-idx-i ; idx-i
-2
-)
-6
-)
-6
-8
-)
-idx-j ; idx-j
-8
-)
-6
-8
-0
-6
-3
-1
-0
-)
-6
-8
-0
-6
-6
-1
-0
-)
-12
-8
-)
-(bv #x09 8)
-1
-8
+                          )
+                   )
 )
 
-)
-(define-symbolic sym_arg0 (bitvector 288))
-(define spec-res (box-blur sym_arg0 6 6 3 3 8))
-(define cex (verify (begin (assert (equal? (synth_check sym_arg0 0 0) (index-into-mat spec-res 4 4 8 0 0)))
+(displayln "Spec On Image:")
+(print-mat (blur image 6 6 3 3 8 ) 4 4 8)
 
-(assert (equal? (synth_check sym_arg0 0 1) (index-into-mat spec-res 4 4 8 0 1)))
+(displayln "DSL on Image:")
+(print-mat (blur-dsl-loop image) 4 4 8)
+;(define temp (blur-dsl-loop image))
 
-(assert (equal? (synth_check sym_arg0 0 2) (index-into-mat spec-res 4 4 8 0 2)))
 
-(assert (equal? (synth_check sym_arg0 0 3) (index-into-mat spec-res 4 4 8 0 3)))
 
-(assert (equal? (synth_check sym_arg0 1 0) (index-into-mat spec-res 4 4 8 1 0)))
 
-(assert (equal? (synth_check sym_arg0 1 1) (index-into-mat spec-res 4 4 8 1 1)))
 
-(assert (equal? (synth_check sym_arg0 1 2) (index-into-mat spec-res 4 4 8 1 2)))
 
-(assert (equal? (synth_check sym_arg0 1 3) (index-into-mat spec-res 4 4 8 1 3)))
 
-(assert (equal? (synth_check sym_arg0 2 0) (index-into-mat spec-res 4 4 8 2 0)))
+(define v0_0 (bv #x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567 288))
+(define env_0_i0_j0 (vector v0_0   0 0))
+(define env_0_i0_j1 (vector v0_0   0 1))
+(define env_0_i0_j2 (vector v0_0   0 2))
+(define env_0_i0_j3 (vector v0_0   0 3))
+(define env_0_i1_j0 (vector v0_0   1 0))
+(define env_0_i1_j1 (vector v0_0   1 1))
+(define env_0_i1_j2 (vector v0_0   1 2))
+(define env_0_i1_j3 (vector v0_0   1 3))
+(define env_0_i2_j0 (vector v0_0   2 0))
+(define env_0_i2_j1 (vector v0_0   2 1))
+(define env_0_i2_j2 (vector v0_0   2 2))
+(define env_0_i2_j3 (vector v0_0   2 3))
+(define env_0_i3_j0 (vector v0_0   3 0))
+(define env_0_i3_j1 (vector v0_0   3 1))
+(define env_0_i3_j2 (vector v0_0   3 2))
+(define env_0_i3_j3 (vector v0_0   3 3))
+(define sol 
+                             (synthesize 
+                            #:forall (list v0_0  env_0_i0_j0 env_0_i0_j1 env_0_i0_j2 env_0_i0_j3 env_0_i1_j0 env_0_i1_j1 env_0_i1_j2 env_0_i1_j3 env_0_i2_j0 env_0_i2_j1 env_0_i2_j2 env_0_i2_j3 env_0_i3_j0 env_0_i3_j1 env_0_i3_j2 env_0_i3_j3)
+                             #:guarantee 
+                            (begin
+                             (assert (equal? (interpret sketch-grammar env_0_i0_j0) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 0 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j1) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 0 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j2) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 0 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i0_j3) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 0 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j0) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 1 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j1) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 1 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j2) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 1 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i1_j3) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 1 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j0) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 2 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j1) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 2 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j2) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 2 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i2_j3) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 2 3) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j0) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 3 0) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j1) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 3 1) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j2) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 3 2) ))
+(assert (equal? (interpret sketch-grammar env_0_i3_j3) (index-into-mat (blur v0_0  6 6 3 3 8) 4 4 8 3 3) ))
 
-(assert (equal? (synth_check sym_arg0 2 1) (index-into-mat spec-res 4 4 8 2 1)))
+                             )))
+(assert (sat? sol)"Unsatisfiable")
 
-(assert (equal? (synth_check sym_arg0 2 2) (index-into-mat spec-res 4 4 8 2 2)))
+        (define synth_res (evaluate sketch-grammar sol))
+        (pretty-print synth_res)
+        (display "synth cost: ")
+        (println (cost synth_res))
 
-(assert (equal? (synth_check sym_arg0 2 3) (index-into-mat spec-res 4 4 8 2 3)))
+        ;(println (get-structure-list synth_res))
+        (displayln "Does Solution have a symmetric structure?")
+        (println (has-symmetric-structure synth_res))
 
-(assert (equal? (synth_check sym_arg0 3 0) (index-into-mat spec-res 4 4 8 3 0)))
-
-(assert (equal? (synth_check sym_arg0 3 1) (index-into-mat spec-res 4 4 8 3 1)))
-
-(assert (equal? (synth_check sym_arg0 3 2) (index-into-mat spec-res 4 4 8 3 2)))
-
-(assert (equal? (synth_check sym_arg0 3 3) (index-into-mat spec-res 4 4 8 3 3)))
-) ))
-(assert (sat? cex) "Verification Passed!")
-(define cex_v0 (evaluate sym_arg0 cex))
-(display "cex_v0 ")
-(displayln cex_v0)
+        (with-output-to-file "./body_1.txt" (lambda() (print-prog synth_res)))
+        
