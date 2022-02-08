@@ -458,119 +458,150 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   if Context.isCompiledAbstraction(IndexExpr.id):
     return Context.getCompiledAbstractionForID(IndexExpr.id)
 
-  # Just a sanity check
-  assert type(IndexExpr.obj) == ElemTypeInfo
+  # If the bitindex indexes intoa a variable, compile that.
+  if type(IndexExpr.obj) == Var:
+    # Compile the vector first
+    Vector = CompileExpression(IndexExpr.obj, Context)
+    # Element type of this variable must be known
+    assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+    print("Vector.getName():")
+    print(Vector.getName())
+    ElemType = Context.getElemTypeOfVariable(Vector.getName())
 
-  # Check for nested bit indices
-  InnerBitIndex = IndexExpr.obj.obj
-  if type(InnerBitIndex) == BitIndex:
-    # Compile the innermost bit index first
-    OuterBitIndex = IndexExpr
-    OuterBitIndexType = HexTypes[OuterBitIndex.obj.elemtype]
-    InnerBitIndexType = HexTypes[InnerBitIndex.obj.elemtype]
-    print("OuterBitIndex.idx:")
-    print(OuterBitIndex.idx)
-    OuterIndex = CompileIndex(OuterBitIndex.idx, Context)
-    InnerIndex = CompileIndex(InnerBitIndex.idx, Context)
-    print("OuterBitIndex:")
-    print(OuterBitIndex)
-    print("InnerBitIndex:")
-    print(InnerBitIndex)
-    print("OuterBitIndexType:")
-    OuterBitIndexType.print()
-    print("InnerBitIndexType:")
-    InnerBitIndexType.print()
-    assert type(InnerBitIndex.obj.obj) == Var
-    BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
-    # First compute the low index
-    OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
-                                  OuterIndex.getType())
-    InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
-                                  InnerIndex.getType())
-    print("OuterCoFactor:")
-    OuterCoFactor.print()
-    OuterCoFactor.getType().print()
-    print("OuterIndex:")
-    OuterIndex.print()
-    OuterIndex.getType().print()
-    print("InnerCoFactor:")
-    InnerCoFactor.print()
-    InnerCoFactor.getType().print()
-    print("InnerIndex:")
-    InnerIndex.print()
-    InnerIndex.getType().print()
-    OuterLowIndex = RoseMulOp.create(Context.genName(), \
-                              [OuterCoFactor, OuterIndex])
-    InnerLowIndex = RoseMulOp.create(Context.genName(), \
-                              [InnerCoFactor, InnerIndex])
-    LowIndex = RoseAddOp.create(Context.genName(), \
-                              [OuterLowIndex, InnerLowIndex])
-    # Generate value for bitwidth
-    BitwidthValue = OuterCoFactor
+    # Compile the low index
+    IndexVal = CompileIndex(IndexExpr.idx, Context)
+    CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                  IndexVal.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), \
+                              [CoFactor, IndexVal])
+    # Get the high index
+    BitwidthValue = CoFactor
     HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
                                       LowIndex.getType())
     HighIndex = RoseAddOp.create(Context.genName(), \
                                   [LowIndex, HighIndexOff])
     # Add the generated ops to the IR and the context
-    Context.addAbstractionToIR(OuterLowIndex)
-    Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
-    Context.addAbstractionToIR(InnerLowIndex)
-    Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
     Context.addAbstractionToIR(LowIndex)
     Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
     Context.addAbstractionToIR(HighIndex)
     Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
-    print("OuterLowIndex:")
-    OuterLowIndex.print()
-    print("InnerLowIndex:")
-    InnerLowIndex.print()
-    print("LOW INDEX: ")
-    LowIndex.print()
-    print("HIGH INDEX:")
-    HighIndex.print()
     # Now generate the bvextract op
-    Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
-                                      LowIndex, HighIndex, BitwidthValue)
-    # Add this op to context for the inner bitindex
-    print(InnerBitIndex)
-    Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
-  else:
-    # Compile the low index first
-    ElemType = HexTypes[IndexExpr.obj.elemtype]
-    CompiledLowIndex = CompileIndex(IndexExpr.idx, Context)
-    print("COMPILED LOW INDEX:")
-    print(CompiledLowIndex)
-    CompiledLowIndex.print()
-    LowCoFactor = RoseConstant.create(ElemType.getBitwidth(),\
-                              CompiledLowIndex.getType())
-    LowIndex = RoseMulOp.create(Context.genName(), \
-                              [LowCoFactor, CompiledLowIndex])
-    Context.addAbstractionToIR(LowIndex)
-    Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
-
-    # Compile the vector object
-    Vector = CompileExpression(IndexExpr.obj, Context)
-    print("VECTOR:")
-    print(Vector)
-    Vector.print()
-
-    # Get the high index
-    assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
-    ElemType = Context.getElemTypeOfVariable(Vector.getName())
-    assert ElemType.isBitVectorTy()
-    IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
-    HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
-    print("HIGH INDEX:")
-    HighIndex.print()
-    Context.addAbstractionToIR(HighIndex)
-    Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
-
-    # Get the bitwdith value
-    BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
-
-    # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
+                                      LowIndex, HighIndex, BitwidthValue)
+  else:
+    # Account for another case
+    assert type(IndexExpr.obj) == ElemTypeInfo
+
+    # Check for nested bit indices
+    InnerBitIndex = IndexExpr.obj.obj
+    if type(InnerBitIndex) == BitIndex:
+      # Compile the innermost bit index first
+      OuterBitIndex = IndexExpr
+      OuterBitIndexType = HexTypes[OuterBitIndex.obj.elemtype]
+      InnerBitIndexType = HexTypes[InnerBitIndex.obj.elemtype]
+      print("OuterBitIndex.idx:")
+      print(OuterBitIndex.idx)
+      OuterIndex = CompileIndex(OuterBitIndex.idx, Context)
+      InnerIndex = CompileIndex(InnerBitIndex.idx, Context)
+      print("OuterBitIndex:")
+      print(OuterBitIndex)
+      print("InnerBitIndex:")
+      print(InnerBitIndex)
+      print("OuterBitIndexType:")
+      OuterBitIndexType.print()
+      print("InnerBitIndexType:")
+      InnerBitIndexType.print()
+      assert type(InnerBitIndex.obj.obj) == Var
+      BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
+      # First compute the low index
+      OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
+                                    OuterIndex.getType())
+      InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
+                                    InnerIndex.getType())
+      print("OuterCoFactor:")
+      OuterCoFactor.print()
+      OuterCoFactor.getType().print()
+      print("OuterIndex:")
+      OuterIndex.print()
+      OuterIndex.getType().print()
+      print("InnerCoFactor:")
+      InnerCoFactor.print()
+      InnerCoFactor.getType().print()
+      print("InnerIndex:")
+      InnerIndex.print()
+      InnerIndex.getType().print()
+      OuterLowIndex = RoseMulOp.create(Context.genName(), \
+                                [OuterCoFactor, OuterIndex])
+      InnerLowIndex = RoseMulOp.create(Context.genName(), \
+                                [InnerCoFactor, InnerIndex])
+      LowIndex = RoseAddOp.create(Context.genName(), \
+                                [OuterLowIndex, InnerLowIndex])
+      # Generate value for bitwidth
+      BitwidthValue = OuterCoFactor
+      HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
+                                        LowIndex.getType())
+      HighIndex = RoseAddOp.create(Context.genName(), \
+                                    [LowIndex, HighIndexOff])
+      # Add the generated ops to the IR and the context
+      Context.addAbstractionToIR(OuterLowIndex)
+      Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
+      Context.addAbstractionToIR(InnerLowIndex)
+      Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
+      print("OuterLowIndex:")
+      OuterLowIndex.print()
+      print("InnerLowIndex:")
+      InnerLowIndex.print()
+      print("LOW INDEX: ")
+      LowIndex.print()
+      print("HIGH INDEX:")
+      HighIndex.print()
+      # Now generate the bvextract op
+      Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
                                         LowIndex, HighIndex, BitwidthValue)
+      # Add this op to context for the inner bitindex
+      print(InnerBitIndex)
+      Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
+    else:
+      # Compile the low index first
+      ElemType = HexTypes[IndexExpr.obj.elemtype]
+      CompiledLowIndex = CompileIndex(IndexExpr.idx, Context)
+      print("COMPILED LOW INDEX:")
+      print(CompiledLowIndex)
+      CompiledLowIndex.print()
+      LowCoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                CompiledLowIndex.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), \
+                                [LowCoFactor, CompiledLowIndex])
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+
+      # Compile the vector object
+      Vector = CompileExpression(IndexExpr.obj, Context)
+      print("VECTOR:")
+      print(Vector)
+      Vector.print()
+
+      # Get the high index
+      #assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+      #ElemType = Context.getElemTypeOfVariable(Vector.getName())
+      #assert ElemType.isBitVectorTy()
+      IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
+      HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
+      print("HIGH INDEX:")
+      HighIndex.print()
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+
+      # Get the bitwdith value
+      BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
+
+      # Now, generate the extract op. 
+      Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
+                                          LowIndex, HighIndex, BitwidthValue)
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -689,6 +720,40 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
   return RoseUndefValue()
 
 
+def GetBitIndexType(IndexExpr, Context : HexRoseContext):
+  print("GET INDEX TYPE")
+  print("INDEX EXPR:")
+  print(IndexExpr)
+  # If this expression is compiled, no need to recompile
+  if Context.isCompiledAbstraction(IndexExpr.id):
+    CompiledVal = Context.getCompiledAbstractionForID(IndexExpr.id)
+    return CompiledVal.getType()
+
+  # If the bitindex indexes intoa a variable, compile that.
+  if type(IndexExpr.obj) == Var:
+    # Get the vector first
+    print("--VARIABLE")
+    if Context.isVariableDefined(IndexExpr.obj.name):
+      ID = Context.getVariableID(IndexExpr.obj.name)
+      Vector = Context.getCompiledAbstractionForID(ID)
+    else:
+      return RoseUndefValue()
+    # Element type of this variable must be known
+    assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
+    return Context.getElemTypeOfVariable(Vector.getName())
+    #ElemType = HexTypes[IndexExpr.elemtype]
+    #print("ElemType:")
+    #ElemType.print()
+    #return ElemType
+  
+  # Account for another case
+  assert type(IndexExpr.obj) == ElemTypeInfo
+  ElemType = HexTypes[IndexExpr.obj.elemtype]
+  print("----ElemType:")
+  ElemType.print()
+  return ElemType
+
+
 def GetExpressionType(Expr, Context : HexRoseContext):
   print("GET EXPRESSION TYPE:")
   print("EXPRESSION:")
@@ -702,33 +767,7 @@ def GetExpressionType(Expr, Context : HexRoseContext):
         return RoseType.getUndefTy()
   
   if type(Expr) == BitIndex:
-    assert type(Expr.obj) == ElemTypeInfo
-    # Bitindex could be indexing into a variable or another bitslice
-    if type(Expr.obj.obj) == Var:
-      Variable = Expr.obj.obj
-      if not Context.isVariableDefined(Variable.name):
-        return RoseType.getUndefTy()
-      if not Context.isElemTypeOfVariableKnown(Variable.name):
-        return RoseType.getUndefTy()
-      ID = Context.getVariableID(Variable.name)
-      BitVector = Context.getCompiledAbstractionForID(ID)
-    else:
-      assert type(Expr.obj.obj) == BitIndex
-      BitIndexVar = Expr.obj.obj
-      assert type(BitIndexVar.obj) == ElemTypeInfo
-      assert type(BitIndexVar.obj.obj) == Var
-      Variable = BitIndexVar.obj.obj
-      if not Context.isVariableDefined(Variable.name):
-        return RoseType.getUndefTy()
-      if not Context.isElemTypeOfVariableKnown(Variable.name):
-        return RoseType.getUndefTy()
-      ID = Context.getVariableID(Variable.name)
-      BitVector = Context.getCompiledAbstractionForID(ID)
-    if Context.isElemTypeOfVariableKnown(BitVector.getName()) == False:
-      return RoseType.getUndefTy()
-    ElemType = Context.getElemTypeOfVariable(BitVector.getName())
-    assert ElemType.isBitVectorTy()
-    return ElemType
+    return GetBitIndexType(Expr, Context)
   
   if type(Expr) == BitSlice:
     print("GETTING BIT SLICE LOW INDEX")
@@ -867,6 +906,8 @@ def GetRHSNumberType(Update, Context : HexRoseContext):
     # The condition cannot be a number. Assert that here.
     assert type(RHS.cond) != Number
     RHSType = GetExpressionType(RHS.then, Context)
+    print("SELECT RHS THEN:")
+    RHSType.print()
     if not RHSType.isUndefTy():
       return RHSType
     RHSType = GetExpressionType(RHS.otherwise, Context)
@@ -1129,6 +1170,8 @@ def CompileSelect(Select, Context : HexRoseContext):
   print(Select)
   # Compile the operation
   Cond = CompileExpression(Select.cond, Context)
+  print("Cond:")
+  Cond.print()
   Then = CompileExpression(Select.then, Context)
   Otherwise = CompileExpression(Select.otherwise, Context)
   Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
@@ -1566,6 +1609,13 @@ def CompileSemantics(Sema):
     else:
       assert type(Param) == Var
       ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+      # Add the element type info
+      print("ParamVal.getName():")
+      print(ParamVal.getName())
+      if "Q" in ParamVal.getName():
+        print(Sema.paramtypes[Index])
+        ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
+        RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
     ParamVal.print()
     #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
@@ -1999,6 +2049,7 @@ BinaryOps = {
     '<<' : HandleToLshr,
     '&' : HandleToAnd,
     '|' : HandleToOr,
+    '||' : HandleToOr,
     '^' : HandleToXor,
     'AND' : HandleToAnd,
     'OR' : HandleToOr,
