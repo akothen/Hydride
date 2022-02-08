@@ -219,9 +219,14 @@ def p_args(p):
   else:
     p[0] = p[1] + [p[3]] #[Arg(p[3], expr_id)]
 
+
 def p_expr_bit_index(p):
   'expr : expr LBRACE expr RBRACE'
   expr_id = "index." + GenUniqueID(parser)
+  if type(p[1]) == Var:
+    if "Q" in p[1].name:
+      p[0] = BitSlice(p[1], p[3], p[3], expr_id)
+      return
   p[0] = BitIndex(p[1], p[3], expr_id)
 
 def p_expr_bit_extension(p):
@@ -436,21 +441,14 @@ def Parse(src):
   AST = parser.parse(src)
   return AST
 
-from pprint import pformat
 
-def pretty_print(root):
-  def to_dict(root):
-    if isinstance(root, tuple):
-      out = dict(root._asdict())
-      for elem, val in out.items():
-        out[elem] = to_dict(val)
-      return {type(root).__name__ : out}
-    elif isinstance(root, list):
-      out = list(map(to_dict, root))
-      return out
-    else:
-      return root
-  return pformat(to_dict(root), indent=1)
+def GetVariableSize(Variable):
+  if "Q" in Variable:
+    return 128
+  elif "R" in Variable:
+    return 32
+  elif "V" in Variable:
+    return 1024
 
 
 def GetSpecFrom(inst, Pseudocode):
@@ -515,8 +513,16 @@ def GetSpecFrom(inst, Pseudocode):
   else:
     name = "TODO"
     params = []
+  
+  param_types = []
+  for param in params:
+    print("param:")
+    print(param)
+    param_types.append(GetVariableSize(param.name))
+  print("param_types:")
+  print(param_types)
   sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), \
-    retname =retname, rettype=rettype, lanes=lanes)
+    retname =retname, rettype=rettype, lanes=lanes, paramtypes=param_types)
   return sema
 
 
@@ -532,6 +538,5 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
-
 
 
