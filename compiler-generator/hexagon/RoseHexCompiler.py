@@ -308,6 +308,10 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   assert not isinstance(Low, RoseConstant)
   assert not isinstance(High, RoseConstant)
 
+  # Account for cases here the low and the high indices are the same.
+  if Low == High:
+    return 1
+
   # Just handle one _very_ common case where high = i + some_constant
   # Strip away any cast first
   assert isinstance(High, RoseAddOp)
@@ -1602,7 +1606,8 @@ def CompileSemantics(Sema):
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
-    ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
+    #ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
+    ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
     # Create a new rosette value
     if type(Param) == ElemTypeInfo:
       ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
@@ -1612,10 +1617,10 @@ def CompileSemantics(Sema):
       # Add the element type info
       print("ParamVal.getName():")
       print(ParamVal.getName())
-      if "Q" in ParamVal.getName():
-        print(Sema.paramtypes[Index])
-        ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
-        RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
+      #if "Q" in ParamVal.getName():
+      print(Sema.paramtypes[Index])
+      #ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
+      RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
     ParamVal.print()
     #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
