@@ -199,7 +199,6 @@ class RoseOperation(RoseValue):
         return False
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
-        and self.ParentBlock.getRegionID() == Other.getParent().getRegionID() \
         and self.getType() == Other.getType()
 
   def getOpcode(self):
@@ -307,6 +306,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 
