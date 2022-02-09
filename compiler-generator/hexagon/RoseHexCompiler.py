@@ -309,8 +309,14 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   assert not isinstance(High, RoseConstant)
 
   # Account for cases here the low and the high indices are the same.
-  if Low == High:
-    return 1
+  if not isinstance(High, RoseOperation) \
+    and not isinstance(Low, RoseOperation):
+    if Low == High:
+      return 1
+  elif isinstance(High, RoseOperation) \
+    and isinstance(Low, RoseOperation):
+    if Low.isSameAs(High):
+      return 1
 
   # Just handle one _very_ common case where high = i + some_constant
   # Strip away any cast first
@@ -1137,6 +1143,8 @@ def CompileUpdate(Update, Context : HexRoseContext):
       BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
       # Now generate the bvinsert op
       # Sometimes size extension of the RHS is required, so we have to handle it here
+      print("+++ElemType:")
+      ElemType.print()
       if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
         # Let's sign-extend
         RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
@@ -1196,7 +1204,7 @@ def CompileUnaryExpr(UnaryExpr, Context : HexRoseContext):
   print(UnaryExpr)
   # Compile the operation
   Value = CompileExpression(UnaryExpr.a, Context)
-  Operation = UnaryOps[UnaryExpr.op]()(UnaryExpr.id, Value)
+  Operation = UnaryOps[UnaryExpr.op]()(Context.genName(), Value)
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
@@ -1601,6 +1609,10 @@ def CompileStatement(Stmt, Context : HexRoseContext):
 def CompileSemantics(Sema):
   # Create the root context
   RootContext = HexRoseContext()
+  
+  # Some sanity checks
+  assert len(Sema.params) > 0
+  assert len(Sema.params) == len(Sema.paramtypes)
   ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
@@ -1609,6 +1621,8 @@ def CompileSemantics(Sema):
     #ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
     ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
     # Create a new rosette value
+    print("Param:")
+    print(Param)
     if type(Param) == ElemTypeInfo:
       ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
     else:
@@ -1617,10 +1631,9 @@ def CompileSemantics(Sema):
       # Add the element type info
       print("ParamVal.getName():")
       print(ParamVal.getName())
-      #if "Q" in ParamVal.getName():
       print(Sema.paramtypes[Index])
-      #ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
-      RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
+      if ParamVal.getName() in Sema.scalarregs:
+        RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
     ParamVal.print()
     #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
     if not IsOutParam:
@@ -2661,5 +2674,6 @@ test105 = {
 
 if __name__ == '__main__':
   Compile(test86)
+
 
 
