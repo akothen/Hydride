@@ -187,9 +187,15 @@ def p_expr_call(p):
   if len(p) == 5:
     if p[1] == "VELEM":
       p[0] = Number(VELEM(p[3][0].val))
-    else:
-      expr_id = "call." + GenUniqueID(parser)
-      p[0] = Call(p[1], p[3], None, expr_id)
+      return
+    if p[1] == "select_bytes":
+      bitslice_id = "bitslice." + GenUniqueID(parser)
+      Condition = BitSlice(p[3][0], p[3][1], p[3][1], bitslice_id)
+      expr_id = "select." + GenUniqueID(parser)
+      p[0] = Select(Condition, p[3][2], p[3][3], expr_id)
+      return
+    expr_id = "call." + GenUniqueID(parser)
+    p[0] = Call(p[1], p[3], None, expr_id)
   elif len(p) == 7:
     expr_id = "call." + GenUniqueID(parser)
     p[0] = Call(p[1], p[3], p[6], expr_id)
@@ -583,6 +589,5 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
-
 
 
