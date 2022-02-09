@@ -21,6 +21,10 @@ class RoseUndefValue(RoseValue):
 # Constant value (integer and float) class
 class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
+    # Some sanity checks
+    if type(Value) == int:
+      assert Type.isBitVectorTy() or Type.isIntegerTy()
+      assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     super().__init__(str(Value), Type)
   
