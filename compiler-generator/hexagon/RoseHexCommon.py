@@ -8,7 +8,7 @@
 HVXVectorWidth = 1024
 
 def VWIDTH():
-  return (HVXVectorWidth / 8)
+  return int(HVXVectorWidth / 8)
 
 def VBITS():
   return HVXVectorWidth

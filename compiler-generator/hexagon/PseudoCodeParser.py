@@ -551,7 +551,7 @@ def GetSpecFrom(inst, Pseudocode):
     name = "TODO"
     params = []
   
-  param_types = []
+  param_sizes = []
   param_args = []
   scalarregs = []
   for param in params:
@@ -560,20 +560,21 @@ def GetSpecFrom(inst, Pseudocode):
     if isinstance(param, UnaryExpr):
       param = param.a
     if type(param) == Var:
-      param_types.append(GetVariableSize(param.name))
+      param_sizes.append(GetVariableSize(param.name))
       if IsVariableScalar(param.name):
         scalarregs.append(param.name)
     elif type(param) == ElemTypeInfo:
       assert type(param.obj) == Var
-      param_types.append(GetVariableSize(param.obj.name))
+      param_sizes.append(GetVariableSize(param.obj.name))
       if IsVariableScalar(param.obj.name):
         scalarregs.append(param.obj.name)
     param_args.append(param)
 
-  print("param_types:")
-  print(param_types)
+  print("param_sizes:")
+  print(param_sizes)
+  retsize = GetVariableSize(retname)
   sema = Sema(intrin="TODO", inst=name, params=param_args, spec=Parse(Pseudocode), \
-    retname =retname, rettype=rettype, paramtypes=param_types, scalarregs=scalarregs)
+    retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
   return sema
 
 
@@ -589,5 +590,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 
