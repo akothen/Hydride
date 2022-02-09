@@ -28,7 +28,8 @@ ElemTypeInfo = namedtuple('ElemTypeInfo', ['obj', 'elemtype'])
 
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params', 'spec', 
-  'retname', 'rettype', 'lanes',
+  'retname', 'rettype',
+  'paramtypes', "scalarregs"
   ])
 
 

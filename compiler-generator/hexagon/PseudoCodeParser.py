@@ -141,10 +141,13 @@ def HandleLoopHeader(Init, Condition, ItUpdate):
           or type(Condition.b) == Var
       End = Condition.b
   if type(ItUpdate) ==  UnaryExpr:
-    assert ItUpdate.op == "INC"
+    assert ItUpdate.op == "INC" or ItUpdate.op == "DEC"
     assert type(ItUpdate.a) == Var
     assert Iterator.name == ItUpdate.a.name
-    Step = Number(1)
+    if ItUpdate.op == "INC":
+      Step = Number(1)
+    else:
+      Step = Number(-1)
   elif type(ItUpdate) == Update:
     if Iterator != None:
       assert type(ItUpdate.lhs) == Var
@@ -459,6 +462,11 @@ def GetVariableSize(Variable):
   elif "V" in Variable:
     return 1024
 
+def IsVariableScalar(Variable):
+  if "Q" in Variable:
+    return True
+  return False
+
 
 def GetSpecFrom(inst, Pseudocode):
   ParsedInst = Parse(inst)
@@ -503,6 +511,11 @@ def GetSpecFrom(inst, Pseudocode):
       rhs = assign.rhs
     elif isinstance(assign.rhs, BitExtend):
       rhs = assign.rhs.hi
+      # Theere may be another level of bit indexing.
+      if isinstance(rhs, BitExtend):
+        rhs = rhs.hi
+      print("-rhs:")
+      print(rhs)
     else:
       rhs =  [assign.rhs]
     
@@ -519,16 +532,6 @@ def GetSpecFrom(inst, Pseudocode):
     print("Unknown lhs:", lhs)
     rettype = None
     retname = None
-
-  if var.name in ['Vx', 'Vy', 'Vd']:
-    lanes = 1
-  elif any(ty in var.name for ty in ['Qd', 'Qv', 'Qt', 'Qx']):
-    lanes = 1
-  elif var.name in ['Vxx', 'Vyy', 'Vdd']:
-    lanes = 2
-  else:
-    lanes = 0
-    print("Unknown variable type:", var)
   
   if isinstance(rhs, Call):
     name = rhs.funcname
@@ -544,21 +547,27 @@ def GetSpecFrom(inst, Pseudocode):
   
   param_types = []
   param_args = []
+  scalarregs = []
   for param in params:
     print("param:")
     print(param)
     if isinstance(param, UnaryExpr):
       param = param.a
     if type(param) == Var:
-     param_types.append(GetVariableSize(param.name))
+      param_types.append(GetVariableSize(param.name))
+      if IsVariableScalar(param.name):
+        scalarregs.append(param.name)
     elif type(param) == ElemTypeInfo:
       assert type(param.obj) == Var
       param_types.append(GetVariableSize(param.obj.name))
+      if IsVariableScalar(param.obj.name):
+        scalarregs.append(param.obj.name)
     param_args.append(param)
+
   print("param_types:")
   print(param_types)
   sema = Sema(intrin="TODO", inst=name, params=param_args, spec=Parse(Pseudocode), \
-    retname =retname, rettype=rettype, lanes=lanes, paramtypes=param_types)
+    retname =retname, rettype=rettype, paramtypes=param_types, scalarregs=scalarregs)
   return sema
 
 
@@ -574,5 +583,6 @@ def ParseHVXSemantics(Semantics):
 if __name__ == '__main__':
   from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
+
 
 
