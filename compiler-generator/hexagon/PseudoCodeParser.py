@@ -206,6 +206,15 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
+  print("p[3]:")
+  print(p[3])
+  if p[3] == "i":
+    # this is a bitslice
+    index_id = "index." + GenUniqueID(parser)
+    Index = Var(p[3], index_id)
+    expr_id = "index." + GenUniqueID(parser)
+    p[0] = BitSlice(p[1], Index, Index, expr_id)
+    return
   assert p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw', 'v']
   p[0] = ElemTypeInfo(p[1], p[3])
 
@@ -452,14 +461,20 @@ def GetVariableSize(Variable):
 
 
 def GetSpecFrom(inst, Pseudocode):
-  assign = Parse(inst)
-  # print(assign)
-  if isinstance(assign, list):
-    assign = assign[0]
+  ParsedInst = Parse(inst)
+  print("ParsedInst:")
+  print(ParsedInst)
+  if isinstance(ParsedInst, list):
+    assign = ParsedInst[0]
+    FirstStmt = ParsedInst[0]
   if isinstance(assign, If):
-      assign = assign.then[0]
+    assign = assign.then[0]
 
   # This is either an if statement or standard function call then
+  print("assign:")
+  print(assign)
+  print("FirstStmt:")
+  print(FirstStmt)
   if not isinstance(assign, Update):
     if isinstance(assign, Call):
       lhs = assign.args[0]
@@ -473,15 +488,23 @@ def GetSpecFrom(inst, Pseudocode):
       rhs = assign.rhs.b
       # Extend args
       tmp = [assign.rhs.a]
-      tmp.extend(rhs.args)
       print(type(rhs))
       if isinstance(rhs, Call):
+        tmp.extend(rhs.args)
+        if isinstance(FirstStmt, If):
+          tmp.append(FirstStmt.cond)
         rhs = Call(rhs.funcname, tmp, rhs.special, rhs.id)
-      #rhs.setattr("args", tmp)
+      else:
+        tmp.append(assign.rhs.b)
+        if isinstance(FirstStmt, If):
+          tmp.append(FirstStmt.cond)
+        rhs = tmp
     elif isinstance(assign.rhs, Call):
       rhs = assign.rhs
     elif isinstance(assign.rhs, BitExtend):
       rhs = assign.rhs.hi
+    else:
+      rhs =  [assign.rhs]
     
   # SIMD instruction
   if isinstance(lhs, ElemTypeInfo):
@@ -510,18 +533,31 @@ def GetSpecFrom(inst, Pseudocode):
   if isinstance(rhs, Call):
     name = rhs.funcname
     params = rhs.args
+  elif isinstance(rhs, list):
+    name = "TODO"
+    params = rhs
+    print("params:")
+    print(params)
   else:
     name = "TODO"
     params = []
   
   param_types = []
+  param_args = []
   for param in params:
     print("param:")
     print(param)
-    param_types.append(GetVariableSize(param.name))
+    if isinstance(param, UnaryExpr):
+      param = param.a
+    if type(param) == Var:
+     param_types.append(GetVariableSize(param.name))
+    elif type(param) == ElemTypeInfo:
+      assert type(param.obj) == Var
+      param_types.append(GetVariableSize(param.obj.name))
+    param_args.append(param)
   print("param_types:")
   print(param_types)
-  sema = Sema(intrin="TODO", inst=name, params=params, spec=Parse(Pseudocode), \
+  sema = Sema(intrin="TODO", inst=name, params=param_args, spec=Parse(Pseudocode), \
     retname =retname, rettype=rettype, lanes=lanes, paramtypes=param_types)
   return sema
 
