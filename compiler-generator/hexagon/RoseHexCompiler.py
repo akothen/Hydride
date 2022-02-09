@@ -319,7 +319,30 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
       return 1
 
   # Just handle one _very_ common case where high = i + some_constant
-  # Strip away any cast first
+  # But let's deal with special case first because of the silly case in 
+  # HVX pseudocode.
+  print("BEFORE HIGH:")
+  High.print()
+  ConstantMinus = RoseUndefValue()
+  if isinstance(High, RoseSubOp):
+    if isinstance(High.getOperand(0), RoseConstant):
+      ConstantMinus = High.getOperand(0)
+      High = High.getOperand(1)
+    else:
+      assert isinstance(High.getOperand(1), RoseConstant)
+      ConstantMinus = High.getOperand(1)
+      High = High.getOperand(0)
+    # Strip high index of any casts
+    if isinstance(High, RoseCastOp) \
+    or isinstance(High, RoseBVSignExtendOp) \
+    or isinstance(High, RoseBVZeroExtendOp):
+      High = High.getOperand(0)
+  
+  print("ConstantMinus:")
+  ConstantMinus.print()
+  print("AFTER HIGH:")
+  High.print()
+  # Now let's continue with the more intuitive case
   assert isinstance(High, RoseAddOp)
   if isinstance(High.getOperand(0), RoseConstant):
     HighIndexValue = High.getOperand(1)
@@ -341,13 +364,21 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   print("Low:")
   Low.print()
   Low.getType().print()
-
   # Just handle one _very_ common case where low = i
-  assert isinstance(HighIndexValue, RoseOperation)
-  assert isinstance(Low, RoseOperation)
-  if Low.isSameAs(HighIndexValue):
-    return (ConstantHighIndex.getValue() + 1)
+  if isinstance(HighIndexValue, RoseOperation) \
+  and isinstance(Low, RoseOperation):
+    if Low.isSameAs(HighIndexValue):
+      if ConstantMinus == RoseUndefValue():
+        return (ConstantHighIndex.getValue() + 1)
+      return (ConstantHighIndex.getValue() - ConstantMinus.getValue() + 1)
   
+  if not isinstance(HighIndexValue, RoseOperation) \
+  and not isinstance(Low, RoseOperation):
+    if Low == HighIndexValue:
+      if ConstantMinus == RoseUndefValue():
+        return (ConstantHighIndex.getValue() + 1)
+      return (ConstantHighIndex.getValue() - ConstantMinus.getValue() + 1)
+
   # Now handle a rare case where low = i + some_constant
   assert isinstance(Low, RoseAddOp)
   if isinstance(Low.getOperand(0), RoseConstant):
@@ -363,8 +394,14 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
   or isinstance(LowIndexValue, RoseBVZeroExtendOp):
     LowIndexValue = LowIndexValue.getOperand(0)
   assert LowIndexValue.isSameAs(HighIndexValue)
-  assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
-  return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
+  if ConstantMinus == RoseUndefValue():
+    assert ConstantHighIndex.getValue() >= ConstantLowIndex.getValue()
+    return (ConstantHighIndex.getValue() - ConstantLowIndex.getValue() + 1)
+  # Constant mimus is defined
+  assert (ConstantHighIndex.getValue() - ConstantMinus.getValue()) \
+                                    >= ConstantLowIndex.getValue()
+  return ((ConstantHighIndex.getValue() - ConstantMinus.getValue()) \
+                                - ConstantLowIndex.getValue() + 1)
 
 
 def CompileIndex(IndexExpr, Context : HexRoseContext):
@@ -625,7 +662,9 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
   return Operation
 
 
-def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
+def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
+  print("ExprIndex:")
+  print(ExprIndex)
   # The given bitslice index could be a number
   if type(ExprIndex) == Number:
     print("--NUMBER")
@@ -661,6 +700,10 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
     elif type(ExprIndex.a) == Number:
       print("EXPRESSION A IS A NUMBER")
       Operand1 = RoseConstant.create(ExprIndex.a.val, RoseType.getIntegerTy(32))
+    elif Recurse == True and type(ExprIndex.a) == BinaryExpr:
+      Operand1 = GetBitSliceIndex(ExprIndex.a, Context, Recurse=False)
+      if Operand1 == RoseUndefValue():
+        return  RoseUndefValue()
     elif Context.isCompiledAbstraction(ExprIndex.a.id):
       Operand1 = Context.getCompiledAbstractionForID(ExprIndex.a.id)
     else:
@@ -679,6 +722,10 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext):
     elif type(ExprIndex.b) == Number:
       print("EXPRESSION B IS A NUMBER")
       Operand2 = RoseConstant.create(ExprIndex.b.val, RoseType.getIntegerTy(32))
+    elif Recurse == True and type(ExprIndex.b) == BinaryExpr:
+      Operand2 = GetBitSliceIndex(ExprIndex.b, Context, Recurse=False)
+      if Operand2 == RoseUndefValue():
+        return  RoseUndefValue()
     elif Context.isCompiledAbstraction(ExprIndex.b.id):
       Operand2 = Context.getCompiledAbstractionForID(ExprIndex.b.id)
     else:
@@ -793,6 +840,8 @@ def GetExpressionType(Expr, Context : HexRoseContext):
     print("HIGH:")
     High.print()
     Bitwidth = ComputeBitSliceWidth(Low, High)
+    print("Bitwidth from compute Bitwidth slice:")
+    print(Bitwidth)
     return RoseType.getBitVectorTy(Bitwidth)
   
   return RoseType.getUndefTy()
@@ -1505,8 +1554,12 @@ def CompileForLoop(ForStmt, Context : HexRoseContext):
 
 
 def CompileIf(IfStmt, Context : HexRoseContext):
+  print("COMPILING IF:")
+  print(IfStmt)
   # Generate a cond region
   Cond = CompileExpression(IfStmt.cond, Context)
+  print("CONDITION:")
+  Cond.print()
   CondRegion = RoseCond.create(Cond)
 
   # Add cond region as root abstraction 
@@ -1612,14 +1665,14 @@ def CompileSemantics(Sema):
   
   # Some sanity checks
   assert len(Sema.params) > 0
-  assert len(Sema.params) == len(Sema.paramtypes)
+  assert len(Sema.params) == len(Sema.paramsizes)
   ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
     #ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
-    ParamType = RoseType.getBitVectorTy(Sema.paramtypes[Index])
+    ParamType = RoseType.getBitVectorTy(Sema.paramsizes[Index])
     # Create a new rosette value
     print("Param:")
     print(Param)
@@ -1631,7 +1684,7 @@ def CompileSemantics(Sema):
       # Add the element type info
       print("ParamVal.getName():")
       print(ParamVal.getName())
-      print(Sema.paramtypes[Index])
+      print(Sema.paramsizes[Index])
       if ParamVal.getName() in Sema.scalarregs:
         RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
     ParamVal.print()
@@ -1643,9 +1696,9 @@ def CompileSemantics(Sema):
         ParamsIDs.append(Param.id)
       ParamValues.append(ParamVal)
 
-  if Sema.rettype != 'void':
-    print(Sema.rettype)
-    RetType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())  
+  if Sema.retsize != None:
+    print(Sema.retsize)
+    RetType = RoseType.getBitVectorTy(Sema.retsize)  
     #HexTypes[Sema.rettype]
     print("adding dst to context")
     RetValue = RoseValue.create(Sema.retname, RetType)
@@ -2674,6 +2727,5 @@ test105 = {
 
 if __name__ == '__main__':
   Compile(test86)
-
 
 
