@@ -173,15 +173,14 @@ def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
   assert not isinstance(Block, RoseUndefRegion)
   # Iterate over the block in reverse order and see 
   # if indexing operations are iterator independent.
-  OpList = Block.getOperations()
-  OpList.reverse()
   IndexingOp = set()
-  for Op in OpList:
+  for Op in reversed(Block.getOperations()):
     # Skip call and cast ops
     if isinstance(Op, RoseCallOp) or isinstance(Op, RoseCastOp):
       continue
     # Sign extending ops are considered to contain invariants
-    if Op.isSizeChangingBVOp():
+    if Op.isSizeChangingOp():
+      assert isinstance(Op, RoseBitVectorOp)
       # Since this op is an indexing op, we can safely ignore it
       if Op in IndexingOp:
         IndexingOp.add(Op.getInputBitVector())
@@ -190,7 +189,7 @@ def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
       # directly used in a bvinsert op.
       Invariants[Op] = [Op.getOperand(1)]
       continue
-    if Op.isIndexingBVOp():
+    if isinstance(Op, RoseBitVectorOp) and Op.isIndexingBVOp():
       IndexingOp.add(Op)
       Low = Op.getLowIndex()
       High = Op.getHighIndex()
@@ -207,6 +206,10 @@ def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
         IndexingOp.add(High)      
       continue
     if Op in IndexingOp:
+      for Operand in Op.getOperands():
+        if isinstance(Operand, RoseConstant):
+          continue
+        IndexingOp.add(Operand)
       continue
     for OperandIndex, Operand in enumerate(Op.getOperands()):
       if isinstance(Operand, RoseConstant):
