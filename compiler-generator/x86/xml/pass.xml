@@ -1954,73 +1954,6 @@ dst[15:8] := k2[7:0]
 	<instruction name="KMERGE2L1L" form="k, k"/>
 	<header>immintrin.h</header>
 </intrinsic>
-<intrinsic tech="KNC" name="_mm512_mask_extpackstorehi_epi32">
-	<type>Integer</type>
-	<CPUID>KNCNI</CPUID>
-	<category>Store</category>
-	<return type="void"/>
-	<parameter type="void *" varname="mt" etype="UI32"/>
-	<parameter type="__mmask16" varname="k" etype="MASK"/>
-	<parameter type="__m512i" varname="v1" etype="UI32"/>
-	<parameter type="_MM_DOWNCONV_EPI32_ENUM" varname="conv" etype="IMM" immtype="_MM_DOWNCONV_EPI32"/>
-	<parameter type="int" varname="hint" etype="UI32" hint="TRUE"/>
-	<description>Down-converts and stores packed 32-bit integer elements of "v1" into a byte/word/doubleword stream according to "conv" at a logically mapped starting address (mt-64), storing the high-64-byte elements of that stream (those elemetns of the stream that map at or after the first 64-byte-aligned address following (m5-64)). "hint" indicates to the processor whether the data is non-temporal. Elements are stored to memory according to element selector "k" (elements are skipped when the corresonding mask bit is not set).</description>
-	<operation>DEFINE DOWNCONVERT(element, convertTo) {
-	CASE convertTo OF
-	_MM_DOWNCONV_EPI32_NONE:
-		RETURN element[31:0]
-	_MM_DOWNCONV_EPI32_UINT8:
-		RETURN Truncate8(element[31:0])
-	_MM_DOWNCONV_EPI32_SINT8:
-		RETURN Saturate8(element[31:0])
-	_MM_DOWNCONV_EPI32_UINT16:
-		RETURN Truncate16(element[31:0])
-	_MM_DOWNCONV_EPI32_SINT16:
-		RETURN Saturate16(element[31:0])
-	ESAC
-}
-DEFINE DOWNCONVERTSIZE(convertTo) {
-	CASE convertTo OF
-	_MM_DOWNCONV_EPI32_NONE:
-		RETURN 4
-	_MM_DOWNCONV_EPI32_UINT8:
-		RETURN 1
-	_MM_DOWNCONV_EPI32_SINT8:
-		RETURN 1
-	_MM_DOWNCONV_EPI32_UINT16:
-		RETURN 2
-	_MM_DOWNCONV_EPI32_SINT16:
-		RETURN 2
-	ESAC
-}
-storeOffset := 0
-foundNext64BytesBoundary := false
-downSize := DOWNCONVERTSIZE(conv)
-addr := mt-64
-FOR j := 0 to 15
-	IF k[j]
-		IF foundNext64BytesBoundary == false
-			IF ((addr + (storeOffset + 1)*downSize) % 64) == 0
-				foundNext64BytesBoundary := true
-			FI
-		ELSE
-			i := j*32
-			tmp := DOWNCONVERT(v1[i+31:i], conv)
-			storeAddr := addr + storeOffset * downSize
-			CASE downSize OF
-			4: MEM[storeAddr] := tmp[31:0]
-			2: MEM[storeAddr] := tmp[15:0]
-			1: MEM[storeAddr] := tmp[7:0]
-			ESAC
-		FI
-		storeOffset := storeOffset + 1
-	FI
-ENDFOR
-dst[MAX:512] := 0
-	</operation>
-	<instruction name="VPACKSTOREHD" form="m512 {k}, zmm"/>
-	<header>immintrin.h</header>
-</intrinsic>
 <intrinsic tech="KNC" name="_mm512_subr_epi32">
 	<type>Integer</type>
 	<CPUID>KNCNI</CPUID>
@@ -36775,4 +36708,903 @@ dst[MAX:512] := 0
 	<instruction name="VPADDSETCD" form="zmm {k}, k, zmm"/>
 	<header>immintrin.h</header>
 </intrinsic>
-
+<intrinsic tech="AVX-512" name="_mm_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="xmm, xmm, xmm" xed="VPDPWSSD_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm {z}, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_mask_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm {k}, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_maskz_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="ymm {z}, ymm, ymm" xed="VPDPBUSD_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_mask_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="ymm {k}, ymm, ymm" xed="VPDPBUSD_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="ymm, ymm, ymm" xed="VPDPBUSD_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_maskz_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="xmm {z}, xmm, xmm" xed="VPDPBUSD_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_mask_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="xmm {k}, xmm, xmm" xed="VPDPBUSD_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSD" form="xmm, xmm, xmm" xed="VPDPBUSD_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="xmm, xmm, xmm" xed="VPDPBUSDS_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_mask_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="xmm {k}, xmm, xmm" xed="VPDPBUSDS_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="ymm, ymm, ymm" xed="VPDPBUSDS_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_maskz_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="xmm {z}, xmm, xmm" xed="VPDPBUSDS_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_mask_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="ymm {k}, ymm, ymm" xed="VPDPBUSDS_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_maskz_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="ymm {z}, ymm, ymm" xed="VPDPBUSDS_YMMi32_MASKmskw_YMMu8_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="zmm, zmm, zmm" xed="VPDPBUSDS_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_mask_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="zmm {k}, zmm, zmm" xed="VPDPBUSDS_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPBUSDS" form="zmm {z}, zmm, zmm" xed="VPDPBUSDS_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_mask_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="xmm {k}, xmm, xmm" xed="VPDPWSSD_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_maskz_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="xmm {z}, xmm, xmm" xed="VPDPWSSD_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="ymm, ymm, ymm" xed="VPDPWSSD_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_mask_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="ymm {k}, ymm, ymm" xed="VPDPWSSD_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_maskz_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="ymm {z}, ymm, ymm" xed="VPDPWSSD_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="zmm, zmm, zmm" xed="VPDPWSSD_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_mask_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="zmm {k}, zmm, zmm" xed="VPDPWSSD_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSD" form="zmm {z}, zmm, zmm" xed="VPDPWSSD_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_mask_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="xmm {k}, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm_maskz_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="xmm {z}, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="ymm, ymm, ymm" xed="VPDPWSSDS_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_mask_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="ymm {k}, ymm, ymm" xed="VPDPWSSDS_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm256_maskz_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="src" etype="SI32"/>
+	<parameter type="__m256i" varname="a" etype="SI16"/>
+	<parameter type="__m256i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 7
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="ymm {z}, ymm, ymm" xed="VPDPWSSDS_YMMi32_MASKmskw_YMMi16_YMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="zmm, zmm, zmm" xed="VPDPWSSDS_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_mask_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="zmm {k}, zmm, zmm" xed="VPDPWSSDS_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpwssds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+		tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VPDPWSSDS" form="zmm {z}, zmm, zmm" xed="VPDPWSSDS_ZMMi32_MASKmskw_ZMMi16_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
