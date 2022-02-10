@@ -25,9 +25,6 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def isSizeChangingBVOp(self):
-    return True
-
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
@@ -51,9 +48,6 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def isSizeChangingBVOp(self):
-    return True
-
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
 
@@ -76,9 +70,6 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-
-  def isSizeChangingBVOp(self):
-    return True
 
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
@@ -117,9 +108,6 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def isSizeChangingBVOp(self):
-    return True
-
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
 
@@ -156,9 +144,6 @@ class RoseBVTruncateOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-  
-  def isSizeChangingBVOp(self):
-    return True
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
@@ -941,5 +926,6 @@ class RoseBVZeroOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
 
 

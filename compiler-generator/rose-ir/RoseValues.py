@@ -217,6 +217,9 @@ class RoseOperation(RoseValue):
   def getOperand(self, Index):
     assert Index < len(self.Operands)
     return self.Operands[Index]
+
+  def isSizeChangingOp(self):
+    return self.Opcode.isSizeChangingOp()
   
   def setOperand(self, Index, Operand):
     assert Index < len(self.Operands)
@@ -310,5 +313,6 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
+
 
 

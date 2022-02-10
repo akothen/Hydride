@@ -773,6 +773,15 @@ class RoseOpcode(Enum):
             return True
         return False
 
+    def isSizeChangingOp(self):
+        if self.value == self.bvsignextend.value \
+        or self.value == self.bvzeroextend.value \
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value \
+        or self.value == self.bvtrunc.value:
+            return True
+        return False
+
     def getRosetteOp(self):
         # Some opcodes have the same name as Rosette ops
         if self.value == self.bvadd.value \
@@ -949,5 +958,6 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
 
 
