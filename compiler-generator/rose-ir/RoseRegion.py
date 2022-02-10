@@ -252,22 +252,50 @@ class RoseRegion:
           return False
     return True
 
-  def containsRegionOfType(self, SubRegionTypes):
+  def containsRegionOfType(self, SubRegionType, Level : int = -1):
     # Some sanity checks
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
-    assert not SubRegionTypes == RoseAbstractions.RoseUndefRegion
-    assert SubRegionTypes == RoseAbstractions.RoseFunction \
-        or SubRegionTypes == RoseAbstractions.RoseForLoop \
-        or SubRegionTypes == RoseAbstractions.RoseCond \
-        or SubRegionTypes == RoseAbstractions.RoseBlock
+    assert not SubRegionType == RoseAbstractions.RoseUndefRegion
+    assert SubRegionType == RoseAbstractions.RoseFunction \
+        or SubRegionType == RoseAbstractions.RoseForLoop \
+        or SubRegionType == RoseAbstractions.RoseCond \
+        or SubRegionType == RoseAbstractions.RoseBlock
     if isinstance(self, RoseAbstractions.RoseBlock):
       return False
     for SubRegion in self:
-      if isinstance(SubRegion, SubRegionTypes):
+      if Level > 0:
+        if SubRegion.containsRegionOfType(SubRegionType, Level - 1) == True:
+          return True
+        continue
+      if isinstance(SubRegion, SubRegionType):
         return True
-      if self.containsRegionOfType(SubRegionTypes) == True:
-        return True
+      if Level < 0:
+        if SubRegion.containsRegionOfType(SubRegionType, Level) == True:
+          return True
+        continue
     return False
+
+
+  def numLevelsOfRegion(self, SubRegionType, Level : int = -1):
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not SubRegionType == RoseAbstractions.RoseUndefRegion
+    assert SubRegionType == RoseAbstractions.RoseFunction \
+        or SubRegionType == RoseAbstractions.RoseForLoop \
+        or SubRegionType == RoseAbstractions.RoseCond \
+        or SubRegionType == RoseAbstractions.RoseBlock
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return 0
+    NumSubRegions = 0
+    for SubRegion in self:
+      if Level > 0:
+        NumSubRegions += SubRegion.numLevelsOfRegion(SubRegionType, Level - 1)
+        continue
+      if isinstance(SubRegion, SubRegionType):
+        NumSubRegions += 1
+      if Level < 0:
+        NumSubRegions += SubRegion.numLevelsOfRegion(SubRegionType, Level)
+        continue
+    return NumSubRegions
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
