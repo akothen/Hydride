@@ -202,10 +202,12 @@ class RoseFunction(RoseValue, RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACES USES IN FUNCTION")
-    assert not isinstance(Abstraction, RoseUndefValue)
-    assert not isinstance(NewAbstraction, RoseUndefValue)
-    assert isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant) \
+       and not isinstance(Abstraction, RoseFunction)
+    assert not isinstance(NewAbstraction, RoseUndefValue) \
+       and not isinstance(NewAbstraction, RoseFunction)
+    assert isinstance(Abstraction, RoseValue)
     assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
@@ -214,9 +216,9 @@ class RoseFunction(RoseValue, RoseRegion):
 
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     for Child in self.getChildren():
       assert self.isChildValid(Child)
       if Child.hasUsesOf(Abstraction) == True:
@@ -225,9 +227,9 @@ class RoseFunction(RoseValue, RoseRegion):
 
   # Get all users of the given value
   def getUsersOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     Users = []
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -328,10 +330,12 @@ class RoseBlock(RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN BLOCK")
-    assert not isinstance(Abstraction, RoseUndefValue)
-    assert not isinstance(NewAbstraction, RoseUndefValue)
-    assert isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant) \
+       and not isinstance(Abstraction, RoseFunction)
+    assert not isinstance(NewAbstraction, RoseUndefValue) \
+       and not isinstance(NewAbstraction, RoseFunction)
+    assert isinstance(Abstraction, RoseValue)
     assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
@@ -344,9 +348,9 @@ class RoseBlock(RoseRegion):
 
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     for Child in self.getChildren():
       assert self.isChildValid(Child)
       if Child.usesValue(Abstraction) == True:
@@ -355,9 +359,9 @@ class RoseBlock(RoseRegion):
 
   # Get all users of the given value
   def getUsersOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     Users = []
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -501,8 +505,18 @@ class RoseForLoop(RoseRegion):
   def getStep(self):
     return self.Step
 
+  # Note that this does not replace the uses of the iterator
   def setIteratorName(self, Name):
     self.Iterator = RoseValue.create(Name, self.Iterator.getType())
+  
+  def setStartIndex(self, NewStart : int):
+    self.Start = RoseConstant(NewStart, self.Start.getType())
+  
+  def setStep(self, NewStep : int):
+    self.Step = RoseConstant(NewStep, self.Step.getType())
+
+  def setEndIndex(self, NewEnd : int):
+    self.End = RoseConstant(NewEnd, self.End.getType())
   
   # An abstraction can be an operation and region
   def addAbstraction(self, Abstraction):
@@ -541,10 +555,12 @@ class RoseForLoop(RoseRegion):
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN LOOP")
-    assert not isinstance(Abstraction, RoseUndefValue)
-    assert not isinstance(NewAbstraction, RoseUndefValue)
-    assert isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant) \
+       and not isinstance(Abstraction, RoseFunction)
+    assert not isinstance(NewAbstraction, RoseUndefValue) \
+       and not isinstance(NewAbstraction, RoseFunction)
+    assert isinstance(Abstraction, RoseValue)
     assert isinstance(NewAbstraction, RoseValue)
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
@@ -553,9 +569,9 @@ class RoseForLoop(RoseRegion):
   
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     for Child in self.getChildren():
       assert self.isChildValid(Child)
       if Child.hasUsesOf(Abstraction) == True:
@@ -564,9 +580,9 @@ class RoseForLoop(RoseRegion):
 
   # Get all users of the given value
   def getUsersOf(self, Abstraction):
-    assert isinstance(Abstraction, RoseFunction) \
-        or isinstance(Abstraction, RoseOperation) \
-        or isinstance(Abstraction, RoseArgument)
+    assert not isinstance(Abstraction, RoseUndefValue) \
+       and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
     Users = []
     for Child in self.getChildren():
       assert self.isChildValid(Child)
@@ -719,10 +735,12 @@ class RoseCond(RoseRegion):
   def replaceUsesWith(self, Abstraction, NewAbstraction, Key = None):
     if Key != None:
       print("REPLACES USES IN FUNCTION")
-      assert not isinstance(Abstraction, RoseUndefValue)
-      assert not isinstance(NewAbstraction, RoseUndefValue)
-      assert isinstance(Abstraction, RoseOperation) \
-          or isinstance(Abstraction, RoseArgument)
+      assert not isinstance(Abstraction, RoseUndefValue) \
+        and not isinstance(Abstraction, RoseConstant) \
+        and not isinstance(Abstraction, RoseFunction)
+      assert not isinstance(NewAbstraction, RoseUndefValue) \
+        and not isinstance(NewAbstraction, RoseFunction)
+      assert isinstance(Abstraction, RoseValue)
       assert isinstance(NewAbstraction, RoseValue)
       assert Abstraction.getType() == NewAbstraction.getType()
       for Child in self.getChildren()[Key]:
@@ -735,9 +753,9 @@ class RoseCond(RoseRegion):
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction, Key = None):
     if Key != None:
-      assert isinstance(Abstraction, RoseFunction) \
-          or isinstance(Abstraction, RoseOperation) \
-          or isinstance(Abstraction, RoseArgument)
+      assert not isinstance(Abstraction, RoseUndefValue) \
+        and not isinstance(Abstraction, RoseConstant)
+      assert isinstance(Abstraction, RoseValue)
       for Child in self.getChildren()[Key]:
         assert self.isChildValid(Child)
         if Child.hasUsesOf(Abstraction) == True:
@@ -752,9 +770,9 @@ class RoseCond(RoseRegion):
   # Get all users of the given value
   def getUsersOf(self, Abstraction, Key = None):
     if Key != None:
-      assert isinstance(Abstraction, RoseFunction) \
-          or isinstance(Abstraction, RoseOperation) \
-          or isinstance(Abstraction, RoseArgument)
+      assert not isinstance(Abstraction, RoseUndefValue) \
+        and not isinstance(Abstraction, RoseConstant)
+      assert isinstance(Abstraction, RoseValue)
       Users = []
       for Child in self.getChildren()[Key]:
         assert self.isChildValid(Child)
