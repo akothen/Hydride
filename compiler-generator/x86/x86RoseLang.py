@@ -1,6 +1,4 @@
 
-from os import register_at_fork
-import re
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
 from x86RoseCompiler import CompileSemantics
@@ -4242,10 +4240,155 @@ ENDFOR
 '''
 #dst[MAX:512] := 0
 
+def test170():
+	return '''
+<intrinsic tech="AVX-512" name="_mm_dpwssd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
+	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2
+ENDFOR
+	</operation>
+	<instruction name="VPDPWSSD" form="xmm, xmm, xmm" xed="VPDPWSSD_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
+
+def test171():
+	return '''
+<intrinsic tech="AVX-512" name="_mm512_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+ENDFOR
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+
+def test172():
+	return '''
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm {z}, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+
+def test173():
+	return '''
+<intrinsic tech="AVX-512" name="_mm_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+	tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+	tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+	tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+	dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+ENDFOR
+	</operation>
+	<instruction name="VPDPBUSDS" form="xmm, xmm, xmm" xed="VPDPBUSDS_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
+
+def test174():
+	return '''
+<intrinsic tech="AVX-512" name="_mm_mask_dpbusds_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI32"/>
+	<parameter type="__m128i" varname="src" etype="SI32"/>
+	<parameter type="__mmask8" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 3
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4)
+	ELSE
+		dst.dword[j] := src.dword[j]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPDPBUSDS" form="xmm {k}, xmm, xmm" xed="VPDPBUSDS_XMMi32_MASKmskw_XMMu8_XMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
 
 def Compile():
-  #sema = test134()#test70() #test68()
-  sema = test50() #test68() #test77()
+  sema = test171() #test68()test134()
+  #sema = test68()#test64()#test70()#test98()#test50() #test68() #test77()
   print(sema)
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
