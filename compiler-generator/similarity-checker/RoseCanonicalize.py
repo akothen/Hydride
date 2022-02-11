@@ -15,13 +15,15 @@ from RoseUtilities import *
 from RoseSimilarityCheckerUtilities import *
 
 
-def RunFixLoopsBooundsOnLoop(Loop : RoseForLoop):
+def RunFixLoopsBooundsInLoop(Loop : RoseForLoop):
   print("FIX BOUNDS OF LOOP")
   print("LOOP:")
   print(Loop)
   Loop.print()
   FunctionOutput = Loop.getFunction().getReturnValue()
+  Params = Loop.getFunction().getArgs()
   BVInsertOps = []
+  BVExtractOps = []
   # Get the bvinserts to the output of the function that this belongs to.
   for Region in Loop:
     if isinstance(Region, RoseBlock):
@@ -29,12 +31,31 @@ def RunFixLoopsBooundsOnLoop(Loop : RoseForLoop):
         if isinstance(Op, RoseBVInsertSliceOp):
           if Op.getInputBitVector() == FunctionOutput:
             BVInsertOps.append(Op)
-    
-  # Go over the bvinserts and see if the bitwidth and loop step are the same.
-  # But first make sure the bitwidth for all bvinserts is the same.
-  BitWidth = BVInsertOps[0].getOutputBitwidth()
-  for Op in BVInsertOps:
-    assert Op.getOutputBitwidth() == BitWidth
+        elif isinstance(Op, RoseBVExtractSliceOp):
+          if Op.getInputBitVector() in Params:
+            BVExtractOps.append(Op)
+
+  if len(BVInsertOps) != 0:
+      # But first make sure the bitwidth for all bvinserts is the same.    
+    BitWidth = BVInsertOps[0].getOutputBitwidth()
+    if BitWidth != 1:
+      for Op in BVInsertOps:
+        assert Op.getOutputBitwidth() == BitWidth
+    else:
+      # But first make sure the bitwidth for all bvxtracts is the same.    
+      BitWidth = BVExtractOps[0].getOutputBitwidth()
+      for Op in BVExtractOps:
+        assert Op.getOutputBitwidth() == BitWidth
+  elif len(BVExtractOps) != 0:
+    # But first make sure the bitwidth for all bvxtracts is the same.    
+    BitWidth = BVExtractOps[0].getOutputBitwidth()
+    for Op in BVExtractOps:
+      assert Op.getOutputBitwidth() == BitWidth
+  else:
+    # Nothing to do here.
+    return
+
+  # Go over the bvinserts/bvextracts and see if the bitwidth and loop step are the same.
   # Now see if the loop bounds need adjusting
   LoopStep = Loop.getStep()
   assert isinstance(LoopStep, RoseConstant)
@@ -73,20 +94,16 @@ def RunFixLoopsBooundsOnLoop(Loop : RoseForLoop):
   Loop.print()
 
 
-def RunFixLoopsBooundsOnRegion(Region):
+def RunFixLoopsBooundsInFunction(Region):
   # Iterate over all the contents of this function
   for Abstraction in Region:
     assert not isinstance(Abstraction, RoseFunction)
     if isinstance(Abstraction, RoseForLoop):
-      RunFixLoopsBooundsOnLoop(Abstraction)
-      continue
-    # Skip blocks
-    if isinstance(Abstraction, RoseBlock):
+      RunFixLoopsBooundsInLoop(Abstraction)
       continue
     print("REGION:")
     print(Abstraction)
     Abstraction.print()
-    RunFixLoopsBooundsOnRegion(Abstraction)
 
 
 def AddOuterLoopInFunction(Function : RoseFunction):
@@ -125,7 +142,7 @@ def CanonicalizeFunction(Function : RoseFunction):
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
-  RunFixLoopsBooundsOnRegion(Function)
+  RunFixLoopsBooundsInFunction(Function)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
@@ -136,13 +153,6 @@ def CanonicalizeFunction(Function : RoseFunction):
   AddOuterLoopInFunction(Function)
   if IsFunctionInCanonicalForm(Function):
     return
-
-  InvariantsMap = GetInvariantsInRegion(Function)
-  print(InvariantsMap)
-  for Key, Val in InvariantsMap.items():
-    print("--------")
-    print(Key)
-    print(Val)
 
 
 # Runs a transformation
