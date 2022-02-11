@@ -5,7 +5,6 @@
 #############################################################
 
 
-from pickle import TRUE
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -74,11 +73,10 @@ def RunFixLoopsBooundsOnLoop(Loop : RoseForLoop):
   Loop.print()
 
 
-def ExtractConstantsFromRegion(Region):
+def RunFixLoopsBooundsOnRegion(Region):
   # Iterate over all the contents of this function
   for Abstraction in Region:
-    # We do not inline functions in this pass.
-    assert isinstance(Abstraction, RoseFunction)
+    assert not isinstance(Abstraction, RoseFunction)
     if isinstance(Abstraction, RoseForLoop):
       RunFixLoopsBooundsOnLoop(Abstraction)
       continue
@@ -88,8 +86,7 @@ def ExtractConstantsFromRegion(Region):
     print("REGION:")
     print(Abstraction)
     Abstraction.print()
-    ExtractConstantsFromRegion(Abstraction)
-
+    RunFixLoopsBooundsOnRegion(Abstraction)
 
 
 def AddOuterLoopInFunction(Function : RoseFunction):
@@ -128,7 +125,7 @@ def CanonicalizeFunction(Function : RoseFunction):
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
-  AdjustLoopBoundsInFunction(Function)
+  RunFixLoopsBooundsOnRegion(Function)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
