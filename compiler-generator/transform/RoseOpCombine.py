@@ -16,6 +16,7 @@ from RoseBitVectorOperations import *
 
 
 def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
+  print("OP COMBINE PATTENS")
   # Some sanity checks
   assert isinstance(FirstOp, RoseAddOp) \
       or isinstance(FirstOp, RoseSubOp) \
@@ -40,16 +41,18 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       return Op.getOperand(0), 0
     elif not isinstance(Op.getOperand(0), RoseConstant) \
     and isinstance(Op.getOperand(1), RoseConstant):
-      return Op.getOperand(0), 1
+      return Op.getOperand(1), 1
     return RoseUndefValue(), None
   
   # Get the constant operands
   ConstantOperand1, ConstantIndex1  = GetConstantOperation(FirstOp)
   if ConstantOperand1 == RoseUndefValue():
     return
+  assert isinstance(ConstantOperand1, RoseConstant)
   ConstantOperand2, ConstantIndex2 = GetConstantOperation(SecondOp)
   if ConstantOperand2 == RoseUndefValue():
     return
+  assert isinstance(ConstantOperand2, RoseConstant)
   assert ConstantOperand1.getType() == ConstantOperand2.getType()
   if ConstantIndex1 == 0:
     NonConstantIndex1 = 1
@@ -59,6 +62,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
     NonConstantIndex2 = 1
   else:
     NonConstantIndex2 = 0
+  print("ConstantOperand1:")
+  print(ConstantOperand1)
+  print("ConstantOperand2:")
+  print(ConstantOperand2)
 
   # Now we deal with different patterns
   # TODO: Add more patterns
@@ -520,7 +527,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
         # Generate a new div instruction
         NewOp = RoseSubOp.create("%new." + SecondOp.getName(), \
-                                  [NewOperand, FirstOp.getOperand(NonConstantIndex1]))
+                                  [NewOperand, FirstOp.getOperand(NonConstantIndex1)])
         Block.addOperationBefore(NewOp, SecondOp)
         SecondOp.replaceUsesWith(NewOp)
         # IMPORTANT: the second op must be removed before the first op.
@@ -547,21 +554,6 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           Block.eraseOperation(FirstOp)
           return
     return
-
-
-def CombineOps(Op : RoseOperation):
-  if isinstance(Op, RoseMulOp):
-    # One of the operations must be constant
-    if isinstance(Op.getOperand(0), RoseConstant) \
-    and not isinstance(Op.getOperand(1), RoseConstant):
-      NonConstantOperand = Op.getOperand(1)
-    elif not isinstance(Op.getOperand(0), RoseConstant) \
-    and isinstance(Op.getOperand(1), RoseConstant):
-      NonConstantOperand = Op.getOperand(1)
-    else:
-      # We do not simplify ops here
-      return
-  OpCombinePatterns(NonConstantOperand, Op)
 
 
 def RunOpCombineOnBlock(Block : RoseBlock):
@@ -678,7 +670,29 @@ def RunOpCombineOnBlock(Block : RoseBlock):
           Block.eraseOperation(FirstExtractOp)
       continue
     # Combine the primitiev ops
-    CombineOps(Op)
+    print("------OPERATION:")
+    Op.print()
+    if isinstance(Op, RoseAddOp) \
+      or isinstance(Op, RoseSubOp) \
+      or isinstance(Op, RoseMulOp) \
+      or isinstance(Op, RoseDivOp):
+      # One of the operations must be constant
+      if isinstance(Op.getOperand(0), RoseConstant) \
+      and not isinstance(Op.getOperand(1), RoseConstant):
+        NonConstantOperand = Op.getOperand(1)
+      elif not isinstance(Op.getOperand(0), RoseConstant) \
+      and isinstance(Op.getOperand(1), RoseConstant):
+        NonConstantOperand = Op.getOperand(0)
+      else:
+        # We do not simplify ops here
+        continue
+      print("NonConstantOperand:")
+      NonConstantOperand.print()
+      if isinstance(NonConstantOperand, RoseAddOp) \
+      or isinstance(NonConstantOperand, RoseSubOp) \
+      or isinstance(NonConstantOperand, RoseMulOp) \
+      or isinstance(NonConstantOperand, RoseDivOp):
+        OpCombinePatterns(NonConstantOperand, Op)
 
 
 def RunOpCombineOnRegion(Region):
