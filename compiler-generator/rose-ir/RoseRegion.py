@@ -275,7 +275,6 @@ class RoseRegion:
         continue
     return False
 
-
   def numLevelsOfRegion(self, SubRegionType, Level : int = -1):
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert not SubRegionType == RoseAbstractions.RoseUndefRegion
@@ -296,6 +295,28 @@ class RoseRegion:
         NumSubRegions += SubRegion.numLevelsOfRegion(SubRegionType, Level)
         continue
     return NumSubRegions
+
+  def getRegionsOfType(self, SubRegionType, Level : int = -1):
+    # Some sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not SubRegionType == RoseAbstractions.RoseUndefRegion
+    assert SubRegionType == RoseAbstractions.RoseFunction \
+        or SubRegionType == RoseAbstractions.RoseForLoop \
+        or SubRegionType == RoseAbstractions.RoseCond \
+        or SubRegionType == RoseAbstractions.RoseBlock
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return False
+    RegionList = list()
+    for SubRegion in self:
+      if Level > 0:
+        RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1))
+        continue
+      if isinstance(SubRegion, SubRegionType):
+        RegionList.append(SubRegion)
+      if Level < 0:
+        RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level))
+        continue
+    return RegionList
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
