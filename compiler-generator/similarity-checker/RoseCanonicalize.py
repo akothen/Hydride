@@ -38,14 +38,14 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop):
   if len(BVInsertOps) != 0:
       # But first make sure the bitwidth for all bvinserts is the same.    
     BitWidth = BVInsertOps[0].getOutputBitwidth()
-    if BitWidth != 1:
-      for Op in BVInsertOps:
-        assert Op.getOutputBitwidth() == BitWidth
-    else:
+    #if BitWidth != 1:
+    for Op in BVInsertOps:
+      assert Op.getOutputBitwidth() == BitWidth
+    #else:
       # But first make sure the bitwidth for all bvxtracts is the same.    
-      BitWidth = BVExtractOps[0].getOutputBitwidth()
-      for Op in BVExtractOps:
-        assert Op.getOutputBitwidth() == BitWidth
+    #  BitWidth = BVExtractOps[0].getOutputBitwidth()
+    #  for Op in BVExtractOps:
+    #    assert Op.getOutputBitwidth() == BitWidth
   elif len(BVExtractOps) != 0:
     # But first make sure the bitwidth for all bvxtracts is the same.    
     BitWidth = BVExtractOps[0].getOutputBitwidth()
@@ -81,7 +81,7 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop):
     NewIterator = Loop.getIterator()
     FactorVal = RoseConstant(Factor, NewIterator.getType())
     IteratorReplacement = RoseDivOp.create(OldIterator.getName() + ".new.div", \
-                             NewIterator, FactorVal)
+                            NewIterator, FactorVal)
     # Check if the loop's first child region is a block, if not we insert one
     if not isinstance(Loop.getChild(0), RoseBlock):
       Block = RoseBlock.create([IteratorReplacement])
@@ -131,6 +131,57 @@ def AddOuterLoopInFunction(Function : RoseFunction):
   Function.addRegionBefore(0, Loop)
 
 
+def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  # Iterate over the blocks to see if they have multiple bvinserts
+  BlockToBVInsertOpsMap = dict()
+  for Block in BlockList:
+    BVInsertOpsList = list()
+    for Op in Block:
+      if isinstance(Op, RoseBVInsertSliceOp):
+        BVInsertOpsList.append(Op)
+    if len(BVInsertOpsList) > 1:
+      BlockToBVInsertOpsMap[Block] = []
+      for BVInsertOp in BVInsertOpsList:
+        BlockToBVInsertOpsMap[Block].append(BVInsertOp)
+  
+  # Split the blocks at bvinserts
+  for Block, BVInsertOpsList in BlockToBVInsertOpsMap.items():
+    # Only handle cases whose parents are loops
+    Loop = Block.getParent()
+    assert isinstance(Loop, RoseForLoop)
+    BlockList = list()
+    for SplitPoint in BVInsertOpsList:
+      # Split the block at the split point
+      ParentBlock = SplitPoint.getParent()
+      Pos = ParentBlock.getPosOfOperation(SplitPoint)
+      if Pos + 1 != ParentBlock.getNumOperations():
+        ParentBlock.splitAt(Pos + 1)
+      BlockList.append(ParentBlock)
+    # Now extact the blocks in the blocklist from the loop
+    # and add loops around them and add them back.
+    ParentOfLoop = Loop.getParent()
+    LoopPos = ParentOfLoop.getPosOfChild(Loop)
+    LoopList = list()
+    BlockList = BlockList[1:] # Leave out the original (first) block
+    Index = 1
+    for ChildBlock in BlockList:
+      Loop.eraseChild(ChildBlock)
+      NewLoop = RoseForLoop.create(Loop.getIterator().getName() + str(Index),\
+                                  Loop.getStartIndex().getValue(), Loop.getEndIndex().getValue(), \
+                                  Loop.getStep().getValue())
+      NewLoop.addRegion(ChildBlock)
+      # Replace the uses of old iterator with the new one
+      NewLoop.replaceUsesWith(Loop.getIterator(), NewLoop.getIterator())
+      LoopList.append(NewLoop)
+      Index += 1
+    # Now add the new loops back to the function
+    InsertBefore = LoopPos + 1
+    for NewLoop in LoopList:
+      ParentOfLoop.addRegionBefore(LoopPos, NewLoop)
+      InsertBefore += 1
+      
+
 def CanonicalizeFunction(Function : RoseFunction):
   print("CANONICALIZING FUNCTION")
   print("FUNCTION:")
@@ -138,6 +189,12 @@ def CanonicalizeFunction(Function : RoseFunction):
   # See if the function is already canonicalize
   if IsFunctionInCanonicalForm(Function) == True:
     print("FUNCTION IS IN CANONICAL FORM")
+    return
+
+  # Make sure all blocks have only one bvinsert
+  FixBlocksWithMultipleBVInserts(Function)
+  if IsFunctionInCanonicalForm(Function) == True:
+    print("_____FUNCTION IS IN CANONICAL FORM")
     return
 
   # Adjust the loop bounds
