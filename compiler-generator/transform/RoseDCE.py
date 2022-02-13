@@ -14,6 +14,36 @@ from RoseOperations import *
 from RoseBitVectorOperations import *
 
 
+def RemoveRedundantBVInsertOps(Block : RoseBlock):
+  BVInsertOpList = list()
+  BVInsertToExtractMap = dict()
+  for Operation in Block:
+    if isinstance(Operation, RoseBVInsertSliceOp):
+      # If this op is already in the map, we rempve the entry
+      # from the map. TODO: Imoprove this, if neessary.
+      if Operation in BVInsertToExtractMap:
+        BVInsertToExtractMap.pop(Operation)
+      BVInsertOpList.append(Operation)
+      continue
+    if isinstance(Operation, RoseBVExtractSliceOp):
+      for BVInsertOp in BVInsertOpList:
+        if BVInsertOp.getInputBitVector() == Operation.getInputBitVector():
+          if BVInsertOp not in BVInsertToExtractMap:
+            BVInsertToExtractMap[BVInsertOp] = [Operation]
+          else:
+            BVInsertToExtractMap[BVInsertOp].append(Operation)
+        break
+  
+  # Now we replace the bvextracts with shift sand remove bvinserts.
+  for BVInsertOp, BVExtractList in BVInsertToExtractMap.items():
+    # Now we replace the bitvector being extracted from with the inserted
+    # value to make the extraction more direct.
+    for BVExtractOp in BVExtractList:
+      BVExtractOp.setOperand(0, BVInsertOp.getInsertValue())
+    # Remove the bvinsert op from the block
+    Block.eraseOperation(BVInsertOp)
+
+
 def RunDCEOnBlock(Block : RoseBlock):
   print("RUN DCE ON BLOCK")
   print("BLOCK:")
@@ -22,13 +52,17 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Gather all the ops in this block
   OpList = list()
   for Operation in Block:
+    if isinstance(Operation, RoseBVInsertSliceOp):
+      continue
     OpList.append(Operation)
   # Iterate the list of operations in reverse order
-  OpList.reverse()
-  for Op in OpList:
+  for Op in reversed(OpList):
     # If the Op has no uses, remove it!
     if len(Op.getUsers()) == 0:
       Block.eraseOperation(Op)
+
+  # Remove redundant bvinserts
+  RemoveRedundantBVInsertOps(Block)
 
 
 def RunDCEOnRegion(Region):
