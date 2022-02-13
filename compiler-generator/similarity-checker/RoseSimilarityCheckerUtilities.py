@@ -28,8 +28,14 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
   OuterLoopFound = False
   InnerLoopsFound = False
   for Region in Function:
-    # Ignore blocks
+    # Make sure there aren't more than one bvinserts in a block
     if isinstance(Region, RoseBlock):
+      BVInsertFound = False
+      for Op in Region:
+        if isinstance(Op, RoseBVInsertSliceOp):
+          if BVInsertFound == True:
+            return False
+          BVInsertFound = True
       continue
     # The given function cannot contain regions other than loops
     if not isinstance(Region, RoseForLoop):
@@ -39,8 +45,14 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
     OuterLoopFound = True
     InnerLoopStep = RoseUndefValue()
     for SubRegion in Region:
-      # Ignore blocks
+      # Make sure there aren't more than one bvinserts in a block
       if isinstance(SubRegion, RoseBlock):
+        BVInsertFound = False
+        for Op in SubRegion:
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if BVInsertFound == True:
+              return False
+            BVInsertFound = True
         continue
       # This level of loop mustn't contain regions other than loops
       if not isinstance(SubRegion, RoseForLoop):
@@ -53,9 +65,15 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
           return False
       InnerInnerLoopStep = RoseUndefValue()
       for SubSubRegion in SubRegion:
-        # No more loops should be found
-        if SubSubRegion.containsRegionOfType(RoseFunction):
-          return False
+        # Make sure there aren't more than one bvinserts in a block
+        if isinstance(SubSubRegion, RoseBlock):
+          BVInsertFound = False
+          for Op in SubSubRegion:
+            if isinstance(Op, RoseBVInsertSliceOp):
+              if BVInsertFound == True:
+                return False
+              BVInsertFound = True
+          continue
         if isinstance(SubSubRegion, RoseForLoop):
           if InnerInnerLoopStep == RoseUndefValue():
             InnerInnerLoopStep = SubSubRegion.getStep()
@@ -65,5 +83,3 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
   return (OuterLoopFound == True and InnerLoopsFound == True)
 
 
-def AdjustLoopBoundsInFunction(Function : RoseFunction):
-  RoseFixLoopBounds.RunFixLoopsBooundsOnFunction(Function)
