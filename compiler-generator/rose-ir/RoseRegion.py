@@ -305,7 +305,7 @@ class RoseRegion:
         or SubRegionType == RoseAbstractions.RoseCond \
         or SubRegionType == RoseAbstractions.RoseBlock
     if isinstance(self, RoseAbstractions.RoseBlock):
-      return False
+      return [self]
     RegionList = list()
     for SubRegion in self:
       if Level > 0:
@@ -321,5 +321,6 @@ class RoseRegion:
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
+
 
 

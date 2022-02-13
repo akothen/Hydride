@@ -134,16 +134,16 @@ def AddOuterLoopInFunction(Function : RoseFunction):
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
   BlockList = Function.getRegionsOfType(RoseBlock)
   # Iterate over the blocks to see if they have multiple bvinserts
+  # to the function return value
   BlockToBVInsertOpsMap = dict()
   for Block in BlockList:
     BVInsertOpsList = list()
     for Op in Block:
       if isinstance(Op, RoseBVInsertSliceOp):
-        BVInsertOpsList.append(Op)
+        if Op.getInputBitVector() == Function.getReturnValue():
+          BVInsertOpsList.append(Op)
     if len(BVInsertOpsList) > 1:
-      BlockToBVInsertOpsMap[Block] = []
-      for BVInsertOp in BVInsertOpsList:
-        BlockToBVInsertOpsMap[Block].append(BVInsertOp)
+      BlockToBVInsertOpsMap[Block] = BVInsertOpsList
   
   # Split the blocks at bvinserts
   for Block, BVInsertOpsList in BlockToBVInsertOpsMap.items():
@@ -217,6 +217,7 @@ def Run(Function : RoseFunction):
   CanonicalizeFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 
