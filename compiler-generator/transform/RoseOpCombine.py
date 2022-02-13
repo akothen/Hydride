@@ -7,6 +7,7 @@
 
 
 from ast import Constant
+from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -556,6 +557,36 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
     return
 
 
+def RemoveRedundantBVInsertOps(Block : RoseBlock):
+  BVInsertOpList = list()
+  BVInsertToExtractMap = dict()
+  for Operation in Block:
+    if isinstance(Operation, RoseBVInsertSliceOp):
+      # If this op is already in the map, we rempve the entry
+      # from the map. TODO: Imoprove this, if neessary.
+      if Operation in BVInsertToExtractMap:
+        BVInsertToExtractMap.pop(Operation)
+      BVInsertOpList.append(Operation)
+      continue
+    if isinstance(Operation, RoseBVExtractSliceOp):
+      for BVInsertOp in BVInsertOpList:
+        if BVInsertOp.getInputBitVector() == Operation.getInputBitVector():
+          if BVInsertOp not in BVInsertToExtractMap:
+            BVInsertToExtractMap[BVInsertOp] = [Operation]
+          else:
+            BVInsertToExtractMap[BVInsertOp].append(Operation)
+        break
+  
+  # Now we replace the bvextracts with shift sand remove bvinserts.
+  for BVInsertOp, BVExtractList in BVInsertToExtractMap.items():
+    # Now we replace the bitvector being extracted from with the inserted
+    # value to make the extraction more direct.
+    for BVExtractOp in BVExtractList:
+      BVExtractOp.setOperand(0, BVInsertOp.getInsertValue())
+    # Remove the bvinsert op from the block
+    Block.eraseOperation(BVInsertOp)
+
+
 def RunOpCombineOnBlock(Block : RoseBlock):
   print("RUN OP COMBINE ON BLOCK")
   print("BLOCK:")
@@ -669,6 +700,7 @@ def RunOpCombineOnBlock(Block : RoseBlock):
           Block.eraseOperation(SecondExtractOp)
           Block.eraseOperation(FirstExtractOp)
       continue
+
     # Combine the primitiev ops
     print("------OPERATION:")
     Op.print()
@@ -693,6 +725,9 @@ def RunOpCombineOnBlock(Block : RoseBlock):
       or isinstance(NonConstantOperand, RoseMulOp) \
       or isinstance(NonConstantOperand, RoseDivOp):
         OpCombinePatterns(NonConstantOperand, Op)
+
+  # Remove the redundant bvinserts from the block
+  RemoveRedundantBVInsertOps(Block)  
 
 
 def RunOpCombineOnRegion(Region):
