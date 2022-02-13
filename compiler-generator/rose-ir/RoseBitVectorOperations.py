@@ -38,7 +38,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     String += (self.Opcode.getRosetteOp() + " ")
     String += " " + self.getInputBitVector().getName()
     String += " (bitvector " + str(self.getOutputBitwidth())
-    String += "))\n"
+    String += ")))\n"
     return String
 
 
@@ -74,7 +74,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     String += (self.Opcode.getRosetteOp() + " ")
     String += " " + self.getInputBitVector().getName()
     String += " (bitvector " + str(self.getOutputBitwidth())
-    String += "))\n"
+    String += ")))\n"
     return String
 
 

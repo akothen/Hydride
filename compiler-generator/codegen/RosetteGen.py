@@ -1,6 +1,6 @@
 #############################################################
 #
-# This paas translate Rose IR into Rosette.
+# This paas translate Rose IR into textual Rosette code.
 #
 #############################################################
 
@@ -19,23 +19,39 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, NumSpace = 0):
   print("BLOCK:")
   print(Block)
   Block.print()
-  OpList = list()
+  BVInsertOpsList = list()
   for Operation in Block:
-    # Gather bvinsert ops
-    if isinstance(Operation, RoseBVInsertSliceOp):
-      OpList.append(Operation)
-      continue
     # Ignore return ops
     if isinstance(Operation, RoseReturnOp):
       continue
+    # Gather bvinsert ops
+    if isinstance(Operation, RoseBVInsertSliceOp):
+      BVInsertOpsList.append(Operation)
+      continue
+    # Extracts are dealt with a little differently
+    if isinstance(Operation, RoseBVExtractSliceOp):
+      # There are situations where value being extracted is defined
+      # outside a loop. In Rosette, the indexing into bitvectors takes
+      # place from right to left, instead of left to right. So we need
+      # to reverse the order of extraction as well.
+      if Operation.getInputBitVector() in Block.getOperations():
+        RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
+        continue
     RosetteCode += Operation.to_rosette(NumSpace)
-  print(OpList)
-  if not (len(OpList) > 1):
+  
+  print(BVInsertOpsList)
+  if not (len(BVInsertOpsList) > 1):
+    if len(BVInsertOpsList) == 1:
+      Spaces = ""
+      for _ in range(NumSpace):
+        Spaces += " "
+      RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
     return RosetteCode
+  
   # See which bvinserts in the block are concatable
   ListOfPacks = list()
   Pack = list()
-  for Op in OpList:
+  for Op in BVInsertOpsList:
     if Pack == []:
       Pack = [Op]
       continue
@@ -72,20 +88,23 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace = 
   Spaces = ""
   for _ in range(NumSpace):
     Spaces += " "
-  RosetteCode += Spaces + "(for/list ([" + Loop.getIterator().getName() + " (reverse (range " \
+  TmpRosetteCode = Spaces + "(for/list ([" + Loop.getIterator().getName() + " (reverse (range " \
     + str(Loop.getStartIndex()) + " " + str(Loop.getEndIndex()) \
     + " " + str(Loop.getStep()) + "))])\n"
 
   # To make codegen easy to handle for now, we'll assume that 
   for Abstraction in Loop:
     if isinstance(Abstraction, RoseForLoop):
-      RosetteCode = GenerateRosetteForForLoop(Abstraction, RosetteCode, NumSpace + 1)
+      TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, NumSpace + 1)
     if isinstance(Abstraction, RoseBlock):
-      RosetteCode = GenerateRosetteForBlock(Abstraction, RosetteCode, NumSpace + 1)
+      TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
   
-  RosetteCode += (Spaces + ")\n")
+  TmpRosetteCode += (Spaces + ")\n")
   print("RosetteCode after generating loop")
-  print(RosetteCode)
+  print(TmpRosetteCode)
+  TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
+  TmpRosetteCode += (Spaces + ")\n")
+  RosetteCode += TmpRosetteCode
   return RosetteCode
 
 
@@ -131,7 +150,7 @@ def GenerateRosetteForFunction(Function : RoseFunction, RosetteCode : str, NumSp
   Spaces = ""
   for _ in range(NumSpace):
     Spaces += " "
-  RosetteCode += Spaces + "(define (" + Function.getName() + " ("
+  RosetteCode += Spaces + "(define (" + Function.getName() + " "
   for Arg in Function.getArgs():
     RosetteCode += " " + Arg.getName()
   RosetteCode += " )\n"
@@ -143,7 +162,7 @@ def GenerateRosetteForFunction(Function : RoseFunction, RosetteCode : str, NumSp
   print(RosetteCode)
   if Function.getReturnValue() != RoseUndefValue():
     RosetteCode += ")\n"
-    RosetteCode += "(" + Function.getReturnValue().getName() + ")\n"
+    RosetteCode += Function.getReturnValue().getName() + "\n"
   RosetteCode += (Spaces + ")\n")
   return RosetteCode
 
@@ -154,6 +173,7 @@ def CodeGen(Function : RoseFunction):
   RosetteCode = GenerateRosetteForFunction(Function, RosetteCode)
   print("---\n\n\n\n\n")
   print(RosetteCode)
+
 
 
 
