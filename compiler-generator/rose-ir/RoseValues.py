@@ -65,7 +65,8 @@ class RoseConstant(RoseValue):
   def getValue(self):
     return self.Val
   
-  def to_rosette(self):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     return str(self.Val)
 
   def print(self):
@@ -132,6 +133,10 @@ class RoseArgument(RoseValue):
     assert Function.getArg(self.ArgIndex).getType() == self.getType()
     self.Callee = Function
   
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
+    return self.getName()
+
   def print(self):
     print(self.getName())
 
@@ -283,7 +288,12 @@ class RoseOperation(RoseValue):
   def isSigned(self):
     NotImplemented
 
-  def to_rosette(self, NumSpace = 0):
+  # There are situations where value being extracted is defined
+  # outside a loop. In Rosette, the indexing into bitvectors takes
+  # place from right to left, instead of left to right. So we need
+  # an operand for that.
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "

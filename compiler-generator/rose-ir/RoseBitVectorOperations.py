@@ -28,7 +28,8 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -63,7 +64,8 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -98,7 +100,8 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -135,7 +138,8 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -172,7 +176,8 @@ class RoseBVTruncateOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
     NotImplemented
 
@@ -213,15 +218,26 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
-  def to_rosette(self, NumSpace = 0):
+  # There are situations where value being extracted is defined
+  # outside a loop. In Rosette, the indexing into bitvectors takes
+  # place from right to left, instead of left to right. So we need
+  # to reverse the order of extraction as well.
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
     String += (self.Opcode.getRosetteOp() + " ")
-    String += " " + self.getHighIndex().getName()
-    String += " " + self.getLowIndex().getName()
+    if ReverseIndexing == False:
+      String += " " + self.getHighIndex().getName()
+      String += " " + self.getLowIndex().getName()
+    else:
+      InputBVSize = self.getInputBitVector().getType().getBitwidth()
+      ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      # DO NOT CHANGE THIS ORDER
+      String += " " + ReverseIndexString + self.getLowIndex().getName() + ")"
+      String += " " + ReverseIndexString + self.getHighIndex().getName() + ")"
     String += " " + self.getInputBitVector().getName()
     String += "))\n"
     return String
@@ -272,7 +288,8 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     assert "No direction convertion of BVInsert to Rosette!"
     NotImplemented
 
@@ -665,7 +682,8 @@ class RoseBVNEQOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -963,5 +981,6 @@ class RoseBVZeroOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
 
 

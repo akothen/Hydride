@@ -45,7 +45,8 @@ class RoseReturnOp(RoseOperation):
   def simplify(self):
     return RoseUndefValue()
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -78,7 +79,8 @@ class RoseCallOp(RoseOperation):
       return RoseOperation.Signedness.DontCare
     return ReturnVal.getSignedness()
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -160,7 +162,8 @@ class RoseSelectOp(RoseOperation):
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     assert "No direction convertion of Select Op to Rosette!"
     NotImplemented
 
@@ -202,7 +205,8 @@ class RoseCastOp(RoseOperation):
     # Cannot simplify
     return RoseUndefValue()
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -652,7 +656,8 @@ class RoseNEQOp(RoseOperation):
     assert not isinstance(self.getOperand(1), RoseUndefValue)
     return RoseOperation.Signedness.DontCare
 
-  def to_rosette(self, NumSpace = 0):
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -1187,6 +1192,7 @@ class RoseXorOp(RoseOperation):
       return RoseUndefValue()
     # Not the final result
     return Result
+
 
 
 
