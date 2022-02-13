@@ -145,6 +145,15 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
     # But it must end with bvinsert.
     RerollableCandidatesList.append(PacksList)
 
+  # Now filter out all cases where there is only one pack list
+  TempRerollableCandidatesList = RerollableCandidatesList
+  for PackList in TempRerollableCandidatesList:
+    if len(PackList) == 1:
+      RerollableCandidatesList.remove(PackList)
+      continue
+  print("-------RerollableCandidatesList:")
+  print(RerollableCandidatesList)
+
   for Pack in RerollableCandidatePacks:
     print("+++WINDOW:")
     for Op in Pack:
@@ -341,6 +350,10 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
 
   # Get a set of rerollable sets
   RerollableCandidatesList = GetValidRerollableCandidates(RerollableCandidatePacks)
+
+  print("+++=RerollableCandidatesList:")
+  print(RerollableCandidatesList)
+  print(len(RerollableCandidatesList))
 
   # Add the set to the block map
   BlockToRerollableCandidatesMap[Block] = RerollableCandidatesList
