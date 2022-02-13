@@ -28,6 +28,18 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += (self.Opcode.getRosetteOp() + " ")
+    String += " " + self.getInputBitVector().getName()
+    String += " (bitvector " + str(self.getOutputBitwidth())
+    String += "))\n"
+    return String
+
 
 class RoseBVZeroExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -50,6 +62,18 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
+
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += (self.Opcode.getRosetteOp() + " ")
+    String += " " + self.getInputBitVector().getName()
+    String += " (bitvector " + str(self.getOutputBitwidth())
+    String += "))\n"
+    return String
 
 
 class RoseBVSSaturateOp(RoseBitVectorOp):
@@ -188,6 +212,19 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
     if not isinstance(Operand, RoseOperation):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
+
+  def to_rosette(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += (self.Opcode.getRosetteOp() + " ")
+    String += " " + self.getHighIndex().getName()
+    String += " " + self.getLowIndex().getName()
+    String += " " + self.getInputBitVector().getName()
+    String += "))\n"
+    return String
 
 
 class RoseBVInsertSliceOp(RoseBitVectorOp):
@@ -926,6 +963,5 @@ class RoseBVZeroOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
-
 
 
