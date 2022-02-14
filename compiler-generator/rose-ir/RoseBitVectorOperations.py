@@ -6,6 +6,8 @@ from RoseAbstractions import RoseUndefRegion
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 
+import llvmlite
+
 
 class RoseBVSignExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
@@ -40,6 +42,10 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     String += " (bitvector " + str(self.getOutputBitwidth())
     String += ")))\n"
     return String
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    return IRBuilder.sext(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
 class RoseBVZeroExtendOp(RoseBitVectorOp):
@@ -76,6 +82,10 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     String += " (bitvector " + str(self.getOutputBitwidth())
     String += ")))\n"
     return String
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    return IRBuilder.zext(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
 class RoseBVSSaturateOp(RoseBitVectorOp):
@@ -180,6 +190,10 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     assert ReverseIndexing == False
     assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
     NotImplemented
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    return IRBuilder.trunc(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
 class RoseBVExtractSliceOp(RoseBitVectorOp):
@@ -316,6 +330,10 @@ class RoseBVNotOp(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getOperand(0).to_llvm_ir(IRBuilder)
+    return IRBuilder.not_(Operand, self.getName())
+
 
 class RoseBVAndOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -342,6 +360,12 @@ class RoseBVAndOp(RoseBitVectorOp):
     if SignedOperandFound == True:
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.and_(Operand1, Operand2, self.getName())
 
 
 class RoseBVOrOp(RoseBitVectorOp):
@@ -370,6 +394,12 @@ class RoseBVOrOp(RoseBitVectorOp):
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.or_(Operand1, Operand2, self.getName())
+
 
 class RoseBVXorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -397,6 +427,12 @@ class RoseBVXorOp(RoseBitVectorOp):
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.xor(Operand1, Operand2, self.getName())
+
 
 class RoseBVShlOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -418,6 +454,11 @@ class RoseBVShlOp(RoseBitVectorOp):
     if not isinstance(Operand, RoseOperation):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.shl(Operand1, Operand2, self.getName())
 
 
 class RoseBVLshrOp(RoseBitVectorOp):
@@ -441,6 +482,11 @@ class RoseBVLshrOp(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.lshr(Operand1, Operand2, self.getName())
+
 
 class RoseBVAshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -462,7 +508,11 @@ class RoseBVAshrOp(RoseBitVectorOp):
     if not isinstance(Operand, RoseOperation):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
-  
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.ashr(Operand1, Operand2, self.getName())  
 
 
 ######################################## ARITHMETIC OPERATORS ###########################
@@ -486,6 +536,10 @@ class RoseBVNegOp(RoseBitVectorOp):
     if not isinstance(Operand, RoseOperation):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
+
+  def to_llvm_ir(self, IRBuilder):
+    OperandInLLVM = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    return IRBuilder.neg(OperandInLLVM, self.getName())
 
 
 class RoseBVAddOp(RoseBitVectorOp):
@@ -514,6 +568,12 @@ class RoseBVAddOp(RoseBitVectorOp):
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.add(Operand1, Operand2, self.getName())
+
 
 class RoseBVSubOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -540,6 +600,12 @@ class RoseBVSubOp(RoseBitVectorOp):
     if SignedOperandFound == True:
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.sub(Operand1, Operand2, self.getName())
 
 
 class RoseBVMulOp(RoseBitVectorOp):
@@ -568,7 +634,13 @@ class RoseBVMulOp(RoseBitVectorOp):
       return RoseOperation.Signedness.Signed
     return RoseOperation.Signedness.Unsigned
 
-  
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.mul(Operand1, Operand2, self.getName())
+
+
 class RoseBVUdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert Operand1.getType().isBitVectorTy()
@@ -583,6 +655,11 @@ class RoseBVUdivOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.udiv(Operand1, Operand2, self.getName())
 
 
 class RoseBVSdivOp(RoseBitVectorOp):
@@ -600,6 +677,11 @@ class RoseBVSdivOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.sdiv(Operand1, Operand2, self.getName())
+
 
 class RoseBVUremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -615,6 +697,11 @@ class RoseBVUremOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.urem(Operand1, Operand2, self.getName())
 
 
 class RoseBVSremOp(RoseBitVectorOp):
@@ -632,6 +719,11 @@ class RoseBVSremOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.srem(Operand1, Operand2, self.getName())
+
 
 class RoseBVSmodOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -647,6 +739,11 @@ class RoseBVSmodOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.srem(Operand1, Operand2, self.getName())
 
 
 ############################# COMPARISON OPERATORS ###################################
@@ -665,6 +762,11 @@ class RoseBVEQOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("==", Operand1, Operand2, self.getName())
 
 
 class RoseBVNEQOp(RoseBitVectorOp):
@@ -697,6 +799,11 @@ class RoseBVNEQOp(RoseBitVectorOp):
     String += " )))\n"
     return String
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("!=", Operand1, Operand2, self.getName())
+
 
 class RoseBVSLTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -712,6 +819,11 @@ class RoseBVSLTOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("<", Operand1, Operand2, self.getName())
 
 
 class RoseBVULTOp(RoseBitVectorOp):
@@ -729,6 +841,11 @@ class RoseBVULTOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_unsigned("<", Operand1, Operand2, self.getName())
+
 
 class RoseBVSLEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -744,6 +861,11 @@ class RoseBVSLEOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("<=", Operand1, Operand2, self.getName())
 
 
 class RoseBVULEOp(RoseBitVectorOp):
@@ -761,6 +883,11 @@ class RoseBVULEOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_unsigned("<=", Operand1, Operand2, self.getName())
+
 
 class RoseBVSGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -776,6 +903,11 @@ class RoseBVSGTOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed(">", Operand1, Operand2, self.getName())
 
 
 class RoseBVUGTOp(RoseBitVectorOp):
@@ -793,6 +925,11 @@ class RoseBVUGTOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_unsigned(">", Operand1, Operand2, self.getName())
+
 
 class RoseBVSGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -808,6 +945,11 @@ class RoseBVSGEOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed(">=", Operand1, Operand2, self.getName())
 
 
 class RoseBVUGEOp(RoseBitVectorOp):
@@ -825,6 +967,10 @@ class RoseBVUGEOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_unsigned(">=", Operand1, Operand2, self.getName())
 
 
 ######################################## ADDITIONAL OPERATORS ###########################
@@ -848,6 +994,11 @@ class RoseBVAdd1Op(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
+    return IRBuilder.add(Operand, OneLLVM, self.getName())
+
 
 class RoseBVSub1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
@@ -868,6 +1019,11 @@ class RoseBVSub1Op(RoseBitVectorOp):
       return RoseOperation.Signedness.DontCare
     return Operand.getSignedness()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
+    OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
+    return IRBuilder.sub(Operand, OneLLVM, self.getName())
+
 
 class RoseBVSminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -881,6 +1037,16 @@ class RoseBVSminOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_signed("<=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
 
 
 class RoseBVUminOp(RoseBitVectorOp):
@@ -896,6 +1062,16 @@ class RoseBVUminOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_unsigned("<=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
 
 class RoseBVSmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -910,6 +1086,16 @@ class RoseBVSmaxOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.Signed
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_signed(">=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
 
 class RoseBVUmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -923,6 +1109,16 @@ class RoseBVUmaxOp(RoseBitVectorOp):
 
   def getSignedness(self):
     return RoseOperation.Signedness.Unsigned
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_unsigned(">=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
 
 
 class RoseBVRolOp(RoseBitVectorOp):
@@ -982,5 +1178,9 @@ class RoseBVZeroOp(RoseBitVectorOp):
   def getSignedness(self):
     return RoseOperation.Signedness.DontCare
 
-
+  def to_llvm_ir(self, IRBuilder):
+    OperandInLLVM = self.getOperand(0).to_llvm_ir(IRBuilder)
+    ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
+    return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
+                                 "%" + "cond." + self.getName())
 

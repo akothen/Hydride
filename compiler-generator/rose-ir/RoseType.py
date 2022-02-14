@@ -1,5 +1,7 @@
 
 from enum import Enum, auto
+import llvmlite
+
 
 # Definition of concept of types in Rose IR
 class RoseType:
@@ -114,6 +116,17 @@ class RoseType:
     
     def isFunctionTy(self):
         return isinstance(self, RoseFunctionType)
+
+    def to_llvm_ir(self):
+        if self.isIntegerTy() or self.isBitVectorTy():
+            return llvmlite.ir.IntType(self.getType().getBitwidth())
+        if self.isFloatTy():
+            return llvmlite.ir.FloatType()
+        if self.isDoubleTy():
+            return llvmlite.ir.DoubleType()
+        if self.isVoidTy():
+            return llvmlite.ir.VoidType()
+        assert False, "Rose IR to LLVM IR type conversion not supported."
 
 
 class RoseBitVectorType(RoseType):
@@ -365,3 +378,4 @@ if __name__ == '__main__':
     print(BVType)
 
  
+

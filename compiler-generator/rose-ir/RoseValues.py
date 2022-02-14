@@ -5,6 +5,7 @@ from RoseType import RoseType
 import RoseAbstractions 
 
 from enum import Enum, auto
+import llvmlite
 
 
 class RoseUndefValue(RoseValue):
@@ -14,6 +15,12 @@ class RoseUndefValue(RoseValue):
   def __str__(self):
     return self.getName()
   
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    NotImplemented
+
+  def to_llvm_ir(self, IRBuilder = None):
+    return llvmlite.ir.Undefined()
+
   def print(self):
     print(self.getName())
 
@@ -69,9 +76,11 @@ class RoseConstant(RoseValue):
     assert ReverseIndexing == False
     return str(self.Val)
 
+  def to_llvm_ir(self, IRBuilder = None):
+    return llvmlite.ir.Constant(self.getType().to_llvm_ir(), self.getValue())
+
   def print(self):
     print(self.Val)
-
 
 
 class RoseArgument(RoseValue):

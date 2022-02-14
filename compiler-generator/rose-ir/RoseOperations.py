@@ -5,6 +5,8 @@ from RoseType import RoseType
 from RoseAbstractions import RoseUndefRegion
 from RoseValues import *
 
+import llvmlite
+
 
 class RoseReturnOp(RoseOperation):
   def __init__(self, Value : RoseValue, ParentBlock):
@@ -52,6 +54,11 @@ class RoseReturnOp(RoseOperation):
       Spaces += " "
     String = Spaces + "(" + self.getReturnedValue().getName() + ")\n"
     return String
+  
+  def to_llvm_ir(self, IRBuilder):
+    if self.getReturnedValue().getType().isVoidTy():
+      return IRBuilder.ret_void()
+    return IRBuilder.ret(self.getReturnedValue().to_llvm_ir(IRBuilder))
 
 
 class RoseCallOp(RoseOperation):
@@ -167,6 +174,12 @@ class RoseSelectOp(RoseOperation):
     assert "No direction convertion of Select Op to Rosette!"
     NotImplemented
 
+  def to_llvm_ir(self, IRBuilder):
+    Condition = self.getCondition().to_llvm_ir(IRBuilder)
+    Then = self.getThenValue().to_llvm_ir(IRBuilder)
+    Else = self.getElseValue().to_llvm_ir(IRBuilder)
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
   def solve(self):
     # Cannot solve select ops.
     # TODO: Support simplification for select ops.
@@ -262,6 +275,15 @@ class RoseAbsOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
   
+  def to_llvm_ir(self, IRBuilder):
+    OperandInLLVM = self.getOperand(0).to_llvm_ir(IRBuilder)
+    ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
+    Condition = IRBuilder.icmp_signed(">=", OperandInLLVM, ZeroLLVM, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM
+    Else = IRBuilder.neg(OperandInLLVM, "%neg." + self.getName())
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
 
 ######################################## ARITHMETIC OPERATORS ###########################
 
@@ -324,6 +346,14 @@ class RoseAddOp(RoseOperation):
       return RoseUndefValue()
     return Result
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.add(Operand1, Operand2, self.getName())
+    return IRBuilder.fadd(Operand1, Operand2, self.getName())
+
 
 class RoseSubOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -382,6 +412,14 @@ class RoseSubOp(RoseOperation):
       return RoseUndefValue()
     # Not the final result
     return Result
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.sub(Operand1, Operand2, self.getName())
+    return IRBuilder.fsub(Operand1, Operand2, self.getName())
 
 
 class RoseMulOp(RoseOperation):
@@ -443,6 +481,14 @@ class RoseMulOp(RoseOperation):
       return RoseUndefValue()
     return Result
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.mul(Operand1, Operand2, self.getName())
+    return IRBuilder.fmul(Operand1, Operand2, self.getName())
+
 
 class RoseDivOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -502,6 +548,13 @@ class RoseDivOp(RoseOperation):
       return self.getOperand(0)
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.sdiv(Operand1, Operand2, self.getName())
+    return IRBuilder.fdiv(Operand1, Operand2, self.getName())
+
 
 class RoseRemOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -553,6 +606,13 @@ class RoseRemOp(RoseOperation):
       return self.getOperand(0)
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.srem(Operand1, Operand2, self.getName())
+    return IRBuilder.frem(Operand1, Operand2, self.getName())
+  
 
 class RoseModOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -603,6 +663,13 @@ class RoseModOp(RoseOperation):
       return self.getOperand(0)
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    if self.getType().isIntegerTy():
+      return IRBuilder.srem(Operand1, Operand2, self.getName())
+    return IRBuilder.frem(Operand1, Operand2, self.getName())
+
 
 ############################# COMPARISON OPERATORS ###################################
 
@@ -637,6 +704,11 @@ class RoseEQOp(RoseOperation):
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("==", Operand1, Operand2, self.getName())
 
 
 class RoseNEQOp(RoseOperation):
@@ -686,6 +758,11 @@ class RoseNEQOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("!=", Operand1, Operand2, self.getName())
+
 
 class RoseLTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -718,6 +795,11 @@ class RoseLTOp(RoseOperation):
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("<", Operand1, Operand2, self.getName())
 
 
 class RoseLEOp(RoseOperation):
@@ -752,6 +834,11 @@ class RoseLEOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed("<=", Operand1, Operand2, self.getName())
+
 
 class RoseGTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -785,6 +872,11 @@ class RoseGTOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed(">", Operand1, Operand2, self.getName())
+  
 
 class RoseGEOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -818,6 +910,11 @@ class RoseGEOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.icmp_signed(">=", Operand1, Operand2, self.getName())
+  
 
 
 ######################################## ADDITIONAL OPERATORS ###########################
@@ -869,6 +966,16 @@ class RoseMinOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_signed("<=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
 
 class RoseMaxOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -916,6 +1023,16 @@ class RoseMaxOp(RoseOperation):
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    OperandInLLVM2 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Condition = IRBuilder.icmp_signed(">=", OperandInLLVM1, OperandInLLVM2, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM1
+    Else = OperandInLLVM2
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
 
 ######################################## BOOLEAN OPERATORS ###########################
 
@@ -949,6 +1066,10 @@ class RoseNotOp(RoseOperation):
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
+
+  def to_llvm_ir(self, IRBuilder):
+    Operand = self.getInputValue().to_llvm_ir(IRBuilder)
+    return IRBuilder.not_(Operand, self.getName())
 
 
 class RoseAndOp(RoseOperation):
@@ -997,6 +1118,12 @@ class RoseAndOp(RoseOperation):
         continue
       return RoseUndefValue()
     return Result
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.and_(Operand1, Operand2, self.getName())
 
 
 class RoseNandOp(RoseOperation):
@@ -1049,6 +1176,13 @@ class RoseNandOp(RoseOperation):
     # Not the result
     return RoseNotOp.create("not." + Result.getName(), Result)
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    AndInst = IRBuilder.and_(Operand1, Operand2, self.getName())
+    return IRBuilder.not_(AndInst, "not." + self.getName())
+
 
 class RoseOrOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -1096,6 +1230,12 @@ class RoseOrOp(RoseOperation):
         continue
       return RoseUndefValue()
     return Result
+
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.or_(Operand1, Operand2, self.getName())
 
 
 class RoseNorOp(RoseOperation):
@@ -1148,6 +1288,13 @@ class RoseNorOp(RoseOperation):
     # Not the final result
     return RoseNotOp.create("not." + Result.getName(), Result)
 
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    OrInst = IRBuilder.or_(Operand1, Operand2, self.getName())
+    return IRBuilder.not_(OrInst, "not." + self.getName())
+
 
 class RoseXorOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -1193,6 +1340,10 @@ class RoseXorOp(RoseOperation):
     # Not the final result
     return Result
 
-
+  def to_llvm_ir(self, IRBuilder):
+    assert len(self.getOperands()) == 2
+    Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
+    Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
+    return IRBuilder.xor(Operand1, Operand2, self.getName())
 
 
