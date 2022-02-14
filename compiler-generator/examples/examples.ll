@@ -372,26 +372,26 @@ function vrmpy_dot_product (%Vx, %Vu, %Vv) {
 
 
 
-function _mm256_madd52hi_epu64 ( a, b, c ) {
+function _mm256_madd52hi_epu64 ( bv256 a, bv256 b, bv256 c ) {
  for ([%outer.it (range 0 256 256)]) {
   for ([%j0.new (range 0 256 64)]) {
-   %1 = add %j0.new, 51
-   %2 = bvextract b, %j0.new, %1, 52
-   %3 = bvzeroextend %2, 64
-   %5 = bvextract c, %j0.new, %1, 52
-   %6 = bvzeroextend %5, 64
-   %7 = bvzeroextend %3, 128
-   %8 = bvzeroextend %6, 128
-   %9 = bvmul %7, %8
-   %12 = add %j0.new, 63
-   %13 = bvextract a, %j0.new, %12, 64
-   %14 = bvextract %9, 52, 103, 52
-   %15 = bvzeroextend  %14, 64
-   %16 = bvadd %13, %15
-   bvinsert  %16, dst, %j0.new, %12, 64
+   %1 = add int32 %j0.new, int32 51
+   %2 = bvextract bv256 b, int32 %j0.new, int32 %1, int32 52
+   %3 = bvzeroextend bv52 %2, int32 64
+   %5 = bvextract bv256 c, int32 %j0.new, int32 %1, int32 52
+   %6 = bvzeroextend bv52 %5, int32 64
+   %7 = bvzeroextend bv64 %3, int32 128
+   %8 = bvzeroextend bv64 %6, int32 128
+   %9 = bvmul bv128 %7, bv128 %8
+   %12 = add int32 %j0.new, int32 63
+   %13 = bvextract bv256 a, int32 %j0.new, int32 %12, int32 64
+   %14 = bvextract bv128 %9, int32 52, int32 103, int32 52
+   %15 = bvzeroextend bv52 %14, int32 64
+   %16 = bvadd bv64 %13, bv64 %15
+   bvinsert bv64 %16, bv256 dst, int32 %j0.new, int32 %12, int32 64
   }
  }
- ret dst
+ ret bv256 dst
 }
 
 
@@ -425,26 +425,26 @@ function _mm256_madd52hi_epu64 ( a, b, c, %vector_length, %lane_size, %precision
 
 
 
-function _mm_madd52lo_epu64 ( a, b, c ) {
+function _mm_madd52lo_epu64 ( bv128 a, bv128 b, bv128 c ) {
  for ([%outer.it (range 0 128 128)]) {
   for ([%j0.new (range 0 128 64)]) {
-   %1 = add %j0.new, 51
-   %2 = bvextract b, %j0.new, %1, 52
-   %3 = bvzeroextend %2, 64
-   %5 = bvextract c, %j0.new, %1, 52
-   %6 = bvzeroextend %5, 64
-   %7 = bvzeroextend %3, 128
-   %8 = bvzeroextend %6, 128
-   %9 = bvmul %7, %8
-   %12 = add %j0.new, 63
-   %13 = bvextract a, %j0.new, %12, 64
-   %14 = bvextract %9, 0, 51, 52
-   %15 = bvzeroextend %14, 64
-   %16 = bvadd %13, %15
-   bvinsert %16, dst, %j0.new, %12, 64
+   %1 = add int32 %j0.new, int32 51
+   %2 = bvextract bv128 b, int32 %j0.new, int32 %1, int32 52
+   %3 = bvzeroextend bv52 %2, int32 64
+   %5 = bvextract bv128 c, int32 %j0.new, int32 %1, int32 52
+   %6 = bvzeroextend bv52 %5, int32 64
+   %7 = bvzeroextend bv64 %3, int32 128
+   %8 = bvzeroextend bv64 %6, int32 128
+   %9 = bvmul bv128 %7, bv128 %8
+   %12 = add int32 %j0.new, int32 63
+   %13 = bvextract bv128 a, int32 %j0.new, int32 %12, int32 64
+   %14 = bvextract bv128 %9, int32 0, int32 51, int32 52
+   %15 = bvzeroextend bv52 %14, int32 64
+   %16 = bvadd bv64 %13, bv64 %15
+   bvinsert bv64 %16, bv128 dst, int32 %j0.new, int32 %12, int32 64
   }
  }
- ret dst
+ ret bv128 dst
 }
 
 
