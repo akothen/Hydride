@@ -28,11 +28,13 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
     if isinstance(Operation, RoseBVExtractSliceOp):
       for BVInsertOp in BVInsertOpList:
         if BVInsertOp.getInputBitVector() == Operation.getInputBitVector():
-          if BVInsertOp not in BVInsertToExtractMap:
-            BVInsertToExtractMap[BVInsertOp] = [Operation]
-          else:
-            BVInsertToExtractMap[BVInsertOp].append(Operation)
-        break
+          if Operation.getInputBitVector().getType().getBitwidth() \
+                == BVInsertOp.getInsertValue().getType().getBitwidth():
+            if BVInsertOp not in BVInsertToExtractMap:
+              BVInsertToExtractMap[BVInsertOp] = [Operation]
+            else:
+              BVInsertToExtractMap[BVInsertOp].append(Operation)
+            break
   
   # Now we replace the bvextracts with shift sand remove bvinserts.
   for BVInsertOp, BVExtractList in BVInsertToExtractMap.items():
@@ -52,7 +54,8 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Gather all the ops in this block
   OpList = list()
   for Operation in Block:
-    if isinstance(Operation, RoseBVInsertSliceOp):
+    if isinstance(Operation, RoseBVInsertSliceOp) \
+    or isinstance(Operation, RoseReturnOp):
       continue
     OpList.append(Operation)
   # Iterate the list of operations in reverse order
@@ -96,6 +99,7 @@ def Run(Function : RoseFunction):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 
