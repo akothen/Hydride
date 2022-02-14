@@ -5,6 +5,7 @@
 #############################################################
 
 
+from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -131,6 +132,61 @@ def AddOuterLoopInFunction(Function : RoseFunction):
   Function.addRegionBefore(0, Loop)
 
 
+def AddTwoNestedLoopsInFunction(Function : RoseFunction):
+  # There are no loops in the code. Now we check if the code is all in one block
+  # or there is some control flow (which we do not handle right now.)
+  # TODO: Handle cases where control flow exists.
+  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
+  assert NumBlocksAtLevel0 == 1
+  [Block] = Function.getRegionsOfType(RoseBlock, 0)
+
+  # Split the block first to separate out the return operation.
+  # Look for the first bvinsert op from the bottom.
+  # Just as a sanity check the last op in the block must be a 
+  # return op.
+  assert isinstance(Block.getTailChild(), RoseReturnOp)
+  LastBVInsertOp = RoseUndefValue()
+  for Op in reversed(Block.getOperations()):
+    if isinstance(Op, RoseBVInsertSliceOp):
+      # Found a bvinsert op! Check to see that this inserts into the 
+      # function's return value.
+      assert Op.getInputBitVector() == Function.getReturnValue()
+      # Now split the block.
+      Pos = Block.getPosOfOperation(Op)
+      Block.splitAt(Pos + 1)
+      LastBVInsertOp = Op
+      break
+
+  # Now another sanity check to see if there are 2 blocks at level zero
+  assert not isinstance(LastBVInsertOp, RoseUndefValue)
+  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
+  assert NumBlocksAtLevel0 == 2
+
+  # Now we add a loop around the first block
+  Block = LastBVInsertOp.getParent()
+  # Use the return value of the function as the end and step
+  Bitwidth = Function.getReturnValue().getType().getBitwidth()
+  # Create the inner loop
+  InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
+  # Add the first block to the inner loop and remove it from the function
+  Function.eraseChild(Block)
+  InnerLoop.addRegion(Block)
+  # Create the outer loop and add the inner loop into the outer loop
+  OuterLoop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
+  OuterLoop.addRegion(InnerLoop)
+  # Now add the loop to the function
+  Function.addRegionBefore(0, OuterLoop)
+
+
+def FixLoopNestingInFunction(Function : RoseFunction):
+  # Get number of loops at different levels
+  NumLoopsAtLevel0 = Function.numLevelsOfRegion(RoseForLoop, 0)
+  if NumLoopsAtLevel0 == 0:
+    AddTwoNestedLoopsInFunction(Function)
+  elif NumLoopsAtLevel0 >= 1:
+    AddOuterLoopInFunction(Function)
+
+
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
   BlockList = Function.getRegionsOfType(RoseBlock)
   # Iterate over the blocks to see if they have multiple bvinserts
@@ -204,10 +260,8 @@ def CanonicalizeFunction(Function : RoseFunction):
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
 
-  # There should be only one high-level loop
-  #if Function.numLevelsOfRegion(RoseForLoop, Level=0) != 1:
-    # Need to add a loop at the high level -- this is a very common case
-  AddOuterLoopInFunction(Function)
+  # We may need to add more loops
+  FixLoopNestingInFunction(Function)
   if IsFunctionInCanonicalForm(Function):
     return
 
@@ -217,7 +271,6 @@ def Run(Function : RoseFunction):
   CanonicalizeFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
