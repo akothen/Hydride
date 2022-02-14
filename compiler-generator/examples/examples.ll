@@ -369,124 +369,233 @@ function vrmpy_dot_product (%Vx, %Vu, %Vv) {
   ret %dst
 }
 
-function _mm_max_pi16 ( bv64 a, bv64 b ) {
+
+
+
+function _mm256_madd52hi_epu64 ( a, b, c ) {
+ for ([%outer.it (range 0 256 256)]) {
+  for ([%j0.new (range 0 256 64)]) {
+   %1 = add %j0.new, 51
+   %2 = bvextract b, %j0.new, %1, 52
+   %3 = bvzeroextend %2, 64
+   %5 = bvextract c, %j0.new, %1, 52
+   %6 = bvzeroextend %5, 64
+   %7 = bvzeroextend %3, 128
+   %8 = bvzeroextend %6, 128
+   %9 = bvmul %7, %8
+   %12 = add %j0.new, 63
+   %13 = bvextract a, %j0.new, %12, 64
+   %14 = bvextract %9, 52, 103, 52
+   %15 = bvzeroextend  %14, 64
+   %16 = bvadd %13, %15
+   bvinsert  %16, dst, %j0.new, %12, 64
+  }
+ }
+ ret dst
+}
+
+
+function _mm256_madd52hi_epu64 ( a, b, c, %vector_length, %lane_size, %precision, 
+                                  %extract_size1, %extend_size1, %extend_size2, 
+                                  %start, %extract_size2 ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx.1 = sub %extract_size1, 1
+   %1 = add %j0.new, %last_idx.1
+   %2 = bvextract b, %j0.new, %1, %extract_size1
+   %3 = bvzeroextend %2, %extend_size1
+   %5 = bvextract c, %j0.new, %1, %extract_size1
+   %6 = bvzeroextend %5, %extend_size1
+   %7 = bvzeroextend %3, %extend_size2
+   %8 = bvzeroextend %6, %extend_size2
+   %9 = bvmul %7, %8
+   %last_idx.2 = sub %precision, 1
+   %12 = add  %j0.new, %last_idx.2
+   %13 = bvextract a, %j0.new, %12, %precision
+   %last_idx.3 = sub %extract_size2, 1
+   %end = add  %start, %last_idx.3
+   %14 = bvextract %9, %start, %end, %extract_size2
+   %15 = bvzeroextend %14, %precision
+   %16 = bvadd %13, %15
+   bvinsert %16, dst, %j0.new, %12, %precision
+  }
+ }
+ ret dst
+}
+
+
+
+function _mm_madd52lo_epu64 ( a, b, c ) {
+ for ([%outer.it (range 0 128 128)]) {
+  for ([%j0.new (range 0 128 64)]) {
+   %1 = add %j0.new, 51
+   %2 = bvextract b, %j0.new, %1, 52
+   %3 = bvzeroextend %2, 64
+   %5 = bvextract c, %j0.new, %1, 52
+   %6 = bvzeroextend %5, 64
+   %7 = bvzeroextend %3, 128
+   %8 = bvzeroextend %6, 128
+   %9 = bvmul %7, %8
+   %12 = add %j0.new, 63
+   %13 = bvextract a, %j0.new, %12, 64
+   %14 = bvextract %9, 0, 51, 52
+   %15 = bvzeroextend %14, 64
+   %16 = bvadd %13, %15
+   bvinsert %16, dst, %j0.new, %12, 64
+  }
+ }
+ ret dst
+}
+
+
+function _mm_madd52lo_epu64 ( a, b, c, %vector_length, %lane_size, %precision, 
+                                  %extract_size1, %extend_size1, %extend_size2, 
+                                  %start, %extract_size2 ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx.1 = sub %extract_size1, 1
+   %1 = add %j0.new, %last_idx.1
+   %2 = bvextract b, %j0.new, %1, %extract_size1
+   %3 = bvzeroextend %2, %extend_size1
+   %5 = bvextract c, %j0.new, %1, %extract_size1
+   %6 = bvzeroextend %5, %extend_size1
+   %7 = bvzeroextend %3, %extend_size2
+   %8 = bvzeroextend %6, %extend_size2
+   %9 = bvmul %7, %8
+   %last_idx.2 = sub %precision, 1
+   %12 = add  %j0.new, %last_idx.2
+   %13 = bvextract a, %j0.new, %12, %precision
+   %last_idx.3 = sub %extract_size2, 1
+   %end = add  %start, %last_idx.3
+   %14 = bvextract %9, %start, %end, %extract_size2
+   %15 = bvzeroextend %14, %precision
+   %16 = bvadd %13, %15
+   bvinsert %16, dst, %j0.new, %12, %precision
+  }
+ }
+ ret dst
+}
+
+
+
+
+
+
+
+
+
+function _mm_max_pi16 ( a, b ) {
  for ([%outer.it (range 0 64 64)]) {
   for ([%j0.new (range 0 64 16)]) {
-   %1 = add int32 %j0.new, int32 15
-   %2 = bvextract bv64 a, int32 %j0.new, int32 %1, int32 16
-   %4 = bvextract bv64 b, int32 %j0.new, int32 %1, int32 16
-   %5 = bvsmax bv16 %2, bv16 %4
-   bvinsert bv16 %5, bv64 dst, int32 %j0.new, int32 %1, int32 16
+   %1 = add  %j0.new, 15
+   %2 = bvextract a, %j0.new, %1, 16
+   %4 = bvextract b, %j0.new, %1, 16
+   %5 = bvsmax %2, %4
+   bvinsert %5, dst, %j0.new, %1, 16
   }
  }
- ret bv64 dst
+ ret  dst
 }
 
-function _mm_max_epi32 ( bv128 a, bv128 b ) {
+function _mm_max_epi32 ( a, b ) {
  for ([%outer.it (range 0 128 128)]) {
   for ([%j0.new (range 0 128 32)]) {
-   %1 = add int32 %j0.new, int32 31
-   %2 = bvextract bv128 a, int32 %j0.new, int32 %1, int32 32
-   %4 = bvextract bv128 b, int32 %j0.new, int32 %1, int32 32
-   %5 = bvsmax bv32 %2, bv32 %4
-   bvinsert bv32 %5, bv128 dst, int32 %j0.new, int32 %1, int32 32
+   %1 = add  %j0.new, 31
+   %2 = bvextract a, %j0.new, %1, 32
+   %4 = bvextract b, %j0.new, %1, 32
+   %5 = bvsmax %2, %4
+   bvinsert %5, dst, %j0.new, %1, 32
   }
  }
- ret bv128 dst
+ ret  dst
 }
 
 
-function _mm_max_pi16 ( bv64 a, bv64 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+function _mm_max_pi16 ( a, b, %vector_length, %lane_size, %precision ) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([%j0.new (range 0 %lane_size %precision)]) {
    %last_idx = sub %precision, 1
-   %1 = add int32 %j0.new, int32 %last_idx
-   %2 = bvextract bv64 a, int32 %j0.new, int32 %1, int32 %precision
-   %4 = bvextract bv64 b, int32 %j0.new, int32 %1, int32 %precision
-   %5 = bvsmax bv16 %2, bv16 %4
-   bvinsert bv16 %5, bv64 dst, int32 %j0.new, int32 %1, int32 %precision
+   %1 = add %j0.new, %last_idx
+   %2 = bvextract a, %j0.new, %1, %precision
+   %4 = bvextract b, %j0.new, %1, %precision
+   %5 = bvsmax %2, %4
+   bvinsert %5, dst, %j0.new, %1, %precision
   }
  }
- ret bv64 dst
+ ret dst
 }
 
 
-function _mm_max_epi32 ( bv128 a, bv128 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+function _mm_max_epi32 ( a, b, %vector_length, %lane_size, %precision ) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([%j0.new (range 0 %lane_size %precision)]) {
    %last_idx = sub %precision, 1
-   %1 = add int32 %j0.new, int32 %last_idx
-   %2 = bvextract bv128 a, int32 %j0.new, int32 %1, int32 %precision
-   %4 = bvextract bv128 b, int32 %j0.new, int32 %1, int32 %precision
-   %5 = bvsmax bv32 %2, bv32 %4
-   bvinsert bv32 %5, bv128 dst, int32 %j0.new, int32 %1, int32 %precision
+   %1 = add %j0.new, %last_idx
+   %2 = bvextract a, %j0.new, %1, %precision
+   %4 = bvextract b, %j0.new, %1, %precision
+   %5 = bvsmax %2, %4
+   bvinsert %5, dst, %j0.new, %1, %precision
   }
  }
- ret bv128 dst
+ ret dst
 }
 
 
-function _mm_xor_si128 ( bv128 a, bv128 b ) {
+function _mm_xor_si128 ( a, b ) {
  for ([%outer.it (range 0 128 128)]) {
   for ([%inner.it (range 0 128 128)]) {
-   %0 = bvextract bv128 a, int32 0, int32 127, int32 128
-   %1 = bvextract bv128 b, int32 0, int32 127, int32 128
-   %2 = bvxor bv128 %0, bv128 %1
-   bvinsert bv128 %2, bv128 dst, int32 0, int32 127, int32 128
+   %0 = bvextract a, 0, 127, 128
+   %1 = bvextract b, 0, 127, 128
+   %2 = bvxor %0, %1
+   bvinsert %2, dst, 0, 127, 128
   }
  }
- ret bv128 dst
+ ret  dst
 }
 
 
-function _mm512_xor_epi64 ( bv512 a, bv512 b ) {
+function _mm512_xor_epi64 ( a, b ) {
  for ([%outer.it (range 0 512 512)]) {
   for ([%j0.new (range 0 512 64)]) {
-   %4 = add int32 %j0.new, int32 63
-   %5 = bvextract bv512 a, int32 %j0.new, int32 %4, int32 64
-   %7 = bvextract bv512 b, int32 %j0.new, int32 %4, int32 64
-   %8 = bvxor bv64 %5, bv64 %7
-   bvinsert bv64 %8, bv512 dst, int32 %j0.new, int32 %4, int32 64
+   %4 = add %j0.new, 63
+   %5 = bvextract a, %j0.new, %4, 64
+   %7 = bvextract b, %j0.new, %4, 64
+   %8 = bvxor %5, %7
+   bvinsert %8, dst, %j0.new, %4, 64
   }
  }
- ret bv512 dst
+ ret  dst
 }
 
 
 
-function _mm_xor_si128 ( bv128 a, bv128 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+function _mm_xor_si128 ( a, b, %vector_length, %lane_size, %precision ) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([%j0.new (range 0 %lane_size %precision)]) {
    %last_idx = sub %precision, 1
-   %start_idx = add in32 %j0.new, int32 %last_idx
-   %0 = bvextract bv128 a, int32 %j0.new, int32 %start_idx, int32 %precision
-   %1 = bvextract bv128 b, int32 %j0.new, int32 %start_idx, int32 %precision
-   %2 = bvxor bv128 %0, bv128 %1
-   bvinsert bv128 %2, bv128 dst, int32 0, int32 %start_idx, int32 %precision
+   %start_idx = add %j0.new, %last_idx
+   %0 = bvextract a, %j0.new, %start_idx, %precision
+   %1 = bvextract b, %j0.new, %start_idx, %precision
+   %2 = bvxor %0, %1
+   bvinsert %2, dst, 0, %start_idx, %precision
   }
  }
- ret bv128 dst
+ ret  dst
 }
 
 
-function _mm512_xor_epi64 ( bv512 a, bv512 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+function _mm512_xor_epi64 ( a, b, %vector_length, %lane_size, %precision ) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([%j0.new (range 0 %lane_size %precision)]) {
    %last_idx = sub %precision, 1
-   %4 = add int32 %j0.new, int32 %last_idx
-   %5 = bvextract bv512 a, int32 %j0.new, int32 %4, int32 %precision
-   %7 = bvextract bv512 b, int32 %j0.new, int32 %4, int32 %precision
-   %8 = bvxor bv64 %5, bv64 %7
-   bvinsert bv64 %8, bv512 dst, int32 %j0.new, int32 %4, int32 %precision4
+   %4 = add %j0.new, %last_idx
+   %5 = bvextract a, %j0.new, %4, %precision
+   %7 = bvextract b, %j0.new, %4, %precision
+   %8 = bvxor %5, %7
+   bvinsert %8, dst, %j0.new, %4, %precision4
   }
  }
- ret bv512 dst
+ ret dst
 }
-
-
-
-
-
-
 
 
