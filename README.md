@@ -24,6 +24,10 @@ Hydride has two major components:
 - Install [LLVM](https://github.com/llvm/llvm-project.git):
     - Source: `git clone -b release/13.x https://github.com/llvm/llvm-project.git`
 
+### Llvmlite
+- Install [llvmlite](https://llvmlite.readthedocs.io/en/latest/index.html):
+    - Source: `pip install llvmlite`
+
 ## Directory Structure (WIP)
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
 - `compiler-generator` contains the custom compiler to generate target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
