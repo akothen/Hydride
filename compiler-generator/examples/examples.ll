@@ -426,6 +426,65 @@ function _mm_max_epi32 ( bv128 a, bv128 b, int32 %vector_length, int32 %lane_siz
 }
 
 
+function _mm_xor_si128 ( bv128 a, bv128 b ) {
+ for ([%outer.it (range 0 128 128)]) {
+  for ([%inner.it (range 0 128 128)]) {
+   %0 = bvextract bv128 a, int32 0, int32 127, int32 128
+   %1 = bvextract bv128 b, int32 0, int32 127, int32 128
+   %2 = bvxor bv128 %0, bv128 %1
+   bvinsert bv128 %2, bv128 dst, int32 0, int32 127, int32 128
+  }
+ }
+ ret bv128 dst
+}
+
+
+function _mm512_xor_epi64 ( bv512 a, bv512 b ) {
+ for ([%outer.it (range 0 512 512)]) {
+  for ([%j0.new (range 0 512 64)]) {
+   %4 = add int32 %j0.new, int32 63
+   %5 = bvextract bv512 a, int32 %j0.new, int32 %4, int32 64
+   %7 = bvextract bv512 b, int32 %j0.new, int32 %4, int32 64
+   %8 = bvxor bv64 %5, bv64 %7
+   bvinsert bv64 %8, bv512 dst, int32 %j0.new, int32 %4, int32 64
+  }
+ }
+ ret bv512 dst
+}
+
+
+
+function _mm_xor_si128 ( bv128 a, bv128 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx = sub %precision, 1
+   %start_idx = add in32 %j0.new, int32 %last_idx
+   %0 = bvextract bv128 a, int32 %j0.new, int32 %start_idx, int32 %precision
+   %1 = bvextract bv128 b, int32 %j0.new, int32 %start_idx, int32 %precision
+   %2 = bvxor bv128 %0, bv128 %1
+   bvinsert bv128 %2, bv128 dst, int32 0, int32 %start_idx, int32 %precision
+  }
+ }
+ ret bv128 dst
+}
+
+
+function _mm512_xor_epi64 ( bv512 a, bv512 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx = sub %precision, 1
+   %4 = add int32 %j0.new, int32 %last_idx
+   %5 = bvextract bv512 a, int32 %j0.new, int32 %4, int32 %precision
+   %7 = bvextract bv512 b, int32 %j0.new, int32 %4, int32 %precision
+   %8 = bvxor bv64 %5, bv64 %7
+   bvinsert bv64 %8, bv512 dst, int32 %j0.new, int32 %4, int32 %precision4
+  }
+ }
+ ret bv512 dst
+}
+
+
+
 
 
 
