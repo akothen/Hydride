@@ -41,12 +41,37 @@
   ) 
 
 
+(define (get-log a ) 
+ (cond
+    [(bveq (bv 2 (bitvector 8)) a)  (bv 1 (bitvector 8)) ]
+    [(bveq (bv 4 (bitvector 8)) a)  (bv 2 (bitvector 8)) ]
+    [(bveq (bv 8 (bitvector 8)) a)  (bv 3 (bitvector 8)) ]
+    [(bveq (bv 16 (bitvector 8)) a)  (bv 4 (bitvector 8)) ]
+    [(bveq (bv 32 (bitvector 8)) a)  (bv 5 (bitvector 8)) ]
+    [(bveq (bv 64 (bitvector 8)) a)  (bv 6 (bitvector 8)) ]
+    [(bveq (bv 128 (bitvector 8)) a)  (bv 7 (bitvector 8)) ]
+    [else (bv 0 (bitvector 8))]
+  )
+  )
+
+(define (is-power-of-2 a)
+  (bveq (bvand a (bvsub a (bv 1 (bitvector 8)))) (bv 0 (bitvector 8)))
+  )
+
+(define (fast-div a b)
+  (if (is-power-of-2 b)
+    (bvashr a (get-log b))
+    (bvsdiv a b)
+    )
+  )
+
 (define (vector-div a b len precision) 
   (apply 
     concat 
     (for/list ([j (range len)]) 
               (define tmp 
-                (bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                ;(bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                (fast-div (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
               tmp 
               ) 
     ) 

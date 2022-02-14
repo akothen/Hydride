@@ -58,6 +58,28 @@
                (idx-mul (idx-add (idx-i 0) 1) 6)
                6 8)  ; Row 0
      ]
+    [(choose* #t #f)
+      (lit (bv 0 (bitvector 48)))
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       ;(shufl vars #:depth (- k 1))
+       ;(shufl vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       6 8 (idx-j 0) 6 3 1 0
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       ;(shufl vars #:depth (- k 1))
+       ;(shufl vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       6 8 0 6 6 1 0
+       )
+     ]
+
     [else ;(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 2) 6)
@@ -81,27 +103,13 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
-    [(choose* #t #f)
-     (vec-shuffle-swizzle-double
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       6 8 0 6 3 1 0
-       )
-     ]
-    [(choose* #t #f)
-     (vec-shuffle-swizzle-double
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       6 8 0 6 6 1 0
-       )
-     ]
-    [(choose* #t #f)
-     (vec-shuffle-rotate 
-       (mem vars #:depth (- k 1))
-       (idx-j 0)
-       8
-       )
-     ]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-rotate 
+    ;   (mem vars #:depth (- k 1))
+    ;   (idx-j 0)
+    ;   8
+    ;   )
+    ; ]
     [
      (choose* #t #f)
      (dot-prod
@@ -151,13 +159,8 @@
     [(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
                     )]
-
-    [else ;(choose* #t #f)
-      (lit (bv 0 (bitvector 48)))
-     ]
-
-    ;[else
-    ;  (mem vars #:depth k)]
+    [else
+      (mem vars #:depth k)]
 
     )
   )
@@ -191,7 +194,7 @@
 ;; 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
 
 
 

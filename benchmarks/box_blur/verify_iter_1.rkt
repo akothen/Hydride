@@ -43,12 +43,37 @@
   ) 
 
 
+(define (get-log a ) 
+ (cond
+    [(bveq (bv 2 (bitvector 8)) a)  (bv 1 (bitvector 8)) ]
+    [(bveq (bv 4 (bitvector 8)) a)  (bv 2 (bitvector 8)) ]
+    [(bveq (bv 8 (bitvector 8)) a)  (bv 3 (bitvector 8)) ]
+    [(bveq (bv 16 (bitvector 8)) a)  (bv 4 (bitvector 8)) ]
+    [(bveq (bv 32 (bitvector 8)) a)  (bv 5 (bitvector 8)) ]
+    [(bveq (bv 64 (bitvector 8)) a)  (bv 6 (bitvector 8)) ]
+    [(bveq (bv 128 (bitvector 8)) a)  (bv 7 (bitvector 8)) ]
+    [else (bv 0 (bitvector 8))]
+  )
+  )
+
+(define (is-power-of-2 a)
+  (bveq (bvand a (bvsub a (bv 1 (bitvector 8)))) (bv 0 (bitvector 8)))
+  )
+
+(define (fast-div a b)
+  (if (is-power-of-2 b)
+    (bvashr a (get-log b))
+    (bvsdiv a b)
+    )
+  )
+
 (define (vector-div a b len precision) 
   (apply 
     concat 
     (for/list ([j (range len)]) 
               (define tmp 
-                (bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                ;(bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                (fast-div (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
               tmp 
               ) 
     ) 
@@ -1478,7 +1503,7 @@ arg0
 (* ; idx-mul
 (+ ; idx-add
 idx-i ; idx-i
-2
+0
 )
 6
 )
@@ -1491,7 +1516,7 @@ arg0
 (* ; idx-mul
 (+ ; idx-add
 idx-i ; idx-i
-0
+2
 )
 6
 )
@@ -1507,7 +1532,6 @@ idx-j ; idx-j
 0
 )
 (vector-two-input-swizzle 
-(bv #x000000000000 48)
 (vector-load 
 arg0
 288
@@ -1521,6 +1545,7 @@ idx-i ; idx-i
 6
 8
 )
+(bv #x000000000000 48)
 6
 8
 idx-j ; idx-j

@@ -43,12 +43,37 @@
   ) 
 
 
+(define (get-log a ) 
+ (cond
+    [(bveq (bv 2 (bitvector 8)) a)  (bv 1 (bitvector 8)) ]
+    [(bveq (bv 4 (bitvector 8)) a)  (bv 2 (bitvector 8)) ]
+    [(bveq (bv 8 (bitvector 8)) a)  (bv 3 (bitvector 8)) ]
+    [(bveq (bv 16 (bitvector 8)) a)  (bv 4 (bitvector 8)) ]
+    [(bveq (bv 32 (bitvector 8)) a)  (bv 5 (bitvector 8)) ]
+    [(bveq (bv 64 (bitvector 8)) a)  (bv 6 (bitvector 8)) ]
+    [(bveq (bv 128 (bitvector 8)) a)  (bv 7 (bitvector 8)) ]
+    [else (bv 0 (bitvector 8))]
+  )
+  )
+
+(define (is-power-of-2 a)
+  (bveq (bvand a (bvsub a (bv 1 (bitvector 8)))) (bv 0 (bitvector 8)))
+  )
+
+(define (fast-div a b)
+  (if (is-power-of-2 b)
+    (bvashr a (get-log b))
+    (bvsdiv a b)
+    )
+  )
+
 (define (vector-div a b len precision) 
   (apply 
     concat 
     (for/list ([j (range len)]) 
               (define tmp 
-                (bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                ;(bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                (fast-div (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
               tmp 
               ) 
     ) 
@@ -1488,22 +1513,22 @@
                             #:forall (list v0_0  env_0_i0_j0 env_0_i0_j1 env_0_i0_j2 env_0_i0_j3 env_0_i1_j0 env_0_i1_j1 env_0_i1_j2 env_0_i1_j3 env_0_i2_j0 env_0_i2_j1 env_0_i2_j2 env_0_i2_j3 env_0_i3_j0 env_0_i3_j1 env_0_i3_j2 env_0_i3_j3)
                              #:guarantee 
                             (begin
-                             (assert (equal? (interpret sketch-grammar env_0_i0_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 0) ))
-(assert (equal? (interpret sketch-grammar env_0_i0_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 1) ))
-(assert (equal? (interpret sketch-grammar env_0_i0_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 2) ))
-(assert (equal? (interpret sketch-grammar env_0_i0_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 3) ))
-(assert (equal? (interpret sketch-grammar env_0_i1_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 0) ))
-(assert (equal? (interpret sketch-grammar env_0_i1_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 1) ))
-(assert (equal? (interpret sketch-grammar env_0_i1_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 2) ))
-(assert (equal? (interpret sketch-grammar env_0_i1_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 3) ))
-(assert (equal? (interpret sketch-grammar env_0_i2_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 0) ))
-(assert (equal? (interpret sketch-grammar env_0_i2_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 1) ))
-(assert (equal? (interpret sketch-grammar env_0_i2_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 2) ))
-(assert (equal? (interpret sketch-grammar env_0_i2_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 3) ))
-(assert (equal? (interpret sketch-grammar env_0_i3_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 0) ))
-(assert (equal? (interpret sketch-grammar env_0_i3_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 1) ))
-(assert (equal? (interpret sketch-grammar env_0_i3_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 2) ))
-(assert (equal? (interpret sketch-grammar env_0_i3_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 3) ))
+                             (assert (bveq (interpret sketch-grammar env_0_i0_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 0) ))
+(assert (bveq (interpret sketch-grammar env_0_i0_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 1) ))
+(assert (bveq (interpret sketch-grammar env_0_i0_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 2) ))
+(assert (bveq (interpret sketch-grammar env_0_i0_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 0 3) ))
+(assert (bveq (interpret sketch-grammar env_0_i1_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 0) ))
+(assert (bveq (interpret sketch-grammar env_0_i1_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 1) ))
+(assert (bveq (interpret sketch-grammar env_0_i1_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 2) ))
+(assert (bveq (interpret sketch-grammar env_0_i1_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 1 3) ))
+(assert (bveq (interpret sketch-grammar env_0_i2_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 0) ))
+(assert (bveq (interpret sketch-grammar env_0_i2_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 1) ))
+(assert (bveq (interpret sketch-grammar env_0_i2_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 2) ))
+(assert (bveq (interpret sketch-grammar env_0_i2_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 2 3) ))
+(assert (bveq (interpret sketch-grammar env_0_i3_j0) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 0) ))
+(assert (bveq (interpret sketch-grammar env_0_i3_j1) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 1) ))
+(assert (bveq (interpret sketch-grammar env_0_i3_j2) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 2) ))
+(assert (bveq (interpret sketch-grammar env_0_i3_j3) (index-into-mat (box-blur v0_0  6 6 3 3 8) 4 4 8 3 3) ))
 
                              )))
 (assert (sat? sol)"Unsatisfiable")

@@ -8,7 +8,7 @@ arg0
 (* ; idx-mul
 (+ ; idx-add
 idx-i ; idx-i
-2
+0
 )
 6
 )
@@ -21,7 +21,7 @@ arg0
 (* ; idx-mul
 (+ ; idx-add
 idx-i ; idx-i
-0
+2
 )
 6
 )
@@ -37,7 +37,6 @@ idx-j ; idx-j
 0
 )
 (vector-two-input-swizzle 
-(bv #x000000000000 48)
 (vector-load 
 arg0
 288
@@ -51,6 +50,7 @@ idx-i ; idx-i
 6
 8
 )
+(bv #x000000000000 48)
 6
 8
 idx-j ; idx-j

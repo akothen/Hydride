@@ -43,12 +43,37 @@
   ) 
 
 
+(define (get-log a ) 
+ (cond
+    [(bveq (bv 2 (bitvector 8)) a)  (bv 1 (bitvector 8)) ]
+    [(bveq (bv 4 (bitvector 8)) a)  (bv 2 (bitvector 8)) ]
+    [(bveq (bv 8 (bitvector 8)) a)  (bv 3 (bitvector 8)) ]
+    [(bveq (bv 16 (bitvector 8)) a)  (bv 4 (bitvector 8)) ]
+    [(bveq (bv 32 (bitvector 8)) a)  (bv 5 (bitvector 8)) ]
+    [(bveq (bv 64 (bitvector 8)) a)  (bv 6 (bitvector 8)) ]
+    [(bveq (bv 128 (bitvector 8)) a)  (bv 7 (bitvector 8)) ]
+    [else (bv 0 (bitvector 8))]
+  )
+  )
+
+(define (is-power-of-2 a)
+  (bveq (bvand a (bvsub a (bv 1 (bitvector 8)))) (bv 0 (bitvector 8)))
+  )
+
+(define (fast-div a b)
+  (if (is-power-of-2 b)
+    (bvashr a (get-log b))
+    (bvsdiv a b)
+    )
+  )
+
 (define (vector-div a b len precision) 
   (apply 
     concat 
     (for/list ([j (range len)]) 
               (define tmp 
-                (bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                ;(bvsdiv (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
+                (fast-div (ext-bv a (- (- len 1) j) precision) (ext-bv b (- (- len 1) j) precision))) 
               tmp 
               ) 
     ) 
@@ -227,6 +252,37 @@
 
 
 ;; General version of swizzle with two input vectors
+;; Previous implementation of two input swizzle
+;(define (vector-two-input-swizzle v1 v2 num_elems type_size lane_offset lane_size group_size dis_size rot_factor)
+;  (define high_lane_offset (+ group_size lane_offset))
+;  (define result
+;    (apply
+;     concat
+;     (for/list ([i (range 0 num_elems lane_size)])
+;        (apply
+;          concat
+;          (for/list ([j (range lane_offset (* 2 high_lane_offset))])
+;            (define raw-index (- j lane_offset))
+;            (define swizzled-index (swizzle raw-index (* 2 group_size) dis_size rot_factor))
+;            (if (< swizzled-index group_size)
+;             (begin
+;              (define adjusted-swizzled-index (- (- num_elems  1) (+ i lane_offset swizzled-index)))
+;              (ext-bv v1 adjusted-swizzled-index type_size)
+;             )
+;             (begin
+;              (define adjusted-swizzled-index (- (- num_elems  1) (- (+ i lane_offset swizzled-index) group_size)))
+;              (ext-bv v2 adjusted-swizzled-index type_size)
+;             )
+;            )
+;          )
+;        )
+;      )
+;     )
+;    )
+;  result
+;)
+
+
 (define (vector-two-input-swizzle v1 v2 num_elems type_size lane_offset lane_size group_size dis_size rot_factor)
   (define high_lane_offset (+ group_size lane_offset))
   (define result
@@ -235,7 +291,7 @@
      (for/list ([i (range 0 num_elems lane_size)])
         (apply
           concat
-          (for/list ([j (range lane_offset (* 2 high_lane_offset))])
+          (for/list ([j (range lane_offset (+ (* 2 group_size)  lane_offset)  )]); (* 2 high_lane_offset))])
             (define raw-index (- j lane_offset))
             (define swizzled-index (swizzle raw-index (* 2 group_size) dis_size rot_factor))
             (if (< swizzled-index group_size)
@@ -820,7 +876,7 @@
             [
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
              (assert (equal? (get-length v1) (get-length v2)))
-            (vector-two-input-swizzle (interpret v1 env) (interpret v2 env) len prec lane_offset lane_size group_size fan_size rot_factor)
+            (vector-two-input-swizzle (interpret v1 env) (interpret v2 env) len prec (interpret lane_offset env) lane_size group_size fan_size rot_factor)
              ]
             [v v]
             ))
@@ -993,7 +1049,7 @@
             (print-prog v2)
             (println len)
             (println prec)
-            (println lane_offset)
+            (print-prog lane_offset)
             (println lane_size)
             (println group_size)
             (println fan_size)
@@ -1159,6 +1215,28 @@
                (idx-mul (idx-add (idx-i 0) 1) 6)
                6 8)  ; Row 0
      ]
+    [(choose* #t #f)
+      (lit (bv 0 (bitvector 48)))
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       ;(shufl vars #:depth (- k 1))
+       ;(shufl vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       6 8 (idx-j 0) 6 3 1 0
+       )
+     ]
+    [(choose* #t #f)
+     (vec-shuffle-swizzle-double
+       ;(shufl vars #:depth (- k 1))
+       ;(shufl vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       (mem vars #:depth (- k 1))
+       6 8 0 6 6 1 0
+       )
+     ]
+
     [else ;(choose* #t #f)
      (vec-load (reg 0) 288 
                (idx-mul (idx-add (idx-i 0) 2) 6)
@@ -1182,27 +1260,13 @@
   (cond
     [(choose* #t #f)
      (apply choose* vars)]
-    [(choose* #t #f)
-     (vec-shuffle-swizzle-double
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       6 8 0 6 3 1 0
-       )
-     ]
-    [(choose* #t #f)
-     (vec-shuffle-swizzle-double
-       (shufl vars #:depth (- k 1))
-       (shufl vars #:depth (- k 1))
-       6 8 0 6 6 1 0
-       )
-     ]
-    [(choose* #t #f)
-     (vec-shuffle-rotate 
-       (mem vars #:depth (- k 1))
-       (idx-j 0)
-       8
-       )
-     ]
+    ;[(choose* #t #f)
+    ; (vec-shuffle-rotate 
+    ;   (mem vars #:depth (- k 1))
+    ;   (idx-j 0)
+    ;   8
+    ;   )
+    ; ]
     [
      (choose* #t #f)
      (dot-prod
@@ -1252,13 +1316,8 @@
     [(choose* #t #f)
      (nop (shufl vars #:depth (- k 1))
                     )]
-
-    [else ;(choose* #t #f)
-      (lit (bv 0 (bitvector 48)))
-     ]
-
-    ;[else
-    ;  (mem vars #:depth k)]
+    [else
+      (mem vars #:depth k)]
 
     )
   )
@@ -1292,7 +1351,7 @@
 ;; 
 
 ; Get a sketch of depth 5.
-(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 6))
+(define sketch-grammar (shufl (list (reg 0) (idx-i 0) (idx-j 0)) #:depth 5))
 
 
 
@@ -1387,8 +1446,6 @@
 (bv #x00000000 32)
 (vector-two-input-swizzle 
 (vector-two-input-swizzle 
-(bv #x000000000000 48)
-(vector-shuffle-lrotate
 (vector-load 
 arg0
 288
@@ -1402,19 +1459,29 @@ idx-i ; idx-i
 6
 8
 )
-idx-j ; idx-j
-8
-)
+(bv #x000000000000 48)
 6
 8
-0
+idx-j ; idx-j
 6
 3
 1
 0
 )
 (vector-two-input-swizzle 
-(vector-shuffle-lrotate
+(vector-load 
+arg0
+288
+(* ; idx-mul
+(+ ; idx-add
+idx-i ; idx-i
+1
+)
+6
+)
+6
+8
+)
 (vector-load 
 arg0
 288
@@ -1428,29 +1495,9 @@ idx-i ; idx-i
 6
 8
 )
+6
+8
 idx-j ; idx-j
-8
-)
-(vector-shuffle-lrotate
-(vector-load 
-arg0
-288
-(* ; idx-mul
-(+ ; idx-add
-idx-i ; idx-i
-1
-)
-6
-)
-6
-8
-)
-idx-j ; idx-j
-8
-)
-6
-8
-0
 6
 3
 1
