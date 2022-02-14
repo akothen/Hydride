@@ -369,6 +369,63 @@ function vrmpy_dot_product (%Vx, %Vu, %Vv) {
   ret %dst
 }
 
+function _mm_max_pi16 ( bv64 a, bv64 b ) {
+ for ([%outer.it (range 0 64 64)]) {
+  for ([%j0.new (range 0 64 16)]) {
+   %1 = add int32 %j0.new, int32 15
+   %2 = bvextract bv64 a, int32 %j0.new, int32 %1, int32 16
+   %4 = bvextract bv64 b, int32 %j0.new, int32 %1, int32 16
+   %5 = bvsmax bv16 %2, bv16 %4
+   bvinsert bv16 %5, bv64 dst, int32 %j0.new, int32 %1, int32 16
+  }
+ }
+ ret bv64 dst
+}
+
+function _mm_max_epi32 ( bv128 a, bv128 b ) {
+ for ([%outer.it (range 0 128 128)]) {
+  for ([%j0.new (range 0 128 32)]) {
+   %1 = add int32 %j0.new, int32 31
+   %2 = bvextract bv128 a, int32 %j0.new, int32 %1, int32 32
+   %4 = bvextract bv128 b, int32 %j0.new, int32 %1, int32 32
+   %5 = bvsmax bv32 %2, bv32 %4
+   bvinsert bv32 %5, bv128 dst, int32 %j0.new, int32 %1, int32 32
+  }
+ }
+ ret bv128 dst
+}
+
+
+function _mm_max_pi16 ( bv64 a, bv64 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx = sub %precision, 1
+   %1 = add int32 %j0.new, int32 %last_idx
+   %2 = bvextract bv64 a, int32 %j0.new, int32 %1, int32 %precision
+   %4 = bvextract bv64 b, int32 %j0.new, int32 %1, int32 %precision
+   %5 = bvsmax bv16 %2, bv16 %4
+   bvinsert bv16 %5, bv64 dst, int32 %j0.new, int32 %1, int32 %precision
+  }
+ }
+ ret bv64 dst
+}
+
+
+function _mm_max_epi32 ( bv128 a, bv128 b, int32 %vector_length, int32 %lane_size, int32 %precision ) {
+ for ([%outer.it (range 0 %vector_length %lane_size)]) {
+  for ([%j0.new (range 0 %lane_size %precision)]) {
+   %last_idx = sub %precision, 1
+   %1 = add int32 %j0.new, int32 %last_idx
+   %2 = bvextract bv128 a, int32 %j0.new, int32 %1, int32 %precision
+   %4 = bvextract bv128 b, int32 %j0.new, int32 %1, int32 %precision
+   %5 = bvsmax bv32 %2, bv32 %4
+   bvinsert bv32 %5, bv128 dst, int32 %j0.new, int32 %1, int32 %precision
+  }
+ }
+ ret bv128 dst
+}
+
+
 
 
 
