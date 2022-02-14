@@ -617,7 +617,7 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       # Compute the new high index
       if BVExtractOpLow.getValue() + BVExtractOp.getOutputBitwidth() \
             <= BVInsertOpLow.getValue() + BVInsertOp.getOutputBitwidth():
-        NewHigh = RoseConstant.create(NewLow.getValue() + BVExtractOp.getOutputBitwidth(),\
+        NewHigh = RoseConstant.create(NewLow.getValue() + BVExtractOp.getOutputBitwidth() - 1,\
                                   BVExtractOpHigh.getType())
       else:
         # Cannot do much with this extract op
