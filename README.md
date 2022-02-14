@@ -26,7 +26,7 @@ Hydride has two major components:
 
 ### Llvmlite
 - Install [llvmlite](https://llvmlite.readthedocs.io/en/latest/index.html):
-    - Source: `pip install llvmlite`
+    - Install by running `pip install llvmlite`
 
 ## Directory Structure (WIP)
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
