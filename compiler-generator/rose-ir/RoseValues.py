@@ -4,7 +4,6 @@ from RoseOpcode import RoseOpcode
 from RoseType import RoseType
 import RoseAbstractions 
 
-from enum import Enum, auto
 import llvmlite
 
 
@@ -153,11 +152,6 @@ class RoseArgument(RoseValue):
 # An operation in Rosette
 # An operation is either an instruction.
 class RoseOperation(RoseValue):
-  class Signedness(Enum):
-    Signed = auto()
-    Unsigned = auto()
-    DontCare = auto()
-
   def __init__(self, Opcode : RoseOpcode, Name : str, Operands : list, \
               ParentBlock = RoseAbstractions.RoseUndefRegion()):
     if not isinstance(ParentBlock, RoseAbstractions.RoseUndefRegion):
@@ -291,10 +285,6 @@ class RoseOperation(RoseValue):
 
   # Subclass must implement this
   def solve(self):
-    NotImplemented
-
-  # Subclass is expected to implement this function
-  def isSigned(self):
     NotImplemented
 
   # There are situations where value being extracted is defined

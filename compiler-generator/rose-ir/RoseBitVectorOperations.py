@@ -27,9 +27,6 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     Spaces = ""
@@ -66,9 +63,6 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -107,9 +101,6 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     Spaces = ""
@@ -145,9 +136,6 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     Spaces = ""
@@ -182,9 +170,6 @@ class RoseBVTruncateOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -225,12 +210,6 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
 
   def isIndexingBVOp(self):
     return True
-
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
 
   # There are situations where value being extracted is defined
   # outside a loop. In Rosette, the indexing into bitvectors takes
@@ -296,12 +275,6 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def isIndexingBVOp(self):
     return True
 
-  def getSignedness(self):
-    Operand = self.getInsertValue()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     assert "No direction convertion of BVInsert to Rosette!"
@@ -324,12 +297,6 @@ class RoseBVNotOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_llvm_ir(self, IRBuilder):
     Operand = self.getOperand(0).to_llvm_ir(IRBuilder)
     return IRBuilder.not_(Operand, self.getName())
@@ -344,22 +311,6 @@ class RoseBVAndOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVAndOp(Name, Operands, ParentBlock)
-  
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -378,22 +329,6 @@ class RoseBVOrOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVOrOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
-
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -410,22 +345,6 @@ class RoseBVXorOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVXorOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -449,12 +368,6 @@ class RoseBVShlOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -475,13 +388,7 @@ class RoseBVLshrOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
+  
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -502,12 +409,6 @@ class RoseBVAshrOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
-
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -531,12 +432,6 @@ class RoseBVNegOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_llvm_ir(self, IRBuilder):
     OperandInLLVM = self.getInputBitVector().to_llvm_ir(IRBuilder)
     return IRBuilder.neg(OperandInLLVM, self.getName())
@@ -551,22 +446,6 @@ class RoseBVAddOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVAddOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -585,22 +464,6 @@ class RoseBVSubOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSubOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
-
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -617,22 +480,6 @@ class RoseBVMulOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVMulOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -653,9 +500,6 @@ class RoseBVUdivOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVUdivOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -673,9 +517,6 @@ class RoseBVSdivOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVSdivOp(Name, Operand1, Operand2, ParentBlock)
-  
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -695,9 +536,6 @@ class RoseBVUremOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVUremOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -716,9 +554,6 @@ class RoseBVSremOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSremOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -736,9 +571,6 @@ class RoseBVSmodOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVSmodOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -760,9 +592,6 @@ class RoseBVEQOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVEQOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -780,9 +609,6 @@ class RoseBVNEQOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVNEQOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -817,9 +643,6 @@ class RoseBVSLTOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSLTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -837,9 +660,6 @@ class RoseBVULTOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVULTOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -859,9 +679,6 @@ class RoseBVSLEOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSLEOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -879,9 +696,6 @@ class RoseBVULEOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVULEOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -901,9 +715,6 @@ class RoseBVSGTOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSGTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -921,9 +732,6 @@ class RoseBVUGTOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUGTOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -943,9 +751,6 @@ class RoseBVSGEOp(RoseBitVectorOp):
             ParentBlock = RoseUndefRegion()):
     return RoseBVSGEOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
-
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
@@ -963,9 +768,6 @@ class RoseBVUGEOp(RoseBitVectorOp):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseBVUGEOp(Name, Operand1, Operand2, ParentBlock)
-  
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -988,12 +790,6 @@ class RoseBVAdd1Op(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_llvm_ir(self, IRBuilder):
     Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
     OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
@@ -1013,12 +809,6 @@ class RoseBVSub1Op(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def to_llvm_ir(self, IRBuilder):
     Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
     OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
@@ -1034,9 +824,6 @@ class RoseBVSminOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSminOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -1059,9 +846,6 @@ class RoseBVUminOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVUminOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
-
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -1083,9 +867,6 @@ class RoseBVSmaxOp(RoseBitVectorOp):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVSmaxOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    return RoseOperation.Signedness.Signed
-
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = self.getOperand(0).to_llvm_ir(IRBuilder)
@@ -1106,9 +887,6 @@ class RoseBVUmaxOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseBVUmaxOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.Unsigned
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -1136,12 +914,6 @@ class RoseBVRolOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
 
 class RoseBVRorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
@@ -1158,12 +930,6 @@ class RoseBVRorOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    Operand = self.getInputBitVector()
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
 
 class RoseBVZeroOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
@@ -1174,9 +940,6 @@ class RoseBVZeroOp(RoseBitVectorOp):
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVZeroOp(Name, Bitvector, ParentBlock)
-
-  def getSignedness(self):
-    return RoseOperation.Signedness.DontCare
 
   def to_llvm_ir(self, IRBuilder):
     OperandInLLVM = self.getOperand(0).to_llvm_ir(IRBuilder)

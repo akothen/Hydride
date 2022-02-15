@@ -32,14 +32,6 @@ class RoseReturnOp(RoseOperation):
   def getReturnedValue(self):
     return self.getOperands(0)
 
-  def getSignedness(self):
-    # Signedness of return op depends on what it is returning
-    Operand = self.getOperand(0)
-    assert not isinstance(Operand, RoseUndefValue)
-    if not isinstance(Operand, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return Operand.getSignedness()
-
   def solve(self):
     # Cannot solve return ops
     return None
@@ -77,14 +69,6 @@ class RoseCallOp(RoseOperation):
   
   def getCallOperands(self):
     return self.getOperands()[1:]
-
-  def getSignedness(self):
-    # Signedness depends on the signedness of the return value
-    ReturnVal = self.getCallee().getReturnValue()
-    assert not isinstance(ReturnVal, RoseUndefValue)
-    if not isinstance(ReturnVal, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    return ReturnVal.getSignedness()
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -147,27 +131,6 @@ class RoseSelectOp(RoseOperation):
   
   def getElseValue(self):
     return self.getOperands()[2]
-
-  def getSignedness(self):
-    # Signedness depend
-    ThenValue = self.getThenValue()
-    ElseValue = self.getElseValue()
-    assert not isinstance(ThenValue, RoseUndefValue)
-    assert not isinstance(ElseValue, RoseUndefValue)
-    if not isinstance(ThenValue, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-    if not isinstance(ElseValue, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-    ThenValueSignedness = ThenValue.getSignedness()
-    if ThenValueSignedness == RoseOperation.Signedness.DontCare:
-      return RoseOperation.Signedness.DontCare
-    ElseValueSignedness = ElseValue.getSignedness()
-    if ElseValueSignedness == RoseOperation.Signedness.DontCare:
-      return RoseOperation.Signedness.DontCare
-    if ThenValueSignedness == RoseOperation.Signedness.Signed \
-    or ElseValueSignedness == RoseOperation.Signedness.Signed:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -257,10 +220,6 @@ class RoseAbsOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operand : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseAbsOp(Name, Operand, ParentBlock)
-
-  def getSignedness(self):
-    isinstance(self.getOperand(0), RoseUndefValue)
-    return RoseOperation.Signedness.Unsigned
   
   def solve(self):
     # First check if all the operand is constant
@@ -297,22 +256,6 @@ class RoseAddOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseAddOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def solve(self):
     # First check if all the operands are constants
@@ -365,22 +308,6 @@ class RoseSubOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseSubOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
-
   def solve(self):
     # First check if all the operands are constants
     Result = None
@@ -431,22 +358,6 @@ class RoseMulOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMulOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def solve(self):
     # First check if all the operands are constants
@@ -502,24 +413,6 @@ class RoseDivOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseDivOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    Operand1 = self.getOperand(0)
-    Operand2 = self.getOperand(1)
-    assert not isinstance(Operand1, RoseUndefValue)
-    assert not isinstance(Operand2, RoseUndefValue)
-    if not isinstance(Operand1, RoseOperation) \
-    or not isinstance(Operand2, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    Signedness1 = Operand1.getSignedness()
-    Signedness2 = Operand2.getSignedness()
-    if Signedness1 == RoseOperation.Signedness.Signed \
-    or Signedness2 == RoseOperation.Signedness.Signed:
-      return RoseOperation.Signedness.Signed
-    if Signedness1 == RoseOperation.Signedness.DontCare \
-    or Signedness2 == RoseOperation.Signedness.DontCare:
-      return RoseOperation.Signedness.DontCare  
-    return RoseOperation.Signedness.Unsigned
-
   def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
@@ -567,24 +460,6 @@ class RoseRemOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseRemOp(Name, Operand1, Operand2, ParentBlock)
-  
-  def getSignedness(self):
-    Operand1 = self.getOperand(0)
-    Operand2 = self.getOperand(1)
-    assert not isinstance(Operand1, RoseUndefValue)
-    assert not isinstance(Operand2, RoseUndefValue)
-    if not isinstance(Operand1, RoseOperation) \
-    or not isinstance(Operand2, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    Signedness1 = Operand1.getSignedness()
-    Signedness2 = Operand2.getSignedness()
-    if Signedness1 == RoseOperation.Signedness.Signed \
-    or Signedness2 == RoseOperation.Signedness.Signed:
-      return RoseOperation.Signedness.Signed
-    if Signedness1 == RoseOperation.Signedness.DontCare \
-    or Signedness2 == RoseOperation.Signedness.DontCare:
-      return RoseOperation.Signedness.DontCare  
-    return RoseOperation.Signedness.Unsigned
 
   # TODO: Double check this
   def solve(self):
@@ -625,24 +500,6 @@ class RoseModOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseModOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    Operand1 = self.getOperand(0)
-    Operand2 = self.getOperand(1)
-    assert not isinstance(Operand1, RoseUndefValue)
-    assert not isinstance(Operand2, RoseUndefValue)
-    if not isinstance(Operand1, RoseOperation) \
-    or not isinstance(Operand2, RoseOperation):
-      return RoseOperation.Signedness.DontCare
-    Signedness1 = Operand1.getSignedness()
-    Signedness2 = Operand2.getSignedness()
-    if Signedness1 == RoseOperation.Signedness.Signed \
-    or Signedness2 == RoseOperation.Signedness.Signed:
-      return RoseOperation.Signedness.Signed
-    if Signedness1 == RoseOperation.Signedness.DontCare \
-    or Signedness2 == RoseOperation.Signedness.DontCare:
-      return RoseOperation.Signedness.DontCare  
-    return RoseOperation.Signedness.Unsigned
 
   def solve(self):
     # First check if the operand are constants
@@ -685,11 +542,6 @@ class RoseEQOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseEQOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
-
   def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
@@ -722,11 +574,6 @@ class RoseNEQOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseNEQOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -776,11 +623,6 @@ class RoseLTOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseLTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
-
   def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
@@ -813,11 +655,6 @@ class RoseLEOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseLEOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if the operand are constants
@@ -852,11 +689,6 @@ class RoseGTOp(RoseOperation):
             ParentBlock = RoseUndefRegion()):
     return RoseGTOp(Name, Operand1, Operand2, ParentBlock)
 
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
-
   def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
@@ -889,11 +721,6 @@ class RoseGEOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseGEOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if the operand are constants
@@ -929,22 +756,6 @@ class RoseMinOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMinOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def solve(self):
     # First check if all the operands are constants
@@ -986,22 +797,6 @@ class RoseMaxOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseMaxOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    SignedOperandFound = False
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-      if not isinstance(Operand, RoseOperation):
-        return RoseOperation.Signedness.DontCare
-      Signedness = Operand.getSignedness()
-      if Signedness == RoseOperation.Signedness.Signed:
-        SignedOperandFound = True
-        continue
-      if Signedness == RoseOperation.Signedness.DontCare:
-        return RoseOperation.Signedness.DontCare
-    if SignedOperandFound == True:
-      return RoseOperation.Signedness.Signed
-    return RoseOperation.Signedness.Unsigned
 
   def solve(self):
     # First check if all the operands are constants
@@ -1050,10 +845,6 @@ class RoseNotOp(RoseOperation):
   def getInputValue(self):
     return self.getOperand(0)
 
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
-
   def solve(self):
     # First check if the operand are constants
     if not isinstance(self.getOperand(0), RoseConstant):
@@ -1081,11 +872,6 @@ class RoseAndOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseAndOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if all the operands are constants
@@ -1135,11 +921,6 @@ class RoseNandOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseNandOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if all the operands are constants
@@ -1194,11 +975,6 @@ class RoseOrOp(RoseOperation):
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseOrOp(Name, Operands, ParentBlock)
 
-  def getSignedness(self):
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
-
   def solve(self):
     # First check if all the operands are constants
     Result = None
@@ -1247,11 +1023,6 @@ class RoseNorOp(RoseOperation):
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
     return RoseNorOp(Name, Operands, ParentBlock)
-
-  def getSignedness(self):
-    for Operand in self.getOperands():
-      assert not isinstance(Operand, RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if all the operands are constants
@@ -1307,11 +1078,6 @@ class RoseXorOp(RoseOperation):
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
             ParentBlock = RoseUndefRegion()):
     return RoseXorOp(Name, Operand1, Operand2, ParentBlock)
-
-  def getSignedness(self):
-    assert not isinstance(self.getOperand(0), RoseUndefValue)
-    assert not isinstance(self.getOperand(1), RoseUndefValue)
-    return RoseOperation.Signedness.DontCare
 
   def solve(self):
     # First check if the operand are constants
