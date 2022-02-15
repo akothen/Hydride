@@ -131,8 +131,13 @@ def HandleLoopHeader(Init, Condition, ItUpdate):
     assert type(Init.lhs) == Var
     expr_id = "iterator." + GenUniqueID(parser)
     Iterator = Var(Init.lhs.name, expr_id)
-    assert type(Init.rhs) == Number
-    Begin = Init.rhs
+    assert type(Init.rhs) == Number or type(Init.rhs) == BinaryExpr
+    if type(Init.rhs) == BinaryExpr:
+      # The only time this happens is VWIDTH >> 1
+      assert(Init.rhs.a == Number(128) and Init.rhs.b == Number(1) and Init.rhs.op == '>>')
+      Begin = 64 # 128 >> 1
+    else:
+      Begin = Init.rhs
   if type(Condition) == BinaryExpr:
     if Condition.op == "<":
       assert type(Condition.a) == Var
@@ -181,27 +186,19 @@ def p_stmt_for_single(p):
 
 
 def p_expr_call(p):
-  '''expr : ID LPAREN args RPAREN
-          | ID LPAREN args RPAREN COLON ID
-          | ID LPAREN args RPAREN COLON ID COLON ID'''
-  if len(p) == 5:
-    if p[1] == "VELEM":
-      p[0] = Number(VELEM(p[3][0].val))
-      return
-    if p[1] == "select_bytes":
-      bitslice_id = "bitslice." + GenUniqueID(parser)
-      Condition = BitSlice(p[3][0], p[3][1], p[3][1], bitslice_id)
-      expr_id = "select." + GenUniqueID(parser)
-      p[0] = Select(Condition, p[3][2], p[3][3], expr_id)
-      return
-    expr_id = "call." + GenUniqueID(parser)
-    p[0] = Call(p[1], p[3], None, expr_id)
-  elif len(p) == 7:
-    expr_id = "call." + GenUniqueID(parser)
-    p[0] = Call(p[1], p[3], p[6], expr_id)
-  else:
-    expr_id = "call." + GenUniqueID(parser)
-    p[0] = Call(p[1], p[3], [p[6], p[8]], expr_id)
+  '''expr : ID LPAREN args RPAREN'''
+  if p[1] == "VELEM":
+    p[0] = Number(VELEM(p[3][0].val))
+    return
+  if p[1] == "select_bytes":
+    bitslice_id = "bitslice." + GenUniqueID(parser)
+    Condition = BitSlice(p[3][0], p[3][1], p[3][1], bitslice_id)
+    expr_id = "select." + GenUniqueID(parser)
+    p[0] = Select(Condition, p[3][2], p[3][3], expr_id)
+    return
+  expr_id = "call." + GenUniqueID(parser)
+  p[0] = Call(p[1], p[3], None, expr_id)
+ 
 
 def p_expr_call_module(p):
   'expr : MODULE DOT ID LPAREN args RPAREN'
@@ -224,7 +221,7 @@ def p_expr_lookup(p):
     expr_id = "index." + GenUniqueID(parser)
     p[0] = BitSlice(p[1], Index, Index, expr_id)
     return
-  assert p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw', 'v']
+  assert p[3] in ['b', 'ub', 'h', 'uh', 'w', 'uw', 'v', 's64']
   p[0] = ElemTypeInfo(p[1], p[3])
 
 def p_args(p):
@@ -475,7 +472,9 @@ def IsVariableScalar(Variable):
 
 
 def GetSpecFrom(inst, Pseudocode):
-  ParsedInst = Parse(inst)
+  inst_specs = inst.split(':')
+  reg_inst = inst_specs[0]
+  ParsedInst = Parse(reg_inst)
   print("ParsedInst:")
   print(ParsedInst)
   if isinstance(ParsedInst, list):
@@ -588,7 +587,7 @@ def ParseHVXSemantics(Semantics):
 
 
 if __name__ == '__main__':
-  from HexInsts import HexInsts
+  from dict.HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
 
 

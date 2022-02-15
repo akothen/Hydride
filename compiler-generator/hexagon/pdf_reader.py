@@ -2,8 +2,8 @@ import tabula
 
 pdf = open("hexagon_v66.pdf", 'rb')
 
-# dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(161, 222)))
-dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40, 89)) + list(range(161, 222)))
+# dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40,89)))
+dfs = tabula.read_pdf(pdf, lattice=True, pages=list(range(40, 89)) + list(range(110, 222)))
 # dfs = tabula.read_pdf(pdf, lattice=True, pages=80)
 
 
@@ -63,11 +63,11 @@ for inst_df in insts:
         # print(inst_df)
         for inst in inst_df.iterrows():
             intrinsic = inst[1][0].replace("\r", "")
-            pseudocode = inst[1][1].replace("\r", "")
+            pseudocode = inst[1][1].replace("\r", "").replace(";;", ";") # There are two instructions that accidentally contain an extra semicolon
             print(intrinsic)
             inst_dict.update(filter_optionals(intrinsic, pseudocode))
         # inst_dict.update(dict(zip(inst_df.iloc[:, 0].str.replace("\r", "\n"), inst_df.iloc[:, 1].str.replace("\r", "\n"))))
 print(len(inst_dict))
 from pprint import pformat
-with open("HexInsts.py", "w") as f:
+with open("dict/HexInsts.py", "w") as f:
     f.write("HexInsts = " + pformat(inst_dict))
