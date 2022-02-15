@@ -36,6 +36,8 @@ class RoseContext:
     self.Variables = dict()    # Name --> ID
     # Map variable names to the element types
     self.VariablesToElemTypes = dict()
+    # Track the rose value --> signedness 
+    self.CompiledValToSignedness = dict()
     # Map abstractions to the key
     self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
     # Name generator
@@ -63,6 +65,24 @@ class RoseContext:
     assert ID in self.CompiledAbstractions
     return self.CompiledAbstractions[ID]
   
+  def addSignednessInfoForValue(self, Value : RoseValue, IsSigned : bool):
+    assert not isinstance(Value, RoseUndefValue) \
+       and not isinstance(Value, RoseConstant)
+    print("addSignednessInfoForValue:")
+    Value.print()
+    self.CompiledValToSignedness[Value] = IsSigned
+  
+  def isValueSigned(self, Value : RoseValue):
+    assert not isinstance(Value, RoseUndefValue) \
+       and not isinstance(Value, RoseConstant)
+    assert Value in self.CompiledValToSignedness
+    return self.CompiledValToSignedness[Value]
+
+  def isValueSignKnown(self, Value : RoseValue):
+    assert not isinstance(Value, RoseUndefValue) \
+    and not isinstance(Value, RoseConstant)
+    return Value in self.CompiledValToSignedness
+
   def addVariable(self, Name : str, ID : str):
     self.Variables[Name] = ID
   
@@ -126,6 +146,9 @@ class RoseContext:
   
   def getCompiledAbstractions(self):
     return self.CompiledAbstractions
+
+  def getCompiledValToSignednessMap(self):
+    return self.CompiledValToSignedness
   
   def getDefinedVariables(self):
     return self.Variables
@@ -136,12 +159,13 @@ class RoseContext:
     self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
     # Copy the variables too
     for Name, ID in self.ParentContext.getDefinedVariables().items():
-      print("VARIABLE NAME:")
-      print(Name)
       self.Variables[Name] = ID
     # Copy over the element type information as well
     for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
       self.VariablesToElemTypes[Name] = ElemType
+    # Copy over the signedeness information as well
+    for Value, IsSigned in self.ParentContext.getCompiledValToSignednessMap().items():
+      self.CompiledValToSignedness[Value] = IsSigned
  
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
@@ -373,7 +397,7 @@ def CompileIndex(IndexExpr, Context : x86RoseContext):
   return CompiledIndex
 
 
-def CompileBitSlice(BitSliceExpr, Context : RoseContext):
+def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   print("COMPILE BITSLICE")
   print("BITSLICE:")
   print(BitSliceExpr)
@@ -424,6 +448,9 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, Low, High, BitwidthValue)
   print("BIT SLICE EXTRACT OP:")
   Operation.print()
+
+  # Add signedness info on the op
+  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -485,6 +512,9 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(1, IndexVal.getType())
     # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, IndexVal, IndexVal, BitwidthValue)
+
+  # Add signedness info
+  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Vector))
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -593,7 +623,7 @@ def GetBitSliceIndex(ExprIndex, Context : x86RoseContext):
         Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                         Operand2, Operand1.getType().getBitwidth())
     # Perform the binary operation
-    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2)
+    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2, Context)
 
   # The given bitslice index could be a compiled expression
   if Context.isCompiledAbstraction(ExprIndex.id):
@@ -895,13 +925,13 @@ def CompileUpdate(Update, Context : x86RoseContext):
       print(LowIndex)
       LowIndex.print()
       # Compile the vector object
-      Vector = CompileExpression(Update.lhs.obj, Context)
+      BitVector = CompileExpression(Update.lhs.obj, Context)
       print("VECTOR:")
-      print(Vector)
-      Vector.print()
+      print(BitVector)
+      BitVector.print()
       # Get the high index
-      assert Context.isElemTypeOfVariableKnown(Vector.getName()) == True
-      ElemType = Context.getElemTypeOfVariable(Vector.getName())
+      assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+      ElemType = Context.getElemTypeOfVariable(BitVector.getName())
       assert ElemType.isBitVectorTy()
       IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
       HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, IndexDiff])
@@ -912,7 +942,7 @@ def CompileUpdate(Update, Context : x86RoseContext):
       # Get the bitwdith value
       BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
       # Compile the op
-      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, Vector, LowIndex, HighIndex, BitwidthValue)
+      LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
       print("---BIT SLICE INSERT OP:")
       LHSOp.print()
     else:
@@ -936,6 +966,12 @@ def CompileUpdate(Update, Context : x86RoseContext):
       LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, IndexVal, IndexVal, BitwidthValue)
       print("---BIT SLICE INSERT OP:")
       LHSOp.print()
+
+  # Add signedness info
+  print("BitVector:")
+  BitVector.print()
+  if not Context.isValueSignKnown(BitVector):
+    Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
 
   # Add the op to the IR
   Context.addAbstractionToIR(LHSOp)
@@ -1015,6 +1051,9 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
                           Operand1, OperandBitwidth)
       Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=True)
+      Context.addSignednessInfoForValue(Operand2, IsSigned=True)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       Context.addAbstractionToIR(Operand2)
@@ -1034,6 +1073,9 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
                           Operand1, OperandBitwidth)
       Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)      
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       Context.addAbstractionToIR(Operand2)
@@ -1051,6 +1093,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
     if NumIntBits > Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
       Operand2 = RoseBVZeroExtendOp.create(Context.genName(), Operand2, NumIntBits)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand2)
       # Add operations to the context
@@ -1062,6 +1106,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
     if NumIntBits > Operand1.getType().getBitwidth():
       # We need to extend the size of the other operand
       Operand1 = RoseBVZeroExtendOp.create(Context.genName(), Operand1, NumIntBits)
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       # Add operations to the context
@@ -1083,6 +1129,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to extend the size of the other operand
       Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
                                       Operand1, Operand2.getType().getBitwidth())
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       # Add operations to the context
@@ -1092,6 +1140,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to extend the size of the other operand
       Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                       Operand2, Operand1.getType().getBitwidth())
+      # Add signedness info
+      Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand2)
       # Add operations to the context
@@ -1107,7 +1157,8 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
 
   # Compile the binary operation
   print("GENERATING BINARY OP")
-  Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), Operand1, Operand2)
+  Operation = BinaryOps[BinaryExpr.op]()(Context.genName(), \
+                                  Operand1, Operand2, Context)
   print("BINARY OP GENERATED")
 
   # Add the operation to the IR
@@ -1198,7 +1249,7 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
     return Operation
   
   # Check if this is a call to a builtin function
-  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList)
+  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
 
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
@@ -1396,7 +1447,7 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
     Context.updateCompiledAbstraction(ForStmt.end, End)
 
   # Generate the loop
-  Loop = RoseForLoop.create(ForStmt.iterator.name, Begin, End, Step)
+  Loop = RoseForLoop.create(Context.genName(ForStmt.iterator.name), Begin, End, Step)
 
   # Add loop as root abstraction 
   ChildContext = x86RoseContext()
@@ -1547,6 +1598,10 @@ def CompileSemantics(Sema):
         ParamType = x86Types[Param.type]
     # Create a new rosette value
     ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+    print("PARAM VALUES:")
+    ParamVal.print()
+    print(Param.is_signed)
+    RootContext.addSignednessInfoForValue(ParamVal, Param.is_signed)
     ParamVal.print()
     if not IsOutParam:
       ParamsIDs.append(Param.id)
@@ -1576,6 +1631,7 @@ def CompileSemantics(Sema):
   ReturnID = "return." + RootFunction.getReturnValue().getName()
   RootContext.addVariable(RootFunction.getReturnValue().getName(), ReturnID)
   RootContext.addCompiledAbstraction(ReturnID, RootFunction.getReturnValue())
+  RootContext.addSignednessInfoForValue(RetValue, Sema.ret_is_signed)
 
   # Add the parameter values to the root context
   assert len(ParamsIDs) == RootFunction.getNumArgs()
@@ -1635,82 +1691,102 @@ CompileAbstractions = {
 
 
 def HandleToSignExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     assert Value.getType().getBitwidth() < Bitwidth
-    return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToSpecialSignExtend(_):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     # Increase the bitwidth by 2x. 
     Bitwidth = 2 * Value.getType().getBitwidth()
-    return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToZeroExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     assert Value.getType().getBitwidth() < Bitwidth
-    return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+    Op = RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
-# TODO: Take into account signedness
 def HandleToMin(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 2
     if Operands[0].getType().isBitVectorTy() \
     and Operands[1].getType().isBitVectorTy():
-      return RoseBVSminOp.create(Name, Operands)
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        return RoseBVSminOp.create(Name, Operands)
+      else:
+        return RoseBVUminOp.create(Name, Operands)
     return RoseMinOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
-# TODO: Take into account signedness
 def HandleToMax(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 2
     if Operands[0].getType().isBitVectorTy() \
     and Operands[1].getType().isBitVectorTy():
-      return RoseBVSmaxOp.create(Name, Operands)
+      print("Context.isValueSigned(Operands[0]):")
+      print(Context.isValueSigned(Operands[0]))
+      print("Context.isValueSigned(Operands[1]):")
+      print(Context.isValueSigned(Operands[1]))
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        return RoseBVSmaxOp.create(Name, Operands)
+      else:
+        return RoseBVUmaxOp.create(Name, Operands)
     return RoseMaxOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
 def HandleToSSaturate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     assert Value.getType().getBitwidth() >= Bitwidth
-    return RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToUSaturate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     assert Value.getType().getBitwidth() >= Bitwidth
-    return RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToTruncate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
     [Value] = Args
     assert Value.getType().isBitVectorTy() == True
     assert Value.getType().getBitwidth() > Bitwidth
@@ -1720,16 +1796,18 @@ def HandleToTruncate(Bitwidth : int):
 
 
 def HandleToAbs(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 1
     [Value] = Operands
-    return RoseAbsOp.create(Name, Value)
+    Op = RoseAbsOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToInt(_):
-  def LamdaImplFunc(_, Operands : list):
+  def LamdaImplFunc(_, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 1
     [Value] = Operands
     assert Value.getType().isBitVectorTy() == True
@@ -1739,7 +1817,7 @@ def HandleToInt(_):
 
 
 def HandleToRemainder(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 2
     if Operands[0].getType().isBitVectorTy() \
     and Operands[1].getType().isBitVectorTy():
@@ -1820,51 +1898,71 @@ UnaryOps = {
 
 
 def HandleToAdd():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                    Context : x86RoseContext):
     Operands = [Operand1, Operand2]
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVAddOp.create(Name, Operands)
+      Op = RoseBVAddOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
     return RoseAddOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
 def HandleToSub():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     Operands = [Operand1, Operand2]
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSubOp.create(Name, Operands)
+      Op = RoseBVSubOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
     return RoseSubOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
 def HandleToMul():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     Operands = [Operand1, Operand2]
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVMulOp.create(Name, Operands)
+      Op = RoseBVMulOp.create(Name, Operands)
+      Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
     return RoseMulOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
-# TODO: Take signedness into account
 def HandleToDiv():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSdivOp.create(Name, Operand1, Operand2)
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        Op = RoseBVSdivOp.create(Name, Operand1, Operand2)
+      else:
+        Op = RoseBVUdivOp.create(Name, Operand1, Operand2)
+      Context.addSignednessInfoForValue(Op, \
+          Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      return Op
     return RoseDivOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToMod():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       return RoseBVSmodOp.create(Name, Operand1, Operand2)
@@ -1874,7 +1972,8 @@ def HandleToMod():
 
 
 def HandleToOr():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     Operands = [Operand1, Operand2]
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
@@ -1885,7 +1984,8 @@ def HandleToOr():
 
 
 def HandleToXor():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       Operands = [Operand1, Operand2]
@@ -1896,7 +1996,8 @@ def HandleToXor():
 
 
 def HandleToAnd():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     Operands = [Operand1, Operand2]
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
@@ -1907,7 +2008,8 @@ def HandleToAnd():
 
 
 def HandleToEqual():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       return RoseBVEQOp.create(Name, Operand1, Operand2)
@@ -1917,7 +2019,8 @@ def HandleToEqual():
 
 
 def HandleToNotEqual():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
       return RoseBVNEQOp.create(Name, Operand1, Operand2)
@@ -1927,59 +2030,87 @@ def HandleToNotEqual():
 
 
 def HandleToLessThan():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSLTOp.create(Name, Operand1, Operand2)
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        return RoseBVSLTOp.create(Name, Operand1, Operand2)
+      else:
+        return RoseBVULTOp.create(Name, Operand1, Operand2)
     return RoseLTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToLessThanEqual():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSLEOp.create(Name, Operand1, Operand2)
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        return RoseBVSLEOp.create(Name, Operand1, Operand2)
+      else:
+        return RoseBVULEOp.create(Name, Operand1, Operand2)
     return RoseLEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToGreaterThan():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSGTOp.create(Name, Operand1, Operand2)
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        return RoseBVSGTOp.create(Name, Operand1, Operand2)
+      else:
+        return RoseBVUGTOp.create(Name, Operand1, Operand2)
     return RoseGTOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToGreaterThanEqual():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     if Operand1.getType().isBitVectorTy() \
     and Operand2.getType().isBitVectorTy():
-      return RoseBVSGEOp.create(Name, Operand1, Operand2)
+      if Context.isValueSigned(Operand1) == True \
+      or Context.isValueSigned(Operand2) == True:
+        return RoseBVSGEOp.create(Name, Operand1, Operand2)
+      else:
+        return RoseBVUGEOp.create(Name, Operand1, Operand2)
     return RoseGEOp.create(Name, Operand1, Operand2)
   
   return LamdaImplFunc
 
 
 def HandleToAshr():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVAshrOp.create(Name, Operand1, Operand2)
+    Op = RoseBVAshrOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1))
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToLshr():
-  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue):
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
     assert Operand1.getType().isBitVectorTy() == True
     assert Operand2.getType().isBitVectorTy() == True
-    return RoseBVLshrOp.create(Name, Operand1, Operand2)
+    Op = RoseBVLshrOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, \
+        Context.isValueSigned(Operand1))
+    return Op
   
   return LamdaImplFunc
 
@@ -2309,5 +2440,6 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
+
 
 

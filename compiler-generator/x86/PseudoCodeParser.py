@@ -351,6 +351,7 @@ def GetSemaFromXML(node):
         spec=spec,
         params=Params,
         rettype=output.attrib['type'],
+        ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
         cpuids=CPUIDs,
         inst_form=inst.attrib.get('form', ''),
         imm_width=imm_width,
@@ -495,5 +496,6 @@ def Parsex86Semantics(FileName):
 
 if __name__ == '__main__':
   Parsex86Semantics("intel_sema.xml")
+
 
 

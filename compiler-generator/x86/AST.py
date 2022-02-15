@@ -34,10 +34,11 @@ Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'
 
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params',
-  'spec', 'rettype',
+  'spec', 'rettype', 'ret_is_signed',
   'inst_form',
   'cpuids',
   'imm_width',
   'xed',
   'elem_type',
   ])
+
