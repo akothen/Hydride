@@ -374,6 +374,8 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap)
       continue
+    if FixReductionPatternToMakeBlockRerollable(Abstraction) == False:
+      continue
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
   return BlockToRerollableCandidatesMap
@@ -990,6 +992,73 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict):
       ParentRegion.eraseChild(Block)
 
 
+def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
+  print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
+  print("FixReductionPatternToMakeBlockRerollable")
+  # Look for chains of bvadd ops
+  BVAddChain = list()
+  BVInsertOp = RoseUndefValue()
+  for Op in reversed(Block.getOperations()):
+    if isinstance(Op, RoseBVInsertSliceOp):
+      # Go up the use-def chain to look for add ops
+      if isinstance(Op.getInsertValue(), RoseBVAddOp):
+        Worklist = [Op.getInsertValue()]
+        while len(Worklist) != 0:
+          AddOp = Worklist.pop()
+          BVAddChain.append(AddOp)
+          for Operand in AddOp.getOperands():
+            if isinstance(Operand, RoseBVAddOp) \
+            and Operand.getParent() == Block:
+              Worklist.append(Operand)
+        BVInsertOp = Op
+        break
+  if len(BVAddChain) == 0 or len(BVAddChain) == 1 \
+    or BVInsertOp == RoseUndefValue():
+    return False
+  
+  # One of the bvadds must be coming from external source
+  # (some other block or function argument).
+  TempValues = []
+  ExternalOperand = []
+  for Op in BVAddChain:
+    for Operand in Op.getOperands():
+      if Operand not in Block:
+        ExternalOperand.append(Operand)
+        continue
+      if isinstance(Operand, RoseBVExtractSliceOp) \
+      and isinstance(Operand.getInputBitVector(), RoseArgument):
+        ExternalOperand.append(Operand)
+        continue
+      print("####Operand:")
+      Operand.print()
+      TempValues.append(Operand)
+  if TempValues == [] or ExternalOperand == []:
+    return False
+
+  # Insert bvinserts after TempValues
+  for Op in TempValues:
+    InsertionPoint = Block.getPosOfOperation(Op) + 1
+    InsertBefore = Block.getChild(InsertionPoint)
+    BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
+                                      BVInsertOp.getLowIndex().getType())
+    ExtractOp = RoseBVExtractSliceOp.create(Op.getName() + ".ext", \
+                                          BVInsertOp.getInputBitVector(), \
+                            BVInsertOp.getLowIndex(), BVInsertOp.getHighIndex(), BitwidthVal)
+    print("Op:")
+    Op.print()
+    AddOp = RoseBVAddOp.create(Op.getName() + ".acc", [ExtractOp, Op])
+    InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
+                            BVInsertOp.getLowIndex(), BVInsertOp.getHighIndex(), BitwidthVal)
+    Block.addOperationBefore(ExtractOp, InsertBefore)
+    Block.addOperationBefore(AddOp, InsertBefore)
+    Block.addOperationBefore(InsertOp, InsertBefore)
+
+  print("FIXED BLOCK:")
+  Block.print()
+
+  return True
+
+
 def RunRerollerOnFunction(Function : RoseFunction):
   print("RUN ON REROLLER FUNCTION")
   print("FUNCTION:")
@@ -1000,7 +1069,6 @@ def RunRerollerOnFunction(Function : RoseFunction):
   # Run loop reroller on the given function
   BlockToRerollableCandidatesMap = RunRerollerOnRegion(Function, \
                                     BlockToRerollableCandidatesMap)
-  
   # Time to perform some rerolling
   PerformRerolling(BlockToRerollableCandidatesMap)
 
