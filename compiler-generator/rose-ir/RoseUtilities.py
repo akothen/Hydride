@@ -12,6 +12,7 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 
 def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int = None) -> int:
@@ -235,6 +236,35 @@ def GetInvariantsInRegion(Abstraction, Invariants = dict()):
   return Invariants
 
 
+def CloneAndInsertOperation(Operation : RoseOperation, \
+                            InsertBefore : RoseOperation, Context : RoseContext):
+  # Both operation and insertion point must be in the same block
+  assert Operation.getParent() == InsertBefore.getParent()
 
+  # If the insertion point and operation are the same, there is nothing to do
+  if Operation == InsertBefore:
+    return Operation
 
+  # Get the current position of the operation in the block
+  ParentBlock = Operation.getParent()
+  InsertionPoint = ParentBlock.getPosOfOperation(InsertBefore)
+
+  if InsertionPoint > ParentBlock.getPosOfOperation(Operation):
+    return Operation
+  
+  # Deal with case: InsertionPoint < ParentBlock.getPosOfOperation(Operation)
+  # We need to get operands that are defined before InsertBefore point
+  OperandList = []
+  for Operand in Operation.getOperands():
+    if not isinstance(Operand, RoseOperation):
+      OperandList.append(Operand)
+      continue
+    NewOperand = CloneAndInsertOperation(Operand, InsertBefore)
+    OperandList.append(NewOperand)
+  # Clone and replace the operands in the operation
+  ClonedOperation = Operation.clone(Context.genName(Operation.getName() + ".clone."))
+  ClonedOperation.replaceOperands(OperandList)
+  # Insert the op to the IR
+  ParentBlock.addOperationBefore(ClonedOperation, InsertBefore)
+  return ClonedOperation
 
