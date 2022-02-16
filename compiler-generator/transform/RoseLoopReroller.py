@@ -6,6 +6,7 @@ from RoseValues import *
 from RoseBitVectorOperation import *
 from RoseBitVectorOperations import *
 from RoseOperations import *
+from RoseUtilities import *
 
 import numpy as np
 import math
@@ -1039,16 +1040,26 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
   for Op in TempValues:
     InsertionPoint = Block.getPosOfOperation(Op) + 1
     InsertBefore = Block.getChild(InsertionPoint)
+    LowIndex = BVInsertOp.getLowIndex()
+    HighIndex = BVInsertOp.getHighIndex()
+    if isinstance(LowIndex, RoseOperation):
+      LowIndex = CloneAndInsertOperation(LowIndex, InsertBefore)
+    if isinstance(HighIndex, RoseOperation):
+      HighIndex = CloneAndInsertOperation(HighIndex, InsertBefore)
+    print("LowIndex:")
+    LowIndex.print()
+    print("HighIndex:")
+    HighIndex.print()
     BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
-                                      BVInsertOp.getLowIndex().getType())
+                                      LowIndex.getType())
     ExtractOp = RoseBVExtractSliceOp.create(Op.getName() + ".ext", \
                                           BVInsertOp.getInputBitVector(), \
-                            BVInsertOp.getLowIndex(), BVInsertOp.getHighIndex(), BitwidthVal)
+                                          LowIndex, HighIndex, BitwidthVal)
     print("Op:")
     Op.print()
     AddOp = RoseBVAddOp.create(Op.getName() + ".acc", [ExtractOp, Op])
     InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
-                            BVInsertOp.getLowIndex(), BVInsertOp.getHighIndex(), BitwidthVal)
+                                          LowIndex, HighIndex, BitwidthVal)
     Block.addOperationBefore(ExtractOp, InsertBefore)
     Block.addOperationBefore(AddOp, InsertBefore)
     Block.addOperationBefore(InsertOp, InsertBefore)
