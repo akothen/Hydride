@@ -5,174 +5,12 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 from AST import *
 from x86Types import x86Types
 
-from copy import deepcopy
 import math
-
-
-# This is a generic context that could be used across
-# different architectures.
-class RoseContext:
-  class RoseValueNameGen():
-    def __init__(self):
-      self.Counter = 0
-    
-    def genName(self, Prefix : str = ""):
-      Name = Prefix + str(self.Counter)
-      self.Counter += 1
-      return "%" + Name
-  def __init__(self):
-    self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
-    # Track the contexts we encounter
-    self.ParentContext = None
-    self.Contexts = dict()   # ID --> child context
-    # Heirarchical abstractions such as functions, loops and cond regions.
-    # Blocks are not dealt with by this compiler.
-    self.RootAbstractions = list()
-    # Variable names are associated with their IDs
-    self.Variables = dict()    # Name --> ID
-    # Map variable names to the element types
-    self.VariablesToElemTypes = dict()
-    # Track the rose value --> signedness 
-    self.CompiledValToSignedness = dict()
-    # Map abstractions to the key
-    self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
-    # Name generator
-    self.NameGenerator = self.RoseValueNameGen()
-  
-  def genName(self, Prefix : str = ""):
-    return self.NameGenerator.genName(Prefix)
-
-  def isCompiledAbstraction(self, ID : str):
-    if ID in self.CompiledAbstractions:
-      return True
-    return False
-  
-  def addCompiledAbstraction(self, ID : str, Abstraction):
-    self.CompiledAbstractions[ID] = Abstraction
-
-  def addKeyForCompiledAbstraction(self, Key, Abstraction):
-    self.CompiledAbstractionsKeys[Abstraction] = Key
-    
-  def updateCompiledAbstraction(self, ID : str, NewAbstraction):
-      assert ID in self.CompiledAbstractions
-      self.CompiledAbstractions[ID] = NewAbstraction
-
-  def getCompiledAbstractionForID(self, ID : str):
-    assert ID in self.CompiledAbstractions
-    return self.CompiledAbstractions[ID]
-  
-  def addSignednessInfoForValue(self, Value : RoseValue, IsSigned : bool):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
-    print("addSignednessInfoForValue:")
-    Value.print()
-    self.CompiledValToSignedness[Value] = IsSigned
-  
-  def isValueSigned(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
-    assert Value in self.CompiledValToSignedness
-    return self.CompiledValToSignedness[Value]
-
-  def isValueSignKnown(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-    and not isinstance(Value, RoseConstant)
-    return Value in self.CompiledValToSignedness
-
-  def addVariable(self, Name : str, ID : str):
-    self.Variables[Name] = ID
-  
-  def getVariableID(self, Name : str):
-    assert Name in self.Variables
-    return self.Variables[Name]
-  
-  def isVariableDefined(self, Name : str):
-    if Name in self.Variables:
-      return True
-    return False
-  
-  def addElemTypeOfVariable(self, Name : str, ElemType : RoseType):
-    self.VariablesToElemTypes[Name] = ElemType
-  
-  def isElemTypeOfVariableKnown(self, Name : str):
-    if Name in self.VariablesToElemTypes:
-      return True
-    return False
-
-  def getVariablesToElemTypes(self):
-    return self.VariablesToElemTypes
-  
-  def getElemTypeOfVariable(self, Name : str):
-    assert Name in self.VariablesToElemTypes
-    return self.VariablesToElemTypes[Name]
-  
-  def createContext(self, ID : str, ChildContext):
-    assert isinstance(ChildContext, RoseContext)
-    ChildContext.setParentContext(self)
-    self.Contexts[ID] = ChildContext
-  
-  def destroyContext(self, ID : str):
-    self.Contexts[ID] = None
-  
-  def getChildContext(self, ID : str):
-    return self.Contexts[ID] 
-
-  def pushRootAbstraction(self, Abstraction):
-    self.RootAbstractions.append(Abstraction)
-  
-  def getRootAbstraction(self):
-    return self.RootAbstractions[len(self.RootAbstractions) - 1]
-  
-  def addAbstractionToIR(self, Abstraction):
-    TailAbstraction = self.RootAbstractions.pop()
-    if TailAbstraction in self.CompiledAbstractionsKeys:
-      Key = self.CompiledAbstractionsKeys[TailAbstraction]
-      TailAbstraction.addAbstraction(Abstraction, Key)
-      self.CompiledAbstractionsKeys[TailAbstraction] = Key
-    else:
-      TailAbstraction.addAbstraction(Abstraction)
-    self.pushRootAbstraction(TailAbstraction)
-
-  def setParentContext(self, Context):
-    assert isinstance(Context, RoseContext)
-    self.ParentContext = Context
-  
-  def isRootContext(self):
-    return self.ParentContext == None
-  
-  def getCompiledAbstractions(self):
-    return self.CompiledAbstractions
-
-  def getCompiledValToSignednessMap(self):
-    return self.CompiledValToSignedness
-  
-  def getDefinedVariables(self):
-    return self.Variables
-
-  def copyAbstractionsFromParent(self):
-    assert not self.isRootContext()
-    assert isinstance(self.ParentContext, RoseContext)
-    self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
-    # Copy the variables too
-    for Name, ID in self.ParentContext.getDefinedVariables().items():
-      self.Variables[Name] = ID
-    # Copy over the element type information as well
-    for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
-      self.VariablesToElemTypes[Name] = ElemType
-    # Copy over the signedeness information as well
-    for Value, IsSigned in self.ParentContext.getCompiledValToSignednessMap().items():
-      self.CompiledValToSignedness[Value] = IsSigned
- 
-  def replaceParentAbstractionsWithChild(self):
-    for Name, ID in self.ParentContext.getDefinedVariables().items():
-      # Get the ID for the same variable name in curreent context
-      ChildVarID = self.Variables[Name]
-      Abstraction = self.CompiledAbstractions[ChildVarID]
-      self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
 
 
 # This defines rules specifically for x86 to RoseIR convertion
@@ -1581,9 +1419,7 @@ def CompileStatement(Stmt, Context : x86RoseContext):
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
-def CompileSemantics(Sema):
-  # Create the root context
-  RootContext = x86RoseContext()
+def CompileSemantics(Sema, RootContext : x86RoseContext):
   OutParams = []
   ReturnsVoid = False
   ParamValues = []
@@ -2155,7 +1991,8 @@ def Compile():
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
   print(spec)
-  CompiledFunction = CompileSemantics(spec)
+  RootContext = x86RoseContext()
+  CompiledFunction = CompileSemantics(spec, RootContext)
 
 
 def test1():
