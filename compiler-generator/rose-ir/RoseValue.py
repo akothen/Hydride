@@ -41,8 +41,15 @@ class RoseValue:
         assert not Type.isUndefTy()
         self.Type = Type
     
-    def clone(self):
-        return deepcopy(self)
+    def isClonable(self):
+        return True
+
+    def clone(self, NewName : str = None):
+        assert self.isClonable() == True
+        NewCopy = deepcopy(self)
+        if NewName != None:
+            NewCopy.setName(NewName)
+        return NewCopy
 
     def print(self, Debug = False):
         print(self.Name)
@@ -50,3 +57,5 @@ class RoseValue:
             self.Type.print()
 
  
+
+
