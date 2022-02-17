@@ -7,6 +7,7 @@ from RoseBitVectorOperation import *
 from RoseBitVectorOperations import *
 from RoseOperations import *
 from RoseUtilities import *
+from RoseContext import *
 
 import numpy as np
 import math
@@ -361,21 +362,21 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
   return BlockToRerollableCandidatesMap
 
 
-def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict):
+def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context : RoseContext):
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
   for Abstraction in Region: #Region.getChildren():
     # Run reroller on a nested function
     if isinstance(Abstraction, RoseFunction):
-      RunRerollerOnFunction(Abstraction)
+      RunRerollerOnFunction(Abstraction, Context)
       continue
     # Reroller only operates on blocks
     if not isinstance(Abstraction, RoseBlock):
       Abstraction.print()
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
-                                            BlockToRerollableCandidatesMap)
+                                            BlockToRerollableCandidatesMap, Context)
       continue
-    if FixReductionPatternToMakeBlockRerollable(Abstraction) == False:
+    if FixReductionPatternToMakeBlockRerollable(Abstraction, Context) == False:
       continue
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
@@ -993,7 +994,7 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict):
       ParentRegion.eraseChild(Block)
 
 
-def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
+def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPatternToMakeBlockRerollable")
   # Look for chains of bvadd ops
@@ -1006,7 +1007,9 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
         Worklist = [Op.getInsertValue()]
         while len(Worklist) != 0:
           AddOp = Worklist.pop()
-          BVAddChain.append(AddOp)
+          # Number of uses for the add op must be only 1.
+          if len(AddOp.getUsers()) == 1:
+            BVAddChain.append(AddOp)
           for Operand in AddOp.getOperands():
             if isinstance(Operand, RoseBVAddOp) \
             and Operand.getParent() == Block:
@@ -1021,43 +1024,56 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
   # (some other block or function argument).
   TempValues = []
   ExternalOperand = []
+  OpsWithExternalOperands = []
+  OpsWithTempVals = []
   for Op in BVAddChain:
+    ExternalOperandFound = False
     for Operand in Op.getOperands():
+      if Operand in BVAddChain:
+        continue
       if Operand not in Block:
         ExternalOperand.append(Operand)
+        ExternalOperandFound = True
         continue
       if isinstance(Operand, RoseBVExtractSliceOp) \
       and isinstance(Operand.getInputBitVector(), RoseArgument):
         ExternalOperand.append(Operand)
+        ExternalOperandFound = True
         continue
       print("####Operand:")
       Operand.print()
       TempValues.append(Operand)
+    if ExternalOperandFound == False:
+      OpsWithTempVals.append(Op)
+    else:
+      OpsWithExternalOperands.append(Op)
   if TempValues == [] or ExternalOperand == []:
     return False
 
   # Insert bvinserts after TempValues
   for Op in TempValues:
+    print("TEMP:")
+    Op.print()
     InsertionPoint = Block.getPosOfOperation(Op) + 1
     InsertBefore = Block.getChild(InsertionPoint)
     LowIndex = BVInsertOp.getLowIndex()
     HighIndex = BVInsertOp.getHighIndex()
     if isinstance(LowIndex, RoseOperation):
-      LowIndex = CloneAndInsertOperation(LowIndex, InsertBefore)
+      LowIndex = CloneAndInsertOperation(LowIndex, InsertBefore, Context)
     if isinstance(HighIndex, RoseOperation):
-      HighIndex = CloneAndInsertOperation(HighIndex, InsertBefore)
+      HighIndex = CloneAndInsertOperation(HighIndex, InsertBefore, Context)
     print("LowIndex:")
     LowIndex.print()
     print("HighIndex:")
     HighIndex.print()
     BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
                                       LowIndex.getType())
-    ExtractOp = RoseBVExtractSliceOp.create(Op.getName() + ".ext", \
+    ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
                                           BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
     print("Op:")
     Op.print()
-    AddOp = RoseBVAddOp.create(Op.getName() + ".acc", [ExtractOp, Op])
+    AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, Op])
     InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
     Block.addOperationBefore(ExtractOp, InsertBefore)
@@ -1067,10 +1083,60 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock):
   print("FIXED BLOCK:")
   Block.print()
 
+  def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
+    assert isinstance(BVOp, RoseBVExtractSliceOp) \
+        or isinstance(BVOp, RoseBVInsertSliceOp)
+    ParentBlock = BVOp.getParent()
+    assert not isinstance(ParentBlock, RoseUndefRegion)
+    ErasedOps = []
+    # Get all the indexing operations for bvinsert
+    IndexingOps = []
+    if isinstance(BVOp.getLowIndex(), RoseOperation):
+      IndexingOps.append(BVOp.getLowIndex())
+    if isinstance(BVOp.getHighIndex(), RoseOperation):
+      IndexingOps.append(BVOp.getHighIndex())
+    # Erase the bvinsert op
+    ParentBlock.eraseOperation(BVOp)
+    ErasedOps.append(BVOp)
+    while len(IndexingOps) != 0:
+      Op = IndexingOps.pop()
+      if ParentBlock.hasUsesOf(Op) == False:
+        # We can erase Op, but first get the operands
+        for Operand in Op.getOperands():
+          if isinstance(Operand, RoseOperation):
+            IndexingOps.append(Operand)
+        # Erase the op
+        ParentBlock.eraseOperation(Op)
+        ErasedOps.append(Op)
+    return ErasedOps
+    
+  # Erase the bvinsert op but get some info on it first
+  LowIndex = BVInsertOp.getLowIndex()
+  HighIndex = BVInsertOp.getHighIndex()
+  BitVector = BVInsertOp.getInputBitVector()
+  EraseIndexingBVOp(BVInsertOp)
+  # Remove the temp values
+  print(OpsWithTempVals)
+  print("###############################")
+  for Op in OpsWithTempVals:
+    Op.print()
+    Block.eraseOperation(Op)
+  
+  # Erase some other extraneous ops
+  for Op in OpsWithExternalOperands:
+      Block.eraseOperation(Op)
+
+  # Put the ExternalOperand ops in the beginning of the loop
+  # and then erase them.
+  FirstOp = Block.getChild(0)
+  for Op in ExternalOperand:
+    NewOp = CloneAndInsertOperation(Op, FirstOp, Context)
+    EraseIndexingBVOp(Op)
+
   return True
 
 
-def RunRerollerOnFunction(Function : RoseFunction):
+def RunRerollerOnFunction(Function : RoseFunction, Context : RoseContext):
   print("RUN ON REROLLER FUNCTION")
   print("FUNCTION:")
   Function.print()
@@ -1079,18 +1145,19 @@ def RunRerollerOnFunction(Function : RoseFunction):
 
   # Run loop reroller on the given function
   BlockToRerollableCandidatesMap = RunRerollerOnRegion(Function, \
-                                    BlockToRerollableCandidatesMap)
+                                    BlockToRerollableCandidatesMap, Context)
   # Time to perform some rerolling
   PerformRerolling(BlockToRerollableCandidatesMap)
 
 
 # Runs Loop reroller
-def Run(Function : RoseFunction):
+def Run(Function : RoseFunction, Context : RoseContext):
   print("RUN LOOP REROLLER")
-  RunRerollerOnFunction(Function)
+  RunRerollerOnFunction(Function, Context)
   print("___________")
   print("\n\n\n\n")
   Function.print()
+
 
 
 

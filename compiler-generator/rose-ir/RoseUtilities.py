@@ -259,7 +259,7 @@ def CloneAndInsertOperation(Operation : RoseOperation, \
     if not isinstance(Operand, RoseOperation):
       OperandList.append(Operand)
       continue
-    NewOperand = CloneAndInsertOperation(Operand, InsertBefore)
+    NewOperand = CloneAndInsertOperation(Operand, InsertBefore, Context)
     OperandList.append(NewOperand)
   # Clone and replace the operands in the operation
   ClonedOperation = Operation.clone(Context.genName(Operation.getName() + ".clone."))
@@ -267,4 +267,6 @@ def CloneAndInsertOperation(Operation : RoseOperation, \
   # Insert the op to the IR
   ParentBlock.addOperationBefore(ClonedOperation, InsertBefore)
   return ClonedOperation
+
+
 

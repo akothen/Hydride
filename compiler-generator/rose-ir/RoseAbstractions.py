@@ -395,9 +395,10 @@ class RoseBlock(RoseRegion):
     # This is to prevent deletion of operations before their
     # uses are removed/fixed.
     print("OPERATION TO BE ERASED:")
-    Operation.print()
-    self.print()
+    #Operation.print()
     Function = self.getFunction()
+    #self.print()
+    Operation.print()
     assert not Function.hasUsesOf(Operation)
     self.eraseChild(Operation)
 
@@ -796,4 +797,5 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 
