@@ -1023,7 +1023,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # One of the bvadds must be coming from external source
   # (some other block or function argument).
   TempValues = []
-  ExternalOperand = []
+  ExternalOperands = []
   OpsWithExternalOperands = []
   OpsWithTempVals = []
   for Op in BVAddChain:
@@ -1032,12 +1032,12 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
       if Operand in BVAddChain:
         continue
       if Operand not in Block:
-        ExternalOperand.append(Operand)
+        ExternalOperands.append(Operand)
         ExternalOperandFound = True
         continue
       if isinstance(Operand, RoseBVExtractSliceOp) \
       and isinstance(Operand.getInputBitVector(), RoseArgument):
-        ExternalOperand.append(Operand)
+        ExternalOperands.append(Operand)
         ExternalOperandFound = True
         continue
       print("####Operand:")
@@ -1047,8 +1047,51 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
       OpsWithTempVals.append(Op)
     else:
       OpsWithExternalOperands.append(Op)
-  if TempValues == [] or ExternalOperand == []:
+  if TempValues == [] or ExternalOperands == []:
     return False
+
+  # Insert bvinserts after TempValues
+  InsertOpLowIndex = BVInsertOp.getLowIndex()
+  InsertOpHighIndex = BVInsertOp.getHighIndex()
+  BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
+                                      InsertOpLowIndex.getType())
+  FirstOp = Block.getChild(0)
+
+  # Put the ExternalOperand ops in the beginning of the loop
+  for Index, Op in enumerate(ExternalOperands):
+    print("TEMP:")
+    Op.print()
+    # Get the new op for external operand
+    NewOp = CloneAndInsertOperation(Op, FirstOp, Context)
+    # Get the indices
+    if isinstance(InsertOpLowIndex, RoseOperation):
+      LowIndex = CloneAndInsertOperation(InsertOpLowIndex, FirstOp, Context)
+    else:
+      LowIndex = InsertOpLowIndex
+    if isinstance(InsertOpHighIndex, RoseOperation):
+      HighIndex = CloneAndInsertOperation(InsertOpHighIndex, FirstOp, Context)
+    else:
+      HighIndex = InsertOpHighIndex
+    print("LowIndex:")
+    LowIndex.print()
+    print("HighIndex:")
+    HighIndex.print()
+    if Index != 0:
+      ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
+                                            BVInsertOp.getInputBitVector(), \
+                                            LowIndex, HighIndex, BitwidthVal)
+      print("NewOp:")
+      NewOp.print()
+      AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, NewOp])
+      InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
+                                          LowIndex, HighIndex, BitwidthVal)
+      Block.addOperationBefore(ExtractOp, FirstOp)
+      Block.addOperationBefore(AddOp, FirstOp)
+      Block.addOperationBefore(InsertOp, FirstOp)
+    else:
+      InsertOp = RoseBVInsertSliceOp.create(NewOp, BVInsertOp.getInputBitVector(), \
+                                          LowIndex, HighIndex, BitwidthVal)
+      Block.addOperationBefore(InsertOp, FirstOp)
 
   # Insert bvinserts after TempValues
   for Op in TempValues:
@@ -1056,18 +1099,18 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
     Op.print()
     InsertionPoint = Block.getPosOfOperation(Op) + 1
     InsertBefore = Block.getChild(InsertionPoint)
-    LowIndex = BVInsertOp.getLowIndex()
-    HighIndex = BVInsertOp.getHighIndex()
-    if isinstance(LowIndex, RoseOperation):
-      LowIndex = CloneAndInsertOperation(LowIndex, InsertBefore, Context)
-    if isinstance(HighIndex, RoseOperation):
-      HighIndex = CloneAndInsertOperation(HighIndex, InsertBefore, Context)
+    if isinstance(InsertOpLowIndex, RoseOperation):
+      LowIndex = CloneAndInsertOperation(InsertOpLowIndex, InsertBefore, Context)
+    else:
+      LowIndex = InsertOpLowIndex
+    if isinstance(InsertOpHighIndex, RoseOperation):
+      HighIndex = CloneAndInsertOperation(InsertOpHighIndex, InsertBefore, Context)
+    else:
+      HighIndex = InsertOpHighIndex
     print("LowIndex:")
     LowIndex.print()
     print("HighIndex:")
     HighIndex.print()
-    BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
-                                      LowIndex.getType())
     ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
                                           BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
@@ -1110,10 +1153,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
         ErasedOps.append(Op)
     return ErasedOps
     
-  # Erase the bvinsert op but get some info on it first
-  LowIndex = BVInsertOp.getLowIndex()
-  HighIndex = BVInsertOp.getHighIndex()
-  BitVector = BVInsertOp.getInputBitVector()
+  # Erase the bvinsert op
   EraseIndexingBVOp(BVInsertOp)
   # Remove the temp values
   print(OpsWithTempVals)
@@ -1125,12 +1165,9 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # Erase some other extraneous ops
   for Op in OpsWithExternalOperands:
       Block.eraseOperation(Op)
-
-  # Put the ExternalOperand ops in the beginning of the loop
-  # and then erase them.
-  FirstOp = Block.getChild(0)
-  for Op in ExternalOperand:
-    NewOp = CloneAndInsertOperation(Op, FirstOp, Context)
+  
+  # Now erase the externaloperands
+  for Op in ExternalOperands:
     EraseIndexingBVOp(Op)
 
   return True
@@ -1157,7 +1194,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
-
 
 
 
