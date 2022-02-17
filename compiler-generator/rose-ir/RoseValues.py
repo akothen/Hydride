@@ -258,7 +258,9 @@ class RoseOperation(RoseValue):
   def getUsers(self):
     Block = self.getParent()
     assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
-    return Block.getUsersOf(self)
+    Function =  Block.getFunction()
+    assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
+    return Function.getUsersOf(self)
   
   # This is an overloaded function
   def replaceUsesWith(self, *args):
@@ -335,6 +337,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 
