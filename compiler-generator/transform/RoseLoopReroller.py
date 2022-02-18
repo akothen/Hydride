@@ -98,17 +98,6 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
     if PacksList == []:
       PacksList = [Pack]
       continue
-    # Now check if the window should be added to the current window list.
-    # If the window lenghts different, they cannot be part of a set.
-    if len(PacksList[0]) != len(Pack):
-      # This is the end of the window list.
-      # If we didn't capture multiple windows, we must discard the list
-      if len(PacksList) != 1:
-        # Add the window list to the candidate list
-        RerollableCandidatesList.append(PacksList)
-      # Empty the list and continue
-      PacksList = [Pack]
-      continue
     # Now lets see if the window should be added to the window list
     CheckPack = PacksList[len(PacksList) - 1]
     # The DFGs for the packs have to be the same
@@ -170,17 +159,148 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
+def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
+  # We need to see if we can make these two packs isomorphic.
+  # First step is to see where the DFG isomorphism is violated
+  # and correct it if it has to do with one special case --
+  # missing add indexing op (addition to zero).
+
+  def GatherIndexingOps(Pack : list):
+    BVtoIndexingOpsMap = dict()
+    IndexingToBVOpsMap = set()
+    for Op in reversed(Pack):
+      if isinstance(Op, RoseBVExtractSliceOp) \
+      or isinstance(Op, RoseBVInsertSliceOp):
+       IndexingOps = list()
+      if isinstance(Op.getLowIndex(), RoseOperation):
+        IndexingOps.append(Op.getLowIndex())
+      if isinstance(Op.getHighIndex(), RoseOperation):
+        IndexingOps.append(Op.getHighIndex())
+      BVtoIndexingOpsMap[Op] = []
+      while len(IndexingOps) != 0:
+        IndexingOp = IndexingOps.pop()
+        BVtoIndexingOpsMap[Op].append(IndexingOp)
+        IndexingToBVOpsMap[IndexingOp] = Op
+        # We can erase Op, but first get the operands
+        for Operand in IndexingOp.getOperands():
+          if isinstance(Operand, RoseOperation):
+            IndexingOps.append(Operand)
+    return BVtoIndexingOpsMap, IndexingToBVOpsMap
+
+  def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
+              OpsList1 : list, OpsList2 : list):
+    # See if adding on Add op before Op2 would do.
+    if not isinstance(Op1, RoseAddOp):
+      return False
+    if len(Op1.getOperands()) != 2:
+      return False
+    if not isinstance(Op1.getOperand(0), RoseConstant) \
+    and not isinstance(Op1.getOperand(1), RoseConstant):
+      return False
+    Zero = RoseConstant(0, Op2.getType())
+    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
+    # Add Op2 back
+    OpsList2.append(Op2)
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(NewOp2.getOperands())
+    return True
+
+  # Gather all the indexing ops
+  BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherIndexingOps(Pack1)
+  BVtoIndexingOpsMap2, IndexingToBVOpsMap2 = GatherIndexingOps(Pack2)
+
+  # Reverse iterate the packs
+  OpsList1 =[Pack1[len(Pack1) - 1]]
+  OpsList2 =[Pack2[len(Pack2) - 1]]
+  Visited = set()
+
+  while len(OpsList1) != 0:
+    #print("OpsList1:")
+    #print(OpsList1)
+    #print("OpsList2:")
+    #print(OpsList2)
+    assert len(OpsList1) == len(OpsList2)
+    Op1 = OpsList1.pop()
+    Op2 = OpsList2.pop()
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    if not isinstance(Op1, RoseOperation):
+      if isinstance(Op2, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    if not isinstance(Op2, RoseOperation):
+      if isinstance(Op1, RoseOperation):
+        return False
+      if Op1 != Op2:
+        return False
+      continue
+    #print("OP1:")
+    #Op1.print()
+    #print("OP2:")
+    #Op2.print()
+    # If the operations have different opcodes or types, skip
+    if Op1.getOpcode() != Op2.getOpcode():
+      # Check if one of the ops is an indexing op
+      if Op1 in IndexingToBVOpsMap1 and Op2 not in IndexingToBVOpsMap2:
+        if FixPack(Op1, Op2, OpsList1, OpsList2) == True:
+          continue
+        return False
+      elif  Op2 in IndexingToBVOpsMap2 and Op1 not in IndexingToBVOpsMap1:
+        if FixPack(Op2, Op1, OpsList2, OpsList1) == True:
+          continue
+        return False  
+      elif  Op1 not in IndexingToBVOpsMap1 and Op2 not in IndexingToBVOpsMap2:
+        return False
+      return False
+    if Op1.getType() != Op2.getType():
+      return False
+    # Deal with call operations
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      # Make sure that the callees for the operations are equal.
+      if Op1.getCallee().getName() != Op2.getCallee().getName():
+        return False
+      OpsList1.extend(Op1.getCallOperands())
+      OpsList2.extend(Op2.getCallOperands())
+      continue
+    # If this operation has not indexing operands, add None
+    if Op1.isIndexingBVOp() ==  True:
+      # Output bitwidths for bitvector ops must be equal
+      if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
+        return False
+      OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList2.extend(Op2.getBitVectorOperands())
+      continue
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(Op2.getOperands())
+  # We are done exploring the DFGs
+  return True  
+
+
+
 # This is necessary to ensure that 2 packs are rerollable.
 def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
   #print("DATAFLOW PATTERNS ARE SAME")
   if len(Pack1) != len(Pack2):
     return False
-  #print("PACK1:")
-  #for Op in Pack1:
-  #  Op.print()
-  #print("PACK2:")
-  #for Op in Pack2:
-  #  Op.print()
+  print("PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("PACK2:")
+  for Op in Pack2:
+    Op.print()
   # Reverse iterate the packs
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
@@ -248,7 +368,7 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
   return True
 
 
-def FuseCandidatePacks(RerollableCandidatePacks : list):  
+def FuseCandidatePacks2(RerollableCandidatePacks : list):  
   print("BEFORE FUSING:")
   for Pack in RerollableCandidatePacks:
     print("+++UNFUSED PACK:")
@@ -309,10 +429,72 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
   return NewCandidatePacks
 
 
+def FuseCandidatePacks(RerollableCandidatePacks : list):  
+  print("BEFORE FUSING:")
+  for Pack in RerollableCandidatePacks:
+    print("+++UNFUSED PACK:")
+    for Op in Pack:
+      Op.print()
+  
+  NewCandidatePacks = []
+  NewPack = []
+  AllowPackExtension = None  # We do not know yet
+  for Pack in RerollableCandidatePacks:
+    LastOp = Pack[len(Pack) - 1]
+    assert isinstance(LastOp, RoseBVInsertSliceOp)
+    if NewPack == []:
+      NewPack = Pack
+      continue
+    # This op can be a candidate for being added to the window
+    MergePacks = True
+    for Op in Pack:
+      for NewPackOp in NewPack:
+        # Check if the bitvector opcode and bitvector operands match
+        if Op.getOpcode() == NewPackOp.getOpcode():
+          if isinstance(Op, RoseBitVectorOp):
+            if Op.getBitVectorOperands() == NewPackOp.getBitVectorOperands():
+              MergePacks = False
+              break
+          elif isinstance(Op, RoseCallOp):
+            if Op.getCallee().getName() == NewPackOp.getCallee().getName():
+              MergePacks = False
+              break
+          else:
+            MergePacks = False
+    if MergePacks == True:
+      if AllowPackExtension != False:
+        NewPack.extend(Pack)
+        AllowPackExtension = True
+      else:
+        # Since packs are not allowed to extend,
+        # create a new pack.
+        NewCandidatePacks.append(NewPack)
+        NewPack = Pack
+    else:
+      # Add the new pack to the list of new candidate packs
+      if AllowPackExtension == None:
+        print("FUSION OF PACKS NOT ALLOWD!!")
+        AllowPackExtension = False
+      NewCandidatePacks.append(NewPack)
+      NewPack = Pack
+  
+  if NewPack != []:
+    NewCandidatePacks.append(NewPack)
+  # We expect to see multiple new candidate packs
+  if len(NewCandidatePacks) == 1:
+    NewCandidatePacks = []
+  
+  print("AFTER FUSING:")
+  for Pack in NewCandidatePacks:
+    print("+++FUSED PACK:")
+    for Op in Pack:
+      Op.print()
+  return NewCandidatePacks
+
+
 def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict):
   print("RUN REROLLER ON BLOCK")
   print("BLOCK:")
-  print(Block)
   Block.print()
   # Collect groups instructions that are rerollable.
   # This only works on bitvector operations.
@@ -327,13 +509,13 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
     # Once we hit an instruction that cannot reroll, 
     # we quit if we have found some candidates already.
     # If not, we keep looking.
-    if not isinstance(Operation, RoseBitVectorOp) \
-    and not isinstance(Operation, RoseCallOp):
-      Pack = []
-      if len(RerollableCandidatePacks) == 0:
-        continue
-      else:
-        break
+    #if not isinstance(Operation, RoseBitVectorOp) \
+    #and not isinstance(Operation, RoseCallOp):
+    #  Pack = []
+    #  if len(RerollableCandidatePacks) == 0:
+    #    continue
+    #  else:
+    #    break
     # Add the op to the window
     Pack.append(Operation)
     # The window ends with a bvinsert op. If we hit one,
@@ -376,8 +558,7 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context :
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap, Context)
       continue
-    if FixReductionPatternToMakeBlockRerollable(Abstraction, Context) == False:
-      continue
+    FixReductionPatternToMakeBlockRerollable(Abstraction, Context)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
   return BlockToRerollableCandidatesMap
@@ -1156,10 +1337,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # Erase the bvinsert op
   EraseIndexingBVOp(BVInsertOp)
   # Remove the temp values
-  print(OpsWithTempVals)
-  print("###############################")
   for Op in OpsWithTempVals:
-    Op.print()
     Block.eraseOperation(Op)
   
   # Erase some other extraneous ops
