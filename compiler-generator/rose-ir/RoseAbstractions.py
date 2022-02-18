@@ -327,6 +327,15 @@ class RoseBlock(RoseRegion):
     Index = self.getPosOfOperation(InsertBefore)
     self.addRegionBefore(Index, Operation)
   
+  def addOperationAfter(self, Operation : RoseOperation, InsertAfter : RoseOperation):
+    Index = self.getPosOfOperation(InsertAfter)
+    # See if we are inserting at the end of the block
+    if Index == self.getNumChildren() - 1:
+      self.addRegion(Operation)
+    else:
+      InsertBefore = self.getChild(Index + 1)
+      self.addOperationBefore(Operation, InsertBefore)
+  
   # Replaces the uses of an operation 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
     print("REPLACE USES IN BLOCK")
@@ -340,11 +349,11 @@ class RoseBlock(RoseRegion):
     assert Abstraction.getType() == NewAbstraction.getType()
     for Child in self.getChildren():
       assert self.isChildValid(Child)
-      print("INSTRUCTION BEFORE:")
-      Child.print()
+      #print("INSTRUCTION BEFORE:")
+      #Child.print()
       Child.replaceUsesWith(Abstraction, NewAbstraction)
-      print("INSTRUCTION AFTER:")
-      Child.print()
+      #print("INSTRUCTION AFTER:")
+      #Child.print()
 
   # Sees if the given operation or function or argument has any uses
   def hasUsesOf(self, Abstraction):
@@ -797,5 +806,4 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
