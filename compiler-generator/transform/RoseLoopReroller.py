@@ -203,7 +203,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
 
   # Op1 is an add ops and op2 is not.
   def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
-              OpsList1 : list, OpsList2 : list):
+              Pack : list, OpsList1 : list, OpsList2 : list):
     print("FIXING PACK")
     # See if adding on Add op before Op2 would do.
     if not isinstance(Op1, RoseAddOp):
@@ -218,14 +218,23 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
     NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
     print("NEW ADD OP:")
     NewOp2.print()
+    # Replace the uses of Op2 with NewOp2
+    Op2.replaceUsesWith(NewOp2)
     # Add the new op to the block
     Block = Op2.getParent()
     assert isinstance(Block, RoseBlock)
-    # Replace the uses of Op2 with NewOp2
-    Op2.replaceUsesWith(NewOp2)
+    Block.addOperationAfter(NewOp2, Op2)
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(NewOp2.getOperands())
+    # Extend the pack
+    Index = Pack.index(Op2)
+    Pack.insert(Index + 1, NewOp2)
+    print("NEW BLOCK:")
+    Block.print()
+    print("---AFTER PACK:")
+    for Op in Pack:
+      Op.print()
     return True
 
   # First get number of different number of bv ops
@@ -253,16 +262,14 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
     assert len(OpsList1) == len(OpsList2)
     Op1 = OpsList1.pop()
     Op2 = OpsList2.pop()
-    if Op1 in Visited:
-      if not Op2 in Visited:
-         return False
+    print("----OP1:")
+    Op1.print()
+    print("----OP2:")
+    Op2.print()
+    # Skip constants
+    if isinstance(Op1, RoseConstant) \
+    and isinstance(Op2, RoseConstant):
       continue
-    if Op2 in Visited:
-      if not Op1 in Visited:
-         return False
-      continue
-    Visited.add(Op1)
-    Visited.add(Op2)
     if not isinstance(Op1, RoseOperation):
       if isinstance(Op2, RoseOperation):
         return False
@@ -275,6 +282,16 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
       if Op1 != Op2:
         return False
       continue
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
     print("--OP1:")
     Op1.print()
     print("--OP2:")
@@ -289,7 +306,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op2, Op1, OpsList2, OpsList1) == True:
+        if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1) == True:
+          # Remove Op1 from Visited list
+          Visited.remove(Op1)
           continue
       elif  Op2 in IndexingToBVOpsMap2:
         print("Op2 in IndexingToBVOpsMap2")
@@ -297,7 +316,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op1, Op2, OpsList1, OpsList2) == True:
+        if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2) == True:
+          # Remove Op2 from Visited list
+          Visited.remove(Op2)
           continue
       return False
     if Op1.getType() != Op2.getType():
@@ -328,8 +349,13 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(Op2.getOperands())
   # We are done exploring the DFGs
+  print("AFTER PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("AFTER PACK2:")
+  for Op in Pack2:
+    Op.print()
   return True  
-
 
 
 # This is necessary to ensure that 2 packs are rerollable.
