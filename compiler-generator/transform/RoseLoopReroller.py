@@ -46,6 +46,28 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
         return None
       OffsetsList[Index] =  None
       continue
+
+    if not isinstance(Pack1[Index], RoseBitVectorOp):
+      if len(Pack1[Index].getOperands()) != len(Pack1[Index].getOperands()):
+        return None
+      NewOffsetsList = []
+      for OperandIndex, Operand1 in enumerate(Pack1[Index].getOperands()):
+        Operand2 = Pack2[Index].getOperand(OperandIndex)
+        if isinstance(Operand1, RoseConstant):
+          if not isinstance(Operand2, RoseConstant):
+            return None
+          NewOffsetsList.append(Operand2.getValue() - Operand1.getValue())
+        else:
+          if isinstance(Operand2, RoseConstant):
+            return None
+      # Check if the given offsets match the newly computed offsets
+      if OffsetsList[Index] == []:
+        OffsetsList[Index] = NewOffsetsList
+        continue
+      if OffsetsList[Index] != NewOffsetsList:
+        return None
+      continue
+
     # If this operation has not indexing operands, add None
     if Pack1[Index].isIndexingBVOp() == False:
       OffsetsList[Index] =  None
@@ -55,12 +77,6 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
     #print(Pack1[Index].getBitVectorOperands())
     #print(Pack2[Index].getBitVectorOperands())
     if Pack1[Index].getInputBitVector() != Pack2[Index].getInputBitVector():
-      #print("^^^^^^^^^^")
-      #print("PACK1:")
-      #Pack1[Index].print()
-      #print("PACK2:")
-      #Pack2[Index].print()
-      #print("HERE")
       return None
     # Output bitwidths for bitvector ops must be equal
     if Pack1[Index].getOutputBitwidth() != Pack2[Index].getOutputBitwidth():
@@ -70,14 +86,23 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
     LowIndex2 = Pack2[Index].getLowIndex()
     HighIndex1 = Pack1[Index].getHighIndex()
     HighIndex2 = Pack2[Index].getHighIndex()
-    if not isinstance(LowIndex1, RoseConstant) \
-    or not isinstance(LowIndex2, RoseConstant) \
-    or not isinstance(HighIndex1, RoseConstant) \
-    or not isinstance(HighIndex2, RoseConstant):
-      return None
+
     NewOffsetsList = []
-    NewOffsetsList.append(LowIndex2.getValue() - LowIndex1.getValue())
-    NewOffsetsList.append(HighIndex2.getValue() - HighIndex1.getValue())
+    if isinstance(LowIndex1, RoseConstant):
+      if not isinstance(LowIndex2, RoseConstant):
+        return None
+      NewOffsetsList.append(LowIndex2.getValue() - LowIndex1.getValue())
+    else:
+      if isinstance(LowIndex2, RoseConstant):
+        return None
+    if isinstance(HighIndex1, RoseConstant):
+      if not isinstance(HighIndex2, RoseConstant):
+        return None
+      NewOffsetsList.append(HighIndex2.getValue() - HighIndex1.getValue())
+    else:
+      if isinstance(HighIndex2, RoseConstant):
+        return None
+        
     # Check if the given offsets match the newly computed offsets
     if OffsetsList[Index] == []:
       OffsetsList[Index] = NewOffsetsList
