@@ -159,36 +159,52 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
-def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
+def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
+  print("FixDFGIsomorphism")
   # We need to see if we can make these two packs isomorphic.
   # First step is to see where the DFG isomorphism is violated
   # and correct it if it has to do with one special case --
   # missing add indexing op (addition to zero).
 
+  def GetNumBVOps(Pack : list):
+    NumExtractIOps = 0
+    NumInsertOps = 0
+    NumOtherBVOps = 0
+    for Op in Pack:
+      if isinstance(Op, RoseBVExtractSliceOp):
+        NumExtractIOps += 1
+      elif isinstance(Op, RoseBVInsertSliceOp):
+        NumInsertOps += 1
+      elif isinstance(Op, RoseBitVectorOp):
+        NumOtherBVOps += 1
+    return NumExtractIOps, NumInsertOps, NumOtherBVOps
+
   def GatherIndexingOps(Pack : list):
     BVtoIndexingOpsMap = dict()
-    IndexingToBVOpsMap = set()
+    IndexingToBVOpsMap = dict()
     for Op in reversed(Pack):
       if isinstance(Op, RoseBVExtractSliceOp) \
       or isinstance(Op, RoseBVInsertSliceOp):
-       IndexingOps = list()
-      if isinstance(Op.getLowIndex(), RoseOperation):
-        IndexingOps.append(Op.getLowIndex())
-      if isinstance(Op.getHighIndex(), RoseOperation):
-        IndexingOps.append(Op.getHighIndex())
-      BVtoIndexingOpsMap[Op] = []
-      while len(IndexingOps) != 0:
-        IndexingOp = IndexingOps.pop()
-        BVtoIndexingOpsMap[Op].append(IndexingOp)
-        IndexingToBVOpsMap[IndexingOp] = Op
-        # We can erase Op, but first get the operands
-        for Operand in IndexingOp.getOperands():
-          if isinstance(Operand, RoseOperation):
-            IndexingOps.append(Operand)
+        IndexingOps = list()
+        if isinstance(Op.getLowIndex(), RoseOperation):
+          IndexingOps.append(Op.getLowIndex())
+        if isinstance(Op.getHighIndex(), RoseOperation):
+          IndexingOps.append(Op.getHighIndex())
+        BVtoIndexingOpsMap[Op] = []
+        while len(IndexingOps) != 0:
+          IndexingOp = IndexingOps.pop()
+          BVtoIndexingOpsMap[Op].append(IndexingOp)
+          IndexingToBVOpsMap[IndexingOp] = Op
+          # We can erase Op, but first get the operands
+          for Operand in IndexingOp.getOperands():
+            if isinstance(Operand, RoseOperation):
+              IndexingOps.append(Operand)
     return BVtoIndexingOpsMap, IndexingToBVOpsMap
 
+  # Op1 is an add ops and op2 is not.
   def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
               OpsList1 : list, OpsList2 : list):
+    print("FIXING PACK")
     # See if adding on Add op before Op2 would do.
     if not isinstance(Op1, RoseAddOp):
       return False
@@ -197,14 +213,28 @@ def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
     if not isinstance(Op1.getOperand(0), RoseConstant) \
     and not isinstance(Op1.getOperand(1), RoseConstant):
       return False
+    # Generate a new add op
     Zero = RoseConstant(0, Op2.getType())
     NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
-    # Add Op2 back
-    OpsList2.append(Op2)
+    print("NEW ADD OP:")
+    NewOp2.print()
+    # Add the new op to the block
+    Block = Op2.getParent()
+    assert isinstance(Block, RoseBlock)
+    # Replace the uses of Op2 with NewOp2
+    Op2.replaceUsesWith(NewOp2)
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(NewOp2.getOperands())
     return True
+
+  # First get number of different number of bv ops
+  NumExtractIOps1, NumInsertOps1, NumOtherBVOps1 = GetNumBVOps(Pack1)
+  NumExtractIOps2, NumInsertOps2, NumOtherBVOps2 = GetNumBVOps(Pack2)
+  if NumExtractIOps1 != NumExtractIOps2 \
+  or NumInsertOps1 != NumInsertOps2 \
+  or NumOtherBVOps1 != NumOtherBVOps2:
+    return False
 
   # Gather all the indexing ops
   BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherIndexingOps(Pack1)
@@ -245,23 +275,30 @@ def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
       if Op1 != Op2:
         return False
       continue
-    #print("OP1:")
-    #Op1.print()
-    #print("OP2:")
-    #Op2.print()
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
     # If the operations have different opcodes or types, skip
     if Op1.getOpcode() != Op2.getOpcode():
+      print("OPCODES ARE NOT THE SAME")
       # Check if one of the ops is an indexing op
-      if Op1 in IndexingToBVOpsMap1 and Op2 not in IndexingToBVOpsMap2:
-        if FixPack(Op1, Op2, OpsList1, OpsList2) == True:
-          continue
-        return False
-      elif  Op2 in IndexingToBVOpsMap2 and Op1 not in IndexingToBVOpsMap1:
+      if Op1 in IndexingToBVOpsMap1:
+        print("Op1 in IndexingToBVOpsMap1")
+        print("OP1:")
+        Op1.print()
+        print("OP2:")
+        Op2.print()
         if FixPack(Op2, Op1, OpsList2, OpsList1) == True:
           continue
-        return False  
-      elif  Op1 not in IndexingToBVOpsMap1 and Op2 not in IndexingToBVOpsMap2:
-        return False
+      elif  Op2 in IndexingToBVOpsMap2:
+        print("Op2 in IndexingToBVOpsMap2")
+        print("OP1:")
+        Op1.print()
+        print("OP2:")
+        Op2.print()
+        if FixPack(Op1, Op2, OpsList1, OpsList2) == True:
+          continue
       return False
     if Op1.getType() != Op2.getType():
       return False
@@ -275,12 +312,17 @@ def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
       OpsList2.extend(Op2.getCallOperands())
       continue
     # If this operation has not indexing operands, add None
-    if Op1.isIndexingBVOp() ==  True:
+    if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
+    and Op1.isIndexingBVOp() ==  True:
       # Output bitwidths for bitvector ops must be equal
       if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
         return False
       OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList1.append(Op1.getLowIndex())
+      OpsList1.append(Op1.getHighIndex())
       OpsList2.extend(Op2.getBitVectorOperands())
+      OpsList2.append(Op2.getLowIndex())
+      OpsList2.append(Op2.getHighIndex())
       continue
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
@@ -292,15 +334,15 @@ def CanFixDFGIsomorphism(Pack1 : list, Pack2 : list):
 
 # This is necessary to ensure that 2 packs are rerollable.
 def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
-  #print("DATAFLOW PATTERNS ARE SAME")
-  if len(Pack1) != len(Pack2):
-    return False
   print("PACK1:")
   for Op in Pack1:
     Op.print()
   print("PACK2:")
   for Op in Pack2:
     Op.print()
+  #print("DATAFLOW PATTERNS ARE SAME")
+  if len(Pack1) != len(Pack2): 
+    return FixDFGIsomorphism(Pack1, Pack2)
   # Reverse iterate the packs
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
