@@ -159,7 +159,7 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
-def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
+def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   print("FixDFGIsomorphism")
   # We need to see if we can make these two packs isomorphic.
   # First step is to see where the DFG isomorphism is violated
@@ -203,7 +203,8 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
 
   # Op1 is an add ops and op2 is not.
   def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
-              Pack : list, OpsList1 : list, OpsList2 : list):
+              Pack : list, OpsList1 : list, OpsList2 : list, \
+              Visited : list):
     print("FIXING PACK")
     # See if adding on Add op before Op2 would do.
     if not isinstance(Op1, RoseAddOp):
@@ -230,6 +231,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
     # Extend the pack
     Index = Pack.index(Op2)
     Pack.insert(Index + 1, NewOp2)
+    # Fix the visited ops list
+    Visited.remove(Op2)
+    Visited.add(NewOp2)
     print("NEW BLOCK:")
     Block.print()
     print("---AFTER PACK:")
@@ -253,7 +257,6 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
-
   while len(OpsList1) != 0:
     #print("OpsList1:")
     #print(OpsList1)
@@ -306,9 +309,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1) == True:
-          # Remove Op1 from Visited list
-          Visited.remove(Op1)
+        if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1, Visited) == True:
           continue
       elif  Op2 in IndexingToBVOpsMap2:
         print("Op2 in IndexingToBVOpsMap2")
@@ -316,9 +317,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):#, Block : RoseBlock):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2) == True:
-          # Remove Op2 from Visited list
-          Visited.remove(Op2)
+        if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2, Visited) == True:
           continue
       return False
     if Op1.getType() != Op2.getType():
@@ -381,16 +380,14 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
     assert len(OpsList1) == len(OpsList2)
     Op1 = OpsList1.pop()
     Op2 = OpsList2.pop()
-    if Op1 in Visited:
-      if not Op2 in Visited:
-         return False
+    print("----OP1:")
+    Op1.print()
+    print("----OP2:")
+    Op2.print()
+    # Skip constants
+    if isinstance(Op1, RoseConstant) \
+    and isinstance(Op2, RoseConstant):
       continue
-    if Op2 in Visited:
-      if not Op1 in Visited:
-         return False
-      continue
-    Visited.add(Op1)
-    Visited.add(Op2)
     if not isinstance(Op1, RoseOperation):
       if isinstance(Op2, RoseOperation):
         return False
@@ -403,10 +400,20 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
       if Op1 != Op2:
         return False
       continue
-    #print("OP1:")
-    #Op1.print()
-    #print("OP2:")
-    #Op2.print()
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
     # If the operations have different opcodes or types, skip
     if Op1.getOpcode() != Op2.getOpcode():
       return False
@@ -422,17 +429,28 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
       OpsList2.extend(Op2.getCallOperands())
       continue
     # If this operation has not indexing operands, add None
-    if Op1.isIndexingBVOp() ==  True:
+    if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
+    and Op1.isIndexingBVOp() ==  True:
       # Output bitwidths for bitvector ops must be equal
       if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
         return False
       OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList1.append(Op1.getLowIndex())
+      OpsList1.append(Op1.getHighIndex())
       OpsList2.extend(Op2.getBitVectorOperands())
+      OpsList2.append(Op2.getLowIndex())
+      OpsList2.append(Op2.getHighIndex())
       continue
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(Op2.getOperands())
   # We are done exploring the DFGs
+  print("AFTER PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("AFTER PACK2:")
+  for Op in Pack2:
+    Op.print()
   return True
 
 
