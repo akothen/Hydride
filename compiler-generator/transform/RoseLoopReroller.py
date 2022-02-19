@@ -1003,8 +1003,8 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     # Get the non-constant index
     PackIndices, OperandIndices = AreStartingIndicesNonConstant(PackList[0], PackList[1])
     NonConstantIndexing = False
-    if PackIndices[0] == None:
-      assert OperandIndices[0] == None
+    if PackIndices == None:
+      assert OperandIndices == None
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
                 GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
@@ -1012,7 +1012,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
       Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
       End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     else:
-      assert OperandIndices[0] != None
+      assert OperandIndices != None
       NonConstantIndexing = True
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
@@ -1065,7 +1065,8 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         continue
       if NonConstantIndexing == False:
         # Handle ops that do not have indices in operands
-        if not isinstance(Op, RoseBitVectorOp):
+        if not isinstance(Op, RoseBitVectorOp) \
+          or (isinstance(Op, RoseBitVectorOp) and not Op.isIndexingBVOp()):
           NewOp = Op.clone()
           for Index, Operand in enumerate(Op.getOperands()):
             # If the operand is a constant value, we just copy constants over
@@ -1083,6 +1084,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
           continue
         # Handle bitvector operations (especially the indexing operations)
         LowCofactor = CoFactactorsList[OpIndex]
+        Op.print()
         assert LowCofactor != None
         if LowCofactor == 1:
           ScaledIterator = Iterator
