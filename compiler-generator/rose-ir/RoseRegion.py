@@ -16,6 +16,9 @@ class RoseRegion:
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
+      # Set the parents of the children
+      for Child in self.Children:
+        Child.setParent(self)
     # Tracks keys for this region
     self.Keys = Keys
     # This is a unique ID to identify this instance of rose region
@@ -206,7 +209,11 @@ class RoseRegion:
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Child)
     assert Child in self.Children
+    # Remove the child
     self.Children.remove(Child)
+    # Set the child's parent to undef region
+    Child.setParent(RoseAbstractions.RoseUndefRegion())
+
   
   def clone(self):
     return deepcopy(self)

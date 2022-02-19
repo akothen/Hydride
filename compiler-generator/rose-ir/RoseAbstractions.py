@@ -384,13 +384,14 @@ class RoseBlock(RoseRegion):
     # Get this position of this block in the parent region
     ParentRegion = self.getParent()
     BlockIndex = ParentRegion.getPosOfChild(self)
-    # Create the new block first
+    # Collect all the ops for the new block
     OpsForNewBlock = self.getOperations()[Index:]
-    NewBlock = self.create(OpsForNewBlock)
-    assert isinstance(NewBlock, RoseBlock)
     # Remove the ops after the split point from this Block
     for Op in OpsForNewBlock:
       self.eraseChild(Op)
+    # Create a new block and the new ops to it.
+    NewBlock = self.create(OpsForNewBlock)
+    assert isinstance(NewBlock, RoseBlock)
     # Add this new block to the parent region
     if BlockIndex == ParentRegion.getNumChildren() - 1:
       ParentRegion.addRegion(NewBlock)
@@ -806,4 +807,5 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 

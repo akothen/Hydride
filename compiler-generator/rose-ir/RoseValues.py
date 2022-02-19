@@ -240,7 +240,8 @@ class RoseOperation(RoseValue):
     self.Operands[Index] = Operand
   
   def setParent(self, Block):
-    assert isinstance(Block, RoseAbstractions.RoseBlock)
+    assert isinstance(Block, RoseAbstractions.RoseBlock) \
+        or isinstance(Block, RoseAbstractions.RoseUndefRegion)
     self.ParentBlock = Block
 
   # This is used to query if this operation uses
@@ -337,5 +338,6 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
+
 
 
