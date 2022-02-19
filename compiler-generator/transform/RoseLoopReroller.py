@@ -102,7 +102,7 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
     else:
       if isinstance(HighIndex2, RoseConstant):
         return None
-        
+
     # Check if the given offsets match the newly computed offsets
     if OffsetsList[Index] == []:
       OffsetsList[Index] = NewOffsetsList
@@ -192,17 +192,17 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   # missing add indexing op (addition to zero).
 
   def GetNumBVOps(Pack : list):
-    NumExtractIOps = 0
+    NumExtractOps = 0
     NumInsertOps = 0
     NumOtherBVOps = 0
     for Op in Pack:
       if isinstance(Op, RoseBVExtractSliceOp):
-        NumExtractIOps += 1
+        NumExtractOps += 1
       elif isinstance(Op, RoseBVInsertSliceOp):
         NumInsertOps += 1
       elif isinstance(Op, RoseBitVectorOp):
         NumOtherBVOps += 1
-    return NumExtractIOps, NumInsertOps, NumOtherBVOps
+    return NumExtractOps, NumInsertOps, NumOtherBVOps
 
   def GatherIndexingOps(Pack : list):
     BVtoIndexingOpsMap = dict()
@@ -267,9 +267,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
     return True
 
   # First get number of different number of bv ops
-  NumExtractIOps1, NumInsertOps1, NumOtherBVOps1 = GetNumBVOps(Pack1)
-  NumExtractIOps2, NumInsertOps2, NumOtherBVOps2 = GetNumBVOps(Pack2)
-  if NumExtractIOps1 != NumExtractIOps2 \
+  NumExtractOps1, NumInsertOps1, NumOtherBVOps1 = GetNumBVOps(Pack1)
+  NumExtractOps2, NumInsertOps2, NumOtherBVOps2 = GetNumBVOps(Pack2)
+  if NumExtractOps1 != NumExtractOps2 \
   or NumInsertOps1 != NumInsertOps2 \
   or NumOtherBVOps1 != NumOtherBVOps2:
     return False
@@ -674,11 +674,10 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context :
                                             BlockToRerollableCandidatesMap)
   return BlockToRerollableCandidatesMap
 
-
 # The assumption here is that the relationship between the 
 # indices is of the form: A * iterator + B. 
 # We need to find A and B for every indexed bitvector operation.
-def GetLowOffsetsWithinPack(Pack1 : list, Pack2 : list):
+def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
   # Get the low index for the first bvinsert op in the pack
   StartIndex1 = None
@@ -744,7 +743,127 @@ def GetLowOffsetsWithinPack(Pack1 : list, Pack2 : list):
   return LowOffsetsList, CoFactactorsList
 
 
-def GetFirstLowIndexInPack(Pack : list):
+def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+
+  def GatherLowIndexingOps(Pack : list):
+    BVtoIndexingOpsMap = dict()
+    IndexingToBVOpsMap = dict()
+    for Op in reversed(Pack):
+      if isinstance(Op, RoseBVExtractSliceOp) \
+      or isinstance(Op, RoseBVInsertSliceOp):
+        IndexingOps = list()
+        if isinstance(Op.getLowIndex(), RoseOperation):
+          IndexingOps.append(Op.getLowIndex())
+        BVtoIndexingOpsMap[Op] = []
+        while len(IndexingOps) != 0:
+          IndexingOp = IndexingOps.pop()
+          BVtoIndexingOpsMap[Op].append(IndexingOp)
+          IndexingToBVOpsMap[IndexingOp] = Op
+          # We can erase Op, but first get the operands
+          for Operand in IndexingOp.getOperands():
+            if isinstance(Operand, RoseOperation):
+              IndexingOps.append(Operand)
+    return BVtoIndexingOpsMap, IndexingToBVOpsMap
+
+  # Gather all the indexing ops
+  BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherLowIndexingOps(Pack1)
+  BVtoIndexingOpsMap2, IndexingToBVOpsMap2 = GatherLowIndexingOps(Pack2)
+
+  for Index in reversed(range(len(Pack1))):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    if isinstance(Op1, RoseBVInsertSliceOp):
+      assert isinstance(Op2, RoseBVInsertSliceOp)
+      if not isinstance(Op1.getLowIndex(), RoseConstant):
+        assert not isinstance(Op2.getLowIndex(), RoseConstant)
+      else:
+        assert isinstance(Op2.getLowIndex(), RoseConstant)
+        return None, None
+      continue
+    if isinstance(Op1, RoseBVExtractSliceOp):
+      assert isinstance(Op2, RoseBVExtractSliceOp)
+      if not isinstance(Op1.getLowIndex(), RoseConstant):
+        assert not isinstance(Op2.getLowIndex(), RoseConstant)
+      else:
+        assert isinstance(Op2.getLowIndex(), RoseConstant)
+        return None, None
+      continue
+    if Op1 in IndexingToBVOpsMap1:
+      assert Op2 in IndexingToBVOpsMap2
+      assert len(Op1.getOperands()) == len(Op2.getOperands())
+      for OperandIndex in range(len(Op1.getOperands())):
+        if isinstance(Op1.getOperand(OperandIndex), RoseConstant):
+          assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
+          if Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue():
+           return Index, OperandIndex
+  return None, None
+
+
+def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
+                                            PackIndex : int, OperandIndex : int):
+  assert type(PackIndex) == int
+  assert type(OperandIndex) == int
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+
+  StartIndex1 = None
+  StartIndex2 = None
+  Op1 = Pack1[PackIndex]
+  Op2 = Pack2[PackIndex]
+  assert isinstance(Op1.getOperand(OperandIndex), RoseConstant)
+  assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
+  assert Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue()
+  StartIndex1 = Op1.getOperand(OperandIndex).getValue()
+  StartIndex2 = Op2.getOperand(OperandIndex).getValue()
+  assert StartIndex1 != None
+  assert StartIndex2 != None
+  print("StartIndex1:")
+  print(StartIndex1)
+  print("StartIndex2:")
+  print(StartIndex2)
+
+  LowOffsetsList = list()
+  CoFactactorsList = list()
+  for Index in range(len(Pack1)):
+    Op1 = Pack1[Index]
+    Op2 = Pack2[Index]
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      LowOffsetsList.append(None)
+    elif isinstance(Op1, RoseBitVectorOp):
+      assert isinstance(Op2, RoseBitVectorOp)
+      LowOffsetsList.append(None)
+    else:
+      assert not isinstance(Op2, RoseBitVectorOp)
+      for OperandIndex in range(len(Op1.getOperands())):
+        if not isinstance(Op1.getOperand(OperandIndex), RoseConstant):
+          assert not isinstance(Op2.getOperand(OperandIndex), RoseConstant)
+          LowOffsetsList.append(None)
+        else:
+          assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
+          LowOffsetsList.append(Op2.getOperand(OperandIndex).getValue() \
+                              - Op1.getOperand(OperandIndex).getValue())
+    CoFactactorsList.append(None)
+
+  return LowOffsetsList, CoFactactorsList
+
+
+def GetFirstLowIndexInPackNonConstantIndices(Pack : list, \
+                                            PackIndex : int, OperandIndex : int):
+  print("GetFirstLowIndexInPackNonConstantIndices:")
+  assert type(PackIndex) == int
+  assert type(OperandIndex) == int
+  StartIndex = None
+  Op = Pack[PackIndex]
+  assert isinstance(Op.getOperand(OperandIndex), RoseConstant)
+  StartIndex = Op.getOperand(OperandIndex).getValue()
+  assert StartIndex != None
+  print("StartIndex1:")
+  print(StartIndex)
+  return StartIndex
+
+
+def GetFirstLowIndexInPackConstantIndices(Pack : list):
   print("GetFirstLowIndexInPack:")
   for Op in Pack:
     Op.print()
@@ -758,8 +877,29 @@ def GetFirstLowIndexInPack(Pack : list):
   return StartIndex
 
 
-def GetStepForRerolledLoop(Pack1 : list, Pack2 : list):
+def GetStepForRerolledLoopNonConstantIndices(Pack1 : list, Pack2 : list,  \
+                                             PackIndex : int, OperandIndex : int):
+  assert type(PackIndex) == int
+  assert type(OperandIndex) == int
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
+
+  # We just get the difference between 2 different packs
+  Offset = None
+  Op1 = Pack1[PackIndex]
+  Op2 = Pack2[PackIndex]
+  assert isinstance(Op1.getOperand(OperandIndex), RoseConstant)
+  assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
+  assert Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue()
+  Offset = Op2.getOperand(OperandIndex).getValue() - Op1.getOperand(OperandIndex).getValue()
+  assert Offset != None
+  print("Offset:")
+  print(Offset)
+  return Offset
+
+
+def GetStepForRerolledLoopConstantIndices(Pack1 : list, Pack2 : list):
+  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+
   # We just get the difference between 2 different packs
   Offset = None
   for Index in range(len(Pack1)):
@@ -849,13 +989,32 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
 
 def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
                          IteratorSuffix : int, RemovedOps : list):
+  print("PerformRerollingOnce:")
+  Block.print()
   # Reroll the candidares in the list
   for PackList in RerollableCandidatesList:
-    # Lets get the offsets across windows and other info for generating a loop
-    LowOffsetsList, CoFactactorsList = GetLowOffsetsWithinPack(PackList[0], PackList[1])
-    Step = GetStepForRerolledLoop(PackList[0], PackList[1])
-    Start = GetFirstLowIndexInPack(PackList[0])
-    End = GetFirstLowIndexInPack(PackList[len(PackList) - 1])
+    # Get the non-constant index
+    PackIndex, OperandIndex = AreStartingIndicesNonConstant(PackList[0], PackList[1])
+    if PackIndex == None:
+      assert OperandIndex == None
+      # Lets get the offsets across windows and other info for generating a loop
+      LowOffsetsList, CoFactactorsList = \
+                GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
+      Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
+      Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
+      End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
+    else:
+      assert OperandIndex != None
+      # Lets get the offsets across windows and other info for generating a loop
+      LowOffsetsList, CoFactactorsList = \
+                GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
+                                                          PackIndex, OperandIndex)
+      Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
+                                                      PackIndex, OperandIndex)
+      Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
+                                                       PackIndex, OperandIndex)
+      End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
+                                                    PackIndex, OperandIndex)
     print("START:")
     print(Start)
     print("END:")
@@ -1104,9 +1263,9 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
   FirstLoopPack = ListOfCandidatePackLists[0][0]
   SecondLoopPack = ListOfCandidatePackLists[1][0]
   LastLoopPack = ListOfCandidatePackLists[len(ListOfCandidatePackLists) - 1][0]
-  OutStart = GetFirstLowIndexInPack(FirstLoopPack)
-  OutEnd = GetFirstLowIndexInPack(LastLoopPack)
-  OutStep = GetStepForRerolledLoop(FirstLoopPack, SecondLoopPack)
+  OutStart = GetFirstLowIndexInPackConstantIndices(FirstLoopPack)
+  OutEnd = GetFirstLowIndexInPackConstantIndices(LastLoopPack)
+  OutStep = GetStepForRerolledLoopConstantIndices(FirstLoopPack, SecondLoopPack)
   # Account for how Rosette expects the loop bounds to be expressed.
   OutEnd += OutStep
   OuterLoop = RoseForLoop.create("iterator.lane", OutStart, OutEnd, OutStep)
@@ -1123,9 +1282,9 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
     print("CoFactactorsList2:")
     print(CoFactactorsList2)
     PackList = ListOfPackLists[0]
-    Step = GetStepForRerolledLoop(PackList[0], PackList[1])
-    Start = GetFirstLowIndexInPack(PackList[0])
-    End = GetFirstLowIndexInPack(PackList[len(PackList) - 1])
+    Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
+    Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
+    End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     print("START:")
     print(Start)
     print("END:")
@@ -1415,9 +1574,6 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
     Block.addOperationBefore(AddOp, InsertBefore)
     Block.addOperationBefore(InsertOp, InsertBefore)
 
-  print("FIXED BLOCK:")
-  Block.print()
-
   def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
     assert isinstance(BVOp, RoseBVExtractSliceOp) \
         or isinstance(BVOp, RoseBVInsertSliceOp)
@@ -1458,6 +1614,12 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # Now erase the externaloperands
   for Op in ExternalOperands:
     EraseIndexingBVOp(Op)
+
+  # Now let's split this block 
+  Block.splitAt(Block.getPosOfChild(FirstOp))
+
+  print("FIXED BLOCK:")
+  Block.print()
 
   return True
 
