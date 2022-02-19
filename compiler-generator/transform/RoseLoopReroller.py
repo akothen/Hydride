@@ -770,6 +770,8 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
   BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherLowIndexingOps(Pack1)
   BVtoIndexingOpsMap2, IndexingToBVOpsMap2 = GatherLowIndexingOps(Pack2)
 
+  Indices = list()
+  OperandIndices = list()
   for Index in reversed(range(len(Pack1))):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
@@ -796,8 +798,13 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
         if isinstance(Op1.getOperand(OperandIndex), RoseConstant):
           assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
           if Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue():
-           return Index, OperandIndex
-  return None, None
+            Indices.append(Index)
+            OperandIndices.append(OperandIndex)
+            break
+  if Indices == []:
+    assert OperandIndices == []
+    return None, None
+  return Indices, OperandIndices
 
 
 def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
@@ -994,9 +1001,10 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
   # Reroll the candidares in the list
   for PackList in RerollableCandidatesList:
     # Get the non-constant index
-    PackIndex, OperandIndex = AreStartingIndicesNonConstant(PackList[0], PackList[1])
-    if PackIndex == None:
-      assert OperandIndex == None
+    PackIndices, OperandIndices = AreStartingIndicesNonConstant(PackList[0], PackList[1])
+    NonConstantIndexing = False
+    if PackIndices[0] == None:
+      assert OperandIndices[0] == None
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
                 GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
@@ -1004,17 +1012,18 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
       Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
       End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     else:
-      assert OperandIndex != None
+      assert OperandIndices[0] != None
+      NonConstantIndexing = True
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
                 GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
-                                                          PackIndex, OperandIndex)
+                                                          PackIndices[0], OperandIndices[0])
       Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
-                                                      PackIndex, OperandIndex)
+                                                      PackIndices[0], OperandIndices[0])
       Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
-                                                       PackIndex, OperandIndex)
+                                                       PackIndices[0], OperandIndices[0])
       End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
-                                                    PackIndex, OperandIndex)
+                                                    PackIndices[0], OperandIndices[0])
     print("START:")
     print(Start)
     print("END:")
@@ -1023,6 +1032,10 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     print(Step)
     print("LowOffsetsList:")
     print(LowOffsetsList)
+    print("PackIndices:")
+    print(PackIndices)
+    print("OperandIndices:")
+    print(OperandIndices)
     # Because of the way ranges in Rosette work, we have to add step to end before
     # generating a loop
     End += Step
@@ -1034,7 +1047,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     # Insert operations in the generated loop.
     for OpIndex, Op in enumerate(PackList[0]):
       # Handle ops that do not have indices in operands
-      if isinstance(Op, RoseCallOp) or Op.isIndexingBVOp() == 0:
+      if isinstance(Op, RoseCallOp):
         NewOp = Op.clone()
         for Index, Operand in enumerate(Op.getOperands()):
           # If the operand is a constant value, we just copy constants over
@@ -1050,52 +1063,88 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         OldToNewOPsMap[Op] = NewOp
         Loop.addAbstraction(NewOp)
         continue
-      # Handle instructions with indices as operands
-      LowCofactor = CoFactactorsList[OpIndex]
-      assert LowCofactor != None
-      if LowCofactor == 1:
-        ScaledIterator = Iterator
-      elif LowCofactor == 0:
-        ScaledIterator = RoseConstant(0, Iterator.getType())
-      else:
-        if type(LowCofactor) != int:
-          LowCofactor = int(1 / LowCofactor)
-          LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-          ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+      if NonConstantIndexing == False:
+        # Handle ops that do not have indices in operands
+        if not isinstance(Op, RoseBitVectorOp):
+          NewOp = Op.clone()
+          for Index, Operand in enumerate(Op.getOperands()):
+            # If the operand is a constant value, we just copy constants over
+            if isinstance(Operand, RoseConstant):
+              NewOperand = Op.getOperand(Index)
+            else:
+              NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+              if NewOperand == RoseUndefValue():
+                # Operand is coming from some other source, just use 
+                # the same operand as the old op.
+                NewOperand = Op.getOperand(Index)
+            NewOp.setOperand(Index, NewOperand)
+          OldToNewOPsMap[Op] = NewOp
+          Loop.addAbstraction(NewOp)
+          continue
+        # Handle bitvector operations (especially the indexing operations)
+        LowCofactor = CoFactactorsList[OpIndex]
+        assert LowCofactor != None
+        if LowCofactor == 1:
+          ScaledIterator = Iterator
+        elif LowCofactor == 0:
+          ScaledIterator = RoseConstant(0, Iterator.getType())
         else:
-          LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-          ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
-        Loop.addAbstraction(ScaledIterator)
-      LowOffset = LowOffsetsList[OpIndex]
-      assert LowOffset != None
-      if LowOffset != 0:
-      # Generate an add instruction
-        LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
-        LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
-        Loop.addAbstraction(LowIndex)
+          if type(LowCofactor) != int:
+            LowCofactor = int(1 / LowCofactor)
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+          else:
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
+          Loop.addAbstraction(ScaledIterator)
+        LowOffset = LowOffsetsList[OpIndex]
+        assert LowOffset != None
+        if LowOffset != 0:
+        # Generate an add instruction
+          LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
+          LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
+          Loop.addAbstraction(LowIndex)
+        else:
+          LowIndex = ScaledIterator
+        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
+        HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
+        Loop.addAbstraction(HighIndex)
+        NewOp = Op.clone()
+        for Index, Operand in enumerate(Op.getOperands()):
+          if Index == Op.getLowIndexPos():
+            NewOp.setOperand(Index, LowIndex)
+            continue
+          if Index == Op.getHighIndexPos():
+            NewOp.setOperand(Index, HighIndex)
+            continue
+          if isinstance(Operand, RoseConstant):
+            # Just copy this constant over
+            NewOp.setOperand(Index, Operand)
+            continue
+          NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+          if NewOperand == RoseUndefValue():
+            # Operand is coming from some other source, just use 
+            # the same operand as the old op.
+            NewOperand = Op.getOperand(Index)
+          NewOp.setOperand(Index, NewOperand)
       else:
-        LowIndex = ScaledIterator
-      OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
-      HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
-      Loop.addAbstraction(HighIndex)
-      NewOp = Op.clone()
-      for Index, Operand in enumerate(Op.getOperands()):
-        if Index == Op.getLowIndexPos():
-          NewOp.setOperand(Index, LowIndex)
-          continue
-        if Index == Op.getHighIndexPos():
-          NewOp.setOperand(Index, HighIndex)
-          continue
-        if isinstance(Operand, RoseConstant):
-          # Just copy this constant over
-          NewOp.setOperand(Index, Operand)
-          continue
-        NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
-        if NewOperand == RoseUndefValue():
-          # Operand is coming from some other source, just use 
-          # the same operand as the old op.
-          NewOperand = Op.getOperand(Index)
-        NewOp.setOperand(Index, NewOperand)
+        # Deal with a bitvector and non-bitvector ops
+        NewOp = Op.clone()
+        for Index, Operand in enumerate(Op.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            if OpIndex in PackIndices and Index in OperandIndices:
+              # Replace this constant with the iterator
+              NewOp.setOperand(Index, Loop.getIterator())
+            else:
+              # Just copy this constant over
+              NewOp.setOperand(Index, Operand)
+            continue
+          NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+          if NewOperand == RoseUndefValue():
+            # Operand is coming from some other source, just use 
+            # the same operand as the old op.
+            NewOperand = Op.getOperand(Index)
+          NewOp.setOperand(Index, NewOperand)
       OldToNewOPsMap[Op] = NewOp
       Loop.addAbstraction(NewOp)
     # This is the full loop
