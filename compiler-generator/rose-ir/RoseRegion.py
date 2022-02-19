@@ -13,14 +13,21 @@ class RoseRegion:
     self.Parent = Parent
     if self.Parent is not None:
       assert self.isParentValid(Parent)
+    # Tracks keys for this region
+    self.Keys = Keys
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
-      # Set the parents of the children
-      for Child in self.Children:
-        Child.setParent(self)
-    # Tracks keys for this region
-    self.Keys = Keys
+      if type(self.Children) == list:
+        # Set the parents of the children
+        for Child in self.Children:
+          Child.setParent(self)
+      else:
+        assert self.Keys != None
+        for Key in self.Keys:
+          # Set the parents of the children
+          for Child in self.Children[Key]:
+            Child.setParent(self)
     # This is a unique ID to identify this instance of rose region
     # If this is an instance of undef region, then the ID used is 0.
     if not isinstance(self, RoseAbstractions.RoseUndefRegion):
@@ -328,6 +335,5 @@ class RoseRegion:
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
-
 
 
