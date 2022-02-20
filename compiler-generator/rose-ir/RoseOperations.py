@@ -134,8 +134,24 @@ class RoseSelectOp(RoseOperation):
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
-    assert "No direction convertion of Select Op to Rosette!"
-    NotImplemented
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
+    if self.getType().isBitVectorTy():
+      ThenString = "(bv " + self.getThenValue().getName() + " " \
+                  + str(self.getThenValue().getType().getBitwidth()) + ")"
+      ElseString = "(bv " + self.getElseValue().getName() + " " \
+                  + str(self.getElseValue().getType().getBitwidth()) + ")"
+    else:
+      ThenString = self.getThenValue().getName()
+      ElseString = self.getElseValue().getName()
+    String = Spaces + "(define " + Name + " (if " \
+      + ConditionString + " " + ThenString + " " + ElseString +  "))\n"
+    return String
+    #assert "No direction convertion of Select Op to Rosette!"
+    #NotImplemented
 
   def to_llvm_ir(self, IRBuilder):
     Condition = self.getCondition().to_llvm_ir(IRBuilder)
@@ -1111,5 +1127,4 @@ class RoseXorOp(RoseOperation):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
     return IRBuilder.xor(Operand1, Operand2, self.getName())
-
 
