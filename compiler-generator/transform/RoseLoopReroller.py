@@ -1551,6 +1551,9 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
       OpsWithExternalOperands.append(Op)
   if TempValues == [] or ExternalOperands == []:
     return False
+  # Limit the reduction pattern we analyze
+  if len(OpsWithTempVals) < 2:
+    return False
 
   # Insert bvinserts after TempValues
   InsertOpLowIndex = BVInsertOp.getLowIndex()
@@ -1569,14 +1572,16 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
     if isinstance(InsertOpLowIndex, RoseOperation):
       LowIndex = CloneAndInsertOperation(InsertOpLowIndex, FirstOp, Context)
     else:
+      print("NO NEW LOW OP")
       LowIndex = InsertOpLowIndex
     if isinstance(InsertOpHighIndex, RoseOperation):
       HighIndex = CloneAndInsertOperation(InsertOpHighIndex, FirstOp, Context)
     else:
+      print("NO NEW HIGH OP")
       HighIndex = InsertOpHighIndex
-    print("LowIndex:")
+    print("***LowIndex:")
     LowIndex.print()
-    print("HighIndex:")
+    print("***HighIndex:")
     HighIndex.print()
     if Index != 0:
       ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
@@ -1628,6 +1633,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
     assert isinstance(BVOp, RoseBVExtractSliceOp) \
         or isinstance(BVOp, RoseBVInsertSliceOp)
+    print("EraseIndexingBVOp")
     ParentBlock = BVOp.getParent()
     assert not isinstance(ParentBlock, RoseUndefRegion)
     ErasedOps = []
@@ -1639,10 +1645,18 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
       IndexingOps.append(BVOp.getHighIndex())
     # Erase the bvinsert op
     ParentBlock.eraseOperation(BVOp)
+    print("BV OP ERASED")
+    ParentBlock.print()
     ErasedOps.append(BVOp)
     while len(IndexingOps) != 0:
       Op = IndexingOps.pop()
+      print("--INDEXING OP:")
+      Op.print()
+      # If we have already erased this op, continue
+      if Op in ErasedOps:
+        continue
       if ParentBlock.hasUsesOf(Op) == False:
+        print("INDEXING OP HAS NO MORE USES")
         # We can erase Op, but first get the operands
         for Operand in Op.getOperands():
           if isinstance(Operand, RoseOperation):
@@ -1652,12 +1666,16 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
         ErasedOps.append(Op)
     return ErasedOps
     
+  print("---FIXED BLOCK:")
+  Block.print()
+
   # Erase the bvinsert op
+  print("ERASE INSERT OP")
   EraseIndexingBVOp(BVInsertOp)
   # Remove the temp values
   for Op in OpsWithTempVals:
     Block.eraseOperation(Op)
-  
+
   # Erase some other extraneous ops
   for Op in OpsWithExternalOperands:
       Block.eraseOperation(Op)
@@ -1666,7 +1684,12 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   for Op in ExternalOperands:
     EraseIndexingBVOp(Op)
 
+  print("++++++FIXED BLOCK:")
+  Block.print()
+
   # Now let's split this block 
+  print("FirstOp:")
+  FirstOp.print()
   Block.splitAt(Block.getPosOfChild(FirstOp))
 
   print("FIXED BLOCK:")
@@ -1696,6 +1719,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
+
 
 
 

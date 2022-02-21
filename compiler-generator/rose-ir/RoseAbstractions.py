@@ -393,13 +393,14 @@ class RoseBlock(RoseRegion):
   # Split this block at the given point
   def splitAt(self, Index):
     assert Index < len(self.getOperations())
+    print("SPLITTING BLOCK")
     # Get this position of this block in the parent region
     ParentRegion = self.getParent()
     BlockIndex = ParentRegion.getPosOfChild(self)
     # Collect all the ops for the new block
     OpsForNewBlock = self.getOperations()[Index:]
     # Remove the ops after the split point from this Block
-    for Op in OpsForNewBlock:
+    for Op in reversed(OpsForNewBlock):
       self.eraseChild(Op)
     # Create a new block and the new ops to it.
     NewBlock = self.create(OpsForNewBlock)
@@ -819,4 +820,5 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 
