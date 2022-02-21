@@ -335,6 +335,23 @@ class RoseRegion:
         continue
     return RegionList
 
+  def getParentOdType(self, ParentRegionType):
+    # Some sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not ParentRegionType == RoseAbstractions.RoseUndefRegion \
+       and not ParentRegionType == RoseAbstractions.RoseBlock
+    assert ParentRegionType == RoseAbstractions.RoseFunction \
+        or ParentRegionType == RoseAbstractions.RoseForLoop \
+        or ParentRegionType == RoseAbstractions.RoseCond
+    Parent = self.getParent()
+    if isinstance(Parent, RoseAbstractions.RoseUndefRegion):
+      return RoseAbstractions.RoseUndefRegion()
+    while not isinstance(Parent, ParentRegionType):
+      Parent = Parent.getParent()
+      if isinstance(Parent, RoseAbstractions.RoseUndefRegion):
+        return RoseAbstractions.RoseUndefRegion()
+    return Parent
+
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
