@@ -319,7 +319,10 @@ class RoseRegion:
         or SubRegionType == RoseAbstractions.RoseCond \
         or SubRegionType == RoseAbstractions.RoseBlock
     if isinstance(self, RoseAbstractions.RoseBlock):
-      return [self]
+      if SubRegionType == RoseAbstractions.RoseBlock:
+        return [self]
+      else:
+        return []
     RegionList = list()
     for SubRegion in self:
       if Level > 0:
