@@ -3,6 +3,7 @@ UnknownVal = list()
 for Op in reversed(Block):
   if Op.isSizeChangingOp():
     if Op in BVValToBitwidthVal:
+      Op.setSizeOperand(BVValToBitwidthVal[Op])
       if Op.getOperand() not in BVValToBitwidthVal:
         UnknownVal.append(Op.getOperand())
       continue
