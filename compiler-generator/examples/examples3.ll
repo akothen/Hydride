@@ -631,7 +631,23 @@ dst
 )
 
 
+(define-symbolic sym256_arg0 (bitvector 256))
+(define-symbolic sym256_arg1 (bitvector 256))
+(define-symbolic sym256_arg2 (bitvector 256))
 
+(define-symbolic sym512_arg0 (bitvector 512))
+(define-symbolic sym512_arg1 (bitvector 512))
+(define-symbolic sym512_arg2 (bitvector 512))
+
+(verify
+   (assert (equal? (_mm512_dpbusd_epi32 sym256_arg0 sym256_arg1 sym256_arg2 256 32 8 0) 
+                   (_mm256_dpbusd_epi32 sym256_arg0 sym256_arg1 sym256_arg2 256 32 8 0)))
+)
+
+(verify
+   (assert (equal? (_mm512_dpbusd_epi32 sym512_arg0 sym512_arg1 sym512_arg24 512 32 8 0) 
+                   (_mm256_dpbusd_epi32 sym512_arg0 sym512_arg1 sym512_arg2 512 32 8 0)))
+)
 
 
 
