@@ -136,6 +136,18 @@ class RoseFunction(RoseValue, RoseRegion):
     self.ArgsList[ArgIndex] = Arg
     self.replaceUsesWith(OldArg, Arg)
 
+  def appendArg(self, NewArg : RoseValue):
+    # Add the argument to this function and change the type of this function
+    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
+                              RoseUndefValue(), self.getNumArgs() )
+    self.ArgList.append(Arg)
+    ArgTyList = [Arg.getType() for Arg in self.ArgList]
+    FunctionType = RoseType.getFunctionTy(ArgTyList, self.RetVal.getType())
+    self.setType(FunctionType)
+    # Set the parent of this argument to be this function
+    self.ArgList[self.getNumArgs() - 1].setFunction(self)
+    return self.ArgList[self.getNumArgs() - 1]
+
   def isTopLevelFunction(self):
     return (self.getParent() == RoseUndefRegion())
   
@@ -790,8 +802,8 @@ class RoseCond(RoseRegion):
         Users.extend(Child.getUsersOf(Abstraction))
     else:
       Users = []
-      Users.extend(self.getUsersOf(self, Abstraction, "then"))
-      Users.extend(self.getUsersOf(self, Abstraction, "else"))
+      Users.extend(self.getUsersOf(Abstraction, "then"))
+      Users.extend(self.getUsersOf(Abstraction, "else"))
     return Users
 
   def print(self, NumSpace = 0):
@@ -807,5 +819,4 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
