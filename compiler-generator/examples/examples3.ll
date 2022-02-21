@@ -567,7 +567,7 @@ concat
  concat
  (for/list ([iterator.0.new (reverse (range %lane_offset %lane_size %precision))])
   (define %1 (+  j0new  iterator.0.new))
-  (define %last.idx.1) (- %precision 1)
+  (define %last.idx.1) (- %precision 1))
   (define %2 (+  %1  %last.idx.1))
   (define %3 (extract  %2 %1 a))
   (define %4 (zero-extend  %3 (bitvector %extend_size)))
@@ -575,7 +575,7 @@ concat
   (define %9 (sign-extend  %8 (bitvector %extend_size)))
   (define %10 (bvmul  %4  %9))
   (define %11 (sign-extend  %10 (bitvector %lane_size)))
-  (define %last.idx) (- %lane_size 1)
+  (define %last.idx) (- %lane_size 1))
   (define %62.clone.4 (+  j0.new  %last.idx))
   (define %11.ext0 (extract  %62.clone.4 j0.new dst))
   (define %11.acc0 (bvadd  %11.ext0  %11))
@@ -583,7 +583,44 @@ concat
  )
  )
  )
- (define %last.idx.2) (- %lane_size 1)
+ (define %last.idx.2) (- %lane_size 1))
+ (define %55.clone.0 (+  j0.new  %last.idx.2))
+ (define %56.clone.0 (extract  %55.clone.0 j0.new src))
+ (concat dst_tmp %56.clone.0)
+)
+)
+)
+dst
+)
+
+
+(define (_mm256_dpbusd_epi32  src a b %vector_length %lane_size %precision %lane_offset %extend_size)
+(define  dst
+(apply
+concat
+(for/list ([j0.new (reverse (range 0 %vector_length %lane_size))])
+ (define dst_tmp
+ (apply
+ concat
+ (for/list ([iterator.0.new (reverse (range %lane_offset %lane_size %precision))])
+  (define %1 (+  j0new  iterator.0.new))
+  (define %last.idx.1) (- %precision 1))
+  (define %2 (+  %1  %last.idx.1))
+  (define %3 (extract  %2 %1 a))
+  (define %4 (zero-extend  %3 (bitvector %extend_size)))
+  (define %8 (extract  %2 %1 b))
+  (define %9 (sign-extend  %8 (bitvector %extend_size)))
+  (define %10 (bvmul  %4  %9))
+  (define %11 (sign-extend  %10 (bitvector %lane_size)))
+  (define %last.idx) (- %lane_size 1))
+  (define %62.clone.4 (+  j0.new  %last.idx))
+  (define %11.ext0 (extract  %62.clone.4 j0.new dst))
+  (define %11.acc0 (bvadd  %11.ext0  %11))
+  %11.acc0
+ )
+ )
+ )
+ (define %last.idx.2) (- %lane_size 1))
  (define %55.clone.0 (+  j0.new  %last.idx.2))
  (define %56.clone.0 (extract  %55.clone.0 j0.new src))
  (concat dst_tmp %56.clone.0)
