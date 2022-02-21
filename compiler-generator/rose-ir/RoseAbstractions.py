@@ -72,22 +72,7 @@ class RoseFunction(RoseValue, RoseRegion):
           ArgsList.append(RoseArgument.create("", ArgTy, RoseUndefValue(), ArgIndex))
         return RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], RoseUndefRegion())
     assert(False)
-  
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren():
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseFunction) \
-    or isinstance(Child, RoseForLoop) \
-    or isinstance(Child, RoseCond) \
-    or isinstance(Child, RoseBlock):
-      return True
-    return False
-  
+    
   def __eq__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
     or isinstance(Other, RoseUndefValue) \
@@ -174,80 +159,6 @@ class RoseFunction(RoseValue, RoseRegion):
     assert ArgIndex < len(self.ArgsList)
     self.ArgsList[ArgIndex].setName(Name)
 
-  # An abstraction can be an operation or a region
-  def addAbstraction(self, Abstraction):
-    print("METHOD ADDING ABSTRACTION:")
-    print(Abstraction)
-    if isinstance(Abstraction, RoseRegion):
-      self.addRegion(Abstraction)
-      return
-    elif isinstance(Abstraction, RoseOperation):
-      # This is a little more difficult. First try to get RoseBlock
-      TailRegion = self.getTailChild()
-      if not isinstance(TailRegion, RoseBlock) \
-      or isinstance(TailRegion, RoseUndefRegion):
-        # Add a new block first
-        Block = RoseBlock.create([])
-        Block.addRegion(Abstraction)
-        self.addRegion(Block)
-      else:
-        TailRegion.addRegion(Abstraction)
-        self.updateTailChild(TailRegion)
-      return
-    assert False
-
-  # Replace the given abstraction with a new one
-  def replaceAbstraction(self, OldAbstraction, NewAbstraction):
-    assert type(OldAbstraction) == type(NewAbstraction)
-    assert self.isChildValid(NewAbstraction)
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      if type(OldAbstraction) == type(Child):
-        if Child == OldAbstraction:
-          Index = self.getChildren().index(OldAbstraction)
-          self.replaceRegion(NewAbstraction, Index)
-          return True
-      if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
-        return True
-    return False
-  
-  # Replaces the uses of an operation 
-  def replaceUsesWith(self, Abstraction, NewAbstraction):
-    print("REPLACES USES IN FUNCTION")
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant) \
-       and not isinstance(Abstraction, RoseFunction)
-    assert not isinstance(NewAbstraction, RoseUndefValue) \
-       and not isinstance(NewAbstraction, RoseFunction)
-    assert isinstance(Abstraction, RoseValue)
-    assert isinstance(NewAbstraction, RoseValue)
-    assert Abstraction.getType() == NewAbstraction.getType()
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      Child.replaceUsesWith(Abstraction, NewAbstraction)
-
-  # Sees if the given operation or function or argument has any uses
-  def hasUsesOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      if Child.hasUsesOf(Abstraction) == True:
-        return True
-    return False
-
-  # Get all users of the given value
-  def getUsersOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    Users = []
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      Users.extend(Child.getUsersOf(Abstraction))
-    return Users
-
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -298,30 +209,6 @@ class RoseBlock(RoseRegion):
   # Make rose blocks hashable
   def __hash__(self):
     return hash((tuple(self.getOperations()), self.getRegionID()))
-  
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren():
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseOperation):
-      return True
-    return False
-  
-  # Replace the given abstraction with a new one
-  def replaceAbstraction(self, OldAbstraction, NewAbstraction):
-    assert type(OldAbstraction) == type(NewAbstraction)
-    assert self.isChildValid(NewAbstraction)
-    for Child in self.getChildren():
-      if type(OldAbstraction) == type(Child):
-        if Child == OldAbstraction:
-          Index = self.getChildren().index(OldAbstraction)
-          self.replaceRegion(NewAbstraction, Index)
-          return True
-    return False
 
   def getOperations(self):
     return self.getChildren()
@@ -347,48 +234,6 @@ class RoseBlock(RoseRegion):
     else:
       InsertBefore = self.getChild(Index + 1)
       self.addOperationBefore(Operation, InsertBefore)
-  
-  # Replaces the uses of an operation 
-  def replaceUsesWith(self, Abstraction, NewAbstraction):
-    print("REPLACE USES IN BLOCK")
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant) \
-       and not isinstance(Abstraction, RoseFunction)
-    assert not isinstance(NewAbstraction, RoseUndefValue) \
-       and not isinstance(NewAbstraction, RoseFunction)
-    assert isinstance(Abstraction, RoseValue)
-    assert isinstance(NewAbstraction, RoseValue)
-    assert Abstraction.getType() == NewAbstraction.getType()
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      #print("INSTRUCTION BEFORE:")
-      #Child.print()
-      Child.replaceUsesWith(Abstraction, NewAbstraction)
-      #print("INSTRUCTION AFTER:")
-      #Child.print()
-
-  # Sees if the given operation or function or argument has any uses
-  def hasUsesOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      if Child.usesValue(Abstraction) == True:
-        return True
-    return False
-
-  # Get all users of the given value
-  def getUsersOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    Users = []
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      if Child.usesValue(Abstraction):
-        Users.append(Child)
-    return Users
   
   # Split this block at the given point
   def splitAt(self, Index):
@@ -502,21 +347,6 @@ class RoseForLoop(RoseRegion):
   def __hash__(self):
     return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
 
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren():
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseFunction) \
-    or isinstance(Child, RoseForLoop) \
-    or isinstance(Child, RoseCond) \
-    or isinstance(Child, RoseBlock):
-      return True
-    return False
-
   def getIterator(self):
     return self.Iterator
   
@@ -541,77 +371,6 @@ class RoseForLoop(RoseRegion):
 
   def setEndIndex(self, NewEnd : int):
     self.End = RoseConstant(NewEnd, self.End.getType())
-  
-  # An abstraction can be an operation and region
-  def addAbstraction(self, Abstraction):
-    if isinstance(Abstraction, RoseRegion):
-      self.addRegion(Abstraction)
-      return
-    elif isinstance(Abstraction, RoseOperation):
-      # This is a little more difficult. First try to get RoseBlock
-      TailRegion = self.getTailChild()
-      if not isinstance(TailRegion, RoseBlock) \
-      or isinstance(TailRegion, RoseUndefRegion):
-        # Add a new block first
-        Block = RoseBlock.create([])
-        Block.addRegion(Abstraction)
-        self.addRegion(Block)
-      else:
-        TailRegion.addRegion(Abstraction)
-        self.updateTailChild(TailRegion)
-      return
-    assert False
-  
-  # Replace the given abstraction with a new one
-  def replaceAbstraction(self, OldAbstraction, NewAbstraction):
-    assert type(OldAbstraction) == type(NewAbstraction)
-    assert self.isChildValid(NewAbstraction)
-    for Child in self.getChildren():
-      if type(OldAbstraction) == type(Child):
-        if Child == OldAbstraction:
-          Index = self.getChildren().index(OldAbstraction)
-          self.replaceRegion(NewAbstraction, Index)
-          return True
-      if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
-        return True
-    return False
-  
-  # Replaces the uses of an operation 
-  def replaceUsesWith(self, Abstraction, NewAbstraction):
-    print("REPLACE USES IN LOOP")
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant) \
-       and not isinstance(Abstraction, RoseFunction)
-    assert not isinstance(NewAbstraction, RoseUndefValue) \
-       and not isinstance(NewAbstraction, RoseFunction)
-    assert isinstance(Abstraction, RoseValue)
-    assert isinstance(NewAbstraction, RoseValue)
-    assert Abstraction.getType() == NewAbstraction.getType()
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      Child.replaceUsesWith(Abstraction, NewAbstraction)
-  
-  # Sees if the given operation or function or argument has any uses
-  def hasUsesOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      if Child.hasUsesOf(Abstraction) == True:
-        return True
-    return False
-
-  # Get all users of the given value
-  def getUsersOf(self, Abstraction):
-    assert not isinstance(Abstraction, RoseUndefValue) \
-       and not isinstance(Abstraction, RoseConstant)
-    assert isinstance(Abstraction, RoseValue)
-    Users = []
-    for Child in self.getChildren():
-      assert self.isChildValid(Child)
-      Users.extend(Child.getUsersOf(Abstraction))
-    return Users
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -668,24 +427,6 @@ class RoseCond(RoseRegion):
   # Make rose loops hashable
   def __hash__(self):
     return hash((self.Condition, self.getRegionID()))
-  
-  def areChildrenValid(self):
-    # Children do not have to be instances of regions
-    for Child in self.getChildren()["then"]:
-      if self.isChildValid(Child) == False:
-        return False
-    for Child in self.getChildren()["else"]:
-      if self.isChildValid(Child) == False:
-        return False
-    return True
-  
-  def isChildValid(self, Child):
-    if isinstance(Child, RoseFunction) \
-    or isinstance(Child, RoseForLoop) \
-    or isinstance(Child, RoseCond) \
-    or isinstance(Child, RoseBlock):
-      return True
-    return False
 
   def getCondition(self):
     return self.Condition
@@ -701,27 +442,6 @@ class RoseCond(RoseRegion):
   
   def addElseRegion(self, Region):
     return self.addRegion(Region, "else")
-  
-  # An abstraction can be an operation and region
-  def addAbstraction(self, Abstraction, Key):
-    assert Key == "then" or Key == "else"
-    if isinstance(Abstraction, RoseRegion):
-      self.addRegion(Abstraction, Key)
-      return
-    elif isinstance(Abstraction, RoseOperation):
-      # This is a little more difficult. First try to get RoseBlock
-      TailRegion = self.getTailChild(Key)
-      if not isinstance(TailRegion, RoseBlock) \
-      or isinstance(TailRegion, RoseUndefRegion):
-        # Add a new block first
-        Block = RoseBlock.create([])
-        Block.addRegion(Abstraction)
-        self.addRegion(Block, Key)
-      else:
-        TailRegion.addRegion(Abstraction)
-        self.updateTailChild(TailRegion, Key)
-      return
-    assert False
 
   def addAbstractionInThenRegion(self, Abstraction):
     return self.addAbstraction(Abstraction, "then")
@@ -733,79 +453,7 @@ class RoseCond(RoseRegion):
     return "then"
 
   def getKeyForElseRegion(self):
-    return "else"  
-
-  # Replace the given abstraction with a new one
-  def replaceAbstraction(self, OldAbstraction, NewAbstraction, Key = None):
-    if Key != None:
-      assert type(OldAbstraction) == type(NewAbstraction)
-      assert self.isChildValid(NewAbstraction)
-      for Child in self.getChildren()[Key]:
-        if type(OldAbstraction) == type(Child):
-          if Child == OldAbstraction:
-            Index = self.getChildren()[Key].index(OldAbstraction)
-            self.replaceRegion(NewAbstraction, Index, Key)
-            return True
-        if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
-          return True
-    else:
-      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "then"):
-        return True
-      if self.replaceAbstraction(OldAbstraction, NewAbstraction, "else"):
-        return True
-    return False
-
-  # Replaces the uses of an operation 
-  def replaceUsesWith(self, Abstraction, NewAbstraction, Key = None):
-    if Key != None:
-      print("REPLACES USES IN FUNCTION")
-      assert not isinstance(Abstraction, RoseUndefValue) \
-        and not isinstance(Abstraction, RoseConstant) \
-        and not isinstance(Abstraction, RoseFunction)
-      assert not isinstance(NewAbstraction, RoseUndefValue) \
-        and not isinstance(NewAbstraction, RoseFunction)
-      assert isinstance(Abstraction, RoseValue)
-      assert isinstance(NewAbstraction, RoseValue)
-      assert Abstraction.getType() == NewAbstraction.getType()
-      for Child in self.getChildren()[Key]:
-        assert self.isChildValid(Child)
-        Child.replaceUsesWith(Abstraction, NewAbstraction)
-    else:
-      self.replaceUsesWith(Abstraction, NewAbstraction, "then")
-      self.replaceUsesWith(Abstraction, NewAbstraction, "else")
-
-  # Sees if the given operation or function or argument has any uses
-  def hasUsesOf(self, Abstraction, Key = None):
-    if Key != None:
-      assert not isinstance(Abstraction, RoseUndefValue) \
-        and not isinstance(Abstraction, RoseConstant)
-      assert isinstance(Abstraction, RoseValue)
-      for Child in self.getChildren()[Key]:
-        assert self.isChildValid(Child)
-        if Child.hasUsesOf(Abstraction) == True:
-          return True
-    else:
-      if self.hasUsesOf(Abstraction, "then"):
-        return True
-      if self.hasUsesOf(Abstraction, "else"):
-        return True
-    return False
-
-  # Get all users of the given value
-  def getUsersOf(self, Abstraction, Key = None):
-    if Key != None:
-      assert not isinstance(Abstraction, RoseUndefValue) \
-        and not isinstance(Abstraction, RoseConstant)
-      assert isinstance(Abstraction, RoseValue)
-      Users = []
-      for Child in self.getChildren()[Key]:
-        assert self.isChildValid(Child)
-        Users.extend(Child.getUsersOf(Abstraction))
-    else:
-      Users = []
-      Users.extend(self.getUsersOf(Abstraction, "then"))
-      Users.extend(self.getUsersOf(Abstraction, "else"))
-    return Users
+    return "else"
 
   def print(self, NumSpace = 0):
     Spaces = ""
