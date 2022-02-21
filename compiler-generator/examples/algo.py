@@ -9,6 +9,7 @@ for Op in reversed(Block):
       continue
     Arg = ExtractConstant(Op.sizeOperand())
     BVValToBitwidthVal[Op] = Arg
+    AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
     continue
   
   if Op.outputAndInputTypesAresSame():
@@ -26,6 +27,7 @@ for Op in reversed(Block):
     else:
       Arg = ExtractConstant(Op.sizeOperand())
       BVValToBitwidthVal[Op] = Arg
+      AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
     # high_index = low_index + (precision - 1)
     if Op.LowIndex().isConstant()
       ExtractConstant(Op.LowIndex())
@@ -49,3 +51,4 @@ for Op in reversed(Block):
       assert Op.HighIndex().getOpcode() == RoseAddOp
       LastIdx = RoseSubOp.create(Op.getPrecision(), 1)
       Op.HighIndex().setOperand(LastIdx)
+      
