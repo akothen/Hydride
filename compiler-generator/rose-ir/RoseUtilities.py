@@ -269,4 +269,47 @@ def CloneAndInsertOperation(Operation : RoseOperation, \
   return ClonedOperation
 
 
+# Replaces the uses of an operation in the given region with a new clone of the
+# operation with each block. This is optimization friendly.
+# The new abstraction must be an operation.
+def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction : RoseValue, NewAbstraction : RoseOperation, \
+                                  Context : RoseContext):
+  assert not isinstance(Abstraction, RoseUndefValue) \
+    and not isinstance(Abstraction, RoseConstant) \
+    and not isinstance(Abstraction, RoseFunction)
+  assert isinstance(Abstraction, RoseValue)
+  assert isinstance(NewAbstraction, RoseOperation)
+  assert Abstraction.getType() == NewAbstraction.getType()
 
+  NewOpToInsertBeforeMap = dict()
+  if Region.getKeys() != None:
+    for Key in Region.getKeys():
+      for Child in Region.getChildren()[Key]:
+        assert Region.isChildValid(Child)
+      if isinstance(Child, RoseOperation):
+        assert isinstance(Region, RoseBlock)
+        if Child.usesValue(Abstraction):
+          NewName = Context.genName(NewAbstraction.getName() + ".copy.")
+          ClonedNewAbstraction = NewAbstraction.clone(NewName)
+          Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
+          #Region.addOperationBefore(ClonedNewAbstraction, Child)
+          NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
+      else:
+        ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
+  else:
+    for Child in Region.getChildren():
+      assert Region.isChildValid(Child)
+      if isinstance(Child, RoseOperation):
+        assert isinstance(Region, RoseBlock)
+        if Child.usesValue(Abstraction):
+          NewName = Context.genName(NewAbstraction.getName() + ".copy.")
+          ClonedNewAbstraction = NewAbstraction.clone(NewName)
+          Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
+          #Region.addOperationBefore(ClonedNewAbstraction, Child)
+          NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
+      else:
+        ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
+  
+  # Now add the new operations
+  for NewOp, InsertBefore in NewOpToInsertBeforeMap.items():
+    Region.addOperationBefore(NewOp, InsertBefore)
