@@ -1,5 +1,6 @@
 
 
+
 function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b ) {
  for ([j0 (range 0 16 1)]) {
   %0 = mul int32 4, int32 j0
@@ -191,7 +192,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 16
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 32
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 32
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -218,7 +219,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 16
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 32
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -245,7 +246,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 16
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 32
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -272,7 +273,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 16
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -298,7 +299,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 16
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -324,7 +325,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -351,7 +352,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -377,7 +378,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -397,7 +398,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 32
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 8
    %4 = bvzeroextend bv8 %3, int32 16
@@ -405,7 +406,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -424,7 +425,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 32
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 8
    %4 = bvzeroextend bv8 %3, int32 %extend_size
@@ -432,7 +433,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -452,7 +453,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 32
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 %precision
    %4 = bvzeroextend bv8 %3, int32 %extend_size
@@ -460,7 +461,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -479,7 +480,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 %lane_size
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 %precision
    %4 = bvzeroextend bv8 %3, int32 %extend_size
@@ -487,7 +488,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -502,13 +503,13 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
                                int32 %vector_length, int32 %lane_size, int32 %precision, 
                                int32 %lane_offset, int32 %extend_size) {
  for ([j0.new (range 0 %vector_length %lane_size)]) {
-  %last.idx.2 = sub i32 %lane_size, i32 1
+  %last.idx.2 = sub int32 %lane_size, int32 1
   %55.clone.0 = add int32 j0.new, int32 %last.idx.2
   %56.clone.0 = bvextract bv512 src, int32 j0.new, int32 %55.clone.0, int32 32
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 %lane_size
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 %precision
    %4 = bvzeroextend bv8 %3, int32 %extend_size
@@ -516,7 +517,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -530,13 +531,13 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
                                int32 %vector_length, int32 %lane_size, int32 %precision, 
                                int32 %lane_offset, int32 %extend_size) {
  for ([j0.new (range 0 %vector_length %lane_size)]) {
-  %last.idx.2 = sub i32 %lane_size, i32 1
+  %last.idx.2 = sub int32 %lane_size, int32 1
   %55.clone.0 = add int32 j0.new, int32 %last.idx.2
   %56.clone.0 = bvextract bv512 src, int32 j0.new, int32 %55.clone.0, int32 %lane_size
   bvinsert bv32 %56.clone.0, bv512 dst, int32 j0.new, int32 %55.clone.0, int32 %lane_size
   for ([iterator.0.new (range %lane_offset %lane_size %precision)]) {
    %1 = add int32 j0.new, int32 iterator.0.new
-   %last.idx.1 = sub i32 %precision, i32 1
+   %last.idx.1 = sub int32 %precision, int32 1
    %2 = add int32 %1, int32 %last.idx.1
    %3 = bvextract bv512 a, int32 %1, int32 %2, int32 %precision
    %4 = bvzeroextend bv8 %3, int32 %extend_size
@@ -544,7 +545,7 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
    %9 = bvsignextend bv8 %8, int32 %extend_size
    %10 = bvmul bv16 %4, bv16 %9
    %11 = bvsignextend bv16 %10, int32 %lane_size
-   %last.idx = sub i32 %lane_size, i32 1
+   %last.idx = sub int32 %lane_size, int32 1
    %62.clone.4 = add int32 j0.new, int32 %last.idx
    %11.ext0 = bvextract bv512 dst, int32 j0.new, int32 %62.clone.4, int32 %lane_size
    %11.acc0 = bvadd bv32 %11.ext0, bv32 %11
@@ -553,6 +554,45 @@ function _mm512_dpbusd_epi32 ( bv512 src, bv512 a, bv512 b,
  }
  ret bv512 dst
 }
+
+
+
+(define (_mm512_dpbusd_epi32  src a b %vector_length %lane_size %precision %lane_offset %extend_size)
+(define  dst
+(apply
+concat
+(for/list ([j0.new (reverse (range 0 %vector_length %lane_size))])
+ (define dst_tmp
+ (apply
+ concat
+ (for/list ([iterator.0.new (reverse (range %lane_offset %lane_size %precision))])
+  (define %1 (+  j0new  iterator.0.new))
+  (define %last.idx.1) (- %precision 1)
+  (define %2 (+  %1  %last.idx.1))
+  (define %3 (extract  %2 %1 a))
+  (define %4 (zero-extend  %3 (bitvector %extend_size)))
+  (define %8 (extract  %2 %1 b))
+  (define %9 (sign-extend  %8 (bitvector %extend_size)))
+  (define %10 (bvmul  %4  %9))
+  (define %11 (sign-extend  %10 (bitvector %lane_size)))
+  (define %last.idx) (- %lane_size 1)
+  (define %62.clone.4 (+  j0.new  %last.idx))
+  (define %11.ext0 (extract  %62.clone.4 j0.new dst))
+  (define %11.acc0 (bvadd  %11.ext0  %11))
+  %11.acc0
+ )
+ )
+ )
+ (define %last.idx.2) (- %lane_size 1)
+ (define %55.clone.0 (+  j0.new  %last.idx.2))
+ (define %56.clone.0 (extract  %55.clone.0 j0.new src))
+ (concat dst_tmp %56.clone.0)
+)
+)
+)
+dst
+)
+
 
 
 
@@ -656,7 +696,7 @@ function _mm_max_epi32 ( bv128 a, bv128 b,
                         int32 %lane_offset) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([j0.new (range %lane_offset %lane_size %precision)]) {
-   %last.idx = sub i32 %precision, i32 1
+   %last.idx = sub int32 %precision, int32 1
    %1 = add int32 j0.new, int32 %last.idx
    %2 = bvextract bv128 a, int32 j0.new, int32 %1, int32 32
    %4 = bvextract bv128 b, int32 j0.new, int32 %1, int32 32
@@ -672,7 +712,7 @@ function _mm_max_epi32 ( bv128 a, bv128 b,
                         int32 %lane_offset) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([j0.new (range %lane_offset %lane_size %precision)]) {
-   %last.idx = sub i32 %precision, i32 1
+   %last.idx = sub int32 %precision, int32 1
    %1 = add int32 j0.new, int32 %last.idx
    %2 = bvextract bv128 a, int32 j0.new, int32 %1, int32 32
    %4 = bvextract bv128 b, int32 j0.new, int32 %1, int32 %precision
@@ -688,7 +728,7 @@ function _mm_max_epi32 ( bv128 a, bv128 b,
                         int32 %lane_offset) {
  for ([%outer.it (range 0 %vector_length %lane_size)]) {
   for ([j0.new (range %lane_offset %lane_size %precision)]) {
-   %last.idx = sub i32 %precision, i32 1
+   %last.idx = sub int32 %precision, int32 1
    %1 = add int32 j0.new, int32 %last.idx
    %2 = bvextract bv128 a, int32 j0.new, int32 %1, int32 %precision
    %4 = bvextract bv128 b, int32 j0.new, int32 %1, int32 %precision
