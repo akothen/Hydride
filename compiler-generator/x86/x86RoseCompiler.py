@@ -312,10 +312,24 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   
   if type(IndexExpr.obj) == Lookup:
     # Compile the low index first
-    LowIndex = CompileIndex(IndexExpr.idx, Context)
+    #LowIndex = CompileIndex(IndexExpr.idx, Context)
+    #print("LOW INDEX:")
+    #print(LowIndex)
+    #LowIndex.print()
+
+    # Compile the low index
+    ElemType =x86Types[IndexExpr.obj.key]
+    IndexVal = CompileIndex(IndexExpr.idx, Context)
+    CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                  IndexVal.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), \
+                              [CoFactor, IndexVal])
+    Context.addAbstractionToIR(LowIndex)
+    Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
     print("LOW INDEX:")
     print(LowIndex)
     LowIndex.print()
+
     # Compile the vector object
     Vector = CompileExpression(IndexExpr.obj, Context)
     print("VECTOR:")
@@ -758,10 +772,22 @@ def CompileUpdate(Update, Context : x86RoseContext):
     assert type(Update.lhs) == BitIndex
     if type(Update.lhs.obj) == Lookup:
       # Compile the low index first
-      LowIndex = CompileIndex(Update.lhs.idx, Context)
+      #LowIndex = CompileIndex(Update.lhs.idx, Context)
+      #print("LOW INDEX:")
+      #print(LowIndex)
+      #LowIndex.print()
+      # Compile the low index
+      ElemType =x86Types[Update.lhs.obj.key]
+      IndexVal = CompileIndex(Update.lhs.idx, Context)
+      CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                    IndexVal.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), \
+                                [CoFactor, IndexVal])
       print("LOW INDEX:")
       print(LowIndex)
       LowIndex.print()
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
       # Compile the vector object
       BitVector = CompileExpression(Update.lhs.obj, Context)
       print("VECTOR:")
@@ -2277,6 +2303,5 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
-
 
 
