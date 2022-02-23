@@ -110,6 +110,7 @@ def CompileNumber(Num, Context : x86RoseContext):
     #Context.getIndexNumberType())
   else:
     ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() >= 0))
   return ConstantVal
 
 
@@ -986,9 +987,9 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # Fix the operands' bitwidths
   if Operand1.getType() != Operand2.getType():
     if isinstance(Operand1, RoseConstant):
-      Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
+      Operand1.setType(Operand2.getType())
     elif isinstance(Operand2, RoseConstant):
-      Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
+      Operand2.setType(Operand1.getType())
     elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
       Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
@@ -2303,5 +2304,6 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
+
 
 

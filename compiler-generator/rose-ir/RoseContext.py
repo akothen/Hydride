@@ -11,12 +11,20 @@ from copy import deepcopy
 class RoseContext:
   class RoseValueNameGen():
     def __init__(self):
-      self.Counter = 0
+      self.NameMap = dict()
     
     def genName(self, Prefix : str = ""):
-      Name = Prefix + str(self.Counter)
-      self.Counter += 1
-      return "%" + Name
+      if Prefix in self.NameMap:
+        Counter = self.NameMap[Prefix]
+        Name = Prefix + str(Counter)
+        self.NameMap[Prefix] = Counter + 1
+      else:
+        Name = Prefix + "0"
+        self.NameMap[Prefix] = 1
+      if Prefix == "":
+        return "%" + Name
+      return Name
+  
   def __init__(self):
     self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
     # Track the contexts we encounter
@@ -59,21 +67,18 @@ class RoseContext:
     return self.CompiledAbstractions[ID]
   
   def addSignednessInfoForValue(self, Value : RoseValue, IsSigned : bool):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
+    assert not isinstance(Value, RoseUndefValue)
     print("addSignednessInfoForValue:")
     Value.print()
     self.CompiledValToSignedness[Value] = IsSigned
   
   def isValueSigned(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
+    assert not isinstance(Value, RoseUndefValue)
     assert Value in self.CompiledValToSignedness
     return self.CompiledValToSignedness[Value]
 
   def isValueSignKnown(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-    and not isinstance(Value, RoseConstant)
+    assert not isinstance(Value, RoseUndefValue)
     return Value in self.CompiledValToSignedness
 
   def addVariable(self, Name : str, ID : str):
@@ -143,6 +148,9 @@ class RoseContext:
   def getCompiledValToSignednessMap(self):
     return self.CompiledValToSignedness
   
+  def getNameGenerator(self):
+    return self.NameGenerator
+
   def getDefinedVariables(self):
     return self.Variables
 
@@ -159,6 +167,8 @@ class RoseContext:
     # Copy over the signedeness information as well
     for Value, IsSigned in self.ParentContext.getCompiledValToSignednessMap().items():
       self.CompiledValToSignedness[Value] = IsSigned
+    # Copy over the name generator
+    self.NameGenerator = self.ParentContext.getNameGenerator()
  
   def replaceParentAbstractionsWithChild(self):
     for Name, ID in self.ParentContext.getDefinedVariables().items():
@@ -166,5 +176,8 @@ class RoseContext:
       ChildVarID = self.Variables[Name]
       Abstraction = self.CompiledAbstractions[ChildVarID]
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
- 
+    # Copy over the name generator to the parent
+    self.NameGenerator = self.ParentContext.getNameGenerator()
+
+
 
