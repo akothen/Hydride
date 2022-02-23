@@ -133,6 +133,10 @@ class RoseArgument(RoseValue):
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.ArgIndex))
 
+  # This is same as __eq__ for rose arguments.
+  def isSameAs(self, Other):
+    return self.__eq__(Other)
+
   def getArgIndex(self):
     assert self.ArgIndex < self.Callee.getArg(self.getArgIndex()).getType()
     return self.ArgIndex
@@ -338,6 +342,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 
