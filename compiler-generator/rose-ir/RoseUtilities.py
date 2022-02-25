@@ -313,3 +313,24 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction : RoseValue, NewAbstractio
   # Now add the new operations
   for NewOp, InsertBefore in NewOpToInsertBeforeMap.items():
     Region.addOperationBefore(NewOp, InsertBefore)
+
+
+
+def GatherIndexingOps(Operation : RoseOperation):
+  # Sanity checks
+  assert isinstance(Operation, RoseBitVectorOp) 
+  assert Operation.isIndexingBVOp()
+  IndexingOps = list()
+  Worklist = list()
+  if isinstance(Operation.getLowIndex(), RoseOperation):
+    Worklist.append(Operation.getLowIndex())
+  if isinstance(Operation.getHighIndex(), RoseOperation):
+    Worklist.append(Operation.getHighIndex())
+  while len(Worklist) != 0:
+    IndexingOp = Worklist.pop()
+    IndexingOps.append(IndexingOp)
+    # We can erase Op, but first get the operands
+    for Operand in IndexingOp.getOperands():
+      if isinstance(Operand, RoseOperation):
+        Worklist.append(Operand)
+  return IndexingOps
