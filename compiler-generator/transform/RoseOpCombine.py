@@ -123,6 +123,87 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
           return True
     return False
 
+  if isinstance(FirstOp, RoseSubOp) \
+  and isinstance(SecondOp, RoseMulOp) \
+  and isinstance(FirstOp_1, RoseDivOp) \
+  and isinstance(FirstOp_2, RoseDivOp) \
+  and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
+    and len(FirstOp.getUsers()) == 1:
+      if ConstantIndex1_1 == 1 and ConstantIndex1_2 == 1:
+        if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+          # first_op_1:  y1 = div x1, c
+          # first_op_2:  y2 = div x2, c
+          # first_op:     y = sub y1, y2
+          # second_op:    z = mul y, c
+          # result:       z = add x1, x2
+          NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
+                                  [FirstOp_1.getOperand(NonConstantIndex1_1), \
+                                  FirstOp_2.getOperand(NonConstantIndex1_2)])
+          Block.addOperationBefore(NewOp, SecondOp)
+          SecondOp.replaceUsesWith(NewOp)
+          # Delete the relevant ops
+          Block.eraseOperation(SecondOp)
+          Block.eraseOperation(FirstOp)
+          Block.eraseOperation(FirstOp_1)
+          Block.eraseOperation(FirstOp_2)
+          return True
+    return False
+
+  if isinstance(FirstOp, RoseAddOp) \
+  and isinstance(SecondOp, RoseDivOp) \
+  and isinstance(FirstOp_1, RoseMulOp) \
+  and isinstance(FirstOp_2, RoseMulOp) \
+  and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
+    and len(FirstOp.getUsers()) == 1:
+      if ConstantIndex2 == 1:
+        if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+          # first_op_1:  y1 = mul x1, c
+          # first_op_2:  y2 = mul x2, c
+          # first_op:     y = add y1, y2
+          # second_op:    z = div y, c
+          # result:       z = add x1, x2
+          NewOp = RoseAddOp.create(Context.genName(SecondOp.getName() + ".new"), \
+                                  [FirstOp_1.getOperand(NonConstantIndex1_1), \
+                                  FirstOp_2.getOperand(NonConstantIndex1_2)])
+          Block.addOperationBefore(NewOp, SecondOp)
+          SecondOp.replaceUsesWith(NewOp)
+          # Delete the relevant ops
+          Block.eraseOperation(SecondOp)
+          Block.eraseOperation(FirstOp)
+          Block.eraseOperation(FirstOp_1)
+          Block.eraseOperation(FirstOp_2)
+          return True
+    return False
+
+  if isinstance(FirstOp, RoseSubOp) \
+  and isinstance(SecondOp, RoseDivOp) \
+  and isinstance(FirstOp_1, RoseMulOp) \
+  and isinstance(FirstOp_2, RoseMulOp) \
+  and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
+    and len(FirstOp.getUsers()) == 1:
+      if ConstantIndex2 == 1:
+        if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+          # first_op_1:  y1 = mul x1, c
+          # first_op_2:  y2 = mul x2, c
+          # first_op:     y = sub y1, y2
+          # second_op:    z = div y, c
+          # result:       z = add x1, x2
+          NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
+                                  [FirstOp_1.getOperand(NonConstantIndex1_1), \
+                                  FirstOp_2.getOperand(NonConstantIndex1_2)])
+          Block.addOperationBefore(NewOp, SecondOp)
+          SecondOp.replaceUsesWith(NewOp)
+          # Delete the relevant ops
+          Block.eraseOperation(SecondOp)
+          Block.eraseOperation(FirstOp)
+          Block.eraseOperation(FirstOp_1)
+          Block.eraseOperation(FirstOp_2)
+          return True
+    return False
+
 
 # One operand of each of FirstOp and SecondOp have to be constants.
 def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context : RoseContext):
@@ -918,7 +999,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
