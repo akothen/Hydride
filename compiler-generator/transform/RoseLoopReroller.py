@@ -204,27 +204,15 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         NumOtherBVOps += 1
     return NumExtractOps, NumInsertOps, NumOtherBVOps
 
-  def GatherIndexingOps(Pack : list):
-    BVtoIndexingOpsMap = dict()
+  def GatherIndexingOpsInPack(Pack : list):
     IndexingToBVOpsMap = dict()
     for Op in reversed(Pack):
       if isinstance(Op, RoseBVExtractSliceOp) \
       or isinstance(Op, RoseBVInsertSliceOp):
-        IndexingOps = list()
-        if isinstance(Op.getLowIndex(), RoseOperation):
-          IndexingOps.append(Op.getLowIndex())
-        if isinstance(Op.getHighIndex(), RoseOperation):
-          IndexingOps.append(Op.getHighIndex())
-        BVtoIndexingOpsMap[Op] = []
-        while len(IndexingOps) != 0:
-          IndexingOp = IndexingOps.pop()
-          BVtoIndexingOpsMap[Op].append(IndexingOp)
+        IndexingOps = GatherIndexingOps(Op)
+        for IndexingOp in IndexingOps:
           IndexingToBVOpsMap[IndexingOp] = Op
-          # We can erase Op, but first get the operands
-          for Operand in IndexingOp.getOperands():
-            if isinstance(Operand, RoseOperation):
-              IndexingOps.append(Operand)
-    return BVtoIndexingOpsMap, IndexingToBVOpsMap
+    return IndexingToBVOpsMap
 
   # Op1 is an add ops and op2 is not.
   def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
@@ -275,8 +263,8 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
     return False
 
   # Gather all the indexing ops
-  BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherIndexingOps(Pack1)
-  BVtoIndexingOpsMap2, IndexingToBVOpsMap2 = GatherIndexingOps(Pack2)
+  IndexingToBVOpsMap1 = GatherIndexingOpsInPack(Pack1)
+  IndexingToBVOpsMap2 = GatherIndexingOpsInPack(Pack2)
 
   # Reverse iterate the packs
   OpsList1 =[Pack1[len(Pack1) - 1]]
@@ -747,7 +735,6 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
 
   def GatherLowIndexingOps(Pack : list):
-    BVtoIndexingOpsMap = dict()
     IndexingToBVOpsMap = dict()
     for Op in reversed(Pack):
       if isinstance(Op, RoseBVExtractSliceOp) \
@@ -755,20 +742,18 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
         IndexingOps = list()
         if isinstance(Op.getLowIndex(), RoseOperation):
           IndexingOps.append(Op.getLowIndex())
-        BVtoIndexingOpsMap[Op] = []
         while len(IndexingOps) != 0:
           IndexingOp = IndexingOps.pop()
-          BVtoIndexingOpsMap[Op].append(IndexingOp)
           IndexingToBVOpsMap[IndexingOp] = Op
           # We can erase Op, but first get the operands
           for Operand in IndexingOp.getOperands():
             if isinstance(Operand, RoseOperation):
               IndexingOps.append(Operand)
-    return BVtoIndexingOpsMap, IndexingToBVOpsMap
+    return IndexingToBVOpsMap
 
   # Gather all the indexing ops
-  BVtoIndexingOpsMap1, IndexingToBVOpsMap1 = GatherLowIndexingOps(Pack1)
-  BVtoIndexingOpsMap2, IndexingToBVOpsMap2 = GatherLowIndexingOps(Pack2)
+  IndexingToBVOpsMap1 = GatherLowIndexingOps(Pack1)
+  IndexingToBVOpsMap2 = GatherLowIndexingOps(Pack2)
 
   Indices = list()
   OperandIndices = list()
@@ -1719,7 +1704,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
-
 
 
 
