@@ -373,7 +373,7 @@ class RoseRegion:
         continue
     return RegionList
 
-  def getParentOdType(self, ParentRegionType):
+  def getParentOfType(self, ParentRegionType):
     # Some sanity checks
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert not ParentRegionType == RoseAbstractions.RoseUndefRegion \
