@@ -100,7 +100,7 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   print("NEW LOOP:")
   Loop.print()
   import RoseOpCombine
-  RoseOpCombine.RunOpCombineOnRegion(Loop)
+  RoseOpCombine.RunOpCombineOnRegion(Loop, Context)
   print("NEW LOOP:")
   Loop.print()
   #assert False

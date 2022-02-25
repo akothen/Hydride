@@ -6,18 +6,131 @@
 #############################################################
 
 
-from ast import Constant
-from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 
-def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
+
+def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, \
+                              Context : RoseContext):
   print("OP COMBINE PATTENS")
+  print("FirstOp:")
+  FirstOp.print()
+  print("SecondOp:")
+  SecondOp.print()
+  # Some sanity checks
+  assert isinstance(FirstOp, RoseAddOp) \
+      or isinstance(FirstOp, RoseSubOp) \
+      or isinstance(FirstOp, RoseMulOp) \
+      or isinstance(FirstOp, RoseDivOp)
+  assert isinstance(SecondOp, RoseAddOp) \
+      or isinstance(SecondOp, RoseSubOp) \
+      or isinstance(SecondOp, RoseMulOp) \
+      or isinstance(SecondOp, RoseDivOp)
+  assert len(FirstOp.getOperands()) == 2
+  assert len(SecondOp.getOperands()) == 2
+  assert FirstOp.getParent() == SecondOp.getParent()
+
+  # Important requirement: SecondOp is a user of FirstOp
+  assert SecondOp.getOperand(0) == FirstOp \
+      or SecondOp.getOperand(1) == FirstOp
+
+  # Important requirement that operands of the first op 
+  # must be operations.
+  if not isinstance(FirstOp.getOperand(0), RoseOperation) \
+    or not isinstance(FirstOp.getOperand(1), RoseOperation):
+    return False
+  
+  # Lambda function
+  def GetConstantOperation(Op : RoseOperation):
+    if isinstance(Op.getOperand(0), RoseConstant) \
+    and not isinstance(Op.getOperand(1), RoseConstant):
+      return Op.getOperand(0), 0
+    elif not isinstance(Op.getOperand(0), RoseConstant) \
+    and isinstance(Op.getOperand(1), RoseConstant):
+      return Op.getOperand(1), 1
+    return RoseUndefValue(), None
+  
+  # Get the constant operands
+  ConstantOperand1_1, ConstantIndex1_1  = GetConstantOperation(FirstOp.getOperand(0))
+  if ConstantOperand1_1 == RoseUndefValue():
+    return False
+  assert isinstance(ConstantOperand1_1, RoseConstant)
+  ConstantOperand1_2, ConstantIndex1_2  = GetConstantOperation(FirstOp.getOperand(1))
+  if ConstantOperand1_2 == RoseUndefValue():
+    return False
+  assert isinstance(ConstantOperand1_2, RoseConstant)
+  ConstantOperand2, ConstantIndex2 = GetConstantOperation(SecondOp)
+  if ConstantOperand2 == RoseUndefValue():
+    return False
+  assert isinstance(ConstantOperand2, RoseConstant)
+  assert ConstantOperand1_1.getType() == ConstantOperand1_2.getType()
+  assert ConstantOperand1_2.getType() == ConstantOperand2.getType()
+  if ConstantIndex1_1 == 0:
+    NonConstantIndex1_1 = 1
+  else:
+    NonConstantIndex1_1 = 0
+  if ConstantIndex1_2 == 0:
+    NonConstantIndex1_2 = 1
+  else:
+    NonConstantIndex1_2 = 0
+  if ConstantIndex2 == 0:
+    NonConstantIndex2 = 1
+  else:
+    NonConstantIndex2 = 0
+  print("ConstantOperand1_1:")
+  print(ConstantOperand1_1)
+  print("ConstantOperand1_2:")
+  print(ConstantOperand1_2)
+  print("ConstantOperand2:")
+  print(ConstantOperand2)
+
+  Block = FirstOp.getParent()
+  FirstOp_1 = FirstOp.getOperand(0)
+  FirstOp_2 = FirstOp.getOperand(1)
+
+  # Now we deal with different patterns
+  # TODO: Add more patterns
+  if isinstance(FirstOp, RoseAddOp) \
+  and isinstance(SecondOp, RoseMulOp) \
+  and isinstance(FirstOp_1, RoseDivOp) \
+  and isinstance(FirstOp_2, RoseDivOp) \
+  and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
+    and len(FirstOp.getUsers()) == 1:
+      if ConstantIndex1_1 == 1 and ConstantIndex1_2 == 1:
+        if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
+          # first_op_1:  y1 = div x1, c
+          # first_op_2:  y2 = div x2, c
+          # first_op:     y = add y1, y2
+          # second_op:    z = mul y, c
+          # result:       z = add x1, x2
+          NewOp = RoseAddOp.create(Context.genName(SecondOp.getName() + ".new"), \
+                                  [FirstOp_1.getOperand(NonConstantIndex1_1), \
+                                  FirstOp_2.getOperand(NonConstantIndex1_2)])
+          Block.addOperationBefore(NewOp, SecondOp)
+          SecondOp.replaceUsesWith(NewOp)
+          # Delete the relevant ops
+          Block.eraseOperation(SecondOp)
+          Block.eraseOperation(FirstOp)
+          Block.eraseOperation(FirstOp_1)
+          Block.eraseOperation(FirstOp_2)
+          return True
+    return False
+
+
+# One operand of each of FirstOp and SecondOp have to be constants.
+def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context : RoseContext):
+  print("OP COMBINE PATTENS")
+  print("FirstOp:")
+  FirstOp.print()
+  print("SecondOp:")
+  SecondOp.print()
   # Some sanity checks
   assert isinstance(FirstOp, RoseAddOp) \
       or isinstance(FirstOp, RoseSubOp) \
@@ -48,11 +161,11 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
   # Get the constant operands
   ConstantOperand1, ConstantIndex1  = GetConstantOperation(FirstOp)
   if ConstantOperand1 == RoseUndefValue():
-    return
+    return False
   assert isinstance(ConstantOperand1, RoseConstant)
   ConstantOperand2, ConstantIndex2 = GetConstantOperation(SecondOp)
   if ConstantOperand2 == RoseUndefValue():
-    return
+    return False
   assert isinstance(ConstantOperand2, RoseConstant)
   assert ConstantOperand1.getType() == ConstantOperand2.getType()
   if ConstantIndex1 == 0:
@@ -68,9 +181,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
   print("ConstantOperand2:")
   print(ConstantOperand2)
 
+  Block = FirstOp.getParent()
+
   # Now we deal with different patterns
   # TODO: Add more patterns
-  Block = FirstOp.getParent()
   if isinstance(FirstOp, RoseMulOp) \
   and isinstance(SecondOp, RoseMulOp):
     if len(FirstOp.getUsers()) == 1:
@@ -83,9 +197,9 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       SecondOp.setOperand(ConstantIndex2, NewOperand)
       SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
       # Delete the first op
-      Block = FirstOp.getParent()
       Block.eraseOperation(FirstOp)
-    return
+      return True
+    return False
   
   if isinstance(FirstOp, RoseDivOp) \
   and isinstance(SecondOp, RoseDivOp):
@@ -102,7 +216,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       if (ConstantIndex1 == 1 and ConstantIndex2 == 1) \
       or (ConstantIndex1 == 1 and ConstantIndex2 == 0):
@@ -120,9 +234,8 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         SecondOp.setOperand(ConstantIndex2, NewOperand)
         SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
         # Delete the first op
-        Block = FirstOp.getParent()
         Block.eraseOperation(FirstOp)
-        return
+        return True
       if ConstantIndex1 == 0 and ConstantIndex2 == 0:
        # Case 3:
         # first_op:  y = div c1, x
@@ -136,36 +249,36 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new div instruction
-          NewOp = RoseDivOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseDivOp.create(Context.genName(SecondOp.getName() + ".new"), \
                         FirstOp.getOperand(NonConstantIndex1), NewOperand)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
+          return True
         if ConstantOperand1.getValue() < ConstantOperand2.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new mul instruction
           NewOpOperands = [FirstOp.getOperand(NonConstantIndex1), NewOperand]
-          NewOp = RoseMulOp.create("%new." + SecondOp.getName(), NewOpOperands)
+          NewOp = RoseMulOp.create(Context.genName(SecondOp.getName() + ".new"), NewOpOperands)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
+          return True
       if ConstantIndex1 == 0 and ConstantIndex2 == 1:
         # Case 4:
         # first_op:  y = div c1, x
@@ -179,37 +292,37 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new div instruction
-          NewOp = RoseDivOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseDivOp.create(Context.genName(SecondOp.getName() + ".new"), \
                         NewOperand, FirstOp.getOperand(NonConstantIndex1))
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
+          return True
         if ConstantOperand1.getValue() < ConstantOperand2.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new mul instruction
           NewOpOperands = [FirstOp.getOperand(NonConstantIndex1), NewOperand]
-          NewOp = RoseMulOp.create("%new." + SecondOp.getName(), NewOpOperands)
+          NewOp = RoseMulOp.create(Context.genName(SecondOp.getName() + ".new"), NewOpOperands)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
-    return
+          return True
+    return False
   
   if isinstance(FirstOp, RoseMulOp) \
   and isinstance(SecondOp, RoseDivOp):
@@ -225,7 +338,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       if ConstantIndex2 == 0:
         # Case 1:
@@ -241,16 +354,16 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Replace the operands of the second op
           SecondOp.setOperand(ConstantIndex2, NewOperand)
           SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
           # Delete the first op
-          Block = FirstOp.getParent()
           Block.eraseOperation(FirstOp)
-        return
+          return True
+        return False
       if ConstantIndex2 == 1:
         # Case 2:
         # first_op:  y = mul c1, x
@@ -272,28 +385,27 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           SecondOp.setOperand(ConstantIndex2, NewOperand)
           SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
           # Delete the first op
-          Block = FirstOp.getParent()
           Block.eraseOperation(FirstOp)
-          return
+          return True
         if ConstantOperand1.getValue() > ConstantOperand2.getValue():
           # result: z = mul x, (c1 / c2) when c1 > c2
           NewOperandVal = ConstantOperand1.getValue() / ConstantOperand2.getValue()
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new mul instruction
           NewOpOperands = [FirstOp.getOperand(NonConstantIndex1), NewOperand]
-          NewOp = RoseMulOp.create("%new." + SecondOp.getName(), NewOpOperands)
+          NewOp = RoseMulOp.create(Context.genName(SecondOp.getName() + ".new"), NewOpOperands)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-        return
-    return
+          return True
+    return False
 
   if isinstance(FirstOp, RoseDivOp) \
   and isinstance(SecondOp, RoseMulOp):
@@ -309,7 +421,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       if ConstantIndex1 == 0:
         # Case 1:
@@ -320,14 +432,14 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         NewOperandVal = ConstantOperand2.getValue() * ConstantOperand1.getValue()
         NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
         # Generate a new div instruction
-        NewOp = RoseDivOp.create("%new." + SecondOp.getName(), \
+        NewOp = RoseDivOp.create(Context.genName(SecondOp.getName() + ".new"), \
                                   NewOperand, FirstOp.getOperand(NonConstantIndex1))
         Block.addOperationBefore(NewOp, SecondOp)
         SecondOp.replaceUsesWith(NewOp)
         # IMPORTANT: the second op must be removed before the first op.
         Block.eraseOperation(SecondOp)
         Block.eraseOperation(FirstOp)
-        return
+        return True
       if ConstantIndex1 == 1:
         # Case 2:
         # first_op:  y = div x, c1
@@ -341,37 +453,37 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new div instruction
-          NewOp = RoseDivOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseDivOp.create(Context.genName(SecondOp.getName() + ".new"), \
                                     FirstOp.getOperand(NonConstantIndex1), NewOperand)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
+          return True
         if ConstantOperand2.getValue() > ConstantOperand1.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
           if ConstantOperand1.getType().isIntegerTy():
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
-              return
+              return False
             NewOperandVal = int(NewOperandVal)
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new mul instruction
           NewOpOperands = [FirstOp.getOperand(NonConstantIndex1), NewOperand]
-          NewOp = RoseMulOp.create("%new." + SecondOp.getName(), NewOpOperands)
+          NewOp = RoseMulOp.create(Context.genName(SecondOp.getName() + ".new"), NewOpOperands)
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-        return
-    return
+          return True
+    return False
   
   # More patterns
   if isinstance(FirstOp, RoseAddOp) \
@@ -383,9 +495,9 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       SecondOp.setOperand(ConstantIndex2, NewOperand)
       SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
       # Delete the first op
-      Block = FirstOp.getParent()
       Block.eraseOperation(FirstOp)
-    return
+      return True
+    return False
   
   if isinstance(FirstOp, RoseSubOp) \
   and isinstance(SecondOp, RoseSubOp):
@@ -402,7 +514,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       if (ConstantIndex1 == 1 and ConstantIndex2 == 1) \
       or (ConstantIndex1 == 1 and ConstantIndex2 == 0):
@@ -420,9 +532,8 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         SecondOp.setOperand(ConstantIndex2, NewOperand)
         SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
         # Delete the first op
-        Block = FirstOp.getParent()
         Block.eraseOperation(FirstOp)
-        return
+        return True
       if ConstantIndex1 == 0 and ConstantIndex2 == 0:
        # Case 3:
         # first_op:  y = sub c1, x
@@ -434,14 +545,14 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           NewOperandVal = ConstantOperand1.getValue() - ConstantOperand2.getValue()
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new sub instruction
-          NewOp = RoseSubOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
                         [FirstOp.getOperand(NonConstantIndex1), NewOperand])
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
+          return True
       if ConstantIndex1 == 0 and ConstantIndex2 == 1:
         # Case 4:
         # first_op:  y = sub c1, x
@@ -453,15 +564,15 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           NewOperandVal = ConstantOperand1.getValue() - ConstantOperand2.getValue()
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new div instruction
-          NewOp = RoseSubOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
                         [NewOperand, FirstOp.getOperand(NonConstantIndex1)])
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
-    return
+          return True
+    return False
 
   if isinstance(FirstOp, RoseAddOp) \
   and isinstance(SecondOp, RoseSubOp):
@@ -477,7 +588,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       # Case 1:
       # first_op:  y = add c1, x
@@ -498,9 +609,9 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         SecondOp.setOperand(ConstantIndex2, NewOperand)
         SecondOp.setOperand(NonConstantIndex2, FirstOp.getOperand(NonConstantIndex1))
         # Delete the first op
-        Block = FirstOp.getParent()
         Block.eraseOperation(FirstOp)
-    return
+        return True
+    return False
 
   if isinstance(FirstOp, RoseSubOp) \
   and isinstance(SecondOp, RoseAddOp):
@@ -516,7 +627,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
       # Remove the first op only if it has no more uses
       if len(FirstOp.getUsers()) == 0:
         Block.eraseOperation(FirstOp)
-      return
+      return True
     if len(FirstOp.getUsers()) == 1:
       if ConstantIndex1 == 0:
         # Case 1:
@@ -527,14 +638,14 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
         NewOperandVal = ConstantOperand2.getValue() + ConstantOperand1.getValue()
         NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
         # Generate a new div instruction
-        NewOp = RoseSubOp.create("%new." + SecondOp.getName(), \
+        NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
                                   [NewOperand, FirstOp.getOperand(NonConstantIndex1)])
         Block.addOperationBefore(NewOp, SecondOp)
         SecondOp.replaceUsesWith(NewOp)
         # IMPORTANT: the second op must be removed before the first op.
         Block.eraseOperation(SecondOp)
         Block.eraseOperation(FirstOp)
-        return
+        return True
       if ConstantIndex1 == 1:
         # Case 2:
         # first_op:  y = sub x, c1
@@ -546,15 +657,15 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation):
           NewOperandVal = ConstantOperand1.getValue() - ConstantOperand2.getValue()
           NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand1.getType())
           # Generate a new sub instruction
-          NewOp = RoseSubOp.create("%new." + SecondOp.getName(), \
+          NewOp = RoseSubOp.create(Context.genName(SecondOp.getName() + ".new"), \
                                     [FirstOp.getOperand(NonConstantIndex1), NewOperand])
           Block.addOperationBefore(NewOp, SecondOp)
           SecondOp.replaceUsesWith(NewOp)
           # IMPORTANT: the second op must be removed before the first op.
           Block.eraseOperation(SecondOp)
           Block.eraseOperation(FirstOp)
-          return
-    return
+          return True
+    return False
 
 
 def RemoveRedundantBVInsertOps(Block : RoseBlock):
@@ -632,7 +743,7 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       Block.eraseOperation(BVInsertOp)
 
 
-def RunOpCombineOnBlock(Block : RoseBlock):
+def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   print("RUN OP COMBINE ON BLOCK")
   print("BLOCK:")
   print(Block)
@@ -746,7 +857,7 @@ def RunOpCombineOnBlock(Block : RoseBlock):
           Block.eraseOperation(FirstExtractOp)
       continue
 
-    # Combine the primitiev ops
+    # Combine the primitive ops
     print("------OPERATION:")
     Op.print()
     if isinstance(Op, RoseAddOp) \
@@ -769,41 +880,42 @@ def RunOpCombineOnBlock(Block : RoseBlock):
       or isinstance(NonConstantOperand, RoseSubOp) \
       or isinstance(NonConstantOperand, RoseMulOp) \
       or isinstance(NonConstantOperand, RoseDivOp):
-        OpCombinePatterns(NonConstantOperand, Op)
+        if not OpCombinePatterns(NonConstantOperand, Op, Context):
+          OpCombineMultiplePatterns(NonConstantOperand, Op, Context)
 
   # Remove the redundant bvinserts from the block
   RemoveRedundantBVInsertOps(Block)  
 
 
-def RunOpCombineOnRegion(Region):
+def RunOpCombineOnRegion(Region, Context : RoseContext):
   # Iterate over all the contents of this function
   assert not isinstance(Region, RoseBlock)
   for Abstraction in Region:
     # Run op simplification on a nested function
     if isinstance(Abstraction, RoseFunction):
-      RunOpCombineOnFunction(Abstraction)
+      RunOpCombineOnFunction(Abstraction, Context)
       continue
     # Op simplification only happens on blocks
     if not isinstance(Abstraction, RoseBlock):
       print("REGION:")
       print(Abstraction)
       Abstraction.print()
-      RunOpCombineOnRegion(Abstraction)
+      RunOpCombineOnRegion(Abstraction, Context)
       continue
-    RunOpCombineOnBlock(Abstraction)
+    RunOpCombineOnBlock(Abstraction, Context)
 
 
-def RunOpCombineOnFunction(Function : RoseFunction):
+def RunOpCombineOnFunction(Function : RoseFunction, Context : RoseContext):
   print("RUN ON OP COMBINE FUNCTION")
   print("FUNCTION:")
   Function.print()
   # Run op simplification on the given function
-  RunOpCombineOnRegion(Function)
+  RunOpCombineOnRegion(Function, Context)
 
 
 # Runs a transformation
-def Run(Function : RoseFunction):
-  RunOpCombineOnFunction(Function)
+def Run(Function : RoseFunction, Context : RoseContext):
+  RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
 
