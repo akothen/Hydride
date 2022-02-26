@@ -32,9 +32,11 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
       or isinstance(SecondOp, RoseSubOp) \
       or isinstance(SecondOp, RoseMulOp) \
       or isinstance(SecondOp, RoseDivOp)
-  assert len(FirstOp.getOperands()) == 2
-  assert len(SecondOp.getOperands()) == 2
-  assert FirstOp.getParent() == SecondOp.getParent()
+  if len(FirstOp.getOperands()) != 2 \
+  or len(SecondOp.getOperands()) != 2:
+    return False
+  if FirstOp.getParent() != SecondOp.getParent():
+    return False
 
   # Important requirement: SecondOp is a user of FirstOp
   assert SecondOp.getOperand(0) == FirstOp \
@@ -221,9 +223,11 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       or isinstance(SecondOp, RoseSubOp) \
       or isinstance(SecondOp, RoseMulOp) \
       or isinstance(SecondOp, RoseDivOp)
-  assert len(FirstOp.getOperands()) == 2
-  assert len(SecondOp.getOperands()) == 2
-  assert FirstOp.getParent() == SecondOp.getParent()
+  if len(FirstOp.getOperands()) != 2 \
+  or len(SecondOp.getOperands()) != 2:
+    return False
+  if FirstOp.getParent() != SecondOp.getParent():
+    return False
 
   # Important requirement: SecondOp is a user of FirstOp
   assert SecondOp.getOperand(0) == FirstOp \
