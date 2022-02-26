@@ -251,7 +251,7 @@ def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
       InsertBefore += 1
 
 
-def FixAccumulationCode(Function : RoseFunction):
+def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
   print("FIX ACCUMULATION CODE")
   BlockList = Function.getRegionsOfType(RoseBlock)
   AccumulationPatterFound = False
@@ -336,7 +336,7 @@ def FixAccumulationCode(Function : RoseFunction):
   # Sanity check  
   if len( NewInitInstructions) == 0:
     assert AccumulationPatterFound == False
-    return
+    return False
     
   # Get the first block
   Region = Function.getChild(0)
@@ -348,7 +348,10 @@ def FixAccumulationCode(Function : RoseFunction):
     FirstBlock = Region
 
   # Insert a bvinsert op in the first block of the given function
+  NewInputBVName = Function.getReturnValue().getName() + ".tmp"
   for Op in NewInitInstructions:
+    assert isinstance(Op, RoseBVInsertSliceOp)
+    Op.getInputBitVector().setName(NewInputBVName)
     if FirstBlock.getNumOperations() == 0:
       FirstBlock.addRegion(Op)
     else:
@@ -370,6 +373,22 @@ def FixAccumulationCode(Function : RoseFunction):
       print("here")
       Block.eraseOperation(Op)
   
+  DstUsers = Function.getUsersOf(Function.getReturnValue())
+  for User in DstUsers:
+    print("USER:")
+    User.print()
+    if isinstance(User, RoseBVExtractSliceOp):
+      assert User.getInputBitVector() == Function.getReturnValue()
+      # Clone the user
+      ClonedUser = User.clone(Context.genName(User.getName() + ".clone"))
+      ClonedUser.getInputBitVector().setName(NewInputBVName)
+      Block = User.getParent()
+      Block.addOperationAfter(ClonedUser, User)
+      User.replaceUsesWith(ClonedUser)
+      Block.eraseOperation(User)
+  
+  return True
+  
   
 
 def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
@@ -390,7 +409,7 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
   RunFixLoopsBooundsInFunction(Function, Context)
-  FixAccumulationCode(Function)
+  FixAccumulationCode(Function, Context)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
@@ -406,7 +425,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
