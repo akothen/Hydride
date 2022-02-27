@@ -21,46 +21,12 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   print("LOOP:")
   print(Loop)
   Loop.print()
-  FunctionOutput = Loop.getFunction().getReturnValue()
-  Params = Loop.getFunction().getArgs()
-  BVInsertOps = []
-  BVExtractOps = []
-  # Get the bvinserts to the output of the function that this belongs to.
-  for Region in Loop:
-    if isinstance(Region, RoseBlock):
-      for Op in Region:
-        if isinstance(Op, RoseBVInsertSliceOp):
-          if Op.getInputBitVector() == FunctionOutput:
-            ParentLoop = Loop.getParentOfType(RoseForLoop)
-            print("ParentLoop:")
-            ParentLoop.print()
-            if not isinstance(ParentLoop, RoseUndefRegion):
-              if Op.getLowIndex() == ParentLoop.getIterator():
-                continue
-            BVInsertOps.append(Op)
-        elif isinstance(Op, RoseBVExtractSliceOp):
-          if Op.getInputBitVector() in Params:
-            BVExtractOps.append(Op)
 
-  if len(BVInsertOps) != 0:
-      # But first make sure the bitwidth for all bvinserts is the same.    
-    BitWidth = BVInsertOps[0].getOutputBitwidth()
-    #if BitWidth != 1:
-    for Op in BVInsertOps:
-      assert Op.getOutputBitwidth() == BitWidth
-    #else:
-      # But first make sure the bitwidth for all bvxtracts is the same.    
-    #  BitWidth = BVExtractOps[0].getOutputBitwidth()
-    #  for Op in BVExtractOps:
-    #    assert Op.getOutputBitwidth() == BitWidth
-  elif len(BVExtractOps) != 0:
-    # But first make sure the bitwidth for all bvxtracts is the same.    
-    BitWidth = BVExtractOps[0].getOutputBitwidth()
-    for Op in BVExtractOps:
-      assert Op.getOutputBitwidth() == BitWidth
-  else:
-    # Nothing to do here.
+  # Get the op that we can use to canonicalize the loop bounds
+  PrimaryOp = GetOpDeterminingLoopBounds(Loop)
+  if PrimaryOp[0] == RoseUndefValue():
     return
+  BitWidth = PrimaryOp[0].getOutputBitwidth()
 
   # Go over the bvinserts/bvextracts and see if the bitwidth and loop step are the same.
   # Now see if the loop bounds need adjusting
@@ -348,10 +314,10 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
     FirstBlock = Region
 
   # Insert a bvinsert op in the first block of the given function
-  NewInputBVName = Function.getReturnValue().getName() + ".tmp"
+  #NewInputBVName = Function.getReturnValue().getName() + ".tmp"
   for Op in NewInitInstructions:
     assert isinstance(Op, RoseBVInsertSliceOp)
-    Op.getInputBitVector().setName(NewInputBVName)
+    #Op.getInputBitVector().setName(NewInputBVName)
     if FirstBlock.getNumOperations() == 0:
       FirstBlock.addRegion(Op)
     else:
@@ -373,19 +339,19 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
       print("here")
       Block.eraseOperation(Op)
   
-  DstUsers = Function.getUsersOf(Function.getReturnValue())
-  for User in DstUsers:
-    print("USER:")
-    User.print()
-    if isinstance(User, RoseBVExtractSliceOp):
-      assert User.getInputBitVector() == Function.getReturnValue()
-      # Clone the user
-      ClonedUser = User.clone(Context.genName(User.getName() + ".clone"))
-      ClonedUser.getInputBitVector().setName(NewInputBVName)
-      Block = User.getParent()
-      Block.addOperationAfter(ClonedUser, User)
-      User.replaceUsesWith(ClonedUser)
-      Block.eraseOperation(User)
+  #DstUsers = Function.getUsersOf(Function.getReturnValue())
+  #for User in DstUsers:
+  #  print("USER:")
+  #  User.print()
+  #  if isinstance(User, RoseBVExtractSliceOp):
+  #    assert User.getInputBitVector() == Function.getReturnValue()
+  #    # Clone the user
+  #    ClonedUser = User.clone(Context.genName(User.getName() + ".clone"))
+  #    ClonedUser.getInputBitVector().setName(NewInputBVName)
+  #    Block = User.getParent()
+  #    Block.addOperationAfter(ClonedUser, User)
+  #    User.replaceUsesWith(ClonedUser)
+  #    Block.eraseOperation(User)
   
   return True
   
@@ -425,6 +391,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

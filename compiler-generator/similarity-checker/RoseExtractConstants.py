@@ -47,6 +47,7 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
     LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [VectorSize, One])
     Block.addOperationBefore(LastIdx, Op)
     Op.setOperand(Op.getHighIndexPos(), LastIdx)
+    Op.setOperand(Op.getBitwidthPos(), VectorSize)
     Visited.add(LastIdx)
     return
 
@@ -228,6 +229,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   ExtractConstantsFromFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

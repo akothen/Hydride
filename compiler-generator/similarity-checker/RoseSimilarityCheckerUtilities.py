@@ -130,7 +130,8 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
     return BVExtractOps
   else:
     # Nothing to do here.
-    return RoseUndefValue()
+    return [RoseUndefValue()]
+
 
 
 
