@@ -371,14 +371,26 @@ class RoseForLoop(RoseRegion):
 
   def setEndIndex(self, NewEnd : int):
     self.End = RoseConstant(NewEnd, self.End.getType())
+  
+  def setStartIndexVal(self, NewStart : RoseValue):
+    assert self.Start.getType() == NewStart.getType()
+    self.Start = NewStart
+  
+  def setStepVal(self, NewStep : RoseValue):
+    assert self.Step.getType() == NewStep.getType()
+    self.Step = NewStep
+
+  def setEndIndexVal(self, NewEnd : RoseValue):
+    assert self.End.getType() == NewEnd.getType()
+    self.End = NewEnd
 
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     LoopHeader = Spaces + "for ([" + self.Iterator.getName() + " (range " \
-        + str(self.getStartIndex()) + " " + str(self.getEndIndex()) \
-        + " " + str(self.getStep()) + ")]) {"
+        + self.getStartIndex().getName() + " " + self.getEndIndex().getName() \
+        + " " + self.getStep().getName() + ")]) {"
     print(LoopHeader)
     # Print regions in this loop
     super().print(NumSpace + 1)
@@ -459,7 +471,8 @@ class RoseCond(RoseRegion):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Condtiion = Spaces + "if (" + self.Condition.getName() + ") {"
+    Condtiion = Spaces + "if (" + str(self.Condition.getType()) \
+                       + " " + self.Condition.getName() + ") {"
     print(Condtiion)
     # Print regions in this if-else blocks
     for Region in self.getThenRegions():
@@ -468,5 +481,4 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
