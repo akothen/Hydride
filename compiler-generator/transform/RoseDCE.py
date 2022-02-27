@@ -117,30 +117,14 @@ def RunDCEOnBlock(Block : RoseBlock):
     ParentRegion.eraseChild(Block)
 
 
-def RunDCEOnRegion(Region):
-  # Iterate over all the contents of this function
-  assert not isinstance(Region, RoseBlock)
-  for Abstraction in Region:
-    # Run DCE on a nested function
-    if isinstance(Abstraction, RoseFunction):
-      RunDCEOnFunction(Abstraction)
-      continue
-    # DCE only happens on blocks
-    if not isinstance(Abstraction, RoseBlock):
-      print("REGION:")
-      print(Abstraction)
-      Abstraction.print()
-      RunDCEOnRegion(Abstraction)
-      continue
-    RunDCEOnBlock(Abstraction)
-
-
 def RunDCEOnFunction(Function : RoseFunction):
   print("RUN ON OP SIMPLIFY FUNCTION")
   print("FUNCTION:")
   Function.print()
   # Run DCE on the given function
-  RunDCEOnRegion(Function)
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    RunDCEOnBlock(Block)
 
 
 # Runs a transformation
