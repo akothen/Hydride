@@ -13,7 +13,7 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
-import RoseFixLoopBounds
+from RoseContext import *
 
 
 # The cananonical for a function is a loop nest with 
@@ -81,5 +81,57 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
             if InnerInnerLoopStep.getValue() != SubSubRegion.getStep().getValue():
               return False
   return (OuterLoopFound == True and InnerLoopsFound == True)
+
+
+
+def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
+  print("FIX BOUNDS OF LOOP")
+  print("LOOP:")
+  print(Loop)
+  Loop.print()
+  FunctionOutput = Loop.getFunction().getReturnValue()
+  Params = Loop.getFunction().getArgs()
+  BVInsertOps = []
+  BVExtractOps = []
+  # Get the bvinserts to the output of the function that this belongs to.
+  BlockList = Loop.getRegionsOfType(RoseBlock, Level=0)
+  for Block in BlockList:
+    for Op in reversed(Block.getOperations()):
+      if isinstance(Op, RoseBVInsertSliceOp):
+        if Op.getInputBitVector() == FunctionOutput:
+          ParentLoop = Loop.getParentOfType(RoseForLoop)
+          print("ParentLoop:")
+          ParentLoop.print()
+          if not isinstance(ParentLoop, RoseUndefRegion):
+            if Op.getLowIndex() == ParentLoop.getIterator():
+              continue
+          BVInsertOps.append(Op)
+      elif isinstance(Op, RoseBVExtractSliceOp):
+        if Op.getInputBitVector() in Params:
+          BVExtractOps.append(Op)
+
+  if len(BVInsertOps) != 0:
+      # But first make sure the bitwidth for all bvinserts is the same.    
+    BitWidth = BVInsertOps[0].getOutputBitwidth()
+    #if BitWidth != 1:
+    for Op in BVInsertOps:
+      assert Op.getOutputBitwidth() == BitWidth
+    return [BVInsertOps[0]]
+    #else:
+      # But first make sure the bitwidth for all bvxtracts is the same.    
+    #  BitWidth = BVExtractOps[0].getOutputBitwidth()
+    #  for Op in BVExtractOps:
+    #    assert Op.getOutputBitwidth() == BitWidth
+  elif len(BVExtractOps) != 0:
+    # But first make sure the bitwidth for all bvxtracts is the same.    
+    BitWidth = BVExtractOps[0].getOutputBitwidth()
+    for Op in BVExtractOps:
+      assert Op.getOutputBitwidth() == BitWidth
+    return BVExtractOps
+  else:
+    # Nothing to do here.
+    return RoseUndefValue()
+
+
 
 
