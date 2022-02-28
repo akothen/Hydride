@@ -333,4 +333,60 @@ def GatherIndexingOps(Operation : RoseOperation):
     for Operand in IndexingOp.getOperands():
       if isinstance(Operand, RoseOperation):
         Worklist.append(Operand)
+  IndexingOps.reverse()
   return IndexingOps
+
+
+def HasReductionPattern(Block : RoseBlock):
+  print("HAS REDUCTION PATTERN")
+  Loop = Block.getParentOfType(RoseForLoop)
+  if isinstance(Loop, RoseUndefRegion):
+    print("RETURN FALSE1")
+    return False
+  Op = Block.getOperation(len(Block.getOperations()) - 1)
+  assert isinstance(Op, RoseBVInsertSliceOp)
+  if Op.getInputBitVector() != Block.getFunction().getReturnValue():
+    print("RETURN FALSE2")
+    return False
+  # The low index musst be dependent on the outer loop
+  ParentLoop = Loop.getParentOfType(RoseForLoop)
+  if isinstance(ParentLoop, RoseUndefRegion):
+    print("RETURN FALSE3")
+    return False
+  if ParentLoop.getIterator() != Op.getLowIndex():
+    print("RETURN FALSE4")
+    return False
+  ReductionOp = Op.getInsertValue()
+  if isinstance(ReductionOp, RoseAddOp):
+    print("RETURN FALSE5")
+    return False
+  for Operand in ReductionOp.getOperands():
+    if isinstance(Operand, RoseBVExtractSliceOp):
+      if Operand.getInputBitVector() == Block.getFunction().getReturnValue():
+        print("RETURN TRUE")
+        return True
+  print("RETURN FALSE6")
+  return False
+
+
+def GetReductionOps(Block : RoseBlock):
+  print("GET REDUCTION OPS")
+  assert HasReductionPattern(Block)
+  OpList = list()
+  InsertOp = Block.getOperation(len(Block.getOperations()) - 1)
+  for Operand in InsertOp.getInsertValue().getOperands():
+    if isinstance(Operand, RoseBVExtractSliceOp):
+      if Operand.getInputBitVector() == Block.getFunction().getReturnValue():
+        for IndexingOp in GatherIndexingOps(Operand):
+          if IndexingOp not in OpList:
+            OpList.append(IndexingOp)
+        OpList.append(Operand)
+  OpList.append(InsertOp.getInsertValue())
+  for IndexingOp in GatherIndexingOps(InsertOp):
+    if IndexingOp not in OpList:
+      OpList.append(IndexingOp)
+  OpList.append(InsertOp)
+  for Op in OpList:
+    Op.print()
+  return OpList
+
