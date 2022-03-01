@@ -207,6 +207,9 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
   
   def getHighIndexPos(self):
     return 2
+  
+  def getBitwidthPos(self):
+    return 3
 
   def isIndexingBVOp(self):
     return True
@@ -267,10 +270,16 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
   def getHighIndexPos(self):
     return 3
 
+  def getBitwidthPos(self):
+    return 4
+
   def getBitwidthHandled(self):
     BitwidthVal = self.getOperand(4)
-    assert isinstance(BitwidthVal, RoseConstant)
-    return BitwidthVal.getValue()
+    #assert isinstance(BitwidthVal, RoseConstant)
+    if isinstance(BitwidthVal, RoseConstant):
+      return BitwidthVal.getValue()
+    else:
+      return BitwidthVal
 
   def isIndexingBVOp(self):
     return True
@@ -946,4 +955,3 @@ class RoseBVZeroOp(RoseBitVectorOp):
     ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
     return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
                                  "%" + "cond." + self.getName())
-
