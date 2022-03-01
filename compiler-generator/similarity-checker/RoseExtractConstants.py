@@ -5,7 +5,6 @@
 #############################################################
 
 
-from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -110,6 +109,9 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
                                   BVValToBitwidthVal : dict, UnknownVal : list):
     print("AddBitwidthValForUnknownVal:")
     Op.getParent().print()
+    # If the Op is in the UnkownVal list, remove it from the list
+    if Op in UnknownVal:
+      UnknownVal.remove(Op)
     UsersList = Op.getUsers()
     for User in UsersList:
       if User in UnknownVal:
@@ -155,6 +157,8 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
         continue
 
       if Op.isSizeChangingOp():
+        print("++++++=isSizeChangingOp OP IN OPLIST:")
+        Op.print()
         if Op in BVValToBitwidthVal:
           Op.setOperand(1, BVValToBitwidthVal[Op])
           if Op.getOperand(0) not in BVValToBitwidthVal:
@@ -164,6 +168,9 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
                                                     Op.getOperand(1).getType()))
         Op.setOperand(1, Arg)
         BVValToBitwidthVal[Op] = Arg
+        for Val in UnknownVal:
+          print("UNKNOWN VAL:")
+          Val.print()
         AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
         continue
     
@@ -174,6 +181,7 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
           for Operand in Op.getOperands():
             BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
         else:
+          UnknownVal.append(Op)
           for Operand in Op.getOperands():
             UnknownVal.append(Operand)
         continue
@@ -255,7 +263,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   ExtractConstantsFromFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
