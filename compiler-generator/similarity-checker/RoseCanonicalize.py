@@ -14,6 +14,7 @@ from RoseBitVectorOperations import *
 from RoseUtilities import *
 from RoseContext import *
 from RoseSimilarityCheckerUtilities import *
+import RoseOpCombine
 
 
 def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
@@ -24,7 +25,7 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
 
   # Get the op that we can use to canonicalize the loop bounds
   PrimaryOp = GetOpDeterminingLoopBounds(Loop)
-  if PrimaryOp[0] == RoseUndefValue():
+  if PrimaryOp == None:
     return
   BitWidth = PrimaryOp[0].getOutputBitwidth()
 
@@ -65,7 +66,7 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
     ReplaceUsesWithUniqueCopiesOf(Loop, OldIterator, IteratorReplacement, Context)
   print("NEW LOOP:")
   Loop.print()
-  import RoseOpCombine
+  # Combine some ops in the loop
   RoseOpCombine.RunOpCombineOnRegion(Loop, Context)
   print("NEW LOOP:")
   Loop.print()
@@ -314,7 +315,6 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
     FirstBlock = Region
 
   # Insert a bvinsert op in the first block of the given function
-  #NewInputBVName = Function.getReturnValue().getName() + ".tmp"
   for Op in NewInitInstructions:
     assert isinstance(Op, RoseBVInsertSliceOp)
     #Op.getInputBitVector().setName(NewInputBVName)
@@ -332,26 +332,12 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
     for IndexingOp in IndexingOps:
       if IndexingOp not in ToBeErased:
         ToBeErased.append(IndexingOp)
-  for Op in ToBeErased:
+  for Op in reversed(ToBeErased):
     Block = Op.getParent()
     Op.print()
     if not Function.hasUsesOf(Op):
       print("here")
       Block.eraseOperation(Op)
-  
-  #DstUsers = Function.getUsersOf(Function.getReturnValue())
-  #for User in DstUsers:
-  #  print("USER:")
-  #  User.print()
-  #  if isinstance(User, RoseBVExtractSliceOp):
-  #    assert User.getInputBitVector() == Function.getReturnValue()
-  #    # Clone the user
-  #    ClonedUser = User.clone(Context.genName(User.getName() + ".clone"))
-  #    ClonedUser.getInputBitVector().setName(NewInputBVName)
-  #    Block = User.getParent()
-  #    Block.addOperationAfter(ClonedUser, User)
-  #    User.replaceUsesWith(ClonedUser)
-  #    Block.eraseOperation(User)
   
   return True
   
