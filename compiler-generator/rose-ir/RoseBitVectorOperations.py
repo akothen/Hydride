@@ -2,7 +2,7 @@
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseType import RoseType
-from RoseAbstractions import RoseUndefRegion
+from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 
@@ -14,15 +14,26 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     assert Bitvector.getType().isBitVectorTy()
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
-
+  
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseBVSignExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
-    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVSignExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVSignExtendOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVSignExtendOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVSignExtendOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVSignExtendOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -52,14 +63,24 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVZeroExtendOp(Name, Bitvector, TargetBitwidth, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
-    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVZeroExtendOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVZeroExtendOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVZeroExtendOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -89,14 +110,24 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
     super().__init__(RoseOpcode.bvssat, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVSSaturateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
-    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVSSaturateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVSSaturateOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVSSaturateOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVSSaturateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVSSaturateOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -124,14 +155,24 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     super().__init__(RoseOpcode.bvusat, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVUSaturateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
-    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVUSaturateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVUSaturateOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVUSaturateOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVUSaturateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVUSaturateOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -159,14 +200,24 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     super().__init__(RoseOpcode.bvtrunc, Name, OperandList, ParentBlock)
 
   @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
-            ParentBlock = RoseUndefRegion()):
-    return RoseBVTruncateOp(Name, Bitvector, TargetBitwidth, ParentBlock)
-    
-  @staticmethod
-  def create(Name : str, Bitvector : RoseValue, TargetBitwidth : int, ParentBlock = RoseUndefRegion()):
-    TargetBitwidthVal = RoseConstant.create(TargetBitwidth, RoseType.getIntegerTy(32))
-    return RoseBVTruncateOp(Name, Bitvector, TargetBitwidthVal, ParentBlock)
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVTruncateOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVTruncateOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
 
   def getInputBitVector(self):
     return self.getOperand(0)
@@ -955,3 +1006,5 @@ class RoseBVZeroOp(RoseBitVectorOp):
     ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
     return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
                                  "%" + "cond." + self.getName())
+
+  
