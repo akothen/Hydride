@@ -6,6 +6,7 @@
 #############################################################
 
 
+import re
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -13,7 +14,7 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 from RoseContext import *
-
+from RoseUtilities import *
 
 
 def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, \
@@ -828,11 +829,100 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       Block.eraseOperation(BVInsertOp)
 
 
+def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
+  print("COMBINE SIZE EXTENDING OPS")
+  assert isinstance(Operation, RoseBVZeroExtendOp) \
+      or isinstance(Operation, RoseBVSignExtendOp)
+
+  # The given op must have only one user
+  if len(Operation.getUsers()) != 1:
+    # Nothing to do
+    return
+
+  # We can support a few patterns here
+  InputOp = Operation.getInputBitVector()
+  if not isinstance(InputOp, RoseOperation):
+    return
+  Block = InputOp.getParent()
+  if len(InputOp.getUsers()) != 1:
+    # Nothing to do
+    return
+
+  if InputOp.getOpcode() == Operation.getOpcode():
+    assert Operation.getOutputBitwidth() >= InputOp.getOutputBitwidth()
+    Operation.setOperand(0, InputOp.getInputBitVector())
+    # Erase the old input op
+    Block.eraseOperation(InputOp)
+    return
+  
+  # Another case is where incoming input op is an op with same 
+  # input and output type.
+  # TODO: Make this more general
+  if not InputOp.getOpcode().typesOfInputsAndOutputEqual():
+    return
+  
+  # Some sanity checking
+  for Operand in InputOp.getOperands():
+    if isinstance(Operand, RoseConstant):
+      continue
+    if not isinstance(Operand, RoseOperation):
+      # Nothing to do
+      return
+    if Operand.getOpcode() != Operation.getOpcode():
+      # Nothing to do
+      return
+    # All of these operands mmust have only one user
+    if len(InputOp.getUsers()) != 1:
+      # Nothing to do
+      return
+  
+  # The allowable operands are size extending ops or constants.
+  NewOperandList = list()
+  ToBeErased = list()
+  for Operand in InputOp.getOperands():
+    if isinstance(Operand, RoseConstant):
+      NewConstant = RoseConstant.create(Operand.getValue(), Operation.getType())
+      NewOperandList.append(NewConstant)
+      continue
+    assert Operation.getOutputBitwidth() >= Operand.getOutputBitwidth()
+    # Generate a new op
+    Name = Context.genName(Operand.getName() + ".new")
+    NewOp = NewSizeExtendOp(Name, Operand.getOpcode(), \
+                  Operand.getInputBitVector(), Operation.getOutputBitwidth())
+    # Add this new op before the insert op
+    Block.addOperationBefore(NewOp, InputOp)
+    NewOperandList.append(NewOp)
+    ToBeErased.append(Operand)
+  
+  # Generate the new input op and it to the block
+  Name = Context.genName(InputOp.getName() + ".new")
+  NewInputOp = GenerateOpWithSameInputsAndOutputType(Name, \
+                        InputOp.getOpcode(), NewOperandList)
+  Block.addOperationBefore(NewInputOp, InputOp)
+  # Replace the uses of the give size extending ip with this new input op
+  Operation.replaceUsesWith(NewInputOp)
+  # Erase the op now
+  Block.eraseOperation(Operation)
+  Block.eraseOperation(InputOp)
+  for Operand in ToBeErased:
+    Block.eraseOperation(Operand)
+
+
 def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   print("RUN OP COMBINE ON BLOCK")
   print("BLOCK:")
   print(Block)
   Block.print()
+
+  # Collect the indexing ops
+  IndexingOps = set()
+  for Operation in Block:
+    if isinstance(Operation, RoseBVExtractSliceOp) \
+    or isinstance(Operation, RoseBVInsertSliceOp):
+      for IndexingOp in GatherIndexingOps(Operation):
+        print("INDEXING OPS:")
+        IndexingOp.print()
+        IndexingOps.add(IndexingOp)
 
   # Gather all the truncate and extract ops in this block
   OpList = list()
@@ -841,12 +931,20 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
     if isinstance(Operation, RoseBVTruncateOp) \
     or isinstance(Operation, RoseBVExtractSliceOp):
       OpList.append(Operation)
+      continue
     if isinstance(Operation, RoseAddOp) \
     or isinstance(Operation, RoseSubOp) \
     or isinstance(Operation, RoseMulOp) \
     or isinstance(Operation, RoseDivOp):
       if len(Operation.getOperands()) == 2:
         OpList.append(Operation)
+        continue
+    if Operation in IndexingOps:
+      if isinstance(Operation, RoseBVZeroExtendOp) \
+      or isinstance(Operation, RoseBVSignExtendOp):
+        print("INDEXING OP ADDED:")
+        OpList.append(Operation)
+      continue
 
   # Now deal with all the truncate ops in this block
   for Op in OpList:
@@ -967,6 +1065,14 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
       or isinstance(NonConstantOperand, RoseDivOp):
         if not OpCombinePatterns(NonConstantOperand, Op, Context):
           OpCombineMultiplePatterns(NonConstantOperand, Op, Context)
+      continue
+      
+    # Combine some size extending ops
+    if isinstance(Op, RoseBVZeroExtendOp) \
+    or isinstance(Op, RoseBVSignExtendOp):
+      assert Op in IndexingOps
+      CombineSizeExtendingOps(Op, Context)
+      continue
 
   # Remove the redundant bvinserts from the block
   RemoveRedundantBVInsertOps(Block)  
@@ -1003,6 +1109,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

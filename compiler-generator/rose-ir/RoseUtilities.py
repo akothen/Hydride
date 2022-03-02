@@ -397,7 +397,7 @@ def GenerateOpWithSameInputsAndOutputType(Name : str, Opcode : RoseOpcode, Opera
   if Opcode ==  RoseOpcode.bvsub:
     return RoseBVSubOp.create(Name, Operands)
   if  Opcode == RoseOpcode.bvmul:
-    return RoseMulOp.create(Name, Operands)
+    return RoseBVMulOp.create(Name, Operands)
   if  Opcode == RoseOpcode.bvor:
     return RoseBVOrOp.create(Name, Operands)
   if  Opcode == RoseOpcode.bvxor:
@@ -511,4 +511,6 @@ def NewSizeExtendOp(Name : str, Opcode : RoseOpcode, Operand : RoseBitVectorOp, 
     return RoseBVTruncateOp.create(Name, Operand, NewSize)
 
   assert False, "Operation is not a size extending op"
+
+
 
