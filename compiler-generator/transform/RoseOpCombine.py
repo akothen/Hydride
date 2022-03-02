@@ -829,7 +829,36 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       Block.eraseOperation(BVInsertOp)
 
 
+
 def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
+  print("COMBINE SIZE EXTENDING OPS")
+  assert isinstance(Operation, RoseBVZeroExtendOp) \
+      or isinstance(Operation, RoseBVSignExtendOp)
+
+  # The given op must have only one user
+  if len(Operation.getUsers()) != 1:
+    # Nothing to do
+    return
+
+  # We can support a few patterns here
+  InputOp = Operation.getInputBitVector()
+  if not isinstance(InputOp, RoseOperation):
+    return
+  Block = InputOp.getParent()
+  if len(InputOp.getUsers()) != 1:
+    # Nothing to do
+    return
+
+  if InputOp.getOpcode() == Operation.getOpcode():
+    assert Operation.getOutputBitwidth() >= InputOp.getOutputBitwidth()
+    Operation.setOperand(0, InputOp.getInputBitVector())
+    # Erase the old input op
+    Block.eraseOperation(InputOp)
+  
+  return
+  
+
+def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseContext):
   print("COMBINE SIZE EXTENDING OPS")
   assert isinstance(Operation, RoseBVZeroExtendOp) \
       or isinstance(Operation, RoseBVSignExtendOp)
@@ -939,11 +968,11 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
       if len(Operation.getOperands()) == 2:
         OpList.append(Operation)
         continue
-    if Operation in IndexingOps:
-      if isinstance(Operation, RoseBVZeroExtendOp) \
-      or isinstance(Operation, RoseBVSignExtendOp):
-        print("INDEXING OP ADDED:")
-        OpList.append(Operation)
+    #if Operation in IndexingOps:
+    if isinstance(Operation, RoseBVZeroExtendOp) \
+    or isinstance(Operation, RoseBVSignExtendOp):
+      print("INDEXING OP ADDED:")
+      OpList.append(Operation)
       continue
 
   # Now deal with all the truncate ops in this block
@@ -1070,8 +1099,11 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
     # Combine some size extending ops
     if isinstance(Op, RoseBVZeroExtendOp) \
     or isinstance(Op, RoseBVSignExtendOp):
-      assert Op in IndexingOps
-      CombineSizeExtendingOps(Op, Context)
+      if Op in IndexingOps:
+        CombineSizeExtendingIndexingOps(Op, Context)
+      else:
+        # NOTE: Not 100% sure if this is OK to support.
+        CombineSizeExtendingOps(Op, Context)
       continue
 
   # Remove the redundant bvinserts from the block
@@ -1109,7 +1141,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
