@@ -912,13 +912,26 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to sign extend the operands first. Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
       OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
-                          Operand1, OperandBitwidth)
-      Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+      if Context.isValueSigned(Operand1) == True:
+        Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=True)
+      else:
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      if Context.isValueSigned(Operand2) == True:
+        Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)
-      # Add signedness info
-      Context.addSignednessInfoForValue(Operand1, IsSigned=True)
-      Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+      else:
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                          Operand2, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       Context.addAbstractionToIR(Operand2)
@@ -2304,6 +2317,5 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
-
 
 
