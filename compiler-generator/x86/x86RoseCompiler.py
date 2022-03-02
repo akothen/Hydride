@@ -225,14 +225,20 @@ def CompileIndex(IndexExpr, Context : x86RoseContext):
     assert Context.isVariableDefined(IndexExpr.name)
     ID = Context.getVariableID(IndexExpr.name)
     assert Context.getCompiledAbstractionForID(ID) == CompiledIndex
+    # Consider any zero extension that may be needed. We allow indices that 
+    # are only 32-bits long.
+    if CompiledIndex.getType().getBitwidth() < 32:
+      OpName = Context.genName()
+      CompiledIndex = RoseBVZeroExtendOp.create(OpName, CompiledIndex, 32)
+      # Add this op to the IR and to the context
+      Context.addAbstractionToIR(CompiledIndex)
+      Context.addCompiledAbstraction(OpName, CompiledIndex)
     # Generate the casting op
-    #Name = "cast." + CompiledIndex.getName()
-    CastOp = RoseCastOp.create(Context.genName(), CompiledIndex, \
+    CompiledIndex = RoseCastOp.create(Context.genName(), CompiledIndex, \
                   RoseType.getIntegerTy(CompiledIndex.getType().getBitwidth()))
     # Add this op to the IR and to the context
-    Context.addAbstractionToIR(CastOp)
-    Context.addCompiledAbstraction(ID, CastOp)
-    return CastOp
+    Context.addAbstractionToIR(CompiledIndex)
+    Context.addCompiledAbstraction(ID, CompiledIndex)
   return CompiledIndex
 
 
