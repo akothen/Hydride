@@ -42,10 +42,6 @@ class RoseBitVectorOp(RoseOperation):
     # Generally this is false except a few
     # exceptions
     return False
-  
-  # It is used by getOutputBitwidth
-  def getBitwidthHandled(self):
-    return 0
 
   def getOutputBitwidth(self):
     Type = self.getType()
@@ -53,7 +49,7 @@ class RoseBitVectorOp(RoseOperation):
     print(Type)
     Type.print()
     if Type.isVoidTy():
-      return self.getBitwidthHandled()
+      return 0
     if Type.isBitVectorTy():
       return Type.getBitwidth()
     assert Type.isBooleanTy()
@@ -68,4 +64,5 @@ class RoseBitVectorOp(RoseOperation):
   # bitvector operations
   def simplify(self):
     return RoseUndefValue()
+
 
