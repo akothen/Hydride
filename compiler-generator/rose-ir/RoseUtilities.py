@@ -315,7 +315,6 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction : RoseValue, NewAbstractio
     Region.addOperationBefore(NewOp, InsertBefore)
 
 
-
 def GatherIndexingOps(Operation : RoseOperation):
   # Sanity checks
   assert isinstance(Operation, RoseBitVectorOp) 
@@ -389,4 +388,127 @@ def GetReductionOps(Block : RoseBlock):
   for Op in OpList:
     Op.print()
   return OpList
+
+
+def GenerateOpWithSameInputsAndOutputType(Name : str, Opcode : RoseOpcode, Operands : list):
+  assert Opcode.typesOfInputsAndOutputEqual() == True
+  if Opcode ==  RoseOpcode.bvadd:
+    return RoseBVAddOp.create(Name, Operands)
+  if Opcode ==  RoseOpcode.bvsub:
+    return RoseBVSubOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvmul:
+    return RoseMulOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvor:
+    return RoseBVOrOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvxor:
+    return RoseBVXorOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvand:
+    return RoseBVAndOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvshl:
+    assert len(Operands) == 2
+    return RoseBVShlOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvlshr:
+    assert len(Operands) == 2
+    return RoseBVLshrOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvashr:
+    assert len(Operands) == 2
+    return RoseBVAshrOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvsmin:
+    return RoseBVSminOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvumin:
+    return RoseBVUminOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvsmax:
+    return RoseBVSmaxOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvumax:
+    return RoseBVUmaxOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.bvnot:
+    assert len(Operands) == 1
+    return RoseBVNotOp.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.bvneg:
+    assert len(Operands) == 1
+    return RoseBVNegOp.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.bvadd1:
+    assert len(Operands) == 1
+    return RoseBVAdd1Op.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.bvsub1:
+    assert len(Operands) == 1
+    return RoseBVSub1Op.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.bvsdiv:
+    assert len(Operands) == 2
+    return RoseBVSdivOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvudiv:
+    assert len(Operands) == 2
+    return RoseBVUdivOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvsrem:
+    assert len(Operands) == 2
+    return RoseBVSremOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvurem:
+    assert len(Operands) == 2
+    return RoseBVUremOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvsmod:
+    assert len(Operands) == 2
+    return RoseBVSmodOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvrol:
+    assert len(Operands) == 2
+    return RoseBVRolOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.bvror:
+    assert len(Operands) == 2
+    return RoseBVRorOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.boolnot:
+    assert len(Operands) == 1
+    return RoseNotOp.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.booland:
+    return RoseAndOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.boolnand:
+    return RoseNandOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.boolor:
+    return RoseOrOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.boolnor:
+    return RoseNorOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.boolxor:
+    assert len(Operands) == 2
+    return RoseXorOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.add:
+    return RoseAddOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.sub:
+    return RoseSubOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.mul:
+    return RoseMulOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.min:
+    return RoseMinOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.max:
+    return RoseMaxOp.create(Name, Operands)
+  if  Opcode == RoseOpcode.div:
+    assert len(Operands) == 2
+    return RoseDivOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.rem:
+    assert len(Operands) == 2
+    return RoseRemOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.mod:
+    assert len(Operands) == 2
+    return RoseModOp.create(Name, Operands[0], Operands[1])
+  if  Opcode == RoseOpcode.abs:
+    assert len(Operands) == 1
+    return RoseAbsOp.create(Name, Operands[0])
+  if  Opcode == RoseOpcode.ret:
+    assert len(Operands) == 1
+    return RoseReturnOp.create(Name, Operands[0])
+  
+  assert False, "Operation inputs and outputs do not have same type"
+
+
+def NewSizeExtendOp(Name : str, Opcode : RoseOpcode, Operand : RoseBitVectorOp, NewSize : int):
+  assert Opcode.isSizeChangingOp() == True
+  if Opcode == RoseOpcode.bvzeroextend:
+    return RoseBVZeroExtendOp.create(Name, Operand, NewSize)
+  if Opcode == RoseOpcode.bvsignextend:
+    return RoseBVSignExtendOp.create(Name, Operand, NewSize)
+  if Opcode == RoseOpcode.bvssat:
+    return RoseBVSSaturateOp.create(Name, Operand, NewSize)
+  if Opcode == RoseOpcode.bvusat:
+    return RoseBVUSaturateOp.create(Name, Operand, NewSize)
+  if Opcode == RoseOpcode.bvtrunc:
+    return RoseBVTruncateOp.create(Name, Operand, NewSize)
+
+  assert False, "Operation is not a size extending op"
 
