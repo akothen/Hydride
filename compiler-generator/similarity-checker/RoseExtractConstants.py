@@ -106,6 +106,16 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
               assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
               Op.getLowIndex().setOperand(1, DivOp)
           Visited.add(DivOp)
+        elif isinstance(LowIndex, RoseAddOp):
+          assert len(LowIndex.getOperands()) == 2
+          if isinstance(LowIndex.getOperand(0), RoseConstant):
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                            LowIndex.getOperand(0).getType()))
+            LowIndex.setOperand(0, Arg)
+          elif isinstance(LowIndex.getOperand(1), RoseConstant):
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                            LowIndex.getOperand(1).getType()))
+            LowIndex.setOperand(1, Arg)         
       Visited.add(Op.getLowIndex())
       # Now deal with the high index
       if Op.getHighIndex() in Visited:
