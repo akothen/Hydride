@@ -130,6 +130,8 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
                                   BVValToBitwidthVal : dict, UnknownVal : list):
     print("AddBitwidthValForUnknownVal:")
     Op.getParent().print()
+    print("---------")
+    Op.print()
     # If the Op is in the UnkownVal list, remove it from the list
     if Op in UnknownVal:
       UnknownVal.remove(Op)
@@ -139,17 +141,20 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
         if isinstance(User, RoseOperation):
           if User.getOpcode().typesOfInputsAndOutputEqual():
             BVValToBitwidthVal[User] = Param
-          assert User.getOpcode().typesOfInputsAndOutputEqual() \
-              or User.getOpcode().typesOfOperandsAreEqual()
-          for Operand in User.getOperands():
-            if Operand in BVValToBitwidthVal:
-              Op.print()
-              BVValToBitwidthVal[Op].print()
-              Operand.print()
-              BVValToBitwidthVal[Operand].print()
-              assert BVValToBitwidthVal[Op] == BVValToBitwidthVal[Operand]
-            else:
-              BVValToBitwidthVal[Operand] =  BVValToBitwidthVal[Op]
+            UnknownVal.remove(User)
+          if User.getOpcode().typesOfInputsAndOutputEqual() \
+              or User.getOpcode().typesOfOperandsAreEqual():
+            for Operand in User.getOperands():
+              if Operand in BVValToBitwidthVal:
+                Op.print()
+                BVValToBitwidthVal[Op].print()
+                Operand.print()
+                BVValToBitwidthVal[Operand].print()
+                assert BVValToBitwidthVal[Op] == BVValToBitwidthVal[Operand]
+              else:
+                BVValToBitwidthVal[Operand] =  BVValToBitwidthVal[Op]
+                if Operand in UnknownVal:
+                  UnknownVal.remove(Operand)
     return
 
   UnknownVal = list()
