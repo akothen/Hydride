@@ -108,12 +108,10 @@ class RoseOpcode(Enum):
         return self.name
     
     def __eq__(self, Other):
-        print(Other)
         assert isinstance(Other, RoseOpcode)
         return self.value == Other.value
 
     def __ne__(self, Other):
-        print(Other)
         assert isinstance(Other, RoseOpcode)
         return self.value != Other.value
     
@@ -503,9 +501,6 @@ class RoseOpcode(Enum):
         or self.value == self.bvsmod.value \
         or self.value == self.bvrol.value \
         or self.value == self.bvror.value \
-        or self.value == self.bvssat.value \
-        or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value \
         or self.value == self.boolnot.value \
         or self.value == self.booland.value \
         or self.value == self.boolnand.value \
@@ -550,6 +545,9 @@ class RoseOpcode(Enum):
         or self.value == self.greaterthan.value \
         or self.value == self.greaterthanequal.value\
         or self.value == self.cast.value \
+        or self.value == self.bvssat.value \
+        or self.value == self.bvusat.value \
+        or self.value == self.bvtrunc.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value:
             return False
@@ -958,6 +956,4 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
-
-
 
