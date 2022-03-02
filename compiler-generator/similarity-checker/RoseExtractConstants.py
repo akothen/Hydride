@@ -71,19 +71,35 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
       Visited.add(LastIdx)
     else:
       Op.getLowIndex().print()
+      LowIndex = Op.getLowIndex()
       # Deal with the low index first
-      if isinstance(Op.getLowIndex(), RoseOperation) and Op.getLowIndex() not in Visited:
+      if isinstance(LowIndex, RoseOperation) and LowIndex not in Visited:
         # Now we have to deal with the low index that is a mul op
-        if isinstance(Op.getLowIndex(),  RoseMulOp):
-          # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
-          DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
-          Block.addOperationBefore(DivOp, Op.getLowIndex())
-          assert len(Op.getLowIndex().getOperands()) == 2
-          if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
-            Op.getLowIndex().setOperand(0, DivOp)
+        if isinstance(LowIndex,  RoseMulOp):
+          assert len(LowIndex.getOperands()) == 2
+          if isinstance(LowIndex.getOperand(0), RoseOperation):
+            DivOp = LowIndex.getOperand(0)
+            assert isinstance(DivOp, RoseDivOp)
+            assert isinstance(LowIndex.getOperand(1), RoseConstant)
+            LowIndex.setOperand(1, Op.getOutputBitwidth())
+            assert isinstance(DivOp.getOperand(1), RoseConstant)
+            DivOp.setOperand(1, LoopStep)
+          elif isinstance(LowIndex.getOperand(1), RoseOperation):
+            DivOp = LowIndex.getOperand(1)
+            assert isinstance(DivOp, RoseDivOp)
+            assert isinstance(LowIndex.getOperand(0), RoseConstant)
+            LowIndex.setOperand(1, Op.getOutputBitwidth())
+            assert isinstance(DivOp.getOperand(1), RoseConstant)
+            DivOp.setOperand(1, LoopStep)
           else:
-            assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
-            Op.getLowIndex().setOperand(1, DivOp)
+            # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
+            DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
+            Block.addOperationBefore(DivOp, Op.getLowIndex())
+            if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
+              Op.getLowIndex().setOperand(0, DivOp)
+            else:
+              assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
+              Op.getLowIndex().setOperand(1, DivOp)
           Visited.add(DivOp)
       Visited.add(Op.getLowIndex())
       # Now deal with the high index
@@ -127,13 +143,10 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
              BVValToBitwidthVal[Operand] =  BVValToBitwidthVal[Op]
     return
 
-  BVValToBitwidthVal = dict()
   UnknownVal = list()
   BlockList = Function.getRegionsOfType(RoseBlock)
-  for Block in BlockList:
-    print("Block in List:")
-    Block.print()
   BVValToBitwidthVal = dict()
+  IndexingOps = set()
   for Block in BlockList:
     print("---Block in List:")
     Block.print()
@@ -159,6 +172,9 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
       if Op.isSizeChangingOp():
         print("++++++=isSizeChangingOp OP IN OPLIST:")
         Op.print()
+        # if this is an indexing op, we can ignore it
+        if Op in IndexingOps:
+          continue
         if Op in BVValToBitwidthVal:
           Op.setOperand(1, BVValToBitwidthVal[Op])
           if Op.getOperand(0) not in BVValToBitwidthVal:
@@ -178,18 +194,32 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
         print("typesOfInputsAndOutputEqual:")
         Op.print()
         if Op in BVValToBitwidthVal:
-          for Operand in Op.getOperands():
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
+            if isinstance(Operand, RoseConstant):
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                           Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue
             BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
         else:
           UnknownVal.append(Op)
-          for Operand in Op.getOperands():
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
+            if isinstance(Operand, RoseConstant):
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                           Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue       
             UnknownVal.append(Operand)
         continue
 
       if isinstance(Op, RoseBVExtractSliceOp):
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Op, Visited)
-          Visited.add(Op)
+          # Add indexing ops in a set
+          for IndexingOp in GatherIndexingOps(Op):
+            IndexingOps.add(IndexingOp)
           continue
         if Op in OpBitwidthEqLoopStepList:
           Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
@@ -206,12 +236,18 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
           AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
         FixIndicesForBVOpsInsideOfLoops(Op, Loop.getStep(), Visited)
         Visited.add(Op)
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Op):
+          IndexingOps.add(IndexingOp)
         continue
 
       if isinstance(Op, RoseBVInsertSliceOp):
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Op, Visited)
           Visited.add(Op)
+          # Add indexing ops in a set
+          for IndexingOp in GatherIndexingOps(Op):
+            IndexingOps.add(IndexingOp)
           continue
         if Op.getLowIndex() == LoopList[0].getIterator():
           Op.setOperand(Op.getBitwidthPos(), LaneSize)
@@ -230,9 +266,9 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
         print("BVINSERT OP:")
         Op.print()
         Visited.add(Op)
-        print("----****-OP IN OPLIST:")
-        for Operation__ in reversed(OpList):
-          Operation__.print()
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Op):
+          IndexingOps.add(IndexingOp)
         continue
       
   Function.print()
