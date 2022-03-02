@@ -70,6 +70,10 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
       Visited.add(HighIndex)
       Visited.add(LastIdx)
     else:
+      print("PRINT OP:")
+      Op.print()
+      Op.getParent().print()
+      print("--------------------")
       Op.getLowIndex().print()
       LowIndex = Op.getLowIndex()
       # Deal with the low index first
@@ -93,6 +97,7 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
             DivOp.setOperand(1, LoopStep)
           else:
             # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
+            print(Op.getOutputBitwidth())
             DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
             Block.addOperationBefore(DivOp, Op.getLowIndex())
             if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
@@ -131,16 +136,20 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
     UsersList = Op.getUsers()
     for User in UsersList:
       if User in UnknownVal:
-        BVValToBitwidthVal[User] = Param
-        for Operand in User.getOperands():
-          if Operand in BVValToBitwidthVal:
-            Op.print()
-            BVValToBitwidthVal[Op].print()
-            Operand.print()
-            BVValToBitwidthVal[Operand].print()
-            assert BVValToBitwidthVal[Op] == BVValToBitwidthVal[Operand]
-          else:
-             BVValToBitwidthVal[Operand] =  BVValToBitwidthVal[Op]
+        if isinstance(User, RoseOperation):
+          if User.getOpcode().typesOfInputsAndOutputEqual():
+            BVValToBitwidthVal[User] = Param
+          assert User.getOpcode().typesOfInputsAndOutputEqual() \
+              or User.getOpcode().typesOfOperandsAreEqual()
+          for Operand in User.getOperands():
+            if Operand in BVValToBitwidthVal:
+              Op.print()
+              BVValToBitwidthVal[Op].print()
+              Operand.print()
+              BVValToBitwidthVal[Operand].print()
+              assert BVValToBitwidthVal[Op] == BVValToBitwidthVal[Operand]
+            else:
+              BVValToBitwidthVal[Operand] =  BVValToBitwidthVal[Op]
     return
 
   UnknownVal = list()
@@ -213,6 +222,35 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
               continue       
             UnknownVal.append(Operand)
         continue
+    
+      if Op.getOpcode().typesOfOperandsAreEqual():
+        print("typesOfOperandsAreEqual:")
+        Op.print()
+        if Op not in BVValToBitwidthVal:
+          UnknownVal.append(Op)
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            Op.setOperand(OperandIndex, Arg)
+            continue
+          if Operand not in BVValToBitwidthVal:
+            UnknownVal.append(Operand)
+        continue
+
+      if isinstance(Op, RoseSelectOp):
+        if isinstance(Op.getThenValue(), RoseConstant):
+          # Abstract away this constant value
+          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                        Op.getThenValue().getType()))
+          Op.setOperand(1, Arg)
+        if isinstance(Op.getElseValue(), RoseConstant):
+          # Abstract away this constant value
+          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                        Op.getElseValue().getType()))
+          Op.setOperand(2, Arg)
+        continue  
 
       if isinstance(Op, RoseBVExtractSliceOp):
         if Loop == RoseUndefRegion():
