@@ -265,16 +265,33 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
         continue
 
       if isinstance(Op, RoseSelectOp):
-        if isinstance(Op.getThenValue(), RoseConstant):
-          # Abstract away this constant value
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                        Op.getThenValue().getType()))
-          Op.setOperand(1, Arg)
-        if isinstance(Op.getElseValue(), RoseConstant):
-          # Abstract away this constant value
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                        Op.getElseValue().getType()))
-          Op.setOperand(2, Arg)
+        if Op in BVValToBitwidthVal:
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
+            # Skip the condition operand
+            if OperandIndex == 0:
+              continue
+            if isinstance(Operand, RoseConstant):
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                           Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue
+            BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+            if Operand in UnknownVal:
+              UnknownVal.remove(Operand)
+        else:
+          UnknownVal.add(Op)
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
+            # Skip the condition operand
+            if OperandIndex == 0:
+              continue
+            if isinstance(Operand, RoseConstant):
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                           Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue       
+            UnknownVal.add(Operand)
         continue
 
       if isinstance(Op, RoseBVExtractSliceOp):
