@@ -5,6 +5,7 @@
 #############################################################
 
 
+from ast import Constant
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -147,6 +148,195 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Visited.add(Op.getHighIndex())
   return
 
+def FixIndicesForBVOpsOutsideOfLoops(Op : RoseBitVectorOp, Visited : set, \
+                                    VectorSize : RoseArgument, Context : RoseContext):
+  assert isinstance(Op.getLowIndex(), RoseConstant)
+  assert isinstance(Op.getHighIndex(), RoseConstant)
+  assert Op.getLowIndex().getValue() == 0
+  assert Op.getHighIndex().getValue() == Op.getOutputBitwidth() - 1
+  One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+  LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [VectorSize, One])
+  Block = Op.getParent()
+  Block.addOperationBefore(LastIdx, Op)
+  Op.setOperand(Op.getHighIndexPos(), LastIdx)
+  Op.setOperand(Op.getBitwidthPos(), VectorSize)
+  Visited.add(LastIdx)
+  return
+
+
+def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
+                              Visited : set, UnknownVal : set,  IndexingOps : set, \
+                              LoopList : list, Context : RoseContext):
+  # Some sanity checks
+  assert len(LoopList) > 1
+  Function = Block.getFunction()
+  print("EXTRACTING CONSTANTS FROM BLOCK")
+  Block.print()
+  OpList = []
+  OpList.extend(Block.getOperations())
+  Loop = Block.getParentOfType(RoseForLoop)
+  OpBitwidthEqLoopStepList = list()
+  if not isinstance(Loop, RoseUndefRegion):
+    OpBitwidthEqLoopStepList = GetOpDeterminingLoopBounds(Loop)
+  for Op in reversed(OpList):
+    if Op in Visited:
+      print("ALREADY VISITED")
+      continue
+
+    if Op.isSizeChangingOp():
+      print("++++++=isSizeChangingOp OP IN OPLIST:")
+      Op.print()
+      # if this is an indexing op, we can ignore it
+      if Op in IndexingOps:
+        continue
+      if Op in BVValToBitwidthVal:
+        Op.setOperand(1, BVValToBitwidthVal[Op])
+        if Op.getOperand(0) not in BVValToBitwidthVal:
+          UnknownVal.add(Op.getOperand(0))
+        continue
+      Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                  Op.getOperand(1).getType()))
+      Op.setOperand(1, Arg)
+      BVValToBitwidthVal[Op] = Arg
+      if Op in UnknownVal:
+        UnknownVal.remove(Op)
+      AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
+      continue
+  
+    if Op.getOpcode().typesOfInputsAndOutputEqual():
+      print("typesOfInputsAndOutputEqual:")
+      Op.print()
+      if Op in BVValToBitwidthVal:
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            Op.setOperand(OperandIndex, Arg)
+            continue
+          BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+      else:
+        UnknownVal.add(Op)
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            Op.setOperand(OperandIndex, Arg)
+            continue       
+          UnknownVal.add(Operand)
+      continue
+  
+    if Op.getOpcode().typesOfOperandsAreEqual():
+      print("typesOfOperandsAreEqual:")
+      Op.print()
+      if Op not in BVValToBitwidthVal:
+        UnknownVal.add(Op)
+      for OperandIndex, Operand in enumerate(Op.getOperands()):
+        if isinstance(Operand, RoseConstant):
+          # Abstract away this constant value
+          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                        Operand.getType()))
+          Op.setOperand(OperandIndex, Arg)
+          continue
+        if Operand not in BVValToBitwidthVal:
+          UnknownVal.add(Operand)
+      continue
+
+    if isinstance(Op, RoseSelectOp):
+      if Op in BVValToBitwidthVal:
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
+          # Skip the condition operand
+          if OperandIndex == 0:
+            continue
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            Op.setOperand(OperandIndex, Arg)
+            continue
+          BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+      else:
+        UnknownVal.add(Op)
+        for OperandIndex, Operand in enumerate(Op.getOperands()):
+          # Skip the condition operand
+          if OperandIndex == 0:
+            continue
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            Op.setOperand(OperandIndex, Arg)
+            continue       
+          UnknownVal.add(Operand)
+      continue
+
+    if isinstance(Op, RoseBVExtractSliceOp):
+      if Loop == RoseUndefRegion():
+        FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Op):
+          IndexingOps.add(IndexingOp)
+        continue
+      if Op in OpBitwidthEqLoopStepList:
+        Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
+        BVValToBitwidthVal[Op] = Loop.getStep()
+        if Op in UnknownVal:
+          UnknownVal.remove(Op)
+        AddBitwidthValForUnknownVal(Op, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
+      elif Op in BVValToBitwidthVal:
+        Op.setOperand(Op.getBitwidthPos(), BVValToBitwidthVal[Op])
+      else:
+        # Add a new argument
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Op.getOperand(Op.getBitwidthPos()).getType()))
+        Op.setOperand(3, Arg)
+        BVValToBitwidthVal[Op] = Arg
+        if Op in UnknownVal:
+          UnknownVal.remove(Op)
+        AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
+      FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getStep(), Visited, Context)
+      Visited.add(Op)
+      # Add indexing ops in a set
+      for IndexingOp in GatherIndexingOps(Op):
+        IndexingOps.add(IndexingOp)
+      continue
+
+    if isinstance(Op, RoseBVInsertSliceOp):
+      if Loop == RoseUndefRegion():
+        FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
+        Visited.add(Op)
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Op):
+          IndexingOps.add(IndexingOp)
+        continue
+      assert Loop.getParentOfType(RoseForLoop) == LoopList[0]
+      if Op.getLowIndex() == LoopList[0].getIterator():
+        Op.setOperand(Op.getBitwidthPos(), LoopList[0].getStep())
+        BVValToBitwidthVal[Op] = LoopList[0].getStep()
+      elif Op in OpBitwidthEqLoopStepList:
+        Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
+        BVValToBitwidthVal[Op] = Loop.getStep()
+      else:
+        # Add a new argument
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Op.getOperand(Op.getBitwidthPos()).getType()))
+        Op.setOperand(4, Arg)
+        BVValToBitwidthVal[Op] = Arg
+      BVValToBitwidthVal[Op.getInsertValue()] = BVValToBitwidthVal[Op]
+      FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getStep(), Visited, Context)
+      print("BVINSERT OP:")
+      Op.print()
+      Visited.add(Op)
+      # Add indexing ops in a set
+      for IndexingOp in GatherIndexingOps(Op):
+        IndexingOps.add(IndexingOp)
+      continue
+
 
 def ExtractConstants(Function : RoseFunction, Context : RoseContext):
   # Get all the induction variables
@@ -170,190 +360,16 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
   LoopList[1].setEndIndexVal(LaneSize)
   LoopList[1].setStepVal(ElemSize)
 
-  def FixIndicesForBVOpsOutsideOfLoops(Op : RoseBitVectorOp, Visited : set):
-    assert isinstance(Op.getLowIndex(), RoseConstant)
-    assert isinstance(Op.getHighIndex(), RoseConstant)
-    assert Op.getLowIndex().getValue() == 0
-    assert Op.getHighIndex().getValue() == Op.getOutputBitwidth() - 1
-    One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
-    LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [VectorSize, One])
-    Block.addOperationBefore(LastIdx, Op)
-    Op.setOperand(Op.getHighIndexPos(), LastIdx)
-    Op.setOperand(Op.getBitwidthPos(), VectorSize)
-    Visited.add(LastIdx)
-    return
-
   UnknownVal = set()
   BlockList = Function.getRegionsOfType(RoseBlock)
   BVValToBitwidthVal = dict()
   IndexingOps = set()
+  Visited = set()
   for Block in BlockList:
     print("---Block in List:")
     Block.print()
-    Visited = set()
-    OpList = []
-    OpList.extend(Block.getOperations())
-    Loop = Block.getParentOfType(RoseForLoop)
-    OpBitwidthEqLoopStepList = list()
-    if not isinstance(Loop, RoseUndefRegion):
-      OpBitwidthEqLoopStepList = GetOpDeterminingLoopBounds(Loop)
-    for Op in reversed(OpList):
-      if Op in Visited:
-        print("ALREADY VISITED")
-        continue
-
-      if Op.isSizeChangingOp():
-        print("++++++=isSizeChangingOp OP IN OPLIST:")
-        Op.print()
-        # if this is an indexing op, we can ignore it
-        if Op in IndexingOps:
-          continue
-        if Op in BVValToBitwidthVal:
-          Op.setOperand(1, BVValToBitwidthVal[Op])
-          if Op.getOperand(0) not in BVValToBitwidthVal:
-            UnknownVal.add(Op.getOperand(0))
-          continue
-        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                    Op.getOperand(1).getType()))
-        Op.setOperand(1, Arg)
-        BVValToBitwidthVal[Op] = Arg
-        if Op in UnknownVal:
-          UnknownVal.remove(Op)
-        AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
-        continue
-    
-      if Op.getOpcode().typesOfInputsAndOutputEqual():
-        print("typesOfInputsAndOutputEqual:")
-        Op.print()
-        if Op in BVValToBitwidthVal:
-          for OperandIndex, Operand in enumerate(Op.getOperands()):
-            if isinstance(Operand, RoseConstant):
-              # Abstract away this constant value
-              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                           Operand.getType()))
-              Op.setOperand(OperandIndex, Arg)
-              continue
-            BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
-            if Operand in UnknownVal:
-              UnknownVal.remove(Operand)
-        else:
-          UnknownVal.add(Op)
-          for OperandIndex, Operand in enumerate(Op.getOperands()):
-            if isinstance(Operand, RoseConstant):
-              # Abstract away this constant value
-              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                           Operand.getType()))
-              Op.setOperand(OperandIndex, Arg)
-              continue       
-            UnknownVal.add(Operand)
-        continue
-    
-      if Op.getOpcode().typesOfOperandsAreEqual():
-        print("typesOfOperandsAreEqual:")
-        Op.print()
-        if Op not in BVValToBitwidthVal:
-          UnknownVal.add(Op)
-        for OperandIndex, Operand in enumerate(Op.getOperands()):
-          if isinstance(Operand, RoseConstant):
-            # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Operand.getType()))
-            Op.setOperand(OperandIndex, Arg)
-            continue
-          if Operand not in BVValToBitwidthVal:
-            UnknownVal.add(Operand)
-        continue
-
-      if isinstance(Op, RoseSelectOp):
-        if Op in BVValToBitwidthVal:
-          for OperandIndex, Operand in enumerate(Op.getOperands()):
-            # Skip the condition operand
-            if OperandIndex == 0:
-              continue
-            if isinstance(Operand, RoseConstant):
-              # Abstract away this constant value
-              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                           Operand.getType()))
-              Op.setOperand(OperandIndex, Arg)
-              continue
-            BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
-            if Operand in UnknownVal:
-              UnknownVal.remove(Operand)
-        else:
-          UnknownVal.add(Op)
-          for OperandIndex, Operand in enumerate(Op.getOperands()):
-            # Skip the condition operand
-            if OperandIndex == 0:
-              continue
-            if isinstance(Operand, RoseConstant):
-              # Abstract away this constant value
-              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                           Operand.getType()))
-              Op.setOperand(OperandIndex, Arg)
-              continue       
-            UnknownVal.add(Operand)
-        continue
-
-      if isinstance(Op, RoseBVExtractSliceOp):
-        if Loop == RoseUndefRegion():
-          FixIndicesForBVOpsOutsideOfLoops(Op, Visited)
-          # Add indexing ops in a set
-          for IndexingOp in GatherIndexingOps(Op):
-            IndexingOps.add(IndexingOp)
-          continue
-        if Op in OpBitwidthEqLoopStepList:
-          Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
-          BVValToBitwidthVal[Op] = Loop.getStep()
-          if Op in UnknownVal:
-            UnknownVal.remove(Op)
-          AddBitwidthValForUnknownVal(Op, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
-        elif Op in BVValToBitwidthVal:
-          Op.setOperand(Op.getBitwidthPos(), BVValToBitwidthVal[Op])
-        else:
-          # Add a new argument
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                            Op.getOperand(Op.getBitwidthPos()).getType()))
-          Op.setOperand(3, Arg)
-          BVValToBitwidthVal[Op] = Arg
-          if Op in UnknownVal:
-            UnknownVal.remove(Op)
-          AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
-        FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getStep(), Visited, Context)
-        Visited.add(Op)
-        # Add indexing ops in a set
-        for IndexingOp in GatherIndexingOps(Op):
-          IndexingOps.add(IndexingOp)
-        continue
-
-      if isinstance(Op, RoseBVInsertSliceOp):
-        if Loop == RoseUndefRegion():
-          FixIndicesForBVOpsOutsideOfLoops(Op, Visited)
-          Visited.add(Op)
-          # Add indexing ops in a set
-          for IndexingOp in GatherIndexingOps(Op):
-            IndexingOps.add(IndexingOp)
-          continue
-        if Op.getLowIndex() == LoopList[0].getIterator():
-          Op.setOperand(Op.getBitwidthPos(), LaneSize)
-          BVValToBitwidthVal[Op] = LaneSize
-        elif Op in OpBitwidthEqLoopStepList:
-          Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
-          BVValToBitwidthVal[Op] = Loop.getStep()
-        else:
-          # Add a new argument
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                            Op.getOperand(Op.getBitwidthPos()).getType()))
-          Op.setOperand(4, Arg)
-          BVValToBitwidthVal[Op] = Arg
-        BVValToBitwidthVal[Op.getInsertValue()] = BVValToBitwidthVal[Op]
-        FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getStep(), Visited, Context)
-        print("BVINSERT OP:")
-        Op.print()
-        Visited.add(Op)
-        # Add indexing ops in a set
-        for IndexingOp in GatherIndexingOps(Op):
-          IndexingOps.add(IndexingOp)
-        continue
+    ExtractConstantsFromBlock(Block, BVValToBitwidthVal, Visited, \
+                              UnknownVal,  IndexingOps, LoopList, Context)
       
   Function.print()
   print("NEW FUNCTION ^^^^")
