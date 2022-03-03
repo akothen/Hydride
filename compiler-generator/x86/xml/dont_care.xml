@@ -8742,3 +8742,334 @@ k[MAX:8] := 0
 	<instruction name="VPCMPUQ" form="k {k}, zmm, zmm, imm8" xed="VPCMPUQ_MASKmskw_MASKmskw_ZMMu64_ZMMu64_IMM8_AVX512"/>
 	<header>immintrin.h</header>
 </intrinsic>
+<intrinsic tech="Other" name="_mm512_maskz_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512F</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI8"/>
+	<parameter type="__mmask64" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 63
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := 0
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="zmm {z}, zmm, zmm" xed="VGF2P8MULB_ZMMu8_MASKmskw_ZMMu8_ZMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm512_mask_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512F</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI8"/>
+	<parameter type="__m512i" varname="src" etype="UI8"/>
+	<parameter type="__mmask64" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using writemask "k" (elements are copied from "src"" when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 63
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := src.byte[j]
+	FI
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="zmm {k}, zmm, zmm" xed="VGF2P8MULB_ZMMu8_MASKmskw_ZMMu8_ZMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm512_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512F</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI8"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst". The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 63
+	dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+ENDFOR
+dst[MAX:512] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="zmm, zmm, zmm" xed="VGF2P8MULB_ZMMu8_MASKmskw_ZMMu8_ZMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm256_maskz_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="UI8"/>
+	<parameter type="__mmask32" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 31
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := 0
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="ymm {z}, ymm, ymm" xed="VGF2P8MULB_YMMu8_MASKmskw_YMMu8_YMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm256_mask_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="UI8"/>
+	<parameter type="__m256i" varname="src" etype="UI8"/>
+	<parameter type="__mmask32" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using writemask "k" (elements are copied from "src"" when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 31
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := src.byte[j]
+	FI
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="ymm {k}, ymm, ymm" xed="VGF2P8MULB_YMMu8_MASKmskw_YMMu8_YMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm256_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="UI8"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst". The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 31
+	dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+ENDFOR
+dst[MAX:256] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="ymm, ymm, ymm" xed="VGF2P8MULB_YMMu8_MASKmskw_YMMu8_YMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm_maskz_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="UI8"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 15
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := 0
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="xmm {z}, xmm, xmm" xed="VGF2P8MULB_XMMu8_MASKmskw_XMMu8_XMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm_mask_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="UI8"/>
+	<parameter type="__m128i" varname="src" etype="UI8"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst" using writemask "k" (elements are copied from "src"" when the corresponding mask bit is not set). The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 15
+	IF k[j]
+		dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+	ELSE
+		dst.byte[j] := src.byte[j]
+	FI
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="xmm {k}, xmm, xmm" xed="VGF2P8MULB_XMMu8_MASKmskw_XMMu8_XMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+<intrinsic tech="Other" name="_mm_gf2p8mul_epi8">
+	<type>Integer</type>
+	<CPUID>GFNI</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="UI8"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="UI8"/>
+	<description>Multiply the packed 8-bit integers in "a" and "b" in the finite field GF(2^8), and store the results in "dst". The field GF(2^8) is represented in polynomial representation with the reduction polynomial x^8 + x^4 + x^3 + x + 1.</description>
+	<operation>
+DEFINE gf2p8mul_byte(src1byte, src2byte) {
+	tword := 0
+	FOR i := 0 to 7
+		IF src2byte.bit[i]
+			tword := tword XOR (src1byte &lt;&lt; i)
+		FI
+	ENDFOR
+	FOR i := 14 downto 8
+		p := 0x11B &lt;&lt; (i-8)
+		IF tword.bit[i]
+			tword := tword XOR p
+		FI
+	ENDFOR
+	RETURN tword.byte[0]
+}
+FOR j := 0 TO 15
+	dst.byte[j] := gf2p8mul_byte(a.byte[j], b.byte[j])
+ENDFOR
+dst[MAX:128] := 0
+	</operation>
+	<instruction name="VGF2P8MULB" form="xmm, xmm, xmm" xed="VGF2P8MULB_XMMu8_MASKmskw_XMMu8_XMMu8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+
