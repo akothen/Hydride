@@ -980,7 +980,7 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
 
 
 def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
-                         IteratorSuffix : int, RemovedOps : list):
+                         IteratorSuffix : int, RemovedOps : list, Context : RoseContext):
   print("PerformRerollingOnce:")
   Block.print()
   # Reroll the candidares in the list
@@ -1079,22 +1079,24 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
           if type(LowCofactor) != int:
             LowCofactor = int(1 / LowCofactor)
             LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-            ScaledIterator = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal)
+            ScaledIterator = RoseDivOp.create(Context.genName("%" + "low.cofactor"), \
+                                              Iterator, LowCofactorVal)
           else:
             LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
-            ScaledIterator = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal])
+            ScaledIterator = RoseMulOp.create(Context.genName("%" + "low.cofactor"),\
+                                               [Iterator, LowCofactorVal])
           Loop.addAbstraction(ScaledIterator)
         LowOffset = LowOffsetsList[OpIndex]
         assert LowOffset != None
         if LowOffset != 0:
         # Generate an add instruction
           LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
-          LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
+          LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), [ScaledIterator, LowOffsetVal]) 
           Loop.addAbstraction(LowIndex)
         else:
           LowIndex = ScaledIterator
         OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
-        HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
+        HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), [LowIndex, OpBitWidthVal]) 
         Loop.addAbstraction(HighIndex)
         NewOp = Op.clone()
         for Index, Operand in enumerate(Op.getOperands()):
@@ -1293,7 +1295,7 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
 
 
 def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists : list, \
-                          IteratorSuffix : int, RemovedOps : list):
+                          IteratorSuffix : int, RemovedOps : list, Context : RoseContext):
   # Generate the outer loop that wraps around all the packlists
   ListOfCandidatePackLists = ListOfCandidateIsomorphicPackLists[0]
   FirstLoopPack = ListOfCandidatePackLists[0][0]
@@ -1366,10 +1368,12 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         if type(LowCofactor1) != int:
           LowCofactor1 = int(1 / LowCofactor1)
           LowCofactorVal1 = RoseConstant(LowCofactor1, OutIterator.getType())
-          ScaledIterator1 = RoseDivOp.create("low.out.cofactor." + str(OpIndex), OutIterator, LowCofactorVal1)
+          ScaledIterator1 = RoseDivOp.create(Context.genName("%" + "low.out.cofactor"), \
+                                                          OutIterator, LowCofactorVal1)
         else:
           LowCofactorVal1 = RoseConstant(LowCofactor1, OutIterator.getType())
-          ScaledIterator1 = RoseMulOp.create("low.out.cofactor." + str(OpIndex), [OutIterator, LowCofactorVal1])
+          ScaledIterator1 = RoseMulOp.create(Context.genName("%" + "low.out.cofactor"), \
+                                                [OutIterator, LowCofactorVal1])
         Loop.addAbstraction(ScaledIterator1)
       LowCofactor2 = CoFactactorsList2[OpIndex]
       assert LowCofactor2 != None
@@ -1381,29 +1385,34 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         if type(LowCofactor2) != int:
           LowCofactor2 = int(1 / LowCofactor2)
           LowCofactorVal2 = RoseConstant(LowCofactor2, Iterator.getType())
-          ScaledIterator2 = RoseDivOp.create("low.cofactor." + str(OpIndex), Iterator, LowCofactorVal2)
+          ScaledIterator2 = RoseDivOp.create(Context.genName("%" + "low.cofactor"), \
+                                                         Iterator, LowCofactorVal2)
         else:
           LowCofactorVal2 = RoseConstant(LowCofactor2, Iterator.getType())
-          ScaledIterator2 = RoseMulOp.create("low.cofactor." + str(OpIndex), [Iterator, LowCofactorVal2])
+          ScaledIterator2 = RoseMulOp.create(Context.genName("%" + "low.cofactor"), \
+                                                         [Iterator, LowCofactorVal2])
         Loop.addAbstraction(ScaledIterator2)
       if isinstance(ScaledIterator1, RoseConstant) and ScaledIterator1.getValue() == 0:
         ScaledIterator = ScaledIterator2
       elif isinstance(ScaledIterator2, RoseConstant) and ScaledIterator2.getValue() == 0:
         ScaledIterator = ScaledIterator1
       else:
-        ScaledIterator = RoseAddOp.create("low.scaled.it." + str(OpIndex), [ScaledIterator1, ScaledIterator2])
+        ScaledIterator = RoseAddOp.create(Context.genName("%" + "low.scaled.it"), \
+                                                       [ScaledIterator1, ScaledIterator2])
         Loop.addAbstraction(ScaledIterator)
       LowOffset = LowOffsetsList[OpIndex]
       assert LowOffset != None
       if LowOffset != 0:
       # Generate an add instruction
         LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
-        LowIndex = RoseAddOp.create("low.offset." + str(OpIndex), [ScaledIterator, LowOffsetVal]) 
+        LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), \
+                                          [ScaledIterator, LowOffsetVal]) 
         Loop.addAbstraction(LowIndex)
       else:
         LowIndex = ScaledIterator
       OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
-      HighIndex = RoseAddOp.create("high.offset." + str(OpIndex), [LowIndex, OpBitWidthVal]) 
+      HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), \
+                                                   [LowIndex, OpBitWidthVal]) 
       Loop.addAbstraction(HighIndex)
       NewOp = Op.clone()
       for Index, Operand in enumerate(Op.getOperands()):
@@ -1449,7 +1458,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
   ParentRegion.print()
 
 
-def PerformRerolling(BlockToRerollableCandidatesMap : dict):
+def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContext):
   print("PERFORMING REROLLING")
   RemovedOps = []
   IteratorSuffix = 0
@@ -1461,10 +1470,10 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict):
     if ListOfCandidateIsomorphicPackLists != []:
       print("PERFORMING REROLLING TWICE")
       PerformRerollingTwice(Block, ListOfCandidateIsomorphicPackLists, \
-                            IteratorSuffix, RemovedOps)
+                            IteratorSuffix, RemovedOps, Context)
     else:
       print("PERFORMING REROLLING ONCE")
-      PerformRerollingOnce(Block, RerollableCandidatesList, IteratorSuffix, RemovedOps)
+      PerformRerollingOnce(Block, RerollableCandidatesList, IteratorSuffix, RemovedOps, Context)
   # Finaly, remove the ops.
   # Reverse the list of ops since we want to remove
   # uses of ops before the ops themselves.
@@ -1694,7 +1703,7 @@ def RunRerollerOnFunction(Function : RoseFunction, Context : RoseContext):
   BlockToRerollableCandidatesMap = RunRerollerOnRegion(Function, \
                                     BlockToRerollableCandidatesMap, Context)
   # Time to perform some rerolling
-  PerformRerolling(BlockToRerollableCandidatesMap)
+  PerformRerolling(BlockToRerollableCandidatesMap, Context)
 
 
 # Runs Loop reroller
