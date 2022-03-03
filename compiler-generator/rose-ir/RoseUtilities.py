@@ -516,7 +516,7 @@ def NewSizeExtendOp(Name : str, Opcode : RoseOpcode, Operand : RoseBitVectorOp, 
 
 # This API helps determine if the DFGs in the two given blocks 
 # are isomorphic.
-def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock):
+def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, Strict=False):
   Pack1 = Block1.getOperations()
   Pack2 = Block2.getOperations()
   print("PACK1:")
@@ -551,17 +551,31 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock):
     # Skip constants
     if isinstance(Op1, RoseConstant) \
     and isinstance(Op2, RoseConstant):
+      if Op1.getType() != Op2.getType():
+        return False
+      if Strict == True:
+        if Op1.getValue() == Op2.getValue():
+          return False
       continue
     # Skip arguments
     if isinstance(Op1, RoseArgument) \
     and isinstance(Op2, RoseArgument):
+      if Op1.getType() != Op2.getType():
+        return False
+      if Strict == True:
+        if Op1 == Op2:
+          return False
       continue
     if not isinstance(Op1, RoseOperation):
       if isinstance(Op2, RoseOperation):
         return False
-      # If op1 and op2 are simple values, we can skip
-      if isinstance(Op1, RoseValue) \
-      and isinstance(Op2, RoseValue):
+      if Strict == False:
+        # If op1 and op2 are simple values, we can skip
+        if isinstance(Op1, RoseValue) \
+        and isinstance(Op2, RoseValue):
+          if Op1.getType() != Op2.getType():
+            return False
+          continue
         continue
       if Op1 != Op2:
         return False
@@ -569,10 +583,13 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock):
     if not isinstance(Op2, RoseOperation):
       if isinstance(Op1, RoseOperation):
         return False
-      # If op1 and op2 are simple values, we can skip
-      if isinstance(Op1, RoseValue) \
-      and isinstance(Op2, RoseValue):
-        continue
+      if Strict == False:
+        # If op1 and op2 are simple values, we can skip
+        if isinstance(Op1, RoseValue) \
+        and isinstance(Op2, RoseValue):
+          if Op1.getType() != Op2.getType():
+            return False
+          continue
       if Op1 != Op2:
         return False
       continue
@@ -629,4 +646,142 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock):
     Op.print()
   return True
 
+
+def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, Strict=False):
+  Pack1 = KeyBlock.getOperations()
+  Pack2 = ValBlock.getOperations()
+  print("PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("PACK2:")
+  for Op in Pack2:
+    Op.print()
+  #print("DATAFLOW PATTERNS ARE SAME")
+  if len(Pack1) != len(Pack2): 
+    print("LENGHTS OF THE PACKS ARE THE SMAE")
+    return None
+  
+  MapBetweenValues = dict()
+  # Reverse iterate the packs
+  OpsList1 =[Pack1[len(Pack1) - 1]]
+  OpsList2 =[Pack2[len(Pack2) - 1]]
+  Visited = set()
+  while len(OpsList1) != 0:
+    #print("OpsList1:")
+    #print(OpsList1)
+    #print("OpsList2:")
+    #print(OpsList2)
+    assert len(OpsList1) == len(OpsList2)
+    Op1 = OpsList1.pop()
+    Op2 = OpsList2.pop()
+    print("----OP1:")
+    Op1.print()
+    print("----OP2:")
+    Op2.print()
+    assert not isinstance(Op1, RoseUndefValue)
+    assert not isinstance(Op2, RoseUndefValue)
+    # Skip constants
+    if isinstance(Op1, RoseConstant) \
+    and isinstance(Op2, RoseConstant):
+      if Op1.getType() != Op2.getType():
+        return None
+      if Strict == True:
+        if Op1.getValue() == Op2.getValue():
+          return None
+      # Map Op1 and Op2
+      MapBetweenValues[Op1]= Op2
+      continue
+    # Skip arguments
+    if isinstance(Op1, RoseArgument) \
+    and isinstance(Op2, RoseArgument):
+      if Op1.getType() != Op2.getType():
+        return None
+      if Strict == True:
+        if Op1 == Op2:
+          return None
+      # Map Op1 and Op2
+      MapBetweenValues[Op1]= Op2
+      continue
+    if not isinstance(Op1, RoseOperation):
+      if isinstance(Op2, RoseOperation):
+        return None
+      if Strict == False:
+        # If op1 and op2 are simple values, we can skip
+        if isinstance(Op1, RoseValue) \
+        and isinstance(Op2, RoseValue):
+          if Op1.getType() != Op2.getType():
+            return None
+          # Map Op1 and Op2
+          MapBetweenValues[Op1]= Op2
+          continue
+      if Op1 != Op2:
+        return None
+      # Map Op1 and Op2
+      MapBetweenValues[Op1]= Op2
+      continue
+    if not isinstance(Op2, RoseOperation):
+      if isinstance(Op1, RoseOperation):
+        return None
+      if Strict == False:
+        # If op1 and op2 are simple values, we can skip
+        if isinstance(Op1, RoseValue) \
+        and isinstance(Op2, RoseValue):
+          if Op1.getType() != Op2.getType():
+            return None
+          # Map Op1 and Op2
+          MapBetweenValues[Op1]= Op2
+          continue
+      if Op1 != Op2:
+        return None
+      # Map Op1 and Op2
+      MapBetweenValues[Op1]= Op2
+      continue
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return None
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return None
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    # Map Op1 and Op2
+    MapBetweenValues[Op1]= Op2
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
+    # If the operations have different opcodes or types, skip
+    if Op1.getOpcode() != Op2.getOpcode():
+      return None
+    if Op1.getType() != Op2.getType():
+      return None
+    # Deal with call operations
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      # Make sure that the callees for the operations are equal.
+      if Op1.getCallee().getName() != Op2.getCallee().getName():
+        return None
+      OpsList1.extend(Op1.getCallOperands())
+      OpsList2.extend(Op2.getCallOperands())
+      continue
+    # If this operation has not indexing operands, add None
+    if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
+    and Op1.isIndexingBVOp() ==  True:
+      # Output bitwidths for bitvector ops must be equal
+      if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
+        return None
+      OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList1.append(Op1.getLowIndex())
+      OpsList1.append(Op1.getHighIndex())
+      OpsList2.extend(Op2.getBitVectorOperands())
+      OpsList2.append(Op2.getLowIndex())
+      OpsList2.append(Op2.getHighIndex())
+      continue
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(Op2.getOperands())
+
+  return MapBetweenValues
 
