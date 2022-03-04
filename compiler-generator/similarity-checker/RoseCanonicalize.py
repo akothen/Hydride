@@ -220,11 +220,15 @@ def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
 
 def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
   print("FIX ACCUMULATION CODE")
+  Function.print()
   BlockList = Function.getRegionsOfType(RoseBlock)
   AccumulationPatterFound = False
   NewInitInstructions = list()
   InitInstructions = list()
   for Block in reversed(BlockList):
+    # If this block is in the cond region, skip this block
+    if not isinstance(Block.getParentOfType(RoseCond), RoseUndefRegion):
+      continue
     if len(NewInitInstructions) != 0:
       break
     # Look for accumulation pattern
@@ -246,7 +250,7 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
           # Now go up the use-def chain. The inserted values
           # must be coming from a bvadd op.
           InsertValue = Op.getInsertValue()
-          if not isinstance(InsertValue, RoseAddOp):
+          if not isinstance(InsertValue, RoseBVAddOp):
             # See if this is an extract op
             if isinstance(InsertValue, RoseBVExtractSliceOp):
               # If the extracted bitvector is a function argument
@@ -326,6 +330,8 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
   # Erase gathered ops
   ToBeErased = []
   for Op in InitInstructions:
+    print("INIT INSTRUCTION:")
+    Op.print()
     ToBeErased.append(Op)
   for Op in InitInstructions:
     IndexingOps = GatherIndexingOps(Op)
@@ -390,7 +396,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
