@@ -208,7 +208,8 @@ class RoseBlock(RoseRegion):
 
   # Make rose blocks hashable
   def __hash__(self):
-    return hash((tuple(self.getOperations()), self.getRegionID()))
+    #return hash((tuple(self.getOperations()), self.getRegionID()))
+    return hash(self.getRegionID())
 
   def getOperations(self):
     return self.getChildren()
@@ -222,6 +223,14 @@ class RoseBlock(RoseRegion):
   def getPosOfOperation(self, Operation):
     return self.getPosOfChild(Operation)
   
+  # Insert the given op in the end of the block
+  def addOperation(self, Operation : RoseOperation):
+    if self.getNumOperations() > 0:
+      Index = self.getNumChildren() - 1
+      self.addRegionBefore(Index, Operation)
+    else:
+      self.addRegion(Operation)
+
   def addOperationBefore(self, Operation : RoseOperation, InsertBefore : RoseOperation):
     Index = self.getPosOfOperation(InsertBefore)
     self.addRegionBefore(Index, Operation)
