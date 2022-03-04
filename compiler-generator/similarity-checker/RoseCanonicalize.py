@@ -342,6 +342,17 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
   return True
   
   
+def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    Block = CondRegion.getRegionBefore()
+    if not isinstance(Block, RoseBlock):
+      continue
+    OpList = []
+    OpList.extend(Block.getOperations())
+    for Op in OpList:
+      ReplaceUsesWithUniqueCopiesOf(CondRegion, Op, Op, Context)
+
 
 def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   print("CANONICALIZING FUNCTION")
@@ -357,6 +368,8 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   #if IsFunctionInCanonicalForm(Function) == True:
   #  print("_____FUNCTION IS IN CANONICAL FORM")
   #  return
+
+  SinkOpsIntoCondBlocks(Function, Context)
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")

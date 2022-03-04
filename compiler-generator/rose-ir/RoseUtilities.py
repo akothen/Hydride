@@ -286,16 +286,16 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction : RoseValue, NewAbstractio
     for Key in Region.getKeys():
       for Child in Region.getChildren()[Key]:
         assert Region.isChildValid(Child)
-      if isinstance(Child, RoseOperation):
-        assert isinstance(Region, RoseBlock)
-        if Child.usesValue(Abstraction):
-          NewName = Context.genName(NewAbstraction.getName() + ".copy.")
-          ClonedNewAbstraction = NewAbstraction.clone(NewName)
-          Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
-          #Region.addOperationBefore(ClonedNewAbstraction, Child)
-          NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
-      else:
-        ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
+        if isinstance(Child, RoseOperation):
+          assert isinstance(Region, RoseBlock)
+          if Child.usesValue(Abstraction):
+            NewName = Context.genName(NewAbstraction.getName() + ".copy.")
+            ClonedNewAbstraction = NewAbstraction.clone(NewName)
+            Child.replaceUsesWith(Abstraction, ClonedNewAbstraction)
+            #Region.addOperationBefore(ClonedNewAbstraction, Child)
+            NewOpToInsertBeforeMap[ClonedNewAbstraction] = Child
+        else:
+          ReplaceUsesWithUniqueCopiesOf(Child, Abstraction, NewAbstraction, Context)
   else:
     for Child in Region.getChildren():
       assert Region.isChildValid(Child)
@@ -802,4 +802,5 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
     OpsList2.extend(Op2.getOperands())
 
   return MapBetweenValues
+
 
