@@ -202,6 +202,30 @@ class RoseRegion:
       Function = Function.getParent()
     return Function
 
+  def getKeyForChild(self, Region):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    if self.getKeys() == None:
+      return None
+    for Key in self.getKeys():
+      for Child in self.Children[Key]:
+        if Child == Region:
+          return Key
+    assert False, "Given region is not a child!"
+
+  def getRegionBefore(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    ParentRegion = self.getParent()
+    if isinstance(ParentRegion, RoseAbstractions.RoseUndefRegion):
+      return RoseAbstractions.RoseUndefRegion()
+    # Find the key for this region within the parent
+    Key = ParentRegion.getKeyForChild(self)
+    Position = ParentRegion.getPosOfChild(self, Key)
+    if Position == 0:
+      return RoseAbstractions.RoseUndefRegion()
+    return ParentRegion.getChild(Position - 1, Key)
+
   def setParent(self, Parent):
     assert isinstance(Parent, RoseRegion)
     assert self.isParentValid(Parent)
@@ -259,7 +283,6 @@ class RoseRegion:
     # Set the child's parent to undef region
     Child.setParent(RoseAbstractions.RoseUndefRegion())
 
-  
   def clone(self):
     return deepcopy(self)
 
@@ -519,6 +542,5 @@ class RoseRegion:
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
-
 
 
