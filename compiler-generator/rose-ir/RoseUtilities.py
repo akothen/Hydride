@@ -516,9 +516,12 @@ def NewSizeExtendOp(Name : str, Opcode : RoseOpcode, Operand : RoseBitVectorOp, 
 
 # This API helps determine if the DFGs in the two given blocks 
 # are isomorphic.
-def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, Strict=False):
-  Pack1 = Block1.getOperations()
-  Pack2 = Block2.getOperations()
+def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, \
+                              FixDFGIsomorphism = None, Strict=False):
+  Pack1 = list()
+  Pack2 = list()
+  Pack1.extend(Block1.getOperations())
+  Pack2.extend(Block2.getOperations())
   print("PACK1:")
   for Op in Pack1:
     Op.print()
@@ -527,8 +530,12 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, Strict=Fal
     Op.print()
   #print("DATAFLOW PATTERNS ARE SAME")
   if len(Pack1) != len(Pack2): 
-    print("LENGHTS OF THE PACKS ARE THE SMAE")
-    return False
+    print("LENGHTS OF THE PACKS ARE NOT THE SMAE")
+    if FixDFGIsomorphism != None:
+      if FixDFGIsomorphism(Pack1, Pack2) == False:
+        return None
+    else:
+      return None
   
   # Reverse iterate the packs
   OpsList1 =[Pack1[len(Pack1) - 1]]
@@ -612,6 +619,8 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, Strict=Fal
       return False
     if Op1.getType() != Op2.getType():
       return False
+    if len(Op1.getOperands()) != len(Op2.getOperands()):
+      return False
     # Deal with call operations
     if isinstance(Op1, RoseCallOp):
       assert isinstance(Op2, RoseCallOp)
@@ -647,9 +656,12 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, Strict=Fal
   return True
 
 
-def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, Strict=False):
-  Pack1 = KeyBlock.getOperations()
-  Pack2 = ValBlock.getOperations()
+def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
+                              FixDFGIsomorphism = None, Strict=False):
+  Pack1 = list()
+  Pack2 = list()
+  Pack1.extend(KeyBlock.getOperations())
+  Pack2.extend(ValBlock.getOperations())
   print("PACK1:")
   for Op in Pack1:
     Op.print()
@@ -658,8 +670,12 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, Strict
     Op.print()
   #print("DATAFLOW PATTERNS ARE SAME")
   if len(Pack1) != len(Pack2): 
-    print("LENGHTS OF THE PACKS ARE THE SMAE")
-    return None
+    print("LENGHTS OF THE PACKS ARE NOT THE SMAE")
+    if FixDFGIsomorphism != None:
+      if FixDFGIsomorphism(Pack1, Pack2) == False:
+        return None
+    else:
+      return None
   
   MapBetweenValues = dict()
   # Reverse iterate the packs
@@ -756,6 +772,8 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, Strict
     if Op1.getOpcode() != Op2.getOpcode():
       return None
     if Op1.getType() != Op2.getType():
+      return None
+    if len(Op1.getOperands()) != len(Op2.getOperands()):
       return None
     # Deal with call operations
     if isinstance(Op1, RoseCallOp):
