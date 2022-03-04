@@ -5,7 +5,6 @@
 #############################################################
 
 
-from ast import Constant
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -62,6 +61,7 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
       continue
   return
 
+
 def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, \
                                     LoopStep : RoseValue, Visited : set, Context : RoseContext):
   assert Op.isIndexingBVOp() == True
@@ -95,18 +95,22 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
         assert len(LowIndex.getOperands()) == 2
         if isinstance(LowIndex.getOperand(0), RoseOperation):
           DivOp = LowIndex.getOperand(0)
-          assert isinstance(DivOp, RoseDivOp)
-          assert isinstance(LowIndex.getOperand(1), RoseConstant)
-          LowIndex.setOperand(1, Op.getOutputBitwidth())
-          assert isinstance(DivOp.getOperand(1), RoseConstant)
-          DivOp.setOperand(1, LoopStep)
+          if isinstance(DivOp, RoseDivOp):
+            assert isinstance(LowIndex.getOperand(1), RoseConstant)
+            LowIndex.setOperand(1, Op.getOutputBitwidth())
+            assert isinstance(DivOp.getOperand(1), RoseConstant)
+            DivOp.setOperand(1, LoopStep)
+            Visited.add(DivOp)
+            Visited.add(Op.getLowIndex())
         elif isinstance(LowIndex.getOperand(1), RoseOperation):
           DivOp = LowIndex.getOperand(1)
-          assert isinstance(DivOp, RoseDivOp)
-          assert isinstance(LowIndex.getOperand(0), RoseConstant)
-          LowIndex.setOperand(1, Op.getOutputBitwidth())
-          assert isinstance(DivOp.getOperand(1), RoseConstant)
-          DivOp.setOperand(1, LoopStep)
+          if isinstance(DivOp, RoseDivOp):
+            assert isinstance(LowIndex.getOperand(0), RoseConstant)
+            LowIndex.setOperand(1, Op.getOutputBitwidth())
+            assert isinstance(DivOp.getOperand(1), RoseConstant)
+            DivOp.setOperand(1, LoopStep)
+            Visited.add(DivOp)
+            Visited.add(Op.getLowIndex())
         else:
           # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
           print(Op.getOutputBitwidth())
@@ -117,18 +121,8 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
           else:
             assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
             Op.getLowIndex().setOperand(1, DivOp)
-        Visited.add(DivOp)
-      elif isinstance(LowIndex, RoseAddOp):
-        assert len(LowIndex.getOperands()) == 2
-        if isinstance(LowIndex.getOperand(0), RoseConstant):
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                          LowIndex.getOperand(0).getType()))
-          LowIndex.setOperand(0, Arg)
-        elif isinstance(LowIndex.getOperand(1), RoseConstant):
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                          LowIndex.getOperand(1).getType()))
-          LowIndex.setOperand(1, Arg)         
-    Visited.add(Op.getLowIndex())
+          Visited.add(DivOp)
+          Visited.add(Op.getLowIndex())
     # Now deal with the high index
     if Op.getHighIndex() in Visited:
       return
@@ -147,6 +141,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Visited.add(LastIdx)
     Visited.add(Op.getHighIndex())
   return
+
 
 def FixIndicesForBVOpsOutsideOfLoops(Op : RoseBitVectorOp, Visited : set, \
                                     VectorSize : RoseArgument, Context : RoseContext):
@@ -336,9 +331,15 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       for IndexingOp in GatherIndexingOps(Op):
         IndexingOps.add(IndexingOp)
       continue
+  return
 
 
 def ExtractConstants(Function : RoseFunction, Context : RoseContext):
+  # If there are multiple sibling inner loops, then we deal with it differently
+  if len(Function.getRegionsOfType(RoseForLoop, Level=1)) > 1:
+    ExtractConstantsMultipleLoops(Function, Context)
+    return
+
   # Get all the induction variables
   LoopList = Function.getRegionsOfType(RoseForLoop)
   for Loop in LoopList:
@@ -373,6 +374,731 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext):
       
   Function.print()
   print("NEW FUNCTION ^^^^")
+
+
+def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
+  print("FixDFGIsomorphism")
+  # We need to see if we can make these two packs isomorphic.
+  # First step is to see where the DFG isomorphism is violated
+  # and correct it if it has to do with one special case --
+  # missing add indexing op (addition to zero).
+
+  def GetNumBVOps(Pack : list):
+    NumExtractOps = 0
+    NumInsertOps = 0
+    NumOtherBVOps = 0
+    for Op in Pack:
+      if isinstance(Op, RoseBVExtractSliceOp):
+        NumExtractOps += 1
+      elif isinstance(Op, RoseBVInsertSliceOp):
+        NumInsertOps += 1
+      elif isinstance(Op, RoseBitVectorOp):
+        NumOtherBVOps += 1
+    return NumExtractOps, NumInsertOps, NumOtherBVOps
+
+  def GatherIndexingOpsInPack(Pack : list):
+    IndexingToBVOpsMap = dict()
+    for Op in reversed(Pack):
+      if isinstance(Op, RoseBVExtractSliceOp) \
+      or isinstance(Op, RoseBVInsertSliceOp):
+        IndexingOps = GatherIndexingOps(Op)
+        for IndexingOp in IndexingOps:
+          IndexingToBVOpsMap[IndexingOp] = Op
+    return IndexingToBVOpsMap
+
+  # Op1 is an add ops and op2 is not.
+  def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
+              Pack : list, OpsList1 : list, OpsList2 : list, \
+              Visited : list):
+    print("---------FIXING PACK")
+    # See if adding on Add op before Op2 would do.
+    if not isinstance(Op1, RoseAddOp):
+      return False
+    if len(Op1.getOperands()) != 2:
+      return False
+    if not isinstance(Op1.getOperand(0), RoseConstant) \
+    and not isinstance(Op1.getOperand(1), RoseConstant):
+      return False
+    # Generate a new add op
+    Zero = RoseConstant(0, Op2.getType())
+    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
+    print("NEW ADD OP:")
+    NewOp2.print()
+    # Replace the uses of Op2 with NewOp2
+    Op2.replaceUsesWith(NewOp2)
+    # Add the new op to the block
+    Block = Op2.getParent()
+    assert isinstance(Block, RoseBlock)
+    Block.addOperationAfter(NewOp2, Op2)
+    print("+++++NEW BLOCK:")
+    Block.print()
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(NewOp2.getOperands())
+    # Extend the pack
+    Index = Pack.index(Op2)
+    Pack.insert(Index + 1, NewOp2)
+    # Fix the visited ops list
+    Visited.remove(Op2)
+    Visited.add(NewOp2)
+    print("NEW BLOCK:")
+    Block.print()
+    print("---AFTER PACK:")
+    for Op in Pack:
+      Op.print()
+    return True
+
+  # First get number of different number of bv ops
+  NumExtractOps1, NumInsertOps1, NumOtherBVOps1 = GetNumBVOps(Pack1)
+  NumExtractOps2, NumInsertOps2, NumOtherBVOps2 = GetNumBVOps(Pack2)
+  if NumExtractOps1 != NumExtractOps2 \
+  or NumInsertOps1 != NumInsertOps2 \
+  or NumOtherBVOps1 != NumOtherBVOps2:
+    return False
+
+  # Gather all the indexing ops
+  IndexingToBVOpsMap1 = GatherIndexingOpsInPack(Pack1)
+  IndexingToBVOpsMap2 = GatherIndexingOpsInPack(Pack2)
+
+  # Reverse iterate the packs
+  OpsList1 =[Pack1[len(Pack1) - 1]]
+  OpsList2 =[Pack2[len(Pack2) - 1]]
+  Visited = set()
+  while len(OpsList1) != 0:
+    #print("OpsList1:")
+    #print(OpsList1)
+    #print("OpsList2:")
+    #print(OpsList2)
+    assert len(OpsList1) == len(OpsList2)
+    Op1 = OpsList1.pop()
+    Op2 = OpsList2.pop()
+    print("***&&&&&&&&OP1:")
+    Op1.print()
+    Op1.getType().print()
+    print("***&&&&&&&&OP2:")
+    Op2.print()
+    Op2.getType().print()
+    # Skip constants
+    if isinstance(Op1, RoseConstant) \
+    and isinstance(Op2, RoseConstant):
+      continue
+    if not isinstance(Op1, RoseOperation):
+      if isinstance(Op2, RoseOperation):
+        return False
+      # If op1 and op2 are simple values, we can skip
+      if isinstance(Op1, RoseValue) \
+      and isinstance(Op2, RoseValue):
+        if Op1.getType() != Op2.getType():
+          return False
+        continue
+      if Op1 != Op2:
+        return False
+      continue
+    if not isinstance(Op2, RoseOperation):
+      if isinstance(Op1, RoseOperation):
+        return False
+      # If op1 and op2 are simple values, we can skip
+      if isinstance(Op1, RoseValue) \
+      and isinstance(Op2, RoseValue):
+        if Op1.getType() != Op2.getType():
+          return False
+        continue
+      if Op1 != Op2:
+        return False
+      continue
+    if Op1 in Visited:
+      if not Op2 in Visited:
+         return False
+      continue
+    if Op2 in Visited:
+      if not Op1 in Visited:
+         return False
+      continue
+    Visited.add(Op1)
+    Visited.add(Op2)
+    print("--OP1:")
+    Op1.print()
+    print("--OP2:")
+    Op2.print()
+    # If the operations have different opcodes or types, skip
+    if Op1.getOpcode() != Op2.getOpcode():
+      print("OPCODES ARE NOT THE SAME")
+      # Check if one of the ops is an indexing op
+      if Op1 in IndexingToBVOpsMap1:
+        print("Op1 in IndexingToBVOpsMap1")
+        print("OP1:")
+        Op1.print()
+        print("OP2:")
+        Op2.print()
+        if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1, Visited) == True:
+          continue
+      elif  Op2 in IndexingToBVOpsMap2:
+        print("Op2 in IndexingToBVOpsMap2")
+        print("OP1:")
+        Op1.print()
+        print("OP2:")
+        Op2.print()
+        if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2, Visited) == True:
+          continue
+      return False
+    if Op1.getType() != Op2.getType():
+      return False
+    if len(Op1.getOperands()) != len(Op2.getOperands()):
+      return False
+    # Deal with call operations
+    if isinstance(Op1, RoseCallOp):
+      assert isinstance(Op2, RoseCallOp)
+      # Make sure that the callees for the operations are equal.
+      if Op1.getCallee().getName() != Op2.getCallee().getName():
+        return False
+      OpsList1.extend(Op1.getCallOperands())
+      OpsList2.extend(Op2.getCallOperands())
+      continue
+    # If this operation has not indexing operands, add None
+    if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
+    and Op1.isIndexingBVOp() ==  True:
+      # Output bitwidths for bitvector ops must be equal
+      if Op1.getOutputBitwidth() != Op2.getOutputBitwidth():
+        return False
+      OpsList1.extend(Op1.getBitVectorOperands())
+      OpsList1.append(Op1.getLowIndex())
+      OpsList1.append(Op1.getHighIndex())
+      OpsList2.extend(Op2.getBitVectorOperands())
+      OpsList2.append(Op2.getLowIndex())
+      OpsList2.append(Op2.getHighIndex())
+      continue
+    # See if the packs need fixing
+    MoveOn = False
+    print("++++++++++++++++++++++++++++++++++++++++++++++")
+    for OpIndex in range(len(Op1.getOperands())):
+      Operand1 = Op1.getOperand(OpIndex)
+      Operand2 = Op2.getOperand(OpIndex)
+      print("Operand1:")
+      Operand1.print()
+      print("Operand2:")
+      Operand2.print()
+      if isinstance(Operand1, RoseConstant):
+        if not isinstance(Operand2, RoseConstant):
+          if Op1 in IndexingToBVOpsMap1:
+            print("------Op1 in IndexingToBVOpsMap1")
+            print("OP1:")
+            Op1.print()
+            print("OP2:")
+            Op2.print()
+            if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2, Visited) == True:
+              MoveOn = True
+              break
+          continue
+      if isinstance(Operand2, RoseConstant):
+        if not isinstance(Operand1, RoseConstant):
+          if Op2 in IndexingToBVOpsMap2:
+            print("-----Op2 in IndexingToBVOpsMap1")
+            print("OP1:")
+            Op1.print()
+            print("OP2:")
+            Op2.print()
+            if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1, Visited) == True:
+              MoveOn = True
+              break
+          continue
+    if MoveOn == True:
+      continue
+    
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(Op2.getOperands())
+  # We are done exploring the DFGs
+  print("+++AFTER PACK1:")
+  for Op in Pack1:
+    Op.print()
+  print("+++++AFTER PACK2:")
+  for Op in Pack2:
+    Op.print()
+  return True  
+
+
+def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : RoseBitVectorOp, \
+                                    LoopStep : RoseValue, KeyOp : RoseBitVectorOp, \
+                                    KeyOpToIndexArg : dict, Visited : set, Context : RoseContext):
+  assert Op.isIndexingBVOp() == True
+  Block = Op.getParent()
+  assert not isinstance(Block, RoseUndefRegion)
+  # high_index = low_index + (precision - 1)
+  if isinstance(Op.getLowIndex(), RoseConstant):
+    if Op == KeyOp:
+      Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                  Op.getLowIndex().getType()))
+      KeyOpToIndexArg[KeyOp] = Arg
+    else:
+      Arg = KeyOpToIndexArg[KeyOp]
+    Op.setOperand(Op.getLowIndexPos(), Arg)
+    One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+    LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                              [Op.getOperand(Op.getBitwidthPos()), One])
+    Block.addOperationBefore(LastIdx, Op)
+    HighIndex = RoseAddOp.create(Context.genName("%" + "highidx"), [LastIdx, Op.getLowIndex()])
+    Block.addOperationBefore(HighIndex, Op)
+    Op.setOperand(Op.getHighIndexPos(), HighIndex)
+    Visited.add(HighIndex)
+    Visited.add(LastIdx)
+  else:
+    print("PRINT OP:")
+    Op.print()
+    Op.getParent().print()
+    print("--------------------")
+    Op.getLowIndex().print()
+    LowIndex = Op.getLowIndex()
+    # Deal with the low index first
+    if isinstance(LowIndex, RoseOperation) and LowIndex not in Visited:
+      # Now we have to deal with the low index that is a mul op
+      if isinstance(LowIndex,  RoseMulOp):
+        assert len(LowIndex.getOperands()) == 2
+        if isinstance(LowIndex.getOperand(0), RoseOperation):
+          DivOp = LowIndex.getOperand(0)
+          assert isinstance(DivOp, RoseDivOp)
+          assert isinstance(LowIndex.getOperand(1), RoseConstant)
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+          assert isinstance(DivOp.getOperand(1), RoseConstant)
+          DivOp.setOperand(1, LoopStep)
+        elif isinstance(LowIndex.getOperand(1), RoseOperation):
+          DivOp = LowIndex.getOperand(1)
+          assert isinstance(DivOp, RoseDivOp)
+          assert isinstance(LowIndex.getOperand(0), RoseConstant)
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+          assert isinstance(DivOp.getOperand(1), RoseConstant)
+          DivOp.setOperand(1, LoopStep)
+        else:
+          # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
+          print(Op.getOutputBitwidth())
+          DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
+          Block.addOperationBefore(DivOp, Op.getLowIndex())
+          if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
+            Op.getLowIndex().setOperand(0, DivOp)
+          else:
+            assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
+            Op.getLowIndex().setOperand(1, DivOp)
+        Visited.add(DivOp)
+        Visited.add(Op.getLowIndex())
+      #elif isinstance(LowIndex, RoseAddOp):
+      #  assert len(LowIndex.getOperands()) == 2
+      #  if isinstance(LowIndex.getOperand(0), RoseConstant):
+      #    if Op == KeyOp:
+      #      Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+      #                                      LowIndex.getOperand(0).getType()))
+      #      KeyOpToIndexArg[KeyOp] = Arg
+      #    else:
+      #      Arg = KeyOpToIndexArg[KeyOp]
+      #    LowIndex.setOperand(0, Arg)
+      #  elif isinstance(LowIndex.getOperand(1), RoseConstant):
+      #    if Op == KeyOp:
+      #      Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+      #                                      LowIndex.getOperand(1).getType()))
+      #      KeyOpToIndexArg[KeyOp] = Arg
+      #    else:
+      #      Arg = KeyOpToIndexArg[KeyOp]
+      #    LowIndex.setOperand(1, Arg)         
+    #Visited.add(Op.getLowIndex())
+    # Now deal with the high index
+    if Op.getHighIndex() in Visited:
+      return
+    assert isinstance(Op.getHighIndex(),  RoseAddOp)
+    One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+    LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                              [Op.getOperand(Op.getBitwidthPos()), One])
+    Block.addOperationBefore(LastIdx, Op.getHighIndex())
+    assert len(Op.getHighIndex().getOperands()) == 2
+    if isinstance(Op.getHighIndex().getOperand(0), RoseConstant):
+      Op.getHighIndex().setOperand(0, LastIdx)
+    else:
+      Op.getHighIndex().print()
+      assert isinstance(Op.getHighIndex().getOperand(1), RoseConstant)
+      Op.getHighIndex().setOperand(1, LastIdx)
+    Visited.add(LastIdx)
+    Visited.add(Op.getHighIndex())
+  return
+
+
+def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal : dict, \
+                              Visited : set, UnknownVal : set,  IndexingOps : set, \
+                              LoopList : list, Context : RoseContext):
+  print("ExtractConstantsFromMultipleBlocks")
+  # Some sanity checks
+  assert len(LoopList) > 1
+  assert len(BlockList) > 1
+  # The blocks in the block list must have the isomorphic
+  OpToKeyOpMap = dict()
+  KeyBlock = BlockList[0]
+  for Block in BlockList[1:]:
+    #assert DFGsOfBlocksAreIsomorphic(Block, KeyBlock) == True
+    Map = MapIsomorphicDFGsOfBlocks(Block, KeyBlock, FixDFGIsomorphism)
+    assert Map != None
+    OpToKeyOpMap.update(Map)
+
+  # Collect ops which helped determining the loop bounds during canonicalization
+  OpBitwidthEqLoopStepList = list()
+  for Block in BlockList:
+    Loop = Block.getParentOfType(RoseForLoop)
+    if not isinstance(Loop, RoseUndefRegion):
+      OpBitwidthEqLoopStepList.extend(GetOpDeterminingLoopBounds(Loop))
+
+  # Gather all the ops in the blocks
+  OpListMap = dict()
+  for Block in BlockList:
+    OpList = []
+    OpList.extend(Block.getOperations())
+    OpList.reverse()
+    OpListMap[Block] = OpList
+
+  Function = KeyBlock.getFunction()
+  print("EXTRACTING CONSTANTS FROM KEY BLOCK")
+  KeyBlock.print()
+  KeyOpToArg = dict()
+  KeyOpToIndexArg = dict()
+  for OpIndex, KeyOp in enumerate(OpListMap[KeyBlock]):
+    if KeyOp in Visited:
+      print("ALREADY VISITED")
+      KeyOp.print()
+      # Sanity check
+      for Block in BlockList[1:]:
+        OpListMap[Block][OpIndex].print()
+        assert OpListMap[Block][OpIndex] in Visited
+      continue
+
+    if KeyOp.isSizeChangingOp():
+      print("++++++=isSizeChangingOp OP IN OPLIST:")
+      KeyOp.print()
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        # if this is an indexing op, we can ignore it
+        if Operation in IndexingOps:
+          continue
+        if Operation in BVValToBitwidthVal:
+          Operation.setOperand(1, BVValToBitwidthVal[Operation])
+          if Operation.getOperand(0) not in BVValToBitwidthVal:
+            UnknownVal.add(Operation.getOperand(0))
+          continue
+        if Operation == KeyOp:
+          NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                      Operation.getOperand(1).getType()))
+          KeyOpToArg[KeyOp] = NewArg
+        else:
+          print("OpToKeyOpMap[Operation].print()")
+          OpToKeyOpMap[Operation].print()
+          NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+        Operation.setOperand(1, NewArg)
+        BVValToBitwidthVal[Operation] = NewArg
+        if Operation in UnknownVal:
+          UnknownVal.remove(Operation)
+        AddBitwidthValForUnknownVal(Operation, NewArg, BVValToBitwidthVal, UnknownVal)
+      continue
+  
+    if KeyOp.getOpcode().typesOfInputsAndOutputEqual():
+      print("typesOfInputsAndOutputEqual:")
+      KeyOp.print()
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        if Operation in BVValToBitwidthVal:
+          for OperandIndex, Operand in enumerate(Operation.getOperands()):
+            if isinstance(Operand, RoseConstant):
+              if Operation == KeyOp:
+                # Abstract away this constant value
+                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                              Operand.getType()))
+                KeyOpToArg[KeyOp] = NewArg
+              else:
+                print("OpToKeyOpMap[Operation].print()")
+                OpToKeyOpMap[Operation].print()
+                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+              Operation.setOperand(OperandIndex, NewArg)
+              continue
+            BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Operation]
+            if Operand in UnknownVal:
+              UnknownVal.remove(Operand)
+        else:
+          UnknownVal.add(Operation)
+          for OperandIndex, Operand in enumerate(Operation.getOperands()):
+            if isinstance(Operand, RoseConstant):
+              if Operation == KeyOp:
+                # Abstract away this constant value
+                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                              Operand.getType()))
+                KeyOpToArg[KeyOp] = NewArg
+              else:
+                print("OpToKeyOpMap[Operation].print()")
+                OpToKeyOpMap[Operation].print()
+                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+              Operation.setOperand(OperandIndex, NewArg)
+              continue       
+            UnknownVal.add(Operand)
+      continue
+  
+    if KeyOp.getOpcode().typesOfOperandsAreEqual():
+      print("typesOfOperandsAreEqual:")
+      KeyOp.print()
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        if Operation not in BVValToBitwidthVal:
+          UnknownVal.add(Operation)
+        for OperandIndex, Operand in enumerate(Operation.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            if Operation == KeyOp:
+              # Abstract away this constant value
+              NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Operand.getType()))
+              KeyOpToArg[KeyOp] = NewArg
+            else:
+              print("OpToKeyOpMap[Operation].print()")
+              OpToKeyOpMap[Operation].print()
+              NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+            Operation.setOperand(OperandIndex, NewArg)
+            continue
+          if Operand not in BVValToBitwidthVal:
+            UnknownVal.add(Operand)
+      continue
+
+    if isinstance(KeyOp, RoseSelectOp):
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        if Operation in BVValToBitwidthVal:
+          for OperandIndex, Operand in enumerate(Operation.getOperands()):
+            # Skip the condition operand
+            if OperandIndex == 0:
+              continue
+            if isinstance(Operand, RoseConstant):
+              if Operation == KeyOp:
+                # Abstract away this constant value
+                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                              Operand.getType()))
+                KeyOpToArg[KeyOp] = NewArg
+              else:
+                print("OpToKeyOpMap[Operation].print()")
+                OpToKeyOpMap[Operation].print()
+                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+              Operation.setOperand(OperandIndex, NewArg)
+              continue
+            BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Operation]
+            if Operand in UnknownVal:
+              UnknownVal.remove(Operand)
+        else:
+          UnknownVal.add(Operation)
+          for OperandIndex, Operand in enumerate(Operation.getOperands()):
+            # Skip the condition operand
+            if OperandIndex == 0:
+              continue
+            if isinstance(Operand, RoseConstant):
+              if Operation == KeyOp:
+                # Abstract away this constant value
+                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                              Operand.getType()))
+                KeyOpToArg[KeyOp] = NewArg
+              else:
+                print("OpToKeyOpMap[Operation].print()")
+                OpToKeyOpMap[Operation].print()
+                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+              Operation.setOperand(OperandIndex, NewArg)
+              continue       
+            UnknownVal.add(Operand)
+      continue
+
+    if isinstance(KeyOp, RoseBVExtractSliceOp):
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        Loop = Block.getParentOfType(RoseForLoop)
+        if Loop == RoseUndefRegion():
+          FixIndicesForBVOpsOutsideOfLoops(Operation, Visited, LoopList[0].getEndIndex(), Context)
+          # Add indexing ops in a set
+          for IndexingOp in GatherIndexingOps(Operation):
+            IndexingOps.add(IndexingOp)
+          continue
+        if Operation in OpBitwidthEqLoopStepList:
+          Operation.setOperand(Operation.getBitwidthPos(), Loop.getStep())
+          BVValToBitwidthVal[Operation] = Loop.getStep()
+          if Operation in UnknownVal:
+            UnknownVal.remove(Operation)
+          AddBitwidthValForUnknownVal(Operation, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
+        elif Operation in BVValToBitwidthVal:
+          Operation.setOperand(Operation.getBitwidthPos(), BVValToBitwidthVal[Operation])
+        else:
+          if Operation == KeyOp:
+            # Add a new argument
+            NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                      Operation.getOperand(Operation.getBitwidthPos()).getType()))
+            KeyOpToArg[KeyOp] = NewArg
+          else:
+            print("OpToKeyOpMap[Operation].print()")
+            OpToKeyOpMap[Operation].print()
+            NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+          Operation.setOperand(3, NewArg)
+          BVValToBitwidthVal[Operation] = NewArg
+          if Operation in UnknownVal:
+            UnknownVal.remove(Operation)
+          AddBitwidthValForUnknownVal(Operation, NewArg, BVValToBitwidthVal, UnknownVal)
+        FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function, Operation, Loop.getStep(), \
+                                        KeyOp, KeyOpToIndexArg, Visited, Context)
+        Visited.add(Operation)
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Operation):
+          IndexingOps.add(IndexingOp)
+      continue
+
+    if isinstance(KeyOp, RoseBVInsertSliceOp):
+      for Block in BlockList:
+        Operation = OpListMap[Block][OpIndex]
+        Loop = Block.getParentOfType(RoseForLoop)
+        if Loop == RoseUndefRegion():
+          FixIndicesForBVOpsOutsideOfLoops(Operation, Visited, LoopList[0].getEndIndex(), Context)
+          Visited.add(Operation)
+          # Add indexing ops in a set
+          for IndexingOp in GatherIndexingOps(Operation):
+            IndexingOps.add(IndexingOp)
+          continue
+        assert Loop.getParentOfType(RoseForLoop) == LoopList[0]
+        if Operation.getLowIndex() == LoopList[0].getIterator():
+          Operation.setOperand(Operation.getBitwidthPos(), LoopList[0].getStep())
+          BVValToBitwidthVal[Op] = LoopList[0].getStep()
+        elif Operation in OpBitwidthEqLoopStepList:
+          Operation.setOperand(Operation.getBitwidthPos(), Loop.getStep())
+          BVValToBitwidthVal[Operation] = Loop.getStep()
+        else:
+          if Operation == KeyOp:
+            # Add a new argument
+            NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                      Operation.getOperand(Operation.getBitwidthPos()).getType()))
+            KeyOpToArg[KeyOp] = NewArg
+          else:
+            print("OpToKeyOpMap[Operation].print()")
+            OpToKeyOpMap[Operation].print()
+            NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+          Operation.setOperand(4, NewArg)
+          BVValToBitwidthVal[Operation] = NewArg
+        BVValToBitwidthVal[Operation.getInsertValue()] = BVValToBitwidthVal[Operation]
+        FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function, Operation, Loop.getStep(), \
+                                        KeyOp, KeyOpToIndexArg, Visited, Context)
+        print("BVINSERT OP:")
+        Operation.print()
+        Visited.add(Operation)
+        # Add indexing ops in a set
+        for IndexingOp in GatherIndexingOps(Operation):
+          IndexingOps.add(IndexingOp)
+      continue
+  
+  return
+
+
+def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext):
+  print("ExtractConstantsMultipleLoops")
+  # Sanity check
+  InnerLoopsList = Function.getRegionsOfType(RoseForLoop, Level=1)
+  NumInnerLoops = len(InnerLoopsList)
+  assert NumInnerLoops > 1
+
+  # Get all the induction variables
+  LoopList = Function.getRegionsOfType(RoseForLoop)
+  for Loop in LoopList:
+    print("PRINTING LOOP")
+    Loop.print()
+  Iterators = [Loop.getIterator() for Loop in LoopList]
+
+  # Generate rose arguments for vector length, lane size and element size
+  VectorSize = Function.appendArg(RoseArgument.create("%vectsize", Iterators[0].getType()))
+  LaneSize = Function.appendArg(RoseArgument.create("%" + "lanesize", Iterators[0].getType()))
+  ElemSize = Function.appendArg(RoseArgument.create("%" + "elemsize", Iterators[1].getType()))
+  LaneOffset = Function.appendArg(RoseArgument.create("%" + "laneoffset", Iterators[1].getType()))
+  Function.print()
+
+  FunctionRegList = Function.getChildren()
+  # The function cannot be empty
+  assert len(FunctionRegList) > 0
+  # If the first region in this function is not a block, then insert one.
+  if not isinstance(FunctionRegList[0], RoseBlock):
+    FirstBlock = RoseBlock.create()
+    Function.addRegionBefore(0, FirstBlock)
+  else:
+    FirstBlock = FunctionRegList[0]
+
+  # Compute the points at which the sibling loops "break".
+  # First, compute the first breaking point
+  NumInnerLoopsVal = RoseConstant.create(NumInnerLoops, LaneSize.getType())
+  FirstBreak = RoseDivOp.create(Context.genName("%" + "break"), LaneSize, NumInnerLoopsVal)
+  FirstBlock.addOperation(FirstBreak)
+  # Go over all the loops
+  PreviousBreak = RoseUndefValue()
+  for Index in range(NumInnerLoops):
+    # Deal with some special cases to keep the IR simple
+    if Index == 0:
+      InnerLoopsList[Index].setStartIndexVal(LaneOffset)
+      InnerLoopsList[Index].setStepVal(ElemSize)
+      PreviousBreak = FirstBreak
+      InnerLoopsList[Index].setEndIndexVal(FirstBreak)
+      continue
+    # Compute the lane offset for this loop
+    NewLaneOffset = RoseAddOp.create(Context.genName("%new.lane.offset"), \
+                                    [PreviousBreak, LaneOffset])
+    FirstBlock.addOperation(NewLaneOffset)
+    InnerLoopsList[Index].setStartIndexVal(NewLaneOffset)
+    InnerLoopsList[Index].setStepVal(ElemSize)
+    if Index == NumInnerLoops - 1:
+      InnerLoopsList[Index].setEndIndexVal(LaneSize)
+    else:
+      Factor = RoseConstant.create(Index + 1, FirstBreak.getType())
+      PreviousBreak = RoseMulOp.create(Context.genName("%" + "break"), \
+                                        [Factor, FirstBreak])
+      FirstBlock.addOperation(PreviousBreak)
+      InnerLoopsList[Index].setEndIndexVal(PreviousBreak)
+
+  # Overwrite loop bounds and step of the outer loop
+  LoopList[0].setEndIndexVal(VectorSize)
+  LoopList[0].setStepVal(LaneSize)
+
+  # Map the blocks in the inner loops
+  BlocksInInnerLoops = list()
+  BlocksInInnerLoopsMap = dict() 
+  for Loop in InnerLoopsList:
+    BlockList = Loop.getRegionsOfType(RoseBlock, Level=0)
+    if BlocksInInnerLoops == []:
+       BlocksInInnerLoops = BlockList
+       # init the map
+       for Block in BlockList:
+         BlocksInInnerLoopsMap[Block]= [Block]
+       continue
+    # Sanity check. Number of blocks in all inner loops must 
+    # be the same.
+    assert len(BlocksInInnerLoops) == len(BlockList)
+    for Index, Block in enumerate(BlocksInInnerLoops):
+      BlocksInInnerLoopsMap[Block].append(BlockList[Index])
+
+  Function.print()
+  print("FUNCTION SO FAR ^^^^")
+
+  # Lets extract constants now
+  UnknownVal = set()
+  BVValToBitwidthVal = dict()
+  IndexingOps = set()
+  VisitedOps = set()
+  VisitedBlocks = set()
+  # First extract constants from the inner loops
+  for Block in BlocksInInnerLoops:
+    BlockList = BlocksInInnerLoopsMap[Block]
+    ExtractConstantsFromMultipleBlocks(BlockList,\
+                                       BVValToBitwidthVal, VisitedOps, \
+                                UnknownVal, IndexingOps, LoopList, Context)
+    # Mark these blocks as visited
+    for OtherBlocks in BlockList:
+      VisitedBlocks.add(OtherBlocks)
+
+  # Extract constants from remaining blocks
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    print("---Block in List:")
+    Block.print()
+    if Block in VisitedBlocks:
+      continue
+    ExtractConstantsFromBlock(Block, BVValToBitwidthVal, VisitedOps, \
+                      UnknownVal, IndexingOps, LoopList, Context)
+
+  Function.print()
+  print("NEW FUNCTION ^^^^")
+
 
 
 def ExtractConstantsFromFunction(Function : RoseFunction, Context : RoseContext):
