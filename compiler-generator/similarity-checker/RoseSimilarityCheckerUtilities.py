@@ -7,6 +7,7 @@
 
 
 from ast import Sub
+from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -83,6 +84,28 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
   return (OuterLoopFound == True and InnerLoopsFound == True)
 
 
+
+def GetBVExtractsToBeSkipped(Abstraction):
+  # Gather bvextract ops that index into masks and serve as conditions for
+  # cond regions in the function. We will not need to extract output bitwidths
+  # of these ops because the bitwidth of conditions for bitwidths is always one.
+  SkipBVExtracts = set()
+  CondRegions = Abstraction.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    Worklist = list()
+    Worklist.append(CondRegion.getCondition())
+    while len(Worklist) != 0:
+      Operation = Worklist.pop()
+      if not isinstance(Operation, RoseOperation):
+        continue
+      if not isinstance(Operation, RoseBVExtractSliceOp):
+        Worklist.extend(Operation.getOperands())
+        continue
+      SkipBVExtracts.add(Operation)
+      break
+  return SkipBVExtracts
+
+
 # The loop bounds must be determined by the bvinsert or bvextract to inputs/output 
 # of the smallest bitwidth.
 def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
@@ -96,53 +119,69 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   Params = Loop.getFunction().getArgs()
   BVInsertOps = []
   BVExtractOps = []
-  # Get the bvinserts to the output of the function that this belongs to.
+  # Get all the blocks in this loop at level 0.
   BlockList = Loop.getRegionsOfType(RoseBlock, Level=0)
+  # Take into account any cond blocks in the loop
+  CondRegions = Loop.getRegionsOfType(RoseCond, Level=0)
+  for CondRegion in CondRegions:
+    CondRegionBlockList = CondRegion.getRegionsOfType(RoseBlock, Level=0)
+    BlockList.extend(CondRegionBlockList)
+
+  SkipBVExtracts = GetBVExtractsToBeSkipped(Loop)
+
+  # Now gather the bvinserts and bvextracts.
+  Result = list()
   for Block in BlockList:
     for Op in reversed(Block.getOperations()):
       if isinstance(Op, RoseBVInsertSliceOp):
+        Op.print()
         if Op.getInputBitVector() == FunctionOutput:
+          if isinstance(Op.getOutputBitwidth(), RoseArgument):
+            Result.append(Op)
+            continue
           BVInsertOps.append(Op)
           continue
       if isinstance(Op, RoseBVExtractSliceOp):
+        if Op in SkipBVExtracts:
+          continue
         if Op.getInputBitVector() in Params:
+          if isinstance(Op.getOutputBitwidth(), RoseArgument):
+            Result.append(Op)
+            continue
           BVExtractOps.append(Op)
 
-  Result = list()
+  # If we already have some results in the result list, just return that
+  if len(Result) != 0:
+    return Result
+
+  # The bvinserts and bvextracts have output bitwidths that are integers 
+  # (and not rose values).
+  BitWidth = RoseUndefValue()
   if len(BVInsertOps) != 0:
     # But first make sure the bitwidth for all bvinserts is the same.    
     BitWidth = BVInsertOps[0].getOutputBitwidth()
-    #if BitWidth != 1:
     # Sanity check
-    for Op in BVInsertOps:
+    for Op in BVInsertOps[1:]:
       assert Op.getOutputBitwidth() == BitWidth
     Result.extend(BVInsertOps)
-    
-    # Now check if the extract ops have smaller output bitwidths
-    if len(BVExtractOps) != 0:
-      ExtractBitWidth = BVExtractOps[0].getOutputBitwidth()
-      for Op in BVExtractOps:
-        if ExtractBitWidth > Op.getOutputBitwidth():
-          ExtractBitWidth = Op.getOutputBitwidth()
-      if BitWidth > ExtractBitWidth:
-        BitWidth = ExtractBitWidth
-        # No bvinsert op is good here
-        Result.clear()
-      for Op in BVExtractOps:
-        if Op.getOutputBitwidth() == BitWidth:
-          Result.append(Op)
-    return Result
   
   if len(BVExtractOps) != 0:
     # Now check get extract ops with smallest output bitwidths
     ExtractBitWidth = BVExtractOps[0].getOutputBitwidth()
-    for Op in BVExtractOps:
+    for Op in BVExtractOps[1:]:
+      Op.print()
       if ExtractBitWidth > Op.getOutputBitwidth():
         ExtractBitWidth = Op.getOutputBitwidth()
+    if not isinstance(BitWidth, RoseUndefValue):
+      if BitWidth > ExtractBitWidth:
+        BitWidth = ExtractBitWidth
+        # No bvinsert op is good here
+        Result.clear()
     for Op in BVExtractOps:
       if Op.getOutputBitwidth() == ExtractBitWidth:
         Result.append(Op)
     return Result
   
   return None
+
 
