@@ -432,12 +432,20 @@ class RoseRegion:
             return True
     return False
 
+  # This can be implemented by a subclass
+  def getUsersInRegion(self, Abstraction):
+    return []
+
   # Get all users of the given value
   def getUsersOf(self, Abstraction):
     assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
       and not isinstance(Abstraction, RoseAbstractions.RoseConstant)
     assert isinstance(Abstraction, RoseAbstractions.RoseValue)
     Users = []
+    Users.extend(self.getUsersInRegion(Abstraction))
+    # Blocks are already handled separately
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return Users
     if self.Keys != None:
       for Key in self.Keys:
         for Child in self.getChildren()[Key]:
@@ -446,11 +454,7 @@ class RoseRegion:
     else:
       for Child in self.getChildren():
         assert self.isChildValid(Child)
-        if isinstance(self, RoseAbstractions.RoseBlock):
-          if Child.usesValue(Abstraction):
-            Users.append(Child)
-        else:
-          Users.extend(Child.getUsersOf(Abstraction))
+        Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
   # An abstraction can be an operation and region.
@@ -515,5 +519,6 @@ class RoseRegion:
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
+
 
 

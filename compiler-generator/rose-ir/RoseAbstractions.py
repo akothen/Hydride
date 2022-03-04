@@ -223,6 +223,16 @@ class RoseBlock(RoseRegion):
   def getPosOfOperation(self, Operation):
     return self.getPosOfChild(Operation)
   
+  def getUsersInRegion(self, Abstraction):
+    assert not isinstance(Abstraction, RoseUndefValue) \
+      and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
+    Users = list()
+    for Op in self.getOperations():
+      if Op.usesValue(Abstraction):
+        Users.append(Op)
+    return Users
+
   # Insert the given op in the end of the block
   def addOperation(self, Operation : RoseOperation):
     if self.getNumOperations() > 0:
@@ -393,6 +403,21 @@ class RoseForLoop(RoseRegion):
     assert self.End.getType() == NewEnd.getType()
     self.End = NewEnd
 
+  def getUsersInRegion(self, Abstraction):
+    assert not isinstance(Abstraction, RoseUndefValue) \
+      and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
+    Users = []
+    if self.getIterator() == Abstraction:
+      Users.append(self.getIterator())
+    if self.getStartIndex() == Abstraction:
+      Users.append(self.getStartIndex())
+    if self.getEndIndex() == Abstraction:
+      Users.append(self.getEndIndex())  
+    if self.getStep() == Abstraction:
+      Users.append(self.getStep())  
+    return Users
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
@@ -475,6 +500,14 @@ class RoseCond(RoseRegion):
 
   def getKeyForElseRegion(self):
     return "else"
+  
+  def getUsersInRegion(self, Abstraction):
+    assert not isinstance(Abstraction, RoseUndefValue) \
+      and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
+    if self.getCondition() == Abstraction:
+      return [self.getCondition()]
+    return []
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -490,4 +523,5 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 
