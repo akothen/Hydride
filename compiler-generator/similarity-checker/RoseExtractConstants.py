@@ -268,11 +268,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           if OperandIndex == 0:
             continue
           if isinstance(Operand, RoseConstant):
-            # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Operand.getType()))
-            Op.setOperand(OperandIndex, Arg)
-            continue
+            if Op.getType().getBitwidth() != 1:
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue
           BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
           if Operand in UnknownVal:
             UnknownVal.remove(Operand)
@@ -283,11 +284,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           if OperandIndex == 0:
             continue
           if isinstance(Operand, RoseConstant):
-            # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Operand.getType()))
-            Op.setOperand(OperandIndex, Arg)
-            continue       
+            if Op.getType().getBitwidth() != 1:
+              # Abstract away this constant value
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Operand.getType()))
+              Op.setOperand(OperandIndex, Arg)
+              continue
           UnknownVal.add(Operand)
       continue
 
@@ -973,17 +975,18 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
             if OperandIndex == 0:
               continue
             if isinstance(Operand, RoseConstant):
-              if Operation == KeyOp:
-                # Abstract away this constant value
-                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                              Operand.getType()))
-                KeyOpToArg[KeyOp] = NewArg
-              else:
-                print("OpToKeyOpMap[Operation].print()")
-                OpToKeyOpMap[Operation].print()
-                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-              Operation.setOperand(OperandIndex, NewArg)
-              continue
+              if Operation.getType().getBitwidth() != 1:
+                if Operation == KeyOp:
+                  # Abstract away this constant value
+                  NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                                Operand.getType()))
+                  KeyOpToArg[KeyOp] = NewArg
+                else:
+                  print("OpToKeyOpMap[Operation].print()")
+                  OpToKeyOpMap[Operation].print()
+                  NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+                Operation.setOperand(OperandIndex, NewArg)
+                continue
             BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Operation]
             if Operand in UnknownVal:
               UnknownVal.remove(Operand)
@@ -994,17 +997,18 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
             if OperandIndex == 0:
               continue
             if isinstance(Operand, RoseConstant):
-              if Operation == KeyOp:
-                # Abstract away this constant value
-                NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                              Operand.getType()))
-                KeyOpToArg[KeyOp] = NewArg
-              else:
-                print("OpToKeyOpMap[Operation].print()")
-                OpToKeyOpMap[Operation].print()
-                NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-              Operation.setOperand(OperandIndex, NewArg)
-              continue       
+              if Operation.getType().getBitwidth() != 1:
+                if Operation == KeyOp:
+                  # Abstract away this constant value
+                  NewArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                                Operand.getType()))
+                  KeyOpToArg[KeyOp] = NewArg
+                else:
+                  print("OpToKeyOpMap[Operation].print()")
+                  OpToKeyOpMap[Operation].print()
+                  NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
+                Operation.setOperand(OperandIndex, NewArg)
+                continue       
             UnknownVal.add(Operand)
       continue
 
