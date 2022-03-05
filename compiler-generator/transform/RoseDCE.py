@@ -12,6 +12,7 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 
 def RemoveRedundantBVInsertOps(Block : RoseBlock):
@@ -74,7 +75,7 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       # Compute the new high index
       if BVExtractOpLow.getValue() + BVExtractOp.getOutputBitwidth() \
             <= BVInsertOpLow.getValue() + BVInsertOp.getOutputBitwidth():
-        NewHigh = RoseConstant.create(NewLow.getValue() + BVExtractOp.getOutputBitwidth() - 1,\
+        NewHigh = RoseConstant.create(NewLow.getValue() + BVExtractOp.getOutputBitwidth(),\
                                   BVExtractOpHigh.getType())
       else:
         # Cannot do much with this extract op
@@ -110,23 +111,10 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Remove redundant bvinserts
   RemoveRedundantBVInsertOps(Block)
 
-
-def RunDCEOnRegion(Region):
-  # Iterate over all the contents of this function
-  assert not isinstance(Region, RoseBlock)
-  for Abstraction in Region:
-    # Run DCE on a nested function
-    if isinstance(Abstraction, RoseFunction):
-      RunDCEOnFunction(Abstraction)
-      continue
-    # DCE only happens on blocks
-    if not isinstance(Abstraction, RoseBlock):
-      print("REGION:")
-      print(Abstraction)
-      Abstraction.print()
-      RunDCEOnRegion(Abstraction)
-      continue
-    RunDCEOnBlock(Abstraction)
+  # Check if the block is empty. If it is, remove the block
+  if Block.getNumOperations() == 0:
+    ParentRegion = Block.getParent()
+    ParentRegion.eraseChild(Block)
 
 
 def RunDCEOnFunction(Function : RoseFunction):
@@ -134,15 +122,16 @@ def RunDCEOnFunction(Function : RoseFunction):
   print("FUNCTION:")
   Function.print()
   # Run DCE on the given function
-  RunDCEOnRegion(Function)
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    RunDCEOnBlock(Block)
 
 
 # Runs a transformation
-def Run(Function : RoseFunction):
+def Run(Function : RoseFunction, Context : RoseContext):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 

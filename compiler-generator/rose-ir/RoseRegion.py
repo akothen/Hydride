@@ -13,11 +13,21 @@ class RoseRegion:
     self.Parent = Parent
     if self.Parent is not None:
       assert self.isParentValid(Parent)
+    # Tracks keys for this region
+    self.Keys = Keys
     self.Children = Children
     if self.Children is not None:
       assert self.areChildrenValid()
-    # Tracks keys for this region
-    self.Keys = Keys
+      if type(self.Children) == list:
+        # Set the parents of the children
+        for Child in self.Children:
+          Child.setParent(self)
+      else:
+        assert self.Keys != None
+        for Key in self.Keys:
+          # Set the parents of the children
+          for Child in self.Children[Key]:
+            Child.setParent(self)
     # This is a unique ID to identify this instance of rose region
     # If this is an instance of undef region, then the ID used is 0.
     if not isinstance(self, RoseAbstractions.RoseUndefRegion):
@@ -55,12 +65,32 @@ class RoseRegion:
       if self.ChildIndex == self.getNumChildren():
         raise StopIteration
       return self.getChild(self.ChildIndex)
-    
   
   def areChildrenValid(self):
-    if isinstance(self, RoseAbstractions.RoseUndefRegion):
-      return True
-    return False
+    # Children do not have to be instances of regions
+    if self.Keys != None:
+      for Key in self.Keys:
+        for Child in self.getChildren()[Key]:
+          if self.isChildValid(Child) == False:
+            return False
+    else:
+      for Child in self.getChildren():
+        if self.isChildValid(Child) == False:
+          return False
+    return True
+
+  def isChildValid(self, Child):
+    if not isinstance(self, RoseAbstractions.RoseBlock):
+      if isinstance(Child, RoseAbstractions.RoseFunction) \
+      or isinstance(Child, RoseAbstractions.RoseForLoop) \
+      or isinstance(Child, RoseAbstractions.RoseCond) \
+      or isinstance(Child, RoseAbstractions.RoseBlock):
+        return True
+      return False
+    else:
+      if isinstance(Child, RoseAbstractions.RoseOperation):
+        return True
+      return False
 
   def isParentValid(self, Parent):
     if isinstance(self, RoseAbstractions.RoseUndefRegion):
@@ -101,6 +131,8 @@ class RoseRegion:
       assert Index < len(self.Children)
       return self.Children[Index]
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       assert Index < len(self.Children[Key])
       return self.Children[Key][Index]
   
@@ -110,6 +142,8 @@ class RoseRegion:
     if Key == None:
       return len(self.Children)
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       return len(self.Children[Key])
   
   def getPosOfChild(self, Child, Key = None):
@@ -119,6 +153,8 @@ class RoseRegion:
       assert Child in self.Children
       return self.Children.index(Child)
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       assert Child in self.Children[Key]
       return self.Children[Key].index(Child)
 
@@ -132,6 +168,8 @@ class RoseRegion:
     if Key == None:
       return self.Children[len(self.Children) - 1]
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       return self.Children[Key][len(self.Children[Key]) - 1]
   
   def isEmpty(self, Key = None):
@@ -140,6 +178,8 @@ class RoseRegion:
     if Key == None:
       return len(self.Children) == 0
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       return len(self.Children[Key]) == 0
   
   def updateTailChild(self, UpdatedChild, Key = None):
@@ -149,6 +189,8 @@ class RoseRegion:
     if Key == None:
       self.Children[len(self.Children) - 1] = UpdatedChild
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       self.Children[Key][len(self.Children[Key]) - 1] = UpdatedChild
   
   # Get the first function enclosing this region
@@ -159,6 +201,30 @@ class RoseRegion:
     while not isinstance(Function, RoseAbstractions.RoseFunction):
       Function = Function.getParent()
     return Function
+
+  def getKeyForChild(self, Region):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    if self.getKeys() == None:
+      return None
+    for Key in self.getKeys():
+      for Child in self.Children[Key]:
+        if Child == Region:
+          return Key
+    assert False, "Given region is not a child!"
+
+  def getRegionBefore(self):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    ParentRegion = self.getParent()
+    if isinstance(ParentRegion, RoseAbstractions.RoseUndefRegion):
+      return RoseAbstractions.RoseUndefRegion()
+    # Find the key for this region within the parent
+    Key = ParentRegion.getKeyForChild(self)
+    Position = ParentRegion.getPosOfChild(self, Key)
+    if Position == 0:
+      return RoseAbstractions.RoseUndefRegion()
+    return ParentRegion.getChild(Position - 1, Key)
 
   def setParent(self, Parent):
     assert isinstance(Parent, RoseRegion)
@@ -176,6 +242,8 @@ class RoseRegion:
     if Key == None:
       self.Children.append(Region)
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       self.Children[Key].append(Region)
   
   def addRegionBefore(self, Index, Region, Key = None):
@@ -187,6 +255,8 @@ class RoseRegion:
       assert Index < len(self.Children)
       self.Children.insert(Index, Region)
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       assert Index < len(self.Children[Key])
       self.Children[Key].insert(Index, Region)
     
@@ -198,6 +268,8 @@ class RoseRegion:
       assert Index >= 0 and Index < len(self.Children)
       self.Children[Index] = Region
     else:
+      assert self.Keys != None
+      assert Key in self.Keys
       assert Index >= 0 and Index < len(self.Children[Key])
       self.Children[Key][Index] = Region
     
@@ -206,8 +278,11 @@ class RoseRegion:
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Child)
     assert Child in self.Children
+    # Remove the child
     self.Children.remove(Child)
-  
+    # Set the child's parent to undef region
+    Child.setParent(RoseAbstractions.RoseUndefRegion())
+
   def clone(self):
     return deepcopy(self)
 
@@ -305,7 +380,8 @@ class RoseRegion:
         or SubRegionType == RoseAbstractions.RoseCond \
         or SubRegionType == RoseAbstractions.RoseBlock
     if isinstance(self, RoseAbstractions.RoseBlock):
-      return [self]
+      assert SubRegionType != RoseAbstractions.RoseBlock
+      return []
     RegionList = list()
     for SubRegion in self:
       if Level > 0:
@@ -313,14 +389,158 @@ class RoseRegion:
         continue
       if isinstance(SubRegion, SubRegionType):
         RegionList.append(SubRegion)
+        if SubRegionType == RoseAbstractions.RoseBlock:
+          continue
       if Level < 0:
         RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level))
         continue
     return RegionList
 
+  def getParentOfType(self, ParentRegionType):
+    # Some sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not ParentRegionType == RoseAbstractions.RoseUndefRegion \
+       and not ParentRegionType == RoseAbstractions.RoseBlock
+    assert ParentRegionType == RoseAbstractions.RoseFunction \
+        or ParentRegionType == RoseAbstractions.RoseForLoop \
+        or ParentRegionType == RoseAbstractions.RoseCond
+    Parent = self.getParent()
+    if isinstance(Parent, RoseAbstractions.RoseUndefRegion):
+      return RoseAbstractions.RoseUndefRegion()
+    while not isinstance(Parent, ParentRegionType):
+      Parent = Parent.getParent()
+      if isinstance(Parent, RoseAbstractions.RoseUndefRegion):
+        return RoseAbstractions.RoseUndefRegion()
+    return Parent
+
+  # Replaces the uses of an operation 
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseConstant) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseFunction)
+    assert not isinstance(NewAbstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(NewAbstraction, RoseAbstractions.RoseFunction)
+    assert isinstance(Abstraction, RoseAbstractions.RoseValue)
+    assert isinstance(NewAbstraction, RoseAbstractions.RoseValue)
+    assert Abstraction.getType() == NewAbstraction.getType()
+    if self.Keys != None:
+      for Key in self.Keys:
+        for Child in self.getChildren()[Key]:
+          assert self.isChildValid(Child)
+          Child.replaceUsesWith(Abstraction, NewAbstraction)
+    else:
+      for Child in self.getChildren():
+        assert self.isChildValid(Child)
+        Child.replaceUsesWith(Abstraction, NewAbstraction)
+
+  # Sees if the given operation or function or argument has any uses
+  def hasUsesOf(self, Abstraction):
+    assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseConstant)
+    assert isinstance(Abstraction, RoseAbstractions.RoseValue)
+    if self.Keys != None:
+      for Key in self.Keys:
+        for Child in self.getChildren()[Key]:
+          assert self.isChildValid(Child)
+          if Child.hasUsesOf(Abstraction) == True:
+            return True
+    else:
+      for Child in self.getChildren():
+        assert self.isChildValid(Child)
+        if isinstance(self, RoseAbstractions.RoseBlock):
+          if Child.usesValue(Abstraction) == True:
+            return True
+        else:
+          if Child.hasUsesOf(Abstraction) == True:
+            return True
+    return False
+
+  # This can be implemented by a subclass
+  def getUsersInRegion(self, Abstraction):
+    return []
+
+  # Get all users of the given value
+  def getUsersOf(self, Abstraction):
+    assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseConstant)
+    assert isinstance(Abstraction, RoseAbstractions.RoseValue)
+    Users = []
+    Users.extend(self.getUsersInRegion(Abstraction))
+    # Blocks are already handled separately
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return Users
+    if self.Keys != None:
+      for Key in self.Keys:
+        for Child in self.getChildren()[Key]:
+          assert self.isChildValid(Child)
+          Users.extend(Child.getUsersOf(Abstraction))
+    else:
+      for Child in self.getChildren():
+        assert self.isChildValid(Child)
+        Users.extend(Child.getUsersOf(Abstraction))
+    return Users
+
+  # An abstraction can be an operation and region.
+  # This function cannot be used for rose blocks.
+  def addAbstraction(self, Abstraction, Key = None):
+    assert not isinstance(self, RoseAbstractions.RoseBlock)
+    if Key != None:
+      assert self.Keys != None
+      assert Key in self.Keys
+    else:
+      assert self.Keys == None
+    if isinstance(Abstraction, RoseRegion):
+      self.addRegion(Abstraction, Key)
+      return
+    elif isinstance(Abstraction, RoseAbstractions.RoseOperation):
+      # This is a little more difficult. First try to get RoseBlock
+      TailRegion = self.getTailChild(Key)
+      if not isinstance(TailRegion, RoseAbstractions.RoseBlock) \
+      or isinstance(TailRegion, RoseAbstractions.RoseUndefRegion):
+        # Add a new block first
+        Block = RoseAbstractions.RoseBlock.create([])
+        Block.addRegion(Abstraction)
+        self.addRegion(Block, Key)
+      else:
+        TailRegion.addRegion(Abstraction)
+        self.updateTailChild(TailRegion, Key)
+      return
+    assert False
+
+  def replaceAbstraction(self, OldAbstraction, NewAbstraction, Key = None):
+    assert type(OldAbstraction) == type(NewAbstraction)
+    assert self.isChildValid(NewAbstraction)
+    if Key != None:
+      assert self.Keys != None
+      assert Key in self.Keys
+      for Child in self.getChildren()[Key]:
+        if type(OldAbstraction) == type(Child):
+          if Child == OldAbstraction:
+            Index = self.getChildren()[Key].index(OldAbstraction)
+            self.replaceRegion(NewAbstraction, Index, Key)
+            return True
+        if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
+          return True
+    else:
+      if  self.Keys != None:
+        for RegionKey in self.Keys:
+          if self.replaceAbstraction(OldAbstraction, NewAbstraction, RegionKey):
+            return True
+      else:
+        for Child in self.getChildren():
+          assert self.isChildValid(Child)
+          if type(OldAbstraction) == type(Child):
+            if Child == OldAbstraction:
+              Index = self.getChildren().index(OldAbstraction)
+              self.replaceRegion(NewAbstraction, Index)
+              return True
+          if not isinstance(self, RoseAbstractions.RoseBlock):
+            if Child.replaceAbstraction(OldAbstraction, NewAbstraction) == True:
+              return True
+    return False
+
   def print(self, NumSpace = 0):
     for Child in self.Children:
       Child.print(NumSpace)
-
 
 

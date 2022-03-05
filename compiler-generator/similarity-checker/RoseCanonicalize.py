@@ -5,7 +5,6 @@
 #############################################################
 
 
-from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -13,48 +12,22 @@ from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
 from RoseUtilities import *
+from RoseContext import *
 from RoseSimilarityCheckerUtilities import *
+import RoseOpCombine
 
 
-def RunFixLoopsBooundsInLoop(Loop : RoseForLoop):
+def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   print("FIX BOUNDS OF LOOP")
   print("LOOP:")
   print(Loop)
   Loop.print()
-  FunctionOutput = Loop.getFunction().getReturnValue()
-  Params = Loop.getFunction().getArgs()
-  BVInsertOps = []
-  BVExtractOps = []
-  # Get the bvinserts to the output of the function that this belongs to.
-  for Region in Loop:
-    if isinstance(Region, RoseBlock):
-      for Op in Region:
-        if isinstance(Op, RoseBVInsertSliceOp):
-          if Op.getInputBitVector() == FunctionOutput:
-            BVInsertOps.append(Op)
-        elif isinstance(Op, RoseBVExtractSliceOp):
-          if Op.getInputBitVector() in Params:
-            BVExtractOps.append(Op)
 
-  if len(BVInsertOps) != 0:
-      # But first make sure the bitwidth for all bvinserts is the same.    
-    BitWidth = BVInsertOps[0].getOutputBitwidth()
-    #if BitWidth != 1:
-    for Op in BVInsertOps:
-      assert Op.getOutputBitwidth() == BitWidth
-    #else:
-      # But first make sure the bitwidth for all bvxtracts is the same.    
-    #  BitWidth = BVExtractOps[0].getOutputBitwidth()
-    #  for Op in BVExtractOps:
-    #    assert Op.getOutputBitwidth() == BitWidth
-  elif len(BVExtractOps) != 0:
-    # But first make sure the bitwidth for all bvxtracts is the same.    
-    BitWidth = BVExtractOps[0].getOutputBitwidth()
-    for Op in BVExtractOps:
-      assert Op.getOutputBitwidth() == BitWidth
-  else:
-    # Nothing to do here.
+  # Get the op that we can use to canonicalize the loop bounds
+  PrimaryOp = GetOpDeterminingLoopBounds(Loop)
+  if PrimaryOp == None:
     return
+  BitWidth = PrimaryOp[0].getOutputBitwidth()
 
   # Go over the bvinserts/bvextracts and see if the bitwidth and loop step are the same.
   # Now see if the loop bounds need adjusting
@@ -90,18 +63,24 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop):
     else:
       Block = Loop.getChild(0)
       Block.addOperationBefore(IteratorReplacement, Block.getOperation(0))
-    Loop.replaceUsesWith(OldIterator, IteratorReplacement)
+    ReplaceUsesWithUniqueCopiesOf(Loop, OldIterator, IteratorReplacement, Context)
   print("NEW LOOP:")
   Loop.print()
+  # Combine some ops in the loop
+  RoseOpCombine.RunOpCombineOnRegion(Loop, Context)
+  print("NEW LOOP:")
+  Loop.print()
+  #assert False
 
 
-def RunFixLoopsBooundsInFunction(Region):
+def RunFixLoopsBooundsInFunction(Region, Context : RoseContext):
   # Iterate over all the contents of this function
   for Abstraction in Region:
     assert not isinstance(Abstraction, RoseFunction)
     if isinstance(Abstraction, RoseForLoop):
-      RunFixLoopsBooundsInLoop(Abstraction)
-      continue
+      RunFixLoopsBooundsInLoop(Abstraction, Context)
+    if not isinstance(Abstraction, RoseBlock):
+      RunFixLoopsBooundsInFunction(Abstraction, Context)
     print("REGION:")
     print(Abstraction)
     Abstraction.print()
@@ -204,8 +183,9 @@ def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
   # Split the blocks at bvinserts
   for Block, BVInsertOpsList in BlockToBVInsertOpsMap.items():
     # Only handle cases whose parents are loops
-    Loop = Block.getParent()
-    assert isinstance(Loop, RoseForLoop)
+    Loop = Block.getParentOfType(RoseForLoop)
+    if Loop == RoseUndefRegion():
+      continue
     BlockList = list()
     for SplitPoint in BVInsertOpsList:
       # Split the block at the split point
@@ -236,26 +216,171 @@ def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
     for NewLoop in LoopList:
       ParentOfLoop.addRegionBefore(LoopPos, NewLoop)
       InsertBefore += 1
-      
 
-def CanonicalizeFunction(Function : RoseFunction):
+
+def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
+  print("FIX ACCUMULATION CODE")
+  Function.print()
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  AccumulationPatterFound = False
+  NewInitInstructions = list()
+  InitInstructions = list()
+  for Block in reversed(BlockList):
+    # If this block is in the cond region, skip this block
+    if not isinstance(Block.getParentOfType(RoseCond), RoseUndefRegion):
+      continue
+    if len(NewInitInstructions) != 0:
+      break
+    # Look for accumulation pattern
+    for Op in reversed(Block.getOperations()):
+      if isinstance(Op, RoseBVInsertSliceOp):
+        if Op.getInputBitVector() == Function.getReturnValue():
+          # The bvinsert op has to be using the iterator
+          Loop = Block.getParentOfType(RoseForLoop)
+          if not isinstance(Loop, RoseUndefRegion):
+            if Op.getLowIndex() != Loop.getIterator():
+              break
+            assert isinstance(Loop.getStep(), RoseConstant)
+            if Loop.getStep().getValue() != Op.getOutputBitwidth():
+              break
+            assert isinstance(Loop.getEndIndex(), RoseConstant)
+            if Loop.getEndIndex().getValue() != \
+                      Op.getInputBitVector().getType().getBitwidth():
+              break
+          # Now go up the use-def chain. The inserted values
+          # must be coming from a bvadd op.
+          InsertValue = Op.getInsertValue()
+          if not isinstance(InsertValue, RoseBVAddOp):
+            # See if this is an extract op
+            if isinstance(InsertValue, RoseBVExtractSliceOp):
+              # If the extracted bitvector is a function argument
+              if isinstance(InsertValue.getInputBitVector(), RoseArgument):
+                if not isinstance(Loop, RoseUndefRegion):
+                  if InsertValue.getLowIndex() == Loop.getIterator():
+                    assert isinstance(Loop.getStep(), RoseConstant)
+                    if Loop.getStep().getValue() == InsertValue.getOutputBitwidth():
+                      if Loop.getEndIndex().getValue() == \
+                                InsertValue.getInputBitVector().getType().getBitwidth():
+                        assert len(NewInitInstructions) == 0
+                        InitInstructions.append(Op)
+                        InitInstructions.append(InsertValue)
+                        NewInst = Op.clone()
+                        NewInst.setOperand(0, InsertValue.getInputBitVector())
+                        NewInst.setOperand(2, RoseConstant.create(0, \
+                                          NewInst.getOperand(2).getType()))
+                        NewInst.setOperand(3, \
+                            RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
+                                          NewInst.getOperand(3).getType()))
+                        NewInst.setOperand(4, \
+                            RoseConstant.create(Loop.getEndIndex().getValue(), \
+                                          NewInst.getOperand(3).getType()))
+                        NewInitInstructions.append(NewInst)
+                        continue
+                break
+            elif isinstance(InsertValue, RoseConstant):
+              assert len( NewInitInstructions) == 0
+              InitInstructions.append(Op)
+              NewInst = Op.clone()
+              NewInst.setOperand(2, RoseConstant.create(0, \
+                                NewInst.getOperand(2).getType()))
+              NewInst.setOperand(3, \
+                  RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
+                                NewInst.getOperand(3).getType()))
+              NewInst.setOperand(4, \
+                  RoseConstant.create(Loop.getEndIndex().getValue(), \
+                                NewInst.getOperand(3).getType()))
+              NewInitInstructions.append(NewInst)
+              continue
+            break
+          else:
+            # One of the operands must be bvxtracting function's returning value
+            for Operand in InsertValue.getOperands():
+              if isinstance(Operand, RoseBVExtractSliceOp):
+                if Operand.getInputBitVector() == Function.getReturnValue():
+                  # The bvinsert op has to be using the iterator
+                  if not isinstance(Loop, RoseUndefRegion()):
+                    if Operand.getLowIndex() == Loop.getIterator():
+                      if Loop.getStep().getValue() == Operand.getOutputBitwidth():
+                        AccumulationPatterFound = True
+                        break
+
+  # Sanity check  
+  if len( NewInitInstructions) == 0:
+    assert AccumulationPatterFound == False
+    return False
+    
+  # Get the first block
+  Region = Function.getChild(0)
+  if not isinstance(Region, RoseBlock):
+    # Create a new block
+    FirstBlock = Block.create()
+    Function.addRegionBefore(0, FirstBlock)
+  else:
+    FirstBlock = Region
+
+  # Insert a bvinsert op in the first block of the given function
+  for Op in NewInitInstructions:
+    assert isinstance(Op, RoseBVInsertSliceOp)
+    #Op.getInputBitVector().setName(NewInputBVName)
+    if FirstBlock.getNumOperations() == 0:
+      FirstBlock.addRegion(Op)
+    else:
+      FirstBlock.addOperationBefore(0, Op)
+  
+  # Erase gathered ops
+  ToBeErased = []
+  for Op in InitInstructions:
+    print("INIT INSTRUCTION:")
+    Op.print()
+    ToBeErased.append(Op)
+  for Op in InitInstructions:
+    IndexingOps = GatherIndexingOps(Op)
+    for IndexingOp in IndexingOps:
+      if IndexingOp not in ToBeErased:
+        ToBeErased.append(IndexingOp)
+  for Op in reversed(ToBeErased):
+    Block = Op.getParent()
+    Op.print()
+    if not Function.hasUsesOf(Op):
+      print("here")
+      Block.eraseOperation(Op)
+  
+  return True
+  
+  
+def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    Block = CondRegion.getRegionBefore()
+    if not isinstance(Block, RoseBlock):
+      continue
+    OpList = []
+    OpList.extend(Block.getOperations())
+    for Op in OpList:
+      ReplaceUsesWithUniqueCopiesOf(CondRegion, Op, Op, Context)
+
+
+def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   print("CANONICALIZING FUNCTION")
   print("FUNCTION:")
   Function.print()
   # See if the function is already canonicalize
-  if IsFunctionInCanonicalForm(Function) == True:
-    print("FUNCTION IS IN CANONICAL FORM")
-    return
+  #if IsFunctionInCanonicalForm(Function) == True:
+  #  print("FUNCTION IS IN CANONICAL FORM")
+  #  return
 
   # Make sure all blocks have only one bvinsert
-  FixBlocksWithMultipleBVInserts(Function)
-  if IsFunctionInCanonicalForm(Function) == True:
-    print("_____FUNCTION IS IN CANONICAL FORM")
-    return
+  #FixBlocksWithMultipleBVInserts(Function)
+  #if IsFunctionInCanonicalForm(Function) == True:
+  #  print("_____FUNCTION IS IN CANONICAL FORM")
+  #  return
+
+  SinkOpsIntoCondBlocks(Function, Context)
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
-  RunFixLoopsBooundsInFunction(Function)
+  RunFixLoopsBooundsInFunction(Function, Context)
+  FixAccumulationCode(Function, Context)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
@@ -267,8 +392,8 @@ def CanonicalizeFunction(Function : RoseFunction):
 
 
 # Runs a transformation
-def Run(Function : RoseFunction):
-  CanonicalizeFunction(Function)
+def Run(Function : RoseFunction, Context : RoseContext):
+  CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
 

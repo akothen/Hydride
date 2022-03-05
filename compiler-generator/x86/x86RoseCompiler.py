@@ -5,174 +5,12 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 from AST import *
 from x86Types import x86Types
 
-from copy import deepcopy
 import math
-
-
-# This is a generic context that could be used across
-# different architectures.
-class RoseContext:
-  class RoseValueNameGen():
-    def __init__(self):
-      self.Counter = 0
-    
-    def genName(self, Prefix : str = ""):
-      Name = Prefix + str(self.Counter)
-      self.Counter += 1
-      return "%" + Name
-  def __init__(self):
-    self.CompiledAbstractions = dict()   # ID --> Some Rose abstraction
-    # Track the contexts we encounter
-    self.ParentContext = None
-    self.Contexts = dict()   # ID --> child context
-    # Heirarchical abstractions such as functions, loops and cond regions.
-    # Blocks are not dealt with by this compiler.
-    self.RootAbstractions = list()
-    # Variable names are associated with their IDs
-    self.Variables = dict()    # Name --> ID
-    # Map variable names to the element types
-    self.VariablesToElemTypes = dict()
-    # Track the rose value --> signedness 
-    self.CompiledValToSignedness = dict()
-    # Map abstractions to the key
-    self.CompiledAbstractionsKeys = dict()   # Abstraction --> abstraction key
-    # Name generator
-    self.NameGenerator = self.RoseValueNameGen()
-  
-  def genName(self, Prefix : str = ""):
-    return self.NameGenerator.genName(Prefix)
-
-  def isCompiledAbstraction(self, ID : str):
-    if ID in self.CompiledAbstractions:
-      return True
-    return False
-  
-  def addCompiledAbstraction(self, ID : str, Abstraction):
-    self.CompiledAbstractions[ID] = Abstraction
-
-  def addKeyForCompiledAbstraction(self, Key, Abstraction):
-    self.CompiledAbstractionsKeys[Abstraction] = Key
-    
-  def updateCompiledAbstraction(self, ID : str, NewAbstraction):
-      assert ID in self.CompiledAbstractions
-      self.CompiledAbstractions[ID] = NewAbstraction
-
-  def getCompiledAbstractionForID(self, ID : str):
-    assert ID in self.CompiledAbstractions
-    return self.CompiledAbstractions[ID]
-  
-  def addSignednessInfoForValue(self, Value : RoseValue, IsSigned : bool):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
-    print("addSignednessInfoForValue:")
-    Value.print()
-    self.CompiledValToSignedness[Value] = IsSigned
-  
-  def isValueSigned(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-       and not isinstance(Value, RoseConstant)
-    assert Value in self.CompiledValToSignedness
-    return self.CompiledValToSignedness[Value]
-
-  def isValueSignKnown(self, Value : RoseValue):
-    assert not isinstance(Value, RoseUndefValue) \
-    and not isinstance(Value, RoseConstant)
-    return Value in self.CompiledValToSignedness
-
-  def addVariable(self, Name : str, ID : str):
-    self.Variables[Name] = ID
-  
-  def getVariableID(self, Name : str):
-    assert Name in self.Variables
-    return self.Variables[Name]
-  
-  def isVariableDefined(self, Name : str):
-    if Name in self.Variables:
-      return True
-    return False
-  
-  def addElemTypeOfVariable(self, Name : str, ElemType : RoseType):
-    self.VariablesToElemTypes[Name] = ElemType
-  
-  def isElemTypeOfVariableKnown(self, Name : str):
-    if Name in self.VariablesToElemTypes:
-      return True
-    return False
-
-  def getVariablesToElemTypes(self):
-    return self.VariablesToElemTypes
-  
-  def getElemTypeOfVariable(self, Name : str):
-    assert Name in self.VariablesToElemTypes
-    return self.VariablesToElemTypes[Name]
-  
-  def createContext(self, ID : str, ChildContext):
-    assert isinstance(ChildContext, RoseContext)
-    ChildContext.setParentContext(self)
-    self.Contexts[ID] = ChildContext
-  
-  def destroyContext(self, ID : str):
-    self.Contexts[ID] = None
-  
-  def getChildContext(self, ID : str):
-    return self.Contexts[ID] 
-
-  def pushRootAbstraction(self, Abstraction):
-    self.RootAbstractions.append(Abstraction)
-  
-  def getRootAbstraction(self):
-    return self.RootAbstractions[len(self.RootAbstractions) - 1]
-  
-  def addAbstractionToIR(self, Abstraction):
-    TailAbstraction = self.RootAbstractions.pop()
-    if TailAbstraction in self.CompiledAbstractionsKeys:
-      Key = self.CompiledAbstractionsKeys[TailAbstraction]
-      TailAbstraction.addAbstraction(Abstraction, Key)
-      self.CompiledAbstractionsKeys[TailAbstraction] = Key
-    else:
-      TailAbstraction.addAbstraction(Abstraction)
-    self.pushRootAbstraction(TailAbstraction)
-
-  def setParentContext(self, Context):
-    assert isinstance(Context, RoseContext)
-    self.ParentContext = Context
-  
-  def isRootContext(self):
-    return self.ParentContext == None
-  
-  def getCompiledAbstractions(self):
-    return self.CompiledAbstractions
-
-  def getCompiledValToSignednessMap(self):
-    return self.CompiledValToSignedness
-  
-  def getDefinedVariables(self):
-    return self.Variables
-
-  def copyAbstractionsFromParent(self):
-    assert not self.isRootContext()
-    assert isinstance(self.ParentContext, RoseContext)
-    self.CompiledAbstractions = deepcopy(self.ParentContext.getCompiledAbstractions())
-    # Copy the variables too
-    for Name, ID in self.ParentContext.getDefinedVariables().items():
-      self.Variables[Name] = ID
-    # Copy over the element type information as well
-    for Name, ElemType in self.ParentContext.getVariablesToElemTypes().items():
-      self.VariablesToElemTypes[Name] = ElemType
-    # Copy over the signedeness information as well
-    for Value, IsSigned in self.ParentContext.getCompiledValToSignednessMap().items():
-      self.CompiledValToSignedness[Value] = IsSigned
- 
-  def replaceParentAbstractionsWithChild(self):
-    for Name, ID in self.ParentContext.getDefinedVariables().items():
-      # Get the ID for the same variable name in curreent context
-      ChildVarID = self.Variables[Name]
-      Abstraction = self.CompiledAbstractions[ChildVarID]
-      self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
 
 
 # This defines rules specifically for x86 to RoseIR convertion
@@ -272,6 +110,7 @@ def CompileNumber(Num, Context : x86RoseContext):
     #Context.getIndexNumberType())
   else:
     ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() >= 0))
   return ConstantVal
 
 
@@ -386,14 +225,20 @@ def CompileIndex(IndexExpr, Context : x86RoseContext):
     assert Context.isVariableDefined(IndexExpr.name)
     ID = Context.getVariableID(IndexExpr.name)
     assert Context.getCompiledAbstractionForID(ID) == CompiledIndex
+    # Consider any zero extension that may be needed. We allow indices that 
+    # are only 32-bits long.
+    if CompiledIndex.getType().getBitwidth() < 32:
+      OpName = Context.genName()
+      CompiledIndex = RoseBVZeroExtendOp.create(OpName, CompiledIndex, 32)
+      # Add this op to the IR and to the context
+      Context.addAbstractionToIR(CompiledIndex)
+      Context.addCompiledAbstraction(OpName, CompiledIndex)
     # Generate the casting op
-    #Name = "cast." + CompiledIndex.getName()
-    CastOp = RoseCastOp.create(Context.genName(), CompiledIndex, \
+    CompiledIndex = RoseCastOp.create(Context.genName(), CompiledIndex, \
                   RoseType.getIntegerTy(CompiledIndex.getType().getBitwidth()))
     # Add this op to the IR and to the context
-    Context.addAbstractionToIR(CastOp)
-    Context.addCompiledAbstraction(ID, CastOp)
-    return CastOp
+    Context.addAbstractionToIR(CompiledIndex)
+    Context.addCompiledAbstraction(ID, CompiledIndex)
   return CompiledIndex
 
 
@@ -474,10 +319,24 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
   
   if type(IndexExpr.obj) == Lookup:
     # Compile the low index first
-    LowIndex = CompileIndex(IndexExpr.idx, Context)
+    #LowIndex = CompileIndex(IndexExpr.idx, Context)
+    #print("LOW INDEX:")
+    #print(LowIndex)
+    #LowIndex.print()
+
+    # Compile the low index
+    ElemType =x86Types[IndexExpr.obj.key]
+    IndexVal = CompileIndex(IndexExpr.idx, Context)
+    CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                  IndexVal.getType())
+    LowIndex = RoseMulOp.create(Context.genName(), \
+                              [CoFactor, IndexVal])
+    Context.addAbstractionToIR(LowIndex)
+    Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
     print("LOW INDEX:")
     print(LowIndex)
     LowIndex.print()
+
     # Compile the vector object
     Vector = CompileExpression(IndexExpr.obj, Context)
     print("VECTOR:")
@@ -920,10 +779,22 @@ def CompileUpdate(Update, Context : x86RoseContext):
     assert type(Update.lhs) == BitIndex
     if type(Update.lhs.obj) == Lookup:
       # Compile the low index first
-      LowIndex = CompileIndex(Update.lhs.idx, Context)
+      #LowIndex = CompileIndex(Update.lhs.idx, Context)
+      #print("LOW INDEX:")
+      #print(LowIndex)
+      #LowIndex.print()
+      # Compile the low index
+      ElemType =x86Types[Update.lhs.obj.key]
+      IndexVal = CompileIndex(Update.lhs.idx, Context)
+      CoFactor = RoseConstant.create(ElemType.getBitwidth(),\
+                                    IndexVal.getType())
+      LowIndex = RoseMulOp.create(Context.genName(), \
+                                [CoFactor, IndexVal])
       print("LOW INDEX:")
       print(LowIndex)
       LowIndex.print()
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
       # Compile the vector object
       BitVector = CompileExpression(Update.lhs.obj, Context)
       print("VECTOR:")
@@ -1047,13 +918,26 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
       # We need to sign extend the operands first. Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
       OperandBitwidth = 2 * Operand1.getType().getBitwidth()
-      Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
-                          Operand1, OperandBitwidth)
-      Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+      if Context.isValueSigned(Operand1) == True:
+        Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=True)
+      else:
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                            Operand1, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+      if Context.isValueSigned(Operand2) == True:
+        Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
                           Operand2, OperandBitwidth)
-      # Add signedness info
-      Context.addSignednessInfoForValue(Operand1, IsSigned=True)
-      Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+      else:
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                          Operand2, OperandBitwidth)
+        # Add signedness info
+        Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
       Context.addAbstractionToIR(Operand1)
       Context.addAbstractionToIR(Operand2)
@@ -1122,9 +1006,9 @@ def CompileBinaryExpr(BinaryExpr, Context : x86RoseContext):
   # Fix the operands' bitwidths
   if Operand1.getType() != Operand2.getType():
     if isinstance(Operand1, RoseConstant):
-      Operand1 = RoseConstant.create(Operand1.getValue(), Operand2.getType())
+      Operand1.setType(Operand2.getType())
     elif isinstance(Operand2, RoseConstant):
-      Operand2 = RoseConstant.create(Operand2.getValue(), Operand1.getType())
+      Operand2.setType(Operand1.getType())
     elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
       Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
@@ -1581,9 +1465,7 @@ def CompileStatement(Stmt, Context : x86RoseContext):
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
-def CompileSemantics(Sema):
-  # Create the root context
-  RootContext = x86RoseContext()
+def CompileSemantics(Sema, RootContext : x86RoseContext):
   OutParams = []
   ReturnsVoid = False
   ParamValues = []
@@ -2155,7 +2037,8 @@ def Compile():
   intrin_node = ET.fromstring(sema)
   spec = GetSemaFromXML(intrin_node)
   print(spec)
-  CompiledFunction = CompileSemantics(spec)
+  RootContext = x86RoseContext()
+  CompiledFunction = CompileSemantics(spec, RootContext)
 
 
 def test1():
@@ -2440,6 +2323,5 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
-
 
 

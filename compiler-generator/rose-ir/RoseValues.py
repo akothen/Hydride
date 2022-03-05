@@ -13,6 +13,9 @@ class RoseUndefValue(RoseValue):
   
   def __str__(self):
     return self.getName()
+
+  def isClonable(self):
+    return False
   
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     NotImplemented
@@ -67,6 +70,9 @@ class RoseConstant(RoseValue):
 
   def __str__(self):
     return str(self.Val)
+
+  def isClonable(self):
+    return False
 
   def getValue(self):
     return self.Val
@@ -126,6 +132,10 @@ class RoseArgument(RoseValue):
   # TODO: Should we also include callee in the hash?
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.ArgIndex))
+
+  # This is same as __eq__ for rose arguments.
+  def isSameAs(self, Other):
+    return self.__eq__(Other)
 
   def getArgIndex(self):
     assert self.ArgIndex < self.Callee.getArg(self.getArgIndex()).getType()
@@ -212,7 +222,7 @@ class RoseOperation(RoseValue):
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
         and self.getType() == Other.getType()
-
+  
   def getOpcode(self):
     return self.Opcode
   
@@ -234,7 +244,8 @@ class RoseOperation(RoseValue):
     self.Operands[Index] = Operand
   
   def setParent(self, Block):
-    assert isinstance(Block, RoseAbstractions.RoseBlock)
+    assert isinstance(Block, RoseAbstractions.RoseBlock) \
+        or isinstance(Block, RoseAbstractions.RoseUndefRegion)
     self.ParentBlock = Block
 
   # This is used to query if this operation uses
@@ -252,7 +263,9 @@ class RoseOperation(RoseValue):
   def getUsers(self):
     Block = self.getParent()
     assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
-    return Block.getUsersOf(self)
+    Function =  Block.getFunction()
+    assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
+    return Function.getUsersOf(self)
   
   # This is an overloaded function
   def replaceUsesWith(self, *args):
@@ -278,6 +291,13 @@ class RoseOperation(RoseValue):
           self.setOperand(Index, NewValue)
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
+
+  def replaceOperands(self, OperandList : list):
+    # Check if the operands are valid
+    assert self.getOpcode().inputsAreValid(OperandList)
+    # Now replace each operand
+    for Index, Operand in enumerate(OperandList):
+      self.setOperand(Index, Operand)
 
   # Subclass must implement this
   def simplify(self):
@@ -322,6 +342,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 

@@ -1,7 +1,7 @@
 
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
-from x86RoseCompiler import CompileSemantics
+from x86RoseCompiler import CompileSemantics, x86RoseContext
 
 
 def test1():
@@ -1246,7 +1246,6 @@ ENDFOR
 #dst[MAX:128] := 0
 
 
-# Fix rerolling for this
 def test57():
   return '''
   <intrinsic tech="AVX2" name="_mm256_broadcastsi128_si256">
@@ -1267,7 +1266,6 @@ dst[255:128] := a[127:0]
 #dst[MAX:256] := 0
 
 
-# Fix rerolling pass
 def test58():
   return '''
 <intrinsic tech="AVX2" name="_mm256_hadd_epi16">
@@ -1593,7 +1591,6 @@ ENDFOR
 #dst[MAX:256] := 0
 
 
-# Fix rerolling
 def test70():
   return '''
 <intrinsic tech="AVX2" name="_mm256_hadds_epi16">
@@ -2271,6 +2268,7 @@ ENDFOR
 #dst[MAX:128] := 0
 
 # Passes!
+# This is a special case.
 def test96():
   return '''
 <intrinsic tech="AVX-512/KNC" name="_mm512_alignr_epi32">
@@ -4385,19 +4383,272 @@ ENDFOR
 '''
 #dst[MAX:128] := 0
 
+def test175():
+	return '''
+<intrinsic tech="SSSE3" vexEq="TRUE" name="_mm_hadds_epi16">
+	<type>Integer</type>
+	<CPUID>SSSE3</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI16"/>
+	<parameter type="__m128i" varname="a" etype="SI16"/>
+	<parameter type="__m128i" varname="b" etype="SI16"/>
+	<description>Horizontally add adjacent pairs of signed 16-bit integers in "a" and "b" using saturation, and pack the signed 16-bit results in "dst".</description>
+	<operation>
+dst[15:0] := Saturate16(a[31:16] + a[15:0])
+dst[31:16] := Saturate16(a[63:48] + a[47:32])
+dst[47:32] := Saturate16(a[95:80] + a[79:64])
+dst[63:48] := Saturate16(a[127:112] + a[111:96])
+dst[79:64] := Saturate16(b[31:16] + b[15:0])
+dst[95:80] := Saturate16(b[63:48] + b[47:32])
+dst[111:96] := Saturate16(b[95:80] + b[79:64])
+dst[127:112] := Saturate16(b[127:112] + b[111:96])
+	</operation>
+	<instruction name="PHADDSW" form="xmm, xmm" xed="PHADDSW_XMMdq_XMMdq"/>
+	<header>tmmintrin.h</header>
+</intrinsic>
+'''
+
+def test176():
+	return '''
+<intrinsic tech="MMX" name="_mm_packs_pi32">
+	<type>Integer</type>
+	<CPUID>MMX</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m64" varname="dst" etype="SI16"/>
+	<parameter type="__m64" varname="a" etype="SI32"/>
+	<parameter type="__m64" varname="b" etype="SI32"/>
+	<description>Convert packed signed 32-bit integers from "a" and "b" to packed 16-bit integers using signed saturation, and store the results in "dst".</description>
+	<operation>
+dst[15:0] := Saturate16(a[31:0])
+dst[31:16] := Saturate16(a[63:32])
+dst[47:32] := Saturate16(b[31:0])
+dst[63:48] := Saturate16(b[63:32])
+	</operation>
+	<instruction name="PACKSSDW" form="mm, mm" xed="PACKSSDW_MMXq_MMXq"/>
+	<header>mmintrin.h</header>
+</intrinsic>
+'''
+
+def test177():
+	return '''
+<intrinsic tech="AVX-512" name="_mm512_shufflelo_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512BW</CPUID>
+	<category>Miscellaneous</category>
+	<return type="__m512i" varname="dst" etype="UI16"/>
+	<parameter type="__m512i" varname="a" etype="UI16"/>
+	<parameter type="int" varname="imm8" etype="IMM" immwidth="8"/>
+	<description>Shuffle 16-bit integers in the low 64 bits of 128-bit lanes of "a" using the control in "imm8". Store the results in the low 64 bits of 128-bit lanes of "dst", with the high 64 bits of 128-bit lanes being copied from from "a" to "dst".</description>
+	<operation>
+dst[15:0] := (a &gt;&gt; (imm8[1:0] * 16))[15:0]
+dst[31:16] := (a &gt;&gt; (imm8[3:2] * 16))[15:0]
+dst[47:32] := (a &gt;&gt; (imm8[5:4] * 16))[15:0]
+dst[63:48] := (a &gt;&gt; (imm8[7:6] * 16))[15:0]
+dst[127:64] := a[127:64]
+dst[143:128] := (a &gt;&gt; (imm8[1:0] * 16))[143:128]
+dst[159:144] := (a &gt;&gt; (imm8[3:2] * 16))[143:128]
+dst[175:160] := (a &gt;&gt; (imm8[5:4] * 16))[143:128]
+dst[191:176] := (a &gt;&gt; (imm8[7:6] * 16))[143:128]
+dst[255:192] := a[255:192]
+dst[271:256] := (a &gt;&gt; (imm8[1:0] * 16))[271:256]
+dst[287:272] := (a &gt;&gt; (imm8[3:2] * 16))[271:256]
+dst[303:288] := (a &gt;&gt; (imm8[5:4] * 16))[271:256]
+dst[319:304] := (a &gt;&gt; (imm8[7:6] * 16))[271:256]
+dst[383:320] := a[383:320]
+dst[399:384] := (a &gt;&gt; (imm8[1:0] * 16))[399:384]
+dst[415:400] := (a &gt;&gt; (imm8[3:2] * 16))[399:384]
+dst[431:416] := (a &gt;&gt; (imm8[5:4] * 16))[399:384]
+dst[447:432] := (a &gt;&gt; (imm8[7:6] * 16))[399:384]
+dst[511:448] := a[511:448]
+	</operation>
+	<instruction name="VPSHUFLW" form="zmm, zmm, imm8" xed="VPSHUFLW_ZMMu16_MASKmskw_ZMMu16_IMM8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+def test178():
+	return '''
+<intrinsic tech="AVX-512" name="_mm_madd52lo_epu64">
+	<CPUID>AVX512IFMA52</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="UI64"/>
+	<parameter type="__m128i" varname="a" etype="UI64"/>
+	<parameter type="__m128i" varname="b" etype="UI64"/>
+	<parameter type="__m128i" varname="c" etype="UI64"/>
+	<description>Multiply packed unsigned 52-bit integers in each 64-bit element of "b" and "c" to form a 104-bit intermediate result. Add the low 52-bit unsigned integer from the intermediate result with the corresponding unsigned 64-bit integer in "a", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 1
+	i := j*64
+	tmp[127:0] := ZeroExtend64(b[i+51:i]) * ZeroExtend64(c[i+51:i])
+	dst[i+63:i] := a[i+63:i] + ZeroExtend64(tmp[51:0])
+ENDFOR
+	</operation>
+	<instruction name="VPMADD52LUQ" form="xmm, xmm, xmm" xed="VPMADD52LUQ_XMMu64_MASKmskw_XMMu64_XMMu64_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
+def test179():
+	return '''
+<intrinsic tech="SSE2" vexEq="TRUE" name="_mm_xor_si128">
+	<type>Integer</type>
+	<CPUID>SSE2</CPUID>
+	<category>Logical</category>
+	<return type="__m128i" varname="dst" etype="M128"/>
+	<parameter type="__m128i" varname="a" etype="M128"/>
+	<parameter type="__m128i" varname="b" etype="M128"/>
+	<description>Compute the bitwise XOR of 128 bits (representing integer data) in "a" and "b", and store the result in "dst".</description>
+	<operation>
+dst[127:0] := (a[127:0] XOR b[127:0])
+	</operation>
+	<instruction name="PXOR" form="xmm, xmm" xed="PXOR_XMMdq_XMMdq"/>
+	<header>emmintrin.h</header>
+</intrinsic>
+'''
+#k[MAX:16] := 0
+
+def test180():
+	return '''
+<intrinsic tech="AVX-512/KNC" name="_mm512_xor_epi64">
+	<type>Integer</type>
+	<CPUID>AVX512F/KNCNI</CPUID>
+	<category>Logical</category>
+	<return type="__m512i" varname="dst" etype="UI64"/>
+	<parameter type="__m512i" varname="a" etype="UI64"/>
+	<parameter type="__m512i" varname="b" etype="UI64"/>
+	<description>Compute the bitwise XOR of packed 64-bit integers in "a" and "b", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	i := j*64
+	dst[i+63:i] := a[i+63:i] XOR b[i+63:i]
+ENDFOR
+	</operation>
+	<instruction name="VPXORQ" form="zmm, zmm, zmm" xed="VPXORQ_ZMMu64_MASKmskw_ZMMu64_ZMMu64_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+def test181():
+	return '''
+<intrinsic tech="AVX-512" name="_mm_max_epu64">
+	<type>Integer</type>
+	<CPUID>AVX512VL</CPUID>
+	<CPUID>AVX512F</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="UI64"/>
+	<parameter type="__m128i" varname="a" etype="UI64"/>
+	<parameter type="__m128i" varname="b" etype="UI64"/>
+	<description>Compare packed unsigned 64-bit integers in "a" and "b", and store packed maximum values in "dst".</description>
+	<operation>
+FOR j := 0 to 1
+	i := j*64
+	dst[i+63:i] := MAX(a[i+63:i], b[i+63:i])
+ENDFOR
+	</operation>
+	<instruction name="VPMAXUQ" form="xmm, xmm, xmm" xed="VPMAXUQ_XMMu64_MASKmskw_XMMu64_XMMu64_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
+
+def test84___():
+  return '''
+<intrinsic tech="AVX-512" name="_mm256_cmpge_epu16_mask">
+	<type>Integer</type>
+	<type>Mask</type>
+	<CPUID>AVX512VL</CPUID>
+	<CPUID>AVX512BW</CPUID>
+	<category>Compare</category>
+	<return type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI16"/>
+	<parameter type="__m256i" varname="b" etype="UI16"/>
+	<description>Compare packed unsigned 16-bit integers in "a" and "b" for greater-than-or-equal, and store the results in mask vector "k".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*16
+	k[j] := ( a[i+15:i] &gt;= b[i+15:i] ) ? 1 : 0
+ENDFOR
+	</operation>
+	<instruction name="VPCMPUW" form="k, ymm, ymm" xed="VPCMPUW_MASKmskw_MASKmskw_YMMu16_YMMu16_IMM8_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+
+def test14__():
+	return '''
+<intrinsic tech="SSE4.1" vexEq="TRUE" name="_mm_max_epi32">
+	<type>Integer</type>
+	<CPUID>SSE4.1</CPUID>
+	<category>Special Math Functions</category>
+	<return type="__m128i" varname="dst" etype="UI32"/>
+	<parameter type="__m128i" varname="a" etype="SI32"/>
+	<parameter type="__m128i" varname="b" etype="SI32"/>
+	<description>Compare packed signed 32-bit integers in "a" and "b", and store packed maximum values in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	i := j*32
+	dst[i+31:i] := MAX(a[i+31:i], b[i+31:i])
+ENDFOR
+	</operation>
+	<instruction name="PMAXSD" form="xmm, xmm" xed="PMAXSD_XMMdq_XMMdq"/>
+	<header>smmintrin.h</header>
+</intrinsic>
+'''
+
+def test178__():
+	return '''
+<intrinsic tech="AVX-512" name="_mm256_madd52hi_epu64">
+	<CPUID>AVX512IFMA52</CPUID>
+	<CPUID>AVX512VL</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m256i" varname="dst" etype="UI64"/>
+	<parameter type="__m256i" varname="a" etype="UI64"/>
+	<parameter type="__m256i" varname="b" etype="UI64"/>
+	<parameter type="__m256i" varname="c" etype="UI64"/>
+	<description>Multiply packed unsigned 52-bit integers in each 64-bit element of "b" and "c" to form a 104-bit intermediate result. Add the high 52-bit unsigned integer from the intermediate result with the corresponding unsigned 64-bit integer in "a", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	i := j*64
+	tmp[127:0] := ZeroExtend64(b[i+51:i]) * ZeroExtend64(c[i+51:i])
+	dst[i+63:i] := a[i+63:i] + ZeroExtend64(tmp[103:52])
+ENDFOR
+	</operation>
+	<instruction name="VPMADD52HUQ" form="ymm, ymm, ymm" xed="VPMADD52HUQ_YMMu64_MASKmskw_YMMu64_YMMu64_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:256] := 0
 
 def Compile():
-  sema = test171() #test68()test134()
+  #sema = test84___()
+	#sema = test98()#test176()#test70()#test84___() #test68()test134()
   #sema = test68()#test64()#test70()#test98()#test50() #test68() #test77()
-  print(sema)
-  intrin_node = ET.fromstring(sema)
-  spec = GetSemaFromXML(intrin_node)
-  print(spec)
-  CompiledFunction = CompileSemantics(spec)
-  return CompiledFunction
+	#sema = test178()
+	sema = test71()
+	sema = test70()
+	sema = test171()
+	#sema = test14__()
+	#sema = test179()
+	#sema = test180()
+	#sema = test178__()
+	#sema = test50()
+	#sema = test96()
+	print(sema)
+	intrin_node = ET.fromstring(sema)
+	spec = GetSemaFromXML(intrin_node)
+	print(spec)
+	RootContext = x86RoseContext()
+	CompiledFunction = CompileSemantics(spec, RootContext)
+	return RootContext, CompiledFunction
 
 
 if __name__ == '__main__':
   Compile()
+
 
 
