@@ -237,7 +237,7 @@ class RoseBlock(RoseRegion):
   def addOperation(self, Operation : RoseOperation):
     if self.getNumOperations() > 0:
       Index = self.getNumChildren() - 1
-      self.addRegionBefore(Index, Operation)
+      self.addOperationAfter(Operation, self.getOperation(Index))
     else:
       self.addRegion(Operation)
 
@@ -523,5 +523,4 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
