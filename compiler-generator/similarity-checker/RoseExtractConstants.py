@@ -737,24 +737,23 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
     # Deal with the low index first
     if isinstance(LowIndex, RoseOperation) and LowIndex not in Visited:
       # Now we have to deal with the low index that is a mul op
-      if isinstance(LowIndex , RoseAddOp):
-        assert len(LowIndex.getOperands()) == 2
-        if isinstance(LowIndex.getOperand(0), RoseConstant):
-          if LowIndex.getOperand(0).getValue() == 0:
-            Operand = LowIndex.getOperand(1)
-            LowIndex.replaceUsesWith(Operand)
-            Visited.add(LowIndex)
-            Block.eraseOperation(LowIndex)
-            LowIndex = Operand
-        else:
-          assert isinstance(LowIndex.getOperand(1), RoseConstant)
-          if LowIndex.getOperand(1).getValue() == 0:
-            Operand = LowIndex.getOperand(0)
-            LowIndex.replaceUsesWith(Operand)
-            Visited.add(LowIndex)
-            Block.eraseOperation(LowIndex)
-            LowIndex = Operand
-
+      #if isinstance(LowIndex , RoseAddOp):
+      #  assert len(LowIndex.getOperands()) == 2
+      #  if isinstance(LowIndex.getOperand(0), RoseConstant):
+      #    if LowIndex.getOperand(0).getValue() == 0:
+      #      Operand = LowIndex.getOperand(1)
+      #      LowIndex.replaceUsesWith(Operand)
+      #      Visited.add(LowIndex)
+      #      Block.eraseOperation(LowIndex)
+      #      LowIndex = Operand
+      #  else:
+      #    assert isinstance(LowIndex.getOperand(1), RoseConstant)
+      #    if LowIndex.getOperand(1).getValue() == 0:
+      #      Operand = LowIndex.getOperand(0)
+      #      LowIndex.replaceUsesWith(Operand)
+      #      Visited.add(LowIndex)
+      #      Block.eraseOperation(LowIndex)
+       #     LowIndex = Operand
       if isinstance(LowIndex,  RoseMulOp):
         assert len(LowIndex.getOperands()) == 2
         if isinstance(LowIndex.getOperand(0), RoseOperation):
@@ -1137,9 +1136,11 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
 
   # Compute the points at which the sibling loops "break".
   # First, compute the first breaking point
+  VisitedOps = set()
   NumInnerLoopsVal = RoseConstant.create(NumInnerLoops, LaneSize.getType())
   FirstBreak = RoseDivOp.create(Context.genName("%" + "break"), LaneSize, NumInnerLoopsVal)
   FirstBlock.addOperation(FirstBreak)
+  VisitedOps.add(FirstBreak)
   # Go over all the loops
   PreviousBreak = RoseUndefValue()
   for Index in range(NumInnerLoops):
@@ -1154,6 +1155,7 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
     NewLaneOffset = RoseAddOp.create(Context.genName("%new.lane.offset"), \
                                     [PreviousBreak, LaneOffset])
     FirstBlock.addOperation(NewLaneOffset)
+    VisitedOps.add(NewLaneOffset)
     InnerLoopsList[Index].setStartIndexVal(NewLaneOffset)
     InnerLoopsList[Index].setStepVal(ElemSize)
     if Index == NumInnerLoops - 1:
@@ -1162,6 +1164,7 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
       Factor = RoseConstant.create(Index + 1, FirstBreak.getType())
       PreviousBreak = RoseMulOp.create(Context.genName("%" + "break"), \
                                         [Factor, FirstBreak])
+      VisitedOps.add(PreviousBreak)
       FirstBlock.addOperation(PreviousBreak)
       InnerLoopsList[Index].setEndIndexVal(PreviousBreak)
 
@@ -1201,7 +1204,6 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
   UnknownVal = set()
   BVValToBitwidthVal = dict()
   IndexingOps = set()
-  VisitedOps = set()
   VisitedBlocks = set()
   # First extract constants from the inner loops
   for Block in BlocksInInnerLoops:
