@@ -365,6 +365,34 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   return
 
 
+def MapBVInsertsInCondBlocks(Function : RoseFunction):
+  # Lambda function
+  def ExtractBVInsertsToRetVal(Regions : list):
+    OpList = list()
+    for Region in Regions:
+      if isinstance(Region, RoseBlock):
+        for Op in Region.getOperations():
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if Op.getInputBitVector() == Function.getReturnValue():
+              OpList.append(Op)
+    return OpList
+
+  CondBlocksBVInsertsMap = dict()
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    ThenRegions = list()
+    ElseRegions = list()
+    ThenRegions.extend(CondRegion.getThenRegions())
+    ElseRegions.extend(CondRegion.getElseRegions())
+    ThenBVInsertOps = ExtractBVInsertsToRetVal(ThenRegions)
+    ElseBVInsertOps = ExtractBVInsertsToRetVal(ElseRegions)
+    assert len(ThenBVInsertOps) == len(ElseBVInsertOps)
+    for Index, _ in enumerate(ThenBVInsertOps):
+      CondBlocksBVInsertsMap[ThenBVInsertOps[Index]] = ElseBVInsertOps[Index]
+      CondBlocksBVInsertsMap[ElseBVInsertOps[Index]] = ThenBVInsertOps[Index]
+  return CondBlocksBVInsertsMap
+
+
 def ExtractConstants(Function : RoseFunction, Context : RoseContext):
   # If there are multiple sibling inner loops, then we deal with it differently
   if len(Function.getRegionsOfType(RoseForLoop, Level=1)) > 1:
@@ -800,7 +828,8 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
 
 def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal : dict, \
                               Visited : set, UnknownVal : set,  IndexingOps : set, \
-                              LoopList : list, SkipBVExtracts : set, Context : RoseContext):
+                              LoopList : list, SkipBVExtracts : set, CondBlocksBVInsertsMap : dict, \
+                              Context : RoseContext):
   print("ExtractConstantsFromMultipleBlocks")
   # Some sanity checks
   assert len(LoopList) > 1
@@ -1043,6 +1072,8 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
         elif Operation in OpBitwidthEqLoopStepList:
           Operation.setOperand(Operation.getBitwidthPos(), Loop.getStep())
           BVValToBitwidthVal[Operation] = Loop.getStep()
+        #elif Operation in BVValToBitwidthVal:
+        #  Operation.setOperand(Operation.getBitwidthPos(), BVValToBitwidthVal[Op])
         else:
           if Operation == KeyOp:
             # Add a new argument
@@ -1065,7 +1096,10 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
         # Add indexing ops in a set
         for IndexingOp in GatherIndexingOps(Operation):
           IndexingOps.add(IndexingOp)
-      continue
+        # Map the output bitwidth of corresponding bvinsert, if any.
+        #if Operation in CondBlocksBVInsertsMap:
+        #  BVValToBitwidthVal[CondBlocksBVInsertsMap[Operation]] = BVValToBitwidthVal[Operation]
+        continue
   
   return
 
@@ -1160,6 +1194,9 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
   # of these ops because the bitwidth of conditions for bitwidths is always one.
   SkipBVExtracts = GetBVExtractsToBeSkipped(Function)
 
+  # Find mapping between two similar bvinserts in different condblocks
+  CondBlocksBVInsertsMap = MapBVInsertsInCondBlocks(Function)
+
   # Lets extract constants now
   UnknownVal = set()
   BVValToBitwidthVal = dict()
@@ -1171,7 +1208,8 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
     BlockList = BlocksInInnerLoopsMap[Block]
     ExtractConstantsFromMultipleBlocks(BlockList,\
                                     BVValToBitwidthVal, VisitedOps, UnknownVal, \
-                                 IndexingOps, LoopList, SkipBVExtracts, Context)
+                                    IndexingOps, LoopList, SkipBVExtracts, \
+                                    CondBlocksBVInsertsMap, Context)
     # Mark these blocks as visited
     for OtherBlocks in BlockList:
       VisitedBlocks.add(OtherBlocks)
@@ -1184,7 +1222,8 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
     if Block in VisitedBlocks:
       continue
     ExtractConstantsFromBlock(Block, BVValToBitwidthVal, VisitedOps, \
-                      UnknownVal, IndexingOps, LoopList, SkipBVExtracts, Context)
+                      UnknownVal, IndexingOps, LoopList, SkipBVExtracts, \
+                      CondBlocksBVInsertsMap, Context)
 
   Function.print()
   print("NEW FUNCTION ^^^^")
