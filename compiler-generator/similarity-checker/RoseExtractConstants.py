@@ -329,6 +329,10 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       continue
 
     if isinstance(Op, RoseBVInsertSliceOp):
+      if isinstance(Op.getInsertValue(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                      Op.getOperand(0).getType()))
+        Op.setOperand(0, Arg)
       if Loop == RoseUndefRegion():
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
@@ -1061,6 +1065,11 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
       for Block in BlockList:
         Operation = OpListMap[Block][OpIndex]
         Loop = Block.getParentOfType(RoseForLoop)
+        if isinstance(Operation.getInsertValue(), RoseConstant):
+          if Operation == KeyOp:
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                        Operation.getOperand(0).getType()))
+            Operation.setOperand(0, Arg)
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Operation, Visited, LoopList[0].getEndIndex(), Context)
           Visited.add(Operation)
