@@ -21,8 +21,11 @@ for key in Insts:
             continue
         else:
             inp = inp.replace("__builtin_HEXAGON", "hexagon")
-            output[inp] = Insts[key]
-            del output[key]
+            if inp in output:
+                print("key already exists, skipping")
+            else:
+                output[inp] = Insts[key]
+                del output[key]
 
 from pprint import pformat
 with open("dict/llvm_mapped.py", "w") as f:
