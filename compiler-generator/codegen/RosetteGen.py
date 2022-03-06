@@ -14,47 +14,13 @@ from RoseBitVectorOperations import *
 from RoseUtilities import *
 
 
-def LoopHeaderToString(Loop : RoseForLoop,  NumSpace : int = 0):
-  # Generate loop header
-  Spaces = ""
-  print(range(NumSpace))
-  for _ in range(NumSpace):
-    Spaces += " "
-  String = Spaces + "(for/list ([" + Loop.getIterator().getName() + " (reverse (range " \
-    + Loop.getStartIndex().getName() + " " + Loop.getEndIndex().getName() \
-    + " " + Loop.getStep().getName() + "))])\n"
-  return String
-
-
-def GenBVTruncateOp(TruncOp : RoseBVTruncateOp, NumSpace = 0):
-  InputOp = TruncOp.getInputBitVector()
-  assert isinstance(InputOp, RoseBVExtractSliceOp)
-  Spaces = ""
-  for _ in range(NumSpace):
-    Spaces += " "
-  Name = TruncOp.getName()
-  LowIndexName = Name + ".low.idx"
-  HighIndexName = Name + ".high.idx"
-  String = Spaces + "(define " + HighIndexName + " "  \
-          + "(- " + InputOp.getOutputBitwidth().getName() + " 1))\n"
-  String += Spaces + "(define " + LowIndexName + " "  \
-          + "(- " + HighIndexName + " " \
-          + TruncOp.getOperand(1).getName() + " -1 ))\n"
-  String += Spaces + "(define " + Name + " ("
-  String += (InputOp.Opcode.getRosetteOp() + " ")
-  String += " " + HighIndexName
-  String += " " + LowIndexName
-  String += " " + TruncOp.getInputBitVector().getName()
-  String += "))\n"
-  return String
-
-
 def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
                                       NumSpace = 0, SkipOps = list()):
   print("GENERATE ROSETTE CODE FOR BLOCK")
   print("BLOCK:")
   print(Block)
   Block.print()
+
   BVInsertOpsList = list()
   Spaces = ""
   for _ in range(NumSpace):
@@ -85,9 +51,6 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       if Operation.getInputBitVector() in Block.getOperations():
         RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
         continue
-    if isinstance(Operation, RoseBVTruncateOp):
-      RosetteCode += GenBVTruncateOp(Operation, NumSpace)
-      continue
     print("Operation:")
     Operation.print()
     RosetteCode += Operation.to_rosette(NumSpace)
@@ -134,6 +97,32 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
   return RosetteCode
 
 
+def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSpace : int = 0):
+  # Generate the condition first
+  Spaces = ""
+  for _ in range(NumSpace):
+    Spaces += " "
+  TmpRosetteCode = Spaces + "(if (equal? " + CondRegion.getCondition().getName() + " (bv #b1 1))\n"
+  TmpRosetteCode  += Spaces + " (begin\n"
+  for Abstraction in CondRegion.getThenRegions():
+    if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+    continue
+  TmpRosetteCode += Spaces + " )\n"
+  TmpRosetteCode += Spaces + " (begin\n"
+  for Abstraction in CondRegion.getElseRegions():
+    if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+    continue
+  TmpRosetteCode += Spaces + " )\n"
+
+  print("RosetteCode after generating loop")
+  print(TmpRosetteCode)
+  TmpRosetteCode += (Spaces + ")\n")
+  RosetteCode += TmpRosetteCode
+  return RosetteCode
+
+
 def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : int = 0, \
                           VisitedLoop : list = list(), SkipOpsMap : dict = dict()):
   if Loop not in VisitedLoop:
@@ -154,23 +143,30 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
       SkipOpsMap[Block].extend(GetReductionOps(Block))
 
   # Generate loop header
-  TmpRosetteCode = LoopHeaderToString(Loop, NumSpace)
+  Spaces = ""
+  print(range(NumSpace))
+  for _ in range(NumSpace):
+    Spaces += " "
+  TmpRosetteCode = Spaces + "(for/list ([" + Loop.getIterator().getName() + " (reverse (range " \
+    + Loop.getStartIndex().getName() + " " + Loop.getEndIndex().getName() \
+    + " " + Loop.getStep().getName() + "))])\n"
 
-  # To make codegen easy to handle for now, we'll assume that 
   for Abstraction in Loop:
     if isinstance(Abstraction, RoseForLoop):
       TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                         NumSpace + 1, VisitedLoop, SkipOpsMap)
+      continue
+    if isinstance(Abstraction, RoseCond):
+      TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1)
+      continue
     if isinstance(Abstraction, RoseBlock):
       if Abstraction in SkipOpsMap:
         TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, \
                                                            NumSpace + 1, SkipOpsMap[Abstraction])
       else:
         TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+      continue
   
-  Spaces = ""
-  for _ in range(NumSpace):
-    Spaces += " "
   TmpRosetteCode += (Spaces + ")\n")
   print("RosetteCode after generating loop")
   print(TmpRosetteCode)
@@ -212,33 +208,6 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   else:
     TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
     TmpRosetteCode += (Spaces + ")\n")
-  RosetteCode += TmpRosetteCode
-  return RosetteCode
-
-
-def GenerateRosetteForForLoop1(Loop : RoseForLoop, RosetteCode : str, NumSpace : int = 0):
-  print("GENERATE ROSETTE CODE FOR LOOP")
-  print("LOOP:")
-  print(Loop)
-  Loop.print()
-  # Generate loop header
-  TmpRosetteCode = LoopHeaderToString(Loop, NumSpace)
-
-  # To make codegen easy to handle for now, we'll assume that 
-  for Abstraction in Loop:
-    if isinstance(Abstraction, RoseForLoop):
-      TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, NumSpace + 1)
-    if isinstance(Abstraction, RoseBlock):
-      TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
-  
-  Spaces = ""
-  for _ in range(NumSpace):
-    Spaces += " "
-  TmpRosetteCode += (Spaces + ")\n")
-  print("RosetteCode after generating loop")
-  print(TmpRosetteCode)
-  TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
-  TmpRosetteCode += (Spaces + ")\n")
   RosetteCode += TmpRosetteCode
   return RosetteCode
 
