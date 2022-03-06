@@ -6,8 +6,6 @@
 ###################################################################
 
 
-from ast import Sub
-from re import L
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -84,7 +82,6 @@ def IsFunctionInCanonicalForm(Function : RoseFunction):
   return (OuterLoopFound == True and InnerLoopsFound == True)
 
 
-
 def GetBVExtractsToBeSkipped(Abstraction):
   # Gather bvextract ops that index into masks and serve as conditions for
   # cond regions in the function. We will not need to extract output bitwidths
@@ -125,8 +122,16 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   CondRegions = Loop.getRegionsOfType(RoseCond, Level=0)
   for CondRegion in CondRegions:
     CondRegionBlockList = CondRegion.getRegionsOfType(RoseBlock, Level=0)
+    print("CondRegionBlockList:")
+    for Block in CondRegionBlockList:
+      print("BLOCK:")
+      Block.print()
+      print("*********")
     BlockList.extend(CondRegionBlockList)
 
+  # Gather bvextract ops that index into masks and serve as conditions for
+  # cond regions in the function. We will not need to extract output bitwidths
+  # of these ops because the bitwidth of conditions for bitwidths is always one.
   SkipBVExtracts = GetBVExtractsToBeSkipped(Loop)
 
   # Now gather the bvinserts and bvextracts.
@@ -134,7 +139,6 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   for Block in BlockList:
     for Op in reversed(Block.getOperations()):
       if isinstance(Op, RoseBVInsertSliceOp):
-        Op.print()
         if Op.getInputBitVector() == FunctionOutput:
           if isinstance(Op.getOutputBitwidth(), RoseArgument):
             Result.append(Op)
@@ -148,6 +152,8 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
           if isinstance(Op.getOutputBitwidth(), RoseArgument):
             Result.append(Op)
             continue
+          print("RELEVANT BV EXTRACT OP:")
+          Op.print()
           BVExtractOps.append(Op)
 
   # If we already have some results in the result list, just return that
@@ -178,7 +184,7 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
         # No bvinsert op is good here
         Result.clear()
     for Op in BVExtractOps:
-      if Op.getOutputBitwidth() == ExtractBitWidth:
+      if Op.getOutputBitwidth() == BitWidth:
         Result.append(Op)
     return Result
   
