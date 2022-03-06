@@ -222,10 +222,28 @@ class RoseBVTruncateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  # Rosette has no truncate op. So we use bitvector extract to model it.
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
-    assert ReverseIndexing == False
-    assert "No direct convertion of BVTruncate Op to Rosette. Run OpSimplify Pass!"
-    NotImplemented
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = self.getName()
+    InputOp = self.getInputBitVector()
+    assert isinstance(InputOp, RoseBitVectorOp)
+    LowIndexName = Name + ".low.idx"
+    HighIndexName = Name + ".high.idx"
+    String = Spaces + "(define " + HighIndexName + " "  \
+            + "(- " + InputOp.getOutputBitwidth().getName() + " 1))\n"
+    String += Spaces + "(define " + LowIndexName + " "  \
+            + "(- " + HighIndexName + " " \
+            + self.getOperand(1).getName() + " -1 ))\n"
+    String += Spaces + "(define " + Name + " ("
+    String += RoseOpcode.bvextract.getRosetteOp() + " "
+    String += " " + HighIndexName
+    String += " " + LowIndexName
+    String += " " + self.getInputBitVector().getName()
+    String += "))\n"
+    return String
 
   def to_llvm_ir(self, IRBuilder):
     Operand = self.getInputBitVector().to_llvm_ir(IRBuilder)
@@ -1014,5 +1032,4 @@ class RoseBVZeroOp(RoseBitVectorOp):
     ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
     return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
                                  "%" + "cond." + self.getName())
-
 
