@@ -5,7 +5,6 @@
 #############################################################
 
 
-import re
 from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -27,8 +26,31 @@ def LoopHeaderToString(Loop : RoseForLoop,  NumSpace : int = 0):
   return String
 
 
-def GenerateRosetteForBlockAndSkipOps(Block : RoseBlock, SkipOps : list(), \
-                                      RosetteCode : str, NumSpace = 0):
+def GenBVTruncateOp(TruncOp : RoseBVTruncateOp, NumSpace = 0):
+  InputOp = TruncOp.getInputBitVector()
+  assert isinstance(InputOp, RoseBVExtractSliceOp)
+  Spaces = ""
+  for _ in range(NumSpace):
+    Spaces += " "
+  Name = TruncOp.getName()
+  LowIndexName = Name + ".low.idx"
+  HighIndexName = Name + ".high.idx"
+  String = Spaces + "(define " + HighIndexName + " "  \
+          + "(- " + InputOp.getOutputBitwidth().getName() + " 1))\n"
+  String += Spaces + "(define " + LowIndexName + " "  \
+          + "(- " + HighIndexName + " " \
+          + TruncOp.getOperand(1).getName() + " -1 ))\n"
+  String += Spaces + "(define " + Name + " ("
+  String += (InputOp.Opcode.getRosetteOp() + " ")
+  String += " " + HighIndexName
+  String += " " + LowIndexName
+  String += " " + TruncOp.getInputBitVector().getName()
+  String += "))\n"
+  return String
+
+
+def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
+                                      NumSpace = 0, SkipOps = list()):
   print("GENERATE ROSETTE CODE FOR BLOCK")
   print("BLOCK:")
   print(Block)
@@ -63,6 +85,9 @@ def GenerateRosetteForBlockAndSkipOps(Block : RoseBlock, SkipOps : list(), \
       if Operation.getInputBitVector() in Block.getOperations():
         RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
         continue
+    if isinstance(Operation, RoseBVTruncateOp):
+      RosetteCode += GenBVTruncateOp(Operation, NumSpace)
+      continue
     print("Operation:")
     Operation.print()
     RosetteCode += Operation.to_rosette(NumSpace)
@@ -138,8 +163,8 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
                                         NumSpace + 1, VisitedLoop, SkipOpsMap)
     if isinstance(Abstraction, RoseBlock):
       if Abstraction in SkipOpsMap:
-        TmpRosetteCode = GenerateRosetteForBlockAndSkipOps(Abstraction, SkipOpsMap[Abstraction], \
-                                                           TmpRosetteCode, NumSpace + 1)
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, \
+                                                           NumSpace + 1, SkipOpsMap[Abstraction])
       else:
         TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
   
@@ -190,78 +215,6 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   RosetteCode += TmpRosetteCode
   return RosetteCode
 
-
-def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, NumSpace = 0):
-  print("GENERATE ROSETTE CODE FOR BLOCK")
-  print("BLOCK:")
-  print(Block)
-  Block.print()
-  BVInsertOpsList = list()
-  Spaces = ""
-  for _ in range(NumSpace):
-    Spaces += " "
-  for Operation in Block:
-    # Ignore return ops
-    if isinstance(Operation, RoseReturnOp):
-      continue
-    # Gather bvinsert ops
-    if isinstance(Operation, RoseBVInsertSliceOp):
-      if Block.getParentOfType(RoseForLoop) == RoseUndefRegion():
-        RosetteCode += Spaces + "(define " + Operation.getInputBitVector().getName() \
-            + " " + Operation.getInsertValue().getName() + ")\n"
-      else:
-        BVInsertOpsList.append(Operation)
-      continue
-    # Extracts are dealt with a little differently
-    if isinstance(Operation, RoseBVExtractSliceOp):
-      # There are situations where value being extracted is defined
-      # outside a loop. In Rosette, the indexing into bitvectors takes
-      # place from right to left, instead of left to right. So we need
-      # to reverse the order of extraction as well.
-      if Operation.getInputBitVector() in Block.getOperations():
-        RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
-        continue
-    print("Operation:")
-    Operation.print()
-    RosetteCode += Operation.to_rosette(NumSpace)
-  
-  print(BVInsertOpsList)
-  if not (len(BVInsertOpsList) > 1):
-    if len(BVInsertOpsList) == 1:
-      Block = BVInsertOpsList[0].getParent()
-      RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
-    return RosetteCode
-  
-  # See which bvinserts in the block are concatable
-  ListOfPacks = list()
-  Pack = list()
-  for Op in BVInsertOpsList:
-    if Pack == []:
-      Pack = [Op]
-      continue
-    print("AreBitSlicesContiguous:")
-    if not AreBitSlicesContiguous(Pack[len(Pack) - 1], Op):
-      print("FALSE")
-      # Pack list ends here
-      ListOfPacks.append(Pack)
-      Pack = [Op]
-      continue
-    print("TRUE")
-    # Add the op to the current pack list
-    Pack.append(Op)
-  if len(Pack) != 0:
-    ListOfPacks.append(Pack)
-
-  # TODO: Support multiple packlists in the list of packs
-  print(ListOfPacks)
-  assert len(ListOfPacks) == 1
-  # Now concatenate the packs
-  RosetteCode += "(concat"
-  for Op in Pack:
-    RosetteCode += " " +  Op.getInsertValue().getName()
-  RosetteCode += ")\n"
-  return RosetteCode
-  
 
 def GenerateRosetteForForLoop1(Loop : RoseForLoop, RosetteCode : str, NumSpace : int = 0):
   print("GENERATE ROSETTE CODE FOR LOOP")
