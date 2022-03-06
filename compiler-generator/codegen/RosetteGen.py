@@ -63,7 +63,19 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
   if not (len(BVInsertOpsList) > 1):
     if len(BVInsertOpsList) == 1:
       Block = BVInsertOpsList[0].getParent()
-      RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
+      if isinstance(BVInsertOpsList[0].getInsertValue(), RoseConstant):
+        Result = bin(BVInsertOpsList[0].getInsertValue().getValue()).replace("0b", "#b")
+        print("RESULT:")
+        print(Result)
+        if type(BVInsertOpsList[0].getOutputBitwidth()) == int:
+          RosetteCode += Spaces + "(bv " + Result + " " \
+                        + str(BVInsertOpsList[0].getOutputBitwidth()) + ")\n"
+        else:
+          print(BVInsertOpsList[0].getOutputBitwidth().getName())
+          RosetteCode += Spaces + "(bv " + Result + " " \
+                        + BVInsertOpsList[0].getOutputBitwidth().getName() + ")\n"      
+      else:
+        RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
     return RosetteCode
   
   # See which bvinserts in the block are concatable
@@ -210,20 +222,6 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
     TmpRosetteCode += (Spaces + ")\n")
   RosetteCode += TmpRosetteCode
   return RosetteCode
-
-
-#def to_rosette(self, NumSpace = 0):
-#  Spaces = ""
-#  for _ in range(NumSpace):
-#    Spaces += " "
-#  String = Spaces + "(if (" + self.Condition.getName() + ") \n"
-#  # Print regions in this if-else blocks
-#  for Region in self.getThenRegions():
-#    String += Region.to_rosette(NumSpace + 1)
-#  for Region in self.getElseRegions():
-#    String += Region.to_rosette(NumSpace + 1)
-#  String += (Spaces + ")\n")
-#  return String
 
 
 def GenerateRosetteForRegion(Region, RosetteCode : str, NumSpace = 0):
