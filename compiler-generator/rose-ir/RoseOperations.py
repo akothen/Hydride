@@ -204,15 +204,15 @@ class RoseCastOp(RoseOperation):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    if self.getOperand().getType().isBitVectorTy() and self.getType().isIntegerTy():
-      String += "bitvector->integer " + self.getOperand().getName() + "))\n"
-    elif self.getOperand().getType().isIntegerTy() and self.getType().isBitVectorTy():
-      String += "integer->bitvector " + self.getOperand().getName() + " " \
+    if self.getOperand(0).getType().isBitVectorTy() and self.getType().isIntegerTy():
+      String += "bitvector->integer " + self.getOperand(0).getName() + "))\n"
+    elif self.getOperand(0).getType().isIntegerTy() and self.getType().isBitVectorTy():
+      String += "integer->bitvector " + self.getOperand(0).getName() + " " \
               "(bitvector " + self.getType().getBitwidth() + "))\n"
-    elif self.getOperand().getType().isBitVectorTy() and self.getType().isBooleanTy():
-      String += "bitvector->bool " + self.getOperand().getName() + "))\n"
-    elif self.getOperand().getType().isBooleanTy() and self.getType().isBitVectorTy():
-      String += "bool->bitvector " + self.getOperand().getName() + " " \
+    elif self.getOperand(0).getType().isBitVectorTy() and self.getType().isBooleanTy():
+      String += "bitvector->bool " + self.getOperand(0).getName() + "))\n"
+    elif self.getOperand(0).getType().isBooleanTy() and self.getType().isBitVectorTy():
+      String += "bool->bitvector " + self.getOperand(0).getName() + " " \
               "(bitvector " + self.getType().getBitwidth() + "))\n"
     return String
 
@@ -223,7 +223,9 @@ class RoseCastOp(RoseOperation):
     Name = super().getName()
     String = Spaces + Name + " = "
     String += str(self.Opcode)
-    String += " " + self.getOperand(0).getName() + " " + str(self.getOperand(1))
+    Operand = self.getOperand(0)
+    String += " " + str(Operand.getType()) + " " + Operand.getName() \
+              + ", " + str(self.getOperand(1))
     print(String)
 
 
@@ -249,7 +251,7 @@ class RoseAbsOp(RoseOperation):
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
-  
+
   def to_llvm_ir(self, IRBuilder):
     OperandInLLVM = self.getOperand(0).to_llvm_ir(IRBuilder)
     ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
@@ -1127,4 +1129,5 @@ class RoseXorOp(RoseOperation):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
     return IRBuilder.xor(Operand1, Operand2, self.getName())
+
 

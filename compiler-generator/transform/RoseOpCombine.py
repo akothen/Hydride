@@ -844,6 +844,8 @@ def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
   InputOp = Operation.getInputBitVector()
   if not isinstance(InputOp, RoseOperation):
     return
+  if InputOp.getParent() != Operation.getParent():
+    return
   Block = InputOp.getParent()
   if len(InputOp.getUsers()) != 1:
     # Nothing to do
@@ -871,6 +873,8 @@ def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseCon
   # We can support a few patterns here
   InputOp = Operation.getInputBitVector()
   if not isinstance(InputOp, RoseOperation):
+    return
+  if InputOp.getParent() != Operation.getParent():
     return
   Block = InputOp.getParent()
   if len(InputOp.getUsers()) != 1:
@@ -957,8 +961,9 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   OpList = list()
   for Operation in Block:
     # These instructions make good candidates for being combined
-    if isinstance(Operation, RoseBVTruncateOp) \
-    or isinstance(Operation, RoseBVExtractSliceOp):
+    #if isinstance(Operation, RoseBVTruncateOp) \
+    #or isinstance(Operation, RoseBVExtractSliceOp):
+    if isinstance(Operation, RoseBVExtractSliceOp):
       OpList.append(Operation)
       continue
     if isinstance(Operation, RoseAddOp) \
@@ -1151,6 +1156,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

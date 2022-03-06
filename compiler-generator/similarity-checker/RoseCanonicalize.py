@@ -356,7 +356,7 @@ def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
       continue
     OpList = []
     OpList.extend(Block.getOperations())
-    for Op in OpList:
+    for Op in reversed(OpList):
       ReplaceUsesWithUniqueCopiesOf(CondRegion, Op, Op, Context)
 
 
@@ -396,6 +396,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 
