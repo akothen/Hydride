@@ -66,6 +66,8 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
                 LoopStep : RoseValue, Visited : set, Context : RoseContext):
   # Now we have to deal with the low index that is a mul op
   LowIndex = Op.getLowIndex()
+  if LowIndex in Visited:
+    return
   Block = Op.getParent()
   if isinstance(LowIndex,  RoseMulOp):
     assert len(LowIndex.getOperands()) == 2
@@ -78,8 +80,12 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
           assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
             and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
           assert len(IntermediateOp.getOperands()) == 2
+          if IntermediateOp in Visited:
+            return
           DivOp = IntermediateOp.getOperand(0)
           if isinstance(DivOp, RoseDivOp):
+            if DivOp in Visited:
+              return
             if isinstance(DivOp.getOperand(1), RoseConstant):
               if DivOp.getOperand(1) == Bitwidth:
                 DivOp.setOperand(0, Op.getOutputBitwidth())
@@ -88,6 +94,8 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
           else:
             DivOp = IntermediateOp.getOperand(1)
             if isinstance(DivOp, RoseDivOp):
+              if DivOp in Visited:
+                return
               if isinstance(DivOp.getOperand(0), RoseConstant):
                 if DivOp.getOperand(1) == Bitwidth:
                   DivOp.setOperand(1, Op.getOutputBitwidth())
@@ -102,8 +110,12 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
           assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
             and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
           assert len(IntermediateOp.getOperands()) == 2
+          if IntermediateOp in Visited:
+            return
           DivOp = IntermediateOp.getOperand(0)
           if isinstance(DivOp, RoseDivOp):
+            if DivOp in Visited:
+              return
             if isinstance(DivOp.getOperand(1), RoseConstant):
               if DivOp.getOperand(1) == Bitwidth:
                 DivOp.setOperand(1, Op.getOutputBitwidth())
@@ -112,6 +124,8 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
           else:
             DivOp = IntermediateOp.getOperand(1)
             if isinstance(DivOp, RoseDivOp):
+              if DivOp in Visited:
+                return
               if isinstance(DivOp.getOperand(0), RoseConstant):
                 if DivOp.getOperand(1) == Bitwidth:
                   DivOp.setOperand(1, Op.getOutputBitwidth())
@@ -121,6 +135,8 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
     if isinstance(LowIndex.getOperand(0), RoseOperation):
       DivOp = LowIndex.getOperand(0)
       if isinstance(DivOp, RoseDivOp):
+        if DivOp in Visited:
+          return
         assert isinstance(LowIndex.getOperand(1), RoseConstant)
         LowIndex.setOperand(1, Op.getOutputBitwidth())
         assert isinstance(DivOp.getOperand(1), RoseConstant)
@@ -131,6 +147,8 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
     elif isinstance(LowIndex.getOperand(1), RoseOperation):
       DivOp = LowIndex.getOperand(1)
       if isinstance(DivOp, RoseDivOp):
+        if DivOp in Visited:
+          return
         assert isinstance(LowIndex.getOperand(0), RoseConstant)
         LowIndex.setOperand(1, Op.getOutputBitwidth())
         assert isinstance(DivOp.getOperand(1), RoseConstant)
