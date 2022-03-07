@@ -62,9 +62,101 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
   return
 
 
-def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, LoopIterator : RoseValue,\
-                                    LoopStep : RoseValue, Visited : set, SkipBVExtracts : set, \
-                                    Context : RoseContext):
+def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, \
+                LoopStep : RoseValue, Visited : set, Context : RoseContext):
+  # Now we have to deal with the low index that is a mul op
+  LowIndex = Op.getLowIndex()
+  Block = Op.getParent()
+  if isinstance(LowIndex,  RoseMulOp):
+    assert len(LowIndex.getOperands()) == 2
+    if isinstance(LowIndex.getOperand(0), RoseConstant):
+      if LowIndex.getOperand(0) == Bitwidth:
+        LowIndex.setOperand(0, Op.getOutputBitwidth())
+        Visited.add(LowIndex)
+        if isinstance(LowIndex.getOperand(1), RoseOperation):
+          IntermediateOp = LowIndex.getOperand(1)
+          assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
+            and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
+          assert len(IntermediateOp.getOperands()) == 2
+          DivOp = IntermediateOp.getOperand(0)
+          if isinstance(DivOp, RoseDivOp):
+            if isinstance(DivOp.getOperand(1), RoseConstant):
+              if DivOp.getOperand(1) == Bitwidth:
+                DivOp.setOperand(0, Op.getOutputBitwidth())
+                Visited.add(DivOp)
+                return
+          else:
+            DivOp = IntermediateOp.getOperand(1)
+            if isinstance(DivOp, RoseDivOp):
+              if isinstance(DivOp.getOperand(0), RoseConstant):
+                if DivOp.getOperand(1) == Bitwidth:
+                  DivOp.setOperand(1, Op.getOutputBitwidth())
+                  Visited.add(DivOp)
+                  return
+    elif isinstance(LowIndex.getOperand(1), RoseConstant):
+      if LowIndex.getOperand(1) == Bitwidth:
+        LowIndex.setOperand(1, Op.getOutputBitwidth())
+        Visited.add(LowIndex)
+        if isinstance(LowIndex.getOperand(0), RoseOperation):
+          IntermediateOp = LowIndex.getOperand(0)
+          assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
+            and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
+          assert len(IntermediateOp.getOperands()) == 2
+          DivOp = IntermediateOp.getOperand(0)
+          if isinstance(DivOp, RoseDivOp):
+            if isinstance(DivOp.getOperand(1), RoseConstant):
+              if DivOp.getOperand(1) == Bitwidth:
+                DivOp.setOperand(1, Op.getOutputBitwidth())
+                Visited.add(DivOp)
+                return
+          else:
+            DivOp = IntermediateOp.getOperand(1)
+            if isinstance(DivOp, RoseDivOp):
+              if isinstance(DivOp.getOperand(0), RoseConstant):
+                if DivOp.getOperand(1) == Bitwidth:
+                  DivOp.setOperand(1, Op.getOutputBitwidth())
+                  Visited.add(DivOp)
+                  return
+    
+    if isinstance(LowIndex.getOperand(0), RoseOperation):
+      DivOp = LowIndex.getOperand(0)
+      if isinstance(DivOp, RoseDivOp):
+        assert isinstance(LowIndex.getOperand(1), RoseConstant)
+        LowIndex.setOperand(1, Op.getOutputBitwidth())
+        assert isinstance(DivOp.getOperand(1), RoseConstant)
+        DivOp.setOperand(1, LoopStep)
+        Visited.add(DivOp)
+        Visited.add(Op.getLowIndex())
+        return
+    elif isinstance(LowIndex.getOperand(1), RoseOperation):
+      DivOp = LowIndex.getOperand(1)
+      if isinstance(DivOp, RoseDivOp):
+        assert isinstance(LowIndex.getOperand(0), RoseConstant)
+        LowIndex.setOperand(1, Op.getOutputBitwidth())
+        assert isinstance(DivOp.getOperand(1), RoseConstant)
+        DivOp.setOperand(1, LoopStep)
+        Visited.add(DivOp)
+        Visited.add(LowIndex)
+        return
+    else:
+      # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
+      print(Op.getOutputBitwidth())
+      DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
+      Block.addOperationBefore(DivOp, Op.getLowIndex())
+      if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
+        Op.getLowIndex().setOperand(0, DivOp)
+      else:
+        assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
+        Op.getLowIndex().setOperand(1, DivOp)
+      Visited.add(DivOp)
+      Visited.add(LowIndex)
+      return
+    return
+  
+
+def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
+                                    LoopIterator : RoseValue, LoopStep : RoseValue, \
+                                    Visited : set, SkipBVExtracts : set, Context : RoseContext):
   assert Op.isIndexingBVOp() == True
   Block = Op.getParent()
   assert not isinstance(Block, RoseUndefRegion)
@@ -75,12 +167,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     assert Op.getHighIndex() == LowIndex
     if isinstance(LowIndex,  RoseDivOp):
       assert len(LowIndex.getOperands()) == 2
-      if isinstance(LowIndex.getOperand(0), RoseConstant):
-        assert LowIndex.getOperand(1) == LoopIterator
-        LowIndex.setOperand(0, LoopStep)
-        Visited.add(LowIndex.getOperand(0))
-      else:
-        assert isinstance(LowIndex.getOperand(1), RoseConstant)
+      if isinstance(LowIndex.getOperand(1), RoseConstant):
         assert LowIndex.getOperand(0) == LoopIterator
         LowIndex.setOperand(1, LoopStep)
         Visited.add(LowIndex.getOperand(1))
@@ -108,40 +195,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Op.getLowIndex().print()
     LowIndex = Op.getLowIndex()
     # Deal with the low index first
-    if isinstance(LowIndex, RoseOperation) and LowIndex not in Visited:
-      # Now we have to deal with the low index that is a mul op
-      if isinstance(LowIndex,  RoseMulOp):
-        assert len(LowIndex.getOperands()) == 2
-        if isinstance(LowIndex.getOperand(0), RoseOperation):
-          DivOp = LowIndex.getOperand(0)
-          if isinstance(DivOp, RoseDivOp):
-            assert isinstance(LowIndex.getOperand(1), RoseConstant)
-            LowIndex.setOperand(1, Op.getOutputBitwidth())
-            assert isinstance(DivOp.getOperand(1), RoseConstant)
-            DivOp.setOperand(1, LoopStep)
-            Visited.add(DivOp)
-            Visited.add(Op.getLowIndex())
-        elif isinstance(LowIndex.getOperand(1), RoseOperation):
-          DivOp = LowIndex.getOperand(1)
-          if isinstance(DivOp, RoseDivOp):
-            assert isinstance(LowIndex.getOperand(0), RoseConstant)
-            LowIndex.setOperand(1, Op.getOutputBitwidth())
-            assert isinstance(DivOp.getOperand(1), RoseConstant)
-            DivOp.setOperand(1, LoopStep)
-            Visited.add(DivOp)
-            Visited.add(Op.getLowIndex())
-        else:
-          # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
-          print(Op.getOutputBitwidth())
-          DivOp = RoseDivOp.create(Context.genName("%" + "factor"), Op.getOutputBitwidth(), LoopStep)
-          Block.addOperationBefore(DivOp, Op.getLowIndex())
-          if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
-            Op.getLowIndex().setOperand(0, DivOp)
-          else:
-            assert isinstance(Op.getLowIndex().getOperand(1), RoseConstant)
-            Op.getLowIndex().setOperand(1, DivOp)
-          Visited.add(DivOp)
-          Visited.add(Op.getLowIndex())
+    FixLowIndices(Op, Bitwidth, LoopStep, Visited, Context)
     # Now deal with the high index
     if Op.getHighIndex() in Visited:
       return
@@ -194,6 +248,9 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   OpBitwidthEqLoopStepList = list()
   if not isinstance(Loop, RoseUndefRegion):
     OpBitwidthEqLoopStepList = GetOpDeterminingLoopBounds(Loop)
+  for Op in OpBitwidthEqLoopStepList:
+    print("OpBitwidthEqLoopStepList:")
+    Op.print()
   for Op in reversed(OpList):
     if Op in Visited:
       print("ALREADY VISITED")
@@ -302,6 +359,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             IndexingOps.add(IndexingOp)
           Visited.add(Op)
           continue
+        Bitwidth = Op.getOperand(Op.getBitwidthPos())
         if Op in OpBitwidthEqLoopStepList:
           Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
           BVValToBitwidthVal[Op] = Loop.getStep()
@@ -320,7 +378,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             UnknownVal.remove(Op)
           AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
       if Loop != RoseUndefRegion():
-        FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getIterator(), \
+        FixIndicesForBVOpsInsideOfLoops(Function, Op, Bitwidth, Loop.getIterator(), \
                                       Loop.getStep(), Visited, SkipBVExtracts, Context)
         # Add indexing ops in a set
         for IndexingOp in GatherIndexingOps(Op):
@@ -330,9 +388,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
 
     if isinstance(Op, RoseBVInsertSliceOp):
       if isinstance(Op.getInsertValue(), RoseConstant):
-        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                      Op.getOperand(0).getType()))
-        Op.setOperand(0, Arg)
+        # If the insert value is 1-bit long, then no need to extract it.
+        if Op.getInsertValue().getType().getBitwidth() != 1:
+          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                        Op.getInsertValue().getType()))
+          Op.setOperand(0, Arg)
       if Loop == RoseUndefRegion():
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
@@ -340,6 +400,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         for IndexingOp in GatherIndexingOps(Op):
           IndexingOps.add(IndexingOp)
         continue
+      Bitwidth = Op.getOperand(Op.getBitwidthPos())
       assert Loop.getParentOfType(RoseForLoop) == LoopList[0]
       if Op.getLowIndex() == LoopList[0].getIterator():
         Op.setOperand(Op.getBitwidthPos(), LoopList[0].getStep())
@@ -356,7 +417,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         Op.setOperand(4, Arg)
         BVValToBitwidthVal[Op] = Arg
       BVValToBitwidthVal[Op.getInsertValue()] = BVValToBitwidthVal[Op]
-      FixIndicesForBVOpsInsideOfLoops(Function, Op, Loop.getIterator(), \
+      FixIndicesForBVOpsInsideOfLoops(Function, Op, Bitwidth, Loop.getIterator(), \
                                       Loop.getStep(), Visited, SkipBVExtracts, Context)
       print("BVINSERT OP:")
       Op.print()
@@ -1067,9 +1128,11 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
         Loop = Block.getParentOfType(RoseForLoop)
         if isinstance(Operation.getInsertValue(), RoseConstant):
           if Operation == KeyOp:
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                        Operation.getOperand(0).getType()))
-            Operation.setOperand(0, Arg)
+            # If the insert value is 1-bit long, then no need to extract it.
+            if Operation.getInsertValue().getType().getBitwidth() != 1:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Operation.getInsertValue().getType()))
+              Operation.setOperand(0, Arg)
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Operation, Visited, LoopList[0].getEndIndex(), Context)
           Visited.add(Operation)
