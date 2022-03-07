@@ -14,6 +14,25 @@ from RoseBitVectorOperations import *
 from RoseUtilities import *
 
 
+def GenerateRosetteForSatOp(Op : RoseBitVectorOp, NumSpace = 0):
+  assert isinstance(Op, RoseBVSSaturateOp) or isinstance(Op, RoseBVUSaturateOp)
+  Spaces = ""
+  for _ in range(NumSpace):
+    Spaces += " "
+  if isinstance(Op, RoseBVSSaturateOp):
+    String = Spaces + "(define " + Op.getName() + " (SSat "
+    for Operand in Op.getOperands():
+      String += Operand.getName() + " "
+    String += "))\n"
+    return String
+  # Account for usat op
+  String = Spaces + "(define " + Op.getName() + " (USat "
+  for Operand in Op.getOperands():
+    String += Operand.getName() + " "
+  String += "))\n"
+  return String
+
+
 def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
                                       NumSpace = 0, SkipOps = list()):
   print("GENERATE ROSETTE CODE FOR BLOCK")
@@ -51,6 +70,10 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       if Operation.getInputBitVector() in Block.getOperations():
         RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
         continue
+    if isinstance(Operation, RoseBVSSaturateOp) \
+      or isinstance(Operation, RoseBVUSaturateOp):
+      RosetteCode += GenerateRosetteForSatOp(Operation, NumSpace)
+      continue
     print("Operation:")
     Operation.print()
     RosetteCode += Operation.to_rosette(NumSpace)
