@@ -1477,7 +1477,10 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
         OutParams.append(Param.name)
         IsOutParam = True
     else:
-        ParamType = x86Types[Param.type]
+        if Param.is_imm:
+          ParamType = RoseType.getBitVectorTy(Sema.imm_width)
+        else:
+          ParamType = x86Types[Param.type]
     # Create a new rosette value
     ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
     print("PARAM VALUES:")
