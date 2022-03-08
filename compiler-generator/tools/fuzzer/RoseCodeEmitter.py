@@ -1,5 +1,5 @@
 
-import subprocess
+import subprocess 
 from copy import deepcopy
 
 from RoseAbstractions import RoseFunction
@@ -39,14 +39,20 @@ class RoseCodeEmitter():
       ConcArgs.append(deepcopy(NewArg))
     return ConcArgs
 
-  def test(self):
+  def test(self, *args):
     print("TEST:")
-    ConcArgs = self.genRandomInputs()
+    if len(args) == 0:
+      ConcArgs = self.genRandomInputs()
+    else:
+      assert len(args) == 1
+      ConcArgs = args[0]
     if not self.makeFile(ConcArgs):
       return "", "IO Error"
     SOut, Srr = self.compile()
     if SOut is None and Srr is None:
       SOut, Srr = self.execute()
+      print(SOut)
+      SOut = self.extractAndFormatOutput(SOut)
       print(SOut)
     return SOut, Srr
 
@@ -89,4 +95,8 @@ class RoseCodeEmitter():
       return "", "OS Error running {}".format(Cmd)
     except subprocess.TimeoutExpired:
       return "", "Timout Error running {}".format(Cmd)
+
+  def extractAndFormatOutput(self):
+    NotImplemented
+
 

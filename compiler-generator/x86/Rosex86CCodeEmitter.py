@@ -1,5 +1,4 @@
 
-from copy import deepcopy
 from RoseAbstractions import RoseFunction
 from RoseCodeEmitter import *
 import x86RoseLang
@@ -113,6 +112,10 @@ class CCodeEmitter(RoseCodeEmitter):
 
   def execute(self):
     return self.run("./c-exec")
+  
+  def extractAndFormatOutput(self, Output):
+    return "0x" + Output
+
 
 
 if __name__ == '__main__':

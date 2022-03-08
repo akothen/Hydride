@@ -89,6 +89,14 @@ class RosetteCodeEmitter(RoseCodeEmitter):
 
   def execute(self):
     return self.run("racket {}".format(self.getFileName()))
+  
+  def extractAndFormatOutput(self, Output):
+    Start = Output.find("#x")
+    String = Output[Start:]
+    Bitwidth = self.getFunction().getReturnValue().getType().getBitwidth()
+    End = String.find(" " + str(Bitwidth) + ")")
+    return "0x" + String[2:End].strip()
+
 
 
 if __name__ == '__main__':
