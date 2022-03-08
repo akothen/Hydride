@@ -1,0 +1,31 @@
+#include <immintrin.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+
+void hex_out(const uint8_t * buf, ssize_t sz) {
+    for (ssize_t i = sz - 1; i >= 0; --i) {
+        printf("%02x", buf[i]);
+    }
+    printf("\n");
+}
+
+
+int main() {
+ uint8_t _0[16] = { 0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xa,0xb,0xc,0xd,0xe,0xf };
+ __m128i a;
+  memcpy(&a, _0, 16);
+
+ uint8_t _1[16] = { 0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f };
+ __m128i b;
+  memcpy(&b, _1, 16);
+
+#define imm8 0x0
+  uint8_t out[16] = {0};
+  __m128i ret = _mm_blend_epi32(a,b,imm8);
+  memcpy(out, &ret, 16);
+  hex_out(out, 16);
+  return 0;
+}
