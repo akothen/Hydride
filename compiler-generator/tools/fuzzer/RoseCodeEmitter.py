@@ -26,9 +26,9 @@ def RunProcess(cmd):
 def SizeInBytes(Size):
   if Size < 8:
       return 1
-  nbytes = int(Size / 8)
-  assert nbytes * 8 == Size
-  return nbytes
+  Numbytes = int(Size / 8)
+  assert Numbytes * 8 == Size
+  return Numbytes
 
 
 class ERR(Enum):
@@ -56,14 +56,17 @@ class RoseCodeEmitter():
   def genRandomInputs(self):
     FuncArgs = self.getFunction().getArgs()
     ConcArgs = []
+    Counter = 0
     for Index in range(len(FuncArgs)):
       NewArg = []
-      for J in range(FuncArgs[Index].getType().getBitwidth()):
-        NewArg.append(J)
+      for J in range(SizeInBytes(FuncArgs[Index].getType().getBitwidth())):
+        NewArg.append(Counter)
+        Counter += 1
       ConcArgs.append(deepcopy(NewArg))
     return ConcArgs
 
   def test(self):
+    print("TEST:")
     ConcArgs = self.genRandomInputs()
     if not self.makeFile(ConcArgs):
       return "", "IO Error"
@@ -82,11 +85,14 @@ class RoseCodeEmitter():
     NotImplemented
 
   def makeFile(self, ConcArgs : list):
+    print("make file")
     FileName = "{}/{}".format(".", self.getFileName())
     try:
       File = open(FileName, "w+")
       Content = self.createFile(ConcArgs)
       File.write(Content)
+      print("Content:")
+      print(Content)
       File.close()
       return True
     except IOError:
@@ -142,4 +148,5 @@ class RoseCodeEmitter():
     Result = self.checkResult(RosetteOut_cmp, RosetteErr, COutCmp, CErr)
     self.writeOutput(RosetteOut, RosetteOut_cmp, RosetteErr, COut, COutCmp, CErr, Result)
     return Result
+
 

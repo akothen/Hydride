@@ -22,15 +22,51 @@ class RosetteCodeEmitter(RoseCodeEmitter):
     ]
 
     def GenInputs(Index, Param, ConcArgs):
-      ParamBytes = SizeInBytes(Param.getType().getBitwidth())
-      Input = "#x"
-      for j in range(0, ParamBytes):
-        v = ConcArgs[Index][j] & 0xff
-        if self.getInstInfo().params[Index].is_imm:
-          #v = int(v % imm8_max(Function.getName()))
-          v = int(v & (2**(self.getInstInfo().imm_width) - 1))
+      print("Param.getType().getBitwidth():")
+      print(Param.getType().getBitwidth())
+      print("ConcArgs:")
+      print(ConcArgs)
+      if Param.getType().getBitwidth() < 8:
+        assert self.getInstInfo().params[Index].is_imm
+        print(ConcArgs[Index])
+        [v] = ConcArgs[Index]
+        v = v & (2**(self.getInstInfo().imm_width) - 1)
         HexVal = hex(v)
-        Input += str(HexVal[2:])
+        HexValString = str(HexVal[2:])
+        Input = "#x"
+        Input += HexValString
+      else:
+        ParamBytes = SizeInBytes(Param.getType().getBitwidth())
+        print("ParamBytes:")
+        print(ParamBytes)
+        print(self.getInstInfo().imm_width)
+        Input = "#x"
+        for j in range(0, ParamBytes):
+          print("ConcArgs[Index][j]:")
+          print(ConcArgs[Index][j] )
+          #v = ConcArgs[Index][j] & 0xff
+          if self.getInstInfo().params[Index].is_imm:
+            #v = int(v % imm8_max(Function.getName()))
+            v = ConcArgs[Index][j] & 0xff
+            v = v & (2**(self.getInstInfo().imm_width) - 1)
+          else:
+            Temp = []
+            print(ConcArgs[Index])
+            Temp.extend(ConcArgs[Index])
+            Temp.reverse()
+            v = Temp[j] & 0xff
+          HexVal = hex(v)
+          print("HexVal:")
+          print(HexVal)
+          HexValString = str(HexVal[2:])
+          print("HexValString:")
+          print(HexValString)
+          if len(HexValString) == 1:
+            HexValString = "0" + HexValString
+          print(HexValString)
+          Input += HexValString
+      print("Input:")
+      print(Input)
       return Input
     
     InputNames = list()
@@ -59,5 +95,6 @@ if __name__ == '__main__':
   Sema, Context, Function = x86RoseLang.Compile()
   RoseEmitter = RosetteCodeEmitter(Function, Sema, Context)
   RoseEmitter.test()
+
 
 

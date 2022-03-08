@@ -63,11 +63,12 @@ class CCodeEmitter(RoseCodeEmitter):
   def createFile(self, ConcArgs : list):
     Content = ["#include <immintrin.h>\n", "#include <stdio.h>", \
                "#include <stdlib.h>", "#include <stdint.h>\n"]
-    Content.append('''\n\nvoid hex_out(const uint8_t * buf, ssize_t sz) {
+    Content.append('''\nvoid hex_out(const uint8_t * buf, ssize_t sz) {
     for (ssize_t i = sz - 1; i >= 0; --i) {
         printf("%02x", buf[i]);
-    }\n\n
-}''')
+    }
+    printf("\\n");
+}\n\n''')
     Content.append("int main() {")
 
     def GenMainFunction(Index, Param, ConcArgs):
@@ -81,11 +82,11 @@ class CCodeEmitter(RoseCodeEmitter):
         BinOut.append(str(hex(v)))
       if self.getInstInfo().params[Index].is_imm:
         return "#define {} {}".format(Param.getName(), BinOut[0])
-      Buf = "uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
+      Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
       Buf = Buf.replace("LBRACK", "{")
       Buf = Buf.replace("RBRACK", "}")
-      Var = "{} {};\n".format(x86ToC(self.getInstInfo().params[Index].type), Param.getName())
-      Init = "memcpy(&{}, _{}, {});\n".format(Param.getName(), Index, ParamBytes)
+      Var = " {} {};\n".format(x86ToC(self.getInstInfo().params[Index].type), Param.getName())
+      Init = "  memcpy(&{}, _{}, {});\n".format(Param.getName(), Index, ParamBytes)
       return Buf + Var + Init
     
     Function = self.getFunction()
@@ -94,13 +95,13 @@ class CCodeEmitter(RoseCodeEmitter):
       Params.append(Param.getName())
       Content.append(GenMainFunction(Index, Param, ConcArgs))
     RetBitwidth = Function.getReturnValue().getType().getBitwidth()
-    Content.append("uint8_t out[" + str(SizeInBytes(RetBitwidth)) + "] = {0};")
-    Content.append("{} ret = {}({});".format(x86ToC(self.getInstInfo().rettype),
+    Content.append("  uint8_t out[" + str(SizeInBytes(RetBitwidth)) + "] = {0};")
+    Content.append("  {} ret = {}({});".format(x86ToC(self.getInstInfo().rettype),
                                               self.getFunction().getName(),
                                               ",".join(Params)))
-    Content.append("memcpy(out, &ret, {});".format(SizeInBytes(RetBitwidth)))
-    Content.append("hex_out(out, {});".format(SizeInBytes(RetBitwidth)))
-    Content.append("return 0;")
+    Content.append("  memcpy(out, &ret, {});".format(SizeInBytes(RetBitwidth)))
+    Content.append("  hex_out(out, {});".format(SizeInBytes(RetBitwidth)))
+    Content.append("  return 0;")
     Content.append("}")
     return "\n".join(Content)
 
@@ -118,5 +119,6 @@ if __name__ == '__main__':
   Sema, Context, Function = x86RoseLang.Compile()
   CEmitter = CCodeEmitter(Function, Sema)
   CEmitter.test()
+
 
 
