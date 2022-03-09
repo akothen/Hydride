@@ -2,6 +2,7 @@
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
 from x86RoseCompiler import CompileSemantics, x86RoseContext
+from RoseFunctionInfo import *
 
 
 def test1():
@@ -4556,73 +4557,369 @@ ENDFOR
 #dst[MAX:128] := 0
 
 
-def test84___():
-  return '''
-<intrinsic tech="AVX-512" name="_mm256_cmpge_epu16_mask">
-	<type>Integer</type>
-	<type>Mask</type>
-	<CPUID>AVX512VL</CPUID>
-	<CPUID>AVX512BW</CPUID>
-	<category>Compare</category>
-	<return type="__mmask16" varname="k" etype="MASK"/>
-	<parameter type="__m256i" varname="a" etype="UI16"/>
-	<parameter type="__m256i" varname="b" etype="UI16"/>
-	<description>Compare packed unsigned 16-bit integers in "a" and "b" for greater-than-or-equal, and store the results in mask vector "k".</description>
-	<operation>
-FOR j := 0 to 15
-	i := j*16
-	k[j] := ( a[i+15:i] &gt;= b[i+15:i] ) ? 1 : 0
-ENDFOR
-	</operation>
-	<instruction name="VPCMPUW" form="k, ymm, ymm" xed="VPCMPUW_MASKmskw_MASKmskw_YMMu16_YMMu16_IMM8_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-
-def test14__():
+def test182():
 	return '''
-<intrinsic tech="SSE4.1" vexEq="TRUE" name="_mm_max_epi32">
+<intrinsic tech="SSE4.1" vexEq="TRUE" name="_mm_cvtepu8_epi32">
 	<type>Integer</type>
 	<CPUID>SSE4.1</CPUID>
-	<category>Special Math Functions</category>
+	<category>Convert</category>
 	<return type="__m128i" varname="dst" etype="UI32"/>
-	<parameter type="__m128i" varname="a" etype="SI32"/>
-	<parameter type="__m128i" varname="b" etype="SI32"/>
-	<description>Compare packed signed 32-bit integers in "a" and "b", and store packed maximum values in "dst".</description>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<description>Zero extend packed unsigned 8-bit integers in "a" to packed 32-bit integers, and store the results in "dst".</description>
 	<operation>
 FOR j := 0 to 3
-	i := j*32
-	dst[i+31:i] := MAX(a[i+31:i], b[i+31:i])
+	i := 32*j
+	k := 8*j
+	dst[i+31:i] := ZeroExtend32(a[k+7:k])
 ENDFOR
 	</operation>
-	<instruction name="PMAXSD" form="xmm, xmm" xed="PMAXSD_XMMdq_XMMdq"/>
+	<instruction name="PMOVZXBD" form="xmm, xmm" xed="PMOVZXBD_XMMdq_XMMd"/>
 	<header>smmintrin.h</header>
 </intrinsic>
 '''
 
-def test178__():
+def test183():
 	return '''
-<intrinsic tech="AVX-512" name="_mm256_madd52hi_epu64">
-	<CPUID>AVX512IFMA52</CPUID>
-	<CPUID>AVX512VL</CPUID>
-	<category>Arithmetic</category>
-	<return type="__m256i" varname="dst" etype="UI64"/>
-	<parameter type="__m256i" varname="a" etype="UI64"/>
-	<parameter type="__m256i" varname="b" etype="UI64"/>
-	<parameter type="__m256i" varname="c" etype="UI64"/>
-	<description>Multiply packed unsigned 52-bit integers in each 64-bit element of "b" and "c" to form a 104-bit intermediate result. Add the high 52-bit unsigned integer from the intermediate result with the corresponding unsigned 64-bit integer in "a", and store the results in "dst".</description>
+<intrinsic tech="AVX-512" name="_mm512_mask_packus_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512BW</CPUID>
+	<category>Convert</category>
+	<category>Miscellaneous</category>
+	<return type="__m512i" varname="dst" etype="UI8"/>
+	<parameter type="__m512i" varname="src" etype="UI8"/>
+	<parameter type="__mmask64" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="SI16"/>
+	<parameter type="__m512i" varname="b" etype="SI16"/>
+	<description>Convert packed signed 16-bit integers from "a" and "b" to packed 8-bit integers using unsigned saturation, and store the results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
 	<operation>
-FOR j := 0 to 3
-	i := j*64
-	tmp[127:0] := ZeroExtend64(b[i+51:i]) * ZeroExtend64(c[i+51:i])
-	dst[i+63:i] := a[i+63:i] + ZeroExtend64(tmp[103:52])
+tmp_dst[7:0] := SaturateU8(a[15:0])
+tmp_dst[15:8] := SaturateU8(a[31:16])
+tmp_dst[23:16] := SaturateU8(a[47:32])
+tmp_dst[31:24] := SaturateU8(a[63:48])
+tmp_dst[39:32] := SaturateU8(a[79:64])
+tmp_dst[47:40] := SaturateU8(a[95:80])
+tmp_dst[55:48] := SaturateU8(a[111:96])
+tmp_dst[63:56] := SaturateU8(a[127:112])
+tmp_dst[71:64] := SaturateU8(b[15:0])
+tmp_dst[79:72] := SaturateU8(b[31:16])
+tmp_dst[87:80] := SaturateU8(b[47:32])
+tmp_dst[95:88] := SaturateU8(b[63:48])
+tmp_dst[103:96] := SaturateU8(b[79:64])
+tmp_dst[111:104] := SaturateU8(b[95:80])
+tmp_dst[119:112] := SaturateU8(b[111:96])
+tmp_dst[127:120] := SaturateU8(b[127:112])
+tmp_dst[135:128] := SaturateU8(a[143:128])
+tmp_dst[143:136] := SaturateU8(a[159:144])
+tmp_dst[151:144] := SaturateU8(a[175:160])
+tmp_dst[159:152] := SaturateU8(a[191:176])
+tmp_dst[167:160] := SaturateU8(a[207:192])
+tmp_dst[175:168] := SaturateU8(a[223:208])
+tmp_dst[183:176] := SaturateU8(a[239:224])
+tmp_dst[191:184] := SaturateU8(a[255:240])
+tmp_dst[199:192] := SaturateU8(b[143:128])
+tmp_dst[207:200] := SaturateU8(b[159:144])
+tmp_dst[215:208] := SaturateU8(b[175:160])
+tmp_dst[223:216] := SaturateU8(b[191:176])
+tmp_dst[231:224] := SaturateU8(b[207:192])
+tmp_dst[239:232] := SaturateU8(b[223:208])
+tmp_dst[247:240] := SaturateU8(b[239:224])
+tmp_dst[255:248] := SaturateU8(b[255:240])
+tmp_dst[263:256] := SaturateU8(a[271:256])
+tmp_dst[271:264] := SaturateU8(a[287:272])
+tmp_dst[279:272] := SaturateU8(a[303:288])
+tmp_dst[287:280] := SaturateU8(a[319:304])
+tmp_dst[295:288] := SaturateU8(a[335:320])
+tmp_dst[303:296] := SaturateU8(a[351:336])
+tmp_dst[311:304] := SaturateU8(a[367:352])
+tmp_dst[319:312] := SaturateU8(a[383:368])
+tmp_dst[327:320] := SaturateU8(b[271:256])
+tmp_dst[335:328] := SaturateU8(b[287:272])
+tmp_dst[343:336] := SaturateU8(b[303:288])
+tmp_dst[351:344] := SaturateU8(b[319:304])
+tmp_dst[359:352] := SaturateU8(b[335:320])
+tmp_dst[367:360] := SaturateU8(b[351:336])
+tmp_dst[375:368] := SaturateU8(b[367:352])
+tmp_dst[383:376] := SaturateU8(b[383:368])
+tmp_dst[391:384] := SaturateU8(a[399:384])
+tmp_dst[399:392] := SaturateU8(a[415:400])
+tmp_dst[407:400] := SaturateU8(a[431:416])
+tmp_dst[415:408] := SaturateU8(a[447:432])
+tmp_dst[423:416] := SaturateU8(a[463:448])
+tmp_dst[431:424] := SaturateU8(a[479:464])
+tmp_dst[439:432] := SaturateU8(a[495:480])
+tmp_dst[447:440] := SaturateU8(a[511:496])
+tmp_dst[455:448] := SaturateU8(b[399:384])
+tmp_dst[463:456] := SaturateU8(b[415:400])
+tmp_dst[471:464] := SaturateU8(b[431:416])
+tmp_dst[479:472] := SaturateU8(b[447:432])
+tmp_dst[487:480] := SaturateU8(b[463:448])
+tmp_dst[495:488] := SaturateU8(b[479:464])
+tmp_dst[503:496] := SaturateU8(b[495:480])
+tmp_dst[511:504] := SaturateU8(b[511:496])
+FOR j := 0 to 63
+	i := j*8
+	IF k[j]
+		dst[i+7:i] := tmp_dst[i+7:i]
+	ELSE
+		dst[i+7:i] := src[i+7:i]
+	FI
 ENDFOR
 	</operation>
-	<instruction name="VPMADD52HUQ" form="ymm, ymm, ymm" xed="VPMADD52HUQ_YMMu64_MASKmskw_YMMu64_YMMu64_AVX512"/>
+	<instruction name="VPACKUSWB" form="zmm {k}, zmm, zmm" xed="VPACKUSWB_ZMMu8_MASKmskw_ZMMu16_ZMMu16_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails
+def test184():
+	return '''
+<intrinsic tech="MMX" name="_mm_srl_pi16">
+	<type>Integer</type>
+	<CPUID>MMX</CPUID>
+	<category>Shift</category>
+	<return type="__m64" varname="dst" etype="FP32"/>
+	<parameter type="__m64" varname="a" etype="UI16"/>
+	<parameter type="__m64" varname="count" etype="UI16"/>
+	<description>Shift packed 16-bit integers in "a" right by "count" while shifting in zeros, and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	i := j*16
+	IF count[63:0] &gt; 15
+		dst[i+15:i] := 0
+	ELSE
+		dst[i+15:i] := ZeroExtend16(a[i+15:i] &gt;&gt; count[63:0])
+	FI
+ENDFOR
+	</operation>
+	<instruction name="PSRLW" form="mm, mm" xed="PSRLW_MMXq_MMXq"/>
+	<header>mmintrin.h</header>
+</intrinsic>
+'''
+
+def test185():
+	return '''
+<intrinsic tech="AVX-512" name="_mm512_mask_add_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512BW</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI16"/>
+	<parameter type="__m512i" varname="src" etype="UI16"/>
+	<parameter type="__mmask32" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI16"/>
+	<parameter type="__m512i" varname="b" etype="UI16"/>
+	<description>Add packed 16-bit integers in "a" and "b", and store the results in "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 31
+	i := j*16
+	IF k[j]
+		dst[i+15:i] := a[i+15:i] + b[i+15:i]
+	ELSE
+		dst[i+15:i] := src[i+15:i]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPADDW" form="zmm {k}, zmm, zmm" xed="VPADDW_ZMMu16_MASKmskw_ZMMu16_ZMMu16_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails
+def test186():
+	return '''
+<intrinsic tech="SSSE3" name="_mm_shuffle_pi8">
+	<type>Integer</type>
+	<CPUID>SSSE3</CPUID>
+	<category>Swizzle</category>
+	<return type="__m64" varname="dst" etype="UI8"/>
+	<parameter type="__m64" varname="a" etype="UI8"/>
+	<parameter type="__m64" varname="b" etype="UI8"/>
+	<description>Shuffle packed 8-bit integers in "a" according to shuffle control mask in the corresponding 8-bit element of "b", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	i := j*8
+	IF b[i+7] == 1
+		dst[i+7:i] := 0
+	ELSE
+		index[2:0] := b[i+2:i]
+		dst[i+7:i] := a[index*8+7:index*8]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="PSHUFB" form="mm, mm" xed="PSHUFB_MMXq_MMXq"/>
+	<header>tmmintrin.h</header>
+</intrinsic>
+'''
+
+# Fix reroller
+def test187():
+	return '''
+<intrinsic tech="AVX-512" name="_mm512_maskz_dpbusd_epi32">
+	<type>Integer</type>
+	<CPUID>AVX512_VNNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="SI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="src" etype="SI32"/>
+	<parameter type="__m512i" varname="a" etype="UI8"/>
+	<parameter type="__m512i" varname="b" etype="SI8"/>
+	<description>Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate signed 16-bit results. Sum these 4 results with the corresponding 32-bit integer in "src", and store the packed 32-bit results in "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	IF k[j]
+		tmp1.word := Signed(ZeroExtend16(a.byte[4*j]) * SignExtend16(b.byte[4*j]))
+		tmp2.word := Signed(ZeroExtend16(a.byte[4*j+1]) * SignExtend16(b.byte[4*j+1]))
+		tmp3.word := Signed(ZeroExtend16(a.byte[4*j+2]) * SignExtend16(b.byte[4*j+2]))
+		tmp4.word := Signed(ZeroExtend16(a.byte[4*j+3]) * SignExtend16(b.byte[4*j+3]))
+		dst.dword[j] := src.dword[j] + tmp1 + tmp2 + tmp3 + tmp4
+	ELSE
+		dst.dword[j] := 0
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPDPBUSD" form="zmm {z}, zmm, zmm" xed="VPDPBUSD_ZMMi32_MASKmskw_ZMMu8_ZMMu32_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails
+def test188():
+	return '''
+<intrinsic tech="KNC" name="_mm512_mask_mulhi_epi32">
+	<type>Integer</type>
+	<CPUID>KNCNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="src" etype="UI32"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m512i" varname="a" etype="UI32"/>
+	<parameter type="__m512i" varname="b" etype="UI32"/>
+	<description>Performs element-by-element multiplication between packed 32-bit integer elements in "a" and "b" and stores the high 32 bits of each result into "dst" using writemask "k" (elements are copied from "src" when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	IF k[j]
+		dst[i+31:i] := (a[i+31:i] * b[i+31:i]) &gt;&gt; 32
+	ELSE
+		dst[i+31:i] := src[i+31:i]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPMULHD" form="zmm {k}, zmm, m512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+
+def test189():
+	return '''
+<intrinsic tech="KNC" name="_mm512_mulhi_epu32">
+	<type>Integer</type>
+	<CPUID>KNCNI</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m512i" varname="dst" etype="UI32"/>
+	<parameter type="__m512i" varname="a" etype="UI32"/>
+	<parameter type="__m512i" varname="b" etype="UI32"/>
+	<description>Performs element-by-element multiplication between packed unsigned 32-bit integer elements in "a" and "b" and stores the high 32 bits of each result into "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*32
+	dst[i+31:i] := (a[i+31:i] * b[i+31:i]) &gt;&gt; 32
+ENDFOR
+	</operation>
+	<instruction name="VPMULHUD" form="zmm, zmm, m512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:512] := 0
+
+# Compilation fails
+def test190():
+	return '''
+<intrinsic tech="AVX2" name="_mm256_shuffle_epi8">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Swizzle</category>
+	<return type="__m256i" varname="dst" etype="UI8"/>
+	<parameter type="__m256i" varname="a" etype="UI8"/>
+	<parameter type="__m256i" varname="b" etype="UI8"/>
+	<description>Shuffle 8-bit integers in "a" within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of "b", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*8
+	IF b[i+7] == 1
+		dst[i+7:i] := 0
+	ELSE
+		index[3:0] := b[i+3:i]
+		dst[i+7:i] := a[index*8+7:index*8]
+	FI
+	IF b[128+i+7] == 1
+		dst[128+i+7:128+i] := 0
+	ELSE
+		index[3:0] := b[128+i+3:128+i]
+		dst[128+i+7:128+i] := a[128+index*8+7:128+index*8]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPSHUFB" form="ymm, ymm, ymm" xed="VPSHUFB_YMMqq_YMMqq_YMMqq"/>
 	<header>immintrin.h</header>
 </intrinsic>
 '''
 #dst[MAX:256] := 0
+
+def test191():
+	return '''
+<intrinsic tech="SSSE3" vexEq="TRUE" name="_mm_maddubs_epi16">
+	<type>Integer</type>
+	<CPUID>SSSE3</CPUID>
+	<category>Arithmetic</category>
+	<return type="__m128i" varname="dst" etype="SI16"/>
+	<parameter type="__m128i" varname="a" etype="UI8"/>
+	<parameter type="__m128i" varname="b" etype="SI8"/>
+	<description>Vertically multiply each unsigned 8-bit integer from "a" with the corresponding signed 8-bit integer from "b", producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in "dst".</description>
+	<operation>
+FOR j := 0 to 7
+	i := j*16
+	dst[i+15:i] := Saturate16( a[i+15:i+8]*b[i+15:i+8] + a[i+7:i]*b[i+7:i] )
+ENDFOR
+	</operation>
+	<instruction name="PMADDUBSW" form="xmm, xmm" xed="PMADDUBSW_XMMdq_XMMdq"/>
+	<header>tmmintrin.h</header>
+</intrinsic>
+  '''
+#dst[MAX:256] := 0
+
+
+def test192():
+	return '''
+<intrinsic tech="AVX2" name="_mm_blend_epi32">
+	<type>Integer</type>
+	<CPUID>AVX2</CPUID>
+	<category>Swizzle</category>
+	<return type="__m128i" varname="dst" etype="UI32"/>
+	<parameter type="__m128i" varname="a" etype="UI32"/>
+	<parameter type="__m128i" varname="b" etype="UI32"/>
+	<parameter type="const int" varname="imm8" etype="IMM" immwidth="4"/>
+	<description>Blend packed 32-bit integers from "a" and "b" using control mask "imm8", and store the results in "dst".</description>
+	<operation>
+FOR j := 0 to 3
+	i := j*32
+	IF imm8[j]
+		dst[i+31:i] := b[i+31:i]
+	ELSE
+		dst[i+31:i] := a[i+31:i]
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VPBLENDD" form="xmm, xmm, xmm, imm8" xed="VPBLENDD_XMMdq_XMMdq_XMMdq_IMMb"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
+#dst[MAX:128] := 0
+
 
 def Compile():
   #sema = test84___()
@@ -4632,23 +4929,105 @@ def Compile():
 	sema = test71()
 	sema = test70()
 	sema = test171()
+	sema = test175()
+	sema = test177()
+	sema = test157()
+	#sema = test103()
+	#sema = test98()
+	#sema = test154()
 	#sema = test14__()
 	#sema = test179()
+	sema = test181()
+	sema = test171()
+	sema = test182()
+	sema = test103()
 	#sema = test180()
+	sema = test77() # fails
+	#sema = test84___()
+	#sema = test99()
+	#sema = test97()
+	sema = test89()  # fails
+	#sema = test88()  # Bravo!
+	#sema = test72()
+	#sema = test178()
+	sema = test171()
+	sema = test13() # fails
+	sema = test31()
+	sema = test46()
+	sema = test60()
+	sema = test61() 
+	sema = test83()
+	sema = test16()
+	sema = test183()
+	sema = test184()
+	sema = test185()
+	sema = test186()
+	sema = test187()
+	sema = test188()
+	sema = test72()
+	sema = test46()
+	sema = test77()
+	sema = test61()
+	sema = test171()
+	sema = test31()
+	sema = test46()
+	sema = test83()
+	sema = test182()
+	sema = test181()
+	sema = test88()
+	sema = test75()
+	sema = test58()
+	sema = test185()
+	sema = test77()
+	sema = test183()  # fails
+	sema = test188()
+	sema = test189()
+	sema = test151()
+	sema = test155()
+	sema = test180()
+	sema = test98()
+	sema = test152()
+	sema = test156()
+	sema = test158()
+	sema = test133()
+	sema = test141()
+	sema = test149()
+	sema = test141()
+	sema = test61()
+	sema = test190()
+	sema = test191()
+	sema = test112()
+	sema = test192()
+	#sema = test171()
+	#sema = test186()
+	#sema = test157()
+	#sema = test156()
+	#sema = test178()
+	#sema = test148()
+	#sema = test75()
+	#sema = test63()
+	#sema = test56()
+	#sema = test101()
+	#sema = test144()
+	#sema = test177()
+	#sema = test14__()
 	#sema = test178__()
 	#sema = test50()
 	#sema = test96()
 	print(sema)
-	intrin_node = ET.fromstring(sema)
-	spec = GetSemaFromXML(intrin_node)
-	print(spec)
+	Node = ET.fromstring(sema)
+	Spec = GetSemaFromXML(Node)
+	print(Spec)
 	RootContext = x86RoseContext()
-	CompiledFunction = CompileSemantics(spec, RootContext)
-	return RootContext, CompiledFunction
+	CompiledFunction = CompileSemantics(Spec, RootContext)
+	FunctionInfo = RoseFunctionInfo()
+	FunctionInfo.addContext(RootContext)
+	FunctionInfo.addRawSemantics(Spec)
+	FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+	return [FunctionInfo]
 
 
 if __name__ == '__main__':
   Compile()
-
 
 
