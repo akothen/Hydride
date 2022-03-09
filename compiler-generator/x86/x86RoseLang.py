@@ -2,8 +2,6 @@
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
 from x86RoseCompiler import CompileSemantics, x86RoseContext
-from RoseFunctionInfo import *
-
 
 def test1():
   return '''
@@ -5020,6 +5018,7 @@ def Compile():
 	print(Spec)
 	RootContext = x86RoseContext()
 	CompiledFunction = CompileSemantics(Spec, RootContext)
+	from RoseFunctionInfo import RoseFunctionInfo
 	FunctionInfo = RoseFunctionInfo()
 	FunctionInfo.addContext(RootContext)
 	FunctionInfo.addRawSemantics(Spec)
