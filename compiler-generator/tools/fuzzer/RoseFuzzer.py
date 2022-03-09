@@ -1,9 +1,19 @@
+#############################################################
+#
+# Rosette code fuzzer to compare rosette code correctness
+# against vendor-provided C intrinsics.
+#
+#############################################################
+
 
 from enum import Enum, auto
 from copy import deepcopy
 from RoseAbstractions import RoseFunction
 from RoseContext import *
 from RosetteCodeEmitter import *
+from RoseFunctionInfo import *
+from RoseCodeGenerator import *
+
 import Rosex86CCodeEmitter
 
 
@@ -16,6 +26,7 @@ def SizeInBytes(Size):
 
 
 class RoseFuzzer():
+  # Error codes
   class ERR(Enum):
     NONE = auto()
     NEQ = auto()
@@ -23,9 +34,17 @@ class RoseFuzzer():
     C = auto()
     BOTH = auto()
 
-  def __init__(self, FunctionToSema : dict, FunctionToContext : dict):
-    self.FunctionToSema = FunctionToSema
-    self.FunctionToContext = FunctionToContext
+  # Keep a record of all target-specific APIs here
+  TargetAPI = {
+    "x86" : Rosex86CCodeEmitter
+  }
+
+  def __init__(self, Target : str):
+    # Generate code for all semantics first
+    CodeGenerator = RoseCodeGenerator(Target)
+    self.FunctionInfoList = CodeGenerator.codeGen()
+    # Save target 
+    self.Target = Target
 
   def genRandomInputs(self, Function : RoseFunction):
     FuncArgs = Function.getArgs()
@@ -41,26 +60,27 @@ class RoseFuzzer():
 
   def fuzz(self):
     File = open("FUZZ_RESULTS", "w+")
-    for Function, _ in self.FunctionToSema.items():
-      RosetteOut, RosetteErr, COut, CErr, Result = self.fuzzInstruction(Function)
-      self.dumpResults(File, Function, RosetteOut, RosetteErr, COut, CErr, Result)
+    for FunctionInfo in self.FunctionInfoList:
+      assert isinstance(FunctionInfo, RoseFunctionInfo)
+      RosetteOut, RosetteErr, COut, CErr, Result = self.fuzzInstruction(FunctionInfo)
+      self.dumpResults(File, FunctionInfo, RosetteOut, RosetteErr, COut, CErr, Result)
     File.close()
 
-  def fuzzInstruction(self, Function : RoseFunction):
-    assert Function in self.FunctionToSema
-    assert Function in self.FunctionToContext
-    Sema = self.FunctionToSema[Function]
-    Context = self.FunctionToContext[Function]
+  def fuzzInstruction(self, FunctionInfo : RoseFunctionInfo):
+    Sema = FunctionInfo.getRawSemantics()
+    Context = FunctionInfo.getContext()
+    Function = FunctionInfo.getLatestFunction()
     assert isinstance(Context, RoseContext)
-    RosetteEmitter = RosetteCodeEmitter(Function, Sema, Context)
-    CEmitter = Rosex86CCodeEmitter.CCodeEmitter(Function, Sema)
+    RosetteEmitter = RosetteCodeEmitter(FunctionInfo)
+    CEmitter = self.TargetAPI[self.Target].CCodeEmitter(FunctionInfo)
     ConcArgs = self.genRandomInputs(Function)
     RosetteOut, RosetteErr = RosetteEmitter.test(ConcArgs)
     COut, CErr = CEmitter.test(ConcArgs)
     Result = self.compareResults(RosetteOut, RosetteErr, COut, CErr)
     return RosetteOut, RosetteErr, COut, CErr, Result
 
-  def dumpResults(self, File, Function, RosetteOut, RosetteErr, COut, CErr, Result):
+  def dumpResults(self, File, FunctionInfo, RosetteOut, RosetteErr, COut, CErr, Result):
+    Function = FunctionInfo.getLatestFunction()
     assert isinstance(Function, RoseFunction)
     try:
       FmtOut = "-----------------------------\n"
@@ -97,12 +117,7 @@ class RoseFuzzer():
 
 
 if __name__ == '__main__':
-  Sema, Context, Function = x86RoseLang.Compile()
-  FunctionToSema = dict()
-  FunctionToContext = dict()
-  FunctionToSema[Function] = Sema
-  FunctionToContext[Function] = Context
-  Fuzzer = RoseFuzzer(FunctionToSema, FunctionToContext)
+  Fuzzer = RoseFuzzer("x86")
   Fuzzer.fuzz()
 
-  
+

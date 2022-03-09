@@ -1,19 +1,16 @@
 
-from RoseOpt import RunRoseGenOnFuction
-from RoseAbstractions import RoseFunction
-from RoseContext import *
 from RoseCodeEmitter import *
-
-import x86RoseLang
+from RoseCodeGenerator import *
 
 
 class RosetteCodeEmitter(RoseCodeEmitter):
-  def __init__(self, Function : RoseFunction, Sema, Context : RoseContext):
-    super().__init__(Function, Sema)
-    self.Context = Context
+  def __init__(self, FunctionInfo : RoseFunctionInfo):
+    assert isinstance(FunctionInfo, RoseFunctionInfo)
+    super().__init__(FunctionInfo)
 
   def getFileName(self):
-      return "rkt_{}.rkt".format(self.getFunction().getName())
+    Function = self.getFunctionInfo().getLatestFunction()
+    return "rkt_{}.rkt".format(Function.getName())
 
   def createFile(self, ConcArgs : list):
     Content = [
@@ -27,34 +24,30 @@ class RosetteCodeEmitter(RoseCodeEmitter):
       print("ConcArgs:")
       print(ConcArgs)
       if Param.getType().getBitwidth() < 8:
-        assert self.getInstInfo().params[Index].is_imm
         print(ConcArgs[Index])
         [v] = ConcArgs[Index]
-        v = v & (2**(self.getInstInfo().imm_width) - 1)
+        v = v & (2**(Param.getType().getBitwidth() - 1))
         HexVal = hex(v)
         HexValString = str(HexVal[2:])
         Input = "#x"
         Input += HexValString
       else:
         ParamBytes = SizeInBytes(Param.getType().getBitwidth())
-        print("ParamBytes:")
-        print(ParamBytes)
-        print(self.getInstInfo().imm_width)
         Input = "#x"
         for j in range(0, ParamBytes):
           print("ConcArgs[Index][j]:")
           print(ConcArgs[Index][j] )
           #v = ConcArgs[Index][j] & 0xff
-          if self.getInstInfo().params[Index].is_imm:
-            #v = int(v % imm8_max(Function.getName()))
-            v = ConcArgs[Index][j] & 0xff
-            v = v & (2**(self.getInstInfo().imm_width) - 1)
-          else:
-            Temp = []
-            print(ConcArgs[Index])
-            Temp.extend(ConcArgs[Index])
-            Temp.reverse()
-            v = Temp[j] & 0xff
+          #if self.getInstInfo().params[Index].is_imm:
+          #  #v = int(v % imm8_max(Function.getName()))
+          #  v = ConcArgs[Index][j] & 0xff
+          #  v = v & (2**(Param.getType().getBitwidth() - 1))
+          #else:
+          Temp = []
+          print(ConcArgs[Index])
+          Temp.extend(ConcArgs[Index])
+          Temp.reverse()
+          v = Temp[j] & 0xff
           HexVal = hex(v)
           print("HexVal:")
           print(HexVal)
@@ -72,15 +65,16 @@ class RosetteCodeEmitter(RoseCodeEmitter):
     InputNames = list()
     print("LEN:")
     print(len(ConcArgs))
-    Content.append(RunRoseGenOnFuction(self.getInstInfo(), \
-                                   self.getFunction(), self.Context))
-    for Index, Param in enumerate(self.getFunction().getArgs()):
+    Function = self.getFunctionInfo().getLatestFunction()
+    CodeGenerator = self.getFunctionInfo().getCodeGenerator()
+    Content.append(CodeGenerator.codeGen(self.getFunctionInfo(), JustGenRosette=True))
+    for Index, Param in enumerate(Function.getArgs()):
       Input = GenInputs(Index, Param, ConcArgs)
       Name = "_" + str(Index)
       InputNames.append(Name)
-      Bitwidth = self.getFunction().getArg(Index).getType().getBitwidth()
+      Bitwidth = Function.getArg(Index).getType().getBitwidth()
       Content.append("(define {} (bv {} {}))\n".format(Name, Input, str(Bitwidth)))
-    Content.append("(pretty-print ({} {}))\n".format(self.getFunction().getName(),
+    Content.append("(pretty-print ({} {}))\n".format(Function.getName(),
                                                     " ".join(InputNames)))
     return "\n".join(Content)
 
@@ -93,15 +87,17 @@ class RosetteCodeEmitter(RoseCodeEmitter):
   def extractAndFormatOutput(self, Output):
     Start = Output.find("#x")
     String = Output[Start:]
-    Bitwidth = self.getFunction().getReturnValue().getType().getBitwidth()
+    Function = self.getFunctionInfo().getLatestFunction()
+    Bitwidth = Function.getReturnValue().getType().getBitwidth()
     End = String.find(" " + str(Bitwidth) + ")")
     return "0x" + String[2:End].strip()
 
 
 
 if __name__ == '__main__':
-  Sema, Context, Function = x86RoseLang.Compile()
-  RoseEmitter = RosetteCodeEmitter(Function, Sema, Context)
+  CodeGenerator = RoseCodeGenerator(Target="x86")
+  FunctionInfoList = CodeGenerator.codeGen()
+  RoseEmitter = RosetteCodeEmitter(FunctionInfoList[0])
   RoseEmitter.test()
 
 

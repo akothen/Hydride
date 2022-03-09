@@ -1,8 +1,14 @@
+#############################################################
+#
+# C code emitter for x86.
+#
+#############################################################
 
-from RoseAbstractions import RoseFunction
+
 from RoseCodeEmitter import *
 from x86Types import x86Types
-import x86RoseLang
+from RoseFunctionInfo import *
+from RoseCodeGenerator import *
 
 
 def x86ToC(T):
@@ -76,18 +82,18 @@ def GetInitializer(Tuple):
   assert False
 
 
-Header = "/usr/local/Cellar/llvm/13.0.0_2/lib/clang/13.0.0/include/immintrin.h"
-
 class CCodeEmitter(RoseCodeEmitter):
-  def __init__(self, Function : RoseFunction, Sema):
-    super().__init__(Function, Sema)
+  def __init__(self, FunctionInfo : RoseFunctionInfo):
+    assert isinstance(FunctionInfo, RoseFunctionInfo)
+    super().__init__(FunctionInfo)
 
   def getFileName(self):
-    return "c_{}.c".format(self.getFunction().getName())
+    Function = self.getFunctionInfo().getLatestFunction()
+    return "c_{}.c".format(Function.getName())
 
   def createFile(self, ConcArgs : list):
     Content = ["#include <immintrin.h>", "#include <stdio.h>", \
-               "#include <stdlib.h>", "#include <stdint.h>\n"]
+               "#include <stdint.h>\n"]
     Content.append('''\nvoid hex_out(const uint8_t * buf, ssize_t sz) {
     for (ssize_t i = sz - 1; i >= 0; --i) {
         printf("%02x", buf[i]);
@@ -95,15 +101,16 @@ class CCodeEmitter(RoseCodeEmitter):
     printf("\\n");
 }\n\n''')
     Content.append("int main() {")
+    Sema = self.getFunctionInfo().getRawSemantics()
 
     def GenMainFunction(Index, Param, ConcArgs):
       BinOut = []
       ParamBytes = SizeInBytes(Param.getType().getBitwidth())
       for j in range(ParamBytes):
         v = ConcArgs[Index][j] & 0xff
-        if self.getInstInfo().params[Index].is_imm:
+        if Sema.params[Index].is_imm:
           #v = int(v % imm8_max(Function.getName()))
-          v = int(v & (2**(self.getInstInfo().imm_width) - 1))
+          v = int(v & (2**(Sema.imm_width) - 1))
         HexVal = hex(v)
         print("HexVal:")
         print(HexVal)
@@ -113,12 +120,12 @@ class CCodeEmitter(RoseCodeEmitter):
         if len(HexValString) == 1:
           HexValString = "0" + HexValString
         BinOut.append("0x" + HexValString)
-      if self.getInstInfo().params[Index].is_imm:
+      if Sema.params[Index].is_imm:
         return "#define {} {}".format(Param.getName(), BinOut[0])
       
       BinOut.reverse()
       ElemsList = list()
-      ElemNumBytes = SizeInBytes(x86Types[self.getInstInfo().elem_type].getBitwidth())
+      ElemNumBytes = SizeInBytes(x86Types[Sema.elem_type].getBitwidth())
       print("ElemNumBytes:")
       print(ElemNumBytes)
       print("ParamBytes:")
@@ -133,25 +140,24 @@ class CCodeEmitter(RoseCodeEmitter):
       print("ElemsList:")
       print(ElemsList)
       print((ElemNumBytes*8, ParamBytes * 8))
-      InitArg = "{} {} = {}({});".format(self.getInstInfo().params[Index].type, Param.getName(), 
+      InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
                                   GetInitializer((ElemNumBytes*8, ParamBytes * 8)), ",".join(ElemsList))
       Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
       Buf = Buf.replace("LBRACK", "{")
       Buf = Buf.replace("RBRACK", "}")
-      Var = " {} {};\n".format(x86ToC(self.getInstInfo().params[Index].type), Param.getName())
+      Var = " {} {};\n".format(x86ToC(Sema.params[Index].type), Param.getName())
       Init = "  memcpy(&{}, _{}, {});\n".format(Param.getName(), Index, ParamBytes)
       return InitArg#Buf + Var + Init
     
-    Function = self.getFunction()
+    Function = self.getFunctionInfo().getLatestFunction()
     Params = []
-    for Index, Param in enumerate(self.getFunction().getArgs()):
+    for Index, Param in enumerate(Function.getArgs()):
       Params.append(Param.getName())
       Content.append(GenMainFunction(Index, Param, ConcArgs))
     RetBitwidth = Function.getReturnValue().getType().getBitwidth()
     #Content.append("  uint8_t out[" + str(SizeInBytes(RetBitwidth)) + "] = {0};")
-    Content.append("  {} ret = {}({});".format(x86ToC(self.getInstInfo().rettype),
-                                              self.getFunction().getName(),
-                                              ",".join(Params)))
+    Content.append("  {} ret = {}({});".format(x86ToC(Sema.rettype),
+                                              Function.getName(), ", ".join(Params)))
     #Content.append("  memcpy(out, &ret, {});".format(SizeInBytes(RetBitwidth)))
     #Content.append("  hex_out(out, {});".format(SizeInBytes(RetBitwidth)))
     Content.append("  hex_out(&ret, {});".format(SizeInBytes(RetBitwidth)))
@@ -175,8 +181,10 @@ class CCodeEmitter(RoseCodeEmitter):
 
 
 if __name__ == '__main__':
-  Sema, Context, Function = x86RoseLang.Compile()
-  CEmitter = CCodeEmitter(Function, Sema)
+  CodeGenerator = RoseCodeGenerator(Target="x86")
+  FunctionInfoList = CodeGenerator.codeGen()
+  CEmitter = CCodeEmitter(FunctionInfoList[0])
   CEmitter.test()
+
 
 

@@ -2,8 +2,7 @@
 import subprocess 
 from copy import deepcopy
 
-from RoseAbstractions import RoseFunction
-
+from RoseFunctionInfo import *
 
 def SizeInBytes(Size):
   if Size < 8:
@@ -14,21 +13,17 @@ def SizeInBytes(Size):
 
 
 class RoseCodeEmitter():
-  def __init__(self, Function : RoseFunction, Sema):
-    self.Function = Function
-    self.Sema = Sema
+  def __init__(self, FunctionInfo : RoseFunctionInfo):
+    self.FunctionInfo = FunctionInfo
   
-  def getFunction(self):
-    return self.Function
-  
-  def getInstInfo(self):
-    return self.Sema
+  def getFunctionInfo(self):
+    return self.FunctionInfo
 
   def getFileName(self):
     NotImplemented
 
   def genRandomInputs(self):
-    FuncArgs = self.getFunction().getArgs()
+    FuncArgs = self.getFunctionInfo().getLatestFunction().getArgs()
     ConcArgs = []
     Counter = 0
     for Index in range(len(FuncArgs)):
