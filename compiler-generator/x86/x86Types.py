@@ -62,5 +62,19 @@ x86Types = {
     'dword': RoseType.getBitVectorTy(32),
     'qword': RoseType.getBitVectorTy(64),
     'm128': RoseType.getBitVectorTy(128),
+
+    "SI8": RoseType.getBitVectorTy(8),
+    "SI16": RoseType.getBitVectorTy(16),
+    "SI32": RoseType.getBitVectorTy(32),
+    "SI64": RoseType.getBitVectorTy(64),
+    "UI8": RoseType.getBitVectorTy(8),
+    "UI16":RoseType.getBitVectorTy(16),
+    "UI32": RoseType.getBitVectorTy(32),
+    "UI64": RoseType.getBitVectorTy(64),
+    "FP32": RoseType.getVectorTy(FloatTy, 32 / FloatTyBitwidth),
+    "FP64": RoseType.getVectorTy(DoubleTy, 512 / DoubleTyBitwidth),
+    "M128": RoseType.getBitVectorTy(128),
+    "M256": RoseType.getBitVectorTy(256),
+    "M512": RoseType.getBitVectorTy(512),
 }
 
