@@ -59,7 +59,7 @@ def x86ToC(T):
   return LookupTable[T]
 
 
-def GetInitializer(Tuple):
+def GetVectorInitializer(Tuple):
   LookupTable = {
     (8, 64) : "_mm_set_pi8",
     (16, 64) : "_mm_set_pi16",
@@ -79,6 +79,20 @@ def GetInitializer(Tuple):
   }
   if Tuple in LookupTable:
     return LookupTable[Tuple]
+  print(Tuple)
+  assert False
+
+
+def GetMaskInitializer(Bitwidth):
+  LookupTable = {
+    8 : "_cvtu32_mask8",
+    16 : "_cvtu32_mask16",
+    32 : "_cvtu32_mask32",
+    64 : "_cvtu64_mask64",
+  }
+  if Bitwidth in LookupTable:
+    return LookupTable[Bitwidth]
+  print(Bitwidth)
   assert False
 
 
@@ -140,8 +154,13 @@ class CCodeEmitter(RoseCodeEmitter):
       print("ElemsList:")
       print(ElemsList)
       print((ElemNumBytes*8, ParamBytes * 8))
+      Param.print()
+      if Sema.params[Index].is_mask:
+         Initializer = GetMaskInitializer(ElemNumBytes*8)
+      else:
+        Initializer = GetVectorInitializer((ElemNumBytes*8, ParamBytes * 8))
       InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
-                                  GetInitializer((ElemNumBytes*8, ParamBytes * 8)), ",".join(ElemsList))
+                                  Initializer, ",".join(ElemsList))
       Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
       Buf = Buf.replace("LBRACK", "{")
       Buf = Buf.replace("RBRACK", "}")

@@ -30,7 +30,7 @@ Lookup = namedtuple('Lookup', ['obj', 'key'])
 
 Break = namedtuple('Break', [])
 
-Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'id'])
+Parameter = namedtuple('Parameter', ['name', 'type', 'is_signed', 'is_imm', 'is_mask', 'id'])
 
 Sema = namedtuple('Sema', [
   'intrin', 'inst', 'params',

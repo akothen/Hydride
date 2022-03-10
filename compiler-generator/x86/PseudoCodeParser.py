@@ -322,42 +322,46 @@ def ParseCpuId(CPUID):
 
 
 def GetSemaFromXML(node):
-    Params = []
-    imm_width = None
-    ID = 0
-    for param_node in node.findall('parameter'):
-      name = param_node.attrib.get('varname', '')
-      type = param_node.attrib['type']
-      if name == '':
-          continue
-      is_signed = param_node.attrib.get('etype', '').startswith('SI')
-      is_imm = param_node.attrib.get('etype') == 'IMM'
-      if is_imm:
-          imm_width = int(param_node.attrib.get('immwidth', '8'))
-      id = "param" + "." + name + "." + str(ID)
-      Params.append(Parameter(name, type, is_signed, is_imm, id))
-      ID += 1
-    CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
-    inst = node.find('instruction')
-    assert (inst is not None)
-    operation = node.find('operation')
-    assert (operation is not None)
-    spec = Parse(operation.text)
-    output = node.find('return')
-    assert (output is not None)
-    return Sema(
-        intrin=node.attrib['name'],
-        inst=inst.attrib.get('name'),
-        spec=spec,
-        params=Params,
-        rettype=output.attrib['type'],
-        ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
-        cpuids=CPUIDs,
-        inst_form=inst.attrib.get('form', ''),
-        imm_width=imm_width,
-        elem_type=output.attrib['etype'],
-        xed=inst.attrib.get('xed')
-      )
+  Params = []
+  imm_width = None
+  ID = 0
+  for param_node in node.findall('parameter'):
+    name = param_node.attrib.get('varname', '')
+    type = param_node.attrib['type']
+    if name == '':
+        continue
+    is_signed = param_node.attrib.get('etype', '').startswith('SI')
+    is_imm = param_node.attrib.get('etype') == 'IMM'
+    if is_imm:
+        imm_width = int(param_node.attrib.get('immwidth', '8'))
+    if "__mmask" in type:
+      is_mask = True
+    else:
+      is_mask = False
+    id = "param" + "." + name + "." + str(ID)
+    Params.append(Parameter(name, type, is_signed, is_imm, is_mask, id))
+    ID += 1
+  CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
+  inst = node.find('instruction')
+  assert (inst is not None)
+  operation = node.find('operation')
+  assert (operation is not None)
+  spec = Parse(operation.text)
+  output = node.find('return')
+  assert (output is not None)
+  return Sema(
+      intrin=node.attrib['name'],
+      inst=inst.attrib.get('name'),
+      spec=spec,
+      params=Params,
+      rettype=output.attrib['type'],
+      ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
+      cpuids=CPUIDs,
+      inst_form=inst.attrib.get('form', ''),
+      imm_width=imm_width,
+      elem_type=output.attrib['etype'],
+      xed=inst.attrib.get('xed')
+    )
 
 
 def Parsex86Semantics(FileName):
@@ -486,12 +490,16 @@ def Parsex86Semantics(FileName):
       InstructionList.append(intrin)
 
   # Parse every instruction
+  SemaList = list()
   for Instruction in InstructionList:
     Sema = GetSemaFromXML(Instruction)
     print(Sema)
     print(Sema.intrin, Sema.cpuids, flush=True)
+    SemaList.append(Sema)
   print("NUM SKIPPED INSTRUCTIONS:")
   print(NumSkipped)
+
+  return SemaList
 
 
 if __name__ == '__main__':
