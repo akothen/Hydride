@@ -9,6 +9,7 @@ from RoseCodeEmitter import *
 from x86Types import x86Types
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
+from RoseToolsUtils import *
 
 
 def x86ToC(T):

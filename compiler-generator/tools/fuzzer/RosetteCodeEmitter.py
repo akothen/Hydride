@@ -1,6 +1,7 @@
 
 from RoseCodeEmitter import *
 from RoseCodeGenerator import *
+from RoseToolsUtils import *
 
 
 class RosetteCodeEmitter(RoseCodeEmitter):

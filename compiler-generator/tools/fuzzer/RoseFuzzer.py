@@ -13,16 +13,9 @@ from RoseContext import *
 from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
+from RoseToolsUtils import *
 
 import Rosex86CCodeEmitter
-
-
-def SizeInBytes(Size):
-  if Size < 8:
-      return 1
-  Numbytes = int(Size / 8)
-  assert Numbytes * 8 == Size
-  return Numbytes
 
 
 class RoseFuzzer():
