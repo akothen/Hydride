@@ -29,14 +29,21 @@ class RoseCodeGenerator:
 
   def codeGen(self, FunctionInfo = None, JustGenRosette : bool = False, \
                     ExtractConstants : bool = False):
+    print("START CODEGEN-----")
     if FunctionInfo == None:
       FunctionInfoList = self.TargetAPI[self.Target].Compile()
-      for FunctionInfo in FunctionInfoList:
-        self.codeGen(FunctionInfo, JustGenRosette, ExtractConstants)
-        FunctionInfo.addCodeGenerator(self)
+      for FunctionInfoIt in FunctionInfoList:
+        print("START CODEGEN")
+        print("-----Function NAEEM:")
+        print(FunctionInfoIt.getLatestFunction().getName())
+        self.codeGen(FunctionInfoIt, JustGenRosette, ExtractConstants)
+        print(type(self))
+        FunctionInfoIt.addCodeGenerator(self)
       return FunctionInfoList
     # Generate code for the function in the given function info
     Function = FunctionInfo.getLatestFunction()
+    print("Function NAEEM:")
+    print(Function.getName())
     Context = FunctionInfo.getContext()
     if JustGenRosette == False:
       Function = Function.clone()
@@ -63,19 +70,22 @@ class RoseCodeGenerator:
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       if ExtractConstants == True:
-        RoseExtractConstants.Run(Function, Context)
+        ArgToConstantValsMap = dict()
+        RoseExtractConstants.Run(Function, Context, ArgToConstantValsMap)
         FunctionInfo.addFunctionAtNewStage(Function)
+        FunctionInfo.addArgsToConcreteMap(ArgToConstantValsMap)
         Function = Function.clone()
     RosetteCode = RosetteGen.CodeGen(Function)
     FunctionInfo.addContext(Context)
+    print("END CODEGEN")
+    print(RosetteCode)
     return RosetteCode
 
 
 
 if __name__ == '__main__':
   CodeGenerator = RoseCodeGenerator(Target="x86")
-  CodeGenerator.codeGen(JustGenRosette=True, ExtractConstants=True)
-
+  CodeGenerator.codeGen(JustGenRosette=False, ExtractConstants=True)
 
 
 
