@@ -10,6 +10,7 @@ from RoseContext import *
 from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
+from RoseToolsUtils import *
 
 from RoseEquivalenceClass import *
 
@@ -23,7 +24,7 @@ class RoseSimilarityChecker():
     for Target in self.TargetList:
       # Generate code for all semantics first
       CodeGenerator = RoseCodeGenerator(Target)
-      FunctionInfoList = CodeGenerator.codeGen()
+      FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=True)
       self.FunctionInfoList.extend(FunctionInfoList)
       # Generate rosette code
       for FunctionInfo in FunctionInfoList:
@@ -32,46 +33,35 @@ class RoseSimilarityChecker():
         self.FunctionToRosetteCodeMap[Function] = \
                     CodeGenerator.codeGen(FunctionInfo, JustGenRosette=True)
 
-  def genSymbolicInput(self, Param):
-    Input = "(define-symbolic {} (bitvector {}}))\n".format(Param.getName(),\
+  def genSymbolicInput(self, Param, NameSuffix):
+    Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
                                          str(Param.getType().getBitwidth()))
     return Input
 
-  def genConcreteInput(self, Param, ConcreteArg):
+  def genConcreteInput(self, Param, ConcreteArg, NameSuffix):
+    assert isinstance(ConcreteArg, RoseConstant)
     print("Param.getType().getBitwidth():")
     print(Param.getType().getBitwidth())
-    Input = "(define {} (bv #x".format(Param.getName())
-    if Param.getType().getBitwidth() < 8:
-      print(ConcreteArg)
-      [v] = ConcreteArg
-      v = v & (2**(Param.getType().getBitwidth() - 1))
-      HexVal = hex(v)
+    if ConcreteArg.getType().isBitVectorTy():
+      Input = "(define {} (bv #x".format(Param.getName() + NameSuffix)
+      HexVal = hex(ConcreteArg.getValue())
+      print("HexVal:")
+      print(HexVal)
       HexValString = str(HexVal[2:])
+      print("HexValString:")
+      print(HexValString)
+      LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
+      for _ in range(LeftOver):
+        HexValString = "0" + HexValString
+      print(HexValString)
       Input += HexValString
+      print("Input:")
+      print(Input)
+      Input += " " + str(Param.getType().getBitwidth()) + "))\n"
     else:
-      ParamBytes = SizeInBytes(Param.getType().getBitwidth())
-      for j in range(0, ParamBytes):
-        print("ConcreteArg[j]:")
-        print(ConcreteArg[j] )
-        Temp = []
-        print(ConcreteArg)
-        Temp.extend(ConcreteArg)
-        Temp.reverse()
-        v = Temp[j] & 0xff
-        HexVal = hex(v)
-        print("HexVal:")
-        print(HexVal)
-        HexValString = str(HexVal[2:])
-        print("HexValString:")
-        print(HexValString)
-        if len(HexValString) == 1:
-          HexValString = "0" + HexValString
-        print(HexValString)
-        Input += HexValString
-    print("Input:")
-    print(Input)
-    Input += " " + str(Param.getType().getBitwidth()) + "))\n"
-    return 
+      assert ConcreteArg.getType().isIntegerTy()
+      Input = "(define {} {})\n".format(Param.getName() + NameSuffix, str(ConcreteArg.getValue()))
+    return Input
 
   def qualifiesForSimilarityChecking(self, FunctionInfo1 : RoseFunctionInfo, \
                                     FunctionInfo2 : RoseFunctionInfo):
@@ -81,12 +71,12 @@ class RoseSimilarityChecker():
     if Function1.getNumArgs() != Function2.getNumArgs():
       return False
 
-    def GetSymbolicAndConcreteArgs(self, FunctionInfo : RoseFunctionInfo):
+    def GetSymbolicAndConcreteArgs(FunctionInfo : RoseFunctionInfo):
       Function = FunctionInfo.getLatestFunction()
       ConcreteArgs = list()
       SymbolicArgs = list()
       for Arg in Function.getArgs():
-        if Arg in FunctionInfo.argHasConcreteVal():
+        if FunctionInfo.argHasConcreteVal(Arg) == True:
           ConcreteArgs.append(Arg)
         else:
           SymbolicArgs.append(Arg)
@@ -102,15 +92,15 @@ class RoseSimilarityChecker():
     # TODO: Are there other weed out criteria?
     return True
 
-  def emitVerificationCodeForFunction(self, FunctionInfo : RoseFunctionInfo):
+  def emitVerificationCodeForFunction(self, FunctionInfo : RoseFunctionInfo, NameSuffix : str):
     Function = FunctionInfo.getLatestFunction()
     Code = ""
     for Arg in  Function.getArgs():
-      if Arg not in FunctionInfo.argHasConcreteVal():
-        Code += self.genSymbolicInput(Arg)
+      if FunctionInfo.argHasConcreteVal(Arg) == False:
+        Code += self.genSymbolicInput(Arg, NameSuffix)
       else:
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
-        Code += self.genConcreteInput(Arg, ConcreteVal)
+        Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix)
     return Code
 
   def emitVerificationCodeFor(self, FunctionInfo1 : RoseFunctionInfo, \
@@ -126,35 +116,44 @@ class RoseSimilarityChecker():
     Content.append(self.FunctionToRosetteCodeMap[Function1])
     Content.append(self.FunctionToRosetteCodeMap[Function2])
     # Generate verification code on first set of inputs
-    Content.append(self.emitVerificationCodeForFunction(Function1))
+    NameSuffix = "_1"
+    Content.append(self.emitVerificationCodeForFunction(FunctionInfo1, NameSuffix))
     ArgNamesList1 = [Arg.getName() for Arg in Function1.getArgs()]
-    Content.append("(verify (assert (equal? ({} {}) ({} {})\n".format(Function1.getName(), \
-                " ".format(ArgNamesList1), Function2.getName(), " ".format(ArgNamesList1)))
+    ArgNamesList1String = ""
+    for Name in ArgNamesList1:
+      ArgNamesList1String += Name + NameSuffix + " "
+    Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(), \
+                ArgNamesList1String, Function2.getName(), ArgNamesList1String, NameSuffix))
      # Generate verification code on second set of inputs
-    Content.append(self.emitVerificationCodeForFunction(Function2))
+    NameSuffix = "_2"
+    Content.append(self.emitVerificationCodeForFunction(FunctionInfo2, NameSuffix))
     ArgNamesList2 = [Arg.getName() for Arg in Function2.getArgs()]
-    Content.append("(verify (assert (equal? ({} {}) ({} {})\n".format(Function1.getName(), \
-                " ".format(ArgNamesList2), Function2.getName(), " ".format(ArgNamesList2)))
-    return Content.join("\n")
+    ArgNamesList2String = ""
+    for Name in ArgNamesList2:
+      ArgNamesList2String += Name + NameSuffix + " "
+    Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(), \
+                ArgNamesList2String, Function2.getName(), ArgNamesList2String))
+    return "\n".join(Content)
     
   def verify(self, FunctionInfo1 : RoseFunctionInfo, \
                    FunctionInfo2 : RoseFunctionInfo):
-    if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2):
+    if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2) == False:
       return
     # Generate verification code
     Code = self.emitVerificationCodeFor(FunctionInfo1, FunctionInfo2)
     Function1 = FunctionInfo1.getLatestFunction()
     Function2 = FunctionInfo2.getLatestFunction()
-    FileName = "test_" + Function1.getName() + "_" + Function2.getName()
+    FileName = "test_" + Function1.getName() + "_" + Function2.getName() + ".rkt"
     try:
       File = open(FileName, "w+")
       File.write(Code)
       print("Code:")
       print(Code)
       File.close()
-      return True
+      # Perform verification
+      return RunCommand("racket {}".format(FileName))
     except IOError:
-      print("Error making: {}".format(FileName))
+      print("Error making: {}.rkt".format(FileName))
       return False
     
   def run(self):
@@ -162,7 +161,7 @@ class RoseSimilarityChecker():
       for CheckFunctionInfo in self.FunctionInfoList:
         if FunctionInfo.getLatestFunction() == CheckFunctionInfo.getLatestFunction():
           continue
-        self.verify(FunctionInfo, CheckFunctionInfo)
+        print(self.verify(FunctionInfo, CheckFunctionInfo))
 
 
 if __name__ == '__main__':
