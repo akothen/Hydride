@@ -16,7 +16,7 @@ class RoseFunctionInfo():
   def addArgsToConcreteMap(self, ArgsToConcreteValMap : dict):
     # Sanity checking
     for Arg, _ in ArgsToConcreteValMap.items():
-      assert Arg.getFunction() == self.Function
+      assert Arg.getFunction() in self.FunctionAtStages
     self.ArgsToConcreteValMap = ArgsToConcreteValMap
   
   def getConcreteValFor(self, Arg : RoseFunction):
@@ -57,10 +57,9 @@ class RoseFunctionInfo():
     return self.FunctionAtStages[len(self.FunctionAtStages) -1]
   
   def addCodeGenerator(self, CodeGenerator : RoseCodeGenerator):
-    assert isinstance(CodeGenerator, RoseCodeGenerator)
+    #assert isinstance(CodeGenerator, RoseCodeGenerator)
     self.CodeGenerator = CodeGenerator
   
   def getCodeGenerator(self):
     return self.CodeGenerator
-
 
