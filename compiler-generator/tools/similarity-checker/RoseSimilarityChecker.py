@@ -11,7 +11,6 @@ from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
-
 from RoseEquivalenceClass import *
 
 
@@ -160,15 +159,49 @@ class RoseSimilarityChecker():
     except IOError:
       print("Error making: {}.rkt".format(FileName))
       return False
-    
+  
+
+  def summarize(self):
+    print(len(self.EquivalenceClasses))
+    for EquivalentClass in self.EquivalenceClasses:
+      print("*********EQUIVALENT FUNCTIONS:")
+      for Function in EquivalentClass.getEquivalentFunctions():
+        print(Function.getName())
+    FileName = "summary.rkt"
+    try:
+      File = open(FileName, "w+")
+      for EquivalentClass in self.EquivalenceClasses:
+        for Function in EquivalentClass.getEquivalentFunctions():
+          print(Function.getName())
+          File.write(self.FunctionToRosetteCodeMap[Function])
+          File.write("\n")
+          print("Code:")
+          print(self.FunctionToRosetteCodeMap[Function])
+          break
+      File.close()
+      return True
+    except IOError:
+      print("Error making: {}.rkt".format(FileName))
+      return False  
+
   def run(self):
     for FunctionInfo in self.FunctionInfoList:
+      EqClassFound = False
       for CheckFunctionInfo in self.FunctionInfoList:
         if FunctionInfo.getLatestFunction() == CheckFunctionInfo.getLatestFunction():
           continue
+        # Check if we have already found these functions to be equivalent
+        if FunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap \
+          and CheckFunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap:
+          EquivalentClass = self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()]
+          if CheckFunctionInfo.getLatestFunction() in EquivalentClass.getEquivalentFunctions():
+            EqClassFound = True
+            continue
+        # Perform verification
         if self.verify(FunctionInfo, CheckFunctionInfo) == True:
           if FunctionInfo.getLatestFunction() not in self.FunctionToEquivalenceClassMap \
           and CheckFunctionInfo.getLatestFunction() not in self.FunctionToEquivalenceClassMap:
+            EqClassFound = True
             EQClass = RoseEquivalenceClass()
             EQClass.addFunction(FunctionInfo.getLatestFunction())
             EQClass.addFunction(CheckFunctionInfo.getLatestFunction())
@@ -180,24 +213,35 @@ class RoseSimilarityChecker():
             self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()] = EQClass
             self.FunctionToEquivalenceClassMap[CheckFunctionInfo.getLatestFunction()] = EQClass
             continue
-        if FunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap:
-          EQClass = self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()]
-          assert EQClass in self.EquivalenceClasses
-          EQClass.addFunction(CheckFunctionInfo.getLatestFunction())
-          EQClass.addFunctToArgsMapping(CheckFunctionInfo.getLatestFunction(), \
-                                        CheckFunctionInfo.getArgsToConcreteValMap())      
-          self.FunctionToEquivalenceClassMap[CheckFunctionInfo.getLatestFunction()] = EQClass
-          continue
-        if CheckFunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap:
-          EQClass = self.FunctionToEquivalenceClassMap[CheckFunctionInfo.getLatestFunction()]
-          assert EQClass in self.EquivalenceClasses
-          EQClass.addFunction(FunctionInfo.getLatestFunction())
-          EQClass.addFunctToArgsMapping(FunctionInfo.getLatestFunction(), \
-                                        FunctionInfo.getArgsToConcreteValMap())      
-          self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()] = EQClass
-          continue
-    print(len(self.EquivalenceClasses))
-          
+          if FunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap:
+            EqClassFound = True
+            EQClass = self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()]
+            assert EQClass in self.EquivalenceClasses
+            EQClass.addFunction(CheckFunctionInfo.getLatestFunction())
+            EQClass.addFunctToArgsMapping(CheckFunctionInfo.getLatestFunction(), \
+                                          CheckFunctionInfo.getArgsToConcreteValMap())      
+            self.FunctionToEquivalenceClassMap[CheckFunctionInfo.getLatestFunction()] = EQClass
+            continue
+          if CheckFunctionInfo.getLatestFunction() in self.FunctionToEquivalenceClassMap:
+            EqClassFound = True
+            EQClass = self.FunctionToEquivalenceClassMap[CheckFunctionInfo.getLatestFunction()]
+            assert EQClass in self.EquivalenceClasses
+            EQClass.addFunction(FunctionInfo.getLatestFunction())
+            EQClass.addFunctToArgsMapping(FunctionInfo.getLatestFunction(), \
+                                          FunctionInfo.getArgsToConcreteValMap())      
+            self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()] = EQClass
+            continue 
+      if EqClassFound == False:
+        # Create an equivalence for this function
+        EQClass = RoseEquivalenceClass()
+        EQClass.addFunction(FunctionInfo.getLatestFunction())
+        EQClass.addFunctToArgsMapping(FunctionInfo.getLatestFunction(), \
+                                          FunctionInfo.getArgsToConcreteValMap())
+        self.EquivalenceClasses.append(EQClass)
+        self.FunctionToEquivalenceClassMap[FunctionInfo.getLatestFunction()] = EQClass
+        continue
+    # Summmarize
+    self.summarize()
 
 
 if __name__ == '__main__':
