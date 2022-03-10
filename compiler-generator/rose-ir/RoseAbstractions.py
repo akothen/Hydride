@@ -448,9 +448,16 @@ class RoseCond(RoseRegion):
     super().__init__(Children, ParentRegion, ["then", "else"])
   
   @staticmethod
-  def create(Condition : RoseValue, ThenRegionList : list = [], ElseRegionList : list = [], 
-              ParentRegion : RoseRegion = RoseUndefRegion()):
-    return RoseCond(Condition, ThenRegionList, ElseRegionList, ParentRegion)
+  def create(*args):
+    if len(args) == 4:
+      return RoseCond(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      return RoseCond(args[0], args[1], args[2], RoseUndefRegion())
+    if len(args) == 2:
+      return RoseCond(args[0], args[1], [], RoseUndefRegion())    
+    if len(args) == 1:
+      return RoseCond(args[0], [], [], RoseUndefRegion())
+    assert False
   
   def __eq__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
