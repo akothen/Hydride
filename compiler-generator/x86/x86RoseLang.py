@@ -4918,8 +4918,34 @@ ENDFOR
 '''
 #dst[MAX:128] := 0
 
+def test193():
+	return '''
+<intrinsic tech="AVX-512" name="_mm256_maskz_mov_epi16">
+	<type>Integer</type>
+	<CPUID>AVX512VL</CPUID>
+	<CPUID>AVX512BW</CPUID>
+	<category>Move</category>
+	<return type="__m256i" varname="dst" etype="UI16"/>
+	<parameter type="__mmask16" varname="k" etype="MASK"/>
+	<parameter type="__m256i" varname="a" etype="UI16"/>
+	<description>Move packed 16-bit integers from "a" into "dst" using zeromask "k" (elements are zeroed out when the corresponding mask bit is not set).</description>
+	<operation>
+FOR j := 0 to 15
+	i := j*16
+	IF k[j]
+		dst[i+15:i] := a[i+15:i]
+	ELSE
+		dst[i+15:i] := 0
+	FI
+ENDFOR
+	</operation>
+	<instruction name="VMOVDQU16" form="ymm {z}, ymm" xed="VMOVDQU16_YMMu16_MASKmskw_YMMu16_AVX512"/>
+	<header>immintrin.h</header>
+</intrinsic>
+'''
 
-def Compile():
+
+def Compile_Tests():
   #sema = test84___()
 	#sema = test98()#test176()#test70()#test84___() #test68()test134()
   #sema = test68()#test64()#test70()#test98()#test50() #test68() #test77()
@@ -4996,6 +5022,7 @@ def Compile():
 	sema = test191()
 	sema = test112()
 	sema = test192()
+	sema = test193()
 	#sema = test171()
 	#sema = test186()
 	#sema = test157()
@@ -5026,7 +5053,39 @@ def Compile():
 	return [FunctionInfo]
 
 
+
+from PseudoCodeParser import *
+
+def Compile():
+	SemaList = list()
+	DataRoot = ET.parse("test.xml")
+	for Node in DataRoot.iter('intrinsic'):
+		SemaList.append(GetSemaFromXML(Node))
+	print("SemaList lngth:")
+	print(len(SemaList))
+	from RoseFunctionInfo import RoseFunctionInfo
+	FunctionInfoList = list()
+	for Index, Spec in enumerate(SemaList):
+		RootContext = x86RoseContext()
+		print("RootContext---:")
+		print(RootContext)
+		print("Spec:")
+		print(Spec)
+		FunctionInfo = RoseFunctionInfo()
+		CompiledFunction = CompileSemantics(Spec, RootContext)
+		FunctionInfo.addContext(RootContext)
+		FunctionInfo.addRawSemantics(Spec)
+		FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+		print("Index*****")
+		print(Index)
+		print("CompiledFunction:")
+		CompiledFunction.print()
+		FunctionInfoList.append(FunctionInfo)
+	return FunctionInfoList
+
+
+
 if __name__ == '__main__':
-  Compile()
+  Compile_Tests()
 
 
