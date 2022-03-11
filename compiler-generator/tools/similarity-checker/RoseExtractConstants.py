@@ -837,17 +837,24 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
     assert Op.getOutputBitwidth() == 1
     LowIndex = Op.getLowIndex()
     assert Op.getHighIndex() == LowIndex
-    if isinstance(LowIndex,  RoseDivOp):
-      assert len(LowIndex.getOperands()) == 2
-      if isinstance(LowIndex.getOperand(0), RoseConstant):
-        assert LowIndex.getOperand(1) == LoopIterator
-        LowIndex.setOperand(0, LoopStep)
-        Visited.add(LowIndex.getOperand(0))
+    if isinstance(LowIndex, RoseOperation):
+      if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
+        or LowIndex.getOpcode().typesOfOperandsAreEqual():
+        if isinstance(LowIndex.getOperand(0), RoseDivOp):
+          DivOp = LowIndex.getOperand(0)
+        elif isinstance(LowIndex.getOperand(1), RoseDivOp):
+          DivOp = LowIndex.getOperand(0)
+        else:
+          return
       else:
-        assert isinstance(LowIndex.getOperand(1), RoseConstant)
-        assert LowIndex.getOperand(0) == LoopIterator
-        LowIndex.setOperand(1, LoopStep)
-        Visited.add(LowIndex.getOperand(1))
+        DivOp = LowIndex
+      if isinstance(DivOp,  RoseDivOp):
+        assert len(DivOp.getOperands()) == 2
+        if isinstance(DivOp.getOperand(1), RoseConstant):
+          assert DivOp.getOperand(0) == LoopIterator
+          DivOp.setOperand(1, LoopStep)
+          Visited.add(DivOp.getOperand(1))
+          Visited.add(DivOp)
     return
 
   # high_index = low_index + (precision - 1)
