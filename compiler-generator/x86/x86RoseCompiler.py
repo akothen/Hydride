@@ -1370,9 +1370,19 @@ def CompileForLoop(ForStmt, Context : x86RoseContext):
 
 
 def CompileIf(IfStmt, Context : x86RoseContext):
+  print("IfStmt.id:")
+  print(IfStmt.id)
   # Generate a cond region
   Cond = CompileExpression(IfStmt.cond, Context)
+  print(Cond)
+  #CondRegion = RoseCond(Cond, [], [], RoseUndefRegion())
   CondRegion = RoseCond.create(Cond)
+  print("REGION ID")
+  print(CondRegion.getRegionID())
+  print("Cond:")
+  Cond.print()
+  print("CondRegion:---")
+  CondRegion.print()
 
   # Add cond region as root abstraction 
   ChildContext = x86RoseContext()
@@ -1394,6 +1404,8 @@ def CompileIf(IfStmt, Context : x86RoseContext):
   
   # Update the key for the cond key
   UpdatedCondRegion = ChildContext.getRootAbstraction()
+  print("UpdatedCondRegion:")
+  UpdatedCondRegion.print()
   ElseRegionKey = CondRegion.getKeyForElseRegion()
   ChildContext.addKeyForCompiledAbstraction(ElseRegionKey, UpdatedCondRegion)
  
@@ -1403,12 +1415,17 @@ def CompileIf(IfStmt, Context : x86RoseContext):
 
   # Pop the root cond region from the child context 
   CompiledCondRegion = ChildContext.getRootAbstraction()
+  print("CompiledCondRegion:")
+  CompiledCondRegion.print()
 
   # Add cond region to the root abstraction
   Context.addAbstractionToIR(CompiledCondRegion)
 
   # Update the compiled cond region to the current context
   Context.updateCompiledAbstraction(IfStmt.id, CompiledCondRegion)
+
+  print("COMPILED THEN REGION:")
+  print(CompiledCondRegion.getThenRegions())
 
   # Remove the child context now
   Context.destroyContext(IfStmt.id)
@@ -1473,14 +1490,14 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
     if Param.type.endswith('*'):
-        ParamType = x86Types[Param.type[:-1].strip()]
-        OutParams.append(Param.name)
-        IsOutParam = True
+      ParamType = x86Types[Param.type[:-1].strip()]
+      OutParams.append(Param.name)
+      IsOutParam = True
     else:
-        if Param.is_imm:
-          ParamType = RoseType.getBitVectorTy(Sema.imm_width)
-        else:
-          ParamType = x86Types[Param.type]
+      if Param.is_imm:
+        ParamType = RoseType.getBitVectorTy(Sema.imm_width)
+      else:
+        ParamType = x86Types[Param.type]
     # Create a new rosette value
     ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
     print("PARAM VALUES:")
@@ -1529,10 +1546,18 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   
   # Add the root function now
   RootContext.pushRootAbstraction(RootFunction)
+  print("RootFunction:")
+  RootFunction.print()
 
   # Compile all the statements
   CompiledRetVal = RoseUndefValue()
-  for Stmt in Sema.spec:
+  print("Sema.spec:")
+  print(Sema.spec)
+  for Index, Stmt in enumerate(Sema.spec):
+    if Index == len(Sema.spec) - 1:
+      if type(Stmt) == Update:
+        if Stmt.lhs.hi.name == "MAX":
+          continue
     if type(Stmt) == Return:
       #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
       #CompileStatement(Dst, RootContext)
