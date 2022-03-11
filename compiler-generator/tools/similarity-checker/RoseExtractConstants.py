@@ -203,7 +203,9 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     LowIndex = Op.getLowIndex()
     assert Op.getHighIndex() == LowIndex
     if isinstance(LowIndex, RoseOperation):
-      if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
+      if isinstance(LowIndex,  RoseDivOp):
+         DivOp = LowIndex
+      elif LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
         or LowIndex.getOpcode().typesOfOperandsAreEqual():
         if isinstance(LowIndex.getOperand(0), RoseDivOp):
           DivOp = LowIndex.getOperand(0)
@@ -212,7 +214,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
         else:
           return
       else:
-        DivOp = LowIndex
+        return
       if isinstance(DivOp,  RoseDivOp):
         assert len(DivOp.getOperands()) == 2
         if isinstance(DivOp.getOperand(1), RoseConstant):
@@ -832,13 +834,14 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
   assert Op.isIndexingBVOp() == True
   Block = Op.getParent()
   assert not isinstance(Block, RoseUndefRegion)
-
   if Op in SkipBVExtracts:
     assert Op.getOutputBitwidth() == 1
     LowIndex = Op.getLowIndex()
     assert Op.getHighIndex() == LowIndex
     if isinstance(LowIndex, RoseOperation):
-      if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
+      if isinstance(LowIndex,  RoseDivOp):
+         DivOp = LowIndex
+      elif LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
         or LowIndex.getOpcode().typesOfOperandsAreEqual():
         if isinstance(LowIndex.getOperand(0), RoseDivOp):
           DivOp = LowIndex.getOperand(0)
@@ -847,7 +850,7 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
         else:
           return
       else:
-        DivOp = LowIndex
+        return
       if isinstance(DivOp,  RoseDivOp):
         assert len(DivOp.getOperands()) == 2
         if isinstance(DivOp.getOperand(1), RoseConstant):
