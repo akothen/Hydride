@@ -103,6 +103,9 @@ class RoseOpcode(Enum):
     # Op to represent truncation
     bvtrunc = auto()
 
+    # Add an op for absolute value for bitvectors
+    bvabs = auto()
+
 
     def __str__(self):
         return self.name
@@ -252,11 +255,8 @@ class RoseOpcode(Enum):
             return RoseType.getFloatTy(Inputs[0].getType().getBitwidth())
         if self.value == self.abs.value:
             assert(len(Inputs) == 1)
-            assert Inputs[0].getType().isBitVectorTy() or Inputs[0].getType().isIntegerTy()
-            if Inputs[0].getType().isIntegerTy():
-                return RoseType.getIntegerTy(Inputs[0].getType().getBitwidth())
-            if Inputs[0].getType().isBitVectorTy():
-                return RoseType.getBitVectorTy(Inputs[0].getType().getBitwidth())
+            assert Inputs[0].getType().isIntegerTy()
+            return RoseType.getIntegerTy(Inputs[0].getType().getBitwidth())
         if self.value == self.equal.value \
         or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
@@ -283,6 +283,10 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[1], RoseType)
             assert Inputs[0].getType() != Inputs[1]
             return Inputs[1]
+        if self.value == self.bvabs.value:
+            assert(len(Inputs) == 1)
+            assert Inputs[0].getType().isBitVectorTy()
+            return RoseType.getBitVectorTy(Inputs[0].getType().getBitwidth())
         return None
 
     def inputsAreValid(self, Inputs : list): 
@@ -444,8 +448,7 @@ class RoseOpcode(Enum):
         if self.value == self.abs.value:
             if len(Inputs) != 1:
                 return False
-            if not Inputs[0].getType().isIntegerTy() \
-            and not Inputs[0].getType().isBitVectorTy():
+            if not Inputs[0].getType().isIntegerTy():
                 return False
             return True
         if self.value == self.boolnot.value:
@@ -473,7 +476,13 @@ class RoseOpcode(Enum):
                 return False
             return True
         if self.value == self.cast.value:
-            return self.castInputsAreValid(Inputs)       
+            return self.castInputsAreValid(Inputs)   
+        if self.value == self.bvabs.value:
+            if len(Inputs) != 1:
+                return False
+            if not Inputs[0].getType().isBitVectorTy():
+                return False
+            return True
         return None
 
     def typesOfInputsAndOutputEqual(self):
@@ -516,6 +525,7 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value \
         or self.value == self.abs.value \
+        or self.value == self.bvabs.value \
         or self.value == self.ret.value:
             return True
         if self.value == self.bvzero.value \
@@ -592,6 +602,7 @@ class RoseOpcode(Enum):
         or self.value == self.lsb.value \
         or self.value == self.msb.value \
         or self.value == self.bit.value \
+        or self.value == self.bvabs.value \
         or self.value == self.boolnot.value \
         or self.value == self.booland.value \
         or self.value == self.boolnand.value \
@@ -718,6 +729,8 @@ class RoseOpcode(Enum):
            return (NumInputs == 2)
         if self.value == self.cast.value:
            return (NumInputs == 2)      
+        if self.value == self.bvabs.value:
+            return (NumInputs == 1)
         return None
     
     def isBitVectorOpcode(self):
@@ -759,6 +772,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvugt.value \
         or self.value == self.bvsge.value \
         or self.value == self.bvuge.value \
+        or self.value == self.bvabs.value \
         or self.value == self.rotateleft.value \
         or self.value == self.rotateright.value \
         or self.value == self.bvextract.value \
@@ -878,7 +892,8 @@ class RoseOpcode(Enum):
         or self.value == self.ret.value \
         or self.value == self.cast.value \
         or self.value == self.bvneq.value \
-        or self.value == self.notequal.value:
+        or self.value == self.notequal.value \
+        or self.value == self.bvabs.value:
             assert False, "No direct conversion to Rosette Ops"
         return None
 
@@ -956,4 +971,5 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
 
