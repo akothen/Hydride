@@ -5,8 +5,6 @@
 #############################################################
 
 
-from RoseType import RoseType
-from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
@@ -300,6 +298,7 @@ def CodeGen(Function : RoseFunction):
   Function.print()
   print("---\n\n\n\n\n")
   print(RosetteCode)
+
 
 
 

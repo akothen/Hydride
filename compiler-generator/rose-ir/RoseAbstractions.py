@@ -1,5 +1,5 @@
 
-from RoseType import RoseType, RoseFunctionType
+from RoseTypes import *
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
@@ -35,7 +35,7 @@ class RoseFunction(RoseValue, RoseRegion):
     print("ArgsList:")
     print(ArgsList)
     ArgTyList = [Arg.getType() for Arg in ArgsList]
-    FunctionType = RoseType.getFunctionTy(ArgTyList, RetType)
+    FunctionType = RoseFunctionType.create(ArgTyList, RetType)
     self.ArgList = ArgsList
     self.RetVal = RoseUndefValue()
     for ArgIndex, Arg in enumerate(ArgsList):
@@ -127,7 +127,7 @@ class RoseFunction(RoseValue, RoseRegion):
                               RoseUndefValue(), self.getNumArgs() )
     self.ArgList.append(Arg)
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
-    FunctionType = RoseType.getFunctionTy(ArgTyList, self.RetVal.getType())
+    FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
     self.setType(FunctionType)
     # Set the parent of this argument to be this function
     self.ArgList[self.getNumArgs() - 1].setFunction(self)
@@ -146,7 +146,7 @@ class RoseFunction(RoseValue, RoseRegion):
     assert not Value.getType().isUndefTy()
     # Set the return type first
     RetType = Value.getType()
-    NewFunctionType = RoseType.getFunctionTy(self.getType().getArgList(), RetType)
+    NewFunctionType = RoseFunctionType.create(self.getType().getArgList(), RetType)
     self.setType(NewFunctionType)
     # Do some sanity checks again
     assert self.getType() == NewFunctionType
@@ -297,7 +297,7 @@ class RoseBlock(RoseRegion):
 class RoseForLoop(RoseRegion):
   def __init__(self, IteratorName : str, Start : RoseValue, End : RoseValue, Step : RoseValue, 
               RegionList : list, ParentRegion : RoseRegion):
-    self.Iterator = RoseValue.create(IteratorName, RoseType.getIntegerTy(32))
+    self.Iterator = RoseValue.create(IteratorName, RoseIntegerType.create(32))
     self.Start = Start
     self.End = End
     self.Step = Step
@@ -314,9 +314,9 @@ class RoseForLoop(RoseRegion):
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int) \
       and isinstance(args[4], list) and isinstance(args[5], RoseRegion):
-        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
-        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseIntegerType.create(32))
+        End = RoseConstant. create(args[2], RoseIntegerType.create(32))
+        Step = RoseConstant. create(args[3], RoseIntegerType.create(32))
         return RoseForLoop(args[0], Start, End, Step, args[4], args[5])
     if len(args) == 5:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
@@ -326,9 +326,9 @@ class RoseForLoop(RoseRegion):
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int) \
       and isinstance(args[4], list):
-        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
-        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseIntegerType.create(32))
+        End = RoseConstant. create(args[2], RoseIntegerType.create(32))
+        Step = RoseConstant. create(args[3], RoseIntegerType.create(32))
         return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion())
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
@@ -336,9 +336,9 @@ class RoseForLoop(RoseRegion):
         return RoseForLoop(args[0], args[1], args[2], args[3], [], RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], int) \
       and isinstance(args[2], int) and isinstance(args[3], int):
-        Start = RoseConstant. create(args[1], RoseType.getIntegerTy(32))
-        End = RoseConstant. create(args[2], RoseType.getIntegerTy(32))
-        Step = RoseConstant. create(args[3], RoseType.getIntegerTy(32))
+        Start = RoseConstant. create(args[1], RoseIntegerType.create(32))
+        End = RoseConstant. create(args[2], RoseIntegerType.create(32))
+        Step = RoseConstant. create(args[3], RoseIntegerType.create(32))
         return RoseForLoop(args[0], Start, End, Step, [], RoseUndefRegion()) 
     assert(False)
 
@@ -438,8 +438,9 @@ class RoseCond(RoseRegion):
   def __init__(self, Condition : RoseValue, ThenRegionList : list, ElseRegionList : list, 
               ParentRegion : RoseRegion):
     # Condition must be a 1-bit bitvector or a boolean
-    assert Condition.getType().isBitVectorTy() or Condition.getType().isBooleanTy()
-    if Condition.getType().isBitVectorTy():
+    assert isinstance(Condition.getType(), RoseBitVectorType) \
+       or isinstance(Condition.getType(), RoseBooleanType)
+    if isinstance(Condition.getType(), RoseBitVectorType):
       assert Condition.getType().getBitwidth() == 1
     Children = {}
     Children["then"] = ThenRegionList
@@ -530,4 +531,5 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 

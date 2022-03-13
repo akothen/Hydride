@@ -6,7 +6,6 @@
 ###################################################################
 
 
-from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -802,5 +801,6 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
     OpsList2.extend(Op2.getOperands())
 
   return MapBetweenValues
+
 
 

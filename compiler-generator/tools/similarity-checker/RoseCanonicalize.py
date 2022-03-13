@@ -5,8 +5,6 @@
 #############################################################
 
 
-from RoseType import RoseType
-from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
@@ -396,6 +394,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

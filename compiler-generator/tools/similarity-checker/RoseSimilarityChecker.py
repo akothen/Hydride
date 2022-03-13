@@ -248,3 +248,4 @@ if __name__ == '__main__':
   SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.run()
 
+

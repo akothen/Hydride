@@ -1,5 +1,5 @@
 
-from RoseType import RoseType
+from RoseType import *
 
 from copy import deepcopy
 
@@ -37,8 +37,6 @@ class RoseValue:
     
     # This should only be used if the current type is undefined
     def setType(self, Type : RoseType):
-        # just a sanity check meant to make you stop and think
-        assert not Type.isUndefTy()
         self.Type = Type
     
     def isClonable(self):
@@ -57,5 +55,6 @@ class RoseValue:
             self.Type.print()
 
  
+
 
 

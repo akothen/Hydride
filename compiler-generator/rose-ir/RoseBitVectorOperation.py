@@ -1,7 +1,5 @@
 
-from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType
 from RoseValues import RoseOperation, RoseUndefValue
 import RoseAbstractions 
 
@@ -64,5 +62,6 @@ class RoseBitVectorOp(RoseOperation):
   # bitvector operations
   def simplify(self):
     return RoseUndefValue()
+
 
 

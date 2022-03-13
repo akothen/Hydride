@@ -6,9 +6,6 @@
 #############################################################
 
 
-import re
-from RoseType import RoseType
-from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
@@ -332,7 +329,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() > ConstantOperand2.getValue():
           # result: z = div x, (c1 / c2) when c1 > c2
           NewOperandVal = ConstantOperand1.getValue() / ConstantOperand2.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -350,7 +347,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() < ConstantOperand2.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -375,7 +372,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() > ConstantOperand2.getValue():
           # result: z = div x, (c1 / c2) when c1 > c2
           NewOperandVal = ConstantOperand1.getValue() / ConstantOperand2.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -393,7 +390,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() < ConstantOperand2.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -437,7 +434,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
           # result: z = div (c2 / c1), x when c2 > c1
           # Replace the operands of the second op
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -461,7 +458,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
           # result: z = div x, (c2 / c1) when c2 > c1
           # Replace the operands of the second op
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return
@@ -476,7 +473,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() > ConstantOperand2.getValue():
           # result: z = mul x, (c1 / c2) when c1 > c2
           NewOperandVal = ConstantOperand1.getValue() / ConstantOperand2.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -536,7 +533,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand1.getValue() > ConstantOperand2.getValue():
           # result: z = div x, (c1 / c2) when c1 > c2
           NewOperandVal = ConstantOperand1.getValue() / ConstantOperand2.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType): 
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -554,7 +551,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
         if ConstantOperand2.getValue() > ConstantOperand1.getValue():
           # result: z = mul x, (c2 / c1) when c2 > c1
           NewOperandVal = ConstantOperand2.getValue() / ConstantOperand1.getValue()
-          if ConstantOperand1.getType().isIntegerTy():
+          if isinstance(ConstantOperand1.getType(), RoseIntegerType):
             if NewOperandVal != int(NewOperandVal):
               # Nothing we can do here
               return False
@@ -1156,6 +1153,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

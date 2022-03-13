@@ -1,10 +1,10 @@
 
-from RoseType import RoseType
-from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
+
 
 # Kinds of operations CSE must be skipped on
 def SkipOperation(Operation : RoseOperation):
@@ -157,10 +157,11 @@ def RunCSEOnFunction(Function : RoseFunction):
 
 
 # Runs a transformation
-def Run(Function : RoseFunction):
+def Run(Function : RoseFunction, Context : RoseContext):
   RunCSEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

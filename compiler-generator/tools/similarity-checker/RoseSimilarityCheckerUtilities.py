@@ -6,8 +6,6 @@
 ###################################################################
 
 
-from RoseType import RoseType
-from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
@@ -189,5 +187,6 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
     return Result
   
   return None
+
 
 

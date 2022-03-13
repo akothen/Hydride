@@ -1,5 +1,5 @@
 
-from RoseType import RoseType
+from RoseType import *
 from RoseValue import RoseValue
 from RoseValues import *
 
@@ -178,6 +178,7 @@ class RoseContext:
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
     # Copy over the name generator to the parent
     self.NameGenerator = self.ParentContext.getNameGenerator()
+
 
 
 

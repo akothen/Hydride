@@ -8,13 +8,13 @@
 
 from enum import Enum, auto
 from copy import deepcopy
+
 from RoseAbstractions import RoseFunction
 from RoseContext import *
 from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
-
 import Rosex86CCodeEmitter
 
 
@@ -112,5 +112,6 @@ class RoseFuzzer():
 if __name__ == '__main__':
   Fuzzer = RoseFuzzer("x86")
   Fuzzer.fuzz()
+
 
 

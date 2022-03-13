@@ -1,7 +1,7 @@
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType
+from RoseTypes import *
 import RoseAbstractions 
 
 import llvmlite
@@ -9,7 +9,7 @@ import llvmlite
 
 class RoseUndefValue(RoseValue):
   def __init__(self):
-    super().__init__("undef", RoseType.getUndefTy())
+    super().__init__("undef", RoseUndefinedType.create())
   
   def __str__(self):
     return self.getName()
@@ -32,7 +32,7 @@ class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
     # Some sanity checks
     if type(Value) == int:
-      assert Type.isBitVectorTy() or Type.isIntegerTy()
+      assert isinstance(Type, RoseBitVectorType) or isinstance(Type, RoseIntegerType)
       assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     super().__init__(str(Value), Type)
@@ -342,5 +342,6 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
+
 
 

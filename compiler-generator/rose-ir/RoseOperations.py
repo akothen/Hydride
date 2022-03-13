@@ -48,14 +48,14 @@ class RoseReturnOp(RoseOperation):
     return String
   
   def to_llvm_ir(self, IRBuilder):
-    if self.getReturnedValue().getType().isVoidTy():
+    if isinstance(self.getReturnedValue().getType(), RoseVoidType):
       return IRBuilder.ret_void()
     return IRBuilder.ret(self.getReturnedValue().to_llvm_ir(IRBuilder))
 
 
 class RoseCallOp(RoseOperation):
   def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
-    assert Callee.getType().isFunctionTy()
+    assert isinstance(Callee.getType(), RoseFunctionType)
     Operands = [Callee]
     Operands.extend(OperandList)
     super().__init__(RoseOpcode.call, Name, Operands, ParentBlock)
@@ -114,7 +114,8 @@ class RoseCallOp(RoseOperation):
 
 class RoseSelectOp(RoseOperation):
   def __init__(self, Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, ParentBlock):
-    assert Cond.getType().isBooleanTy() or Cond.getType().isBitVectorTy()
+    assert isinstance(Cond.getType(), RoseBooleanType) \
+      or isinstance(Cond.getType(), RoseBitVectorType) 
     OperandList = [Cond, Then, Else]
     super().__init__(RoseOpcode.select, Name, OperandList, ParentBlock)
     
@@ -139,7 +140,7 @@ class RoseSelectOp(RoseOperation):
       Spaces += " "
     Name = super().getName()
     ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
-    if self.getType().isBitVectorTy():
+    if isinstance(self.getType(), RoseBitVectorType):
       ThenString = "(bv " + self.getThenValue().getName() + " " \
                   + str(self.getThenValue().getType().getBitwidth()) + ")"
       ElseString = "(bv " + self.getElseValue().getName() + " " \
@@ -176,9 +177,12 @@ class RoseSelectOp(RoseOperation):
 
 class RoseCastOp(RoseOperation):
   def __init__(self, Name : str, Operand : RoseValue, TargetType : RoseType, ParentBlock):
-    assert TargetType.isBitVectorTy() or TargetType.isBooleanTy() or TargetType.isIntegerTy()
-    assert Operand.getType().isBitVectorTy() or Operand.getType().isBooleanTy() \
-        or Operand.getType().isIntegerTy()
+    assert isinstance(TargetType, RoseBitVectorType) \
+      or isinstance(TargetType, RoseBooleanType) \
+      or isinstance(TargetType, RoseIntegerType)
+    assert isinstance(Operand.getType(), RoseBitVectorType) \
+        or isinstance(Operand.getType(), RoseBooleanType) \
+        or isinstance(Operand.getType(), RoseIntegerType)
     assert Operand.getType() != TargetType
     OperandList = [Operand, TargetType]
     super().__init__(RoseOpcode.cast, Name, OperandList, ParentBlock)
@@ -204,14 +208,18 @@ class RoseCastOp(RoseOperation):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    if self.getOperand(0).getType().isBitVectorTy() and self.getType().isIntegerTy():
+    if isinstance(self.getOperand(0).getType(), RoseBitVectorType) \
+      and isinstance(self.getType(), RoseIntegerType):
       String += "bitvector->integer " + self.getOperand(0).getName() + "))\n"
-    elif self.getOperand(0).getType().isIntegerTy() and self.getType().isBitVectorTy():
+    elif isinstance(self.getOperand(0).getType(), RoseIntegerType) \
+      and isinstance(self.getType(), RoseBitVectorType):
       String += "integer->bitvector " + self.getOperand(0).getName() + " " \
               "(bitvector " + self.getType().getBitwidth() + "))\n"
-    elif self.getOperand(0).getType().isBitVectorTy() and self.getType().isBooleanTy():
+    elif isinstance(self.getOperand(0).getType(), RoseBitVectorType) \
+      and isinstance(self.getType(), RoseBooleanType):
       String += "bitvector->bool " + self.getOperand(0).getName() + "))\n"
-    elif self.getOperand(0).getType().isBooleanTy() and self.getType().isBitVectorTy():
+    elif isinstance(self.getOperand(0).getType(), RoseBooleanType) \
+      and isinstance(self.getType(), RoseBitVectorType):
       String += "bool->bitvector " + self.getOperand(0).getName() + " " \
               "(bitvector " + self.getType().getBitwidth() + "))\n"
     return String
@@ -231,7 +239,7 @@ class RoseCastOp(RoseOperation):
 
 class RoseAbsOp(RoseOperation):
   def __init__(self, Name : str, Operand : RoseValue, ParentBlock):
-    assert Operand.getType().isBitVectorTy() or Operand.getType().isIntegerTy()
+    assert isinstance(Operand.getType(), RoseIntegerType)
     OperandList = [Operand]
     super().__init__(RoseOpcode.abs, Name, OperandList, ParentBlock)
 
@@ -268,7 +276,7 @@ class RoseAbsOp(RoseOperation):
 class RoseAddOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert not Operand.getType().isBitVectorTy()
+      assert not isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.add, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -311,7 +319,7 @@ class RoseAddOp(RoseOperation):
     assert len(self.getOperands()) == 2
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.add(Operand1, Operand2, self.getName())
     return IRBuilder.fadd(Operand1, Operand2, self.getName())
 
@@ -319,7 +327,7 @@ class RoseAddOp(RoseOperation):
 class RoseSubOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert not Operand.getType().isBitVectorTy()
+      assert not isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.sub, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -362,7 +370,7 @@ class RoseSubOp(RoseOperation):
     assert len(self.getOperands()) == 2
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.sub(Operand1, Operand2, self.getName())
     return IRBuilder.fsub(Operand1, Operand2, self.getName())
 
@@ -370,7 +378,7 @@ class RoseSubOp(RoseOperation):
 class RoseMulOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert not Operand.getType().isBitVectorTy()
+      assert not isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.mul, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -414,15 +422,15 @@ class RoseMulOp(RoseOperation):
     assert len(self.getOperands()) == 2
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.mul(Operand1, Operand2, self.getName())
     return IRBuilder.fmul(Operand1, Operand2, self.getName())
 
 
 class RoseDivOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.div, Name, OperandList, ParentBlock)
   
@@ -442,15 +450,15 @@ class RoseDivOp(RoseOperation):
       return None
     Result = (self.getOperand(0).getValue() / self.getOperand(1).getValue())
     # If the result is an integer, see if can be cast into an integer
-    if self.getOperand(0).getType().isIntegerTy() \
-      and self.getOperand(1).getType().isIntegerTy():
+    if isinstance(self.getOperand(0).getType(), RoseIntegerType) \
+      and isinstance(self.getOperand(1).getType(), RoseIntegerType):
       if Result == int(Result):
         Result = int(Result)
     return Result
   
   def simplify(self):
     # Try solving the operation first
-    SolvedResult = self.solve()
+    SolvedResult = self.solve() 
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     # See if the denominator is 1, the result is the numerator
@@ -462,15 +470,15 @@ class RoseDivOp(RoseOperation):
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.sdiv(Operand1, Operand2, self.getName())
     return IRBuilder.fdiv(Operand1, Operand2, self.getName())
 
 
 class RoseRemOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.rem, Name, OperandList, ParentBlock)
   
@@ -502,15 +510,15 @@ class RoseRemOp(RoseOperation):
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.srem(Operand1, Operand2, self.getName())
     return IRBuilder.frem(Operand1, Operand2, self.getName())
   
 
 class RoseModOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.mod, Name, OperandList, ParentBlock)
     
@@ -541,7 +549,7 @@ class RoseModOp(RoseOperation):
   def to_llvm_ir(self, IRBuilder):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
-    if self.getType().isIntegerTy():
+    if isinstance(self.getType(), RoseIntegerType):
       return IRBuilder.srem(Operand1, Operand2, self.getName())
     return IRBuilder.frem(Operand1, Operand2, self.getName())
 
@@ -550,8 +558,8 @@ class RoseModOp(RoseOperation):
 
 class RoseEQOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.equal, Name, OperandList, ParentBlock)
     
@@ -583,8 +591,8 @@ class RoseEQOp(RoseOperation):
 
 class RoseNEQOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.notequal, Name, OperandList, ParentBlock)
     
@@ -631,8 +639,8 @@ class RoseNEQOp(RoseOperation):
 
 class RoseLTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.lessthan, Name, OperandList, ParentBlock)
     
@@ -664,8 +672,8 @@ class RoseLTOp(RoseOperation):
 
 class RoseLEOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.lessthanequal, Name, OperandList, ParentBlock)
     
@@ -697,8 +705,8 @@ class RoseLEOp(RoseOperation):
 
 class RoseGTOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.greaterthan, Name, OperandList, ParentBlock)
     
@@ -730,8 +738,8 @@ class RoseGTOp(RoseOperation):
 
 class RoseGEOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert not Operand1.getType().isBitVectorTy()
-    assert not Operand2.getType().isBitVectorTy()
+    assert not isinstance(Operand1.getType(), RoseBitVectorType)
+    assert not isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.greaterthanequal, Name, OperandList, ParentBlock)
     
@@ -768,7 +776,7 @@ class RoseGEOp(RoseOperation):
 class RoseMinOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert not Operand.getType().isBitVectorTy()
+      assert not isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.min, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -809,7 +817,7 @@ class RoseMinOp(RoseOperation):
 class RoseMaxOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert not Operand.getType().isBitVectorTy()
+      assert not isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.max, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -852,7 +860,7 @@ class RoseMaxOp(RoseOperation):
 
 class RoseNotOp(RoseOperation):
   def __init__(self, Name : str, Value : RoseValue, ParentBlock):
-    assert Value.getType().isBooleanTy()
+    assert isinstance(Value.getType(), RoseBooleanType)
     OperandList = [Value]
     super().__init__(RoseOpcode.boolnot, Name, OperandList, ParentBlock)
 
@@ -884,7 +892,7 @@ class RoseNotOp(RoseOperation):
 class RoseAndOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBooleanTy()
+      assert isinstance(Operand.getType(), RoseBooleanType)
     super().__init__(RoseOpcode.booland, Name, Operands, ParentBlock)
   
   @staticmethod
@@ -933,7 +941,7 @@ class RoseAndOp(RoseOperation):
 class RoseNandOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBooleanTy()
+      assert isinstance(Operand.getType(), RoseBooleanType)
     super().__init__(RoseOpcode.boolnand, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -986,7 +994,7 @@ class RoseNandOp(RoseOperation):
 class RoseOrOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBooleanTy()
+      assert isinstance(Operand.getType(), RoseBooleanType)
     super().__init__(RoseOpcode.boolor, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -1035,7 +1043,7 @@ class RoseOrOp(RoseOperation):
 class RoseNorOp(RoseOperation):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBooleanTy()
+      assert isinstance(Operand.getType(), RoseBooleanType)
     super().__init__(RoseOpcode.boolnor, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -1087,8 +1095,8 @@ class RoseNorOp(RoseOperation):
 
 class RoseXorOp(RoseOperation):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBooleanTy()
-    assert Operand2.getType().isBooleanTy()
+    assert isinstance(Operand1.getType(), RoseBooleanType)
+    assert isinstance(Operand2.getType(), RoseBooleanType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.boolxor, Name, OperandList, ParentBlock)
     
@@ -1129,5 +1137,6 @@ class RoseXorOp(RoseOperation):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
     return IRBuilder.xor(Operand1, Operand2, self.getName())
+
 
 
