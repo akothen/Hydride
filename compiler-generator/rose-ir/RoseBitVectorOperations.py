@@ -1,7 +1,7 @@
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
-from RoseType import RoseType
+from RoseTypes import *
 from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
@@ -11,7 +11,7 @@ import llvmlite
 
 class RoseBVSignExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType) 
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
   
@@ -20,7 +20,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVSignExtendOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
@@ -28,7 +28,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVSignExtendOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
@@ -58,7 +58,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
 
 class RoseBVZeroExtendOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
@@ -67,7 +67,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
@@ -75,7 +75,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVZeroExtendOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
@@ -105,7 +105,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
 
 class RoseBVSSaturateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvssat, Name, OperandList, ParentBlock)
 
@@ -114,7 +114,7 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVSSaturateOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
@@ -122,7 +122,7 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVSSaturateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
@@ -150,7 +150,7 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
 
 class RoseBVUSaturateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvusat, Name, OperandList, ParentBlock)
 
@@ -159,7 +159,7 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVUSaturateOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
@@ -167,7 +167,7 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVUSaturateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
@@ -195,7 +195,7 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
 
 class RoseBVTruncateOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, TargetBitwidth]
     super().__init__(RoseOpcode.bvtrunc, Name, OperandList, ParentBlock)
 
@@ -204,7 +204,7 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     if len(args) == 4:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
@@ -212,7 +212,7 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseType.getIntegerTy(32))
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
         return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
@@ -253,7 +253,7 @@ class RoseBVTruncateOp(RoseBitVectorOp):
 class RoseBVExtractSliceOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, Low : RoseValue, High : RoseValue, \
               Bitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, Low, High, Bitwidth]
     super().__init__(RoseOpcode.bvextract, Name, OperandList, ParentBlock)
 
@@ -319,8 +319,8 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
 class RoseBVInsertSliceOp(RoseBitVectorOp):
   def __init__(self, InsertVal : RoseValue, Bitvector : RoseValue, Low : RoseValue, \
               High : RoseValue, Bitwidth : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
-    assert InsertVal.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    assert isinstance(InsertVal.getType(), RoseBitVectorType)
     OperandList = [InsertVal, Bitvector, Low, High, Bitwidth]
     super().__init__(RoseOpcode.bvinsert, "", OperandList, ParentBlock)
 
@@ -372,7 +372,7 @@ class RoseBVInsertSliceOp(RoseBitVectorOp):
 
 class RoseBVNotOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvnot, Name, OperandList, ParentBlock)
 
@@ -391,7 +391,7 @@ class RoseBVNotOp(RoseBitVectorOp):
 class RoseBVAndOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvand, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -408,7 +408,7 @@ class RoseBVAndOp(RoseBitVectorOp):
 class RoseBVOrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvor, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -425,7 +425,7 @@ class RoseBVOrOp(RoseBitVectorOp):
 class RoseBVXorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvxor, Name, Operands, ParentBlock)
   
   @staticmethod
@@ -441,8 +441,8 @@ class RoseBVXorOp(RoseBitVectorOp):
 
 class RoseBVShlOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvshl, Name, OperandList, ParentBlock)
     
@@ -462,8 +462,8 @@ class RoseBVShlOp(RoseBitVectorOp):
 
 class RoseBVLshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvlshr, Name, OperandList, ParentBlock)
     
@@ -483,8 +483,8 @@ class RoseBVLshrOp(RoseBitVectorOp):
 
 class RoseBVAshrOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvashr, Name, OperandList, ParentBlock)
     
@@ -507,7 +507,7 @@ class RoseBVAshrOp(RoseBitVectorOp):
 
 class RoseBVNegOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvneg, Name, OperandList, ParentBlock)
 
@@ -526,7 +526,7 @@ class RoseBVNegOp(RoseBitVectorOp):
 class RoseBVAddOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvadd, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -543,7 +543,7 @@ class RoseBVAddOp(RoseBitVectorOp):
 class RoseBVSubOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvsub, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -560,7 +560,7 @@ class RoseBVSubOp(RoseBitVectorOp):
 class RoseBVMulOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvmul, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -576,8 +576,8 @@ class RoseBVMulOp(RoseBitVectorOp):
 
 class RoseBVUdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvudiv, Name, OperandList, ParentBlock)
   
@@ -594,8 +594,8 @@ class RoseBVUdivOp(RoseBitVectorOp):
 
 class RoseBVSdivOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsdiv, Name, OperandList, ParentBlock)
     
@@ -612,8 +612,8 @@ class RoseBVSdivOp(RoseBitVectorOp):
 
 class RoseBVUremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvurem, Name, OperandList, ParentBlock)
   
@@ -630,8 +630,8 @@ class RoseBVUremOp(RoseBitVectorOp):
 
 class RoseBVSremOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsrem, Name, OperandList, ParentBlock)
     
@@ -648,8 +648,8 @@ class RoseBVSremOp(RoseBitVectorOp):
 
 class RoseBVSmodOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsmod, Name, OperandList, ParentBlock)
     
@@ -668,8 +668,8 @@ class RoseBVSmodOp(RoseBitVectorOp):
 
 class RoseBVEQOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bveq, Name, OperandList, ParentBlock)
     
@@ -686,8 +686,8 @@ class RoseBVEQOp(RoseBitVectorOp):
 
 class RoseBVNEQOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvneq, Name, OperandList, ParentBlock)
     
@@ -719,8 +719,8 @@ class RoseBVNEQOp(RoseBitVectorOp):
 
 class RoseBVSLTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvslt, Name, OperandList, ParentBlock)
     
@@ -737,8 +737,8 @@ class RoseBVSLTOp(RoseBitVectorOp):
 
 class RoseBVULTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvult, Name, OperandList, ParentBlock)
     
@@ -755,8 +755,8 @@ class RoseBVULTOp(RoseBitVectorOp):
 
 class RoseBVSLEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsle, Name, OperandList, ParentBlock)
     
@@ -773,8 +773,8 @@ class RoseBVSLEOp(RoseBitVectorOp):
 
 class RoseBVULEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvule, Name, OperandList, ParentBlock)
     
@@ -791,8 +791,8 @@ class RoseBVULEOp(RoseBitVectorOp):
 
 class RoseBVSGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsgt, Name, OperandList, ParentBlock)
     
@@ -809,8 +809,8 @@ class RoseBVSGTOp(RoseBitVectorOp):
 
 class RoseBVUGTOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvugt, Name, OperandList, ParentBlock)
     
@@ -827,8 +827,8 @@ class RoseBVUGTOp(RoseBitVectorOp):
 
 class RoseBVSGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvsge, Name, OperandList, ParentBlock)
     
@@ -845,8 +845,8 @@ class RoseBVSGEOp(RoseBitVectorOp):
 
 class RoseBVUGEOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvuge, Name, OperandList, ParentBlock)
     
@@ -865,7 +865,7 @@ class RoseBVUGEOp(RoseBitVectorOp):
 
 class RoseBVAdd1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvadd1, Name, OperandList, ParentBlock)
 
@@ -884,7 +884,7 @@ class RoseBVAdd1Op(RoseBitVectorOp):
 
 class RoseBVSub1Op(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvsub1, Name, OperandList, ParentBlock)
 
@@ -904,7 +904,7 @@ class RoseBVSub1Op(RoseBitVectorOp):
 class RoseBVSminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvsmin, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -925,7 +925,7 @@ class RoseBVSminOp(RoseBitVectorOp):
 class RoseBVUminOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvumin, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -946,7 +946,7 @@ class RoseBVUminOp(RoseBitVectorOp):
 class RoseBVSmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvsmax, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -967,7 +967,7 @@ class RoseBVSmaxOp(RoseBitVectorOp):
 class RoseBVUmaxOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
     for Operand in Operands:
-      assert Operand.getType().isBitVectorTy()
+      assert isinstance(Operand.getType(), RoseBitVectorType)
     super().__init__(RoseOpcode.bvumax, Name, Operands, ParentBlock)
     
   @staticmethod
@@ -987,8 +987,8 @@ class RoseBVUmaxOp(RoseBitVectorOp):
 
 class RoseBVRolOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvrol, Name, OperandList, ParentBlock)
     
@@ -1003,8 +1003,8 @@ class RoseBVRolOp(RoseBitVectorOp):
 
 class RoseBVRorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
-    assert Operand1.getType().isBitVectorTy()
-    assert Operand2.getType().isBitVectorTy()
+    assert isinstance(Operand1.getType(), RoseBitVectorType)
+    assert isinstance(Operand2.getType(), RoseBitVectorType)
     OperandList = [Operand1, Operand2]
     super().__init__(RoseOpcode.bvror, Name, OperandList, ParentBlock)
     
@@ -1019,7 +1019,7 @@ class RoseBVRorOp(RoseBitVectorOp):
 
 class RoseBVZeroOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
-    assert Bitvector.getType().isBitVectorTy()
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
     super().__init__(RoseOpcode.bvzero, Name, OperandList, ParentBlock)
 
@@ -1032,4 +1032,38 @@ class RoseBVZeroOp(RoseBitVectorOp):
     ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
     return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
                                  "%" + "cond." + self.getName())
+
+
+class RoseBVAbsOp(RoseBitVectorOp):
+  def __init__(self, Name : str, Operand : RoseValue, ParentBlock):
+    assert isinstance(Operand.getType(), RoseBitVectorType)
+    OperandList = [Operand]
+    super().__init__(RoseOpcode.bvabs, Name, OperandList, ParentBlock)
+
+  @staticmethod
+  def create(Name : str, Operand : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVAbsOp(Name, Operand, ParentBlock)
+
+  def to_llvm_ir(self, IRBuilder):
+    OperandInLLVM = self.getOperand(0).to_llvm_ir(IRBuilder)
+    ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
+    Condition = IRBuilder.icmp_signed(">=", OperandInLLVM, ZeroLLVM, \
+                                     "%" + "cond." + self.getName())
+    Then = OperandInLLVM
+    Else = IRBuilder.neg(OperandInLLVM, "%neg." + self.getName())
+    return IRBuilder.select(Condition, Then, Else, self.getName())
+
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " "
+    String += "(integer->bitvector (abs (bitvector->integer " \
+            + self.getOperand(0).getName() + ")) (bitvector " \
+            + str(self.getOperand(0).getOutputBitwidth()) + "))"
+    String += ")\n"
+    return String
+
 
