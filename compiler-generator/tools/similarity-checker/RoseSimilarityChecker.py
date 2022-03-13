@@ -42,7 +42,7 @@ class RoseSimilarityChecker():
     assert isinstance(ConcreteArg, RoseConstant)
     print("Param.getType().getBitwidth():")
     print(Param.getType().getBitwidth())
-    if ConcreteArg.getType().isBitVectorTy():
+    if isinstance(ConcreteArg.getType(), RoseBitVectorType):
       Input = "(define {} (bv #x".format(Param.getName() + NameSuffix)
       HexVal = hex(ConcreteArg.getValue())
       print("HexVal:")
@@ -59,7 +59,7 @@ class RoseSimilarityChecker():
       print(Input)
       Input += " " + str(Param.getType().getBitwidth()) + "))\n"
     else:
-      assert ConcreteArg.getType().isIntegerTy()
+      assert isinstance(ConcreteArg.getType(), RoseIntegerType)
       Input = "(define {} {})\n".format(Param.getName() + NameSuffix, str(ConcreteArg.getValue()))
     return Input
 
@@ -133,6 +133,7 @@ class RoseSimilarityChecker():
       ArgNamesList2String += Name + NameSuffix + " "
     Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(), \
                 ArgNamesList2String, Function2.getName(), ArgNamesList2String))
+    print(Content)
     return "\n".join(Content)
     
   def verify(self, FunctionInfo1 : RoseFunctionInfo, \
@@ -160,7 +161,6 @@ class RoseSimilarityChecker():
       print("Error making: {}.rkt".format(FileName))
       return False
   
-
   def summarize(self):
     print(len(self.EquivalenceClasses))
     for EquivalentClass in self.EquivalenceClasses:
@@ -247,5 +247,4 @@ class RoseSimilarityChecker():
 if __name__ == '__main__':
   SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.run()
-
 
