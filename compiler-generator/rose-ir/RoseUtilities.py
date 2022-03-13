@@ -6,6 +6,7 @@
 ###################################################################
 
 
+from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -342,7 +343,8 @@ def HasReductionPattern(Block : RoseBlock):
     print("RETURN FALSE1")
     return False
   Op = Block.getOperation(len(Block.getOperations()) - 1)
-  assert isinstance(Op, RoseBVInsertSliceOp)
+  if not isinstance(Op, RoseBVInsertSliceOp):
+    return False
   if Op.getInputBitVector() != Block.getFunction().getReturnValue():
     print("RETURN FALSE2")
     return False
@@ -801,6 +803,4 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
     OpsList2.extend(Op2.getOperands())
 
   return MapBetweenValues
-
-
 
