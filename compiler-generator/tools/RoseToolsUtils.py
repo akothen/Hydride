@@ -1,3 +1,9 @@
+##############################################################
+#
+# Utility functions for tools for Rosette IR.
+#
+##############################################################
+
 
 import subprocess 
 
@@ -24,5 +30,6 @@ def SizeInBytes(Size):
   Numbytes = int(Size / 8)
   assert Numbytes * 8 == Size
   return Numbytes
+
 
 

@@ -1,3 +1,10 @@
+##############################################################
+#
+# This file contains the code for the base class for regions
+# in Rosette IR.
+#
+##############################################################
+
 
 import RoseAbstractions
 

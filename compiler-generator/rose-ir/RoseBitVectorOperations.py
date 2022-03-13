@@ -1,3 +1,11 @@
+##################################################################
+#
+# This files contains definitions of all bitvector ops supported
+# in Rosette IR. Most of these operations are similar to the ones
+# supported by the Rosette language.
+#
+##################################################################
+
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode

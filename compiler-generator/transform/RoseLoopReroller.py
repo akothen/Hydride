@@ -1,3 +1,11 @@
+##############################################################
+#
+# This file contains code for loop reroller transformation.
+# It aggressively looks for patterns of code to reroll and
+# is also capable of rerolling code multiple times.
+#
+##############################################################
+
 
 from RoseAbstractions import *
 from RoseValues import *

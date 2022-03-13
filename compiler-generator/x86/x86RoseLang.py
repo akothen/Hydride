@@ -1,3 +1,9 @@
+#############################################################
+#
+# A tool for compiling x86 semantics to Rosette IR.
+#
+#############################################################
+
 
 from PseudoCodeParser import GetSemaFromXML
 import xml.etree.ElementTree as ET
@@ -5087,5 +5093,7 @@ def Compile():
 
 if __name__ == '__main__':
   Compile_Tests()
+
+
 
 

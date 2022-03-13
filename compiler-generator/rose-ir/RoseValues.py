@@ -1,3 +1,10 @@
+#############################################################
+#
+# This file contains all the different classes for values
+# in Rosette IR.
+#
+#############################################################
+
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode

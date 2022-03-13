@@ -1,3 +1,10 @@
+##################################################################
+#
+# Class in this file represents an equivalence class of Functions
+# in Rosette IR.
+#
+##################################################################
+
 
 from RoseAbstractions import *
 from RoseValues import *
@@ -19,6 +26,7 @@ class RoseEquivalenceClass:
   
   def getEquivalentFunctions(self):
     return self.EquivalentFuctions
+
 
 
 

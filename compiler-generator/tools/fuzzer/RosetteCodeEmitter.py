@@ -1,3 +1,9 @@
+##############################################################
+#
+# Rosette code emitter for fuzzer.
+#
+##############################################################
+
 
 from RoseCodeEmitter import *
 from RoseCodeGenerator import *

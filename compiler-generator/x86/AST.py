@@ -1,3 +1,10 @@
+###################################################################
+#
+# Abstractions reprsented by the nodes of the AST generated from
+# x86 ISA pseudocode.
+#
+###################################################################
+
 
 from collections import namedtuple
 
@@ -41,4 +48,5 @@ Sema = namedtuple('Sema', [
   'xed',
   'elem_type',
   ])
+
 

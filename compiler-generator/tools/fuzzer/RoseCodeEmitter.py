@@ -1,4 +1,8 @@
-
+##################################################################
+#
+# Base class for representing code emitters for fuzzing.
+#
+##################################################################
 
 from RoseFunctionInfo import *
 from RoseToolsUtils import *

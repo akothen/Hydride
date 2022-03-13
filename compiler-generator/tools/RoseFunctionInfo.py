@@ -1,3 +1,11 @@
+##############################################################
+#
+# Class in this file keeps track of state of a Function in
+# Rosette IR and other information from each compilation
+# stage.
+#
+##############################################################
+
 
 from RoseAbstractions import *
 from RoseValues import *
@@ -62,6 +70,5 @@ class RoseFunctionInfo():
   
   def getCodeGenerator(self):
     return self.CodeGenerator
-
 
 

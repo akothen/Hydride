@@ -1,3 +1,11 @@
+###################################################################
+#
+# This files contains all the regions represented in Rosette IR.
+# The properties of abstractions are similar to that of abstractions
+# in Rosette language i.e. arbitrary nesting of abstractions.
+#
+###################################################################
+
 
 from RoseTypes import *
 from RoseValue import RoseValue

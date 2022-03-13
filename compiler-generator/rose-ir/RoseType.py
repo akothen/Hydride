@@ -1,3 +1,10 @@
+#############################################################
+#
+# Base class for tracking type information for Rosette IR.
+#
+#############################################################
+
+
 
 from enum import Enum, auto
 

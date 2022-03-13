@@ -1,3 +1,9 @@
+##################################################################
+#
+# Class to represent bitvector ops for Rosette IR.
+#
+##################################################################
+
 
 from RoseOpcode import RoseOpcode
 from RoseValues import RoseOperation, RoseUndefValue

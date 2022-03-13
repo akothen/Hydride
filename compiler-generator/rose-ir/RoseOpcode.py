@@ -1,3 +1,10 @@
+##############################################################
+#
+# This file contains all the opcodes of all operations 
+# supported in the  Rosette IR.
+#
+##############################################################
+
 
 from RoseTypes import *
 from  RoseValue import RoseValue

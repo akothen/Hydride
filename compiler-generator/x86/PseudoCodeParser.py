@@ -1,3 +1,9 @@
+###################################################################
+#
+# Pseudocode parser for x86 ISA semantics.
+#
+###################################################################
+
 
 import ply.yacc as yacc
 from lex import tokens
@@ -504,6 +510,7 @@ def Parsex86Semantics(FileName):
 
 if __name__ == '__main__':
   Parsex86Semantics("intel_sema.xml")
+
 
 
 

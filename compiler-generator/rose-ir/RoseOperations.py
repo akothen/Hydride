@@ -1,3 +1,11 @@
+##############################################################
+#
+# This file contains all the primitive ops for Rosette IR.
+# Most of these ops are similar to the ones supported by
+# Rosette language.
+#
+##############################################################
+
 
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode

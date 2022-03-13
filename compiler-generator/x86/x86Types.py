@@ -1,3 +1,9 @@
+#############################################################
+#
+# A dictionary of types for x86.
+#
+#############################################################
+
 
 from RoseTypes import *
 
@@ -77,6 +83,5 @@ x86Types = {
     "M256": RoseBitVectorType.create(256),
     "M512": RoseBitVectorType.create(512),
 }
-
 
 
