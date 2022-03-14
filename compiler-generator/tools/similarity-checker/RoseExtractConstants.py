@@ -473,6 +473,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
     if isinstance(Op, RoseBVInsertSliceOp):
       print("---INSERT OP:")
       Op.print()
+      CorrespondingCondOp = CondBlocksBVInsertsMap[Op]
       if Loop == RoseUndefRegion():
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
@@ -488,6 +489,9 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         # Add indexing ops in a set
         for IndexingOp in GatherIndexingOps(Op):
           IndexingOps.add(IndexingOp)
+        # Map the output bitwidth of corresponding bvinsert, if any.
+        if CorrespondingCondOp in CondBlocksBVInsertsMap:
+          BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
         continue
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
       assert Loop.getParentOfType(RoseForLoop) == LoopList[0]
@@ -530,8 +534,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       for IndexingOp in GatherIndexingOps(Op):
         IndexingOps.add(IndexingOp)
       # Map the output bitwidth of corresponding bvinsert, if any.
-      if Op in CondBlocksBVInsertsMap:
-        BVValToBitwidthVal[CondBlocksBVInsertsMap[Op]] = BVValToBitwidthVal[Op]
+      if CorrespondingCondOp in CondBlocksBVInsertsMap:
+        BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
       continue
   return
 
