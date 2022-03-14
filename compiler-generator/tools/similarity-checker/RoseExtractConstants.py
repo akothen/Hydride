@@ -229,7 +229,7 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
   if isinstance(Op.getLowIndex(), RoseConstant):
     Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                 Op.getLowIndex().getType()))
-    ArgToConstantValsMap[Arg] = Op.getOperand(Op.getLowIndexPos())
+    ArgToConstantValsMap[Arg] = Op.getOperand(Op.getLowIndexPos()).clone()
     Op.setOperand(Op.getLowIndexPos(), Arg)
     One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
     LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
@@ -326,7 +326,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         continue
       Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                   Op.getOperand(1).getType()))
-      ArgToConstantValsMap[Arg] = Op.getOperand(1)
+      ArgToConstantValsMap[Arg] = Op.getOperand(1).clone()
       Op.setOperand(1, Arg)
       Op.setType(RoseBitVectorType.create(Arg))
       BVValToBitwidthVal[Op] = Arg
@@ -344,7 +344,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             # Abstract away this constant value
             Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                           Op.getType()))
-            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex)
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue
           Operand.setType(Op.getType())
@@ -358,7 +358,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             # Abstract away this constant value
             Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                           Op.getType()))
-            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex)
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue       
           Operand.setType(Op.getType())
@@ -381,7 +381,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           # Abstract away this constant value
           Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                         CommonType))
-          ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex)
+          ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
           Op.setOperand(OperandIndex, Arg)
           continue
         Operand.setType(CommonType)
@@ -401,7 +401,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
               # Abstract away this constant value
               Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                             Op.getType()))
-              ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex)
+              ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
               Op.setOperand(OperandIndex, Arg)
               continue
           Operand.setType(Op.getType())
@@ -419,7 +419,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
               # Abstract away this constant value
               Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                             Operand.getType()))
-              ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex)
+              ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
               Op.setOperand(OperandIndex, Arg)
               continue
           UnknownVal.add(Operand)
@@ -453,7 +453,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           # Add a new argument
           Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                             Op.getOperand(Op.getBitwidthPos()).getType()))
-          ArgToConstantValsMap[Arg] = Op.getOperand(3)
+          ArgToConstantValsMap[Arg] = Op.getOperand(3).clone()
           Op.setOperand(Op.getBitwidthPos(), Arg)
           Op.setType(RoseBitVectorType.create(Arg))
           BVValToBitwidthVal[Op] = Arg
@@ -482,7 +482,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           if Op.getInsertValue().getType().getBitwidth() != 1:
             Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                           Op.getType()))
-            ArgToConstantValsMap[Arg] = Op.getOperand(0)
+            ArgToConstantValsMap[Arg] = Op.getOperand(0).clone()
             Op.setOperand(0, Arg)
         Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
         BVValToBitwidthVal[Op.getInsertValue()] =  Op.getOperand(Op.getBitwidthPos())
@@ -511,7 +511,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         # Add a new argument
         Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                           Op.getOperand(Op.getBitwidthPos()).getType()))
-        ArgToConstantValsMap[Arg] = Op.getOperand(Op.getBitwidthPos())
+        ArgToConstantValsMap[Arg] = Op.getOperand(Op.getBitwidthPos()).clone()
         Op.setOperand(Op.getBitwidthPos(), Arg)
         Op.setType(RoseBitVectorType.create(Arg))
         BVValToBitwidthVal[Op] = Arg
@@ -527,7 +527,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         if Op.getInsertValue().getType().getBitwidth() != 1:
           Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                                         Op.getType()))
-          ArgToConstantValsMap[Arg] = Op.getInsertValue()
+          ArgToConstantValsMap[Arg] = Op.getInsertValue().clone()
           Op.setOperand(0, Arg)
       Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
       # Add indexing ops in a set
@@ -590,10 +590,10 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
   Function.print()
 
   # Map the args to the concrete values
-  ArgToConstantValsMap[VectorSize] = LoopList[0].getEndIndex()
-  ArgToConstantValsMap[LaneSize] = LoopList[0].getStep()
-  ArgToConstantValsMap[ElemSize] = LoopList[1].getStep()
-  ArgToConstantValsMap[LaneOffset] = LoopList[1].getStartIndex()
+  ArgToConstantValsMap[VectorSize] = LoopList[0].getEndIndex().clone()
+  ArgToConstantValsMap[LaneSize] = LoopList[0].getStep().clone()
+  ArgToConstantValsMap[ElemSize] = LoopList[1].getStep().clone()
+  ArgToConstantValsMap[LaneOffset] = LoopList[1].getStartIndex().clone()
 
   # Overwrite loop bounds and step
   LoopList[0].setEndIndexVal(VectorSize)
@@ -908,7 +908,7 @@ def FixIndicesForBVOpsInsideOfLoopsMultipleLoops(Function : RoseFunction, Op : R
       KeyOpToIndexArg[KeyOp] = Arg
     else:
       Arg = KeyOpToIndexArg[KeyOp]
-    ArgToConstantValsMap[Arg] = Op.getOperand(Op.getLowIndexPos())
+    ArgToConstantValsMap[Arg] = Op.getOperand(Op.getLowIndexPos()).clone()
     Op.setOperand(Op.getLowIndexPos(), Arg)
     One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
     LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
@@ -1085,7 +1085,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
           print("OpToKeyOpMap[Operation].print()")
           OpToKeyOpMap[Operation].print()
           NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-        ArgToConstantValsMap[NewArg] = Operation.getOperand(1)
+        ArgToConstantValsMap[NewArg] = Operation.getOperand(1).clone()
         Operation.setOperand(1, NewArg)
         BVValToBitwidthVal[Operation] = NewArg
         if Operation in UnknownVal:
@@ -1110,7 +1110,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
                 print("OpToKeyOpMap[Operation].print()")
                 OpToKeyOpMap[Operation].print()
                 NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-              ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex)
+              ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex).clone()
               Operation.setOperand(OperandIndex, NewArg)
               continue
             BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Operation]
@@ -1129,7 +1129,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
                 print("OpToKeyOpMap[Operation].print()")
                 OpToKeyOpMap[Operation].print()
                 NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-              ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex)
+              ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex).clone()
               Operation.setOperand(OperandIndex, NewArg)
               continue       
             UnknownVal.add(Operand)
@@ -1153,7 +1153,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
               print("OpToKeyOpMap[Operation].print()")
               OpToKeyOpMap[Operation].print()
               NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-            ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex)
+            ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex).clone()
             Operation.setOperand(OperandIndex, NewArg)
             continue
           if Operand not in BVValToBitwidthVal:
@@ -1179,7 +1179,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
                   print("OpToKeyOpMap[Operation].print()")
                   OpToKeyOpMap[Operation].print()
                   NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-                ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex)
+                ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex).clone()
                 Operation.setOperand(OperandIndex, NewArg)
                 continue
             BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Operation]
@@ -1202,7 +1202,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
                   print("OpToKeyOpMap[Operation].print()")
                   OpToKeyOpMap[Operation].print()
                   NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-                ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex)
+                ArgToConstantValsMap[NewArg] = Operation.getOperand(OperandIndex).clone()
                 Operation.setOperand(OperandIndex, NewArg)
                 continue       
             UnknownVal.add(Operand)
@@ -1238,7 +1238,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
               print("OpToKeyOpMap[Operation].print()")
               OpToKeyOpMap[Operation].print()
               NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-            ArgToConstantValsMap[NewArg] = Operation.getOperand(3)
+            ArgToConstantValsMap[NewArg] = Operation.getOperand(3).clone()
             Operation.setOperand(3, NewArg)
             BVValToBitwidthVal[Operation] = NewArg
             if Operation in UnknownVal:
@@ -1264,7 +1264,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
             if Operation.getInsertValue().getType().getBitwidth() != 1:
               Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                           Operation.getInsertValue().getType()))
-              ArgToConstantValsMap[Arg] = Operation.getOperand(0)
+              ArgToConstantValsMap[Arg] = Operation.getOperand(0).clone()
               Operation.setOperand(0, Arg)
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Operation, Visited, LoopList[0].getEndIndex(), Context)
@@ -1292,7 +1292,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
             print("OpToKeyOpMap[Operation].print()")
             OpToKeyOpMap[Operation].print()
             NewArg = KeyOpToArg[KeyOp] #KeyOpToArg[OpToKeyOpMap[Operation]]
-          ArgToConstantValsMap[NewArg] = Operation.getOperand(4)
+          ArgToConstantValsMap[NewArg] = Operation.getOperand(4).clone()
           Operation.setOperand(4, NewArg)
           BVValToBitwidthVal[Operation] = NewArg
         BVValToBitwidthVal[Operation.getInsertValue()] = BVValToBitwidthVal[Operation]
@@ -1357,9 +1357,9 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
   for Index in range(NumInnerLoops):
     # Deal with some special cases to keep the IR simple
     if Index == 0:
-      ArgToConstantValsMap[LaneOffset] = InnerLoopsList[Index].getStartIndex()
+      ArgToConstantValsMap[LaneOffset] = InnerLoopsList[Index].getStartIndex().clone()
       InnerLoopsList[Index].setStartIndexVal(LaneOffset)
-      ArgToConstantValsMap[ElemSize] = InnerLoopsList[Index].getStep()
+      ArgToConstantValsMap[ElemSize] = InnerLoopsList[Index].getStep().clone()
       InnerLoopsList[Index].setStepVal(ElemSize)
       PreviousBreak = FirstBreak
       InnerLoopsList[Index].setEndIndexVal(FirstBreak)
@@ -1382,8 +1382,8 @@ def ExtractConstantsMultipleLoops(Function : RoseFunction, Context : RoseContext
       InnerLoopsList[Index].setEndIndexVal(PreviousBreak)
 
   # Map args to concrete values
-  ArgToConstantValsMap[VectorSize] = LoopList[0].getEndIndex()
-  ArgToConstantValsMap[LaneSize] = LoopList[0].getStep()
+  ArgToConstantValsMap[VectorSize] = LoopList[0].getEndIndex().clone()
+  ArgToConstantValsMap[LaneSize] = LoopList[0].getStep().clone()
 
   # Overwrite loop bounds and step of the outer loop
   LoopList[0].setEndIndexVal(VectorSize)
@@ -1475,6 +1475,7 @@ def Run(Function : RoseFunction, Context : RoseContext, \
   ExtractConstantsFromFunction(Function, Context,  ArgToConstantValsMap)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

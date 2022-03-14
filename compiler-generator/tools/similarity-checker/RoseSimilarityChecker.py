@@ -32,6 +32,8 @@ class RoseSimilarityChecker():
         assert not isinstance(Function, RoseUndefRegion)
         self.FunctionToRosetteCodeMap[Function] = \
                     CodeGenerator.codeGen(FunctionInfo, JustGenRosette=True)
+        print("self.FunctionToRosetteCodeMap[Function]:")
+        print(self.FunctionToRosetteCodeMap[Function])
 
   def genSymbolicInput(self, Param, NameSuffix):
     Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
@@ -57,7 +59,9 @@ class RoseSimilarityChecker():
       Input += HexValString
       print("Input:")
       print(Input)
-      Input += " " + str(Param.getType().getBitwidth()) + "))\n"
+      print("ConcreteArg.getType().getBitwidth():")
+      print(ConcreteArg.getType().getBitwidth())
+      Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"
     else:
       assert isinstance(ConcreteArg.getType(), RoseIntegerType)
       Input = "(define {} {})\n".format(Param.getName() + NameSuffix, str(ConcreteArg.getValue()))
@@ -247,4 +251,6 @@ class RoseSimilarityChecker():
 if __name__ == '__main__':
   SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.run()
+
+
 

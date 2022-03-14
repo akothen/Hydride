@@ -298,6 +298,7 @@ def CodeGen(Function : RoseFunction):
   Function.print()
   print("---\n\n\n\n\n")
   print(RosetteCode)
+  return RosetteCode
 
 
 

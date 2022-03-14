@@ -78,9 +78,6 @@ class RoseConstant(RoseValue):
   def __str__(self):
     return str(self.Val)
 
-  def isClonable(self):
-    return False
-
   def getValue(self):
     return self.Val
   
