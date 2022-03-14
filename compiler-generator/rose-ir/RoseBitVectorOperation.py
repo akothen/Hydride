@@ -5,6 +5,7 @@
 ##################################################################
 
 
+from RoseTypes import *
 from RoseOpcode import RoseOpcode
 from RoseValues import RoseOperation, RoseUndefValue
 import RoseAbstractions 
@@ -27,7 +28,7 @@ class RoseBitVectorOp(RoseOperation):
     Operands = self.getOperands()
     BVOperands = []
     for Operand in Operands:
-      if Operand.getType().isBitVectorTy():
+      if isinstance(Operand.getType(), RoseBitVectorType):
         BVOperands.append(Operand)
     return BVOperands
   
@@ -35,7 +36,7 @@ class RoseBitVectorOp(RoseOperation):
     Operands = self.getOperands()
     NonBVOperands = []
     for Operand in Operands:
-      if not Operand.getType().isBitVectorTy():
+      if not isinstance(Operand.getType(), RoseBitVectorType):
         NonBVOperands.append(Operand)
     return NonBVOperands
   
@@ -52,11 +53,11 @@ class RoseBitVectorOp(RoseOperation):
     print("OUTPUT TYPE:")
     print(Type)
     Type.print()
-    if Type.isVoidTy():
+    if isinstance(Type, RoseVoidType):
       return 0
-    if Type.isBitVectorTy():
+    if isinstance(Type, RoseBitVectorType):
       return Type.getBitwidth()
-    assert Type.isBooleanTy()
+    assert isinstance(Type, RoseBooleanType)
     return 1
 
   # Nothing to solve for 

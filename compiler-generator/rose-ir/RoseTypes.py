@@ -5,7 +5,8 @@
 #############################################################
 
 
-from RoseType import *
+from RoseType import RoseType
+from RoseValue import RoseValue
 
 import llvmlite
 
@@ -44,29 +45,44 @@ class RoseVoidType(RoseType):
 
 
 class RoseBitVectorType(RoseType):
-    def __init__(self, Bitwidth : int):
-      # Bitwidth of a bitvector must be more than 1.
-      assert Bitwidth >= 1
-      super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
+    def __init__(self, Bitwidth):
+        # Some sanity checks
+        print(type(Bitwidth))
+        assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
+        if isinstance(Bitwidth, int):
+            # Bitwidth of a bitvector must be more than 1.
+            assert Bitwidth >= 1
+        super().__init__(RoseType.RoseTypeEnum.BitVector, Bitwidth)
     
     @staticmethod
-    def create(Bitwidth : int):
+    def create(Bitwidth):
       return RoseBitVectorType(Bitwidth)
 
     def getBitwidth(self):
       Bitwidth = self.getSubClassData()
-      assert type(Bitwidth) == int
-      assert Bitwidth >= 1
+      assert isinstance(Bitwidth, int) or isinstance(Bitwidth, RoseValue)
+      if isinstance(Bitwidth, int):
+        assert Bitwidth >= 1
       return Bitwidth
     
     def __str__(self):
-      return "bv" + str(self.getBitwidth())
+        Bitwidth = self.getBitwidth()
+        if type(Bitwidth) == int:
+            return "bv" + str(Bitwidth)
+        else:
+            return "bv"
     
     def print(self):
-      print("bitvector" + str(self.getBitwidth()))
+        Bitwidth = self.getBitwidth()
+        if type(Bitwidth) == int:
+            print("bitvector" + str(Bitwidth))
+        else:
+            print("bitvector" + str(Bitwidth.getName()))
 
     def to_llvm_ir(self):
-      return llvmlite.ir.IntType(self.getType().getBitwidth())
+        Bitwidth = self.getBitwidth()
+        assert type(Bitwidth) == int
+        return llvmlite.ir.IntType(Bitwidth)
 
 
 class RoseIntegerType(RoseType):

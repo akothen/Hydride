@@ -31,6 +31,9 @@ class RoseValue:
 
     def __hash__(self):
         return hash((self.Name, self.Type))
+    
+    def __str__(self):
+        return self.getName()
 
     def getType(self):
         return self.Type
