@@ -1,6 +1,6 @@
 #############################################################
 #
-# This paas translate Rose IR into textual Rosette code.
+# This pass translate Rose IR into textual Rosette code.
 #
 #############################################################
 
@@ -44,19 +44,28 @@ def GetSkippedBVInsertIndexingOps(Operation : RoseBVInsertSliceOp):
     if len(Operation.getHighIndex().getUsers())  == 1:
       Worklist.append(Operation.getHighIndex())
       ToBeSkipped.append(Operation.getHighIndex())
+  print(" INIT ToBeSkipped:")
+  for Op in ToBeSkipped:
+    Op.print()
   while len(Worklist) != 0:
     IndexingOp = Worklist.pop()
+    print("IndexingOp:")
+    IndexingOp.print()
     if IndexingOp not in ToBeSkipped:
       continue
     if isinstance(IndexingOp, RoseOperation):
       for Operand in IndexingOp.getOperands():
         if isinstance(Operand, RoseOperation):
           # This operand can be skipped if the users are
-          # ops to be skipped.
+          # ops to be skipped or the given bvinsert op itself.
           CanBeSkipped = True
           for User in Operand.getUsers():
-            if User not in ToBeSkipped:
+            if User not in ToBeSkipped \
+            and User != Operation:
               CanBeSkipped = False
+              print("CanBeSkipped is False")
+              print("OPERAND;")
+              Operand.print()
               break
           if CanBeSkipped == True:
             ToBeSkipped.append(Operand)
@@ -78,10 +87,10 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
 
   # Collect the indexing ops of bvinserts. These ops will be skipped
   # when generating Rosette code.
-  IndexingOps = list()
+  SkippedIndexingOps = list()
   for Op in Block:
     if isinstance(Op, RoseBVInsertSliceOp):
-      IndexingOps.extend(GetSkippedBVInsertIndexingOps(Op))
+      SkippedIndexingOps.extend(GetSkippedBVInsertIndexingOps(Op))
 
   BVInsertOpsList = list()
   Spaces = ""
@@ -93,9 +102,8 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
     if Operation in SkipOps:
       continue
     # May need to skip indexing op
-    if Operation in IndexingOps:
-      if len(Operation.getUsers()) == 1:
-        continue
+    if Operation in SkippedIndexingOps:
+      continue
     # Ignore return ops
     if isinstance(Operation, RoseReturnOp):
       continue
