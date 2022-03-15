@@ -15,6 +15,7 @@ class RoseType:
         Integer = auto()
         Float = auto()
         Boolean = auto()
+        String = auto()
         BitVector = auto()
         Vector = auto()
         List = auto()

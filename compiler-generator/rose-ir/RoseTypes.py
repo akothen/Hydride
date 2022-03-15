@@ -133,6 +133,33 @@ class RoseBooleanType(RoseType):
       return llvmlite.ir.IntType(self.getType().getBitwidth())
   
 
+class RoseStringType(RoseType):
+    def __init__(self, Length : int):
+        # Bitwidth of an integer must be more than 0.
+        print(type(Length))
+        assert Length > 0
+        super().__init__(RoseType.RoseTypeEnum.String, Length)
+    
+    @staticmethod
+    def create(Length : int):
+        return RoseStringType(Length)
+    
+    def getLength(self):
+        Length = self.getSubClassData()
+        assert type(Length) == int
+        assert Length > 0
+        return Length
+    
+    def __str__(self):
+        return "str" + str(self.getLength())
+    
+    def print(self):
+        print("str" + str(self.getLength()))
+  
+    def to_llvm_ir(self):
+        NotImplemented
+
+
 class RoseGenericFloatType(RoseType):
     def __init__(self, Mantissa : int, Exponent : int):
         # Some sanity checks
@@ -242,6 +269,7 @@ class RoseListType(RoseType):
             or isinstance(NodeType, RoseIntegerType) \
             or isinstance(NodeType, RoseBitVectorType) \
             or isinstance(NodeType, RoseVectorType) \
+            or isinstance(NodeType, RoseStringType) \
             or isinstance(NodeType, RoseListType)
         SubClassData = {}
         SubClassData["nodeType"] = NodeType
