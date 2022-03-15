@@ -22,10 +22,10 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   Loop.print()
 
   # Get the op that we can use to canonicalize the loop bounds
-  PrimaryOp = GetOpDeterminingLoopBounds(Loop)
-  if PrimaryOp == None:
+  PrimaryOps = GetOpDeterminingLoopBounds(Loop)
+  if PrimaryOps == None:
     return
-  BitWidth = PrimaryOp[0].getOutputBitwidth()
+  BitWidth = PrimaryOps[0].getOutputBitwidth()
 
   # Go over the bvinserts/bvextracts and see if the bitwidth and loop step are the same.
   # Now see if the loop bounds need adjusting
@@ -86,7 +86,13 @@ def RunFixLoopsBooundsInFunction(Region, Context : RoseContext):
 
 def AddOuterLoopInFunction(Function : RoseFunction):
   # Use the return value of the function as the end and step
-  Bitwidth = Function.getReturnValue().getType().getBitwidth()
+  #Bitwidth = Function.getReturnValue().getType().getBitwidth()
+  # Get the op that we can use to canonicalize the loop bounds
+  LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
+  assert len(LoopList) != 0
+  PrimaryOps = GetOpDeterminingLoopBounds(LoopList[0])
+  assert PrimaryOps != None
+  Bitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
   # Create a new loop
   Loop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
   # Add the regions in the function into the loop
@@ -113,7 +119,7 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   # There are no loops in the code. Now we check if the code is all in one block
   # or there is some control flow (which we do not handle right now.)
   # TODO: Handle cases where control flow exists.
-  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
+  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
   assert NumBlocksAtLevel0 == 1
   [Block] = Function.getRegionsOfType(RoseBlock, 0)
 
@@ -394,7 +400,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
