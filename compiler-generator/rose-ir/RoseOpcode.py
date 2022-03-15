@@ -213,6 +213,7 @@ class RoseOpcode(Enum):
         if self.value == self.opaquecall.value:
             Callee = Inputs[0]
             assert isinstance(Callee, RoseValues.RoseConstant)
+            assert isinstance(Callee.getType(), RoseStringType)
             return Callee.getType().getReturnType()
         if self.value == self.select.value:
             assert Inputs[1].getType() == Inputs[2].getType()
@@ -426,6 +427,8 @@ class RoseOpcode(Enum):
         if self.value == self.opaquecall.value:
             Callee = Inputs[0]
             if not isinstance(Callee, RoseValues.RoseConstant):
+                return False
+            if not isinstance(Callee.getType(), RoseStringType):
                 return False
             return True
         if self.value == self.select.value:
@@ -997,5 +1000,6 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
+
 
 
