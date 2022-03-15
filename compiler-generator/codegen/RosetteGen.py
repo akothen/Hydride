@@ -31,12 +31,57 @@ def GenerateRosetteForSatOp(Op : RoseBitVectorOp, NumSpace = 0):
   return String
 
 
+def GetSkippedBVInsertIndexingOps(Operation : RoseBVInsertSliceOp):
+  # Sanity checks
+  assert isinstance(Operation, RoseBVInsertSliceOp)
+  Worklist = list()
+  ToBeSkipped = list()
+  if isinstance(Operation.getLowIndex(), RoseOperation):
+    if len(Operation.getLowIndex().getUsers())  == 1:
+      Worklist.append(Operation.getLowIndex())
+      ToBeSkipped.append(Operation.getLowIndex())
+  if isinstance(Operation.getHighIndex(), RoseOperation):
+    if len(Operation.getHighIndex().getUsers())  == 1:
+      Worklist.append(Operation.getHighIndex())
+      ToBeSkipped.append(Operation.getHighIndex())
+  while len(Worklist) != 0:
+    IndexingOp = Worklist.pop()
+    if IndexingOp not in ToBeSkipped:
+      continue
+    if isinstance(IndexingOp, RoseOperation):
+      for Operand in IndexingOp.getOperands():
+        if isinstance(Operand, RoseOperation):
+          # This operand can be skipped if the users are
+          # ops to be skipped.
+          CanBeSkipped = True
+          for User in Operand.getUsers():
+            if User not in ToBeSkipped:
+              CanBeSkipped = False
+              break
+          if CanBeSkipped == True:
+            ToBeSkipped.append(Operand)
+          Worklist.append(Operand)
+  ToBeSkipped.reverse()
+  print("ToBeSkipped:")
+  for Op in ToBeSkipped:
+    Op.print()
+  print("++++++++++++++++++++++++")
+  return ToBeSkipped
+
+
 def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
                                       NumSpace = 0, SkipOps = list()):
   print("GENERATE ROSETTE CODE FOR BLOCK")
   print("BLOCK:")
   print(Block)
   Block.print()
+
+  # Collect the indexing ops of bvinserts. These ops will be skipped
+  # when generating Rosette code.
+  IndexingOps = list()
+  for Op in Block:
+    if isinstance(Op, RoseBVInsertSliceOp):
+      IndexingOps.extend(GetSkippedBVInsertIndexingOps(Op))
 
   BVInsertOpsList = list()
   Spaces = ""
@@ -47,6 +92,10 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
     # Skip certain ops
     if Operation in SkipOps:
       continue
+    # May need to skip indexing op
+    if Operation in IndexingOps:
+      if len(Operation.getUsers()) == 1:
+        continue
     # Ignore return ops
     if isinstance(Operation, RoseReturnOp):
       continue
@@ -299,7 +348,6 @@ def CodeGen(Function : RoseFunction):
   print("---\n\n\n\n\n")
   print(RosetteCode)
   return RosetteCode
-
 
 
 
