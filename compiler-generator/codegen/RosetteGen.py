@@ -1,6 +1,6 @@
 #############################################################
 #
-# This paas translate Rose IR into textual Rosette code.
+# This pass translate Rose IR into textual Rosette code.
 #
 #############################################################
 
@@ -31,12 +31,66 @@ def GenerateRosetteForSatOp(Op : RoseBitVectorOp, NumSpace = 0):
   return String
 
 
+def GetSkippedBVInsertIndexingOps(Operation : RoseBVInsertSliceOp):
+  # Sanity checks
+  assert isinstance(Operation, RoseBVInsertSliceOp)
+  Worklist = list()
+  ToBeSkipped = list()
+  if isinstance(Operation.getLowIndex(), RoseOperation):
+    if len(Operation.getLowIndex().getUsers())  == 1:
+      Worklist.append(Operation.getLowIndex())
+      ToBeSkipped.append(Operation.getLowIndex())
+  if isinstance(Operation.getHighIndex(), RoseOperation):
+    if len(Operation.getHighIndex().getUsers())  == 1:
+      Worklist.append(Operation.getHighIndex())
+      ToBeSkipped.append(Operation.getHighIndex())
+  print(" INIT ToBeSkipped:")
+  for Op in ToBeSkipped:
+    Op.print()
+  while len(Worklist) != 0:
+    IndexingOp = Worklist.pop()
+    print("IndexingOp:")
+    IndexingOp.print()
+    if IndexingOp not in ToBeSkipped:
+      continue
+    if isinstance(IndexingOp, RoseOperation):
+      for Operand in IndexingOp.getOperands():
+        if isinstance(Operand, RoseOperation):
+          # This operand can be skipped if the users are
+          # ops to be skipped or the given bvinsert op itself.
+          CanBeSkipped = True
+          for User in Operand.getUsers():
+            if User not in ToBeSkipped \
+            and User != Operation:
+              CanBeSkipped = False
+              print("CanBeSkipped is False")
+              print("OPERAND;")
+              Operand.print()
+              break
+          if CanBeSkipped == True:
+            ToBeSkipped.append(Operand)
+          Worklist.append(Operand)
+  ToBeSkipped.reverse()
+  print("ToBeSkipped:")
+  for Op in ToBeSkipped:
+    Op.print()
+  print("++++++++++++++++++++++++")
+  return ToBeSkipped
+
+
 def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
                                       NumSpace = 0, SkipOps = list()):
   print("GENERATE ROSETTE CODE FOR BLOCK")
   print("BLOCK:")
   print(Block)
   Block.print()
+
+  # Collect the indexing ops of bvinserts. These ops will be skipped
+  # when generating Rosette code.
+  SkippedIndexingOps = list()
+  for Op in Block:
+    if isinstance(Op, RoseBVInsertSliceOp):
+      SkippedIndexingOps.extend(GetSkippedBVInsertIndexingOps(Op))
 
   BVInsertOpsList = list()
   Spaces = ""
@@ -46,6 +100,9 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
   for Operation in Block:
     # Skip certain ops
     if Operation in SkipOps:
+      continue
+    # May need to skip indexing op
+    if Operation in SkippedIndexingOps:
       continue
     # Ignore return ops
     if isinstance(Operation, RoseReturnOp):
@@ -299,7 +356,6 @@ def CodeGen(Function : RoseFunction):
   print("---\n\n\n\n\n")
   print(RosetteCode)
   return RosetteCode
-
 
 
 

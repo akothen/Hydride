@@ -120,6 +120,65 @@ class RoseCallOp(RoseOperation):
     return RoseUndefValue()
 
 
+class RoseOpaqueCallOp(RoseOperation):
+  def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
+    assert isinstance(Callee.getType(), RoseStringType)
+    Operands = [Callee]
+    Operands.extend(OperandList)
+    super().__init__(RoseOpcode.opaquecall, Name, Operands, ParentBlock)
+    
+  @staticmethod
+  def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
+    return RoseOpaqueCallOp(Name, Callee, OperandList, ParentBlock)
+  
+  def getCallee(self):
+    return self.getOperands()[0]
+  
+  def getCallOperands(self):
+    return self.getOperands()[1:]
+
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + "(define " + Name + " ("
+    String += self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    String += " )))\n"
+    return String
+
+  def print(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
+    String += str(self.Opcode)
+    String += " " + self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += ","
+    String += " )"
+    print(String)
+  
+  def solve(self):
+    # Cannot solve calls
+    return None
+
+  def simplify(self):
+    return RoseUndefValue()
+
+
 class RoseSelectOp(RoseOperation):
   def __init__(self, Name : str, Cond : RoseValue, Then : RoseValue, Else : RoseValue, ParentBlock):
     assert isinstance(Cond.getType(), RoseBooleanType) \

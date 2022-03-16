@@ -39,10 +39,18 @@ class RoseConstant(RoseValue):
   def __init__(self, Value, Type : RoseType):
     # Some sanity checks
     if type(Value) == int:
-      assert isinstance(Type, RoseBitVectorType) or isinstance(Type, RoseIntegerType)
-      assert Value.bit_length() <= Type.getBitwidth()
+      assert isinstance(Type, RoseBitVectorType) \
+          or isinstance(Type, RoseIntegerType) \
+          or isinstance(Type, RoseStringType)
+      if not isinstance(Type, RoseStringType):
+        assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
-    super().__init__(str(Value), Type)
+    if isinstance(Type, RoseStringType):
+      assert type(self.Value) == str
+    if not isinstance(Type, RoseStringType):
+      super().__init__(str(Value), Type)
+    else:
+      super().__init__(Value, Type)
   
   @staticmethod
   def create(Value, Type :  RoseType):
@@ -76,6 +84,8 @@ class RoseConstant(RoseValue):
     return hash((self.getValue(), self.getType()))
 
   def __str__(self):
+    if isinstance(self.getType(), RoseStringType):
+      return self.Val
     return str(self.Val)
 
   def getValue(self):
@@ -83,9 +93,12 @@ class RoseConstant(RoseValue):
   
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
+    if isinstance(self.getType(), RoseStringType):
+      return self.Val
     return str(self.Val)
 
   def to_llvm_ir(self, IRBuilder = None):
+    assert not isinstance(self.getType(), RoseStringType)
     return llvmlite.ir.Constant(self.getType().to_llvm_ir(), self.getValue())
 
   def print(self):
@@ -346,6 +359,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 

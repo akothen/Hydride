@@ -62,8 +62,9 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
   return
 
 
-def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, LoopIterator : RoseValue, \
-                LoopStep : RoseValue, Visited : set, Context : RoseContext):
+def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
+                  LoopIterator : RoseValue, LoopStep : RoseValue, Visited : set, \
+                  Context : RoseContext, ArgToConstantValsMap : dict):
   # Now we have to deal with the low index that is a mul op
   LowIndex = Op.getLowIndex()
   if LowIndex in Visited:
@@ -131,31 +132,35 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, LoopIterator : Ros
                   DivOp.setOperand(1, Op.getOutputBitwidth())
                   Visited.add(DivOp)
                   return
-    
+
     if isinstance(LowIndex.getOperand(0), RoseOperation):
       DivOp = LowIndex.getOperand(0)
       if isinstance(DivOp, RoseDivOp):
         if DivOp in Visited:
           return
-        assert isinstance(LowIndex.getOperand(1), RoseConstant)
-        LowIndex.setOperand(1, Op.getOutputBitwidth())
-        assert isinstance(DivOp.getOperand(1), RoseConstant)
-        DivOp.setOperand(1, LoopStep)
-        Visited.add(DivOp)
-        Visited.add(Op.getLowIndex())
-        return
+        print("LowIndex:")
+        LowIndex.print()
+        print("DivOp:")
+        DivOp.print()
+        if isinstance(LowIndex.getOperand(1), RoseConstant):
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+        if isinstance(DivOp.getOperand(1), RoseConstant):
+          DivOp.setOperand(1, LoopStep)
+          Visited.add(DivOp)
+          Visited.add(Op.getLowIndex())
+          return
     elif isinstance(LowIndex.getOperand(1), RoseOperation):
       DivOp = LowIndex.getOperand(1)
       if isinstance(DivOp, RoseDivOp):
         if DivOp in Visited:
           return
-        assert isinstance(LowIndex.getOperand(0), RoseConstant)
-        LowIndex.setOperand(1, Op.getOutputBitwidth())
-        assert isinstance(DivOp.getOperand(1), RoseConstant)
-        DivOp.setOperand(1, LoopStep)
-        Visited.add(DivOp)
-        Visited.add(LowIndex)
-        return
+        if isinstance(LowIndex.getOperand(0), RoseConstant):
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+        if isinstance(DivOp.getOperand(1), RoseConstant):
+          DivOp.setOperand(1, LoopStep)
+          Visited.add(DivOp)
+          Visited.add(LowIndex)
+          return
     else:
       # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
       print(Op.getOutputBitwidth())
@@ -171,6 +176,132 @@ def FixLowIndices(Op : RoseBitVectorOp, Bitwidth : RoseValue, LoopIterator : Ros
       return
 
   if isinstance(LowIndex, RoseOperation):
+    # Account for division case
+    if isinstance(LowIndex,  RoseDivOp):
+      print("LowIndex:")
+      LowIndex.print()
+      assert len(LowIndex.getOperands()) == 2
+      if isinstance(LowIndex.getOperand(1), RoseConstant):
+        if LowIndex.getOperand(1) == Bitwidth:
+          assert LowIndex.getOperand(0) == LoopIterator
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+          Visited.add(LowIndex)
+          return
+    # Account for add case
+    if isinstance(LowIndex,  RoseAddOp):
+      assert len(LowIndex.getOperands()) == 2
+      if isinstance(LowIndex.getOperand(1), RoseConstant):
+        print("++++++++ADD OP PARAMETERIZATION")
+        if LowIndex.getOperand(1).getValue() == Bitwidth.getValue() - 1:
+          LowIndex.getOperand(0) == LoopIterator
+          One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+          LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                              [Op.getOperand(Op.getBitwidthPos()), One])
+          Block = LowIndex.getParent()
+          Block.addOperationBefore(LastIdx, LowIndex)
+          LowIndex.setOperand(1, LastIdx)
+          Visited.add(LowIndex)
+          Visited.add(LastIdx)
+          return
+        elif LowIndex.getOperand(1).getValue() ==  ArgToConstantValsMap[LoopStep].getValue() - 1:
+          LowIndex.getOperand(0) == LoopIterator
+          One = RoseConstant.create(1, LoopStep.getType())
+          LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [LoopStep, One])
+          Block = LowIndex.getParent()
+          Block.addOperationBefore(LastIdx, LowIndex)
+          LowIndex.setOperand(1, LastIdx)
+          Visited.add(LowIndex)
+          Visited.add(LastIdx)
+          return
+        elif isinstance(LowIndex.getOperand(0), RoseMulOp):
+          MulOp = LowIndex.getOperand(0)
+          if isinstance(MulOp.getOperand(0), RoseConstant):
+            assert MulOp.getOperand(1) == LoopIterator
+            if MulOp.getOperand(0).getValue() == LowIndex.getOperand(1).getValue() + 1:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            LowIndex.getType()))
+              ArgToConstantValsMap[Arg] = MulOp.getOperand(0)
+              MulOp.setOperand(0, Arg)
+              One = RoseConstant.create(1, Arg.getType())
+              LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
+              Block = LowIndex.getParent()
+              Block.addOperationBefore(LastIdx, LowIndex)
+              LowIndex.setOperand(1, LastIdx)
+              Visited.add(LowIndex)
+              Visited.add(MulOp)
+              Visited.add(LastIdx)
+              return
+          elif isinstance(MulOp.getOperand(1), RoseConstant):
+            assert MulOp.getOperand(0) == LoopIterator
+            if MulOp.getOperand(1).getValue() == LowIndex.getOperand(1).getValue() + 1:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          LowIndex.getType()))
+              ArgToConstantValsMap[Arg] = MulOp.getOperand(1)
+              MulOp.setOperand(1, Arg)
+              One = RoseConstant.create(1, Arg.getType())
+              LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
+              Block = LowIndex.getParent()
+              Block.addOperationBefore(LastIdx, LowIndex)
+              LowIndex.setOperand(1, LastIdx)
+              Visited.add(LowIndex)
+              Visited.add(MulOp)
+              Visited.add(LastIdx)
+              return
+      if isinstance(LowIndex.getOperand(0), RoseConstant):
+        if LowIndex.getOperand(0).getValue() == Bitwidth.getValue() - 1:
+          LowIndex.getOperand(1) == LoopIterator
+          One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+          LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                              [Op.getOperand(Op.getBitwidthPos()), One])
+          Block = LowIndex.getParent()
+          Block.addOperationBefore(LastIdx, LowIndex)
+          LowIndex.setOperand(0, LastIdx)
+          Visited.add(LowIndex)
+          Visited.add(LastIdx)
+          return
+        elif LowIndex.getOperand(0).getValue() ==  ArgToConstantValsMap[LoopStep].getValue() - 1:
+          LowIndex.getOperand(1) == LoopIterator
+          One = RoseConstant.create(1, LoopStep.getType())
+          LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [LoopStep, One])
+          Block = LowIndex.getParent()
+          Block.addOperationBefore(LastIdx, LowIndex)
+          LowIndex.setOperand(0, LastIdx)
+          Visited.add(LowIndex)
+          Visited.add(LastIdx)
+          return
+        elif isinstance(LowIndex.getOperand(0), RoseMulOp):
+          MulOp = LowIndex.getOperand(0)
+          if isinstance(MulOp.getOperand(0), RoseConstant):
+            assert MulOp.getOperand(1) == LoopIterator
+            if MulOp.getOperand(0).getValue() == LowIndex.getOperand(0).getValue() + 1:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                            MulOp.getOperand(0).getType()))
+              MulOp.setOperand(0, Arg)
+              One = RoseConstant.create(1, Arg.getType())
+              LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
+              Block = LowIndex.getParent()
+              Block.addOperationBefore(LastIdx, LowIndex)
+              LowIndex.setOperand(0, LastIdx)
+              Visited.add(LowIndex)
+              Visited.add(MulOp)
+              Visited.add(LastIdx)
+              return
+          elif isinstance(MulOp.getOperand(1), RoseConstant):
+            assert MulOp.getOperand(0) == LoopIterator
+            if MulOp.getOperand(1).getValue() == LowIndex.getOperand(0).getValue() + 1:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                            MulOp.getOperand(0).getType()))
+              MulOp.setOperand(1, Arg)
+              One = RoseConstant.create(1, Arg.getType())
+              LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
+              Block = LowIndex.getParent()
+              Block.addOperationBefore(LastIdx, LowIndex)
+              LowIndex.setOperand(0, LastIdx)
+              Visited.add(LowIndex)
+              Visited.add(MulOp)
+              Visited.add(LastIdx)
+              return
+    # Account for other casess
     if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
       or LowIndex.getOpcode().typesOfOperandsAreEqual():
       assert len(LowIndex.getOperands()) == 2
@@ -206,6 +337,55 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     if isinstance(LowIndex, RoseOperation):
       if isinstance(LowIndex,  RoseDivOp):
          DivOp = LowIndex
+      elif isinstance(LowIndex, RoseAddOp):
+        assert len(LowIndex.getOperands()) == 2
+        if isinstance(LowIndex.getOperand(1), RoseConstant):
+          print("---ADD OP PARAMETERIZATION")
+          if LowIndex.getOperand(1).getValue() == Bitwidth.getValue() - 1:
+            LowIndex.getOperand(0) == LoopIterator
+            One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+            LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                                [Op.getOperand(Op.getBitwidthPos()), One])
+            Block = LowIndex.getParent()
+            Block.addOperationBefore(LastIdx, LowIndex)
+            LowIndex.setOperand(1, LastIdx)
+            Visited.add(LowIndex)
+            Visited.add(LastIdx)
+            return
+          elif LowIndex.getOperand(1).getValue() ==  ArgToConstantValsMap[LoopStep].getValue() - 1:
+            LowIndex.getOperand(0) == LoopIterator
+            One = RoseConstant.create(1, LoopStep.getType())
+            LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [LoopStep, One])
+            Block = LowIndex.getParent()
+            Block.addOperationBefore(LastIdx, LowIndex)
+            LowIndex.setOperand(1, LastIdx)
+            Visited.add(LowIndex)
+            Visited.add(LastIdx)
+            return
+          return
+        if isinstance(LowIndex.getOperand(0), RoseConstant):
+          if LowIndex.getOperand(0).getValue() == Bitwidth.getValue() - 1:
+            LowIndex.getOperand(1) == LoopIterator
+            One = RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())
+            LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+                                [Op.getOperand(Op.getBitwidthPos()), One])
+            Block = LowIndex.getParent()
+            Block.addOperationBefore(LastIdx, LowIndex)
+            LowIndex.setOperand(0, LastIdx)
+            Visited.add(LowIndex)
+            Visited.add(LastIdx)
+            return
+          elif LowIndex.getOperand(0).getValue() ==  ArgToConstantValsMap[LoopStep].getValue() - 1:
+            LowIndex.getOperand(1) == LoopIterator
+            One = RoseConstant.create(1, LoopStep.getType())
+            LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [LoopStep, One])
+            Block = LowIndex.getParent()
+            Block.addOperationBefore(LastIdx, LowIndex)
+            LowIndex.setOperand(0, LastIdx)
+            Visited.add(LowIndex)
+            Visited.add(LastIdx)
+            return
+        return
       elif LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
         or LowIndex.getOpcode().typesOfOperandsAreEqual():
         if isinstance(LowIndex.getOperand(0), RoseDivOp):
@@ -246,9 +426,8 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Op.getParent().print()
     print("--------------------")
     Op.getLowIndex().print()
-    LowIndex = Op.getLowIndex()
     # Deal with the low index first
-    FixLowIndices(Op, Bitwidth, LoopIterator, LoopStep, Visited, Context)
+    FixLowIndices(Function, Op, Bitwidth, LoopIterator, LoopStep, Visited, Context, ArgToConstantValsMap)
     # Now deal with the high index
     if Op.getHighIndex() in Visited:
       return
@@ -473,7 +652,9 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
     if isinstance(Op, RoseBVInsertSliceOp):
       print("---INSERT OP:")
       Op.print()
-      CorrespondingCondOp = CondBlocksBVInsertsMap[Op]
+      CorrespondingCondOp = RoseUndefValue()
+      if Op in CondBlocksBVInsertsMap:
+        CorrespondingCondOp = CondBlocksBVInsertsMap[Op]
       if Loop == RoseUndefRegion():
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
@@ -534,8 +715,9 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       for IndexingOp in GatherIndexingOps(Op):
         IndexingOps.add(IndexingOp)
       # Map the output bitwidth of corresponding bvinsert, if any.
-      if CorrespondingCondOp in CondBlocksBVInsertsMap:
-        BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
+      if not isinstance(CorrespondingCondOp, RoseUndefValue):
+        if CorrespondingCondOp in CondBlocksBVInsertsMap:
+          BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
       continue
   return
 
@@ -1455,7 +1637,7 @@ def ExtractConstantsFromFunction(Function : RoseFunction, \
   print("FUNCTION:")
   Function.print()
   # The function must be in the canonical form
-  assert IsFunctionInCanonicalForm(Function) == True
+  #assert IsFunctionInCanonicalForm(Function) == True
 
   ExtractConstants(Function, Context, ArgToConstantValsMap)
 
@@ -1475,7 +1657,6 @@ def Run(Function : RoseFunction, Context : RoseContext, \
   ExtractConstantsFromFunction(Function, Context,  ArgToConstantValsMap)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
