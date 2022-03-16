@@ -138,25 +138,29 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
       if isinstance(DivOp, RoseDivOp):
         if DivOp in Visited:
           return
-        assert isinstance(LowIndex.getOperand(1), RoseConstant)
-        LowIndex.setOperand(1, Op.getOutputBitwidth())
-        assert isinstance(DivOp.getOperand(1), RoseConstant)
-        DivOp.setOperand(1, LoopStep)
-        Visited.add(DivOp)
-        Visited.add(Op.getLowIndex())
-        return
+        print("LowIndex:")
+        LowIndex.print()
+        print("DivOp:")
+        DivOp.print()
+        if isinstance(LowIndex.getOperand(1), RoseConstant):
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+        if isinstance(DivOp.getOperand(1), RoseConstant):
+          DivOp.setOperand(1, LoopStep)
+          Visited.add(DivOp)
+          Visited.add(Op.getLowIndex())
+          return
     elif isinstance(LowIndex.getOperand(1), RoseOperation):
       DivOp = LowIndex.getOperand(1)
       if isinstance(DivOp, RoseDivOp):
         if DivOp in Visited:
           return
-        assert isinstance(LowIndex.getOperand(0), RoseConstant)
-        LowIndex.setOperand(1, Op.getOutputBitwidth())
-        assert isinstance(DivOp.getOperand(1), RoseConstant)
-        DivOp.setOperand(1, LoopStep)
-        Visited.add(DivOp)
-        Visited.add(LowIndex)
-        return
+        if isinstance(LowIndex.getOperand(0), RoseConstant):
+          LowIndex.setOperand(1, Op.getOutputBitwidth())
+        if isinstance(DivOp.getOperand(1), RoseConstant):
+          DivOp.setOperand(1, LoopStep)
+          Visited.add(DivOp)
+          Visited.add(LowIndex)
+          return
     else:
       # Look for the constant operand and replace it with op_out_bitwidth = c * loop_step
       print(Op.getOutputBitwidth())
@@ -1633,7 +1637,7 @@ def ExtractConstantsFromFunction(Function : RoseFunction, \
   print("FUNCTION:")
   Function.print()
   # The function must be in the canonical form
-  assert IsFunctionInCanonicalForm(Function) == True
+  #assert IsFunctionInCanonicalForm(Function) == True
 
   ExtractConstants(Function, Context, ArgToConstantValsMap)
 
