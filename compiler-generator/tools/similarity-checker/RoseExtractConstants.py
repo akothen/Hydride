@@ -174,10 +174,12 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
   if isinstance(LowIndex, RoseOperation):
     # Account for division case
     if isinstance(LowIndex,  RoseDivOp):
+      print("LowIndex:")
+      LowIndex.print()
       assert len(LowIndex.getOperands()) == 2
       if isinstance(LowIndex.getOperand(1), RoseConstant):
         if LowIndex.getOperand(1) == Bitwidth:
-          LowIndex.getOperand(0) == LoopIterator
+          assert LowIndex.getOperand(0) == LoopIterator
           LowIndex.setOperand(1, Op.getOutputBitwidth())
           Visited.add(LowIndex)
           return
@@ -213,7 +215,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
             assert MulOp.getOperand(1) == LoopIterator
             if MulOp.getOperand(0).getValue() == LowIndex.getOperand(1).getValue() + 1:
               Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                            MulOp.getOperand(0).getType()))
+                                                            LowIndex.getType()))
+              ArgToConstantValsMap[Arg] = MulOp.getOperand(0)
               MulOp.setOperand(0, Arg)
               One = RoseConstant.create(1, Arg.getType())
               LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
@@ -228,7 +231,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
             assert MulOp.getOperand(0) == LoopIterator
             if MulOp.getOperand(1).getValue() == LowIndex.getOperand(1).getValue() + 1:
               Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                            MulOp.getOperand(0).getType()))
+                                                          LowIndex.getType()))
+              ArgToConstantValsMap[Arg] = MulOp.getOperand(1)
               MulOp.setOperand(1, Arg)
               One = RoseConstant.create(1, Arg.getType())
               LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [Arg, One])
@@ -418,7 +422,6 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     Op.getParent().print()
     print("--------------------")
     Op.getLowIndex().print()
-    LowIndex = Op.getLowIndex()
     # Deal with the low index first
     FixLowIndices(Function, Op, Bitwidth, LoopIterator, LoopStep, Visited, Context, ArgToConstantValsMap)
     # Now deal with the high index
