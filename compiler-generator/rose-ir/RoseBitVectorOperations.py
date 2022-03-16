@@ -315,7 +315,10 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
       String += " " + self.getLowIndex().getName()
     else:
       InputBVSize = self.getInputBitVector().getType().getBitwidth()
-      ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+         ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
       # DO NOT CHANGE THIS ORDER
       String += " " + ReverseIndexString + self.getLowIndex().getName() + ")"
       String += " " + ReverseIndexString + self.getHighIndex().getName() + ")"
@@ -1073,6 +1076,5 @@ class RoseBVAbsOp(RoseBitVectorOp):
             + str(self.getOperand(0).getOutputBitwidth()) + "))"
     String += ")\n"
     return String
-
 
 
