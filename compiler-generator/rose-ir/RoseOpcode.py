@@ -983,9 +983,9 @@ class RoseOpcode(Enum):
             or isinstance(Inputs[0].getType(), RoseBitVectorType) \
             or isinstance(Inputs[0].getType(), RoseIntegerType)):
             return False
-        if not (isinstance(Inputs[1].getType(), RoseBooleanType) \
-            or isinstance(Inputs[1].getType(), RoseBitVectorType) \
-            or isinstance(Inputs[1].getType(), RoseIntegerType)):
+        if not (isinstance(Inputs[1], RoseBooleanType) \
+            or isinstance(Inputs[1], RoseBitVectorType) \
+            or isinstance(Inputs[1], RoseIntegerType)):
             return False
         if Inputs[0].getType().getBitwidth() != Inputs[1].getBitwidth():
             return False
@@ -1000,6 +1000,5 @@ class HighOrderFunctions(Enum):
 
     def __str__(self):
         return self.name
-
 
 
