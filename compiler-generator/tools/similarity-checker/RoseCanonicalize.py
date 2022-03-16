@@ -164,10 +164,13 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
 def FixLoopNestingInFunction(Function : RoseFunction):
   # Get number of loops at different levels
   NumLoopsAtLevel0 = Function.numLevelsOfRegion(RoseForLoop, 0)
+  print("NumLoopsAtLevel0:")
+  print(NumLoopsAtLevel0)
   if NumLoopsAtLevel0 == 0:
     AddTwoNestedLoopsInFunction(Function)
   elif NumLoopsAtLevel0 >= 1:
-    AddOuterLoopInFunction(Function)
+    if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
+      AddOuterLoopInFunction(Function)
 
 
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
@@ -329,7 +332,7 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
     if FirstBlock.getNumOperations() == 0:
       FirstBlock.addRegion(Op)
     else:
-      FirstBlock.addOperationBefore(0, Op)
+      FirstBlock.addOperationBefore(Op, FirstBlock.getOperation(0))
   
   # Erase gathered ops
   ToBeErased = []
