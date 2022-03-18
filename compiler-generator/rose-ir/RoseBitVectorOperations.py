@@ -240,8 +240,13 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     assert isinstance(InputOp, RoseBitVectorOp)
     LowIndexName = Name + ".low.idx"
     HighIndexName = Name + ".high.idx"
-    String = Spaces + "(define " + HighIndexName + " "  \
-            + "(- " + InputOp.getOutputBitwidth().getName() + " 1))\n"
+    BVSize = InputOp.getOutputBitwidth()
+    if isinstance(BVSize, RoseValue):
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + "(- " + str(BVSize) + " 1))\n"
+    else:
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + str(BVSize - 1) + ")\n"
     String += Spaces + "(define " + LowIndexName + " "  \
             + "(- " + HighIndexName + " " \
             + self.getOperand(1).getName() + " -1 ))\n"
