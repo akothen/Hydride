@@ -206,7 +206,10 @@ class RoseSelectOp(RoseOperation):
     for _ in range(NumSpace):
       Spaces += " "
     Name = super().getName()
-    ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
+    if isinstance(self.getCondition(), RoseBitVectorType):
+      ConditionString = "(equal? " + self.getCondition().getName() + " (bv #b1 1))\n"
+    else:
+      ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
     if isinstance(self.getType(), RoseBitVectorType):
       ThenString = "(bv " + self.getThenValue().getName() + " " \
                   + str(self.getThenValue().getType().getBitwidth()) + ")"
@@ -1204,6 +1207,5 @@ class RoseXorOp(RoseOperation):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
     return IRBuilder.xor(Operand1, Operand2, self.getName())
-
 
 
