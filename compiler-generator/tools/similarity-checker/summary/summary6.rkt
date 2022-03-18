@@ -1140,42 +1140,35 @@ concat
 )
 )
 
+
+
 _mm_dpwssd_epi32
 Code:
-(define (_mm_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
+(define (_mm_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
+(define dst src)
 (apply
 concat
-(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
- (apply
- concat
- (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
-  (define %factor0 (/  %arg0  %elemsize))
-  (define %1.new0 (*  j0.new  %factor0))
+(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])
+ (define %10.sum
+(apply
+ bvadd
+ (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
+  (define %1.new0 (+  j0.new  iterator.0.new))
   (define %lastidx2 (-  %elemsize  1))
   (define %2 (+  %1.new0  %lastidx2))
   (define %3 (extract  %2 %1.new0 a))
-  (define %4 (sign-extend  %3 (bitvector %arg0)))
+  (define %4 (sign-extend  %3 (bitvector %lanesize1)))
   (define %8 (extract  %2 %1.new0 b))
-  (define %9 (sign-extend  %8 (bitvector %arg0)))
+  (define %9 (sign-extend  %8 (bitvector %lanesize1)))
   (define %10 (bvmul  %4  %9))
-  (define %11.new0 (/  j0.new  %arg2))
-  (define %12 (+  %11.new0  %arg1))
-  (define %13 (*  %elemsize  %12))
-  (define %lastidx1 (-  %elemsize  1))
-  (define %14 (+  %13  %lastidx1))
-  (define %15 (extract  %14 %13 a))
-  (define %16 (sign-extend  %15 (bitvector %arg0)))
-  (define %21 (extract  %14 %13 b))
-  (define %22 (sign-extend  %21 (bitvector %arg0)))
-  (define %23 (bvmul  %16  %22))
-  (define %lastidx0 (-  %arg0  1))
-  (define %25 (+  %1.new0  %lastidx0))
-  (define %26 (extract  %25 %1.new0 src))
-  (define %27 (bvadd  %26  %10))
-  (define %28 (bvadd  %27  %23))
-  %28
+  %10
  )
- )
+))
+ (define %lastidx1 (-  %lanesize1  1))
+ (define %30.clone.2 (+  j0.new  %lastidx1))
+ (define %10.ext0 (extract  %30.clone.2 j0.new dst))
+ (define %10.acc0 (bvadd %10.sum %10.ext0))
+ %10.acc0
 )
 )
 )
