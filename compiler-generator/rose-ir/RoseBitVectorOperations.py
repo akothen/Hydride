@@ -719,7 +719,7 @@ class RoseBVNEQOp(RoseBitVectorOp):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    String += "bvnot (bveq " 
+    String += "not (bveq " 
     for Index, Operand in enumerate(self.getOperands()):
         String += " " + Operand.getName()
         if Index != len(self.getOperands()) - 1:
