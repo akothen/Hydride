@@ -47,14 +47,24 @@ class RoseSimilarityChecker():
   def genConcreteInput(self, Param, ConcreteArg, NameSuffix):
     assert isinstance(ConcreteArg, RoseConstant)
     if isinstance(ConcreteArg.getType(), RoseBitVectorType):
-      Input = "(define {} (bv #x".format(Param.getName() + NameSuffix)
-      HexVal = hex(ConcreteArg.getValue())
-      HexValString = str(HexVal[2:])
-      LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
-      for _ in range(LeftOver):
-        HexValString = "0" + HexValString
-      Input += HexValString
-      Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"
+      if ConcreteArg.getType().getBitwidth() >= 4:
+        Input = "(define {} (bv #x".format(Param.getName() + NameSuffix)
+        HexVal = hex(ConcreteArg.getValue())
+        HexValString = str(HexVal[2:])
+        LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
+        for _ in range(LeftOver):
+          HexValString = "0" + HexValString
+        Input += HexValString
+        Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"
+      else:
+        Input = "(define {} (bv #b".format(Param.getName() + NameSuffix)
+        HexVal = hex(ConcreteArg.getValue())
+        HexValString = str(HexVal[2:])
+        LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
+        for _ in range(LeftOver):
+          HexValString = "0" + HexValString
+        Input += HexValString
+        Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"    
     else:
       assert isinstance(ConcreteArg.getType(), RoseIntegerType)
       Input = "(define {} {})\n".format(Param.getName() + NameSuffix, str(ConcreteArg.getValue()))
@@ -65,10 +75,10 @@ class RoseSimilarityChecker():
     Function1 = FunctionInfo1.getLatestFunction()
     Function2 = FunctionInfo2.getLatestFunction()
     # Number of arguments must be equal
-    print("Function1.getNumArgs():")
-    print(Function1.getNumArgs())
-    print("Function2.getNumArgs():")
-    print(Function2.getNumArgs())
+    #print("Function1.getNumArgs():")
+    #print(Function1.getNumArgs())
+    #print("Function2.getNumArgs():")
+    #print(Function2.getNumArgs())
     if Function1.getNumArgs() != Function2.getNumArgs():
       return False
 
@@ -160,7 +170,7 @@ class RoseSimilarityChecker():
       Output, Err = RunCommand("racket {}".format(FileName))
       RunCommand("killall z3")
       RunCommand("killall racket")
-      #RunCommand("rm {}".format(FileName))
+      RunCommand("rm {}".format(FileName))
       print("Output:")
       print(Output)
       print("Err:")
