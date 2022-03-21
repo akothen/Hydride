@@ -65,6 +65,10 @@ class RoseSimilarityChecker():
     Function1 = FunctionInfo1.getLatestFunction()
     Function2 = FunctionInfo2.getLatestFunction()
     # Number of arguments must be equal
+    print("Function1.getNumArgs():")
+    print(Function1.getNumArgs())
+    print("Function2.getNumArgs():")
+    print(Function2.getNumArgs())
     if Function1.getNumArgs() != Function2.getNumArgs():
       return False
 
@@ -82,10 +86,13 @@ class RoseSimilarityChecker():
     # Number of symbolic and concrete must be the same
     SymbolicArgs1, ConcreteArgs1 = GetSymbolicAndConcreteArgs(FunctionInfo1)
     SymbolicArgs2, ConcreteArgs2 = GetSymbolicAndConcreteArgs(FunctionInfo2)
-    if len(ConcreteArgs1) != len(ConcreteArgs2):
-      return False
-    if len(SymbolicArgs1) != len(SymbolicArgs2):
-      return False
+    #if len(ConcreteArgs1) != len(ConcreteArgs2):
+    #  return False
+    #if len(SymbolicArgs1) != len(SymbolicArgs2):
+    #  return False
+    for Arg1, Arg2 in zip(Function1.getArgs(), Function2.getArgs()):
+      if type(Arg1.getType()) != type(Arg2.getType()):
+        return False
     # The types of the concrete values must be the same.
     #for ConcreteVal1, ConcreteVal2 in zip(ConcreteArgs1, ConcreteArgs2):
     #  if ConcreteVal1.getType() != ConcreteVal2.getType():
