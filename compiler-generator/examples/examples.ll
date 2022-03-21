@@ -637,6 +637,7 @@ function _mm_blend_epi16 ( bv128 a, bv128 b, bv8 imm8 ) {
    bvinsert bv16 %8, bv128 dst, int32 %0, int32 %9, int32 16
   }
  }
+ ret bv128 dst
 }
 
 
