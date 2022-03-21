@@ -664,13 +664,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           if OperandIndex == 0:
             continue
           if isinstance(Operand, RoseConstant):
-            if Op.getType().getBitwidth() != 1:
-              # Abstract away this constant value
-              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                            Operand.getType()))
-              ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
-              Op.setOperand(OperandIndex, Arg)
-              continue
+            # Abstract away this constant value
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+            Op.setOperand(OperandIndex, Arg)
+            continue
           UnknownVal.add(Operand)
       continue
 
@@ -775,11 +774,10 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       Visited.add(Op)
       if isinstance(Op.getInsertValue(), RoseConstant):
         # If the insert value is 1-bit long, then no need to extract it.
-        if Op.getInsertValue().getType().getBitwidth() != 1:
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                        Op.getType()))
-          ArgToConstantValsMap[Arg] = Op.getInsertValue().clone()
-          Op.setOperand(0, Arg)
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                      Op.getType()))
+        ArgToConstantValsMap[Arg] = Op.getInsertValue().clone()
+        Op.setOperand(0, Arg)
       Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
       # Add indexing ops in a set
       for IndexingOp in GatherIndexingOps(Op):
@@ -869,9 +867,9 @@ def ReplaceInsertedConstantBVWithArg(Function : RoseFunction, Context : RoseCont
 def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
                      ArgToConstantValsMap : dict):
   # If there are multiple sibling inner loops, then we deal with it differently
-  if len(Function.getRegionsOfType(RoseForLoop, Level=1)) > 1:
-    ExtractConstantsMultipleLoops(Function, Context, ArgToConstantValsMap)
-    return
+  #if len(Function.getRegionsOfType(RoseForLoop, Level=1)) > 1:
+  #  ExtractConstantsMultipleLoops(Function, Context, ArgToConstantValsMap)
+  #  return
 
   # Get all the induction variables
   LoopList = Function.getRegionsOfType(RoseForLoop)
