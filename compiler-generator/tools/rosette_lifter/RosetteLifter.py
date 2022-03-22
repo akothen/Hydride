@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '../../rosette_ir/') # temporary hack for file organization
+sys.path.insert(0, '../../rose-ir/') # temporary hack for file organization
 
 import re
 from RoseAbstractions import *
