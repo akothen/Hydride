@@ -46,7 +46,7 @@ class RoseConstant(RoseValue):
         assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     if isinstance(Type, RoseStringType):
-      assert type(self.Value) == str
+      assert type(self.Val) == str
     if not isinstance(Type, RoseStringType):
       super().__init__(str(Value), Type)
     else:

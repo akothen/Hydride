@@ -214,7 +214,7 @@ class RoseOpcode(Enum):
             Callee = Inputs[0]
             assert isinstance(Callee, RoseValues.RoseConstant)
             assert isinstance(Callee.getType(), RoseStringType)
-            return Callee.getType().getReturnType()
+            return Callee.getType() # .getReturnType()
         if self.value == self.select.value:
             assert Inputs[1].getType() == Inputs[2].getType()
             return Inputs[1].getType()
