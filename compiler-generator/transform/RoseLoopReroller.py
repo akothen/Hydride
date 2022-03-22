@@ -1542,7 +1542,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
         ExternalOperands.append(Operand)
         ExternalOperandFound = True
         continue
-      print("####Operand:")
+      print("--####Operand:")
       Operand.print()
       TempValues.append(Operand)
     if ExternalOperandFound == False:
@@ -1552,7 +1552,10 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   if TempValues == [] or ExternalOperands == []:
     return False
   # Limit the reduction pattern we analyze
-  if len(OpsWithTempVals) < 2:
+  print(len(OpsWithTempVals))
+  for tmp in OpsWithTempVals:
+    tmp.print()
+  if len(OpsWithTempVals) == 0:
     return False
 
   # Insert bvinserts after TempValues
@@ -1719,7 +1722,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
-
 
 
 

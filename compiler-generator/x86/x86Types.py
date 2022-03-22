@@ -49,7 +49,7 @@ x86Types = {
     'double': RoseVectorType.create(DoubleTy, 64 / DoubleTyBitwidth),
     'int': RoseBitVectorType.create(32),
     'char': RoseBitVectorType.create(8),
-    'short': RoseIntegerType.create(16),
+    'short': RoseBitVectorType.create(16),
     'unsigned short': RoseBitVectorType.create(16),
     'const int': RoseBitVectorType.create(32),
     'uint': RoseBitVectorType.create(32),
@@ -83,5 +83,4 @@ x86Types = {
     "M256": RoseBitVectorType.create(256),
     "M512": RoseBitVectorType.create(512),
 }
-
 

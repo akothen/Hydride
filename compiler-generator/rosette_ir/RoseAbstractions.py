@@ -191,11 +191,17 @@ class RoseFunction(RoseValue, RoseRegion):
 class RoseBlock(RoseRegion):
   def __init__(self, OpList : list, ParentRegion : RoseRegion):
     super().__init__(OpList, ParentRegion)
-  
+
   @staticmethod
-  def create(OpList : list = [], ParentRegion : RoseRegion = RoseUndefRegion()):
-    return RoseBlock(OpList, ParentRegion)
-  
+  def create(*args):
+    if len(args) == 2:
+      return RoseBlock(args[0], args[1])
+    if len(args) == 1:
+      return RoseBlock(args[0], RoseUndefRegion())
+    if len(args) == 0:
+      return RoseBlock([], RoseUndefRegion())
+    assert False
+
   def __eq__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
     or isinstance(Other, RoseFunction) \
@@ -539,5 +545,4 @@ class RoseCond(RoseRegion):
     for Region in self.getElseRegions():
       Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 

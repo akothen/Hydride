@@ -684,12 +684,8 @@
             [
             (vec-shuffle-swizzle-double v1 v2   len prec lane_offset lane_size  group_size fan_size rot_factor)
                 ;(* len prec 2) ;; FIXME, size can vary for the same len and prec depending on other params
-                (cond 
-                  [(eq? group_size 3)
-                    48]
-                  [else
-                    96]
-                  )]
+                (* (/ len lane_size) (* 2 group_size) prec)
+                  ]
             [_ -1]
             )
   )

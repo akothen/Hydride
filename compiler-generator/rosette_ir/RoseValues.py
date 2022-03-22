@@ -57,6 +57,8 @@ class RoseConstant(RoseValue):
     return RoseConstant(Value, Type)
 
   def __eq__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return False
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseArgument):
@@ -69,6 +71,8 @@ class RoseConstant(RoseValue):
     return self.Val == Other.Val and super().__eq__(Other)
 
   def __ne__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return  True
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseArgument):
@@ -121,6 +125,8 @@ class RoseArgument(RoseValue):
     return RoseArgument(Name, Type, Function, ArgIndex)
 
   def __eq__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return False
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseConstant):
@@ -134,6 +140,8 @@ class RoseArgument(RoseValue):
       and self.Callee.getRegionID() == Other.Callee.getRegionID() and super().__eq__(Other)
 
   def __ne__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return  True
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseOperation) \
     or isinstance(Other, RoseConstant):
@@ -195,6 +203,8 @@ class RoseOperation(RoseValue):
     assert self.getOpcode().inputsAreValid(self.getOperands())
   
   def __eq__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return False
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseArgument) \
     or isinstance(Other, RoseConstant):
@@ -209,6 +219,8 @@ class RoseOperation(RoseValue):
         and super().__eq__(Other)
 
   def __ne__(self, Other):
+    if not isinstance(Other, RoseValue):
+      return  True
     if isinstance(Other, RoseUndefValue) \
     or isinstance(Other, RoseArgument) \
     or isinstance(Other, RoseConstant):

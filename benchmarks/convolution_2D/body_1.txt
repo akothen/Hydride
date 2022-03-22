@@ -1,0 +1,48 @@
+(dsl_inst_0 
+(bv #x00 8)
+(vector-shuffle-ext-special 
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+(* ; idx-mul
+(+ ; idx-add
+idx-i ; idx-i
+0
+)
+4
+)
+4
+8
+)
+idx-j ; idx-j
+8
+)
+(vector-shuffle-lrotate
+(vector-load 
+arg0
+128
+(* ; idx-mul
+(+ ; idx-add
+idx-i ; idx-i
+1
+)
+4
+)
+4
+8
+)
+idx-j ; idx-j
+8
+)
+4
+8
+0
+2
+)
+arg1
+1
+4
+8
+8
+)

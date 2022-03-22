@@ -206,12 +206,21 @@ class RoseSelectOp(RoseOperation):
     for _ in range(NumSpace):
       Spaces += " "
     Name = super().getName()
-    ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
+    if isinstance(self.getCondition().getType(), RoseBitVectorType):
+      ConditionString = "(equal? " + self.getCondition().getName() + " (bv #b1 1))\n"
+    else:
+      ConditionString = "(equal? " + self.getCondition().getName() + " #t)"
     if isinstance(self.getType(), RoseBitVectorType):
-      ThenString = "(bv " + self.getThenValue().getName() + " " \
-                  + str(self.getThenValue().getType().getBitwidth()) + ")"
-      ElseString = "(bv " + self.getElseValue().getName() + " " \
-                  + str(self.getElseValue().getType().getBitwidth()) + ")"
+      if isinstance(self.getThenValue(), RoseConstant):
+        ThenString = "(bv " + self.getThenValue().getName() + " " \
+                    + str(self.getThenValue().getType().getBitwidth()) + ")"
+      else:
+        ThenString = self.getThenValue().getName()
+      if isinstance(self.getElseValue(), RoseConstant):
+        ElseString = "(bv " + self.getElseValue().getName() + " " \
+                    + str(self.getElseValue().getType().getBitwidth()) + ")"
+      else:
+        ElseString = self.getElseValue().getName()
     else:
       ThenString = self.getThenValue().getName()
       ElseString = self.getElseValue().getName()
@@ -1204,6 +1213,5 @@ class RoseXorOp(RoseOperation):
     Operand1 = self.getOperand(0).to_llvm_ir(IRBuilder)
     Operand2 = self.getOperand(1).to_llvm_ir(IRBuilder)
     return IRBuilder.xor(Operand1, Operand2, self.getName())
-
 
 

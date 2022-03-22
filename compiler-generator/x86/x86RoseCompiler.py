@@ -278,6 +278,9 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   BitVector = CompileExpression(BitSliceExpr.bv, Context)
   print("COMPILED BITVECTOR")
   BitVector.print()
+  print(BitVector)
+  BitVector.getType().print()
+  print(type(BitVector))
   assert isinstance(BitVector.getType(), RoseBitVectorType)
   print("BITVEVTOR BITWODTH:")
   print(BitVector.getType().getBitwidth())
@@ -1139,6 +1142,11 @@ def CompileBuiltIn(CallStmt, Context : x86RoseContext):
     [Operation] = ArgValuesList
     Context.addCompiledAbstraction(CallStmt.id, Operation)
     return Operation
+
+  # Int function does nothing. So just return the operand.
+  if CallStmt.funcname == "Int":
+      [Operation] = ArgValuesList
+      return Operation
   
   # Check if this is a call to a builtin function
   Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
@@ -1729,16 +1737,6 @@ def HandleToAbs(_):
   return LamdaImplFunc
 
 
-def HandleToInt(_):
-  def LamdaImplFunc(_, Operands : list, Context : x86RoseContext):
-    assert len(Operands) == 1
-    [Value] = Operands
-    assert isinstance(Value.getType(), RoseBitVectorType) == True
-    return Value
-  
-  return LamdaImplFunc
-
-
 def HandleToRemainder(_):
   def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 2
@@ -1778,7 +1776,7 @@ Builtins = {
 
   'ABS' : HandleToAbs(None),
 
-  'Int' : HandleToInt(None),
+  'Int' : None,
 
   'REMAINDER' : HandleToRemainder(None),
 }
@@ -2364,6 +2362,5 @@ dst[63:56] := a[7:0]
 
 if __name__ == '__main__':
   Compile()
-
 
 

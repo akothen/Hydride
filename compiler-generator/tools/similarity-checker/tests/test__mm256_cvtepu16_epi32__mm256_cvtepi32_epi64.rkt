@@ -4,21 +4,17 @@
 (require racket/pretty)
 (require rosette/solver/smt/boolector)
 
-(define (_mm256_cvtepu16_epi32  a %vectsize %lanesize %elemsize %laneoffset %arg0 )
+(define (_mm256_cvtepu16_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
-(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize))])
+(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
  (apply
  concat
- (for/list ([j0.new (reverse (range %laneoffset %lanesize %elemsize))])
-  (define %factor0 (/  %arg0  %elemsize))
-  (define %0.new0 (*  j0.new  %factor0))
+ (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
   (define %lastidx1 (-  %elemsize  1))
   (define %2 (+  j0.new  %lastidx1))
   (define %3 (extract  %2 j0.new a))
   (define %4 (zero-extend  %3 (bitvector %arg0)))
-  (define %lastidx0 (-  %arg0  1))
-  (define %5 (+  %0.new0  %lastidx0))
   %4
  )
  )
@@ -26,21 +22,17 @@ concat
 )
 )
 
-(define (_mm256_cvtepi32_epi64  a %vectsize %lanesize %elemsize %laneoffset %arg0 )
+(define (_mm256_cvtepi32_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
-(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize))])
+(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
  (apply
  concat
- (for/list ([j0.new (reverse (range %laneoffset %lanesize %elemsize))])
-  (define %factor0 (/  %arg0  %elemsize))
-  (define %0.new0 (*  j0.new  %factor0))
+ (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
   (define %lastidx1 (-  %elemsize  1))
   (define %2 (+  j0.new  %lastidx1))
   (define %3 (extract  %2 j0.new a))
   (define %4 (sign-extend  %3 (bitvector %arg0)))
-  (define %lastidx0 (-  %arg0  1))
-  (define %5 (+  %0.new0  %lastidx0))
   %4
  )
  )
@@ -49,19 +41,21 @@ concat
 )
 
 (define-symbolic a_1 (bitvector 128))
-(define %vectsize_1 256)
-(define %lanesize_1 256)
+(define %vectsize_1 128)
+(define %lanesize1_1 128)
+(define %lanesize2_1 128)
 (define %elemsize_1 16)
 (define %laneoffset_1 0)
 (define %arg0_1 32)
 
-(verify (assert (equal? (_mm256_cvtepu16_epi32 a_1 %vectsize_1 %lanesize_1 %elemsize_1 %laneoffset_1 %arg0_1 ) (_mm256_cvtepi32_epi64 a_1 %vectsize_1 %lanesize_1 %elemsize_1 %laneoffset_1 %arg0_1 ))))
+(verify (assert (equal? (_mm256_cvtepu16_epi32 a_1 %vectsize_1 %lanesize1_1 %lanesize2_1 %elemsize_1 %laneoffset_1 %arg0_1 ) (_mm256_cvtepi32_epi64 a_1 %vectsize_1 %lanesize1_1 %lanesize2_1 %elemsize_1 %laneoffset_1 %arg0_1 ))))
 
 (define-symbolic a_2 (bitvector 128))
-(define %vectsize_2 256)
-(define %lanesize_2 256)
+(define %vectsize_2 128)
+(define %lanesize1_2 128)
+(define %lanesize2_2 128)
 (define %elemsize_2 32)
 (define %laneoffset_2 0)
 (define %arg0_2 64)
 
-(verify (assert (equal? (_mm256_cvtepu16_epi32 a_2 %vectsize_2 %lanesize_2 %elemsize_2 %laneoffset_2 %arg0_2 ) (_mm256_cvtepi32_epi64 a_2 %vectsize_2 %lanesize_2 %elemsize_2 %laneoffset_2 %arg0_2 ))))
+(verify (assert (equal? (_mm256_cvtepu16_epi32 a_2 %vectsize_2 %lanesize1_2 %lanesize2_2 %elemsize_2 %laneoffset_2 %arg0_2 ) (_mm256_cvtepi32_epi64 a_2 %vectsize_2 %lanesize1_2 %lanesize2_2 %elemsize_2 %laneoffset_2 %arg0_2 ))))

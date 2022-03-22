@@ -240,8 +240,13 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     assert isinstance(InputOp, RoseBitVectorOp)
     LowIndexName = Name + ".low.idx"
     HighIndexName = Name + ".high.idx"
-    String = Spaces + "(define " + HighIndexName + " "  \
-            + "(- " + InputOp.getOutputBitwidth().getName() + " 1))\n"
+    BVSize = InputOp.getOutputBitwidth()
+    if isinstance(BVSize, RoseValue):
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + "(- " + str(BVSize) + " 1))\n"
+    else:
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + str(BVSize - 1) + ")\n"
     String += Spaces + "(define " + LowIndexName + " "  \
             + "(- " + HighIndexName + " " \
             + self.getOperand(1).getName() + " -1 ))\n"
@@ -315,7 +320,10 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
       String += " " + self.getLowIndex().getName()
     else:
       InputBVSize = self.getInputBitVector().getType().getBitwidth()
-      ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+         ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
       # DO NOT CHANGE THIS ORDER
       String += " " + ReverseIndexString + self.getLowIndex().getName() + ")"
       String += " " + ReverseIndexString + self.getHighIndex().getName() + ")"
@@ -711,7 +719,7 @@ class RoseBVNEQOp(RoseBitVectorOp):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    String += "bvnot (bveq " 
+    String += "not (bveq " 
     for Index, Operand in enumerate(self.getOperands()):
         String += " " + Operand.getName()
         if Index != len(self.getOperands()) - 1:
@@ -1073,6 +1081,5 @@ class RoseBVAbsOp(RoseBitVectorOp):
             + str(self.getOperand(0).getOutputBitwidth()) + "))"
     String += ")\n"
     return String
-
 
 
