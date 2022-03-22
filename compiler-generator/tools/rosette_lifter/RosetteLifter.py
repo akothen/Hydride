@@ -82,7 +82,7 @@ def convert(ast):
         if isinstance(ast, str):
             if ast[0] != '#':
                 # TODO: This is not correct, I suspect we need to add some code to handle variables or values with an unknown type
-                return RoseConstant.create(1, RoseIntegerType.create(32))
+                return RoseValue.create(ast, RoseIntegerType.create(32))
             return RoseConstant.create(ast, RoseStringType.create(len(ast)))
     elif ast[0] == 'bv':
         return RoseConstant.create(convert(ast[1]), RoseBitVectorType.create(ast[2]))

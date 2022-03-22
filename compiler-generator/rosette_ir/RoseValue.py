@@ -62,8 +62,7 @@ class RoseValue:
         print(self.Name)
         if Debug == True:
             self.Type.print()
-
- 
-
-
+    
+    def to_rosette(self):
+        return self.Name
 
