@@ -512,28 +512,28 @@ class RoseCond(RoseRegion):
     return self.Condition
   
   def getThenRegions(self):
-    return self.getChildren()["then"]
+    return self.getChildren(self.getKeyForThenRegion())
   
   def getElseRegions(self):
-    return self.getChildren()["else"]
+    return self.getChildren()[self.getKeyForElseRegion()]
   
   def addThenRegion(self, Region):
-    return self.addRegion(Region, "then")
+    return self.addRegion(Region, self.getKeyForThenRegion())
   
   def addElseRegion(self, Region):
-    return self.addRegion(Region, "else")
+    return self.addRegion(Region, self.getKeyForElseRegion())
 
   def addAbstractionInThenRegion(self, Abstraction):
-    return self.addAbstraction(Abstraction, "then")
+    return self.addAbstraction(Abstraction, self.getKeyForThenRegion())
   
   def addAbstrctionInElseRegion(self, Abstraction):
-    return self.addAbstraction(Abstraction, "else")
+    return self.addAbstraction(Abstraction, self.getKeyForElseRegion())
   
   def getKeyForThenRegion(self):
-    return "then"
+    return self.getKeys()[0]
 
   def getKeyForElseRegion(self):
-    return "else"
+    return self.getKeys()[1]
   
   def getUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
