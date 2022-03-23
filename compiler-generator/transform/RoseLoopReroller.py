@@ -1148,8 +1148,9 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     ParentRegion = Block.getParent()
     ParentRegion.print()
     Block.print()
-    Index = ParentRegion.getPosOfChild(Block)
-    ParentRegion.addRegionBefore(Index, Loop)
+    ParentKey = ParentRegion.getKeyForChild(Block)
+    Index = ParentRegion.getPosOfChild(Block, ParentKey)
+    ParentRegion.addRegionBefore(Index, Loop, ParentKey)
     print("PRINTING PARENT REGION BEFORE:")
     ParentRegion.print()
     print("PRINTING PARENT REGION AFTER:")
@@ -1409,7 +1410,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
       LowOffset = LowOffsetsList[OpIndex]
       assert LowOffset != None
       if LowOffset != 0:
-      # Generate an add instruction
+        # Generate an add instruction
         LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
         LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), \
                                           [ScaledIterator, LowOffsetVal]) 
@@ -1479,21 +1480,26 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContex
                             IteratorSuffix, RemovedOps, Context)
     else:
       print("PERFORMING REROLLING ONCE")
+      ParentRegion = Block.getParent()
+      print("+++++++BLOCK VALIDITY:")
+      print(Block in ParentRegion.getChildren())
       PerformRerollingOnce(Block, RerollableCandidatesList, IteratorSuffix, RemovedOps, Context)
+      print("---------BLOCK VALIDITY:")
+      print(Block in ParentRegion.getChildren())
   # Finaly, remove the ops.
   # Reverse the list of ops since we want to remove
   # uses of ops before the ops themselves.
   RemovedOps.reverse()
   for Operation in RemovedOps:
     Block = Operation.getParent()
-    print("OPERATION TO BE ERASED:")
-    Operation.print()
     Block.eraseOperation(Operation)
-    Block.print()
     # If the block is empty now, we can remove it
     if Block.isEmpty():
       ParentRegion = Block.getParent()
-      ParentRegion.eraseChild(Block)
+      print("ParentRegion:")
+      ParentRegion.print()
+      ParentKey = ParentRegion.getKeyForChild(Block)
+      ParentRegion.eraseChild(Block, ParentKey)
 
 
 def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
@@ -1552,9 +1558,6 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   if TempValues == [] or ExternalOperands == []:
     return False
   # Limit the reduction pattern we analyze
-  print(len(OpsWithTempVals))
-  for tmp in OpsWithTempVals:
-    tmp.print()
   if len(OpsWithTempVals) == 0:
     return False
 
