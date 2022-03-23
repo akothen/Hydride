@@ -44,11 +44,11 @@ class RoseRegion:
 
   def __eq__(self, Other):
     assert isinstance(Other, RoseRegion)
-    return self.Children == Other.Children and self.Parent == Other.Parent
+    return self.ID == Other.ID #self.Children == Other.Children and self.Parent == Other.Parent
   
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
-    return self.Children != Other.Children or self.Parent != Other.Parent
+    return self.ID != Other.ID #self.Children != Other.Children or self.Parent != Other.Parent
   
   def __iter__(self):
     # Undef region is not iterable
@@ -136,12 +136,16 @@ class RoseRegion:
     assert not self.isEmpty(Key)
     if Key == None:
       assert Index < len(self.Children)
-      return self.Children[Index]
+      Child = self.Children[Index]
+      assert Child.getParent() == self
+      return Child
     else:
       assert self.Keys != None
       assert Key in self.Keys
       assert Index < len(self.Children[Key])
-      return self.Children[Key][Index]
+      Child = self.Children[Key][Index]
+      assert Child.getParent() == self
+      return Child
   
   def getNumChildren(self, Key = None):
     # Sanity check
@@ -163,6 +167,7 @@ class RoseRegion:
       assert self.Keys != None
       assert Key in self.Keys
       assert Child in self.Children[Key]
+      assert Child.getParent() == self
       return self.Children[Key].index(Child)
 
   def getTailChild(self, Key = None):
@@ -173,11 +178,15 @@ class RoseRegion:
     if self.isEmpty(Key):
       return RoseAbstractions.RoseUndefRegion()
     if Key == None:
-      return self.Children[len(self.Children) - 1]
+      Child = self.Children[len(self.Children) - 1]
+      assert Child.getParent() == self
+      return Child
     else:
       assert self.Keys != None
       assert Key in self.Keys
-      return self.Children[Key][len(self.Children[Key]) - 1]
+      Child = self.Children[Key][len(self.Children[Key]) - 1]
+      assert Child.getParent() == self
+      return Child
   
   def isEmpty(self, Key = None):
     # Sanity check
@@ -205,7 +214,8 @@ class RoseRegion:
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     Function = self.getParent()
-    while not isinstance(Function, RoseAbstractions.RoseFunction):
+    while not isinstance(Function, RoseAbstractions.RoseFunction) \
+          and not isinstance(Function, RoseAbstractions.RoseUndefRegion):
       Function = Function.getParent()
     return Function
 
@@ -280,13 +290,21 @@ class RoseRegion:
       assert Index >= 0 and Index < len(self.Children[Key])
       self.Children[Key][Index] = Region
     
-  def eraseChild(self, Child):
+  def eraseChild(self, Child, Key = None):
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert self.isChildValid(Child)
-    assert Child in self.Children
-    # Remove the child
-    self.Children.remove(Child)
+    assert Child.getParent() == self
+    if Key == None:
+      assert Child in self.Children
+      # Remove the child
+      self.Children.remove(Child)
+    else:
+      assert self.Keys != None
+      assert Key in self.Keys
+      assert Child in self.Children[Key]
+      # Remove the child
+      self.Children[Key].remove(Child)
     # Set the child's parent to undef region
     Child.setParent(RoseAbstractions.RoseUndefRegion())
 
@@ -548,7 +566,8 @@ class RoseRegion:
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
+      Child.getParent() 
+      assert Child.getParent() == self
       Child.print(NumSpace)
-
 
 
