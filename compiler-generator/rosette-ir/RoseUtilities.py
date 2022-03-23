@@ -6,7 +6,6 @@
 ###################################################################
 
 
-from RoseType import RoseType
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -284,7 +283,7 @@ def ReplaceUsesWithUniqueCopiesOf(Region, Abstraction : RoseValue, NewAbstractio
   NewOpToInsertBeforeMap = dict()
   if Region.getKeys() != None:
     for Key in Region.getKeys():
-      for Child in Region.getChildren()[Key]:
+      for Child in Region.getChildren(Key):
         assert Region.isChildValid(Child)
         if isinstance(Child, RoseOperation):
           assert isinstance(Region, RoseBlock)
@@ -803,4 +802,5 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
     OpsList2.extend(Op2.getOperands())
 
   return MapBetweenValues
+
 
