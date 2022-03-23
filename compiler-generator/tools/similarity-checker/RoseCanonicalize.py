@@ -85,6 +85,7 @@ def RunFixLoopsBooundsInFunction(Region, Context : RoseContext):
 
 
 def AddOuterLoopInFunction(Function : RoseFunction):
+  print("AddOuterLoopInFunction")
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
   # Get the op that we can use to canonicalize the loop bounds
@@ -92,6 +93,8 @@ def AddOuterLoopInFunction(Function : RoseFunction):
   assert len(LoopList) != 0
   PrimaryOps = GetOpDeterminingLoopBounds(LoopList[0])
   assert PrimaryOps != None
+  print("PrimaryOps[0]:")
+  PrimaryOps[0].print()
   Bitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
   # Create a new loop
   Loop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
@@ -169,7 +172,7 @@ def FixLoopNestingInFunction(Function : RoseFunction):
   if NumLoopsAtLevel0 == 0:
     AddTwoNestedLoopsInFunction(Function)
   elif NumLoopsAtLevel0 >= 1:
-    if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
+    if Function.numLevelsOfRegion(RoseForLoop) - NumLoopsAtLevel0 == 0:
       AddOuterLoopInFunction(Function)
 
 
@@ -322,18 +325,29 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
     # Create a new block
     FirstBlock = Block.create()
     Function.addRegionBefore(0, FirstBlock)
+    print("ALLOCATED NEW BLOCK")
+    print("----FirstBlock:")
+    FirstBlock.print()
+    print(FirstBlock)
   else:
     FirstBlock = Region
 
   # Insert a bvinsert op in the first block of the given function
   for Op in NewInitInstructions:
+    print("NewInitInstructions:")
+    Op.print()
     assert isinstance(Op, RoseBVInsertSliceOp)
     #Op.getInputBitVector().setName(NewInputBVName)
+    print("FirstBlock:")
+    FirstBlock.print()
+    print(FirstBlock)
     if FirstBlock.getNumOperations() == 0:
       FirstBlock.addRegion(Op)
     else:
       FirstBlock.addOperationBefore(Op, FirstBlock.getOperation(0))
   
+  print("INTERMEDIATE FUNCTION:")
+  Function.print()
   # Erase gathered ops
   ToBeErased = []
   for Op in InitInstructions:
