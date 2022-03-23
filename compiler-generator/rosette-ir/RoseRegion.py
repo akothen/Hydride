@@ -421,6 +421,24 @@ class RoseRegion:
         continue
     return RegionList
 
+  def getKeysOfSubRegionsWithRegionOfType(self, SubRegionType):
+    # Some sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert not SubRegionType == RoseAbstractions.RoseUndefRegion
+    assert SubRegionType == RoseAbstractions.RoseFunction \
+        or SubRegionType == RoseAbstractions.RoseForLoop \
+        or SubRegionType == RoseAbstractions.RoseCond \
+        or SubRegionType == RoseAbstractions.RoseBlock
+    if self.Keys == None:
+      return None
+    KeyList = list()
+    for Key in self.Keys:
+      for Child in self.Children[Key]:
+        if isinstance(Child, SubRegionType):
+          KeyList.append(Key)
+          break
+    return KeyList
+
   def getParentOfType(self, ParentRegionType):
     # Some sanity checks
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
