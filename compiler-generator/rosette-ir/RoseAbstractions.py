@@ -88,7 +88,6 @@ class RoseFunction(RoseValue, RoseRegion):
     or isinstance(Other, RoseForLoop) \
     or isinstance(Other, RoseCond):
         return False
-    print(type(Other))
     assert isinstance(Other, RoseFunction)
     return self.RetVal == Other.RetVal and self.ArgList == Other.ArgList \
         and RoseValue.__eq__(self, Other) and RoseRegion.__eq__(self, Other)
@@ -132,7 +131,7 @@ class RoseFunction(RoseValue, RoseRegion):
   def appendArg(self, NewArg : RoseValue):
     # Add the argument to this function and change the type of this function
     Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
-                              RoseUndefValue(), self.getNumArgs() )
+                              RoseUndefValue(), self.getNumArgs())
     self.ArgList.append(Arg)
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
     FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
@@ -140,6 +139,18 @@ class RoseFunction(RoseValue, RoseRegion):
     # Set the parent of this argument to be this function
     self.ArgList[self.getNumArgs() - 1].setFunction(self)
     return self.ArgList[self.getNumArgs() - 1]
+
+  def prependArg(self, NewArg : RoseValue):
+    # Add the argument to this function and change the type of this function
+    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
+                              RoseUndefValue(), 0)
+    self.ArgList.insert(0, Arg)
+    ArgTyList = [Arg.getType() for Arg in self.ArgList]
+    FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
+    self.setType(FunctionType)
+    # Set the parent of this argument to be this function
+    self.ArgList[0].setFunction(self)
+    return self.ArgList[0]
 
   def isTopLevelFunction(self):
     return (self.getParent() == RoseUndefRegion())
@@ -274,7 +285,8 @@ class RoseBlock(RoseRegion):
     print("SPLITTING BLOCK")
     # Get this position of this block in the parent region
     ParentRegion = self.getParent()
-    BlockIndex = ParentRegion.getPosOfChild(self)
+    ParentKey = ParentRegion.getKeyForChild(self)
+    BlockIndex = ParentRegion.getPosOfChild(self, ParentKey)
     # Collect all the ops for the new block
     OpsForNewBlock = self.getOperations()[Index:]
     # Remove the ops after the split point from this Block
@@ -284,10 +296,10 @@ class RoseBlock(RoseRegion):
     NewBlock = self.create(OpsForNewBlock)
     assert isinstance(NewBlock, RoseBlock)
     # Add this new block to the parent region
-    if BlockIndex == ParentRegion.getNumChildren() - 1:
-      ParentRegion.addRegion(NewBlock)
+    if BlockIndex == ParentRegion.getNumChildren(ParentKey) - 1:
+      ParentRegion.addRegion(NewBlock, ParentKey)
     else:
-      ParentRegion.addRegionBefore(BlockIndex + 1, NewBlock)
+      ParentRegion.addRegionBefore(BlockIndex + 1, NewBlock, ParentKey)
     return NewBlock
 
   def eraseOperation(self, Operation):
@@ -540,9 +552,11 @@ class RoseCond(RoseRegion):
     print(Condtiion)
     # Print regions in this if-else blocks
     for Region in self.getThenRegions():
+      assert Region.getParent() == self
       Region.print(NumSpace + 1)
     print(Spaces + "} else {")
     for Region in self.getElseRegions():
+      assert Region.getParent() == self
       Region.print(NumSpace + 1)
     print(Spaces + "}")
 
