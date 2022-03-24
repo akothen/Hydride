@@ -401,7 +401,7 @@ class RoseRegion:
         continue
     return NumSubRegions
 
-  def getRegionsOfType(self, SubRegionType, Level : int = -1):
+  def getRegionsOfType(self, SubRegionType, Level : int = -1, Key = None):
     # Some sanity checks
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
     assert not SubRegionType == RoseAbstractions.RoseUndefRegion
@@ -412,17 +412,34 @@ class RoseRegion:
     if isinstance(self, RoseAbstractions.RoseBlock):
       assert SubRegionType != RoseAbstractions.RoseBlock
       return []
+    print(type(self))
+    if self.getKeys() == None:
+      assert Key == None
+    else:
+      print("self.getKeys():")
+      print(self.getKeys())
+      print("Key:")
+      print(Key)
+      assert Key in self.getKeys()
     RegionList = list()
-    for SubRegion in self:
+    for SubRegion in self.getChildren(Key):
       if Level > 0:
-        RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1))
+        if SubRegion.getKeys() == None:
+          RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1))
+        else:
+          for SubRegionKey in SubRegion.getKeys():
+            RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level - 1, SubRegionKey))
         continue
       if isinstance(SubRegion, SubRegionType):
         RegionList.append(SubRegion)
         if SubRegionType == RoseAbstractions.RoseBlock:
           continue
       if Level < 0:
-        RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level))
+        if SubRegion.getKeys() == None:
+          RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level))
+        else:
+          for SubRegionKey in SubRegion.getKeys():
+            RegionList.extend(SubRegion.getRegionsOfType(SubRegionType, Level, SubRegionKey))
         continue
     return RegionList
 
@@ -592,6 +609,5 @@ class RoseRegion:
       Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
-
 
 
