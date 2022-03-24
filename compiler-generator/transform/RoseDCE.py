@@ -112,7 +112,8 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Check if the block is empty. If it is, remove the block
   if Block.getNumOperations() == 0:
     ParentRegion = Block.getParent()
-    ParentRegion.eraseChild(Block)
+    ParentKey = ParentRegion.getKeyForChild(Block)
+    ParentRegion.eraseChild(Block, ParentKey)
 
 
 def RunDCEOnFunction(Function : RoseFunction):
@@ -130,7 +131,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
