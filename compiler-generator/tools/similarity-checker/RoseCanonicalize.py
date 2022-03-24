@@ -84,6 +84,36 @@ def RunFixLoopsBooundsInFunction(Region, Context : RoseContext):
     Abstraction.print()
 
 
+def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
+  # Sanity checks
+  for Region in RegionList:
+    assert Region.getParent() == ParentRegion
+  Function = ParentRegion.getFunction()
+  PrimaryOps = GetOpDeterminingLoopBoundsInBlockList(Function, RegionList)
+  assert PrimaryOps != None
+  print("PrimaryOps[0]:")
+  PrimaryOps[0].print()
+  Bitwidth = PrimaryOps[0].getOutputBitwidth()
+  # Create a new loop
+  Loop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
+  RegionIndex = ParentRegion.getPosOfChild(RegionList[0], ParentKey)
+  print("RegionIndex:")
+  print(RegionIndex)
+  # Add the regions in the parent region into the loop
+  for Region in RegionList:
+    ParentRegion.eraseChild(Region, ParentKey)
+    Loop.addRegion(Region)
+  # Add the loop in the parent region
+  if RegionIndex == 0:
+    ParentRegion.addRegion(Loop, ParentKey)
+  else:
+    ParentRegion.addRegionBefore(RegionIndex, Loop, ParentKey)
+  print("ParentRegion:")
+  ParentRegion.print()
+  Loop.print()
+  ParentRegion.getFunction().print()
+
+
 def AddOuterLoopInFunction(Function : RoseFunction):
   print("AddOuterLoopInFunction")
   # Use the return value of the function as the end and step
@@ -172,7 +202,27 @@ def FixLoopNestingInFunction(Function : RoseFunction):
   if NumLoopsAtLevel0 == 0:
     AddTwoNestedLoopsInFunction(Function)
   elif NumLoopsAtLevel0 >= 1:
-    if Function.numLevelsOfRegion(RoseForLoop) - NumLoopsAtLevel0 == 0:
+    if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
+      # If one cond region has no loop but another does, add loop
+      # around the other region.
+      if Function.numLevelsOfRegion(RoseCond, 1) == 1:
+        [CondRegion] = Function.getRegionsOfType(RoseCond, 1)
+        if CondRegion.numLevelsOfRegion(RoseForLoop, 0) == 1:
+          # Check what sub-region is a loop
+          [RegionKey] = CondRegion.getKeysOfSubRegionsWithRegionOfType(RoseForLoop)
+          if RegionKey == CondRegion.getKeyForThenRegion():
+            KeyForRelevantRegion = CondRegion.getKeyForElseRegion()
+          else:
+            assert RegionKey == CondRegion.getKeyForElseRegion()
+            KeyForRelevantRegion = CondRegion.getKeyForThenRegion()
+          SubRegionList = CondRegion.getChildren(KeyForRelevantRegion)
+          print("KeyForRelevantRegion:")
+          print(KeyForRelevantRegion)
+          # All the subregions must be blocks
+          for SubRegion in SubRegionList:
+            assert isinstance(SubRegion, RoseBlock)
+          AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
+    else:
       AddOuterLoopInFunction(Function)
 
 
@@ -228,38 +278,67 @@ def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
       InsertBefore += 1
 
 
-def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
+def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
   print("FIX ACCUMULATION CODE")
+  if len(BlockList) == 0:
+    return False
+  Function = BlockList[0].getFunction()
   Function.print()
-  BlockList = Function.getRegionsOfType(RoseBlock)
+  #BlockList = Function.getRegionsOfType(RoseBlock)
   AccumulationPatterFound = False
   NewInitInstructions = list()
   InitInstructions = list()
+  print("len(BlockList)")
+  print(len(BlockList))
+
+  def SanityChecks(Op : RoseBitVectorOp, Loop : RoseForLoop):
+    Op.getLowIndex().print()
+    Loop.getIterator().print()
+    if Op.getLowIndex() != Loop.getIterator():
+      print("BREAK1")
+      return False
+    assert isinstance(Loop.getStep(), RoseConstant)
+    if Loop.getStep().getValue() != Op.getOutputBitwidth():
+      print("BREAK2")
+      return False
+    assert isinstance(Loop.getEndIndex(), RoseConstant)
+    if Loop.getEndIndex().getValue() != \
+              Op.getInputBitVector().getType().getBitwidth():
+      print("BREAK3")
+      return False
+    return True
+
   for Block in reversed(BlockList):
+    assert isinstance(Block, RoseBlock)
+    assert Function == Block.getFunction()
     # If this block is in the cond region, skip this block
-    if not isinstance(Block.getParentOfType(RoseCond), RoseUndefRegion):
-      continue
-    if len(NewInitInstructions) != 0:
-      break
+    #if not isinstance(Block.getParentOfType(RoseCond), RoseUndefRegion):
+    #  continue
+    #if len(NewInitInstructions) != 0:
+    #  break
     # Look for accumulation pattern
+    Block.print()
+    print("ITERATING ANOTHER BLOCK")
     for Op in reversed(Block.getOperations()):
       if isinstance(Op, RoseBVInsertSliceOp):
         if Op.getInputBitVector() == Function.getReturnValue():
+          print("**********INSERT OP:")
+          Op.print()
           # The bvinsert op has to be using the iterator
           Loop = Block.getParentOfType(RoseForLoop)
-          if not isinstance(Loop, RoseUndefRegion):
-            if Op.getLowIndex() != Loop.getIterator():
+          if isinstance(Loop, RoseUndefRegion):
+            break
+          if SanityChecks(Op, Loop) == False:
+            Loop =  Loop.getParentOfType(RoseForLoop)
+            if isinstance(Loop, RoseUndefRegion):
               break
-            assert isinstance(Loop.getStep(), RoseConstant)
-            if Loop.getStep().getValue() != Op.getOutputBitwidth():
-              break
-            assert isinstance(Loop.getEndIndex(), RoseConstant)
-            if Loop.getEndIndex().getValue() != \
-                      Op.getInputBitVector().getType().getBitwidth():
+            if SanityChecks(Op, Loop) == False:
               break
           # Now go up the use-def chain. The inserted values
           # must be coming from a bvadd op.
           InsertValue = Op.getInsertValue()
+          print("**********InsertValue:")
+          InsertValue.print()
           if not isinstance(InsertValue, RoseBVAddOp):
             # See if this is an extract op
             if isinstance(InsertValue, RoseBVExtractSliceOp):
@@ -271,6 +350,14 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
                     if Loop.getStep().getValue() == InsertValue.getOutputBitwidth():
                       if Loop.getEndIndex().getValue() == \
                                 InsertValue.getInputBitVector().getType().getBitwidth():
+                        print("Op.print():")
+                        Op.print()
+                        print("NewInitInstructions:")
+                        for Inst__ in NewInitInstructions:
+                          print(Inst__)
+                          print("^^^^^^^^")
+                          Inst__.print()
+                        print("=======================")
                         assert len(NewInitInstructions) == 0
                         InitInstructions.append(Op)
                         InitInstructions.append(InsertValue)
@@ -284,6 +371,8 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
                         NewInst.setOperand(4, \
                             RoseConstant.create(Loop.getEndIndex().getValue(), \
                                           NewInst.getOperand(3).getType()))
+                        print("NewInst:")
+                        NewInst.print()
                         NewInitInstructions.append(NewInst)
                         continue
                 break
@@ -299,6 +388,8 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
               NewInst.setOperand(4, \
                   RoseConstant.create(Loop.getEndIndex().getValue(), \
                                 NewInst.getOperand(3).getType()))
+              print("NewInst:")
+              NewInst.print()
               NewInitInstructions.append(NewInst)
               continue
             break
@@ -308,15 +399,21 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
               if isinstance(Operand, RoseBVExtractSliceOp):
                 if Operand.getInputBitVector() == Function.getReturnValue():
                   # The bvinsert op has to be using the iterator
-                  if not isinstance(Loop, RoseUndefRegion()):
+                  if not isinstance(Loop, RoseUndefRegion):
                     if Operand.getLowIndex() == Loop.getIterator():
                       if Loop.getStep().getValue() == Operand.getOutputBitwidth():
                         AccumulationPatterFound = True
                         break
 
   # Sanity check  
+  print("---NewInitInstructions:")
+  print(NewInitInstructions)
+  print("AccumulationPatterFound:")
+  print(AccumulationPatterFound)
   if len( NewInitInstructions) == 0:
     assert AccumulationPatterFound == False
+    return False
+  if AccumulationPatterFound == False:
     return False
     
   # Get the first block
@@ -367,8 +464,63 @@ def FixAccumulationCode(Function : RoseFunction, Context : RoseContext):
       Block.eraseOperation(Op)
   
   return True
-  
-  
+
+
+def FixAccumulationCodeInFunction(Function : RoseFunction, Context : RoseContext):
+  assert isinstance(Function, RoseFunction)
+  SubRegions = list()
+  SubRegions.extend(Function.getChildren())
+  for SubRegion in SubRegions:
+    if isinstance(SubRegion, RoseFunction):
+      FixAccumulationCodeInFunction(SubRegion, Context)
+      continue
+    if isinstance(SubRegion, RoseForLoop):
+      # If the loop contains cond regions, we need to fix accumulation code for
+      # subregions in condregions one at a time.
+      if SubRegion.containsRegionOfType(RoseCond, Level=0):
+        CondRegions1 = list()
+        CondRegions2 = list()
+        for SubSubRegion in SubRegion:
+          if isinstance(SubSubRegion, RoseCond):
+            print("SubSubRegion.getKeyForThenRegion():")
+            print(SubSubRegion.getKeyForThenRegion())
+            CondRegions1.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
+                                Key=SubSubRegion.getKeyForThenRegion()))
+            print("SubSubRegion.getKeyForElseRegion():")
+            print(SubSubRegion.getKeyForElseRegion())
+            CondRegions2.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
+                                Key=SubSubRegion.getKeyForElseRegion()))
+            continue
+          if isinstance(SubSubRegion, RoseBlock):
+            CondRegions1.append(SubSubRegion)
+            CondRegions2.append(SubSubRegion)
+            continue
+          CondRegions1.extend(SubSubRegion.getRegionsOfType(RoseBlock))
+          CondRegions2.extend(SubSubRegion.getRegionsOfType(RoseBlock))
+        # Fix accumulation code now
+        print("+++++++++++++++++++++++++++++++++++++++++")
+        for Block in CondRegions1:
+          print("BLOCK:")
+          Block.print()
+        print("+++++++++++++++++++++++++++++++++++++++++")
+        FixAccumulationCodeForBlockList(CondRegions1, Context)
+        print("+++++++++++++++++++++++++++++++++++++++++")
+        for Block in CondRegions2:
+          print("BLOCK:")
+          Block.print()
+        print("+++++++++++++++++++++++++++++++++++++++++")
+        FixAccumulationCodeForBlockList(CondRegions2, Context)
+        continue
+      BlockList = SubRegion.getRegionsOfType(RoseBlock)
+      print("=========================================")
+      for Block in BlockList:
+        print("BLOCK:")
+        Block.print()
+      print("=========================================")
+      FixAccumulationCodeForBlockList(BlockList, Context)
+      continue
+
+
 def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
   CondRegions = Function.getRegionsOfType(RoseCond)
   for CondRegion in CondRegions:
@@ -401,7 +553,7 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
   RunFixLoopsBooundsInFunction(Function, Context)
-  FixAccumulationCode(Function, Context)
+  FixAccumulationCodeInFunction(Function, Context)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
     return
