@@ -201,29 +201,29 @@ def FixLoopNestingInFunction(Function : RoseFunction):
   print(NumLoopsAtLevel0)
   if NumLoopsAtLevel0 == 0:
     AddTwoNestedLoopsInFunction(Function)
-  elif NumLoopsAtLevel0 >= 1:
-    if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
-      # If one cond region has no loop but another does, add loop
-      # around the other region.
-      if Function.numLevelsOfRegion(RoseCond, 1) == 1:
-        [CondRegion] = Function.getRegionsOfType(RoseCond, 1)
-        if CondRegion.numLevelsOfRegion(RoseForLoop, 0) == 1:
-          # Check what sub-region is a loop
-          [RegionKey] = CondRegion.getKeysOfSubRegionsWithRegionOfType(RoseForLoop)
-          if RegionKey == CondRegion.getKeyForThenRegion():
-            KeyForRelevantRegion = CondRegion.getKeyForElseRegion()
-          else:
-            assert RegionKey == CondRegion.getKeyForElseRegion()
-            KeyForRelevantRegion = CondRegion.getKeyForThenRegion()
-          SubRegionList = CondRegion.getChildren(KeyForRelevantRegion)
-          print("KeyForRelevantRegion:")
-          print(KeyForRelevantRegion)
-          # All the subregions must be blocks
-          for SubRegion in SubRegionList:
-            assert isinstance(SubRegion, RoseBlock)
-          AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
-    else:
-      AddOuterLoopInFunction(Function)
+    return
+  if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
+    # If one cond region has no loop but another does, add loop
+    # around the other region.
+    if Function.numLevelsOfRegion(RoseCond, 1) == 1:
+      [CondRegion] = Function.getRegionsOfType(RoseCond, 1)
+      if CondRegion.numLevelsOfRegion(RoseForLoop, 0) == 1:
+        # Check what sub-region is a loop
+        [RegionKey] = CondRegion.getKeysOfSubRegionsWithRegionOfType(RoseForLoop)
+        if RegionKey == CondRegion.getKeyForThenRegion():
+          KeyForRelevantRegion = CondRegion.getKeyForElseRegion()
+        else:
+          assert RegionKey == CondRegion.getKeyForElseRegion()
+          KeyForRelevantRegion = CondRegion.getKeyForThenRegion()
+        SubRegionList = CondRegion.getChildren(KeyForRelevantRegion)
+        print("KeyForRelevantRegion:")
+        print(KeyForRelevantRegion)
+        # All the subregions must be blocks
+        for SubRegion in SubRegionList:
+          assert isinstance(SubRegion, RoseBlock)
+        AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
+        return
+    AddOuterLoopInFunction(Function)
 
 
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
