@@ -1,18 +1,22 @@
+#lang rosette
+(require racket/pretty)
+
 
 (define (bvumaxval bitwidth)
   (apply 
   concat
-    (for idx (range (0, bitwidth))
+    (for/list ([idx (range 0 bitwidth)])
       (bv #b1 1)
     )
   )
 )
 
 (define (bvsmaxval bitwidth)
+  (define end (- bitwidth 1))
   (define res
   (apply 
   concat
-    (for idx (range (0, (- bitwidth 1)))
+    (for/list ([idx (range 0 end)])
       (bv #b1 1)
     )
   )
@@ -23,17 +27,18 @@
 (define (bvuminval bitwidth)
   (apply 
   concat
-    (for idx (range (0, bitwidth))
-      (bv #b1 0)
+    (for/list ([idx (range 0 bitwidth)])
+      (bv #b0 1)
     )
   )
 )
 
 (define (bvsminval bitwidth)
+  (define end (- bitwidth 1))
   (define res
   (apply 
   concat
-    (for idx (range (0, (- bitwidth 1)))
+    (for/list ([idx (range 0 end)])
       (bv #b0 1)
     )
   )
@@ -49,3 +54,4 @@
   (bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
 )
 
+(provide (all-defined-out))
