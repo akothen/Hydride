@@ -339,6 +339,10 @@ def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
           InsertValue = Op.getInsertValue()
           print("**********InsertValue:")
           InsertValue.print()
+          # Skip any saturation ops
+          if isinstance(InsertValue, RoseBVSSaturateOp) \
+            or isinstance(InsertValue, RoseBVUSaturateOp):
+            InsertValue = InsertValue.getInputBitVector()
           if not isinstance(InsertValue, RoseBVAddOp):
             # See if this is an extract op
             if isinstance(InsertValue, RoseBVExtractSliceOp):
