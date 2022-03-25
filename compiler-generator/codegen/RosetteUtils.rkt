@@ -1,6 +1,8 @@
 #lang rosette
 (require racket/pretty)
 
+(provide (all-defined-out))
+
 
 (define (bvumaxval bitwidth)
   (apply 
@@ -46,12 +48,30 @@
   (concat (bv #b1 1) res)
 )
 
-(define (bvssat vect bitwidth)
-  (bvsmin (bvsmax vect (bvsminval bitwidth)) (bvsmaxval bitwidth))
+(define (bvssat vect bitwidth sat_size)
+  (if (> bitwidth sat_size)
+  (begin
+    (cond
+    [(bvslt vect (bvsminval bitwidth)) (bvsminval sat_size)]
+    [(bvsgt vect (bvsmaxval bitwidth)) (bvsmaxval bitwidth)]
+    [else (extract (- sat_size 1) 0 vect)])
+  )
+  (begin
+   vect
+  )
+ )
+ ;;(bvsmin (bvsmax vect (bvsminval bitwidth)) (bvsmaxval bitwidth))
 )
 
-(define (bvusat vect bitwidth)
-  (bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
+(define (bvusat vect bitwidth sat_size)
+  (if (bvugt vect (bvumaxval bitwidth)) 
+    (begin
+      (bvsmaxval bitwidth)
+    )
+    (begin
+      (extract (- sat_size 1) 0 vect)
+    )
+  )
+  ;;(bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
 )
 
-(provide (all-defined-out))
