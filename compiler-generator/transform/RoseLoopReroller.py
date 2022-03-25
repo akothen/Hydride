@@ -1508,11 +1508,18 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # Look for chains of bvadd ops
   BVAddChain = list()
   BVInsertOp = RoseUndefValue()
+  IntermediateOp = RoseUndefValue()
   for Op in reversed(Block.getOperations()):
     if isinstance(Op, RoseBVInsertSliceOp):
-      # Go up the use-def chain to look for add ops
-      if isinstance(Op.getInsertValue(), RoseBVAddOp):
-        Worklist = [Op.getInsertValue()]
+      # Go up the use-def chain to look for add ops.
+      # Skip bvsat and bvusat ops.
+      InsertValue = Op.getInsertValue()
+      if isinstance(InsertValue, RoseBVSSaturateOp) \
+      or isinstance(InsertValue, RoseBVUSaturateOp):
+        IntermediateOp = InsertValue
+        InsertValue = IntermediateOp.getInputBitVector()
+      if isinstance(InsertValue, RoseBVAddOp):
+        Worklist = [InsertValue]
         while len(Worklist) != 0:
           AddOp = Worklist.pop()
           # Number of uses for the add op must be only 1.
@@ -1527,6 +1534,10 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   if len(BVAddChain) == 0 or len(BVAddChain) == 1 \
     or BVInsertOp == RoseUndefValue():
     return False
+
+  if not isinstance(IntermediateOp, RoseUndefValue):
+    assert isinstance(IntermediateOp, RoseBVSSaturateOp) \
+        or isinstance(IntermediateOp, RoseBVUSaturateOp)
   
   # One of the bvadds must be coming from external source
   # (some other block or function argument).
@@ -1566,7 +1577,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   InsertOpHighIndex = BVInsertOp.getHighIndex()
   BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
                                       InsertOpLowIndex.getType())
-  FirstOp = Block.getChild(0)
+  FirstOp = Block.getOperation(0)
 
   # Put the ExternalOperand ops in the beginning of the loop
   for Index, Op in enumerate(ExternalOperands):
@@ -1596,10 +1607,20 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
       print("NewOp:")
       NewOp.print()
       AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, NewOp])
-      InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
+      if isinstance(IntermediateOp, RoseBVSSaturateOp):
+        InsertValue = RoseBVSSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                                AddOp, BitwidthVal)
+      elif isinstance(IntermediateOp, RoseBVUSaturateOp):
+        InsertValue = RoseBVUSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                                AddOp, BitwidthVal)
+      else:
+        InsertValue = AddOp
+      InsertOp = RoseBVInsertSliceOp.create(InsertValue, BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
       Block.addOperationBefore(ExtractOp, FirstOp)
       Block.addOperationBefore(AddOp, FirstOp)
+      if not isinstance(IntermediateOp, RoseUndefValue):
+        Block.addOperationBefore(InsertValue, FirstOp)
       Block.addOperationBefore(InsertOp, FirstOp)
     else:
       InsertOp = RoseBVInsertSliceOp.create(NewOp, BVInsertOp.getInputBitVector(), \
@@ -1630,10 +1651,20 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
     print("Op:")
     Op.print()
     AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, Op])
-    InsertOp = RoseBVInsertSliceOp.create(AddOp, BVInsertOp.getInputBitVector(), \
+    if isinstance(IntermediateOp, RoseBVSSaturateOp):
+      InsertValue = RoseBVSSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                              AddOp, BitwidthVal)
+    elif isinstance(IntermediateOp, RoseBVUSaturateOp):
+      InsertValue = RoseBVUSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                              AddOp, BitwidthVal)
+    else:
+      InsertValue = AddOp
+    InsertOp = RoseBVInsertSliceOp.create(InsertValue, BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
     Block.addOperationBefore(ExtractOp, InsertBefore)
     Block.addOperationBefore(AddOp, InsertBefore)
+    if not isinstance(IntermediateOp, RoseUndefValue):
+      Block.addOperationBefore(InsertValue, InsertBefore)
     Block.addOperationBefore(InsertOp, InsertBefore)
 
   def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
@@ -1678,6 +1709,8 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
   # Erase the bvinsert op
   print("ERASE INSERT OP")
   EraseIndexingBVOp(BVInsertOp)
+  if not isinstance(IntermediateOp, RoseUndefValue):
+    Block.eraseOperation(IntermediateOp)
   # Remove the temp values
   for Op in OpsWithTempVals:
     Block.eraseOperation(Op)
