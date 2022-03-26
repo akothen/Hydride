@@ -12,6 +12,7 @@ from RoseOperations import *
 from RoseBitVectorOperations import *
 from RoseContext import *
 from RoseUtilities import *
+from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
 
 
 def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, \
@@ -976,6 +977,10 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
       print("INDEXING OP ADDED:")
       OpList.append(Operation)
       continue
+    if isinstance(Operation, RoseBVUSaturateOp) \
+    or isinstance(Operation, RoseBVSSaturateOp):
+      OpList.append(Operation)
+      continue
 
   # Now deal with all the truncate ops in this block
   for Op in OpList:
@@ -1118,6 +1123,25 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
         CombineSizeExtendingOps(Op, Context)
       continue
 
+    # Change saturation qualifiers
+    if isinstance(Op, RoseBVUSaturateOp):
+      if isinstance(Op.getInputBitVector(), RoseSaturableBitVectorOp):
+        # Apply the qualifiers if the bitwidths of saturation are the same as ops'.
+        if Op.getInputBitVector().getType().getBitwidth() == Op.getType().getBitwidth():
+          Op.getInputBitVector().allowNoUnsignedWrapping()
+          Op.replaceUsesWith(Op.getInputBitVector())
+          Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVSSaturateOp):
+      if isinstance(Op.getInputBitVector(), RoseSaturableBitVectorOp):
+        # Apply the qualifiers if the bitwidths of saturation are the same as ops'.
+        if Op.getInputBitVector().getType().getBitwidth() == Op.getType().getBitwidth():
+          Op.getInputBitVector().allowNoSignedWrapping()
+          Op.replaceUsesWith(Op.getInputBitVector())
+          Block.eraseOperation(Op)
+      continue
+      
+
   # Remove the redundant bvinserts from the block
   RemoveRedundantBVInsertOps(Block)  
 
@@ -1153,7 +1177,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
