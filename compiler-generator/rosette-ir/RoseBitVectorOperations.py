@@ -13,6 +13,7 @@ from RoseTypes import *
 from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
+from RoseSaturatableBitVectorOperation import RoseSaturatableBitVectorOp
 
 import llvmlite
 
@@ -539,15 +540,25 @@ class RoseBVNegOp(RoseBitVectorOp):
     return IRBuilder.neg(OperandInLLVM, self.getName())
 
 
-class RoseBVAddOp(RoseBitVectorOp):
-  def __init__(self, Name : str, Operands : list, ParentBlock):
+class RoseBVAddOp(RoseSaturatableBitVectorOp):
+  def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
+                NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
       assert isinstance(Operand.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvadd, Name, Operands, ParentBlock)
+    super().__init__(RoseOpcode.bvadd, Name, Operands, NoSignedWrap, \
+                    NoUnsignedWrap, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseBVAddOp(Name, Operands, ParentBlock)
+    return RoseBVAddOp(Name, Operands, False, False, ParentBlock)
+
+  @staticmethod
+  def createNSW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVAddOp(Name, Operands, True, False, ParentBlock)
+
+  @staticmethod
+  def createNUW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVAddOp(Name, Operands, False, True, ParentBlock)
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -556,15 +567,25 @@ class RoseBVAddOp(RoseBitVectorOp):
     return IRBuilder.add(Operand1, Operand2, self.getName())
 
 
-class RoseBVSubOp(RoseBitVectorOp):
-  def __init__(self, Name : str, Operands : list, ParentBlock):
+class RoseBVSubOp(RoseSaturatableBitVectorOp):
+  def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
+                NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
       assert isinstance(Operand.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvsub, Name, Operands, ParentBlock)
-    
+    super().__init__(RoseOpcode.bvsub, Name, Operands, NoSignedWrap, \
+                    NoUnsignedWrap, ParentBlock)
+
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseBVSubOp(Name, Operands, ParentBlock)
+    return RoseBVSubOp(Name, Operands, False, False, ParentBlock)
+
+  @staticmethod
+  def createNSW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVSubOp(Name, Operands, True, False, ParentBlock)
+
+  @staticmethod
+  def createNUW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVSubOp(Name, Operands, False, True, ParentBlock)
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -573,15 +594,25 @@ class RoseBVSubOp(RoseBitVectorOp):
     return IRBuilder.sub(Operand1, Operand2, self.getName())
 
 
-class RoseBVMulOp(RoseBitVectorOp):
-  def __init__(self, Name : str, Operands : list, ParentBlock):
+class RoseBVMulOp(RoseSaturatableBitVectorOp):
+  def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
+                NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
       assert isinstance(Operand.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvmul, Name, Operands, ParentBlock)
-    
+    super().__init__(RoseOpcode.bvmul, Name, Operands, NoSignedWrap, \
+                    NoUnsignedWrap, ParentBlock)
+
   @staticmethod
   def create(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
-    return RoseBVMulOp(Name, Operands, ParentBlock)
+    return RoseBVMulOp(Name, Operands, False, False, ParentBlock)
+
+  @staticmethod
+  def createNSW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVMulOp(Name, Operands, True, False, ParentBlock)
+
+  @staticmethod
+  def createNUW(Name : str, Operands : list, ParentBlock = RoseUndefRegion()):
+    return RoseBVMulOp(Name, Operands, False, True, ParentBlock)
 
   def to_llvm_ir(self, IRBuilder):
     assert len(self.getOperands()) == 2
@@ -879,16 +910,26 @@ class RoseBVUGEOp(RoseBitVectorOp):
 
 ######################################## ADDITIONAL OPERATORS ###########################
 
-class RoseBVAdd1Op(RoseBitVectorOp):
-  def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
+class RoseBVAdd1Op(RoseSaturatableBitVectorOp):
+  def __init__(self, Name : str, Bitvector : RoseValue,  NoSignedWrap : bool, \
+                NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
-    super().__init__(RoseOpcode.bvadd1, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvadd1, Name, OperandList, NoSignedWrap, \
+                    NoUnsignedWrap, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseBVAdd1Op(Name, Bitvector, ParentBlock)
+    return RoseBVAdd1Op(Name, Bitvector, False, False, ParentBlock)
   
+  @staticmethod
+  def createNSW(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVAdd1Op(Name, Bitvector, True, False, ParentBlock)
+
+  @staticmethod
+  def createNUW(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVAdd1Op(Name,Bitvector,  False, True, ParentBlock)
+
   def getInputBitVector(self):
     return self.getOperand(0)
 
@@ -899,14 +940,24 @@ class RoseBVAdd1Op(RoseBitVectorOp):
 
 
 class RoseBVSub1Op(RoseBitVectorOp):
-  def __init__(self, Name : str, Bitvector : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Bitvector : RoseValue,  NoSignedWrap : bool, \
+                NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector]
-    super().__init__(RoseOpcode.bvsub1, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvsub1, Name, OperandList, NoSignedWrap, \
+                    NoUnsignedWrap, ParentBlock)
 
   @staticmethod
   def create(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
-    return RoseBVSub1Op(Name, Bitvector, ParentBlock)
+    return RoseBVSub1Op(Name, Bitvector, False, False, ParentBlock)
+  
+  @staticmethod
+  def createNSW(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVSub1Op(Name, Bitvector, True, False, ParentBlock)
+
+  @staticmethod
+  def createNUW(Name : str, Bitvector : RoseValue, ParentBlock = RoseUndefRegion()):
+    return RoseBVSub1Op(Name,Bitvector,  False, True, ParentBlock)
 
   def getInputBitVector(self):
     return self.getOperand(0)
