@@ -58,6 +58,27 @@ class RoseSaturatableBitVectorOp(RoseBitVectorOp):
       return "nuw"
     return None
 
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    SatQualifier = self.getSaturationQualifier()
+    String = Spaces + "(define " + Name + " ("
+    if SatQualifier != None:
+      String += (self.Opcode.getRosetteOp() + SatQualifier + " ")
+    else:
+      String += (self.Opcode.getRosetteOp() + " ")
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += " "
+    if SatQualifier != None:
+      String += " " + str(self.getOutputBitwidth())
+    String += "))\n"
+    return String
+
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
