@@ -80,7 +80,7 @@
   (define result
   (cond
     [(and (bvsgt a zerobv) (bvsgt b zerobv) 
-          (bvugt a (bvsub (bvsmaxval bitwidth) b))) 
+          (bvsgt a (bvsub (bvsmaxval bitwidth) b))) 
           (bvsmaxval bitwidth)]
     [(and (bvslt a zerobv) (bvslt b zerobv) 
           (bvslt a (bvsub (bvsminval bitwidth) b))) 
@@ -110,7 +110,7 @@
   (define result
   (cond
     [(and (bvsgt a zerobv) (bvsgt (bvneg b) zerobv) 
-          (bvugt a (bvsub (bvsmaxval bitwidth) (bvneg b)))) 
+          (bvsgt a (bvsub (bvsmaxval bitwidth) (bvneg b)))) 
           (bvsmaxval bitwidth)]
     [(and (bvslt a zerobv) (bvslt (bvneg b) zerobv) 
           (bvslt a (bvsub (bvsminval bitwidth) (bvneg b)))) 
@@ -135,11 +135,42 @@
   result
 )
 
+(define (bvmulnsw a b bitwidth)
+  (define minusonebv (bv -1 (bitvector bitwidth)))
+  (define result
+  (cond
+    [(and (bveq a minusonebv) (bveq b (bvsminval bitwidth)))
+          (bvsmaxval bitwidth)]
+      [(and (bveq b minusonebv) (bveq a (bvsminval bitwidth)))
+          (bvsmaxval bitwidth)]
+    [(and (bvsgt a (bvsdiv (bvsmaxval bitwidth) b))) 
+          (bvsmaxval bitwidth)]
+    [(and (bvslt a (bvsdiv (bvsminval bitwidth) b)))
+          (bvsmaxval bitwidth)]
+    [else (bvmul a b)]
+  )
+  )
+  result
+)
+
+(define (bvmulnuw a b bitwidth)
+  (define result 
+  (if (bvugt a (bvudiv (bvumaxval bitwidth) b))
+    (begin
+      (bvumaxval bitwidth)
+    )
+    (begin
+      (bvmul a b)
+    )
+  )
+  )
+  result
+)
 
 
 ;; Tests
 (define au64 (bvumaxval 64))
-(define bu64 (bv #x0000000000000001 64))
+(define bu64 (bv #x0000000000000002 64))
 (pretty-print "au64:")
 (pretty-print au64)
 (pretty-print "bu64:")
@@ -156,5 +187,6 @@
 (pretty-print bs64)
 (pretty-print "(bvaddnsw as64 bs64 64):")
 (pretty-print (bvaddnsw as64 bs64 64))
-
+(pretty-print "(bvmulnuw au64 bu64 64):")
+(pretty-print (bvmulnuw au64 bu64 64))
 
