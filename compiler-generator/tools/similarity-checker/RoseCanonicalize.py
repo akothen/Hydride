@@ -537,24 +537,6 @@ def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
       ReplaceUsesWithUniqueCopiesOf(CondRegion, Op, Op, Context)
 
 
-def ChangeSaturationQualifiers(Function : RoseFunction):
-  BlockList = Function.getRegionsOfType(RoseBlock)
-  for Block in BlockList:
-    for Op in Block:
-      if isinstance(Op, RoseBVUSaturateOp):
-        if isinstance(Op.getInputBitVector(), RoseSaturableBitVectorOp):
-          # Apply the qualifiers if the bitwidths of saturation are the same as ops'.
-          if Op.getInputBitVector().getType().getBitwidth() == Op.getType().getBitwidth():
-            Op.getInputBitVector().allowNoUnsignedWrapping()
-        continue
-      if isinstance(Op, RoseBVSSaturateOp):
-        if isinstance(Op.getInputBitVector(), RoseSaturableBitVectorOp):
-          # Apply the qualifiers if the bitwidths of saturation are the same as ops'.
-          if Op.getInputBitVector().getType().getBitwidth() == Op.getType().getBitwidth():
-            Op.getInputBitVector().allowNoSignedWrapping()
-        continue
-
-
 def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   print("CANONICALIZING FUNCTION")
   print("FUNCTION:")
@@ -571,8 +553,6 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   #  return
 
   SinkOpsIntoCondBlocks(Function, Context)
-
-  ChangeSaturationQualifiers(Function)
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
