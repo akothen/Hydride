@@ -14,7 +14,7 @@ from RoseBitVectorOperation import RoseBitVectorOp
 from enum import Enum, auto
 
 
-class RoseSaturatableBitVectorOp(RoseBitVectorOp):
+class RoseSaturableBitVectorOp(RoseBitVectorOp):
   class SaturationQualifiers(Enum):
     NUW = auto()
     NSW = auto()
@@ -99,5 +99,6 @@ class RoseSaturatableBitVectorOp(RoseBitVectorOp):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
+
 
 

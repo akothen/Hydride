@@ -13,7 +13,7 @@ from RoseTypes import *
 from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
-from RoseSaturatableBitVectorOperation import RoseSaturatableBitVectorOp
+from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
 
 import llvmlite
 
@@ -534,7 +534,7 @@ class RoseBVNegOp(RoseBitVectorOp):
     return IRBuilder.neg(OperandInLLVM, self.getName())
 
 
-class RoseBVAddOp(RoseSaturatableBitVectorOp):
+class RoseBVAddOp(RoseSaturableBitVectorOp):
   def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
                 NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
@@ -561,7 +561,7 @@ class RoseBVAddOp(RoseSaturatableBitVectorOp):
     return IRBuilder.add(Operand1, Operand2, self.getName())
 
 
-class RoseBVSubOp(RoseSaturatableBitVectorOp):
+class RoseBVSubOp(RoseSaturableBitVectorOp):
   def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
                 NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
@@ -588,7 +588,7 @@ class RoseBVSubOp(RoseSaturatableBitVectorOp):
     return IRBuilder.sub(Operand1, Operand2, self.getName())
 
 
-class RoseBVMulOp(RoseSaturatableBitVectorOp):
+class RoseBVMulOp(RoseSaturableBitVectorOp):
   def __init__(self, Name : str, Operands : list,  NoSignedWrap : bool, \
                 NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     for Operand in Operands:
@@ -904,7 +904,7 @@ class RoseBVUGEOp(RoseBitVectorOp):
 
 ######################################## ADDITIONAL OPERATORS ###########################
 
-class RoseBVAdd1Op(RoseSaturatableBitVectorOp):
+class RoseBVAdd1Op(RoseSaturableBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue,  NoSignedWrap : bool, \
                 NoUnsignedWrap : bool, ParentBlock : RoseBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
