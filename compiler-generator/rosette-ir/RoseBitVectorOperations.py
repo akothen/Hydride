@@ -146,14 +146,11 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Name = super().getName()
-    String = Spaces + "(define " + Name + " ("
-    String += "Saturate("
-    for Index, Operand in enumerate(self.getCallOperands()):
-        String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
-          String += " "
-    String += " )))\n"
+    String = Spaces + "(define " + self.getName() + " (bvssat "
+    String += self.getOperand(0).getName() + " " \
+            + str(self.getOperand(0).getOutputBitwidth()) \
+            + " " + self.getOperand(1).getName() + " "
+    String += "))\n"
     return String
 
 
@@ -191,14 +188,11 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Name = super().getName()
-    String = Spaces + "(define " + Name + " ("
-    String += "USaturate("
-    for Index, Operand in enumerate(self.getCallOperands()):
-        String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
-          String += " "
-    String += " )))\n"
+    String = Spaces + "(define " + self.getName() + " (bvusat "
+    String += self.getOperand(0).getName() + " " \
+            + str(self.getOperand(0).getOutputBitwidth()) \
+            + " " + self.getOperand(1).getName() + " "
+    String += "))\n"
     return String
 
 
@@ -1132,5 +1126,6 @@ class RoseBVAbsOp(RoseBitVectorOp):
             + str(self.getOperand(0).getOutputBitwidth()) + "))"
     String += ")\n"
     return String
+
 
 
