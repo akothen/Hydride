@@ -283,8 +283,13 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
               continue
             ReductionVal = Operand
             break
-          Epilogue += Spaces + "(define " + Op.getName() + " (bvadd " \
+          if Op.getSaturationQualifier() == None:
+            Epilogue += Spaces + "(define " + Op.getName() + " (bvadd " \
                     + ReductionVal.getName() + ".sum " + ExtractOp.getName() + "))\n"
+          else:
+            Epilogue += Spaces + "(define " + Op.getName() + " (bvadd" \
+                    + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".sum " \
+                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"       
           Epilogue += Spaces + Op.getName() + "\n"
           break
         if isinstance(Op, RoseBVInsertSliceOp):
@@ -356,7 +361,6 @@ def CodeGen(Function : RoseFunction):
   print("---\n\n\n\n\n")
   print(RosetteCode)
   return RosetteCode
-
 
 
 
