@@ -349,7 +349,7 @@ def GetSemaFromXML(node):
     ID += 1
   CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
   inst = node.find('instruction')
-  assert (inst is not None)
+  #assert (inst is not None)
   operation = node.find('operation')
   assert (operation is not None)
   spec = Parse(operation.text)
@@ -357,16 +357,16 @@ def GetSemaFromXML(node):
   assert (output is not None)
   return Sema(
       intrin=node.attrib['name'],
-      inst=inst.attrib.get('name'),
+      inst= None if inst is None else inst.attrib.get('name'),
       spec=spec,
       params=Params,
       rettype=output.attrib['type'],
       ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
       cpuids=CPUIDs,
-      inst_form=inst.attrib.get('form', ''),
+      inst_form = None if inst is None else inst.attrib.get('form', ''),
       imm_width=imm_width,
       elem_type=output.attrib['etype'],
-      xed=inst.attrib.get('xed')
+      xed = None if inst is None else inst.attrib.get('xed')
     )
 
 
@@ -510,7 +510,6 @@ def Parsex86Semantics(FileName):
 
 if __name__ == '__main__':
   Parsex86Semantics("intel_sema.xml")
-
 
 
 
