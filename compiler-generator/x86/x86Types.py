@@ -56,6 +56,7 @@ x86Types = {
     'unsigned int': RoseBitVectorType.create(32),
     'unsigned char': RoseBitVectorType.create(8),
     'unsigned long': RoseBitVectorType.create(64),
+    'long long' : RoseBitVectorType.create(64),
     '__int64': RoseBitVectorType.create(64),
     '__int32': RoseBitVectorType.create(32),
     'unsigned __int32': RoseBitVectorType.create(32),
