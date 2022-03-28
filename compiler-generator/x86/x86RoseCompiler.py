@@ -1723,6 +1723,17 @@ def HandleToTruncate(Bitwidth : int):
   return LamdaImplFunc
 
 
+def HandleToSpecialTruncate(_):
+  def LamdaImplFunc(Name : str, Args : list, Context : x86RoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    Bitwidth = int(Value.getType().getBitwidth() / 2)
+    assert Value.getType().getBitwidth() > Bitwidth
+    return RoseBVTruncateOp.create(Name, Value, Bitwidth)
+
+  return LamdaImplFunc
+
+
 def HandleToAbs(_):
   def LamdaImplFunc(Name : str, Operands : list, Context : x86RoseContext):
     assert len(Operands) == 1
@@ -1770,6 +1781,7 @@ Builtins = {
   'Truncate8' : HandleToTruncate(8),
   'Truncate16': HandleToTruncate(16),
   'Truncate32' : HandleToTruncate(32),
+  'TRUNCATE' : HandleToSpecialTruncate(None),
 
   'MIN' : HandleToMin(None),
   'MAX' : HandleToMax(None),
