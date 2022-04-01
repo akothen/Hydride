@@ -64,7 +64,7 @@ binary_ops = {
     }
 
 tokens = [
-    'PSEUDO', 'ID', 'COMMENT', 'NUMBER',
+    'PSEUDO', 'ID', 'COMMENT', 'DE', 'NUMBER',
     'LBRACE', 'RBRACE', 'COLON',
     'UPDATE', 'SEMICOLON',
     'LPAREN', 'RPAREN', 'COMMA',
@@ -138,6 +138,10 @@ def t_COMMENT(t):
   pass
 
 # TODO: multiline comment?
+
+def t_DE(t):
+  r'\#DE'
+  pass
 
 def t_NUMBER(t):
   r'\d+\.\d*|0x[0-9a-fA-F]+|\d+'
