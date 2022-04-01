@@ -119,12 +119,19 @@ def p_stmt_for_dec(p):
 def p_stmt_if(p):
   'stmt : IF expr THEN stmts FI'
   expr_id = "if." + GenUniqueID(parser)
+  print("p[4]:")
+  print(p[4])
   p[0] = If(p[2], p[4], [], expr_id)
 
 def p_stmt_if2(p):
   'stmt : IF expr THEN stmts ELSE stmts FI'
   expr_id = "if." + GenUniqueID(parser)
   p[0] = If(p[2], p[4], p[6], expr_id)
+
+def p_stmt_if3(p):
+  'stmt : IF expr FI'
+  print("here")
+  p[0] = None
 
 def p_stmt_if_no_then(p):
   'stmt : IF expr stmts FI'
@@ -140,7 +147,6 @@ def p_stmt_if2_no_then_no_fi(p):
   'stmt : IF expr stmts ELSE stmts'
   expr_id = "if." + GenUniqueID(parser)
   p[0] = If(p[2], p[3], p[5], expr_id)
-
 
 def p_expr_call(p):
   'expr : ID LPAREN args RPAREN'
