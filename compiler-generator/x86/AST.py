@@ -18,7 +18,9 @@ Update = namedtuple('Update', ['lhs', 'rhs'])
 For = namedtuple('For', ['iterator', 'begin', 'end', 'body', 'inc', 'id'])
 While = namedtuple('While', ['cond', 'body', 'id'])
 
-If = namedtuple('If', ['cond', 'then', 'otherwise', 'id'])
+IfElseIfElse = namedtuple('IfElseIfElse', ['cond1', 'then', 'cond2', 'elseif',  'otherwise', 'id'])
+IfElse = namedtuple('IfElse', ['cond', 'then',  'otherwise', 'id'])
+If = namedtuple('If', ['cond', 'then', 'id'])
 
 Call = namedtuple('Call', ['funcname', 'args', 'id'])
 
@@ -48,5 +50,4 @@ Sema = namedtuple('Sema', [
   'xed',
   'elem_type',
   ])
-
 
