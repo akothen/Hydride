@@ -457,33 +457,49 @@ class RoseForLoop(RoseRegion):
     print(Spaces + "}")
 
 
-####################################### ROSE IF-THEN ############################################
+####################################### ROSE IF-ELSE ############################################
 
 # Class representing If-else blocks
 class RoseCond(RoseRegion):
-  def __init__(self, Condition : RoseValue, ThenRegionList : list, ElseRegionList : list, 
-              ParentRegion : RoseRegion):
-    # Condition must be a 1-bit bitvector or a boolean
-    assert isinstance(Condition.getType(), RoseBitVectorType) \
-       or isinstance(Condition.getType(), RoseBooleanType)
-    if isinstance(Condition.getType(), RoseBitVectorType):
-      assert Condition.getType().getBitwidth() == 1
-    Children = {}
-    Children["then"] = ThenRegionList
-    Children["else"] = ElseRegionList
-    self.Condition = Condition
-    super().__init__(Children, ParentRegion, ["then", "else"])
+  def __init__(self, Conditions : list, RegionsList : list, ParentRegion : RoseRegion):
+    # Sanity check
+    assert len(Conditions) > 0
+    # Conditions must be a 1-bit bitvector or a boolean
+    # Also, make sure that conditions are not the same.
+    ConditionsSet = set()
+    for Condition in Conditions:
+      assert isinstance(Condition.getType(), RoseBitVectorType) \
+        or isinstance(Condition.getType(), RoseBooleanType)
+      if isinstance(Condition.getType(), RoseBitVectorType):
+        assert Condition.getType().getBitwidth() == 1
+    assert (len(Conditions) == len(RegionsList)) \
+        or (len(Conditions) == len(RegionsList) - 1)
+    assert Condition not in ConditionsSet
+    ConditionsSet.add(Condition)
+    Children = dict()
+    Keys = list()
+    Key = 0
+    for RegionList in RegionsList:
+      Children[Key] = RegionList
+      Keys.append(Key)
+      Key += 1
+    self.Conditions = Conditions
+    super().__init__(Children, ParentRegion, Keys)
   
   @staticmethod
   def create(*args):
-    if len(args) == 4:
-      return RoseCond(args[0], args[1], args[2], args[3])
     if len(args) == 3:
-      return RoseCond(args[0], args[1], args[2], RoseUndefRegion())
+      if isinstance(args[1], list):
+        return RoseCond(args[0], args[1], args[2])
+      assert isinstance(args[1], int)
+      RegionList = []*args[1]
+      return RoseCond(args[0], [RegionList], args[2])
     if len(args) == 2:
-      return RoseCond(args[0], args[1], [], RoseUndefRegion())    
-    if len(args) == 1:
-      return RoseCond(args[0], [], [], RoseUndefRegion())
+      if isinstance(args[1], list):
+        return RoseCond(args[0], args[1], RoseUndefRegion())
+      assert isinstance(args[1], int)
+      RegionList = []*args[1]
+      return RoseCond(args[0], [RegionList], RoseUndefRegion())
     assert False
   
   def __eq__(self, Other):
@@ -493,7 +509,7 @@ class RoseCond(RoseRegion):
     or isinstance(Other, RoseForLoop):
         return False
     assert isinstance(Other, RoseCond)
-    return self.Condition == Other.Condition and super().__eq__(Other)
+    return self.Conditions == Other.Conditions and super().__eq__(Other)
 
   def __ne__(self, Other):
     if isinstance(Other, RoseUndefRegion) \
@@ -502,14 +518,14 @@ class RoseCond(RoseRegion):
     or isinstance(Other, RoseForLoop):
         return True
     assert isinstance(Other, RoseCond)
-    return self.Condition != Other.Condition or super().__ne__(Other)
+    return self.Conditions != Other.Conditions or super().__ne__(Other)
 
   # Make rose loops hashable
   def __hash__(self):
-    return hash((self.Condition, self.getRegionID()))
+    return hash(self.getRegionID())
 
-  def getCondition(self):
-    return self.Condition
+  def getCondition(self, Index = 0):
+    return self.Conditions[Index]
   
   def getThenRegions(self):
     return self.getChildren(self.getKeyForThenRegion())
@@ -530,33 +546,61 @@ class RoseCond(RoseRegion):
     return self.addAbstraction(Abstraction, self.getKeyForElseRegion())
   
   def getKeyForThenRegion(self):
+    assert len(self.getKeys()) > 0
     return self.getKeys()[0]
 
   def getKeyForElseRegion(self):
-    return self.getKeys()[1]
+    print("self.getKeys():")
+    print(self.getKeys())
+    assert len(self.getKeys()) >= 2
+    # Get the last key
+    return self.getKeys()[-1]
   
+  def getKeyForElseIfRegion(self):
+    assert len(self.getKeys()) == 3
+    return self.getKeys()[1]
+
+  def hasElseRegion(self):
+    return len(self.getKeys()) >= 2
+  
+  def hasElseIfRegion(self):
+     return len(self.getKeys()) == 3
+
   def getUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
-    if self.getCondition() == Abstraction:
-      return [self.getCondition()]
+    for Condition in self.Conditions:
+      if Condition == Abstraction:
+        return [Condition]
     return []
 
   def print(self, NumSpace = 0):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Condtiion = Spaces + "if (" + str(self.Condition.getType()) \
-                       + " " + self.Condition.getName() + ") {"
+    Condtiion = Spaces + "if (" + str(self.Conditions[0].getType()) \
+                       + " " + self.Conditions[0].getName() + ") {"
     print(Condtiion)
-    # Print regions in this if-else blocks
-    for Region in self.getThenRegions():
+    # Print regions in this then regions
+    for Region in self.getChildren(self.getKeys()[0]):
       assert Region.getParent() == self
       Region.print(NumSpace + 1)
-    print(Spaces + "} else {")
-    for Region in self.getElseRegions():
-      assert Region.getParent() == self
-      Region.print(NumSpace + 1)
+    # Printing other cond regions
+    if len(self.getKeys()) > 1:
+      for Index, ConditionVal in enumerate(self.Conditions[1:-1]):
+        Condtiion = Spaces + "} elif (" + str(ConditionVal.getType()) \
+                    + " " + self.Conditions[0].getName() + ") {"
+        print(Condtiion)
+        # Print regions in this then regions
+        for Region in self.getChildren(self.getKeys()[Index + 1]):
+          assert Region.getParent() == self
+          Region.print(NumSpace + 1)
+      print(Spaces + "} else {")
+      for Region in self.getChildren(self.getKeys()[-1]):
+        assert Region.getParent() == self
+        Region.print(NumSpace + 1)
     print(Spaces + "}")
+
+
 
