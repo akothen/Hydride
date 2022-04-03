@@ -484,23 +484,32 @@ def FixAccumulationCodeInFunction(Function : RoseFunction, Context : RoseContext
       if SubRegion.containsRegionOfType(RoseCond, Level=0):
         CondRegions1 = list()
         CondRegions2 = list()
+        CondRegions3 = list()
         for SubSubRegion in SubRegion:
           if isinstance(SubSubRegion, RoseCond):
             print("SubSubRegion.getKeyForThenRegion():")
             print(SubSubRegion.getKeyForThenRegion())
             CondRegions1.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
                                 Key=SubSubRegion.getKeyForThenRegion()))
-            print("SubSubRegion.getKeyForElseRegion():")
-            print(SubSubRegion.getKeyForElseRegion())
-            CondRegions2.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
-                                Key=SubSubRegion.getKeyForElseRegion()))
+            if SubSubRegion.hasElseIfRegion():
+              print("SubSubRegion.getKeyForElseIfRegion():")
+              print(SubSubRegion.getKeyForElseIfRegion())
+              CondRegions2.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
+                                  Key=SubSubRegion.getKeyForElseIfRegion()))
+            if SubSubRegion.hasElseRegion():
+              print("SubSubRegion.getKeyForElseRegion():")
+              print(SubSubRegion.getKeyForElseRegion())
+              CondRegions3.extend(SubSubRegion.getRegionsOfType(RoseBlock, \
+                                  Key=SubSubRegion.getKeyForElseRegion()))
             continue
           if isinstance(SubSubRegion, RoseBlock):
             CondRegions1.append(SubSubRegion)
             CondRegions2.append(SubSubRegion)
+            CondRegions3.append(SubSubRegion)
             continue
           CondRegions1.extend(SubSubRegion.getRegionsOfType(RoseBlock))
           CondRegions2.extend(SubSubRegion.getRegionsOfType(RoseBlock))
+          CondRegions3.extend(SubSubRegion.getRegionsOfType(RoseBlock))
         # Fix accumulation code now
         print("+++++++++++++++++++++++++++++++++++++++++")
         for Block in CondRegions1:
@@ -514,6 +523,11 @@ def FixAccumulationCodeInFunction(Function : RoseFunction, Context : RoseContext
           Block.print()
         print("+++++++++++++++++++++++++++++++++++++++++")
         FixAccumulationCodeForBlockList(CondRegions2, Context)
+        for Block in CondRegions3:
+          print("BLOCK:")
+          Block.print()
+        print("+++++++++++++++++++++++++++++++++++++++++")
+        FixAccumulationCodeForBlockList(CondRegions3, Context)
         continue
       BlockList = SubRegion.getRegionsOfType(RoseBlock)
       print("=========================================")
@@ -537,6 +551,35 @@ def SinkOpsIntoCondBlocks(Function : RoseFunction, Context : RoseContext):
       ReplaceUsesWithUniqueCopiesOf(CondRegion, Op, Op, Context)
 
 
+def BalanceCondRegions(Function : RoseFunction):
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    # Cond region should have an else region
+    if CondRegion.hasElseRegion() == False:
+      # Check if we can find a bvinsert outside of the parent loop
+      ParentRegion = CondRegion.getParent()
+      assert isinstance(ParentRegion, RoseForLoop)
+      Preheader = ParentRegion.getPreheader()
+      assert not isinstance(Preheader, RoseUndefRegion)
+      PreheaderOps = list()
+      PreheaderOps.extend(Preheader.getOperations())
+      for Op in reversed(PreheaderOps):
+        if isinstance(Op, RoseBVInsertSliceOp):
+          if Op.getInputBitVector() == Function.getReturnValue():
+            # Erase the block from the preheader
+            #Preheader.eraseOperation(Op)
+            # Add a new block
+            NewBlock = RoseBlock.create()
+            NewBlock.addOperation(Op.clone())
+            CondRegion.addNewElseRegion(NewBlock)
+            # If the preheaer is empty, remove that too
+            #if Preheader.getNumOperations() == 0:
+            #  ParentOfPreheader = Preheader.getParent()
+            #  Key = ParentOfPreheader.getKeyForChild(Preheader)
+            #  ParentOfPreheader.eraseChild(Preheader, Key)
+            break
+
+
 def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   print("CANONICALIZING FUNCTION")
   print("FUNCTION:")
@@ -553,6 +596,7 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
   #  return
 
   SinkOpsIntoCondBlocks(Function, Context)
+  BalanceCondRegions(Function)
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
