@@ -121,18 +121,26 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
   print(BVInsertOpsList)
   if not (len(BVInsertOpsList) > 1):
     if len(BVInsertOpsList) == 1:
-      Block = BVInsertOpsList[0].getParent()
       if isinstance(BVInsertOpsList[0].getInsertValue(), RoseConstant):
         Result = bin(BVInsertOpsList[0].getInsertValue().getValue()).replace("0b", "#b")
         print("RESULT:")
         print(Result)
+        # If the block is in the cond region, we do not need to define a variable
+        ParentCondRegion = Block.getParentOfType(RoseCond)
         if type(BVInsertOpsList[0].getOutputBitwidth()) == int:
-          RosetteCode += Spaces + "(bv " + Result + " " \
-                        + str(BVInsertOpsList[0].getOutputBitwidth()) + ")\n"
+          if isinstance(ParentCondRegion, RoseUndefRegion):
+            RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
+                  + "(bv " + Result + " " + str(BVInsertOpsList[0].getOutputBitwidth()) + "))\n"
+          else:
+            RosetteCode += Spaces + "(bv " + Result + " " \
+                            + str(BVInsertOpsList[0].getOutputBitwidth()) + ")\n"
         else:
-          print(BVInsertOpsList[0].getOutputBitwidth().getName())
-          RosetteCode += Spaces + "(bv " + Result + " " \
-                        + BVInsertOpsList[0].getOutputBitwidth().getName() + ")\n"      
+          if isinstance(ParentCondRegion, RoseUndefRegion):
+            RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
+                      + " (bv " + Result + " " + BVInsertOpsList[0].getOutputBitwidth().getName() + "))\n"
+          else:
+            RosetteCode += Spaces + "(bv " + Result + " " \
+                        + BVInsertOpsList[0].getOutputBitwidth().getName() + ")\n"  
       else:
         RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
     return RosetteCode
@@ -169,7 +177,8 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
 
 
 def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSpace : int = 0, \
-                                  VisitedLoop : list = list(), SkipOpsMap : dict = dict()):
+                                  VisitedLoop : set = set(), ReductionLoops : set = set(), \
+                                  SkipOpsMap : dict = dict()):
   # Generate the condition first
   Spaces = ""
   for _ in range(NumSpace):
@@ -187,11 +196,15 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
     TmpRosetteCode  += Spaces + " (begin\n"
     for Abstraction in CondRegion.getThenRegions():
       if isinstance(Abstraction, RoseBlock):
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                    SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
         continue
       if isinstance(Abstraction, RoseForLoop):
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
     TmpRosetteCode += Spaces + " )\n"
 
@@ -199,11 +212,15 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
       TmpRosetteCode += Spaces + " (begin\n"
       for Abstraction in CondRegion.getElseRegions():
         if isinstance(Abstraction, RoseBlock):
-          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+          if Abstraction in SkipOpsMap:
+            TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      SkipOpsMap[Abstraction])
+          else:
+            TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
           continue
         if isinstance(Abstraction, RoseForLoop):
           TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                            NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                            NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
           continue
       TmpRosetteCode += Spaces + " )\n"
   else:
@@ -214,11 +231,15 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
     TmpRosetteCode  += Spaces + " (begin\n"
     for Abstraction in CondRegion.getThenRegions():
       if isinstance(Abstraction, RoseBlock):
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
         continue
       if isinstance(Abstraction, RoseForLoop):
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
     TmpRosetteCode += Spaces + " )]\n"
   
@@ -229,22 +250,30 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
     TmpRosetteCode += Spaces + " (begin\n"
     for Abstraction in CondRegion.getElseIfRegions():
       if isinstance(Abstraction, RoseBlock):
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                  SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
         continue
       if isinstance(Abstraction, RoseForLoop):
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
     TmpRosetteCode += Spaces + " )]\n"
 
     TmpRosetteCode += Spaces + "[else (begin\n"
     for Abstraction in CondRegion.getElseRegions():
       if isinstance(Abstraction, RoseBlock):
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                  SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
         continue
       if isinstance(Abstraction, RoseForLoop):
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
     TmpRosetteCode += Spaces + " )]\n"
 
@@ -256,7 +285,8 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
 
 
 def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : int = 0, \
-                          VisitedLoop : list = list(), SkipOpsMap : dict = dict()):
+                          VisitedLoop : set = set(), ReductionLoops : set = set(), \
+                          SkipOpsMap : dict = dict()):
   print("GENERATING CODE FOR LOOP")
   if Loop not in VisitedLoop:
     print("LOOP IS NOT VISITED")
@@ -266,15 +296,23 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
     for Block in BlockList:
       if HasReductionPattern(Block):
         ReductionBlockList.append(Block)
+        # Get the immediate parent loop for this block
+        ParentLoop = Block.getParentOfType(RoseForLoop)
+        ReductionLoops.add(ParentLoop)
     if ReductionBlockList != []:
       LoopList = Loop.getRegionsOfType(RoseForLoop)
-      VisitedLoop.extend(LoopList)
+      VisitedLoop.update(LoopList)
 
     # Get all the operations to skip
     SkipOpsMap = dict()
     for Block in ReductionBlockList:
+      print("REDUCTION BLOCK:")
+      Block.print()
       SkipOpsMap[Block] = []
       SkipOpsMap[Block].extend(GetReductionOps(Block))
+      print("REDUCTION OPS:")
+      for Op in SkipOpsMap[Block]:
+        Op.print()
 
   # Generate loop header
   Spaces = ""
@@ -289,11 +327,11 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   for Abstraction in Loop:
     if isinstance(Abstraction, RoseForLoop):
       TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                        NumSpace + 1, VisitedLoop, SkipOpsMap)
+                                        NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
       continue
     if isinstance(Abstraction, RoseCond):
       TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
-                                                    VisitedLoop, SkipOpsMap)
+                                                    VisitedLoop, ReductionLoops, SkipOpsMap)
       continue
     if isinstance(Abstraction, RoseBlock):
       if Abstraction in SkipOpsMap:
@@ -309,43 +347,47 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   print("RosetteCode after generating loop")
   print(TmpRosetteCode)
 
-  IsReductionLoop = False
-  ReductionVal = RoseUndefValue()
-  Epilogue = ""
-  BlockList = Loop.getRegionsOfType(RoseBlock, Level=0)
-  for Block in BlockList:
-    if Block in SkipOpsMap:
-      Epilogue += "))\n"
-      IsReductionLoop = True
-      ExtractOp = RoseUndefValue()
-      for Op in SkipOpsMap[Block]:
-        print("SkipOpsMap[Block]:")
-        Op.print()
-        if isinstance(Op, RoseBVExtractSliceOp):
-          ExtractOp = Op
-          Epilogue += Op.to_rosette(NumSpace)
-          continue
-        if isinstance(Op, RoseBVAddOp):
-          for Operand in Op.getOperands():
-            if ExtractOp == Operand:
-              continue
-            ReductionVal = Operand
+  if Loop in ReductionLoops:
+    ReductionVal = RoseUndefValue()
+    Epilogue = ""
+    BlockList = Loop.getRegionsOfType(RoseBlock)
+    print("BlockList:")
+    print(BlockList)
+    for Block in BlockList:
+      Block.print()
+      if Block in SkipOpsMap:
+        Epilogue += "))\n"
+        ExtractOp = RoseUndefValue()
+        for Op in SkipOpsMap[Block]:
+          print("SkipOpsMap[Block]:")
+          Op.print()
+          if isinstance(Op, RoseBVExtractSliceOp):
+            ExtractOp = Op
+            Epilogue += Op.to_rosette(NumSpace)
+            continue
+          if isinstance(Op, RoseBVAddOp):
+            for Operand in Op.getOperands():
+              if ExtractOp == Operand:
+                continue
+              ReductionVal = Operand
+              break
+            if Op.getSaturationQualifier() == None:
+              Epilogue += Spaces + "(define " + Op.getName() + " (bvadd " \
+                      + ReductionVal.getName() + ".sum " + ExtractOp.getName() + "))\n"
+            else:
+              Epilogue += Spaces + "(define " + Op.getName() + " (bvadd" \
+                      + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".sum " \
+                      + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"       
+            Epilogue += Spaces + Op.getName() + "\n"
             break
-          if Op.getSaturationQualifier() == None:
-            Epilogue += Spaces + "(define " + Op.getName() + " (bvadd " \
-                    + ReductionVal.getName() + ".sum " + ExtractOp.getName() + "))\n"
-          else:
-            Epilogue += Spaces + "(define " + Op.getName() + " (bvadd" \
-                    + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".sum " \
-                    + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"       
-          Epilogue += Spaces + Op.getName() + "\n"
-          break
-        if isinstance(Op, RoseBVInsertSliceOp):
-          continue
-        Epilogue += Op.to_rosette(NumSpace)
+          if isinstance(Op, RoseBVInsertSliceOp):
+            continue
+          Epilogue += Op.to_rosette(NumSpace)
   
-  TmpRosetteCode += Epilogue
-  if IsReductionLoop == True:
+    TmpRosetteCode += Epilogue
+    print("ReductionLoops:")
+    for L in ReductionLoops:
+      L.print()
     TmpRosetteCode = Spaces + "(define " + ReductionVal.getName() + ".sum\n" \
                       +  "(apply\n" + Spaces + "bvadd\n" + TmpRosetteCode
   else:
