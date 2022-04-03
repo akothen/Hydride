@@ -174,31 +174,79 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
   Spaces = ""
   for _ in range(NumSpace):
     Spaces += " "
-  if isinstance(CondRegion.getCondition().getType(), RoseBitVectorType):
-    TmpRosetteCode = Spaces + "(if (equal? " + CondRegion.getCondition().getName() + " (bv #b1 1))\n"
-  else:
-    TmpRosetteCode = Spaces + "(if (equal? " + CondRegion.getCondition().getName() + " #t)\n"
-  TmpRosetteCode  += Spaces + " (begin\n"
-  for Abstraction in CondRegion.getThenRegions():
-    if isinstance(Abstraction, RoseBlock):
-      TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
-      continue
-    if isinstance(Abstraction, RoseForLoop):
-      TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                        NumSpace + 1, VisitedLoop, SkipOpsMap)
-      continue
 
-  TmpRosetteCode += Spaces + " )\n"
-  TmpRosetteCode += Spaces + " (begin\n"
-  for Abstraction in CondRegion.getElseRegions():
-    if isinstance(Abstraction, RoseBlock):
-      TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
-      continue
-    if isinstance(Abstraction, RoseForLoop):
-      TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                        NumSpace + 1, VisitedLoop, SkipOpsMap)
-      continue
-  TmpRosetteCode += Spaces + " )\n"
+  if CondRegion.hasElseIfRegion() == False:
+    CondOp = "if"
+    if CondRegion.hasElseRegion() == False:
+      CondOp = "when"
+    if isinstance(CondRegion.getCondition().getType(), RoseBitVectorType):
+      TmpRosetteCode = Spaces + "({} (equal? {} (bv #b1 1))\n".format(CondOp, CondRegion.getCondition().getName())
+    else:
+      TmpRosetteCode = Spaces + "({} (equal? {} #t)\n".format(CondOp, CondRegion.getCondition().getName())
+    
+    TmpRosetteCode  += Spaces + " (begin\n"
+    for Abstraction in CondRegion.getThenRegions():
+      if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+        continue
+    TmpRosetteCode += Spaces + " )\n"
+
+    if CondRegion.hasElseRegion():
+      TmpRosetteCode += Spaces + " (begin\n"
+      for Abstraction in CondRegion.getElseRegions():
+        if isinstance(Abstraction, RoseBlock):
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+          continue
+        if isinstance(Abstraction, RoseForLoop):
+          TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                            NumSpace + 1, VisitedLoop, SkipOpsMap)
+          continue
+      TmpRosetteCode += Spaces + " )\n"
+  else:
+    if isinstance(CondRegion.getCondition().getType(), RoseBitVectorType):
+      TmpRosetteCode = Spaces + "(cond [(equal? {} (bv #b1 1))\n".format(CondRegion.getCondition().getName())
+    else:
+      TmpRosetteCode = Spaces + "(cond [(equal? {} #t)\n".format(CondRegion.getCondition().getName())
+    TmpRosetteCode  += Spaces + " (begin\n"
+    for Abstraction in CondRegion.getThenRegions():
+      if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+        continue
+    TmpRosetteCode += Spaces + " )]\n"
+  
+    if isinstance(CondRegion.getCondition().getType(), RoseBitVectorType):
+      TmpRosetteCode = Spaces + "[(equal? {} (bv #b1 1))\n".format(CondRegion.getCondition().getName())
+    else:
+      TmpRosetteCode = Spaces + "[(equal? {} #t)\n".format(CondRegion.getCondition().getName())
+    TmpRosetteCode += Spaces + " (begin\n"
+    for Abstraction in CondRegion.getElseIfRegions():
+      if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+        continue
+    TmpRosetteCode += Spaces + " )]\n"
+
+    TmpRosetteCode += Spaces + "[else (begin\n"
+    for Abstraction in CondRegion.getElseRegions():
+      if isinstance(Abstraction, RoseBlock):
+        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, SkipOpsMap)
+        continue
+    TmpRosetteCode += Spaces + " )]\n"
 
   print("RosetteCode after generating loop")
   print(TmpRosetteCode)
