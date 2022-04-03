@@ -428,6 +428,21 @@ class RoseForLoop(RoseRegion):
   def setEndIndexVal(self, NewEnd : RoseValue):
     assert self.End.getType() == NewEnd.getType()
     self.End = NewEnd
+  
+  # A preheader is a block that comes right before a loop
+  def getPreheader(self):
+    Parent = self.getParent()
+    assert not isinstance(Parent, RoseUndefRegion)
+    # Get the position of the loop in the parent region
+    Key = Parent.getKeyForChild(self)
+    PosIndex = Parent.getPosOfChild(self, Key)
+    if PosIndex == 0:
+      # There is no preheader
+      return RoseUndefRegion()
+    Preheader = Parent.getChild(PosIndex - 1, Key)
+    if not isinstance(Preheader, RoseBlock):
+      return RoseUndefRegion()
+    return Preheader
 
   def getUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
@@ -533,6 +548,9 @@ class RoseCond(RoseRegion):
   def getElseRegions(self):
     return self.getChildren()[self.getKeyForElseRegion()]
   
+  def getElseIfRegions(self):
+    return self.getChildren()[self.getKeyForElseIfRegion()]
+  
   def addThenRegion(self, Region):
     return self.addRegion(Region, self.getKeyForThenRegion())
   
@@ -544,14 +562,24 @@ class RoseCond(RoseRegion):
   
   def addAbstrctionInElseRegion(self, Abstraction):
     return self.addAbstraction(Abstraction, self.getKeyForElseRegion())
+
+  def addAbstrctionInElseIfRegion(self, Abstraction):
+    return self.addAbstraction(Abstraction, self.getKeyForElseIfRegion())
   
+  def addNewElseRegion(self, Abstraction):
+    NewKey = len(self.getKeys())
+    self.addNewKeyedRegion(NewKey, Abstraction)
+
+  def addNewElseIfRegion(self, Condition, Abstraction):
+    self.Conditions = Condition
+    NewKey = len(self.getKeys())
+    self.addNewKeyedRegion(NewKey, Abstraction)
+
   def getKeyForThenRegion(self):
     assert len(self.getKeys()) > 0
     return self.getKeys()[0]
 
   def getKeyForElseRegion(self):
-    print("self.getKeys():")
-    print(self.getKeys())
     assert len(self.getKeys()) >= 2
     # Get the last key
     return self.getKeys()[-1]
