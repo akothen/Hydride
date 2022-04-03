@@ -268,6 +268,16 @@ class RoseRegion:
       assert Key in self.Keys
       self.Children[Key].append(Region)
   
+  def addNewKeyedRegion(self, Key, Region):
+    # Sanity checks
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    assert self.isChildValid(Region)
+    assert self.Keys != None
+    assert Key not in self.Keys
+    self.Keys.append(Key)
+    Region.setParent(self)
+    self.Children[Key] = [Region]
+  
   def addRegionBefore(self, Index, Region, Key = None):
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
