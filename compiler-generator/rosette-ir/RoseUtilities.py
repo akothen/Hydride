@@ -337,6 +337,7 @@ def GatherIndexingOps(Operation : RoseOperation):
 
 def HasReductionPattern(Block : RoseBlock):
   print("HAS REDUCTION PATTERN")
+  Block.print()
   Loop = Block.getParentOfType(RoseForLoop)
   if isinstance(Loop, RoseUndefRegion):
     print("RETURN FALSE1")
@@ -347,15 +348,18 @@ def HasReductionPattern(Block : RoseBlock):
   if Op.getInputBitVector() != Block.getFunction().getReturnValue():
     print("RETURN FALSE2")
     return False
-  # The low index musst be dependent on the outer loop
+  # The low index musst be dependent on the outer loop if an outer loop
+  # exists.
   ParentLoop = Loop.getParentOfType(RoseForLoop)
-  if isinstance(ParentLoop, RoseUndefRegion):
-    print("RETURN FALSE3")
-    return False
-  if ParentLoop.getIterator() != Op.getLowIndex():
-    print("RETURN FALSE4")
-    return False
+  if not isinstance(ParentLoop, RoseUndefRegion):
+    if not isinstance(Op.getLowIndex(), RoseConstant):
+      if ParentLoop.getIterator() != Op.getLowIndex():
+        print("RETURN FALSE4")
+        return False
   ReductionOp = Op.getInsertValue()
+  if not isinstance(ReductionOp, RoseOperation):
+    print("---RETURN FALSE5")
+    return False
   if isinstance(ReductionOp, RoseAddOp):
     print("RETURN FALSE5")
     return False
@@ -802,5 +806,4 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
     OpsList2.extend(Op2.getOperands())
 
   return MapBetweenValues
-
 
