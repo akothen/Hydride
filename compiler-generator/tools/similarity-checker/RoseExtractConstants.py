@@ -837,22 +837,95 @@ def MapBVInsertsInCondBlocks(Function : RoseFunction):
   return CondBlocksBVInsertsMap
 
 
+def ExtractConstantsFromAccumulationInBlock(Op : RoseBVInsertSliceOp, OpToLowIndexMap : dict, \
+                                        OpToInsertValArgMap : dict, BVValToBitwidthVal : dict, \
+                                        Context : RoseContext, Visited : set):
+  print("ExtractConstantsFromAccumulationInBlock")
+  Block = Op.getParent()
+  Function = Block.getFunction()
+  Loop = Block.getParentOfType(RoseForLoop)
+  if isinstance(Op.getLowIndex(), RoseConstant) \
+  and isinstance(Op.getHighIndex(), RoseConstant):
+    if isinstance(Op.getInsertValue(), RoseOperation):
+      if Op.getInsertValue().getOpcode().typesOfInputsAndOutputEqual():
+        print("HERE")
+        InsertOp = Op.getInsertValue()
+        if isinstance(InsertOp.getOperand(0), RoseBVExtractSliceOp) \
+        and InsertOp.getOperand(0).getInputBitVector() == Function.getReturnValue():
+          ExtractOp = InsertOp.getOperand(0)
+        elif isinstance(InsertOp.getOperand(1), RoseBVExtractSliceOp) \
+        and InsertOp.getOperand(1).getInputBitVector() == Function.getReturnValue():
+          ExtractOp = InsertOp.getOperand(1)
+        else:
+          return
+    else:
+      if not isinstance(Op.getInsertValue(), RoseConstant):
+        return
+      NewArg = RoseUndefValue()
+      for Key in OpToInsertValArgMap.keys():
+        if Op.isSameAs(Key):
+          NewArg = OpToInsertValArgMap[Key]
+          break
+      if isinstance(NewArg, RoseUndefValue):
+        return
+      ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), NewArg,  \
+          Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
+      Op.setOperand(0, ExtractOp)
+      Block.addOperationBefore(ExtractOp, Op)
+    LowIndex = RoseUndefValue()
+    for Key in OpToLowIndexMap.keys():
+      if Key.getLowIndex() == Op.getLowIndex() \
+      and Key.getHighIndex() == Op.getHighIndex():
+        LowIndex = OpToLowIndexMap[Key]
+        break
+    print("LOW INDEX:")
+    LowIndex.print()
+    if isinstance(LowIndex, RoseUndefValue):
+      return  
+    Offset = RoseAddOp.create(Context.genName("%" + "offset"), \
+                    [LowIndex, Op.getOperand(Op.getBitwidthPos())])
+    LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
+        [Offset, RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())])
+    Op.setOperand(Op.getLowIndexPos(), LowIndex)
+    Op.setOperand(Op.getHighIndexPos(), LastIdx)
+    Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
+    Op.setType(RoseBitVectorType.create(Loop.getStep()))
+    ExtractOp.setOperand(ExtractOp.getLowIndexPos(), LowIndex)
+    ExtractOp.setOperand(ExtractOp.getHighIndexPos(), LastIdx)
+    ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Loop.getStep())
+    ExtractOp.setType(RoseBitVectorType.create(Loop.getStep()))
+    Offset.setOperand(1, Loop.getStep())
+    Block.addOperationBefore(Offset, Op)
+    Block.addOperationBefore(LastIdx, Op)
+    BVValToBitwidthVal[Op] = Op.getOperand(Op.getBitwidthPos())
+    BVValToBitwidthVal[Op.getInsertValue()] = Op.getOperand(Op.getBitwidthPos())
+    BVValToBitwidthVal[ExtractOp] = Loop.getStep()
+    Visited.add(Op)
+    Visited.add(ExtractOp)
+    Visited.add(LastIdx)
+    Visited.add(Offset)
+  return
+
+
 def ExtractConstantsFromAccumulationCode(Function : RoseFunction,  BVValToBitwidthVal : dict, \
                               Context : RoseContext, ArgToConstantValsMap : dict, Visited : set):
   # First get the preheaders of the loops and check if there are any bvinsert ops.
   OpToInsertValArgMap = dict()
   OpToLowIndexMap = dict()
+  VisitedBlocks = set()
   LoopsList = Function.getRegionsOfType(RoseForLoop)
   for Loop in LoopsList:
     Preheader = Loop.getPreheader()
     if not isinstance(Preheader, RoseBlock):
       continue
+    if Preheader in VisitedBlocks:
+      continue
+    VisitedBlocks.add(Preheader)
     OpList = list()
     OpList.extend(Preheader.getOperations())
     for Op in reversed(OpList):
       if isinstance(Op, RoseBVInsertSliceOp):
-        if isinstance(Op.getInsertValue(), RoseConstant) \
-        and isinstance(Op.getLowIndex(), RoseConstant) \
+        if isinstance(Op.getLowIndex(), RoseConstant) \
         and isinstance(Op.getHighIndex(), RoseConstant):
           InsertValue = Op.getInsertValue()
           NewArg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
@@ -891,145 +964,56 @@ def ExtractConstantsFromAccumulationCode(Function : RoseFunction,  BVValToBitwid
           Visited.add(ExtractOp)
           Visited.add(LastIdx)
           Visited.add(Offset)
-  
-  # Look into the bvinserts in the cond regions.
-  CondRegions = Function.getRegionsOfType(RoseCond)
-  print("len(CondRegions):")
-  print(len(CondRegions))
-  if len(CondRegions) != 1:
-    return
-  # If the then region of cond region ends with a bvinsert with a constant
-  # insert, we can skip this step.
-  print("COND REGION EXTRACT CONSTANTS:")
-  for SubRegion in CondRegions[0].getThenRegions():
-    if not isinstance(SubRegion, RoseBlock):
-      BlockList = SubRegion.getRegionsOfType(RoseBlock)
+    CondRegions = Function.getRegionsOfType(RoseCond)
+    if len(CondRegions) == 0:
+      BlockList = Loop.getRegionsOfType(RoseBlock)
+      for Block in BlockList:
+        if Block in VisitedBlocks:
+          continue
+        VisitedBlocks.add(Block)
+        OpList = list()
+        OpList.extend(Block.getOperations())
+        for Op in reversed(OpList):
+          if isinstance(Op, RoseBVInsertSliceOp):
+            ExtractConstantsFromAccumulationInBlock(Op, OpToLowIndexMap, \
+                              OpToInsertValArgMap, BVValToBitwidthVal, Context, Visited)
     else:
-      BlockList = [SubRegion]
-    for Block in BlockList:
-      print("THEN SUBREGION:")
-      Block.print()
-      print("---------")
-      OpList = []
-      OpList.extend(Block.getOperations())
-      for Op in reversed(OpList):
-        if isinstance(Op, RoseBVInsertSliceOp):
-          print("HERE")
-          Op.print()
-          if isinstance(Op.getLowIndex(), RoseConstant) \
-          and isinstance(Op.getHighIndex(), RoseConstant):
-            if isinstance(Op.getInsertValue(), RoseBVAddOp):
-              print("HERE")
-              AddOp = Op.getInsertValue()
-              if isinstance(AddOp.getOperand(0), RoseBVExtractSliceOp) \
-              and AddOp.getOperand(0).getInputBitVector() == Function.getReturnValue():
-                ExtractOp = AddOp.getOperand(0)
-              elif isinstance(AddOp.getOperand(1), RoseBVExtractSliceOp) \
-              and AddOp.getOperand(1).getInputBitVector() == Function.getReturnValue():
-                ExtractOp = AddOp.getOperand(1)
-              else:
-                continue
-              print("REDUCTION CONSTRANT EXTRACTON:")
-              LowIndex = RoseUndefValue()
-              for Key in OpToLowIndexMap.keys():
-                if Key.getLowIndex() == Op.getLowIndex() \
-                and Key.getHighIndex() == Op.getHighIndex():
-                  LowIndex = OpToLowIndexMap[Key]
-                  break
-              print("LOW INDEX:")
-              LowIndex.print()
-              if isinstance(LowIndex, RoseUndefValue):
-                continue
-              Offset = RoseAddOp.create(Context.genName("%" + "offset"), \
-                              [LowIndex, Op.getOperand(Op.getBitwidthPos())])
-              LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
-                  [Offset, RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())])
-              Op.setOperand(Op.getLowIndexPos(), LowIndex)
-              Op.setOperand(Op.getHighIndexPos(), LastIdx)
-              Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
-              Op.setType(RoseBitVectorType.create(Loop.getStep()))
-              ExtractOp.setOperand(ExtractOp.getLowIndexPos(), LowIndex)
-              ExtractOp.setOperand(ExtractOp.getHighIndexPos(), LastIdx)
-              ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Loop.getStep())
-              ExtractOp.setType(RoseBitVectorType.create(Loop.getStep()))
-              Offset.setOperand(1, Loop.getStep())
-              Block.addOperationBefore(Offset, Op)
-              Block.addOperationBefore(LastIdx, Op)
-              Op.setOperand(0, ExtractOp)
-              BVValToBitwidthVal[Op] = Loop.getStep()
-              BVValToBitwidthVal[Op.getInsertValue()] = Loop.getStep()
-              BVValToBitwidthVal[ExtractOp] = Loop.getStep()
-              Visited.add(Op)
-              Visited.add(ExtractOp)
-              Visited.add(LastIdx)
-              Visited.add(Offset)
-
-  # Now extract the constant away in the else regions.
-  for SubRegion in CondRegions[0].getElseRegions():
-    if not isinstance(SubRegion, RoseBlock):
-      BlockList = SubRegion.getRegionsOfType(RoseBlock)
-    else:
-      BlockList = [SubRegion]
-    for Block in BlockList:
-      OpList = list()
-      OpList.extend(Block.getOperations())
-      for Op in reversed(OpList):
-        if isinstance(Op, RoseBVInsertSliceOp):
-          if isinstance(Op.getInsertValue(), RoseConstant) \
-          and isinstance(Op.getLowIndex(), RoseConstant) \
-          and isinstance(Op.getHighIndex(), RoseConstant):
-            InsertValue = Op.getInsertValue()
-            NewArg = RoseUndefValue()
-            for Key in OpToInsertValArgMap.keys():
-              if Op.isSameAs(Key):
-                NewArg = OpToInsertValArgMap[Key]
-                break
-            if isinstance(NewArg, RoseUndefValue):
-              continue
-            Op.print()
-            print("Op.getLowIndex():")
-            Op.getLowIndex().print()
-            print("Op.getHighIndex():")
-            Op.getHighIndex().print()
-            print("NewArg:")
-            NewArg.print()
-            print("Op.getOperand(Op.getBitwidthPos()):")
-            print(Op.getBitwidthPos())
-            Op.getOperand(Op.getBitwidthPos()).print()
-            print(Op.getOperand(Op.getBitwidthPos()))
-            ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), NewArg,  \
-                Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
-            LowIndex = RoseUndefValue()
-            for Key in OpToLowIndexMap.keys():
-              if Op.isSameAs(Key):
-                LowIndex = OpToLowIndexMap[Key]
-                break
-            if isinstance(LowIndex, RoseUndefValue):
-              continue
-            Offset = RoseAddOp.create(Context.genName("%" + "offset"), \
-                            [LowIndex, Op.getOperand(Op.getBitwidthPos())])
-            LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
-                [Offset, RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())])
-            Op.setOperand(Op.getLowIndexPos(), LowIndex)
-            Op.setOperand(Op.getHighIndexPos(), LastIdx)
-            Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
-            Op.setType(RoseBitVectorType.create(Loop.getStep()))
-            ExtractOp.setOperand(ExtractOp.getLowIndexPos(), LowIndex)
-            ExtractOp.setOperand(ExtractOp.getHighIndexPos(), LastIdx)
-            ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Loop.getStep())
-            ExtractOp.setType(RoseBitVectorType.create(Loop.getStep()))
-            Offset.setOperand(1, Loop.getStep())
-            Block.addOperationBefore(Offset, Op)
-            Block.addOperationBefore(LastIdx, Op)
-            Block.addOperationBefore(ExtractOp, Op)
-            Op.setOperand(0, ExtractOp)
-            BVValToBitwidthVal[Op] = NewArg
-            BVValToBitwidthVal[Op.getInsertValue()] = NewArg
-            BVValToBitwidthVal[ExtractOp] = Loop.getStep()
-            Visited.add(Op)
-            Visited.add(ExtractOp)
-            Visited.add(LastIdx)
-            Visited.add(Offset)
+      if len(CondRegions) != 1:
+        return
+      print("COND REGION CONSTANT EXTRACTION")
+      Function.print()
+      # Extract constaints from then region
+      for SubRegion in CondRegions[0].getThenRegions():
+        if not isinstance(SubRegion, RoseBlock):
+          BlockList = SubRegion.getRegionsOfType(RoseBlock)
+        else:
+          BlockList = [SubRegion]
+        for Block in BlockList:
+          print("THEN SUBREGION:")
+          Block.print()
+          print("---------")
+          OpList = []
+          OpList.extend(Block.getOperations())
+          for Op in reversed(OpList):
+            if isinstance(Op, RoseBVInsertSliceOp):
+              ExtractConstantsFromAccumulationInBlock(Op, OpToLowIndexMap, \
+                  OpToInsertValArgMap, BVValToBitwidthVal, Context, Visited)
+      Function.print()
+      # Extract constaints from else region
+      for SubRegion in CondRegions[0].getElseRegions():
+        if not isinstance(SubRegion, RoseBlock):
+          BlockList = SubRegion.getRegionsOfType(RoseBlock)
+        else:
+          BlockList = [SubRegion]
+        for Block in BlockList:
+          print("Block:")
+          Block.print()
+          OpList = list()
+          OpList.extend(Block.getOperations())
+          for Op in reversed(OpList):
+            if isinstance(Op, RoseBVInsertSliceOp):
+              ExtractConstantsFromAccumulationInBlock(Op, OpToLowIndexMap, \
+                  OpToInsertValArgMap, BVValToBitwidthVal, Context, Visited)   
   return
 
 
