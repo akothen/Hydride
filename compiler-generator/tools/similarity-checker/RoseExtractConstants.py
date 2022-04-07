@@ -871,7 +871,6 @@ def ExtractConstantsFromAccumulationInBlock(Op : RoseBVInsertSliceOp, OpToLowInd
       ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), NewArg,  \
           Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
       Op.setOperand(0, ExtractOp)
-      Block.addOperationBefore(ExtractOp, Op)
     LowIndex = RoseUndefValue()
     for Key in OpToLowIndexMap.keys():
       if Key.getLowIndex() == Op.getLowIndex() \
@@ -897,6 +896,8 @@ def ExtractConstantsFromAccumulationInBlock(Op : RoseBVInsertSliceOp, OpToLowInd
     Offset.setOperand(1, Loop.getStep())
     Block.addOperationBefore(Offset, Op)
     Block.addOperationBefore(LastIdx, Op)
+    if isinstance(Op.getInsertValue(), RoseBVExtractSliceOp):
+      Block.addOperationBefore(ExtractOp, Op)
     BVValToBitwidthVal[Op] = Op.getOperand(Op.getBitwidthPos())
     BVValToBitwidthVal[Op.getInsertValue()] = Op.getOperand(Op.getBitwidthPos())
     BVValToBitwidthVal[ExtractOp] = Loop.getStep()
