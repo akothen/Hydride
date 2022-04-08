@@ -115,12 +115,15 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
     RosetteCode += Operation.to_rosette(NumSpace)
   
   if len(SkipOps) != 0:
+    print("SKIP SOME OPS")
     RosetteCode += Spaces + LastOp.getName() + "\n"
     return RosetteCode
 
   print(BVInsertOpsList)
   if not (len(BVInsertOpsList) > 1):
     if len(BVInsertOpsList) == 1:
+      print("BVInsertOpsList[0]:")
+      BVInsertOpsList[0].print()
       if isinstance(BVInsertOpsList[0].getInsertValue(), RoseConstant):
         Result = bin(BVInsertOpsList[0].getInsertValue().getValue()).replace("0b", "#b")
         print("RESULT:")
@@ -130,7 +133,7 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
         if type(BVInsertOpsList[0].getOutputBitwidth()) == int:
           if isinstance(ParentCondRegion, RoseUndefRegion):
             RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
-                  + "(bv " + Result + " " + str(BVInsertOpsList[0].getOutputBitwidth()) + "))\n"
+                  + " (bv " + Result + " " + str(BVInsertOpsList[0].getOutputBitwidth()) + "))\n"
           else:
             RosetteCode += Spaces + "(bv " + Result + " " \
                             + str(BVInsertOpsList[0].getOutputBitwidth()) + ")\n"
@@ -142,7 +145,13 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
             RosetteCode += Spaces + "(bv " + Result + " " \
                         + BVInsertOpsList[0].getOutputBitwidth().getName() + ")\n"  
       else:
-        RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
+        # If the bvinsert is in the preheader, we do not need to return anything.
+        Block = BVInsertOpsList[0].getParent()
+        if IsBlockPreheader(Block) == False:
+          RosetteCode += Spaces + BVInsertOpsList[0].getInsertValue().getName() + "\n"
+        else:
+          RosetteCode += Spaces + "(define " + BVInsertOpsList[0].getInputBitVector().getName() \
+                          + " " + BVInsertOpsList[0].getInsertValue().getName() + ")\n"
     return RosetteCode
   
   # See which bvinserts in the block are concatable
@@ -353,6 +362,7 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
     BlockList = Loop.getRegionsOfType(RoseBlock)
     print("BlockList:")
     print(BlockList)
+    ReductionOpString = None
     for Block in BlockList:
       Block.print()
       if Block in SkipOpsMap:
@@ -365,18 +375,22 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
             ExtractOp = Op
             Epilogue += Op.to_rosette(NumSpace)
             continue
-          if isinstance(Op, RoseBVAddOp):
+          if Op.getOpcode().typesOfInputsAndOutputEqual() == True \
+          and isinstance(Op, RoseBitVectorOp):
             for Operand in Op.getOperands():
               if ExtractOp == Operand:
                 continue
               ReductionVal = Operand
               break
+            print("******OP:")
+            Op.print()
+            ReductionOpString = Op.getOpcode().getRosetteOp()
             if Op.getSaturationQualifier() == None:
-              Epilogue += Spaces + "(define " + Op.getName() + " (bvadd " \
-                      + ReductionVal.getName() + ".sum " + ExtractOp.getName() + "))\n"
+              Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
+                      + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
             else:
-              Epilogue += Spaces + "(define " + Op.getName() + " (bvadd" \
-                      + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".sum " \
+              Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString +  \
+                      + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
                       + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"       
             Epilogue += Spaces + Op.getName() + "\n"
             break
@@ -388,8 +402,8 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
     print("ReductionLoops:")
     for L in ReductionLoops:
       L.print()
-    TmpRosetteCode = Spaces + "(define " + ReductionVal.getName() + ".sum\n" \
-                      +  "(apply\n" + Spaces + "bvadd\n" + TmpRosetteCode
+    TmpRosetteCode = Spaces + "(define " + ReductionVal.getName() + ".red\n" \
+                      +  "(apply\n" + Spaces + ReductionOpString + "\n" + TmpRosetteCode
   else:
     TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
     TmpRosetteCode += (Spaces + ")\n")
