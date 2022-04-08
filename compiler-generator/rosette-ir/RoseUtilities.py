@@ -348,19 +348,22 @@ def HasReductionPattern(Block : RoseBlock):
   if Op.getInputBitVector() != Block.getFunction().getReturnValue():
     print("RETURN FALSE2")
     return False
-  # The low index musst be dependent on the outer loop if an outer loop
+  # The low index must be dependent on the outer loop if an outer loop
   # exists.
   ParentLoop = Loop.getParentOfType(RoseForLoop)
   if not isinstance(ParentLoop, RoseUndefRegion):
     if not isinstance(Op.getLowIndex(), RoseConstant):
-      if ParentLoop.getIterator() != Op.getLowIndex():
-        print("RETURN FALSE4")
-        return False
+      if not isinstance(Op.getLowIndex(), RoseArgument):
+        if ParentLoop.getIterator() != Op.getLowIndex():
+          print("RETURN FALSE4")
+          return False
   ReductionOp = Op.getInsertValue()
   if not isinstance(ReductionOp, RoseOperation):
     print("---RETURN FALSE5")
     return False
-  if isinstance(ReductionOp, RoseAddOp):
+  print("ReductionOp:")
+  ReductionOp.print()
+  if ReductionOp.getOpcode().typesOfInputsAndOutputEqual() == False:
     print("RETURN FALSE5")
     return False
   for Operand in ReductionOp.getOperands():
@@ -392,6 +395,26 @@ def GetReductionOps(Block : RoseBlock):
   for Op in OpList:
     Op.print()
   return OpList
+
+
+def IsBlockPreheader(Block : RoseBlock):
+  assert isinstance(Block, RoseBlock)
+  print("IS BLOCK PREHEADER:")
+  print("BLOCK:")
+  Block.print()
+  ParentRegion = Block.getParent()
+  assert not isinstance(ParentRegion, RoseUndefRegion)
+  print("PARENT REGION:")
+  ParentRegion.print()
+  Key = ParentRegion.getKeyForChild(Block)
+  if ParentRegion.getTailChild(Key) != Block:
+    BlockPos = ParentRegion.getPosOfChild(Block, Key)
+    print("BlockPos:")
+    print(BlockPos)
+    NextRegion = ParentRegion.getChild(BlockPos + 1, Key)
+    if isinstance(NextRegion, RoseForLoop):
+      return True
+  return False
 
 
 def GenerateOpWithSameInputsAndOutputType(Name : str, Opcode : RoseOpcode, Operands : list):
