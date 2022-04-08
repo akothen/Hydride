@@ -385,13 +385,17 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
             print("******OP:")
             Op.print()
             ReductionOpString = Op.getOpcode().getRosetteOp()
-            if Op.getSaturationQualifier() == None:
-              Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
-                      + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+            if isinstance(Op, RoseSaturableBitVectorOp):
+              if Op.getSaturationQualifier() == None:
+                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
+                        + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
+              else:
+                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString +  \
+                        + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
+                        + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n" 
             else:
-              Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString +  \
-                      + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
-                      + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n"       
+              Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
+                      + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"    
             Epilogue += Spaces + Op.getName() + "\n"
             break
           if isinstance(Op, RoseBVInsertSliceOp):
