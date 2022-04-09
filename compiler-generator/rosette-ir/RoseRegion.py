@@ -572,11 +572,11 @@ class RoseRegion:
       for Key in self.Keys:
         for Child in self.Children[Key]:
           assert self.isChildValid(Child)
-          NumUsers += Child.getUsersOf(Abstraction)
+          NumUsers += Child.getNumUsersOf(Abstraction)
     else:
       for Child in self.Children:
         assert self.isChildValid(Child)
-        NumUsers += Child.getUsersOf(Abstraction)
+        NumUsers += Child.getNumUsersOf(Abstraction)
     return NumUsers
 
   # An abstraction can be an operation and region.
@@ -655,6 +655,5 @@ class RoseRegion:
       Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
-
 
 
