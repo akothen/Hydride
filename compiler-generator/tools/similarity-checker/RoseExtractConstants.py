@@ -43,8 +43,11 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
         if not isinstance(Operand, RoseOperation):
           continue
         if Operand in BVValToBitwidthVal:
+          print("Operation:")
           Operation.print()
+          print("Operand:")
           Operand.print()
+          print("BVValToBitwidthVal[Operand].print():")
           BVValToBitwidthVal[Operand].print()
           assert Operand not in UnknownVal
           assert Param == BVValToBitwidthVal[Operand]
@@ -57,6 +60,13 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
           # Add all the users of this operand to the worklist
           Worklist.extend(Operand.getUsers())
       # Add all the users of this operation to the worklist
+      print("Operation.getUsers():")
+      print(Operation.getUsers())
+      print("Operation:")
+      Operation.print()
+      for User in Operation.getUsers():
+        print("USER:")
+        User.print()
       Worklist.extend(Operation.getUsers())
       continue
   return
@@ -697,6 +707,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           BVValToBitwidthVal[Op] = Loop.getStep()
           if Op in UnknownVal:
             UnknownVal.remove(Op)
+          print("MODIFIED EXTRACT OP:")
+          Op.print()
           AddBitwidthValForUnknownVal(Op, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
         else:
           # Add a new argument
@@ -927,7 +939,8 @@ def ExtractConstantsFromAccumulationCode(Function : RoseFunction,  BVValToBitwid
     for Op in reversed(OpList):
       if isinstance(Op, RoseBVInsertSliceOp):
         if isinstance(Op.getLowIndex(), RoseConstant) \
-        and isinstance(Op.getHighIndex(), RoseConstant):
+        and isinstance(Op.getHighIndex(), RoseConstant) \
+        and isinstance(Op.getInsertValue(), RoseConstant):
           InsertValue = Op.getInsertValue()
           NewArg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                       Op.getInputBitVector().getType()))
