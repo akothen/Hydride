@@ -16,7 +16,7 @@ import llvmlite
 
 class RoseUndefValue(RoseValue):
   def __init__(self):
-    super().__init__("undef", RoseUndefinedType.create())
+    super().__init__("undef", RoseUndefinedType.create(), ID=0)
   
   def __str__(self):
     return self.getName()
@@ -46,7 +46,7 @@ class RoseConstant(RoseValue):
         assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     if isinstance(Type, RoseStringType):
-      assert type(self.Val) == str
+      assert type(self.Value) == str
     if not isinstance(Type, RoseStringType):
       super().__init__(str(Value), Type)
     else:
@@ -85,7 +85,7 @@ class RoseConstant(RoseValue):
     return self.Val != Other.Val or super().__ne__(Other)
   
   def __hash__(self):
-    return hash((self.getValue(), self.getType()))
+    return super().__hash__()
 
   def __str__(self):
     if isinstance(self.getType(), RoseStringType):
@@ -156,7 +156,7 @@ class RoseArgument(RoseValue):
 
   # TODO: Should we also include callee in the hash?
   def __hash__(self):
-    return hash((self.getName(), self.getType(), self.ArgIndex))
+    return super().__hash__()
 
   # This is same as __eq__ for rose arguments.
   def isSameAs(self, Other):
@@ -173,6 +173,8 @@ class RoseArgument(RoseValue):
     # Sanity checks
     assert isinstance(Function, RoseAbstractions.RoseFunction)
     assert Function.getNumArgs() > self.ArgIndex
+    Function.getArg(self.ArgIndex).getType().print()
+    self.getType().print()
     assert Function.getArg(self.ArgIndex).getType() == self.getType()
     self.Callee = Function
   
@@ -235,7 +237,7 @@ class RoseOperation(RoseValue):
         or super().__ne__(Other)
   
   def __hash__(self):
-    return hash((self.getName(), self.getType(), self.Opcode))
+    return super().__hash__()
   
   # This is different from __eq__ because here we want to see if 
   # the compuations are the same.
@@ -296,6 +298,13 @@ class RoseOperation(RoseValue):
     assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
     return Function.getUsersOf(self)
   
+  def getNumUsers(self):
+    Block = self.getParent()
+    assert not isinstance(Block, RoseAbstractions.RoseUndefRegion)
+    Function =  Block.getFunction()
+    assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
+    return Function.getNumUsersOf(self)
+
   # This is an overloaded function
   def replaceUsesWith(self, *args):
     if len(args) == 1:
@@ -371,5 +380,6 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
+
 
 

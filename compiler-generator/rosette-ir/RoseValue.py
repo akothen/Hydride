@@ -8,14 +8,19 @@
 from RoseType import *
 
 from copy import deepcopy
+import uuid
 
 
 # Base class for Rosette values. The values have name
 # and type. Keeping this simple for now.
 class RoseValue:
-    def __init__(self, Name : str, Type : RoseType):
+    def __init__(self, Name : str, Type : RoseType, ID = None):
         self.Name = Name
         self.Type = Type
+        if ID == None:
+            self.ID = uuid.uuid4()
+        else:
+            self.ID = ID
     
     @staticmethod
     def create(Name : str, Type : RoseType):
@@ -30,7 +35,7 @@ class RoseValue:
         return self.Name != Other.Name or self.Type != Other.Type
 
     def __hash__(self):
-        return hash((self.Name, self.Type))
+        return hash(self.ID)
     
     def __str__(self):
         return self.getName()
@@ -62,7 +67,8 @@ class RoseValue:
         print(self.Name)
         if Debug == True:
             self.Type.print()
-    
-    def to_rosette(self):
-        return self.Name
+
+ 
+
+
 
