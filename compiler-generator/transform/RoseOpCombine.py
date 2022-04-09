@@ -102,8 +102,8 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
   and isinstance(FirstOp_1, RoseDivOp) \
   and isinstance(FirstOp_2, RoseDivOp) \
   and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
-    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
-    and len(FirstOp.getUsers()) == 1:
+    if FirstOp_1.getNumUsers() == 1 and FirstOp_2.getNumUsers() == 1 \
+    and FirstOp.getNumUsers() == 1:
       if ConstantIndex1_1 == 1 and ConstantIndex1_2 == 1:
         if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
           # first_op_1:  y1 = div x1, c
@@ -129,8 +129,8 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
   and isinstance(FirstOp_1, RoseDivOp) \
   and isinstance(FirstOp_2, RoseDivOp) \
   and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
-    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
-    and len(FirstOp.getUsers()) == 1:
+    if FirstOp_1.getNumUsers() == 1 and FirstOp_2.getNumUsers() == 1 \
+    and FirstOp.getNumUsers() == 1:
       if ConstantIndex1_1 == 1 and ConstantIndex1_2 == 1:
         if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
           # first_op_1:  y1 = div x1, c
@@ -156,8 +156,8 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
   and isinstance(FirstOp_1, RoseMulOp) \
   and isinstance(FirstOp_2, RoseMulOp) \
   and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
-    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
-    and len(FirstOp.getUsers()) == 1:
+    if FirstOp_1.getNumUsers() == 1 and FirstOp_2.getNumUsers() == 1 \
+    and FirstOp.getNumUsers() == 1:
       if ConstantIndex2 == 1:
         if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
           # first_op_1:  y1 = mul x1, c
@@ -183,8 +183,8 @@ def OpCombineMultiplePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation,
   and isinstance(FirstOp_1, RoseMulOp) \
   and isinstance(FirstOp_2, RoseMulOp) \
   and ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
-    if len(FirstOp_1.getUsers()) == 1 and len(FirstOp_2.getUsers()) == 1 \
-    and len(FirstOp.getUsers()) == 1:
+    if FirstOp_1.getNumUsers() == 1 and FirstOp_2.getNumUsers() == 1 \
+    and FirstOp.getNumUsers() == 1:
       if ConstantIndex2 == 1:
         if ConstantOperand1_1.getValue() == ConstantOperand1_2.getValue():
           # first_op_1:  y1 = mul x1, c
@@ -271,7 +271,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
   # TODO: Add more patterns
   if isinstance(FirstOp, RoseMulOp) \
   and isinstance(SecondOp, RoseMulOp):
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       # first_op:  y = mul x, c1
       # second_op: z = mul y, c2
       # result: z = mul x, (c1 * c2) 
@@ -298,10 +298,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       if (ConstantIndex1 == 1 and ConstantIndex2 == 1) \
       or (ConstantIndex1 == 1 and ConstantIndex2 == 0):
         # Case 1:
@@ -420,10 +420,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       if ConstantIndex2 == 0:
         # Case 1:
         # first_op:  y = mul c1, x
@@ -503,10 +503,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       if ConstantIndex1 == 0:
         # Case 1:
         # first_op:  y = div c1, x
@@ -572,7 +572,7 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
   # More patterns
   if isinstance(FirstOp, RoseAddOp) \
   and isinstance(SecondOp, RoseAddOp):
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       NewOperandVal = ConstantOperand2.getValue() + ConstantOperand1.getValue()
       NewOperand = RoseConstant.create(NewOperandVal, ConstantOperand2.getType())
       # Replace the operands of the second op
@@ -596,10 +596,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       if (ConstantIndex1 == 1 and ConstantIndex2 == 1) \
       or (ConstantIndex1 == 1 and ConstantIndex2 == 0):
         # Case 1:
@@ -670,10 +670,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       # Case 1:
       # first_op:  y = add c1, x
       # second_op: z = sub c2, y
@@ -709,10 +709,10 @@ def OpCombinePatterns(FirstOp : RoseOperation, SecondOp : RoseOperation, Context
       # IMPORTANT: the second op must be removed before the first op.
       Block.eraseOperation(SecondOp)
       # Remove the first op only if it has no more uses
-      if len(FirstOp.getUsers()) == 0:
+      if FirstOp.getNumUsers() == 0:
         Block.eraseOperation(FirstOp)
       return True
-    if len(FirstOp.getUsers()) == 1:
+    if FirstOp.getNumUsers() == 1:
       if ConstantIndex1 == 0:
         # Case 1:
         # first_op:  y = sub c1, x
@@ -834,7 +834,7 @@ def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
       or isinstance(Operation, RoseBVSignExtendOp)
 
   # The given op must have only one user
-  if len(Operation.getUsers()) != 1:
+  if Operation.getNumUsers() != 1:
     # Nothing to do
     return
 
@@ -845,7 +845,7 @@ def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
   if InputOp.getParent() != Operation.getParent():
     return
   Block = InputOp.getParent()
-  if len(InputOp.getUsers()) != 1:
+  if InputOp.getNumUsers() != 1:
     # Nothing to do
     return
 
@@ -864,7 +864,7 @@ def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseCon
       or isinstance(Operation, RoseBVSignExtendOp)
 
   # The given op must have only one user
-  if len(Operation.getUsers()) != 1:
+  if Operation.getNumUsers() != 1:
     # Nothing to do
     return
 
@@ -875,7 +875,7 @@ def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseCon
   if InputOp.getParent() != Operation.getParent():
     return
   Block = InputOp.getParent()
-  if len(InputOp.getUsers()) != 1:
+  if InputOp.getNumUsers() != 1:
     # Nothing to do
     return
 
@@ -903,7 +903,7 @@ def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseCon
       # Nothing to do
       return
     # All of these operands mmust have only one user
-    if len(InputOp.getUsers()) != 1:
+    if InputOp.getNumUsers() != 1:
       # Nothing to do
       return
   
@@ -988,7 +988,7 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
       if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
         # Check if the only use of this extract op is the truncate op
         ExtractOp = Op.getInputBitVector()
-        if len(ExtractOp.getUsers()) == 1:
+        if ExtractOp.getNumUsers() == 1:
           # Replace this extract and truncate instruction with a new extarct op
           TotalBitwidth = ExtractOp.getOutputBitwidth()
           TruncBitwidth = Op.getOutputBitwidth()
@@ -1051,7 +1051,7 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
         SecondExtractOp = Op
         # Check if the only use of this extract op is the only use
         FirstExtractOp = SecondExtractOp.getInputBitVector()
-        if len(FirstExtractOp.getUsers()) == 1:
+        if FirstExtractOp.getNumUsers() == 1:
           # Replace this first and second instruction with a new extarct op
           FirstExtractBitwidth = FirstExtractOp.getOutputBitwidth()
           SecondExtractBitwidth = SecondExtractOp.getOutputBitwidth()
@@ -1177,6 +1177,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 

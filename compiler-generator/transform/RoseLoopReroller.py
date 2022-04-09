@@ -1523,7 +1523,7 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
         while len(Worklist) != 0:
           AddOp = Worklist.pop()
           # Number of uses for the add op must be only 1.
-          if len(AddOp.getUsers()) == 1:
+          if AddOp.getNumUsers() == 1:
             BVAddChain.append(AddOp)
           for Operand in AddOp.getOperands():
             if isinstance(Operand, RoseBVAddOp) \
@@ -1758,6 +1758,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
+
 
 
 

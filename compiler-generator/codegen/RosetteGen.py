@@ -22,11 +22,11 @@ def GetSkippedBVInsertIndexingOps(Operation : RoseBVInsertSliceOp):
   if isinstance(Operation.getLowIndex(), RoseOperation):
     print("Operation.getLowIndex()")
     Operation.getLowIndex().print()
-    if len(Operation.getLowIndex().getUsers())  == 1:
+    if Operation.getLowIndex().getNumUsers()  == 1:
       Worklist.append(Operation.getLowIndex())
       ToBeSkipped.append(Operation.getLowIndex())
   if isinstance(Operation.getHighIndex(), RoseOperation):
-    if len(Operation.getHighIndex().getUsers())  == 1:
+    if Operation.getHighIndex().getNumUsers()  == 1:
       Worklist.append(Operation.getHighIndex())
       ToBeSkipped.append(Operation.getHighIndex())
   print(" INIT ToBeSkipped:")
@@ -469,6 +469,7 @@ def CodeGen(Function : RoseFunction):
   print("---\n\n\n\n\n")
   print(RosetteCode)
   return RosetteCode
+
 
 
 

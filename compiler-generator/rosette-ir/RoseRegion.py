@@ -555,6 +555,30 @@ class RoseRegion:
         Users.extend(Child.getUsersOf(Abstraction))
     return Users
 
+  # This can be implemented by a subclass
+  def getNumUsersInRegion(self, Abstraction):
+    return 0
+
+  def getNumUsersOf(self, Abstraction):
+    assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseConstant)
+    assert isinstance(Abstraction, RoseAbstractions.RoseValue)
+    NumUsers = 0
+    NumUsers += self.getNumUsersInRegion(Abstraction)
+    # Blocks are already handled separately
+    if isinstance(self, RoseAbstractions.RoseBlock):
+      return NumUsers
+    if self.Keys != None:
+      for Key in self.Keys:
+        for Child in self.Children[Key]:
+          assert self.isChildValid(Child)
+          NumUsers += Child.getUsersOf(Abstraction)
+    else:
+      for Child in self.Children:
+        assert self.isChildValid(Child)
+        NumUsers += Child.getUsersOf(Abstraction)
+    return NumUsers
+
   # An abstraction can be an operation and region.
   # This function cannot be used for rose blocks.
   def addAbstraction(self, Abstraction, Key = None):
@@ -564,6 +588,12 @@ class RoseRegion:
       assert Key in self.Keys
     else:
       assert self.Keys == None
+    print("ADD ABSTRACTION SELF:")
+    self.print()
+    print("+++Key:")
+    print(Key)
+    print("Abstraction:")
+    Abstraction.print()
     if isinstance(Abstraction, RoseRegion):
       self.addRegion(Abstraction, Key)
       return
@@ -572,11 +602,17 @@ class RoseRegion:
       TailRegion = self.getTailChild(Key)
       if not isinstance(TailRegion, RoseAbstractions.RoseBlock) \
       or isinstance(TailRegion, RoseAbstractions.RoseUndefRegion):
+        print("CREATING A NEW BLOCK")
         # Add a new block first
         Block = RoseAbstractions.RoseBlock.create([])
         Block.addRegion(Abstraction)
+        print("--BLOCK:")
+        Block.print()
         self.addRegion(Block, Key)
+        print("--self:")
+        self.print()
       else:
+        print("ADDING TO TAIL REGION")
         TailRegion.addRegion(Abstraction)
         self.updateTailChild(TailRegion, Key)
       return
@@ -619,5 +655,6 @@ class RoseRegion:
       Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
+
 
 

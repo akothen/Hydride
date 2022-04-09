@@ -240,7 +240,7 @@ class RoseBlock(RoseRegion):
     return self.getChildren()
 
   def getOperation(self, Index):
-    return self.getChild(Index) 
+    return self.getChild(Index)
   
   def getNumOperations(self):
     return self.getNumChildren()
@@ -253,10 +253,34 @@ class RoseBlock(RoseRegion):
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
     Users = list()
+    print("Abstraction:")
+    Abstraction.print()
     for Op in self.getOperations():
+      print("CHECK OPERATION:")
+      Op.print()
       if Op.usesValue(Abstraction):
+        print("TRUE")
         Users.append(Op)
+    print("Users list:")
+    print(Users)
     return Users
+
+  def getNumUsersInRegion(self, Abstraction):
+    assert not isinstance(Abstraction, RoseUndefValue) \
+      and not isinstance(Abstraction, RoseConstant)
+    assert isinstance(Abstraction, RoseValue)
+    NumUsers = 0
+    print("Abstraction:")
+    Abstraction.print()
+    for Op in self.getOperations():
+      print("CHECK OPERATION:")
+      Op.print()
+      if Op.usesValue(Abstraction):
+        print("TRUE")
+        NumUsers += 1
+    print("Users NUM:")
+    print(NumUsers)
+    return NumUsers
 
   # Insert the given op in the end of the block
   def addOperation(self, Operation : RoseOperation):
@@ -444,20 +468,20 @@ class RoseForLoop(RoseRegion):
       return RoseUndefRegion()
     return Preheader
 
-  def getUsersInRegion(self, Abstraction):
+  def getNumUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
-    Users = []
+    NumUsers = 0
     if self.getIterator() == Abstraction:
-      Users.append(self.getIterator())
+      NumUsers += self.getIterator()
     if self.getStartIndex() == Abstraction:
-      Users.append(self.getStartIndex())
+      NumUsers += self.getStartIndex()
     if self.getEndIndex() == Abstraction:
-      Users.append(self.getEndIndex())  
+      NumUsers += self.getEndIndex()
     if self.getStep() == Abstraction:
-      Users.append(self.getStep())  
-    return Users
+      NumUsers += self.getStep()
+    return NumUsers
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -598,14 +622,15 @@ class RoseCond(RoseRegion):
   def hasElseIfRegion(self):
      return len(self.getKeys()) == 3
 
-  def getUsersInRegion(self, Abstraction):
+  def getNumUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
+    NumUsers = 0
     for Condition in self.Conditions:
       if Condition == Abstraction:
-        return [Condition]
-    return []
+        NumUsers += 1
+    return NumUsers
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -634,6 +659,7 @@ class RoseCond(RoseRegion):
         assert Region.getParent() == self
         Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 
 
 

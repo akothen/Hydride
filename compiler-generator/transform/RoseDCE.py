@@ -103,7 +103,7 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Iterate the list of operations in reverse order
   for Op in reversed(OpList):
     # If the Op has no uses, remove it!
-    if len(Op.getUsers()) == 0:
+    if Op.getNumUsers() == 0:
       Block.eraseOperation(Op)
 
   # Remove redundant bvinserts
@@ -131,6 +131,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
+
 
 
 
