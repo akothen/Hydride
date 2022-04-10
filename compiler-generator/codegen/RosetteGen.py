@@ -390,7 +390,7 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
                 Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString + " " \
                         + ReductionVal.getName() + ".red " + ExtractOp.getName() + "))\n"
               else:
-                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString +  \
+                Epilogue += Spaces + "(define " + Op.getName() + " (" + ReductionOpString  \
                         + Op.getSaturationQualifier() + " " + ReductionVal.getName() + ".red " \
                         + ExtractOp.getName() + " " + str(Op.getOutputBitwidth()) + "))\n" 
             else:
@@ -469,7 +469,6 @@ def CodeGen(Function : RoseFunction):
   print("---\n\n\n\n\n")
   print(RosetteCode)
   return RosetteCode
-
 
 
 
