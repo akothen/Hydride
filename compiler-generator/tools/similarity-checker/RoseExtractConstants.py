@@ -340,6 +340,8 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
                                     Visited : set, SkipBVExtracts : set, Context : RoseContext, \
                                     ArgToConstantValsMap : dict):
   print("Fix Indices For BVOps Inside Of Loops")
+  print("OP:")
+  Op.print()
   assert Op.isIndexingBVOp() == True
   Block = Op.getParent()
   assert not isinstance(Block, RoseUndefRegion)
@@ -348,6 +350,8 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
     assert Op.getOutputBitwidth() == 1
     LowIndex = Op.getLowIndex()
     assert Op.getHighIndex() == LowIndex
+    if LowIndex in Visited:
+      return
     if isinstance(LowIndex, RoseOperation):
       if isinstance(LowIndex,  RoseDivOp):
          DivOp = LowIndex
@@ -557,13 +561,19 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   OpList = []
   OpList.extend(Block.getOperations())
   Loop = Block.getParentOfType(RoseForLoop)
+  print("PRINTING LOOP:")
+  Loop.print()
   OpBitwidthEqLoopStepList = list()
   if not isinstance(Loop, RoseUndefRegion):
     OpBitwidthEqLoopStepList = GetOpDeterminingLoopBounds(Loop)
   if isinstance(OpBitwidthEqLoopStepList, list): 
+    print("EXTRACTING CONSTANTS FROM BLOCK")
+    Block.print()
     for Op in OpBitwidthEqLoopStepList:
       print("OpBitwidthEqLoopStepList:")
       Op.print()
+  print("--------OpBitwidthEqLoopStepList:")
+  print(OpBitwidthEqLoopStepList)
   for Op in reversed(OpList):
     if Op in Visited:
       print("ALREADY VISITED")
@@ -689,6 +699,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       Op.print()
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
       if Op not in SkipBVExtracts:
+        print("OP IS NOT IN SKIP EXTRACT OPS LIST")
         if Loop == RoseUndefRegion():
           FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
           BVValToBitwidthVal[Op] =  Op.getOperand(Op.getBitwidthPos())
@@ -946,12 +957,13 @@ def ExtractConstantsFromAccumulationCode(Function : RoseFunction,  BVValToBitwid
                                       Op.getInputBitVector().getType()))
           OpToInsertValArgMap[Op.clone()] = NewArg
           BVValToBitwidthVal[Op] = NewArg
+          ArgToConstantValsMap[NewArg] = RoseConstant(InsertValue.getValue(), NewArg.getType())
           ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), NewArg,  \
             Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
-          ArgToConstantValsMap[NewArg] = RoseConstant(InsertValue.getValue(), NewArg.getType())
-          LowIndex = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+          LowIndex = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
                                       Op.getLowIndex().getType()))
           OpToLowIndexMap[Op.clone()] = LowIndex
+          ArgToConstantValsMap[LowIndex] = RoseConstant(Op.getLowIndex().getValue(), LowIndex.getType())
           Offset = RoseAddOp.create(Context.genName("%" + "offset"), \
                           [LowIndex, Op.getOperand(Op.getBitwidthPos())])
           LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
@@ -1151,6 +1163,9 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
   # cond regions in the function. We will not need to extract output bitwidths
   # of these ops because the bitwidth of conditions for bitwidths is always one.
   SkipBVExtracts = GetBVExtractsToBeSkipped(Function)
+  for Op in SkipBVExtracts:
+    print("*******SkipBVExtracts:")
+    Op.print()
 
   # Find mapping between two similar bvinserts in different condblocks
   CondBlocksBVInsertsMap = MapBVInsertsInCondBlocks(Function)
