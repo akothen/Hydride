@@ -113,6 +113,9 @@ function _mm256_mask_cvtsepi32_epi8 ( bv128 src, bv8 k, bv256 a ) {
    bvinsert bv8 %9, bv128 dst, int32 %1, int32 %10, int32 8
   }
  }
+ ret bv128 dst
+}
+
 
 
 
