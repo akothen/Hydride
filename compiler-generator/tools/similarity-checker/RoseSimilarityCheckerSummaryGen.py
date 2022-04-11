@@ -36,25 +36,33 @@ class RoseSimilarityCheckerSummaryGen():
       ArgList = list()
       for Arg in Function.getArgs():
         if FunctionInfo.argHasConcreteVal(Arg) == False:
-          ArgList.append("SYM")
+          ArgList.append("\"SYMBOLIC_VECTOR\"")
         else:
           ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
-          ArgList.append(GenConcreteValue(ConcreteVal))
-      EntryString += f'''
-            "name" : {Function.getName()},
+          ArgList.append("\"" + GenConcreteValue(ConcreteVal) + "\"")
+      TempEntryString = f'''
+            "name" : "{Function.getName()}",
             "args" : {"[" + ",".join(ArgList) + "]"},
             "in_vectsize" : {str(FunctionInfo.getInVectorLength())},
             "out_vectsize" : {str(FunctionInfo.getOutVectorLength())},
             "lanesize" : {str(FunctionInfo.getLaneSize())},
             "in_precision" : {str(FunctionInfo.getInElemType())},
             "out_precision" : {str(FunctionInfo.getOutElemType())},
-            "SIMD" : {str(FunctionInfo.isSIMD())},
+            "Cost" : "{""}",
+            "SIMD" : "{str(FunctionInfo.isSIMD())}",
         '''
-      EntryString = "{\n" + EntryString + "},\n"
+      TempEntryString = "{\n" + TempEntryString + "},\n"
+      EntryString += TempEntryString
+    # Get the rosette code for this equivalence class
+    RosetteCode = self.FunctionToRosetteCodeMap[EquivalenceClass.getAFunction()]
+    # Replace all newlines with quotes
+    RosetteCodeList = RosetteCode.split("\n")
+    for Index, Line in enumerate(RosetteCodeList):
+      RosetteCodeList[Index] = "\"" + Line + "\""
     return f'''
-          "name" : {FunctionName},
-          "x86_semantics" : {EntryString}
-          "semantics" : {self.FunctionToRosetteCodeMap[EquivalenceClass.getAFunction()]}, 
+          "name" : "{FunctionName}",
+          "x86_instructions" : {EntryString},
+          "semantics" : {RosetteCodeList}, 
       '''
 
   def summarize(self, DSLFile : str):
@@ -67,7 +75,7 @@ class RoseSimilarityCheckerSummaryGen():
       File.write(String)
       File.close()
     except IOError:
-      print("Error making: {}.rkt".format(DSLFile))
+      print("Error making: {}".format(DSLFile))
 
 
 
