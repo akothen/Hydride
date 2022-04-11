@@ -12,6 +12,7 @@ from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseEquivalenceClass import *
+from RoseSimilarityCheckerUtilities import *
 
 
 class RoseSimilarityChecker():
@@ -44,30 +45,9 @@ class RoseSimilarityChecker():
                                          str(Param.getType().getBitwidth()))
     return Input
 
-  def genConcreteInput(self, Param, ConcreteArg, NameSuffix):
+  def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str):
     assert isinstance(ConcreteArg, RoseConstant)
-    if isinstance(ConcreteArg.getType(), RoseBitVectorType):
-      if ConcreteArg.getType().getBitwidth() >= 4:
-        Input = "(define {} (bv #x".format(Param.getName() + NameSuffix)
-        HexVal = hex(ConcreteArg.getValue())
-        HexValString = str(HexVal[2:])
-        LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
-        for _ in range(LeftOver):
-          HexValString = "0" + HexValString
-        Input += HexValString
-        Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"
-      else:
-        Input = "(define {} (bv #b".format(Param.getName() + NameSuffix)
-        HexVal = hex(ConcreteArg.getValue())
-        HexValString = str(HexVal[2:])
-        LeftOver = ConcreteArg.getType().getBitwidth() - len(HexValString)
-        for _ in range(LeftOver):
-          HexValString = "0" + HexValString
-        Input += HexValString
-        Input += " " + str(ConcreteArg.getType().getBitwidth()) + "))\n"    
-    else:
-      assert isinstance(ConcreteArg.getType(), RoseIntegerType)
-      Input = "(define {} {})\n".format(Param.getName() + NameSuffix, str(ConcreteArg.getValue()))
+    Input = "(define {} {})\n".format(Param.getName() + NameSuffix, GenConcreteValue(ConcreteArg))
     return Input
 
   def qualifiesForSimilarityChecking(self, FunctionInfo1 : RoseFunctionInfo, \
@@ -128,7 +108,8 @@ class RoseSimilarityChecker():
     # Rosette code headers
     Content = [
       "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require rosette/solver/smt/boolector)\n"
+      "(require racket/pretty)", "(require rosette/solver/smt/boolector)", 
+      "(require \"RosetteOpsImpl.rkt\")\n"
     ]
     # Generate rosette code
     Content.append(self.FunctionToRosetteCodeMap[Function1])
