@@ -28,7 +28,10 @@ class RoseSimilarityCheckerSummaryGen():
     FunctionName = EquivalenceClass.getAFunction().getName()
     # List of arguments for functions in this equivalent class
     # and  track names of functions and track vector information
+    EntryString = ""
     for Function in EquivalenceClass.getEquivalentFunctions():
+      print("FUNCTION IN EQUIVALENCE CLASS:")
+      Function.print()
       FunctionInfo = self.FunctionToFunctionInfo[Function]
       ArgList = list()
       for Arg in Function.getArgs():
@@ -37,7 +40,7 @@ class RoseSimilarityCheckerSummaryGen():
         else:
           ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
           ArgList.append(GenConcreteValue(ConcreteVal))
-      EntryString = f'''
+      EntryString += f'''
             "name" : {Function.getName()},
             "args" : {"[" + ",".join(ArgList) + "]"},
             "in_vectsize" : {str(FunctionInfo.getInVectorLength())},
@@ -47,7 +50,7 @@ class RoseSimilarityCheckerSummaryGen():
             "out_precision" : {str(FunctionInfo.getOutElemType())},
             "SIMD" : {str(FunctionInfo.isSIMD())},
         '''
-      EntryString = "{" + EntryString + "},\n"
+      EntryString = "{\n" + EntryString + "},\n"
     return f'''
           "name" : {FunctionName},
           "x86_semantics" : {EntryString}
