@@ -166,6 +166,7 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
 
   # If we already have some results in the result list, just return that
   if len(Result) != 0:
+    print("RETUTNING RESULT")
     return Result
 
   # The bvinserts and bvextracts have output bitwidths that are integers 
@@ -243,4 +244,28 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   return GetOpDeterminingLoopBoundsInBlockList(Loop.getFunction(), BlockList, SkipBVExtracts)
 
 
-
+def GenConcreteValue(ConcreteValue : RoseConstant):
+  assert isinstance(ConcreteValue, RoseConstant)
+  if isinstance(ConcreteValue.getType(), RoseBitVectorType):
+    if ConcreteValue.getType().getBitwidth() >= 4:
+      Input = "(bv #x"
+      HexVal = hex(ConcreteValue.getValue())
+      HexValString = str(HexVal[2:])
+      LeftOver = ConcreteValue.getType().getBitwidth() - len(HexValString)
+      for _ in range(LeftOver):
+        HexValString = "0" + HexValString
+      Input += HexValString
+      Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"
+    else:
+      Input = "(bv #b"
+      HexVal = hex(ConcreteValue.getValue())
+      HexValString = str(HexVal[2:])
+      LeftOver = ConcreteValue.getType().getBitwidth() - len(HexValString)
+      for _ in range(LeftOver):
+        HexValString = "0" + HexValString
+      Input += HexValString
+      Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"    
+  else:
+    assert isinstance(ConcreteValue.getType(), RoseIntegerType)
+    Input = str(ConcreteValue.getValue())
+  return Input
