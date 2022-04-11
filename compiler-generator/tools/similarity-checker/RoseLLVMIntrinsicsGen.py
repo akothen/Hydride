@@ -24,8 +24,8 @@ class RoseLLVMIntrinsicsGen():
     print("GENERATING INTRINSIC")
     Function = EquivalenceClass.getAFunction()
     FunctionName = Function.getName()
-    VectorType = "llvm_anyVectorType"
-    IntType = "llvm_anyIntType"
+    VectorType = "llvm_anyvector_ty"
+    IntType = "llvm_anyint_ty"
     Output = "[" + VectorType + "]"
     InputList = ""
     for Index, Arg in enumerate(Function.getArgs()):
@@ -37,9 +37,9 @@ class RoseLLVMIntrinsicsGen():
         InputList += ","
     Input = "[" + InputList + "]"
     Attr = "[IntrNoMem, IntrSpeculatable]"
-    IntrinsicName = "tensor_" + FunctionName
+    IntrinsicName = RoseIRToLLVM(FunctionName)
     IntrinsicDef = "def int_" + IntrinsicName + " : Intrinsic<" \
-                      + Output + "," + Input + "," + Attr + ">;"
+                      + Output + "," + Input + "," + Attr + ">;\n\n"
     print(IntrinsicDef)
     return IntrinsicDef
 
