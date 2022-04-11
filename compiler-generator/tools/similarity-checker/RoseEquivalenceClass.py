@@ -20,15 +20,19 @@ class RoseEquivalenceClass:
     self.ID = uuid.uuid4()
 
   def __eq__(self, Other):
+    if Other == None:
+      return False
     assert isinstance(Other, RoseEquivalenceClass)
     return self.ID == Other.ID
 
   def __neq__(self, Other):
+    if Other == None:
+      return True
     assert isinstance(Other, RoseEquivalenceClass)
     return self.ID != Other.ID
 
   def __hash__(self):
-    return hash(self.ID())
+    return hash(self.ID)
 
   def addFunction(self, Function : RoseFunction):
     self.EquivalentFuctions.add(Function)
@@ -37,7 +41,7 @@ class RoseEquivalenceClass:
     self.FunctToArgsMapping[Function] = ArgToConcreteValMap
   
   def getAFunction(self):
-    return self.EquivalentFuctions[0]
+    return list(self.EquivalentFuctions)[0]
   
   def getFunctToArgsMapping(self):
     return self.FunctToArgsMapping
