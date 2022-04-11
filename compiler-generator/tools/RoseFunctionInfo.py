@@ -27,8 +27,26 @@ class RoseFunctionInfo():
     self.InVectorLength = None
     self.OutVectorLength = None
     self.LaneSize = None
-    self.SIMD = None
-  
+    self.IsSIMD = None
+
+  def getInElemType(self):
+    return self.InElemType
+
+  def getOutElemType(self):
+    return self.OutElemType
+
+  def getInVectorLength(self):
+    return self.InVectorLength
+
+  def getOutVectorLength(self):
+    return self.OutVectorLength
+
+  def getLaneSize(self):
+    return self.LaneSize
+
+  def isSIMD(self):
+    return self.IsSIMD
+
   def addArgsToConcreteMap(self, ArgsToConcreteValMap : dict):
     # Sanity checking
     for Arg, _ in ArgsToConcreteValMap.items():
@@ -97,32 +115,46 @@ class RoseFunctionInfo():
                 OuterLoop = Loop.getParentOfType(RoseForLoop)
                 if not isinstance(OuterLoop, RoseUndefRegion):
                   self.OutElemType = Op.getOutputBitwidth()
+                  if isinstance(self.OutElemType, RoseValue):
+                    self.OutElemType = self.ArgsToConcreteValMap[self.OutElemType].getValue()
                   LoopStep = OuterLoop.getStep()
-                  assert isinstance(LoopStep, RoseConstant)
+                  if not isinstance(LoopStep, RoseConstant):
+                    LoopStep = self.ArgsToConcreteValMap[LoopStep]
                   self.LaneSize = LoopStep.getValue()
                   # If block is a reduction block then the output vector
                   # length is different.
                   LoopEnd = OuterLoop.getEndIndex()
-                  assert isinstance(LoopEnd, RoseConstant)
+                  if not isinstance(LoopEnd, RoseConstant):
+                    LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
                   if HasReductionPattern(Block):
-                    self.InVectorLength = Op.getOutputBitwidth() \
+                    self.OutVectorLength = self.OutElemType \
                                   * int(LoopEnd.getValue() / LoopStep.getValue())
-                    self.SIMD = False
+                    self.IsSIMD = False
                   else:
-                    self.InVectorLength = LoopEnd.getValue()
-                    self.SIMD = True
+                    self.OutVectorLength = LoopEnd.getValue()
+                    self.IsSIMD = True
+                  print("self.OutVectorLength:")
+                  print(self.OutVectorLength)
           continue
         if isinstance(Op, RoseBVExtractSliceOp):
           if Op.getInputBitVector() != Function.getReturnValue():
-            if Op.getOutputBitwidth() != 1:
+            Bitwidth = Op.getOutputBitwidth()
+            if isinstance(Bitwidth, RoseValue):
+              Bitwidth = self.ArgsToConcreteValMap[Bitwidth].getValue()
+            if Bitwidth != 1:
               self.InElemType = Op.getOutputBitwidth()
+              if isinstance(self.InElemType, RoseValue):
+                self.InElemType = self.ArgsToConcreteValMap[self.InElemType].getValue()
               Loop = Block.getParentOfType(RoseForLoop)
               if not isinstance(Loop, RoseUndefRegion):
                 OuterLoop = Loop.getParentOfType(RoseForLoop)
                 if not isinstance(OuterLoop, RoseUndefRegion):
                   LoopEnd = OuterLoop.getEndIndex()
-                  assert isinstance(LoopEnd, RoseConstant)
-                  self.OutVectorLength = LoopEnd.getValue()
+                  if not isinstance(LoopEnd, RoseConstant):
+                    LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
+                  self.InVectorLength = LoopEnd.getValue()
+                  print("self.InVectorLength:")
+                  print(self.InVectorLength)
           continue
     return
 
@@ -143,7 +175,7 @@ class RoseFunctionInfo():
     print("LaneSize:")
     print(self.LaneSize)
     print("SIMD?:")
-    print(self.SIMD)
+    print(self.IsSIMD)
     print("***************************************")
 
 
