@@ -14,6 +14,8 @@ from RoseToolsUtils import *
 from RoseEquivalenceClass import *
 from RoseSimilarityCheckerUtilities import *
 from RoseSimilarityCheckerSummaryGen import *
+from RoseLLVMIntrinsicsGen import *
+from RoseIRToLLVMMappingGen import *
 
 
 class RoseSimilarityChecker():
@@ -40,6 +42,8 @@ class RoseSimilarityChecker():
       # Generate rosette code
       for FunctionInfo in FunctionInfoList:
         Function = FunctionInfo.getLatestFunction()
+        FunctionInfo.computeSemanticsInfo()
+        FunctionInfo.print()
         self.FunctionToFunctionInfo[Function] = FunctionInfo
         assert not isinstance(Function, RoseUndefRegion)
         self.FunctionToRosetteCodeMap[Function] = \
@@ -204,6 +208,16 @@ class RoseSimilarityChecker():
                 self.FunctionToRosetteCodeMap, self.EquivalenceClasses)
     SummaryGen.summarize(SummaryFileName)
     return True
+
+  def genLLVMIntrinsics(self):
+    IntrinsicsFileName = "hydride_llvm_intrinsics.td"
+    LLVMIntrinsicsGen = RoseLLVMIntrinsicsGen(self.EquivalenceClasses)
+    LLVMIntrinsicsGen.generateLLVMIntrinsics(IntrinsicsFileName)
+
+  def genRoseIRToLLVMIRMappings(self):
+    FileName = "RoseToLLVMMap.py"
+    RoseIRToLLVMMappingGenerator = RoseIRToLLVMMappingGen(self.EquivalenceClasses)
+    RoseIRToLLVMMappingGenerator.generateRoseIRToLLVMMappings(FileName)
 
   def slower_run(self, IndexList = list()):
     if IndexList == []:
@@ -458,6 +472,10 @@ class RoseSimilarityChecker():
           continue
     # Summmarize
     self.summarize()
+    # Generate LLVM intrinsics
+    self.genLLVMIntrinsics()
+    # Generate Rose IR to LLVM IR mappings
+    self.genRoseIRToLLVMIRMappings()
 
   def slow_run(self):
     for FunctionInfo in self.FunctionInfoList:
