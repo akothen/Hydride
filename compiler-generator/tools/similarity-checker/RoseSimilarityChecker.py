@@ -13,12 +13,14 @@ from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseEquivalenceClass import *
 from RoseSimilarityCheckerUtilities import *
+from RoseSimilarityCheckerSummaryGen import *
 
 
 class RoseSimilarityChecker():
   def __init__(self, TargetList : list):
     self.TargetList = TargetList
     self.FunctionInfoList = list()
+    self.FunctionToFunctionInfo = dict()
     self.FunctionToRosetteCodeMap = dict()
     self.EquivalenceClasses = set()
     self.FunctionToEquivalenceClassMap = dict()
@@ -38,6 +40,7 @@ class RoseSimilarityChecker():
       # Generate rosette code
       for FunctionInfo in FunctionInfoList:
         Function = FunctionInfo.getLatestFunction()
+        self.FunctionToFunctionInfo[Function] = FunctionInfo
         assert not isinstance(Function, RoseUndefRegion)
         self.FunctionToRosetteCodeMap[Function] = \
                     CodeGenerator.codeGen(FunctionInfo, JustGenRosette=True)
@@ -192,10 +195,15 @@ class RoseSimilarityChecker():
           print(self.FunctionToRosetteCodeMap[Function])
           break
       File.close()
-      return True
     except IOError:
       print("Error making: {}.rkt".format(FileName))
       return False  
+    # Generate an elaborate summary
+    SummaryFileName = "semantics.py"
+    SummaryGen = RoseSimilarityCheckerSummaryGen(self.FunctionToFunctionInfo, \
+                self.FunctionToRosetteCodeMap, self.EquivalenceClasses)
+    SummaryGen.summarize(SummaryFileName)
+    return True
 
   def slower_run(self, IndexList = list()):
     if IndexList == []:
