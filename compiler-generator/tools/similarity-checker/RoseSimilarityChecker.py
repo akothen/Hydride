@@ -26,6 +26,10 @@ class RoseSimilarityChecker():
     CodeGenerator = RoseCodeGenerator(TargetList[0])
     FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False, JustGenRosette=False)
     #assert False
+    # Compute some semantics info for the functions
+    for FunctionInfo in FunctionInfoList:
+      FunctionInfo.computeSemanticsInfo()
+      FunctionInfo.print()
     for Target in self.TargetList:
       # Generate code for all semantics first
       CodeGenerator = RoseCodeGenerator(Target)
