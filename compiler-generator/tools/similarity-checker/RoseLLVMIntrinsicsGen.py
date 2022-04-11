@@ -14,11 +14,11 @@ from RoseSimilarityCheckerUtilities import *
 
 
 class RoseLLVMIntrinsicsGen():
-  def __init__(self, FunctionInfoList : list):
+  def __init__(self, EquivalenceClasses : set):
     # Sanity check
-    for FunctionInfo in FunctionInfoList:
-      assert isinstance(FunctionInfo, RoseFunctionInfo)
-    self.FunctionInfoList = FunctionInfoList
+    for EquivalenceClass in EquivalenceClasses:
+      assert isinstance(EquivalenceClass, RoseEquivalenceClass)
+    self.EquivalenceClasses = EquivalenceClasses
   
   def generateLLVMIntrinsic(self, EquivalenceClass : RoseEquivalenceClass):
     print("GENERATING INTRINSIC")
@@ -35,13 +35,13 @@ class RoseLLVMIntrinsicsGen():
         InputList += IntType
       if Index != Function.getNumArgs() - 1:
         InputList += ","
-    input = "[" + InputList + "]"
+    Input = "[" + InputList + "]"
     Attr = "[IntrNoMem, IntrSpeculatable]"
     IntrinsicName = "tensor_" + FunctionName
     IntrinsicDef = "def int_" + IntrinsicName + " : Intrinsic<" \
-                      + Output + "," + input + "," + Attr + ">;"
+                      + Output + "," + Input + "," + Attr + ">;"
     print(IntrinsicDef)
-    return IntrinsicName
+    return IntrinsicDef
 
   def generateLLVMIntrinsics(self, FileName : str):
     String = ""
