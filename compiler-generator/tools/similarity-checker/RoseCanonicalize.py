@@ -23,6 +23,8 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
 
   # Get the op that we can use to canonicalize the loop bounds
   PrimaryOps = GetOpDeterminingLoopBounds(Loop)
+  print("PrimaryOps:")
+  PrimaryOps[0].print()
   if PrimaryOps == None:
     return
   BitWidth = PrimaryOps[0].getOutputBitwidth()
@@ -125,9 +127,13 @@ def AddOuterLoopInFunction(Function : RoseFunction):
   assert PrimaryOps != None
   print("PrimaryOps[0]:")
   PrimaryOps[0].print()
-  Bitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+  # Find the maximum bitwidth and use that
+  MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+  for Op in PrimaryOps[1:]:
+    if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
+      MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
   # Create a new loop
-  Loop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
+  Loop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
   # Add the regions in the function into the loop
   RegionList = list()
   for Region in Function:
@@ -223,6 +229,7 @@ def FixLoopNestingInFunction(Function : RoseFunction):
           assert isinstance(SubRegion, RoseBlock)
         AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
         return
+    print("ADDING OUTER LOOP IN FUNCTION")
     AddOuterLoopInFunction(Function)
 
 
