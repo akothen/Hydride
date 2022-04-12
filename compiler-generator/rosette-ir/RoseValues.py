@@ -110,19 +110,16 @@ class RoseConstant(RoseValue):
 
 
 class RoseArgument(RoseValue):
-  def __init__(self, Name : str, Type : RoseType, Function, ArgIndex : int):
+  def __init__(self, Name : str, Type : RoseType, Function):
     # Some sanity checks
     if isinstance(Function, RoseUndefValue) == False:
       assert isinstance(Function, RoseAbstractions.RoseFunction)
-      assert ArgIndex < Function.getNumArgs() 
-      assert Function.getArg(ArgIndex).getType() == Type
     self.Callee = Function
-    self.ArgIndex = ArgIndex
     super().__init__(Name, Type)
   
   @staticmethod
-  def create(Name : str, Type : RoseType, Function = RoseUndefValue(), ArgIndex : int = 0):
-    return RoseArgument(Name, Type, Function, ArgIndex)
+  def create(Name : str, Type : RoseType, Function = RoseUndefValue()):
+    return RoseArgument(Name, Type, Function)
 
   def __eq__(self, Other):
     if not isinstance(Other, RoseValue):
@@ -136,8 +133,7 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return False
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex == Other.ArgIndex \
-      and self.Callee.getRegionID() == Other.Callee.getRegionID() and super().__eq__(Other)
+    return self.Callee.getRegionID() == Other.Callee.getRegionID() and super().__eq__(Other)
 
   def __ne__(self, Other):
     if not isinstance(Other, RoseValue):
@@ -151,8 +147,7 @@ class RoseArgument(RoseValue):
     and isinstance(Other, RoseValue):
         return True
     assert isinstance(Other, RoseArgument)
-    return self.ArgIndex != Other.ArgIndex \
-      or self.Callee.getRegionID() != Other.Callee.getRegionID() or super().__ne__(Other)
+    return self.Callee.getRegionID() != Other.Callee.getRegionID() or super().__ne__(Other)
 
   # TODO: Should we also include callee in the hash?
   def __hash__(self):
@@ -163,12 +158,8 @@ class RoseArgument(RoseValue):
     return self.__eq__(Other)
 
   def getArgIndex(self):
-    assert self.ArgIndex < self.Callee.getNumArgs()
-    return self.ArgIndex
-  
-  def setArgIndex(self, NewIndex : int):
-    assert NewIndex < self.Callee.getNumArgs()
-    self.ArgIndex = NewIndex
+    assert isinstance(self.Callee, RoseAbstractions.RoseFunction)
+    return self.Callee.getIndexOfArg(self)
 
   def getFunction(self):
     return self.Callee
@@ -176,10 +167,6 @@ class RoseArgument(RoseValue):
   def setFunction(self, Function):
     # Sanity checks
     assert isinstance(Function, RoseAbstractions.RoseFunction)
-    assert Function.getNumArgs() > self.ArgIndex
-    Function.getArg(self.ArgIndex).getType().print()
-    self.getType().print()
-    assert Function.getArg(self.ArgIndex).getType() == self.getType()
     self.Callee = Function
   
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
