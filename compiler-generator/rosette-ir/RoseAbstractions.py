@@ -145,10 +145,14 @@ class RoseFunction(RoseValue, RoseRegion):
     Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
                               RoseUndefValue(), 0)
     self.ArgList.insert(0, Arg)
+    # Increment the indices of other arguments
+    for ExistingArg in self.ArgList[1:]:
+      ArgIndex = ExistingArg.getArgIndex()
+      ExistingArg.setArgIndex(ArgIndex + 1)
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
     FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
     self.setType(FunctionType)
-    # Set the parent of this argument to be this function
+    # Set the parent of this new argument
     self.ArgList[0].setFunction(self)
     return self.ArgList[0]
 
@@ -659,7 +663,6 @@ class RoseCond(RoseRegion):
         assert Region.getParent() == self
         Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
 
 
