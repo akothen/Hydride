@@ -163,9 +163,13 @@ class RoseArgument(RoseValue):
     return self.__eq__(Other)
 
   def getArgIndex(self):
-    assert self.ArgIndex < self.Callee.getArg(self.getArgIndex()).getType()
+    assert self.ArgIndex < self.Callee.getNumArgs()
     return self.ArgIndex
   
+  def setArgIndex(self, NewIndex : int):
+    assert NewIndex < self.Callee.getNumArgs()
+    self.ArgIndex = NewIndex
+
   def getFunction(self):
     return self.Callee
   
@@ -380,6 +384,5 @@ class RoseOperation(RoseValue):
         if Index != len(self.getOperands()) - 1:
           String += ","
     print(String)
-
 
 
