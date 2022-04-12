@@ -7,6 +7,7 @@
 ##############################################################
 
 
+from tokenize import String
 from RoseAbstractions import *
 from RoseContext import *
 from RosetteCodeEmitter import *
@@ -56,7 +57,7 @@ class RoseSimilarityCheckerSummaryGen():
             "Cost" : "{""}",
             "SIMD" : "{str(FunctionInfo.isSIMD())}",
         '''
-      TempEntryString = "{\n" + TempEntryString + "},\n"
+      TempEntryString = "{\n" + TempEntryString + "}"
       EntryString += TempEntryString
     # Get the rosette code for this equivalence class
     RosetteCode = self.FunctionToRosetteCodeMap[EquivalenceClass.getAFunction()]
@@ -64,17 +65,27 @@ class RoseSimilarityCheckerSummaryGen():
     RosetteCodeList = RosetteCode.split("\n")
     for Index, Line in enumerate(RosetteCodeList):
       RosetteCodeList[Index] = "\"" + Line + "\""
-    return f'''
-          "name" : "{FunctionName}",
+    String = f'''
           "x86_instructions" : {EntryString},
           "semantics" : {RosetteCodeList}, 
       '''
-
-  def summarize(self, DSLFile : str):
+    String = "{\n" + String + "}"
+    return String
+  
+  def genDictionary(self):
     String = "\n\nsemantcs = {\n"
     for EquivalenceClass in self.EquivalenceClasses:
-      String += self.genDictionaryEntry(EquivalenceClass)
+      FunctionName = EquivalenceClass.getAFunction().getName()
+      TempEntryString = f'''
+          "{FunctionName}" : {self.genDictionaryEntry(EquivalenceClass)},
+        '''
+      String += TempEntryString + "\n"
     String += "}\n"
+    return String
+
+  def summarize(self, DSLFile : str):
+    String = GenHeadersForAutoGenFiles("#")
+    String += self.genDictionary()
     try:
       File = open(DSLFile, "w")
       File.write(String)
