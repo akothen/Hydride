@@ -75,9 +75,9 @@ class RoseFunction(RoseValue, RoseRegion):
         FunctionType = args[1]
         ArgTypeList = FunctionType.getArgList()
         ArgsList = []
-        for ArgIndex, ArgTy in enumerate(ArgTypeList):
+        for ArgTy in ArgTypeList:
           # All arguments start out unmaed
-          ArgsList.append(RoseArgument.create("", ArgTy, RoseUndefValue(), ArgIndex))
+          ArgsList.append(RoseArgument.create("", ArgTy, RoseUndefValue()))
         return RoseFunction(args[0], ArgsList, FunctionType.getReturnType(), [], RoseUndefRegion())
     assert(False)
     
@@ -115,6 +115,11 @@ class RoseFunction(RoseValue, RoseRegion):
   
   def getArg(self, Index):
     return self.ArgList[Index]
+
+  def getIndexOfArg(self, Arg : RoseArgument):
+    assert isinstance(Arg, RoseArgument)
+    assert Arg in self.ArgList
+    return self.ArgList.index(Arg)
   
   def getReturnValue(self):
     return self.RetVal
@@ -123,15 +128,14 @@ class RoseFunction(RoseValue, RoseRegion):
     # Some sanity checks
     assert ArgIndex < len(self.ArgsList)
     assert self.ArgsList[ArgIndex].getType() == NewArg.getType()
-    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), self, ArgIndex)
+    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), self)
     OldArg = self.ArgsList[ArgIndex]
     self.ArgsList[ArgIndex] = Arg
     self.replaceUsesWith(OldArg, Arg)
 
   def appendArg(self, NewArg : RoseValue):
     # Add the argument to this function and change the type of this function
-    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
-                              RoseUndefValue(), self.getNumArgs())
+    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), RoseUndefValue())
     self.ArgList.append(Arg)
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
     FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
@@ -142,13 +146,8 @@ class RoseFunction(RoseValue, RoseRegion):
 
   def prependArg(self, NewArg : RoseValue):
     # Add the argument to this function and change the type of this function
-    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), \
-                              RoseUndefValue(), 0)
+    Arg = RoseArgument.create(NewArg.getName(), NewArg.getType(), RoseUndefValue())
     self.ArgList.insert(0, Arg)
-    # Increment the indices of other arguments
-    for ExistingArg in self.ArgList[1:]:
-      ArgIndex = ExistingArg.getArgIndex()
-      ExistingArg.setArgIndex(ArgIndex + 1)
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
     FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
     self.setType(FunctionType)
