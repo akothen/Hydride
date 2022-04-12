@@ -1311,7 +1311,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       print("Arg.getType().getBitwidth():")
       print(ArgType.getBitwidth())
       assert ArgType.getBitwidth() == ParamWidth
-      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue(), Index)
+      ArgVal = RoseArgument.create(ParamName, ArgType, RoseUndefValue())
       ChildContext.addVariable(ParamName, Param.id)
       FuncArgList.append(ArgVal)
       print("PARAM NAME:")
@@ -1727,7 +1727,7 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
       else:
         ParamType = x86Types[Param.type]
     # Create a new rosette value
-    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+    ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue())
     print("PARAM VALUES:")
     ParamVal.print()
     print(Param.is_signed)
