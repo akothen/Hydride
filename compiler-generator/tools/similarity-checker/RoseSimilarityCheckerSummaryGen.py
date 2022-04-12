@@ -36,7 +36,7 @@ class RoseSimilarityCheckerSummaryGen():
       ArgList = list()
       for Arg in Function.getArgs():
         if FunctionInfo.argHasConcreteVal(Arg) == False:
-          ArgList.append("\"SYMBOLIC_VECTOR\"")
+          ArgList.append("\"SYMBOLIC_BV_" + str(Arg.getType().getBitwidth()) + "\"")
         else:
           ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
           ArgList.append("\"" + GenConcreteValue(ConcreteVal) + "\"")
@@ -48,6 +48,11 @@ class RoseSimilarityCheckerSummaryGen():
             "lanesize" : {str(FunctionInfo.getLaneSize())},
             "in_precision" : {str(FunctionInfo.getInElemType())},
             "out_precision" : {str(FunctionInfo.getOutElemType())},
+            "in_vectsize_index" : {str(FunctionInfo.getInVectorLengthIndex())},
+            "out_vectsize_index" : {str(FunctionInfo.getOutVectorLengthIndex())},
+            "lanesize_index" : {str(FunctionInfo.getLaneSizeIndex())},
+            "in_precision_index" : {str(FunctionInfo.getInElemTypeIndex())},
+            "out_precision_index" : {str(FunctionInfo.getOutElemTypeIndex())},
             "Cost" : "{""}",
             "SIMD" : "{str(FunctionInfo.isSIMD())}",
         '''
