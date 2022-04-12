@@ -27,6 +27,11 @@ class RoseFunctionInfo():
     self.InVectorLength = None
     self.OutVectorLength = None
     self.LaneSize = None
+    self.LaneSizeIndex = None
+    self.InElemTypeIndex = None
+    self.OutElemTypeIndex = None
+    self.InVectorLengthIndex = None
+    self.OutVectorLengthIndex = None
     self.IsSIMD = None
 
   def getInElemType(self):
@@ -43,6 +48,21 @@ class RoseFunctionInfo():
 
   def getLaneSize(self):
     return self.LaneSize
+
+  def getInElemTypeIndex(self):
+    return self.InElemTypeIndex
+
+  def getOutElemTypeIndex(self):
+    return self.OutElemTypeIndex
+
+  def getInVectorLengthIndex(self):
+    return self.InVectorLengthIndex
+
+  def getOutVectorLengthIndex(self):
+    return self.OutVectorLengthIndex
+
+  def getLaneSizeIndex(self):
+    return self.LaneSizeIndex
 
   def isSIMD(self):
     return self.IsSIMD
@@ -116,19 +136,25 @@ class RoseFunctionInfo():
                 if not isinstance(OuterLoop, RoseUndefRegion):
                   self.OutElemType = Op.getOutputBitwidth()
                   if isinstance(self.OutElemType, RoseValue):
+                    if isinstance(self.OutElemType, RoseArgument):
+                      self.OutElemType.print()
+                      self.OutElemTypeIndex = self.OutElemType.getArgIndex()
                     self.OutElemType = self.ArgsToConcreteValMap[self.OutElemType].getValue()
                   LoopStep = OuterLoop.getStep()
                   if not isinstance(LoopStep, RoseConstant):
+                    self.LaneSizeIndex = LoopStep.getArgIndex()
                     LoopStep = self.ArgsToConcreteValMap[LoopStep]
                   self.LaneSize = LoopStep.getValue()
                   # If block is a reduction block then the output vector
                   # length is different.
                   LoopEnd = OuterLoop.getEndIndex()
                   if not isinstance(LoopEnd, RoseConstant):
+                    self.OutVectorLengthIndex = LoopEnd.getArgIndex()
                     LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
                   if HasReductionPattern(Block):
                     self.OutVectorLength = self.OutElemType \
                                   * int(LoopEnd.getValue() / LoopStep.getValue())
+                    self.OutVectorLengthIndex = None
                     self.IsSIMD = False
                   else:
                     self.OutVectorLength = LoopEnd.getValue()
@@ -144,12 +170,15 @@ class RoseFunctionInfo():
             if Bitwidth != 1:
               self.InElemType = Op.getOutputBitwidth()
               if isinstance(self.InElemType, RoseValue):
+                self.InElemTypeIndex = self.InElemType.getArgIndex()
                 self.InElemType = self.ArgsToConcreteValMap[self.InElemType].getValue()
               Loop = Block.getParentOfType(RoseForLoop)
               if not isinstance(Loop, RoseUndefRegion):
                 OuterLoop = Loop.getParentOfType(RoseForLoop)
                 if not isinstance(OuterLoop, RoseUndefRegion):
                   LoopEnd = OuterLoop.getEndIndex()
+                  if isinstance(LoopEnd, RoseArgument):
+                    self.InVectorLengthIndex = LoopEnd.getArgIndex()
                   if not isinstance(LoopEnd, RoseConstant):
                     LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
                   self.InVectorLength = LoopEnd.getValue()
@@ -166,14 +195,24 @@ class RoseFunctionInfo():
     print(self.InstSema)
     print("InElemType:")
     print(self.InElemType)
+    print("InElemTypeIndex:")
+    print(self.InElemTypeIndex)
     print("OutElemType:")
     print(self.OutElemType)
+    print("OutElemTypeIndex:")
+    print(self.OutElemTypeIndex)
     print("InVectorLength:")
     print(self.InVectorLength)
+    print("InVectorLengthIndex:")
+    print(self.InVectorLengthIndex)
     print("OutVectorLength:")
     print(self.OutVectorLength)
+    print("OutVectorLengthIndex:")
+    print(self.OutVectorLengthIndex)
     print("LaneSize:")
     print(self.LaneSize)
+    print("LaneSizeIndex:")
+    print(self.LaneSizeIndex)
     print("SIMD?:")
     print(self.IsSIMD)
     print("***************************************")
