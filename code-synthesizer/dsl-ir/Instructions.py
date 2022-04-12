@@ -1,16 +1,31 @@
-from Types import OperandType, InstructionType
+from Types import *
 
 
+SYM_BV_STR =  "SYMBOLIC_BV_"
+CONST_BV_STR = "(bv"
 
 class Context:
     def __init__(self, in_vectsize = None, out_vectsize = None,
                  lane_size = None, in_precision = None,
-                 out_precision = None):
+                 out_precision = None, SIMD = False, args = [],
+                 in_vectsize_index = None, out_vectsize_index = None,
+                 lanesize_index = None, in_precision_index = None,
+                 out_precision_index = None, cost = None):
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
         self.lane_size = lane_size
         self.in_precision = in_precision
         self.out_precision = out_precision
+        self.SIMD = SIMD
+        self.in_vectsize_index = in_vectsize_index
+        self.out_vectsize_index = out_vectsize_index
+        self.lanesize_index = lanesize_index
+        self.in_precision_index = in_precision_index
+        self.out_precision_index = out_precision_index
+        self.cost = cost
+
+        self.parse_args(args)
+
 
     def get_input_size(self):
         assert (self.in_precision != None) and (self.in_vectsize != None) , "Unable to process input size for instruction"
@@ -21,22 +36,78 @@ class Context:
         assert (self.out_precision != None) and (self.out_vectsize != None) , "Unable to process output size for instruction"
         return self.out_precision * self.out_vectsize
 
+    def parse_args(self, args):
+
+        context_args = []
+
+        for idx , arg in enumerate(args):
+
+            context_arg = None
 
 
-class Instruction(InstructionType):
+            if arg.startswith(SYM_BV_STR):
+                bv_size = int(arg.split(SYM_BV_STR)[-1])
+                context_arg = BitVector("v{}".format(idx), bv_size)
+            elif arg.startswith(CONST_BV_STR):
+                tokens = arg.split(" ")
+                assert len(tokens) == 3, "Unable to parse bv constant"
+                value = tokens[1]
+                size = int(tokens[2].split(")")[0])
 
-    def __init__(self, name = None, args = [],
-                 in_vectsize = None, out_vectsize = None,
-                 lane_size = None, in_precision = None,
-                 out_precision = None, SIMD = False,
+                context_arg = ConstBitVector(value, size)
+
+            elif idx == self.lanesize_index:
+                lane_size = int(arg)
+                context_arg = LaneSize("lane_size", value =  lane_size)
+            elif idx == self.in_precision_index or  idx == self.out_precision_index:
+                precision_value = int(arg)
+
+                is_in = (idx == self.in_precision_index)
+                is_out = (idx == self.out_precision_index)
+
+                in_str  = ""
+                out_str = ""
+
+                if is_in:
+                    in_str = "_i"
+                if is_out:
+                    out_str = "_o"
+
+                context_arg = Precision("prec{}{}".format(in_str,out_str),
+                                        input_precision = is_in,
+                                        output_precision = is_out,
+                                        value = precision_value)
+            else:
+                assert False, "Unsupported operand type"
+
+
+            context_args.append(context_arg)
+
+
+        self.context_args = context_args
+
+
+
+
+
+
+
+
+
+
+
+class DSLInstruction(InstructionType):
+
+    def __init__(self, name = None,
                  shuffle = False, semantics = None,
-                 operation = False):
+                 operation = False, simd = False):
 
         self.name = name
         self.semantics = semantics
-        self.SIMD = SIMD
         self.shuffle = shuffle
         self.operation = operation
+        self.simd = simd
+
 
 
         assert (not (shuffle and operation)), "Instruction must be either a shuffle or computation"
@@ -48,19 +119,43 @@ class Instruction(InstructionType):
         # a list of the specific concrete instances.
         self.contexts = []
 
+        if simd:
+            super().__init__(InstructionType.InstructionTypeEnum.SIMD)
+        elif shuffle:
+            super().__init__(InstructionType.InstructionTypeEnum.Shuffle)
+        else:
+            super().__init__(InstructionType.InstructionTypeEnum.Non_SIMD)
+
+
+
 
 
 
 
     def add_context(self, in_vectsize = None, out_vectsize = None,
                     lane_size = None, in_precision = None,
-                    out_precision = None):
+                    out_precision = None, SIMD = False, args = [],
+                    in_vectsize_index = None, out_vectsize_index = None,
+                    lanesize_index = None, in_precision_index = None,
+                    out_precision_index = None, cost = None):
+                    ):
 
         self.contexts.append(
             Context(in_vectsize = in_vectsize, out_vectsize,
                     lane_size = lane_size, in_precision = in_precision,
-                    out_precision = out_precision)
+                    out_precision = out_precision, SIMD = SIMD, args = args,
+                    in_vectsize_index = in_vectsize_index,
+                    out_vectsize_index = out_vectsize_index,
+                    lanesize_index = lanesize_index,
+                    in_precision_index = in_precision_index,
+                    out_precision_index = out_precision_index,
+                    cost = cost)
         )
+
+
+    def get_dsl_name(self):
+        return self.name +"_dsl"
+
 
 
 
