@@ -66,7 +66,11 @@ class ConstBitVector(OperandType):
         return "(lit {})".format(self.get_rkt_value())
 
     def print_operand(self, prefix = ""):
-        print("{} {}\t| Constant Bitvector {}".format(prefix, self.value, self.size))
+        trunc_value = self.value
+        if len(trunc_value) > 20:
+            trunc_value = self.value[:20] + "..."
+
+        print("{} {}\t| Constant Bitvector {}".format(prefix, trunc_value, self.size))
 
 
 
@@ -101,6 +105,7 @@ class Precision(OperandType):
         self.name = name
         self.value = value
         self.input_precision = input_precision
+        self.output_precision = output_precision
         super().__init__(OperandType.OperandTypeEnum.Precision)
 
 

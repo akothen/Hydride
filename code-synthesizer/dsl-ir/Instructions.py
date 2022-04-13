@@ -5,12 +5,13 @@ SYM_BV_STR =  "SYMBOLIC_BV_"
 CONST_BV_STR = "(bv"
 
 class Context:
-    def __init__(self, in_vectsize = None, out_vectsize = None,
+    def __init__(self, name = "", in_vectsize = None, out_vectsize = None,
                  lane_size = None, in_precision = None,
                  out_precision = None, SIMD = False, args = [],
                  in_vectsize_index = None, out_vectsize_index = None,
                  lanesize_index = None, in_precision_index = None,
                  out_precision_index = None, cost = None):
+        self.name= name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
         self.lane_size = lane_size
@@ -36,9 +37,19 @@ class Context:
         assert (self.out_precision != None) and (self.out_vectsize != None) , "Unable to process output size for instruction"
         return self.out_precision * self.out_vectsize
 
+    def print_context(self, prefix = ""):
+        print("{} {}".format(prefix, self.name))
+
+        for arg in self.context_args:
+            arg.print_operand(prefix = prefix+"------>")
+
+
+
+
     def parse_args(self, args):
 
         context_args = []
+
 
         for idx , arg in enumerate(args):
 
@@ -77,7 +88,27 @@ class Context:
                                         input_precision = is_in,
                                         output_precision = is_out,
                                         value = precision_value)
+            elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
+
+                is_in = (idx == self.in_vectsize_index)
+                is_out = (idx == self.out_vectsize_index)
+
+                in_str  = ""
+                out_str = ""
+
+                if is_in:
+                    in_str = "_i"
+                if is_out:
+                    out_str = "_o"
+
+                context_arg = Integer("size{}{}".format(in_str,out_str), value = int(arg))
+
+            elif arg.isnumeric() or type(arg) == int:
+
+                context_arg = Integer("num_{}".format(idx), int(arg))
+
             else:
+                print(idx)
                 assert False, "Unsupported operand type"
 
 
@@ -124,7 +155,7 @@ class DSLInstruction(InstructionType):
         elif shuffle:
             super().__init__(InstructionType.InstructionTypeEnum.Shuffle)
         else:
-            super().__init__(InstructionType.InstructionTypeEnum.Non_SIMD)
+            super().__init__(InstructionType.InstructionTypeEnum.NON_SIMD)
 
 
 
@@ -132,16 +163,15 @@ class DSLInstruction(InstructionType):
 
 
 
-    def add_context(self, in_vectsize = None, out_vectsize = None,
+    def add_context(self, name = "", in_vectsize = None, out_vectsize = None,
                     lane_size = None, in_precision = None,
                     out_precision = None, SIMD = False, args = [],
                     in_vectsize_index = None, out_vectsize_index = None,
                     lanesize_index = None, in_precision_index = None,
                     out_precision_index = None, cost = None):
-                    ):
 
         self.contexts.append(
-            Context(in_vectsize = in_vectsize, out_vectsize,
+            Context(name = name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
                     lane_size = lane_size, in_precision = in_precision,
                     out_precision = out_precision, SIMD = SIMD, args = args,
                     in_vectsize_index = in_vectsize_index,
@@ -151,6 +181,20 @@ class DSLInstruction(InstructionType):
                     out_precision_index = out_precision_index,
                     cost = cost)
         )
+
+    def print_instruction(self):
+        print("="*60)
+        print(" "*20, self.name , " "*25)
+        print("="*60)
+
+        for ctx in self.contexts:
+            ctx.print_context(prefix = "---")
+
+        print("="*60)
+        print("semantics:")
+        print("\n".join(self.semantics))
+
+        print("="*60)
 
 
     def get_dsl_name(self):
