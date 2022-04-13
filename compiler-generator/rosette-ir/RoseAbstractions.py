@@ -164,8 +164,8 @@ class RoseFunction(RoseValue, RoseRegion):
   # Use this in *very* rare cases
   def setRetVal(self, Value):
     # Just some safety checks
-    assert self.getType().getReturnType().isUndefTy()
-    assert not Value.getType().isUndefTy()
+    assert isinstance(self.getType().getReturnType(), RoseUndefinedType)
+    assert not isinstance(Value.getType(), RoseUndefinedType)
     # Set the return type first
     RetType = Value.getType()
     NewFunctionType = RoseFunctionType.create(self.getType().getArgList(), RetType)
