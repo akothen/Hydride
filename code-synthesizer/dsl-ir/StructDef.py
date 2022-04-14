@@ -7,6 +7,7 @@ class StructDef:
         return
 
 
+
     def emit_dsl_struct_def(self, dsl_inst):
         dsl_name = dsl_inst.get_dsl_name()
 
