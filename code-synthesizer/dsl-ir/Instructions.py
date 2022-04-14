@@ -224,7 +224,7 @@ class DSLInstruction(InstructionType):
 
         print("="*60)
         print("semantics:")
-        print("\n".join(self.semantics))
+        print(self.get_semantics())
         print("="*60)
         print(self.get_semantics_ops_list())
 
@@ -236,6 +236,10 @@ class DSLInstruction(InstructionType):
 
     def get_dsl_name(self):
         return self.name +"_dsl"
+
+    def get_semantics(self):
+        return "\n".join([line.replace("\"","") for line in self.semantics])
+
 
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
         operations = []
@@ -290,6 +294,7 @@ class DSLInstruction(InstructionType):
             return True
 
         return any([supports(ctx) for ctx in self.contexts])
+
 
 
 

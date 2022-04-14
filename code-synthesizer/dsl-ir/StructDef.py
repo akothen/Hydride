@@ -6,6 +6,15 @@ class StructDef:
     def __init__(self):
         return
 
+    def emit_default_def(self):
+        defaults = []
+
+        defaults.append("(struct reg (id) #:transparent #:mutable)")
+        defaults.append("(struct lit (val) #:transparent)")
+        defaults.append("(struct idx-i (id) #:transparent)")
+        defaults.append("(struct idx-j (id) #:transparent)")
+
+        return defaults
 
 
     def emit_dsl_struct_def(self, dsl_inst):
@@ -30,7 +39,7 @@ class StructDef:
 
     def emit_struct_defs(self, dsl_inst_ls):
 
-        definitions = [self.emit_dsl_struct_def(dsl) for dsl in dsl_inst_ls]
+        definitions = self.emit_default_def() + [self.emit_dsl_struct_def(dsl) for dsl in dsl_inst_ls]
 
 
         prefix = ";; "+"="*80 + "\n"
