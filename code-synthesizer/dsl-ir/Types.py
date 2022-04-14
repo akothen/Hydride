@@ -51,8 +51,9 @@ class BitVector(OperandType):
 
 class ConstBitVector(OperandType):
 
-    def __init__(self, value , size):
+    def __init__(self, value , size, name = None):
 
+        self.name = name
         self.value = value
         self.size = size
         super().__init__(OperandType.OperandTypeEnum.ConstBitVector)

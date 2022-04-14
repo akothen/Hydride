@@ -25,7 +25,9 @@ class Context:
         self.out_precision_index = out_precision_index
         self.cost = cost
 
+        self.num_args = len(args)
         self.parse_args(args)
+
 
 
     def get_input_size(self):
@@ -65,7 +67,7 @@ class Context:
                 value = tokens[1]
                 size = int(tokens[2].split(")")[0])
 
-                context_arg = ConstBitVector(value, size)
+                context_arg = ConstBitVector(value, size, name = "vc_{}".format(idx))
 
             elif idx == self.lanesize_index:
                 lane_size = int(arg)
@@ -199,6 +201,10 @@ class DSLInstruction(InstructionType):
 
     def get_dsl_name(self):
         return self.name +"_dsl"
+
+    def get_sample_context(self):
+        assert len(self.contexts) != 0, "DSL instruction must have at least one context"
+        return self.contexts[0]
 
 
 
