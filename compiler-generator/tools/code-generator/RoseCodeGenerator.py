@@ -9,6 +9,7 @@ import x86RoseLang
 
 import RoseCSE
 import RoseDCE
+import RoseBVLengthReduction
 import RoseLoopReroller
 import RoseFunctionInliner
 import RoseExtractConstants
@@ -47,14 +48,22 @@ class RoseCodeGenerator:
     Context = FunctionInfo.getContext()
     if JustGenRosette == False:
       Function = Function.clone()
+      RoseBVLengthReduction.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
       RoseLoopReroller.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
-      #RoseFunctionInliner.Run(Function, Context)
       RoseOpCombine.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseCSE.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      RoseDCE.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      RoseFunctionInliner.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseCanonicalize.Run(Function, Context)
@@ -68,12 +77,14 @@ class RoseCodeGenerator:
       Function = Function.clone()
       RoseDCE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
+      FunctionInfo.addTargetSpecificFunction(Function)
       Function = Function.clone()
       if ExtractConstants == True:
         ArgToConstantValsMap = dict()
         RoseExtractConstants.Run(Function, Context, ArgToConstantValsMap)
         FunctionInfo.addFunctionAtNewStage(Function)
         FunctionInfo.addArgsToConcreteMap(ArgToConstantValsMap)
+        FunctionInfo.addTargetAgnosticFunction(Function)
         Function = Function.clone()
     RosetteCode = RosetteGen.CodeGen(Function)
     FunctionInfo.addContext(Context)
@@ -86,7 +97,6 @@ class RoseCodeGenerator:
 if __name__ == '__main__':
   CodeGenerator = RoseCodeGenerator(Target="x86")
   CodeGenerator.codeGen(JustGenRosette=False, ExtractConstants=True)
-
 
 
 
