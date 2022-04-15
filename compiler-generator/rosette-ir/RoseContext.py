@@ -2,6 +2,7 @@
 from RoseType import *
 from RoseValue import RoseValue
 from RoseValues import *
+from RoseAbstractions import RoseFunction, RoseUndefRegion
 
 from copy import deepcopy
 
@@ -30,6 +31,8 @@ class RoseContext:
     # Track the contexts we encounter
     self.ParentContext = None
     self.Contexts = dict()   # ID --> child context
+    # Mapping functions to their contexts
+    self.FunctionToContexts = dict()
     # Heirarchical abstractions such as functions, loops and cond regions.
     # Blocks are not dealt with by this compiler.
     self.RootAbstractions = list()
@@ -113,11 +116,19 @@ class RoseContext:
     ChildContext.setParentContext(self)
     self.Contexts[ID] = ChildContext
   
+  def copyContext(self, ID : str, Function : RoseFunction):
+    assert not isinstance(Function, RoseUndefRegion)
+    self.FunctionToContexts[Function] = self.Contexts[ID]
+
   def destroyContext(self, ID : str):
     self.Contexts[ID] = None
   
   def getChildContext(self, ID : str):
     return self.Contexts[ID] 
+  
+  def getContextOfChildFunction(self, Function : RoseFunction):
+    assert Function in self.FunctionToContexts
+    return self.FunctionToContexts[Function]
 
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
@@ -178,7 +189,6 @@ class RoseContext:
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
     # Copy over the name generator to the parent
     self.NameGenerator = self.ParentContext.getNameGenerator()
-
 
 
 
