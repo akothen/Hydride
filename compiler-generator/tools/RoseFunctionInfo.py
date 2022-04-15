@@ -18,6 +18,8 @@ from RoseCodeGenerator import RoseCodeGenerator
 class RoseFunctionInfo():
   def __init__(self):
     self.FunctionAtStages = list()
+    self.TargetAgnosticFunction = RoseUndefRegion()
+    self.TargetSpecificFunction = RoseUndefRegion()
     self.ArgsToConcreteValMap = dict()
     self.InstSema = None
     self.Context = None
@@ -66,6 +68,12 @@ class RoseFunctionInfo():
 
   def isSIMD(self):
     return self.IsSIMD
+
+  def addTargetSpecificFunction(self, Function : RoseFunction):
+    self.TargetSpecificFunction = Function
+
+  def addTargetAgnosticFunction(self, Function : RoseFunction):
+    self.TargetAgnosticFunction = Function
 
   def addArgsToConcreteMap(self, ArgsToConcreteValMap : dict):
     # Sanity checking
@@ -120,9 +128,19 @@ class RoseFunctionInfo():
   def getCodeGenerator(self):
     return self.CodeGenerator
   
+  def getTargetAgnoticFunction(self):
+    return self.TargetAgnosticFunction
+  
+  def getTargetSpecificFunction(self):
+    return self.TargetSpecificFunction
+  
   def computeSemanticsInfo(self):
+    self.computeSemanticsInfoFromTargetSpecficFunction()
+    self.computeSemanticsInfoFromTargetAgnosticFunction()
+
+  def computeSemanticsInfoFromTargetSpecficFunction(self):
     # Function is expected to be canonicalized
-    Function = self.getLatestFunction()
+    Function = self.getTargetSpecificFunction()
     # Go over all the blocks in the function
     BlockList = Function.getRegionsOfType(RoseBlock)
     for Block in BlockList:
@@ -135,55 +153,70 @@ class RoseFunctionInfo():
                 OuterLoop = Loop.getParentOfType(RoseForLoop)
                 if not isinstance(OuterLoop, RoseUndefRegion):
                   self.OutElemType = Op.getOutputBitwidth()
-                  if isinstance(self.OutElemType, RoseValue):
-                    if isinstance(self.OutElemType, RoseArgument):
-                      self.OutElemType.print()
-                      self.OutElemTypeIndex = self.OutElemType.getArgIndex()
-                    self.OutElemType = self.ArgsToConcreteValMap[self.OutElemType].getValue()
                   LoopStep = OuterLoop.getStep()
-                  if not isinstance(LoopStep, RoseConstant):
-                    self.LaneSizeIndex = LoopStep.getArgIndex()
-                    LoopStep = self.ArgsToConcreteValMap[LoopStep]
                   self.LaneSize = LoopStep.getValue()
-                  # If block is a reduction block then the output vector
-                  # length is different.
-                  LoopEnd = OuterLoop.getEndIndex()
-                  if not isinstance(LoopEnd, RoseConstant):
-                    self.OutVectorLengthIndex = LoopEnd.getArgIndex()
-                    LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
+                  self.OutVectorLength = Op.getInputBitVector().getType().getBitwidth()
                   if HasReductionPattern(Block):
-                    self.OutVectorLength = self.OutElemType \
-                                  * int(LoopEnd.getValue() / LoopStep.getValue())
-                    self.OutVectorLengthIndex = None
                     self.IsSIMD = False
                   else:
-                    self.OutVectorLength = LoopEnd.getValue()
                     self.IsSIMD = True
                   print("self.OutVectorLength:")
                   print(self.OutVectorLength)
           continue
         if isinstance(Op, RoseBVExtractSliceOp):
           if Op.getInputBitVector() != Function.getReturnValue():
-            Bitwidth = Op.getOutputBitwidth()
-            if isinstance(Bitwidth, RoseValue):
-              Bitwidth = self.ArgsToConcreteValMap[Bitwidth].getValue()
-            if Bitwidth != 1:
-              self.InElemType = Op.getOutputBitwidth()
-              if isinstance(self.InElemType, RoseValue):
-                self.InElemTypeIndex = self.InElemType.getArgIndex()
-                self.InElemType = self.ArgsToConcreteValMap[self.InElemType].getValue()
+            if isinstance(Op.getInputBitVector(), RoseArgument):
+              Bitwidth = Op.getOutputBitwidth()
+              if Bitwidth != 1:
+                self.InElemType = Op.getOutputBitwidth()
+                self.InVectorLength = Op.getInputBitVector().getType().getBitwidth()
+          continue
+    return
+
+  def computeSemanticsInfoFromTargetAgnosticFunction(self):
+    # Function is expected to be canonicalized
+    Function = self.getTargetAgnoticFunction()
+    # Go over all the blocks in the function
+    BlockList = Function.getRegionsOfType(RoseBlock)
+    for Block in BlockList:
+      for Op in reversed(Block.getOperations()):
+        if isinstance(Op, RoseBVInsertSliceOp):
+          if Op.getInputBitVector() == Function.getReturnValue():
+            if not isinstance(Op.getInsertValue(), RoseConstant):
               Loop = Block.getParentOfType(RoseForLoop)
               if not isinstance(Loop, RoseUndefRegion):
                 OuterLoop = Loop.getParentOfType(RoseForLoop)
                 if not isinstance(OuterLoop, RoseUndefRegion):
+                  if isinstance(Op.getOutputBitwidth(), RoseArgument):
+                    self.OutElemTypeIndex = Op.getOutputBitwidth().getArgIndex()
+                  LoopStep = OuterLoop.getStep()
+                  if not isinstance(LoopStep, RoseConstant):
+                    self.LaneSizeIndex = LoopStep.getArgIndex()
+                  # If block is a reduction block then the output vector
+                  # length is different.
                   LoopEnd = OuterLoop.getEndIndex()
-                  if isinstance(LoopEnd, RoseArgument):
-                    self.InVectorLengthIndex = LoopEnd.getArgIndex()
                   if not isinstance(LoopEnd, RoseConstant):
-                    LoopEnd = self.ArgsToConcreteValMap[LoopEnd]
-                  self.InVectorLength = LoopEnd.getValue()
-                  print("self.InVectorLength:")
-                  print(self.InVectorLength)
+                    self.OutVectorLengthIndex = LoopEnd.getArgIndex()
+                  if HasReductionPattern(Block):
+                    self.OutVectorLengthIndex = None
+          continue
+        if isinstance(Op, RoseBVExtractSliceOp):
+          if Op.getInputBitVector() != Function.getReturnValue():
+            if isinstance(Op.getInputBitVector(), RoseArgument):
+              Bitwidth = Op.getOutputBitwidth()
+              if isinstance(Bitwidth, RoseValue):
+                Bitwidth = self.ArgsToConcreteValMap[Bitwidth].getValue()
+              if Bitwidth != 1:
+                if isinstance(Op.getOutputBitwidth(), RoseArgument):
+                  self.InElemTypeIndex = Op.getOutputBitwidth().getArgIndex()
+                if not isinstance(Op.getLowIndex(), RoseArgument):
+                  Loop = Block.getParentOfType(RoseForLoop)
+                  if not isinstance(Loop, RoseUndefRegion):
+                    OuterLoop = Loop.getParentOfType(RoseForLoop)
+                    if not isinstance(OuterLoop, RoseUndefRegion):
+                      LoopEnd = OuterLoop.getEndIndex()
+                      if isinstance(LoopEnd, RoseArgument):
+                        self.InVectorLengthIndex = LoopEnd.getArgIndex()
           continue
     return
 
