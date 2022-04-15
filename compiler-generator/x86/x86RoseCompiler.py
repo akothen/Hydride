@@ -92,7 +92,7 @@ class x86RoseContext(RoseContext):
       ChildContext.setParentContext(self)
       ChildContext.copyAbstractionsFromParent()
       super().createContext(ID, ChildContext)
-  
+
   def destroyContext(self, ContextName : str):
     print("ROOT ABSTRACTION:")
     print(self.getRootAbstraction())
@@ -121,7 +121,7 @@ def CompileNumber(Num, Context : x86RoseContext):
   return ConstantVal
 
 
-def CompileVar(Variable, Context):
+def CompileVariable(Variable, Context):
   print("COMPILE VARIABLE")
   print("VARIABLE:")
   print(Variable)
@@ -305,7 +305,8 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
   Operation.print()
 
   # Add signedness info on the op
-  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
+  if Context.isValueSignKnown(BitVector):
+    Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -756,11 +757,13 @@ def CompileUpdate(Update, Context : x86RoseContext):
     if isinstance(High, RoseConstant):
       if High.getValue() > Context.getMaxVectorLength():
         NewLength = Context.getMaxVectorLength() \
-                * math.ceil(High.getValue()/Context.getMaxVectorLength())
+                * math.ceil(High.getValue() / Context.getMaxVectorLength())
         print("NEW LENGTH:")
         print(NewLength)
         Context.setMaxVectorLength(NewLength)
     # Compile the bitvector
+    print("Update.lhs.bv:")
+    print(Update.lhs.bv)
     BitVector = CompileExpression(Update.lhs.bv, Context)
     print("BITVECTOR======:")
     BitVector.print()
@@ -864,7 +867,8 @@ def CompileUpdate(Update, Context : x86RoseContext):
   print("RHSExprVal:")
   print(RHSExprVal)
   RHSExprVal.print()
-  if not Context.isValueSignKnown(BitVector):
+  if Context.isValueSignKnown(BitVector) == False \
+  and Context.isValueSignKnown(RHSExprVal) == True:
     Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
 
   # Add the op to the IR
@@ -1356,7 +1360,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     CompiledFunction = ChildContext.getRootAbstraction()
 
     # Set the return value for this function
-    CompiledFunction.setRetVal(ReturnValue)
+    CompiledFunction.setRetVal(ReturnValue.getOperand(0))
 
     # Add this function to the root abstraction and update context
     Context.addAbstractionToIR(CompiledFunction)
@@ -1364,7 +1368,8 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     # Update the compiled function in this context now
     Context.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
 
-    # Destroy the child context now
+    # Destroy the child context now. But copy the context over for this function.
+    Context.copyContext(FunctionDef.id, CompiledFunction)
     Context.destroyContext(FunctionDef.id)
     print("COMPILED FUNCITON:")
     CompiledFunction.print()
@@ -1747,7 +1752,6 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
       print("adding k to context")
       RetValue = RoseValue.create('k', RetType)
   else:
-    ReturnsVoid = True
     RetType = RoseVoidType.create()
     RetValue = RoseValue.create("", RetType)
     
@@ -1811,7 +1815,7 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
 CompileAbstractions = {
   For: CompileForLoop,
   Number: CompileNumber,
-  Var: CompileVar,
+  Var: CompileVariable,
   Return : CompileReturn,
   FuncDef: CompileFunction,
   Call: CompileCall,
