@@ -11,6 +11,8 @@ from RoseTypes import *
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
+from copy import deepcopy
+
 
 ####################################### ROSE UNDEF REGION #######################################
 
@@ -107,6 +109,39 @@ class RoseFunction(RoseValue, RoseRegion):
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.getRegionID()))
 
+  def clone(self, Suffix : str = ""):
+    # Sanity check
+    assert not isinstance(self, RoseUndefRegion)
+    ClonedFunction = deepcopy(self)
+    if Suffix != "":
+      BlockList = ClonedFunction.getRegionsOfType(RoseBlock)
+      for Block in BlockList:
+        assert isinstance(Block, RoseBlock)
+        for Op in Block:
+          if isinstance(Op.getType(), RoseVoidType):
+            NewOp = Op.clone(Op.getName() + "." + Suffix)
+            Block.addOperationBefore(NewOp, Op)
+            Op.replaceUsesWith(NewOp)
+            Block.eraseOperation(Op)
+      # Got to replace the return values as well
+      ReturnVal = ClonedFunction.getReturnValue()
+      print("ReturnVal:")
+      ReturnVal.print()
+      if not isinstance(ReturnVal, RoseOperation) \
+      and not isinstance(ReturnVal, RoseArgument):
+        # Get all the uses of the input vector of the return value
+        Users = ClonedFunction.getUsersOf(ReturnVal)
+        NewReturnValue = RoseValue.create(ReturnVal.getName() + "." + Suffix, ReturnVal.getType())
+        # Replace all the return value input bitvectors with the new one.
+        for User in Users:
+          ReturnVal.print()
+          Index = User.getIndexForOperand(ReturnVal)
+          assert isinstance(Index, int)
+          User.setOperand(Index, NewReturnValue)
+        # Reset the return value
+        self.setRetVal(NewReturnValue)
+    return ClonedFunction
+
   def getNumArgs(self):
     return len(self.ArgList)
   
@@ -164,7 +199,7 @@ class RoseFunction(RoseValue, RoseRegion):
   # Use this in *very* rare cases
   def setRetVal(self, Value):
     # Just some safety checks
-    assert isinstance(self.getType().getReturnType(), RoseUndefinedType)
+    #assert isinstance(self.getType().getReturnType(), RoseUndefinedType)
     assert not isinstance(Value.getType(), RoseUndefinedType)
     # Set the return type first
     RetType = Value.getType()
@@ -173,8 +208,9 @@ class RoseFunction(RoseValue, RoseRegion):
     # Do some sanity checks again
     assert self.getType() == NewFunctionType
     assert self.getType().getReturnType() == Value.getType()
-    # Now set the name for the return value
-    self.setRetValName(Value.getName())
+    # Now set the return value
+    #self.setRetValName(Value.getName())
+    self.RetVal = Value
   
   def setArgName(self, Name, ArgIndex):
     # Some sanity checks
@@ -340,6 +376,7 @@ class RoseBlock(RoseRegion):
     #self.print()
     Operation.print()
     assert not Function.hasUsesOf(Operation)
+    print("NO USES")
     self.eraseChild(Operation)
 
 
