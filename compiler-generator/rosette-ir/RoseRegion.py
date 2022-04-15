@@ -340,14 +340,14 @@ class RoseRegion:
         for Block in BlockList:
           assert isinstance(Block, RoseAbstractions.RoseBlock)
           for Op in Block:
-            if isinstance(Op.getType(), RoseVoidType):
+            if not isinstance(Op.getType(), RoseVoidType):
               NewOp = Op.clone(Op.getName() + "." + Suffix)
               Block.addOperationBefore(NewOp, Op)
               Op.replaceUsesWith(NewOp)
               Block.eraseOperation(Op)
       else:
         for Op in Block:
-         if isinstance(Op.getType(), RoseVoidType):
+         if not isinstance(Op.getType(), RoseVoidType):
             NewOp = Op.clone(Op.getName() + "." + Suffix)
             Block.addOperationBefore(NewOp, Op)
             Op.replaceUsesWith(NewOp)
@@ -683,5 +683,6 @@ class RoseRegion:
       Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
+
 
 

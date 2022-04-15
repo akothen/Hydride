@@ -118,7 +118,7 @@ class RoseFunction(RoseValue, RoseRegion):
       for Block in BlockList:
         assert isinstance(Block, RoseBlock)
         for Op in Block:
-          if isinstance(Op.getType(), RoseVoidType):
+          if not isinstance(Op.getType(), RoseVoidType):
             NewOp = Op.clone(Op.getName() + "." + Suffix)
             Block.addOperationBefore(NewOp, Op)
             Op.replaceUsesWith(NewOp)
@@ -699,6 +699,7 @@ class RoseCond(RoseRegion):
         assert Region.getParent() == self
         Region.print(NumSpace + 1)
     print(Spaces + "}")
+
 
 
 
