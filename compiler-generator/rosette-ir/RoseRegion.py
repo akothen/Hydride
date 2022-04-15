@@ -5,7 +5,7 @@
 #
 ##############################################################
 
-
+from RoseTypes import RoseVoidType
 import RoseAbstractions
 
 from copy import deepcopy
@@ -71,6 +71,8 @@ class RoseRegion:
     else:
       if self.ChildIndex == self.getNumChildren():
         raise StopIteration
+      print("self.ChildIndex:")
+      print(self.ChildIndex)
       return self.getChild(self.ChildIndex)
   
   def areChildrenValid(self):
@@ -142,6 +144,11 @@ class RoseRegion:
     if Key == None:
       assert Index < len(self.Children)
       Child = self.Children[Index]
+      print("CHILD:")
+      Child.print()
+      print("Child.getParent():")
+      print(type(Child.getParent()))
+      print(type(self))
       assert Child.getParent() == self
       return Child
     else:
@@ -323,8 +330,29 @@ class RoseRegion:
     # Set the child's parent to undef region
     Child.setParent(RoseAbstractions.RoseUndefRegion())
 
-  def clone(self):
-    return deepcopy(self)
+  def clone(self, Suffix : str = ""):
+    # Sanity check
+    assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
+    Copy = deepcopy(self)
+    if Suffix != "":
+      if not isinstance(Copy, RoseAbstractions.RoseBlock):
+        BlockList = Copy.getRegionsOfType(RoseAbstractions.RoseBlock)
+        for Block in BlockList:
+          assert isinstance(Block, RoseAbstractions.RoseBlock)
+          for Op in Block:
+            if isinstance(Op.getType(), RoseVoidType):
+              NewOp = Op.clone(Op.getName() + "." + Suffix)
+              Block.addOperationBefore(NewOp, Op)
+              Op.replaceUsesWith(NewOp)
+              Block.eraseOperation(Op)
+      else:
+        for Op in Block:
+         if isinstance(Op.getType(), RoseVoidType):
+            NewOp = Op.clone(Op.getName() + "." + Suffix)
+            Block.addOperationBefore(NewOp, Op)
+            Op.replaceUsesWith(NewOp)
+            Block.eraseOperation(Op)
+    return Copy
 
   # This could be used for checking structural isomorphism
   # i.e. this region's and given region's types match up as
