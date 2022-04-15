@@ -60,7 +60,7 @@ class RoseOpcode(Enum):
     bvextract = auto()
     bvsignextend = auto()
     bvzeroextend = auto()
-
+    
     # Some primitive ops
     add = auto()
     sub = auto()
@@ -214,12 +214,13 @@ class RoseOpcode(Enum):
             Callee = Inputs[0]
             assert isinstance(Callee, RoseValues.RoseConstant)
             assert isinstance(Callee.getType(), RoseStringType)
-            return Callee.getType() # .getReturnType()
+            return Callee.getType().getReturnType()
         if self.value == self.select.value:
             assert Inputs[1].getType() == Inputs[2].getType()
             return Inputs[1].getType()
         if self.value == self.ret.value:
-            return Inputs[0].getType()
+            assert len(Inputs) == 1
+            return RoseVoidType.create()
         if self.value == self.bvextract.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
@@ -307,6 +308,7 @@ class RoseOpcode(Enum):
 
     def inputsAreValid(self, Inputs : list): 
         if self.isValidNumInputs(len(Inputs)) == False:
+            print("false")
             return False
         if self.value == self.bvzero.value \
         or self.value == self.bit.value \
@@ -339,12 +341,16 @@ class RoseOpcode(Enum):
         if self.value == self.bvinsert.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[4], RoseValues.RoseConstant):
+                print("false1")
                 return False
             if len(BVInputs) != 2:
+                print("false2")
                 return False
             if BVInputs[0].getType().getBitwidth() != Inputs[4].getValue():
+                print("false3")
                 return False
             if BVInputs[1].getType().getBitwidth() < Inputs[4].getValue():
+                print("false4")
                 return False
             return True
         if self.value == self.bvsignextend.value \
