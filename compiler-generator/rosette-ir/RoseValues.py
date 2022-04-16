@@ -6,6 +6,7 @@
 #############################################################
 
 
+from re import L
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
@@ -229,7 +230,7 @@ class RoseOperation(RoseValue):
   
   def __hash__(self):
     return super().__hash__()
-  
+
   # This is different from __eq__ because here we want to see if 
   # the compuations are the same.
   def isSameAs(self, Other):
@@ -244,6 +245,24 @@ class RoseOperation(RoseValue):
     assert isinstance(Other, RoseOperation)
     return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
         and self.getType() == Other.getType()
+  
+  def cloneOperation(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+    if Suffix == "":
+      return self.clone()
+    if isinstance(self.getType(), RoseVoidType):
+      ClonedOp = self.clone()
+    else:
+      ClonedOp = self.clone(self.getName() + "." + Suffix)
+    ValueToValueMap[self] = ClonedOp
+    for Index, Operand in enumerate(self.getOperands()):
+      print("Operand:")
+      Operand.print()
+      if isinstance(Operand, RoseConstant):
+        ClonedOperand = RoseConstant.create(Operand.getValue(), Operand.getType())
+      else:
+        ClonedOperand = ValueToValueMap[Operand]
+      ClonedOp.setOperand(Index, ClonedOperand)
+    return ClonedOp
   
   def getOpcode(self):
     return self.Opcode
@@ -273,8 +292,9 @@ class RoseOperation(RoseValue):
   # This is used to query if this operation uses
   #  the given value as an operand.
   def usesValue(self, Value):
-    if Value == self:
-      return False
+    if isinstance(Value, RoseOperation):
+      if Value == self:
+        return False
     for Operand in self.Operands:
       if type(Value) != type(Operand):
         continue
@@ -295,6 +315,13 @@ class RoseOperation(RoseValue):
     Function =  Block.getFunction()
     assert not isinstance(Function, RoseAbstractions.RoseUndefRegion)
     return Function.getNumUsersOf(self)
+
+  def getIndexForOperand(self, Operand):
+    assert isinstance(Operand, RoseValue)
+    for Index, CheckOperand in enumerate(self.getOperands()):
+      if Operand == CheckOperand:
+        return Index
+    return None
 
   # This is an overloaded function
   def replaceUsesWith(self, *args):
