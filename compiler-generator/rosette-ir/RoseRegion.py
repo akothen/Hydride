@@ -330,29 +330,10 @@ class RoseRegion:
     # Set the child's parent to undef region
     Child.setParent(RoseAbstractions.RoseUndefRegion())
 
-  def clone(self, Suffix : str = ""):
+  def cloneRegion(self):
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
-    Copy = deepcopy(self)
-    if Suffix != "":
-      if not isinstance(Copy, RoseAbstractions.RoseBlock):
-        BlockList = Copy.getRegionsOfType(RoseAbstractions.RoseBlock)
-        for Block in BlockList:
-          assert isinstance(Block, RoseAbstractions.RoseBlock)
-          for Op in Block:
-            if not isinstance(Op.getType(), RoseVoidType):
-              NewOp = Op.clone(Op.getName() + "." + Suffix)
-              Block.addOperationBefore(NewOp, Op)
-              Op.replaceUsesWith(NewOp)
-              Block.eraseOperation(Op)
-      else:
-        for Op in Block:
-         if not isinstance(Op.getType(), RoseVoidType):
-            NewOp = Op.clone(Op.getName() + "." + Suffix)
-            Block.addOperationBefore(NewOp, Op)
-            Op.replaceUsesWith(NewOp)
-            Block.eraseOperation(Op)
-    return Copy
+    return deepcopy(self)
 
   # This could be used for checking structural isomorphism
   # i.e. this region's and given region's types match up as
@@ -683,6 +664,5 @@ class RoseRegion:
       Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
-
 
 
