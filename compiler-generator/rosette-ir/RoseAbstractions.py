@@ -68,9 +68,6 @@ class RoseFunction(RoseValue, RoseRegion):
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], list) \
       and isinstance(args[2], RoseType):
-        print(args[0])
-        print(args[1])
-        print(args[2])
         return RoseFunction(args[0], args[1], args[2], [], RoseUndefRegion())
     if len(args) == 2:
       if isinstance(args[0], str) and isinstance(args[1], RoseFunctionType):
@@ -108,38 +105,31 @@ class RoseFunction(RoseValue, RoseRegion):
   # Make rose functions hashable
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.getRegionID()))
-
-  def clone(self, Suffix : str = ""):
-    # Sanity check
-    assert not isinstance(self, RoseUndefRegion)
-    ClonedFunction = deepcopy(self)
-    if Suffix != "":
-      BlockList = ClonedFunction.getRegionsOfType(RoseBlock)
-      for Block in BlockList:
-        assert isinstance(Block, RoseBlock)
-        for Op in Block:
-          if not isinstance(Op.getType(), RoseVoidType):
-            NewOp = Op.clone(Op.getName() + "." + Suffix)
-            Block.addOperationBefore(NewOp, Op)
-            Op.replaceUsesWith(NewOp)
-            Block.eraseOperation(Op)
-      # Got to replace the return values as well
-      ReturnVal = ClonedFunction.getReturnValue()
-      print("ReturnVal:")
-      ReturnVal.print()
-      if not isinstance(ReturnVal, RoseOperation) \
-      and not isinstance(ReturnVal, RoseArgument):
-        # Get all the uses of the input vector of the return value
-        Users = ClonedFunction.getUsersOf(ReturnVal)
-        NewReturnValue = RoseValue.create(ReturnVal.getName() + "." + Suffix, ReturnVal.getType())
-        # Replace all the return value input bitvectors with the new one.
-        for User in Users:
-          ReturnVal.print()
-          Index = User.getIndexForOperand(ReturnVal)
-          assert isinstance(Index, int)
-          User.setOperand(Index, NewReturnValue)
-        # Reset the return value
-        self.setRetVal(NewReturnValue)
+  
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+    if Suffix == "":
+      return self.cloneRegion()
+    ClonedArgsList = list()
+    for Arg in self.getArgs():
+      ClonedArg = Arg.clone(Suffix)
+      ValueToValueMap[Arg] = ClonedArg
+      ClonedArgsList.append(ClonedArg)
+    FunctionName = self.getName() + "." + Suffix
+    ClonedFunction = RoseFunction.create(FunctionName, ClonedArgsList, \
+                                        self.getType().getReturnType())
+    ReturnValue = self.getReturnValue()
+    if not isinstance(ReturnValue, RoseOperation) \
+      and not isinstance(ReturnValue, RoseArgument):
+      ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
+      ClonedFunction.setRetVal(ClonedReturnVal)
+      print("ReturnValue:")
+      ReturnValue.print()
+      print("ClonedReturnVal:")
+      ClonedReturnVal.print()
+      ValueToValueMap[ReturnValue] = ClonedReturnVal
+    for Abstraction in self:
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedFunction.addRegion(ClonedAbstraction)
     return ClonedFunction
 
   def getNumArgs(self):
@@ -274,6 +264,15 @@ class RoseBlock(RoseRegion):
   def __hash__(self):
     #return hash((tuple(self.getOperations()), self.getRegionID()))
     return hash(self.getRegionID())
+
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+    if Suffix == "":
+      return self.cloneRegion()
+    ClonedBlock = RoseBlock.create()
+    for Operation in self:
+      ClonedOperation = Operation.cloneOperation(Suffix, ValueToValueMap)
+      ClonedBlock.addRegion(ClonedOperation)
+    return ClonedBlock
 
   def getOperations(self):
     return self.getChildren()
@@ -456,6 +455,35 @@ class RoseForLoop(RoseRegion):
   def __hash__(self):
     return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
 
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+    if Suffix == "":
+      return self.cloneRegion()
+    LoopStart = self.getStartIndex()
+    if isinstance(LoopStart, RoseConstant):
+      LoopStart = LoopStart.getValue()
+    else:
+      LoopStart = ValueToValueMap[LoopStart]
+    LoopEnd = self.getEndIndex()
+    if isinstance(LoopEnd, RoseConstant):
+      LoopEnd = LoopEnd.getValue()
+    else:
+      LoopEnd = ValueToValueMap[LoopEnd]
+    LoopStep = self.getStep()
+    if isinstance(LoopStep, RoseConstant):
+      LoopStep = LoopStep.getValue()
+    else:
+      LoopStep = ValueToValueMap[LoopStep]
+    IteratorName = self.getIterator().getName() + "." + Suffix
+    ClonedLoop = RoseForLoop.create(IteratorName, LoopStart, LoopEnd, LoopStep)
+    ValueToValueMap[self.getIterator()] = ClonedLoop.getIterator()
+    ValueToValueMap[self.getStartIndex()] = ClonedLoop.getStartIndex()
+    ValueToValueMap[self.getEndIndex()] = ClonedLoop.getEndIndex()
+    ValueToValueMap[self.getStep()] = ClonedLoop.getStep()
+    for Abstraction in self:
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedLoop.addRegion(ClonedAbstraction)
+    return ClonedLoop
+
   def getIterator(self):
     return self.Iterator
   
@@ -607,6 +635,18 @@ class RoseCond(RoseRegion):
   def __hash__(self):
     return hash(self.getRegionID())
 
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+    if Suffix == "":
+      return self.cloneRegion()
+    ClonedConditions = list()
+    for Condition in self.Conditions:
+      ClonedConditions.append(ValueToValueMap[Condition])
+    ClonedCondRegion = RoseCond.create(ClonedConditions)
+    for Abstraction in self:
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedCondRegion.addRegion(ClonedAbstraction)
+    return ClonedCondRegion
+
   def getCondition(self, Index = 0):
     return self.Conditions[Index]
   
@@ -699,7 +739,6 @@ class RoseCond(RoseRegion):
         assert Region.getParent() == self
         Region.print(NumSpace + 1)
     print(Spaces + "}")
-
 
 
 
