@@ -67,7 +67,7 @@ class Specification:
 
         for idx in range(0, len(spec_ops) - len(dsl_ops) + 1):
             if spec_ops[idx:idx+len(dsl_ops)] == dsl_ops:
-                print("MATCH", dsl_ops)
+                print(";; MATCH", dsl_ops)
                 return True
 
         return False

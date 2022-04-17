@@ -3,6 +3,8 @@ from Types import *
 
 SYM_BV_STR =  "SYMBOLIC_BV_"
 CONST_BV_STR = "(bv"
+IDX_I_STR = "IDX_I"
+IDX_J_STR = "IDX_J"
 
 BV_OPS = [
     "bveq", "bvslt", "bvult",
@@ -14,7 +16,10 @@ BV_OPS = [
     "bvurem", "bvurem", "bvsmod", "concat",
     "extract", "sign-extend", "zero-extend",
     "bitvector->integer", "bitvector->natural",
-    "integer->bitvector",
+    "integer->bitvector", "bvumaxval", "bvsmaxval",
+    "bvuminval", "bvsminval", "bvssat", "bvusat",
+    "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
+    "bvmulnsw", "bvmulnuw",
 ]
 
 
@@ -93,6 +98,10 @@ class Context:
 
                 context_arg = ConstBitVector(value, size, name = "vc_{}".format(idx))
 
+            elif arg.startswith(IDX_I_STR):
+                context_arg = IndexVariable(name = "idx-i")
+            elif arg.startswith(IDX_J_STR):
+                context_arg = IndexVariable(name = "idx-j")
             elif idx == self.lanesize_index:
                 lane_size = int(arg)
                 context_arg = LaneSize("lane_size", value =  lane_size)
@@ -134,7 +143,7 @@ class Context:
                 context_arg = Integer("num_{}".format(idx), int(arg))
 
             else:
-                print(idx)
+                print("ARG {}:\t{}".format(idx, arg ))
                 assert False, "Unsupported operand type"
 
 

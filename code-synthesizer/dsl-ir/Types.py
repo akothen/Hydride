@@ -8,9 +8,11 @@ class OperandType:
         LaneSize = auto()
         Precision = auto()
         Integer = auto()
+        IndexVariable = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
+        self.is_hole = False
 
     def __eq__(self, Other):
         assert isinstance(Other, OperandType)
@@ -22,6 +24,9 @@ class OperandType:
 
     def __hash__(self):
         return hash(self.TypeEnum)
+
+    def get_rkt_comment(self):
+        return ";; Base Operand Type"
 
     def print_operand(self, prefix = ""):
         print("{} Base OperandType".format(prefix))
@@ -35,6 +40,7 @@ class BitVector(OperandType):
         self.size = size
         self.name = name
         super().__init__(OperandType.OperandTypeEnum.BitVector)
+        self.is_hole = True
 
 
     def define_symbolic(self):
@@ -42,6 +48,10 @@ class BitVector(OperandType):
         def_str = "(define-symbolic {} (bitvector {}))".format(label, self.size)
 
         return (label, def_str)
+
+
+    def get_rkt_comment(self):
+        return ";; {}-bit Bitvector operand".format(self.size)
 
 
     def print_operand(self, prefix = ""):
@@ -65,6 +75,9 @@ class ConstBitVector(OperandType):
 
     def get_dsl_value(self):
         return "(lit {})".format(self.get_rkt_value())
+
+    def get_rkt_comment(self):
+        return ";; {}-bit Constant Bitvector operand".format(self.size)
 
     def print_operand(self, prefix = ""):
         trunc_value = self.value
@@ -95,6 +108,10 @@ class LaneSize(OperandType):
         return self.get_rkt_value()
 
 
+    def get_rkt_comment(self):
+        return ";; Lane Size "
+
+
     def print_operand(self, prefix = ""):
         print("{} {}\t| Lane Size {}".format(prefix, self.name, self.value))
 
@@ -116,6 +133,9 @@ class Precision(OperandType):
         else:
             return str(self.name)
 
+
+    def get_rkt_comment(self):
+        return ";; Precision Operand "
 
     def get_dsl_value(self):
         return self.get_rkt_value()
@@ -140,6 +160,9 @@ class Integer(OperandType):
             return str(self.name)
 
 
+    def get_rkt_comment(self):
+        return ";; Integer Operand "
+
     def get_dsl_value(self):
         return self.get_rkt_value()
 
@@ -147,6 +170,32 @@ class Integer(OperandType):
     def print_operand(self, prefix = ""):
         print("{} {}\t| Integer {}".format(prefix, self.name, self.value))
 
+
+class IndexVariable(OperandType):
+
+    def __init__(self, name = "idx-i"):
+
+        self.name = name
+
+        assert (name == "idx-i" or name == "idx-j"), "Unsupported Index Variable"
+
+
+        super().__init__(OperandType.OperandTypeEnum.IndexVariable)
+
+
+    def get_rkt_value(self):
+        assert False , "Index variable has no corresponding racket value"
+
+
+    def get_dsl_value(self):
+        return "(idx-i 0)"
+
+
+    def get_rkt_comment(self):
+        return ";; Loop Index Variable "
+
+    def print_operand(self, prefix = ""):
+        print("{}\t| Index Variable {}".format(prefix, self.name))
 
 class InstructionType:
 
