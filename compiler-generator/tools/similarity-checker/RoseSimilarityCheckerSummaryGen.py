@@ -15,6 +15,7 @@ from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseEquivalenceClass import *
 from RoseSimilarityCheckerUtilities import *
+from x86InstsCosts import x86Costs
 
 
 class RoseSimilarityCheckerSummaryGen():
@@ -35,6 +36,15 @@ class RoseSimilarityCheckerSummaryGen():
       else:
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         ArgList.append("\"" + GenConcreteValue(ConcreteVal) + "\"")
+    # Get cost
+    SemaInfo = FunctionInfo.getRawSemantics()
+    if SemaInfo.xed != None:
+      if SemaInfo.xed in x86Costs:
+        Cost = x86Costs[SemaInfo.xed]
+      else:
+        Cost = None
+    else:
+      Cost = None
     TempEntryString = f'''
                   "args" : {"[" + ",".join(ArgList) + "]"},
                   "in_vectsize" : {str(FunctionInfo.getInVectorLength())},
@@ -47,14 +57,13 @@ class RoseSimilarityCheckerSummaryGen():
                   "lanesize_index" : {str(FunctionInfo.getLaneSizeIndex())},
                   "in_precision_index" : {str(FunctionInfo.getInElemTypeIndex())},
                   "out_precision_index" : {str(FunctionInfo.getOutElemTypeIndex())},
-                  "Cost" : "{""}",
+                  "Cost" : "{Cost}",
                   "SIMD" : "{str(FunctionInfo.isSIMD())}",
       '''
     TempEntryString = "{" + TempEntryString + "}"
     return TempEntryString
 
   def genDictionaryEntry(self, EquivalenceClass : RoseEquivalenceClass):
-    FunctionName = EquivalenceClass.getAFunction().getName()
     # List of arguments for functions in this equivalent class
     # and  track names of functions and track vector information
     EntryString = ""
