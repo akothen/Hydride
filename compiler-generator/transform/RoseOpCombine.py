@@ -1070,12 +1070,17 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
           if isinstance(SecondHigh, RoseConstant) and isinstance(FirstLow, RoseConstant):
             NewHigh = RoseConstant.create(FirstLow.getValue() + SecondHigh.getValue(), SecondHigh.getType())
           else:
-            NewHigh = RoseAddOp.create(Context.genName(SecondExtractOp.getName() + "new.high.idx"), \
-                                      [FirstLow, SecondHigh])
+            #NewHigh = RoseAddOp.create(Context.genName(SecondExtractOp.getName() + "new.high.idx"), \
+            #                          [FirstLow, SecondHigh])
+            Bitwidth = RoseConstant(SecondExtractBitwidth - 1, \
+                  SecondExtractOp.getOperand(SecondExtractOp.getBitwidthPos()).getType())
+            NewHigh = RoseAddOp.create(Context.genName(SecondExtractOp.getName() + ".new.high.idx"), \
+                                      [NewLow, Bitwidth])
             # Add this new low index computation to the IR
             Block.addOperationBefore(NewHigh, FirstExtractOp)
           # Generate the new operation now
-          BitwidthVal = RoseConstant(SecondExtractBitwidth, NewHigh.getType())
+          BitwidthVal = RoseConstant(SecondExtractBitwidth, \
+                  SecondExtractOp.getOperand(SecondExtractOp.getBitwidthPos()).getType())
           NewOp = RoseBVExtractSliceOp.create(Context.genName(FirstExtractOp.getName()) + ".new", \
                                 FirstExtractOp.getInputBitVector(), NewLow, NewHigh, BitwidthVal)
           # Add this new operation to the block and replace the uses of older op
@@ -1177,7 +1182,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
