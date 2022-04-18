@@ -13,6 +13,7 @@ from RoseBitVectorOperation import *
 from RoseBitVectorOperations import *
 from RoseOperations import *
 from RoseContext import *
+from RoseUtilities import *
 
 
 def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
@@ -29,14 +30,11 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   # Top level function has no uses
   if Function.isTopLevelFunction():
     return
-  
-  # Track call sites of the function
-  CallSites = list()
 
   # Look for uses of this function
   ParentRegionOfFunction = Function.getFunction()
   Users = ParentRegionOfFunction.getUsersOf(Function)
-  Suffix = "callsite"
+  Suffix = "site"
   for UserIndex, User in enumerate(Users):
     # Clone the function
     ClonedFunction = Function.clone(Suffix + str(UserIndex))
@@ -47,7 +45,6 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
     print("USER OF FUNCTION:")
     User.print()
     assert isinstance(User, RoseCallOp)
-    CallSites.append(User)
     # Get all the call operands that matter
     CallArgs = User.getCallOperands()
     Block = User.getParent()
@@ -75,6 +72,18 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
       print("FunctionArgs[Index]:")
       FunctionArgs[Index].print()
       ParentRegion.replaceUsesWith(FunctionArgs[Index], CallArgs[Index])
+        
+    print("User.getParent().getFunction():")
+    User.getParent().getFunction().print()
+    # Get uses of callsites
+    ClonedReturnValue = ClonedFunction.getReturnValue()
+    CallSiteUsers = User.getParent().getFunction().getUsersOf(User)
+    print("CallSiteUsers:")
+    print(CallSiteUsers)
+    assert len(CallSiteUsers) == 1
+    CallSiteUser = CallSiteUsers[0]
+    # Get users of return value
+    TempDstUsers = ParentRegion.getUsersOf(ClonedReturnValue)
     # Replace the value at callsite with return value
     User.replaceUsesWith(ClonedFunction.getReturnValue())
     # Erase the return op
@@ -87,6 +96,52 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
           Key = BlockParent.getKeyForChild(ParentBlock)
           BlockParent.eraseChild(ParentBlock, Key)
         break
+    
+    if isinstance(CallSiteUser, RoseBVInsertSliceOp):
+      assert CallSiteUser.getInsertValue() == ClonedReturnValue
+      if not isinstance(ClonedReturnValue, RoseArgument) \
+        and not isinstance(ClonedReturnValue, RoseOperation):
+        for TempDstUser in TempDstUsers:
+          if isinstance(TempDstUser, RoseBVInsertSliceOp):
+            print("TempDstUser:")
+            TempDstUser.print()
+            #ParentFunction = TempDstUser.getParent().getFunction()
+            assert ClonedReturnValue == TempDstUser.getInputBitVector()
+            LowIndex = RoseAddOp.create(Context.genName(), \
+                            [TempDstUser.getLowIndex(), CallSiteUser.getLowIndex()])
+            Bitwidth = RoseConstant.create(TempDstUser.getOutputBitwidth() - 1, \
+                            CallSiteUser.getOperand(CallSiteUser.getBitwidthPos()).getType())
+            HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, Bitwidth])
+            CurrentBlock = TempDstUser.getParent()
+            CurrentBlock.addOperationBefore(LowIndex, \
+                            TempDstUser.getOperand(TempDstUser.getHighIndexPos()))
+            CurrentBlock.addOperationBefore(HighIndex, \
+                            TempDstUser.getOperand(TempDstUser.getHighIndexPos()))   
+            TempDstUser.setOperand(TempDstUser.getLowIndexPos(), LowIndex)
+            TempDstUser.setOperand(TempDstUser.getHighIndexPos(), HighIndex)
+            TempDstUser.setOperand(1, CallSiteUser.getInputBitVector())
+        # Erase the callsite user
+        ParentBlock = CallSiteUser.getParent()
+        ParentBlock.eraseOperation(CallSiteUser)
+        if ParentBlock.getNumOperations() == 0:
+          BlockParent = ParentBlock.getParent()
+          Key = BlockParent.getKeyForChild(ParentBlock)
+          BlockParent.eraseChild(ParentBlock, Key)
+    
+    # Erase the call site
+    Block = User.getParent()
+    Block.eraseOperation(User)
+    if Block.getNumOperations() == 0:
+      BlockParent = Block.getParent()
+      Key = BlockParent.getKeyForChild(Block)
+      BlockParent.eraseChild(Block, Key)
+
+    # Replace uses with unique copies
+    for CallArgOp in CallArgs:
+      if isinstance(CallArgOp, RoseOperation):
+        NewOp = CallArgOp.clone(CallArgOp.getName() + "." + "copy")
+        ReplaceUsesWithUniqueCopiesOf(ParentRegion, CallArgOp, NewOp, Context)
+
     print("ParentRegion:")
     ParentRegion.print()
     print("FUNCTION AFTER INLINING")
@@ -98,10 +153,6 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   ParentRegionOfFunction.eraseChild(Function)
   print("FUNCTION AFTER ERASING")
   ParentRegionOfFunction.print()
-  # Erase call sites
-  for CallSite in CallSites:
-    Block = CallSite.getParent()
-    Block.eraseOperation(CallSite)
 
 
 # Runs function inliner
