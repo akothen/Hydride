@@ -6,10 +6,14 @@
 
 
 from RoseCodeEmitter import *
-from x86Types import x86Types
+from x86Types import *
+from RoseAbstractions import *
+from RoseContext import *
+from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
+from RoseSimilarityCheckerUtilities import *
 
 
 def x86ToC(T):
@@ -61,16 +65,18 @@ def x86ToC(T):
 
 
 class x86CIntrinsicsWrappersEmitter():
-  def __init__(self, FunctionInfoList : list):
-    # Sanity check
-    for FunctionInfo in FunctionInfoList:
-      assert isinstance(FunctionInfo, RoseFunctionInfo)
-    self.FunctionInfoList = FunctionInfoList
+  def __init__(self):
+    self.FunctionInfoList = list()
+    # Generate code for all semantics first
+    CodeGenerator = RoseCodeGenerator("x86")
+    FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False, JustGenRosette=False)
+    self.FunctionInfoList.extend(FunctionInfoList)
 
   def genHeader(self):
+    String = GenHeadersForAutoGenFiles("//")
     Content = ["#include <immintrin.h>", "#include <stdio.h>", \
                "#include <stdint.h>\n"]
-    return "\n".join(Content)
+    return String + "\n".join(Content)
 
   def genCWrapperFunction(self, FunctionInfo : RoseFunctionInfo):
     assert isinstance(FunctionInfo, RoseFunctionInfo)
@@ -81,13 +87,14 @@ class x86CIntrinsicsWrappersEmitter():
     for Index, Param in enumerate(Function.getArgs()):
       ParamsNames.append(Param.getName())
       TypedParams.append(x86ToC(Sema.params[Index].type) + " " + Param.getName())
-    FuncSig = "{} {}_wrapper({}) {".format(x86ToC(Sema.rettype), \
+    FuncSig = "{} {}_wrapper({})".format(x86ToC(Sema.rettype), \
                         Function.getName(), ", ".join(TypedParams))
+    FuncSig += " {"
     Content = list()
     Content.append(FuncSig)
     InvokedFunction = "{}({})".format(Function.getName(), ", ".join(ParamsNames))
-    Content.append("  return " + InvokedFunction)
-    Content.append("}")
+    Content.append("  return " + InvokedFunction + ";")
+    Content.append("}\n\n")
     return "\n".join(Content)
   
   def genWrappers(self):
@@ -106,5 +113,10 @@ class x86CIntrinsicsWrappersEmitter():
       assert False
 
     
+
+if __name__ == '__main__':
+  Emitter = x86CIntrinsicsWrappersEmitter()
+  Emitter.genWrappers()
+
 
 
