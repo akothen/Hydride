@@ -22,7 +22,7 @@ spec_sema = [
 specification = {
     "name" : "tensor-add",
     "semantics": spec_sema,
-    "input_shape": [4,4],
+    "input_shapes": [[4,4]],
     "output_shape": [4,4],
     "input_precision": 8,
     "output_precision": 8,

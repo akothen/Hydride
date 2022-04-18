@@ -51,12 +51,12 @@ class Context:
 
     def get_input_size(self):
         assert (self.in_precision != None) and (self.in_vectsize != None) , "Unable to process input size for instruction"
-        return self.in_precision * self.in_vectsize
+        return self.in_vectsize
 
 
     def get_output_size(self):
         assert (self.out_precision != None) and (self.out_vectsize != None) , "Unable to process output size for instruction"
-        return self.out_precision * self.out_vectsize
+        return self.out_vectsize
 
     def supports_input_precision(self, prec):
         return self.in_precision == prec
@@ -64,6 +64,20 @@ class Context:
 
     def supports_output_precision(self, prec):
         return self.out_precision == prec
+
+    def supports_input_size(self, input_size):
+        for arg in self.context_args:
+            if isinstance(arg, BitVector):
+                if arg.size == input_size:
+                    return True
+
+        return False
+
+
+    def supports_output_size(self, output_size):
+        return self.get_output_size == output_size
+
+
 
     def supports_lane_size(self, lane_size):
         return self.lane_size == lane_size
@@ -278,10 +292,19 @@ class DSLInstruction(InstructionType):
         return any([ctx.supports_output_precision(prec) for ctx in self.contexts])
 
 
+
+
+    def supports_input_size(self, input_size):
+        return any([ctx.supports_input_size(input_size) for ctx in self.contexts])
+
+    def supports_output_size(self, output_size):
+        return any([ctx.supports_output_size(output_size) for ctx in self.contexts])
+
     def supports_lane_size(self, lane_size):
         return any([ctx.supports_lane_size(lane_size) for ctx in self.contexts])
 
-    def supports_config(self, input_precision = None, output_precision = None, lane_size = None):
+    def supports_config(self, input_precision = None, output_precision = None, lane_size = None,
+                        input_size = None, output_size = None):
 
         def supports(ctx):
 
@@ -298,6 +321,18 @@ class DSLInstruction(InstructionType):
             if lane_size == None:
                 pass
             elif not ctx.supports_lane_size(lane_size):
+                return False
+
+
+            if input_size == None:
+                pass
+            elif not ctx.supports_input_size(input_size):
+                return False
+
+
+            if output_size == None:
+                pass
+            elif not ctx.supports_output_size(output_size):
                 return False
 
             return True

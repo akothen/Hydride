@@ -94,6 +94,15 @@ def create_vector_load_dsl(input_vector_sizes = [],
     return vec_load_dsl
 
 
+# Placeholder instruction definition to faciliate other classes
+# emitting racket code for interpreter
+dummy_vector_load_dsl = create_vector_load_dsl(
+    input_vector_sizes = [64],
+    offsets = [0],
+    num_elem_sizes = [4],
+    precisions = [8]
+)
+
 def create_two_input_swizzle(input_vector_sizes = [],
                              num_elem_sizes = [],
                              group_sizes = [],

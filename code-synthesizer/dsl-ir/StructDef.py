@@ -1,5 +1,6 @@
 from Instructions import DSLInstruction
 from Types import *
+from PredefinedDSL import *
 
 class StructDef:
 
@@ -13,6 +14,9 @@ class StructDef:
         defaults.append("(struct lit (val) #:transparent)")
         defaults.append("(struct idx-i (id) #:transparent)")
         defaults.append("(struct idx-j (id) #:transparent)")
+
+
+        defaults.append(self.emit_dsl_struct_def(dummy_vector_load_dsl))
 
         return defaults
 

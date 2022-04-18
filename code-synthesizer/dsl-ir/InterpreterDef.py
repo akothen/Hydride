@@ -1,5 +1,6 @@
 from Instructions import DSLInstruction
 from Types import *
+from PredefinedDSL import *
 
 class InterpreterDef:
 
@@ -7,7 +8,7 @@ class InterpreterDef:
         return
 
 
-    def emit_default_def(self, env_name = "env"):
+    def emit_default_def(self, struct_definer , env_name = "env"):
         defaults = []
 
         defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 2))]".format(env_name, env_name))
@@ -17,6 +18,7 @@ class InterpreterDef:
         defaults.append("[(lit v) v]")
 
         defaults.append("[(nop v1) (interpret v1 {})]".format(env_name))
+        defaults.append(self.emit_interpret_def(dummy_vector_load_dsl, struct_definer)[1:])
 
         return ["\t{}".format(d) for d in defaults]
 
@@ -47,7 +49,7 @@ class InterpreterDef:
 
     def emit_interpreter(self, dsl_inst_ls, struct_definer, add_assertions = True, env_name = "env"):
 
-        interpret_clauses = self.emit_default_def(env_name = env_name)
+        interpret_clauses = self.emit_default_def(struct_definer , env_name = env_name)
         interpret_clauses += [self.emit_interpret_def(dsl_inst, struct_definer, env_name = env_name) for dsl_inst in dsl_inst_ls]
         interpret_clauses.append(self.emit_fallback_def())
 

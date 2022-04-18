@@ -11,7 +11,28 @@ from test_spec import specification
 
 from GrammarGenerator import GrammarGenerator
 
+from Synthesizer import Synthesizer
+
 dsl_list = parse_dict(semantics)
+
+
+sd = StructDef()
+idd = InterpreterDef()
+cd = CostDef()
+sp = parse_spec(specification)
+gg = GrammarGenerator()
+
+syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
+                  struct_definer = sd, grammar_generator = gg,
+                  )
+
+## Dumping contents into racket file
+
+print(syn.emit_synthesis_grammar())
+
+
+
+sys.exit(1)
 
 vector_load_input_sizes = [64, 256, 1024]
 vector_load_offsets = ["IDX_I", "IDX_I", "IDX_I"]
@@ -55,12 +76,6 @@ swizzle_two.print_instruction()
 
 sys.exit(1)
 
-sd = StructDef()
-idd = InterpreterDef()
-cd = CostDef()
-sp = parse_spec(specification)
-
-gg = GrammarGenerator()
 
 
 sample_dsl = dsl_list[:5]

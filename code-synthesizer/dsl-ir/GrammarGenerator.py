@@ -1,6 +1,8 @@
 from Types import *
 from Instructions import *
 
+
+
 class GrammarGenerator:
 
     def __init__(self ):
@@ -12,7 +14,8 @@ class GrammarGenerator:
         return "({} {} #:depth (- {} 1))".format(grammar_name, vars_name, depth_name)
 
     def emit_grammar_clause(self, dsl_inst, grammar_args , vars_name = "vars",
-                             depth_name = "k", grammar_name = "operations"):
+                             depth_name = "k", grammar_name = "operations",
+                            last_clause = False):
 
         grammar_clause = ["("]
 
@@ -27,13 +30,28 @@ class GrammarGenerator:
 
         combined = "\n\t\t".join(grammar_clause)
 
-        grammar_clause = ["\t[(choose* #t #f)"] + [combined] + [")]"]
+        if last_clause:
+            grammar_clause = ["\t[else"] + [combined] + [")]"]
+        else:
+            grammar_clause = ["\t[(choose* #t #f)"] + [combined] + [")]"]
 
         return "\n\t".join(grammar_clause)
 
+    def emit_other_grammar_reference(self, other_grammar, last_clause = False, vars_name = "vars",
+                                     depth_name = "k"):
+        command = []
+        if last_clause:
+            command = ["\t[else"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar)] +["]"]
+        else:
+            command = ["\t[(choose* #t #f)"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar)] +["]"]
+
+        return "\n\t".join(command)
+
+
     def emit_grammar_layer(self, layer_name = "grammar_layer", layer_dsl_insts = [],
                            layer_dsl_args_list = [],
-                           vars_name = "vars", depth_name = "k"):
+                           vars_name = "vars", depth_name = "k",
+                           other_grammars = []):
 
         assert len(layer_dsl_insts) == len(layer_dsl_args_list), "Each grammar rule should have an argument context"
 
@@ -44,7 +62,13 @@ class GrammarGenerator:
         for i in range(0, len(layer_dsl_insts)):
             clauses.append(self.emit_grammar_clause(layer_dsl_insts[i], layer_dsl_args_list[i],
                                                     vars_name = vars_name, depth_name = depth_name,
-                                                    grammar_name = layer_name))
+                                                    grammar_name = layer_name, last_clause = (i == len(layer_dsl_insts) -1) and len(other_grammars) == 0))
+        for idx, og in enumerate(other_grammars):
+            clauses.append(self.emit_other_grammar_reference(og, last_clause = (idx == len(other_grammars) -1), vars_name = vars_name,
+                                                             depth_name = depth_name))
+
+
+
         define_grammar = "(define ({} {} #:depth {})".format(layer_name, vars_name, depth_name)
 
         return define_grammar +"\n" +assert_depth +"\n" +"\t(cond" + "\n"+ choose_vars +"\n" +"\n".join(clauses)+"\n\t)"+"\n)\n"
@@ -55,13 +79,39 @@ class GrammarGenerator:
                      memory_dsl_args_list = [],
                      operation_layer_name = "operations", operation_dsl_insts = [],
                      operation_dsl_args_list = [],
-                     top_level_grammar_name = "synth_grammar"):
+                     top_level_grammar_name = "synth_grammar",
+                     top_level_grammar_args = [],
+                     depth = 6):
+
+
+        # Leaves in the grammar tree to load from memory
+        mem_layer = self.emit_grammar_layer(layer_name = memory_layer_name,
+                                            layer_dsl_insts = memory_dsl_insts,
+                                            layer_dsl_args_list = memory_dsl_args_list)
+
+        # TODO: Shuffle layer
+
+        # Layer which performs the operations on the organized vectors
+        operation_layer = self.emit_grammar_layer(layer_name = operation_layer_name,
+                                            layer_dsl_insts = operation_dsl_insts,
+                                            layer_dsl_args_list = operation_dsl_args_list,
+                                                other_grammars = [memory_layer_name])
+
+        top_level_grammar = "(define {} ({} (list {}) #:depth {} ))".format(top_level_grammar_name,
+                                                                            operation_layer_name,
+                                                                            " ".join(top_level_grammar_args),
+                                                                            depth)
+
 
         prefix = ";; "+"="*80 + "\n"
         prefix += ";; "+" "*30 +" DSL Grammar"+'\n'
         prefix += ";; "+"="*80 + "\n"
 
+        grammar_tree = mem_layer + "\n" + operation_layer +"\n" + top_level_grammar
+
         sufix = "\n;; "+"="*80 + "\n"
+
+        return prefix + "\n" + grammar_tree + "\n" + sufix
 
 
 
