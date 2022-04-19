@@ -1,5 +1,11 @@
+#############################################################
+#
+# A dictionary of types for Hexagon instructions.
+#
+#############################################################
 
-from RoseType import RoseType
+
+from RoseTypes import *
 
 from RoseHexCommon import *
 
@@ -7,13 +13,13 @@ from RoseHexCommon import *
 
 # Define types used in HVX pseudocode
 HexTypes = {
-    'v': RoseType.getBitVectorTy(HVXVectorWidth >> 1),
-    'w': RoseType.getBitVectorTy(32),
-    'uw': RoseType.getBitVectorTy(32),
-    'h': RoseType.getBitVectorTy(16),
-    'uh': RoseType.getBitVectorTy(16),
-    'b': RoseType.getBitVectorTy(8),
-    'ub': RoseType.getBitVectorTy(8),
+    'v': RoseBitVectorType.create(HVXVectorWidth >> 1),
+    'w': RoseBitVectorType.create(32),
+    'uw': RoseBitVectorType.create(32),
+    'h': RoseBitVectorType.create(16),
+    'uh': RoseBitVectorType.create(16),
+    'b': RoseBitVectorType.create(8),
+    'ub': RoseBitVectorType.create(8),
 }
 
 
