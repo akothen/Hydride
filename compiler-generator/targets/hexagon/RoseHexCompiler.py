@@ -6,7 +6,7 @@
 ###################################################################
 
 
-from RoseType import RoseType
+from RoseTypes import *
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -30,8 +30,8 @@ class HexRoseContext(RoseContext):
     self.SizeExtended = dict()
     # Integer constant length can change depending on the context in which 
     # is used.
-    self.NumberType = RoseType.getIntegerTy(32)
-    #self.IndexNumberType = RoseType.getIntegerTy(32)
+    self.NumberType = RoseIntegerType.create(32)
+    #self.IndexNumberType = RoseIntegerType.create(32)
     self.CompileIndexFlag = False
     super().__init__()
   
@@ -104,7 +104,7 @@ def CompileNumber(Num, Context : HexRoseContext):
   print("NUM:")
   print(Num)
   if Context.isCompileIndexFlagSet():
-    ConstantVal = RoseConstant.create(Num.val, RoseType.getIntegerTy(32))
+    ConstantVal = RoseConstant.create(Num.val, RoseIntegerType.create(32))
     #Context.getIndexNumberType())
   else:
     ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
@@ -122,7 +122,7 @@ def CompileVar(Variable, Context):
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
   CompiledVar = RoseValue.create(Variable.name, \
-          RoseType.getBitVectorTy(Context.getMaxVectorLength()))
+          RoseBitVectorType.create(Context.getMaxVectorLength()))
 
   # Add the variable info to the context
   Context.addVariable(Variable.name, Variable.id)
@@ -262,7 +262,7 @@ def CompileIndex(IndexExpr, Context : HexRoseContext):
   # The compiled indices are supposed to be integer values
   # and not bitvectors. However, in some cases it can be a bitvector
   # where indices are in a bitvector. We just change cast the index value.
-  if CompiledIndex.getType().isBitVectorTy():
+  if isinstance(CompiledIndex.getType(), RoseBitVectorType):
     print("GENERATING CAST")
     # Indices can only be variables for them to be cast
     assert type(IndexExpr) == Var
@@ -272,7 +272,7 @@ def CompileIndex(IndexExpr, Context : HexRoseContext):
     # Generate the casting op
     #Name = "cast." + CompiledIndex.getName()
     CastOp = RoseCastOp.create(Context.genName(), CompiledIndex, \
-                  RoseType.getIntegerTy(CompiledIndex.getType().getBitwidth()))
+                  RoseIntegerType.create(CompiledIndex.getType().getBitwidth()))
     # Add this op to the IR and to the context
     Context.addAbstractionToIR(CastOp)
     Context.addCompiledAbstraction(ID, CastOp)
@@ -309,7 +309,7 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   BitVector = CompileExpression(BitSliceExpr.bv, Context)
   print("COMPILED BITVECTOR")
   BitVector.print()
-  assert BitVector.getType().isBitVectorTy()
+  assert isinstance(BitVector.getType(), RoseBitVectorType)
   print("BITVEVTOR BITWODTH:")
   print(BitVector.getType().getBitwidth())
 
@@ -516,7 +516,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
   # The given bitslice index could be a number
   if type(ExprIndex) == Number:
     print("--NUMBER")
-    return RoseConstant.create(ExprIndex.val, RoseType.getIntegerTy(32))
+    return RoseConstant.create(ExprIndex.val, RoseIntegerType.create(32))
   
   # The given bitslice index could be a variable
   if type(ExprIndex) == Var:
@@ -524,9 +524,9 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
     if Context.isVariableDefined(ExprIndex.name):
       ID = Context.getVariableID(ExprIndex.name)
       Index = Context.getCompiledAbstractionForID(ID)
-      if Index.getType().isBitVectorTy():
+      if isinstance(Index.getType(), RoseBitVectorType):
         return RoseCastOp.create(Context.genName(), Index, \
-                            RoseType.getIntegerTy(Index.getType().getBitwidth()))
+                            RoseIntegerType.create(Index.getType().getBitwidth()))
       return Index
     return RoseUndefValue()
   
@@ -539,15 +539,15 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
       if Context.isVariableDefined(ExprIndex.a.name):
         ID = Context.getVariableID(ExprIndex.a.name)
         Operand1 = Context.getCompiledAbstractionForID(ID)
-        if Operand1.getType().isBitVectorTy():
+        if isinstance(Operand1.getType(), RoseBitVectorType):
           print("CAST")
           Operand1 = RoseCastOp.create(Context.genName(), Operand1, \
-                              RoseType.getIntegerTy(Operand1.getType().getBitwidth()))
+                              RoseIntegerType.create(Operand1.getType().getBitwidth()))
       else:
         return RoseUndefValue()
     elif type(ExprIndex.a) == Number:
       print("EXPRESSION A IS A NUMBER")
-      Operand1 = RoseConstant.create(ExprIndex.a.val, RoseType.getIntegerTy(32))
+      Operand1 = RoseConstant.create(ExprIndex.a.val, RoseIntegerType.create(32))
     elif Recurse == True and type(ExprIndex.a) == BinaryExpr:
       Operand1 = GetBitSliceIndex(ExprIndex.a, Context, Recurse=False)
       if Operand1 == RoseUndefValue():
@@ -562,14 +562,14 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
       if Context.isVariableDefined(ExprIndex.b.name):
         ID = Context.getVariableID(ExprIndex.b.name)
         Operand2 = Context.getCompiledAbstractionForID(ID)
-        if Operand2.getType().isBitVectorTy():
+        if isinstance(Operand2.getType(), RoseBitVectorType):
           Operand2 = RoseCastOp.create(Context.genName(), Operand2, \
-                              RoseType.getIntegerTy(Operand2.getType().getBitwidth()))
+                              RoseIntegerType.create(Operand2.getType().getBitwidth()))
       else:
         return RoseType.getUndefTy()
     elif type(ExprIndex.b) == Number:
       print("EXPRESSION B IS A NUMBER")
-      Operand2 = RoseConstant.create(ExprIndex.b.val, RoseType.getIntegerTy(32))
+      Operand2 = RoseConstant.create(ExprIndex.b.val, RoseIntegerType.create(32))
     elif Recurse == True and type(ExprIndex.b) == BinaryExpr:
       Operand2 = GetBitSliceIndex(ExprIndex.b, Context, Recurse=False)
       if Operand2 == RoseUndefValue():
@@ -690,7 +690,7 @@ def GetExpressionType(Expr, Context : HexRoseContext):
     Bitwidth = ComputeBitSliceWidth(Low, High)
     print("Bitwidth from compute Bitwidth slice:")
     print(Bitwidth)
-    return RoseType.getBitVectorTy(Bitwidth)
+    return RoseBitVectorType.create(Bitwidth)
   
   return RoseType.getUndefTy()
 
@@ -707,11 +707,11 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
   and RHS.a.funcname in ZeroExtendsSize \
    and RHS.b.funcname in ZeroExtendsSize):
       RHSType = GetExpressionType(RHS.a, Context)
-      if not RHSType.isUndefTy():
-        return RoseType.getBitVectorTy(RHSType.getBitwidth() * 2)
+      if not isinstance(RHSType, RoseUndefinedType):
+        return RoseBitVectorType.create(RHSType.getBitwidth() * 2)
       RHSType = GetExpressionType(RHS.b, Context)
-      if not RHSType.isUndefTy():
-        return RoseType.getBitVectorTy(RHSType.getBitwidth() * 2)
+      if not isinstance(RHSType, RoseUndefinedType):
+        return RoseBitVectorType.create(RHSType.getBitwidth() * 2)
   
   # Now if we have a binary op performed with constant (integer),
   # we must take into account the minimum bitwidth required to
@@ -719,24 +719,24 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
   if type(RHS.a) == Number \
   and (type(RHS.b) == BitSlice or type(RHS.b) == BitIndex):
     RHSType = GetExpressionType(RHS.b, Context)
-    if RHSType.isUndefTy():
+    if isinstance(RHSType, RoseUndefinedType):
       return RoseType.getUndefTy()
     # Binary operation can only be performed on bitvectors and integers
     # so getting bitwidth is OK.
     NumIntBits = RHS.a.val.bit_length()
     if NumIntBits > RHSType.getBitwidth():
       # We need to extend the size of the other operand
-      if RHSType.isBitVectorTy():
-        return RoseType.getBitVectorTy(NumIntBits)
+      if isinstance(RHSType, RoseBitVectorType):
+        return RoseBitVectorType.create(NumIntBits)
       assert RHSType.isIntegerTy()
-      return RoseType.getIntegerTy(NumIntBits)
+      return RoseIntegerType.create(NumIntBits)
   # Handle the other case
   if type(RHS.b) == Number \
    and (type(RHS.a) == BitSlice or type(RHS.a) == BitIndex):
     RHSType = GetExpressionType(RHS.a, Context)
     print("RHS TYPE:")
     RHSType.print()
-    if RHSType.isUndefTy():
+    if isinstance(RHSType, RoseUndefinedType):
       return RoseType.getUndefTy()
     # Binary operation can only be performed on bitvectors and integers
     # so getting bitwidth is OK.
@@ -745,10 +745,10 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
     print(NumIntBits)
     if NumIntBits > RHSType.getBitwidth():
       # We need to extend the size of the other operand
-      if RHSType.isBitVectorTy():
-        return RoseType.getBitVectorTy(NumIntBits)
+      if isinstance(RHSType, RoseBitVectorType):
+        return RoseBitVectorType.create(NumIntBits)
       assert RHSType.isIntegerTy()
-      return RoseType.getIntegerTy(NumIntBits)
+      return RoseIntegerType.create(NumIntBits)
 
   # Account for the operands' bitwidths
   RHSAType = GetExpressionType(RHS.a, Context)
@@ -782,25 +782,25 @@ def GetRHSNumberType(Update, Context : HexRoseContext):
   if type(RHS) == Var or type(RHS) == BitIndex \
   or type(RHS) == BitSlice:
     RHSType = GetExpressionType(RHS, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     return GetExpressionType(LHS, Context)
 
   if type(RHS) == UnaryExpr:
     RHSType = GetExpressionType(RHS.a, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     return GetExpressionType(LHS, Context)
   
   if type(RHS) == BinaryExpr:
     RHSType = GetRHSTypeForSpecialCases(RHS, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     RHSType = GetExpressionType(RHS.a, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     RHSType = GetExpressionType(RHS.b, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     # Binary ops outside of comparison ops have the 
     # same type as operands, so we could try that.
@@ -815,10 +815,10 @@ def GetRHSNumberType(Update, Context : HexRoseContext):
     RHSType = GetExpressionType(RHS.then, Context)
     print("SELECT RHS THEN:")
     RHSType.print()
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     RHSType = GetExpressionType(RHS.otherwise, Context)
-    if not RHSType.isUndefTy():
+    if not isinstance(RHSType, RoseUndefinedType):
       return RHSType
     print("SELECT LHS BEING ANALYZED")
     return GetExpressionType(LHS, Context)
@@ -833,7 +833,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
   PredictedType = GetRHSNumberType(Update, Context)
   print("GET RHS TYPE:")
   PredictedType.print()
-  if not PredictedType.isUndefTy():
+  if not isinstance(PredictedType, RoseUndefinedType):
     Context.setNumberType(PredictedType)
   else:
     print("!!!!!!! LHS TYPE UNDEFINED")
@@ -1029,7 +1029,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
       # Get the high index
       assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
       ElemType = Context.getElemTypeOfVariable(BitVector.getName())
-      assert ElemType.isBitVectorTy()
+      assert isinstance(ElemType, RoseBitVectorType)
       IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
       HighIndex = RoseAddOp.create(Context.genName(), \
                                         [LowIndex, IndexDiff])
@@ -1320,7 +1320,8 @@ def CompileCall(CallStmt, Context : HexRoseContext):
   for Arg in CallStmt.args:
     CompiledArg = CompileExpression(Arg, Context)
     # Argument type cannot be undefined or void
-    assert not CompiledArg.getType().isVoidTy() and not CompiledArg.getType().isUndefTy()
+    assert not CompiledArg.getType().isVoidTy() \
+      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
     ArgValuesList.append(CompiledArg)
   print("ARGUMENTS COMPILED")
 
@@ -1519,8 +1520,8 @@ def CompileSemantics(Sema):
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
     IsOutParam = False
-    #ParamType = RoseType.getBitVectorTy(RootContext.getMaxVectorLength())
-    ParamType = RoseType.getBitVectorTy(Sema.paramsizes[Index])
+    #ParamType = RoseBitVectorType.create(RootContext.getMaxVectorLength())
+    ParamType = RoseBitVectorType.create(Sema.paramsizes[Index])
     # Create a new rosette value
     print("Param:")
     print(Param)
@@ -1546,8 +1547,9 @@ def CompileSemantics(Sema):
 
   if Sema.retsize != None:
     print(Sema.retsize)
-    RetType = RoseType.getBitVectorTy(Sema.retsize)  
+    RetType = RoseBitVectorType.create(Sema.retsize)  
     #HexTypes[Sema.rettype]
+
     print("adding dst to context")
     RetValue = RoseValue.create(Sema.retname, RetType)
   else:
@@ -1617,7 +1619,7 @@ CompileAbstractions = {
 def HandleToSignExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
   
@@ -1627,7 +1629,7 @@ def HandleToSignExtend(Bitwidth : int):
 def HandleToZeroExtend(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() < Bitwidth
     return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
   
@@ -1638,8 +1640,8 @@ def HandleToZeroExtend(Bitwidth : int):
 def HandleToMin(_):
   def LamdaImplFunc(Name : str, Operands : list):
     assert len(Operands) == 2
-    if Operands[0].getType().isBitVectorTy() \
-    and Operands[1].getType().isBitVectorTy():
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
       return RoseBVSminOp.create(Name, Operands)
     return RoseMinOp.create(Name, Operands)
   
@@ -1650,8 +1652,8 @@ def HandleToMin(_):
 def HandleToMax(_):
   def LamdaImplFunc(Name : str, Operands : list):
     assert len(Operands) == 2
-    if Operands[0].getType().isBitVectorTy() \
-    and Operands[1].getType().isBitVectorTy():
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
       return RoseBVSmaxOp.create(Name, Operands)
     return RoseMaxOp.create(Name, Operands)
   
@@ -1661,7 +1663,7 @@ def HandleToMax(_):
 def HandleToSSaturate(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() >= Bitwidth
     return RoseBVSSaturateOp.create(Name, Value, Bitwidth)
   
@@ -1671,7 +1673,7 @@ def HandleToSSaturate(Bitwidth : int):
 def HandleToUSaturate(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() >= Bitwidth
     return RoseBVUSaturateOp.create(Name, Value, Bitwidth)
   
@@ -1681,7 +1683,7 @@ def HandleToUSaturate(Bitwidth : int):
 def HandleToTruncate(Bitwidth : int):
   def LamdaImplFunc(Name : str, Args):
     [Value] = Args
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() > Bitwidth
     return RoseBVTruncateOp.create(Name, Value, Bitwidth)
 
@@ -1701,7 +1703,7 @@ def HandleToInt(_):
   def LamdaImplFunc(_, Operands : list):
     assert len(Operands) == 1
     [Value] = Operands
-    assert Value.getType().isBitVectorTy() == True
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
     return Value
   
   return LamdaImplFunc
@@ -1710,8 +1712,8 @@ def HandleToInt(_):
 def HandleToRemainder(_):
   def LamdaImplFunc(Name : str, Operands : list):
     assert len(Operands) == 2
-    if Operands[0].getType().isBitVectorTy() \
-    and Operands[1].getType().isBitVectorTy():
+    if isinstance(Operands[0].getType(), RoseBitVectorType) \
+    and isinstance(Operands[1].getType(), RoseBitVectorType):
       return RoseBVSremOp.create(Name, Operands[0], Operands[1])
     return RoseRemOp.create(Name, Operands)
   
