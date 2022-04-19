@@ -1,7 +1,11 @@
+#############################################################
+#
+# A tool for compiling Hexagon semantics to Rosette IR.
+#
+#############################################################
 
-from PseudoCodeParser import GetSpecFrom
-from RoseHexCompiler import CompileSemantics
 
+from RoseHexCompiler import CompileSemantics, HexRoseContext
 
 test1 ={
  'Vd.b=vadd(Vu.b,Vv.b)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = '
@@ -1194,13 +1198,44 @@ test213 = {
 }
 
 
-def Compile():
+def Compile2():
   Test = test213#test168#test142#test80#test108#test107#test106  
   for Inst, Pseudocode in Test.items():
     Spec = GetSpecFrom(Inst, Pseudocode)
     print(Spec)
     CompiledFunction = CompileSemantics(Spec)
     return CompiledFunction
+
+
+from RoseHexPseudoCodeParser import *
+
+def Compile():
+   Test = test213
+   SemaList = list()
+   for Inst, Pseudocode in Test.items():
+      Spec = GetSpecFrom(Inst, Pseudocode)
+      SemaList.append(Spec)
+   print("SemaList lngth:")
+   print(len(SemaList))
+   from RoseFunctionInfo import RoseFunctionInfo
+   FunctionInfoList = list()
+   for Index, Spec in enumerate(SemaList):
+      RootContext = HexRoseContext()
+      print("RootContext---:")
+      print(RootContext)
+      print("Spec:")
+      print(Spec)
+      FunctionInfo = RoseFunctionInfo()
+      CompiledFunction = CompileSemantics(Spec, RootContext)
+      FunctionInfo.addContext(RootContext)
+      FunctionInfo.addRawSemantics(Spec)
+      FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+      print("Index*****")
+      print(Index)
+      print("CompiledFunction:")
+      CompiledFunction.print()
+      FunctionInfoList.append(FunctionInfo)
+   return FunctionInfoList
 
 
 if __name__ == '__main__':
