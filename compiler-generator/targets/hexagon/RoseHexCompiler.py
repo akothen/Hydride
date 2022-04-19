@@ -1323,7 +1323,7 @@ def CompileCall(CallStmt, Context : HexRoseContext):
   for Arg in CallStmt.args:
     CompiledArg = CompileExpression(Arg, Context)
     # Argument type cannot be undefined or void
-    assert not CompiledArg.getType().isVoidTy() \
+    assert not isinstance(CompiledArg.getType(), RoseVoidType) \
       and not isinstance(CompiledArg.getType(), RoseUndefinedType)
     ArgValuesList.append(CompiledArg)
   print("ARGUMENTS COMPILED")
@@ -1338,7 +1338,7 @@ def CompileCall(CallStmt, Context : HexRoseContext):
     return Operation
   
   # Check if this is a call to a builtin function
-  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList)
+  Operation = Builtins[CallStmt.funcname](Context.genName(), ArgValuesList, Context)
 
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
@@ -1555,7 +1555,7 @@ def CompileSemantics(Sema):
     print("adding dst to context")
     RetValue = RoseValue.create(Sema.retname, RetType)
   else:
-    RetType = RoseType.getVoidTy()
+    RetType = RoseVoidType.create()
     RetValue = RoseValue.create("", RetType)
     
   # Define a Rose function
@@ -1618,104 +1618,153 @@ CompileAbstractions = {
 
 
 def HandleToSignExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() < Bitwidth
-    return RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
+  
+  return LamdaImplFunc
+
+
+def HandleToSpecialSignExtend(_):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    # Increase the bitwidth by 2x. 
+    Bitwidth = 2 * Value.getType().getBitwidth()
+    Op = RoseBVSignExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToZeroExtend(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() < Bitwidth
-    return RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+    Op = RoseBVZeroExtendOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
-# TODO: Take into account signedness
 def HandleToMin(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : HexRoseContext):
     assert len(Operands) == 2
     if isinstance(Operands[0].getType(), RoseBitVectorType) \
     and isinstance(Operands[1].getType(), RoseBitVectorType):
-      return RoseBVSminOp.create(Name, Operands)
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        Op = RoseBVSminOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=True)
+      else:
+        Op = RoseBVUminOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
     return RoseMinOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
-# TODO: Take into account signedness
 def HandleToMax(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : HexRoseContext):
     assert len(Operands) == 2
     if isinstance(Operands[0].getType(), RoseBitVectorType) \
     and isinstance(Operands[1].getType(), RoseBitVectorType):
-      return RoseBVSmaxOp.create(Name, Operands)
+      print("Context.isValueSigned(Operands[0]):")
+      print(Context.isValueSigned(Operands[0]))
+      print("Context.isValueSigned(Operands[1]):")
+      print(Context.isValueSigned(Operands[1]))
+      if Context.isValueSigned(Operands[0]) == True \
+      or Context.isValueSigned(Operands[1]) == True:
+        Op = RoseBVSmaxOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=True)
+      else:
+        Op = RoseBVUmaxOp.create(Name, Operands)
+        Context.addSignednessInfoForValue(Op, IsSigned=False)
+      return Op
     return RoseMaxOp.create(Name, Operands)
   
   return LamdaImplFunc
 
 
 def HandleToSSaturate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() >= Bitwidth
-    return RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVSSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=True)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToUSaturate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() >= Bitwidth
-    return RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVUSaturateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToTruncate(Bitwidth : int):
-  def LamdaImplFunc(Name : str, Args):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() > Bitwidth
-    return RoseBVTruncateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVTruncateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
+    return Op
+
+  return LamdaImplFunc
+
+
+def HandleToSpecialTruncate(_):
+  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
+    [Value] = Args
+    assert isinstance(Value.getType(), RoseBitVectorType) == True
+    Bitwidth = int(Value.getType().getBitwidth() / 2)
+    assert Value.getType().getBitwidth() > Bitwidth
+    Op = RoseBVTruncateOp.create(Name, Value, Bitwidth)
+    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
+    return Op
 
   return LamdaImplFunc
 
 
 def HandleToAbs(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : HexRoseContext):
     assert len(Operands) == 1
     [Value] = Operands
-    return RoseAbsOp.create(Name, Value)
-  
-  return LamdaImplFunc
-
-
-def HandleToInt(_):
-  def LamdaImplFunc(_, Operands : list):
-    assert len(Operands) == 1
-    [Value] = Operands
-    assert isinstance(Value.getType(), RoseBitVectorType) == True
-    return Value
+    if isinstance(Value.getType(), RoseBitVectorType):
+      Op = RoseBVAbsOp.create(Name, Value)
+    else:
+      Op = RoseAbsOp.create(Name, Value)
+    Context.addSignednessInfoForValue(Op, IsSigned=False)
+    return Op
   
   return LamdaImplFunc
 
 
 def HandleToRemainder(_):
-  def LamdaImplFunc(Name : str, Operands : list):
+  def LamdaImplFunc(Name : str, Operands : list, Context : HexRoseContext):
     assert len(Operands) == 2
     if isinstance(Operands[0].getType(), RoseBitVectorType) \
     and isinstance(Operands[1].getType(), RoseBitVectorType):
-      return RoseBVSremOp.create(Name, Operands[0], Operands[1])
+      Op = RoseBVSremOp.create(Name, Operands[0], Operands[1])
+      Context.addSignednessInfoForValue(Op, IsSigned=True)
+      return Op
     return RoseRemOp.create(Name, Operands)
   
   return LamdaImplFunc
@@ -1747,8 +1796,6 @@ Builtins = {
   'MAX' : HandleToMax(None),
 
   'ABS' : HandleToAbs(None),
-
-  'Int' : HandleToInt(None),
 
   'REMAINDER' : HandleToRemainder(None),
 }
