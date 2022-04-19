@@ -457,6 +457,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
       # Now generate the bvextract op
       Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
                                         LowIndex, HighIndex, BitwidthValue)
+      Context.addSignednessInfoForValue(BitVector, \
+                             HexTypeSignedness[InnerBitIndex.obj.elemtype])
       # Add this op to context for the inner bitindex
       print(InnerBitIndex)
       Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
@@ -497,7 +499,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
       # Now, generate the extract op. 
       Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
                                           LowIndex, HighIndex, BitwidthValue)
-
+      Context.addSignednessInfoForValue(Operation, \
+                             HexTypeSignedness[IndexExpr.obj.elemtype])
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
 
@@ -566,7 +569,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
           Operand2 = RoseCastOp.create(Context.genName(), Operand2, \
                               RoseIntegerType.create(Operand2.getType().getBitwidth()))
       else:
-        return RoseType.getUndefTy()
+        return RoseUndefinedType.create()
     elif type(ExprIndex.b) == Number:
       print("EXPRESSION B IS A NUMBER")
       Operand2 = RoseConstant.create(ExprIndex.b.val, RoseIntegerType.create(32))
@@ -669,7 +672,7 @@ def GetExpressionType(Expr, Context : HexRoseContext):
         ID = Context.getVariableID(Expr.name)
         return Context.getCompiledAbstractionForID(ID).getType()
       else:
-        return RoseType.getUndefTy()
+        return RoseUndefinedType.create()
   
   if type(Expr) == BitIndex:
     return GetBitIndexType(Expr, Context)
@@ -678,13 +681,13 @@ def GetExpressionType(Expr, Context : HexRoseContext):
     print("GETTING BIT SLICE LOW INDEX")
     Low = GetBitSliceIndex(Expr.lo, Context)
     if Low == RoseUndefValue():
-      return RoseType.getUndefTy()
+      return RoseUndefinedType.create()
     print("LOW:")
     Low.print()
     print("GETTING BIT SLICE HIGH INDEX")
     High = GetBitSliceIndex(Expr.hi, Context)
     if High == RoseUndefValue():
-      return RoseType.getUndefTy()
+      return RoseUndefinedType.create()
     print("HIGH:")
     High.print()
     Bitwidth = ComputeBitSliceWidth(Low, High)
@@ -692,7 +695,7 @@ def GetExpressionType(Expr, Context : HexRoseContext):
     print(Bitwidth)
     return RoseBitVectorType.create(Bitwidth)
   
-  return RoseType.getUndefTy()
+  return RoseUndefinedType.create()
 
 
 def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
@@ -720,7 +723,7 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
   and (type(RHS.b) == BitSlice or type(RHS.b) == BitIndex):
     RHSType = GetExpressionType(RHS.b, Context)
     if isinstance(RHSType, RoseUndefinedType):
-      return RoseType.getUndefTy()
+      return RoseUndefinedType.create()
     # Binary operation can only be performed on bitvectors and integers
     # so getting bitwidth is OK.
     NumIntBits = RHS.a.val.bit_length()
@@ -737,7 +740,7 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
     print("RHS TYPE:")
     RHSType.print()
     if isinstance(RHSType, RoseUndefinedType):
-      return RoseType.getUndefTy()
+      return RoseUndefinedType.create()
     # Binary operation can only be performed on bitvectors and integers
     # so getting bitwidth is OK.
     NumIntBits = RHS.b.val.bit_length()
@@ -752,18 +755,18 @@ def GetRHSTypeForSpecialCases(RHS, Context : HexRoseContext):
 
   # Account for the operands' bitwidths
   RHSAType = GetExpressionType(RHS.a, Context)
-  if RHSAType == RoseType.getUndefTy():
-    return RoseType.getUndefTy()
+  if RHSAType == RoseUndefinedType.create():
+    return RoseUndefinedType.create()
   RHSBType = GetExpressionType(RHS.b, Context)
-  if RHSBType == RoseType.getUndefTy():
-    return RoseType.getUndefTy()
+  if RHSBType == RoseUndefinedType.create():
+    return RoseUndefinedType.create()
   # Shorter type will be extended
   if RHSAType.getBitwidth() < RHSBType.getBitwidth():
     return RHSBType
   if RHSAType.getBitwidth() > RHSBType.getBitwidth():
     return RHSAType
 
-  return RoseType.getUndefTy()
+  return RoseUndefinedType.create()
 
 
 # We try to work out the type of the numbers in RHS.
@@ -806,7 +809,7 @@ def GetRHSNumberType(Update, Context : HexRoseContext):
     # same type as operands, so we could try that.
     if RHS.op not in ComparisonOps:
       return GetExpressionType(LHS, Context)
-    return RoseType.getUndefTy()
+    return RoseUndefinedType.create()
   
   # See if the RHS is a select op
   if type(RHS) == Select:
@@ -824,7 +827,7 @@ def GetRHSNumberType(Update, Context : HexRoseContext):
     return GetExpressionType(LHS, Context)
 
   # If we do not know what the RHS is, we just give up.
-  return RoseType.getUndefTy()
+  return RoseUndefinedType.create()
 
 
 def CompileUpdate(Update, Context : HexRoseContext):
@@ -1515,7 +1518,6 @@ def CompileSemantics(Sema):
   # Some sanity checks
   assert len(Sema.params) > 0
   assert len(Sema.params) == len(Sema.paramsizes)
-  ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
@@ -1526,10 +1528,10 @@ def CompileSemantics(Sema):
     print("Param:")
     print(Param)
     if type(Param) == ElemTypeInfo:
-      ParamVal = RoseArgument.create(Param.obj.name, ParamType, RoseUndefValue(), Index)
+      ParamVal = RoseArgument.create(Param.obj.name, ParamType)
     else:
       assert type(Param) == Var
-      ParamVal = RoseArgument.create(Param.name, ParamType, RoseUndefValue(), Index)
+      ParamVal = RoseArgument.create(Param.name, ParamType)
       # Add the element type info
       print("ParamVal.getName():")
       print(ParamVal.getName())
@@ -1553,7 +1555,6 @@ def CompileSemantics(Sema):
     print("adding dst to context")
     RetValue = RoseValue.create(Sema.retname, RetType)
   else:
-    ReturnsVoid = True
     RetType = RoseType.getVoidTy()
     RetValue = RoseValue.create("", RetType)
     
