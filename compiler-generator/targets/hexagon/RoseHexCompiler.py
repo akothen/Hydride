@@ -6,6 +6,7 @@
 ###################################################################
 
 
+from contextvars import Context
 from RoseTypes import *
 from RoseValue import RoseValue
 from RoseAbstractions import *
@@ -96,7 +97,7 @@ class HexRoseContext(RoseContext):
       print("HERE")
       ChildContext.replaceParentAbstractionsWithChild()
       super().destroyContext(ContextName)
-    
+
 
 
 def CompileNumber(Num, Context : HexRoseContext):
@@ -108,6 +109,7 @@ def CompileNumber(Num, Context : HexRoseContext):
     #Context.getIndexNumberType())
   else:
     ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
+  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() < 0))
   return ConstantVal
 
 
@@ -1511,6 +1513,38 @@ def CompileStatement(Stmt, Context : HexRoseContext):
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
+def FixFunctionsWithReductionPattern(Function : RoseFunction, Context : HexRoseContext):
+  print("FixFunctionsWithReductionPattern:")
+  # There are times when the return values of the functions are
+  # the same as the function argument.
+  if not isinstance(Function.getReturnValue(), RoseArgument):
+    return
+  for Arg in Function.getArgs():
+    print("Arg:")
+    print(id(Arg))
+    Arg.print()
+    print("Function.getReturnValue():")
+    Function.getReturnValue().print()
+    if Arg == Function.getReturnValue():
+      print("EQUAL ARG AND RETURN VALUE")
+      # Create an alternative to the return value 
+      NewReturnValue = RoseValue.create(Context.genName("%" + "dst"), Arg.getType())
+      # Replace the uses of the Arg in bvinsert ops and return ops
+      ArgUsers = Function.getUsersOf(Arg)
+      for User in ArgUsers:
+        if isinstance(User, RoseBVInsertSliceOp):
+          if User.getInputBitVector() == Arg:
+            User.setOperand(1, NewReturnValue)
+          continue
+        if isinstance(User, RoseReturnOp):
+          User.setOperand(0, NewReturnValue)
+          Function.setRetVal(NewReturnValue)
+          continue
+  print("NEW FUNCTIONS:")
+  Function.print()
+  return
+
+
 def CompileSemantics(Sema):
   # Create the root context
   RootContext = HexRoseContext()
@@ -1520,8 +1554,8 @@ def CompileSemantics(Sema):
   assert len(Sema.params) == len(Sema.paramsizes)
   ParamValues = []
   ParamsIDs = []
+  OutputParam = RoseUndefValue()
   for Index, Param in enumerate(Sema.params):
-    IsOutParam = False
     #ParamType = RoseBitVectorType.create(RootContext.getMaxVectorLength())
     ParamType = RoseBitVectorType.create(Sema.paramsizes[Index])
     # Create a new rosette value
@@ -1539,21 +1573,24 @@ def CompileSemantics(Sema):
       if ParamVal.getName() in Sema.scalarregs:
         RootContext.addElemTypeOfVariable(ParamVal.getName(), ParamType)
     ParamVal.print()
+    if ParamVal.getName() == Sema.retname:
+      OutputParam = ParamVal
     #RootContext.addElemTypeOfVariable(ParamVal.getName(), HexTypes[Param.elemtype])
-    if not IsOutParam:
-      if type(Param) == ElemTypeInfo:
-        ParamsIDs.append(Param.obj.id)
-      else:
-        ParamsIDs.append(Param.id)
-      ParamValues.append(ParamVal)
+    if type(Param) == ElemTypeInfo:
+      ParamsIDs.append(Param.obj.id)
+    else:
+      ParamsIDs.append(Param.id)
+    ParamValues.append(ParamVal)
 
   if Sema.retsize != None:
     print(Sema.retsize)
-    RetType = RoseBitVectorType.create(Sema.retsize)  
-    #HexTypes[Sema.rettype]
-
-    print("adding dst to context")
-    RetValue = RoseValue.create(Sema.retname, RetType)
+    if isinstance(OutputParam, RoseUndefValue):
+      RetType = RoseBitVectorType.create(Sema.retsize)  
+      #HexTypes[Sema.rettype]
+      print("adding dst to context")
+      RetValue = RoseValue.create(Sema.retname, RetType)
+    else:
+      RetValue = OutputParam
   else:
     RetType = RoseVoidType.create()
     RetValue = RoseValue.create("", RetType)
@@ -1561,8 +1598,8 @@ def CompileSemantics(Sema):
   # Define a Rose function
   print("ParamValues:")
   print(ParamValues)
-  RootFunction = RoseFunction.create(Sema.intrin, ParamValues, RetType)
-  RootFunction.setRetValName(RetValue.getName())
+  RootFunction = RoseFunction.create(Sema.intrin, ParamValues, RetValue.getType())
+  RootFunction.setRetVal(RetValue)
 
   # Add return value to the root context
   ReturnID = "return." + RootFunction.getReturnValue().getName()
@@ -1594,6 +1631,17 @@ def CompileSemantics(Sema):
   Op = RoseReturnOp.create(RetValue)
   # NO meed to add this operation to the context but add it to the function
   CompiledFunction.addAbstraction(Op)
+
+  print("RetValue:")
+  print(id(RetValue))
+  print(RetValue)
+  print(type(RetValue))
+  print("OutputParam:")
+  print(id(OutputParam))
+  print(OutputParam)
+  print(type(OutputParam))
+  # Fix some reduction patterns specific to hexagon
+  FixFunctionsWithReductionPattern(CompiledFunction, RootContext)
 
   print("\n\n\n\n\n")
   CompiledFunction.print()
