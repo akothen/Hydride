@@ -578,6 +578,18 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
     if Op in Visited:
       print("ALREADY VISITED")
       continue
+  
+    if len(Op.getOperands()) == 1:
+      if not isinstance(Op.getType(), RoseVoidType):
+        Operand = Op.getOperand(0)
+        if Op not in BVValToBitwidthVal:
+          UnknownVal.add(Op)
+          UnknownVal.add(Operand)
+        else:
+          BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+      continue
 
     if Op.isSizeChangingOp():
       print("++++++=isSizeChangingOp OP IN OPLIST:")
@@ -968,24 +980,24 @@ def ExtractConstantsFromAccumulationCode(Function : RoseFunction,  BVValToBitwid
                           [LowIndex, Op.getOperand(Op.getBitwidthPos())])
           LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), \
                 [Offset, RoseConstant.create(1, Op.getOperand(Op.getBitwidthPos()).getType())])
-          ParentLoop = Loop.getParentOfType(RoseForLoop)
-          assert not isinstance(ParentLoop, RoseUndefRegion)
+          #ParentLoop = Loop.getParentOfType(RoseForLoop)
+          #assert not isinstance(ParentLoop, RoseUndefRegion)
           Op.setOperand(Op.getLowIndexPos(), LowIndex)
           Op.setOperand(Op.getHighIndexPos(), LastIdx)
-          Op.setOperand(Op.getBitwidthPos(), ParentLoop.getStep())
-          Op.setType(RoseBitVectorType.create(ParentLoop.getStep()))
+          Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
+          Op.setType(RoseBitVectorType.create(Loop.getStep()))
           ExtractOp.setOperand(ExtractOp.getLowIndexPos(), LowIndex)
           ExtractOp.setOperand(ExtractOp.getHighIndexPos(), LastIdx)
-          ExtractOp.setOperand(ExtractOp.getBitwidthPos(), ParentLoop.getStep())
-          ExtractOp.setType(RoseBitVectorType.create(ParentLoop.getStep()))
-          Offset.setOperand(1, ParentLoop.getStep())
+          ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Loop.getStep())
+          ExtractOp.setType(RoseBitVectorType.create(Loop.getStep()))
+          Offset.setOperand(1, Loop.getStep())
           Preheader.addOperationBefore(Offset, Op)
           Preheader.addOperationBefore(LastIdx, Op)
           Preheader.addOperationBefore(ExtractOp, Op)
           Op.setOperand(0, ExtractOp)
           BVValToBitwidthVal[Op] = NewArg
           BVValToBitwidthVal[Op.getInsertValue()] = NewArg
-          BVValToBitwidthVal[ExtractOp] = ParentLoop.getStep()
+          BVValToBitwidthVal[ExtractOp] = Loop.getStep()
           Visited.add(Op)
           Visited.add(ExtractOp)
           Visited.add(LastIdx)
