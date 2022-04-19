@@ -3,6 +3,13 @@ from Instructions import *
 
 
 vector_load_sem =  [
+
+"(define (scalar-load mem mem_size index type_size)",
+  "(define total_num_elems (/ mem_size type_size))",
+   "(define result",
+    "(ext-bv mem (- (- total_num_elems  1) index) type_size))",
+    "result",
+    ")",
     "(define (vector-load mem mem_size start num_elems type_size)",
     "(define result",
     "(apply",

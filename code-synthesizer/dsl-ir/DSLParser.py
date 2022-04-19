@@ -1,4 +1,5 @@
 from Instructions import DSLInstruction
+import json
 
 
 
@@ -9,6 +10,21 @@ def create_dsl_inst(inst_dict, dsl_name, is_simd):
 
     return dsl_inst
 
+
+def parse_cost(dsl_inst_cost, hw_name = "Skylake"):
+    cost_list = eval(dsl_inst_cost)
+
+    if cost_list == None:
+        return None
+
+    if len(cost_list) == 0:
+        return None
+
+    for cost_obj in cost_list:
+        if hw_name in cost_obj:
+            return cost_obj[hw_name]['l']
+
+    return None
 
 def populate_dsl_inst(dsl_inst , sub_inst_dict):
     for subinst_name in sub_inst_dict:
@@ -26,7 +42,7 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
                              lanesize_index = sub_obj['lanesize_index'],
                              in_precision_index = sub_obj['in_precision_index'],
                              out_precision_index = sub_obj['out_precision_index'],
-                             cost = sub_obj['Cost']
+                             cost = parse_cost(sub_obj['Cost'])
                              )
 
     return dsl_inst

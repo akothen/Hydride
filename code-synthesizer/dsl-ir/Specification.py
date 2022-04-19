@@ -16,6 +16,9 @@ class Specification:
         self.spec_invokation = spec_invokation
 
 
+    def get_output_size(self):
+        return self.output_precision * self.output_shape[0] * self.output_shape[1]
+
 
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
         operations = []

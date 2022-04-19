@@ -1,13 +1,15 @@
 from Types import *
 from Instructions import *
 from PredefinedDSL import *
+import random
 
 class Synthesizer:
 
     def __init__(self, spec = None, dsl_operators = [],
                  struct_definer = None, grammar_generator = None,
                  vectorization_factor = 8,
-                 depth = 6):
+                 depth = 6,
+                 contexts_per_dsl_inst = None):
 
         self.spec = spec
         self.dsl_operators = dsl_operators
@@ -16,6 +18,10 @@ class Synthesizer:
         self.VF = vectorization_factor
         self.depth = depth
         self.output_slice_length = self.VF * self.spec.output_precision
+        self.contexts_per_dsl_inst = contexts_per_dsl_inst
+        self.input_sizes = [shape[0] * shape[1] * self.spec.input_precision for shape in self.spec.input_shapes]
+
+        self.output_size = self.spec.get_output_size()
 
 
     def get_memory_loads(self):
@@ -26,12 +32,11 @@ class Synthesizer:
         num_elem_sizes = []
         precisions = []
 
-        input_sizes = [shape[0] * shape[1] * self.spec.input_precision for shape in self.spec.input_shapes]
 
 
 
         for lf in load_factors:
-            for input_size in input_sizes:
+            for input_size in self.input_sizes:
                 num_elem = int(lf * self.VF)
                 offset = "IDX_I"
                 precision = self.spec.input_precision
@@ -57,7 +62,7 @@ class Synthesizer:
 
 
 
-    def emit_synthesis_grammar(self):
+    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar"):
 
         ## Memory loading layer
         spec_memory_loads = self.get_memory_loads()
@@ -72,7 +77,7 @@ class Synthesizer:
         for dsl_inst in self.dsl_operators:
 
             if self.consider_dsl_inst(dsl_inst):
-                operator_contexts = self.get_supported_context_for_dsl(dsl_inst, limit = 2)
+                operator_contexts = self.get_supported_context_for_dsl(dsl_inst, limit = self.contexts_per_dsl_inst)
 
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx.context_args for ctx in operator_contexts]
@@ -84,11 +89,138 @@ class Synthesizer:
             memory_dsl_args_list = memory_dsl_args_list,
             operation_dsl_insts = operation_dsl_insts,
             operation_dsl_args_list = operation_dsl_args_list,
+            top_level_grammar_name = main_grammar_name,
             top_level_grammar_args = top_level_grammar_args,
             depth = self.depth
         )
 
 
+
+    def get_random_bv(self, bv_size, name = "rand_val"):
+        # If can be represented using Hex values
+        if bv_size % 4  == 0:
+            values = [str(i) for i in range(0,3)] #+ ["a","b","c", "d","e", "f"]
+            bv_val ="#x" +  "".join(random.choices(values, k = bv_size // 4))
+            return ConstBitVector(bv_val, bv_size, name = name )
+        else:
+            values = ["0","1"]
+            bv_val ="#b" + "".join(random.choices(values, k = bv_size))
+            return ConstBitVector(bv_val, bv_size, name = name )
+
+
+
+    def create_concrete_spec_inputs(self, prefix = "cex_0_"):
+
+        concrete_values = []
+        definitions = []
+
+
+        for arg in self.spec.args:
+            if isinstance(arg, BitVector):
+                bv_name = prefix+str(len(concrete_values))
+                const_bv =  self.get_random_bv(arg.size, name = bv_name )
+                concrete_values.append(const_bv)
+                definitions.append(const_bv.get_rkt_definition())
+
+
+
+        return (concrete_values, definitions)
+
+
+    def create_concrete_inputs_vector(self, args_list, i_range, i_step,
+                                      j_range, j_step):
+        definitions = []
+        concrete_vector_map = {}
+        for idx, arg_tupple in enumerate(args_list):
+            concrete_vector_map['args_{}'.format(idx)] = {}
+            for i in range(0,i_range, i_step):
+                concrete_vector_map['args_{}'.format(idx)][str(i)] = {}
+                for j in range(0, j_range, j_step):
+                    arg_names = [arg.name for arg in arg_tupple]
+
+                    env_name = "env_{}_i{}_j{}".format(idx, i, j)
+                    vector_args = arg_names + [str(i), str(j)]
+
+                    vector_def = "(define {} (vector {}))".format(env_name, " ".join(vector_args))
+                    definitions.append(vector_def)
+
+
+
+                    concrete_vector_map['args_{}'.format(idx)][str(i)][str(j)] = env_name
+
+
+        return concrete_vector_map , definitions
+
+    def emit_vector_load(self, value, value_size, start_index, num_elem, precision):
+        return "(vector-load {} {} {} {} {})".format(value, value_size, start_index, num_elem, precision)
+
+
+    def emit_assert_eq(self, lhs, rhs):
+        return "(assert (equal? {} {}))".format(lhs, rhs)
+
+    def emit_synthesis_constraints(self, args_tupple_list , vector_map, grammar_name = "synth_grammar"):
+
+        constraints = []
+
+        for idx, arg_tupple in enumerate(args_tupple_list):
+            spec_result = self.spec.emit_invoke_spec([arg.name for arg in arg_tupple])
+            vmap_entry = vector_map['args_{}'.format(idx)]
+            for i in vmap_entry:
+                for j in vmap_entry[i]:
+                    result_offset = (int(i) * self.spec.output_shape[1] + int(j))
+
+                    spec_slice = self.emit_vector_load(spec_result, self.output_size, result_offset, self.VF, self.spec.output_precision)
+
+                    interpret_cmd = "(interpret {} {})".format(grammar_name, vmap_entry[i][j])
+                    constraints.append(
+                        self.emit_assert_eq(interpret_cmd , spec_slice)
+                    )
+
+        return constraints
+
+
+
+
+
+
+
+
+
+    def emit_synthesis_query(self, program, optimize = False):
+        new_values , new_defs = self.create_concrete_spec_inputs()
+
+        vector_map, v_defs = self.create_concrete_inputs_vector([new_values],
+                                                                self.spec.output_shape[0],
+                                                                1,
+                                                                self.spec.output_shape[1],
+                                                                self.VF
+                                                                )
+
+        definitions = "\n".join(new_defs + v_defs)
+
+
+        # Add Constraint calls
+        constraints = self.emit_synthesis_constraints([new_values] , vector_map, grammar_name = program)
+
+        constraints = "\n\t\t".join(["\t(begin"] + constraints + [")"])
+
+        synthesis_query = None
+
+        if optimize:
+            synthesis_query = "(optimize \n #:minimize (list (cost {}))\n #:guarantee \n".format(grammar_name)
+        else:
+            synthesis_query = "(synthesize \n #:forall (list {} )\n #:guarantee \n".format(" ".join(v.name for v in new_values))
+
+
+
+
+        prefix = ";; "+"="*80 + "\n"
+        prefix += ";; "+" "*30 +" Synthesis Query"+'\n'
+        prefix += ";; "+"="*80 + "\n"
+
+        sufix = "\n;; "+"="*80 + "\n"
+
+        return prefix + definitions + "\n" + "(define sol" +"\n"+ synthesis_query + constraints  +")\n)" + sufix
 
 
 
@@ -150,12 +282,14 @@ class Synthesizer:
 
             supports_output_length = dsl_inst.supports_output_size(self.output_slice_length)
 
-            return supports_inputs_prec or supports_outputs_prec or supports_output_length
+            supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
+
+            return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
 
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        return self.does_dsl_configs_overlap(dsl_inst) or self.does_dsl_ops_overlap(dsl_inst)
+        return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
 
 
 

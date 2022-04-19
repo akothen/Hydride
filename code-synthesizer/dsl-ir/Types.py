@@ -73,6 +73,9 @@ class ConstBitVector(OperandType):
         return "(bv {} (bitvector {}))".format(self.value , self.size)
 
 
+    def get_rkt_definition(self):
+        return "(define {} {})".format(self.name, self.get_rkt_value())
+
     def get_dsl_value(self):
         return "(lit {})".format(self.get_rkt_value())
 

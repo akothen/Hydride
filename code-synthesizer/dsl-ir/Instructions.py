@@ -68,7 +68,7 @@ class Context:
     def supports_input_size(self, input_size):
         for arg in self.context_args:
             if isinstance(arg, BitVector):
-                if arg.size == input_size:
+                if arg.size >= input_size:
                     return True
 
         return False
@@ -107,7 +107,10 @@ class Context:
             elif arg.startswith(CONST_BV_STR):
                 tokens = arg.split(" ")
                 assert len(tokens) == 3, "Unable to parse bv constant"
-                value = tokens[1]
+
+                # FIXME: dictionary currently says #x for values when it should be
+                # using #b. Manually fix later
+                value = tokens[1].replace("#x","#b")
                 size = int(tokens[2].split(")")[0])
 
                 context_arg = ConstBitVector(value, size, name = "vc_{}".format(idx))

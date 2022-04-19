@@ -1,18 +1,18 @@
 #============================== Hydride File =================================
 #
-# Part of the Hydride Compiler Infrastructure. 
-# <Placeholder for license information> 
+# Part of the Hydride Compiler Infrastructure.
+# <Placeholder for license information>
 #
 #=============================================================================
 #
-# Do NOT modify this file. It is automatically generated. 
+# Do NOT modify this file. It is automatically generated.
 #
 #=============================================================================
 
 
 
 
-semantcs = {
+cost_semantics = {
 
           "_mm512_mask_testn_epi64_mask" : {
             "x86_instructions" : {
@@ -31,7 +31,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_testn_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 128,
@@ -47,7 +47,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_testn_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 256,
@@ -63,7 +63,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_testn_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 128,
@@ -79,7 +79,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_testn_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 512,
@@ -95,7 +95,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_testn_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 128,
@@ -111,7 +111,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_testn_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 256,
@@ -127,7 +127,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_testn_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 256,
@@ -143,7 +143,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_testn_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 128,
@@ -159,7 +159,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_testn_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 512,
@@ -175,7 +175,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_testn_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 512,
@@ -191,7 +191,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_testn_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 256,
@@ -208,9 +208,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_testn_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg4))"', '"   (define %lastidx0 (-  %arg4  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvand  %3  %5))"', '"   (define %7 (bveq  %6  %arg3))"', '"   (define %8 (if (equal? %7 #t) %arg1 %arg2))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %9 (extract  j0 j0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_testn_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg4))"', '"   (define %lastidx0 (-  %arg4  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvand  %3  %5))"', '"   (define %7 (bveq  %6  %arg3))"', '"   (define %8 (if (equal? %7 #t) %arg1 %arg2))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %9 (extract  j0 j0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_mulhi_epu16" : {
             "x86_instructions" : {
               "_mm512_maskz_mulhi_epu16" : {
@@ -228,7 +228,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -244,7 +244,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0","0","128"],
                   "in_vectsize" : 512,
@@ -260,7 +260,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '3'}}, {'Skylake': {'l': '5', 't': '1.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","0","64"],
                   "in_vectsize" : 256,
@@ -276,7 +276,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mullo_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0","0","64"],
                   "in_vectsize" : 512,
@@ -292,7 +292,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","0","64"],
                   "in_vectsize" : 128,
@@ -308,7 +308,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mullo_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","0","128"],
                   "in_vectsize" : 256,
@@ -324,7 +324,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","16","32"],
                   "in_vectsize" : 512,
@@ -340,7 +340,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0","0","64"],
                   "in_vectsize" : 512,
@@ -356,7 +356,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mullo_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0","0","128"],
                   "in_vectsize" : 512,
@@ -372,7 +372,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '3'}}, {'Skylake': {'l': '5', 't': '1.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","0","128"],
                   "in_vectsize" : 128,
@@ -388,7 +388,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mulhi_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -404,7 +404,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","16","32"],
                   "in_vectsize" : 256,
@@ -420,7 +420,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mullo_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","0","128"],
                   "in_vectsize" : 128,
@@ -436,7 +436,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mullo_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","0","64"],
                   "in_vectsize" : 128,
@@ -452,7 +452,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mullo_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","0","64"],
                   "in_vectsize" : 256,
@@ -468,7 +468,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","0","128"],
                   "in_vectsize" : 256,
@@ -484,7 +484,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mulhi_epu16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","16","32"],
                   "in_vectsize" : 256,
@@ -501,9 +501,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_mulhi_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %6 (extract  %3 j0.new b))"', '"   (define %7 (zero-extend  %4 (bitvector %arg2)))"', '"   (define %8 (zero-extend  %6 (bitvector %arg2)))"', '"   (define %9 (bvmul  %7  %8))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %10 (extract  (- (- %arg2 1) %arg1) (- (- %arg2 1) %highidx0) %9))"', '"   %10"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %13 (+  j0.new  %lastidx2))"', '"   (define %14 (extract  %13 j0.new %arg0))"', '"   %14"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_mulhi_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %6 (extract  %3 j0.new b))"', '"   (define %7 (zero-extend  %4 (bitvector %arg2)))"', '"   (define %8 (zero-extend  %6 (bitvector %arg2)))"', '"   (define %9 (bvmul  %7  %8))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %10 (extract  (- (- %arg2 1) %arg1) (- (- %arg2 1) %highidx0) %9))"', '"   %10"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %13 (+  j0.new  %lastidx2))"', '"   (define %14 (extract  %13 j0.new %arg0))"', '"   %14"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmpge_epi16_mask" : {
             "x86_instructions" : {
               "_mm_cmpge_epi16_mask" : {
@@ -521,7 +521,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -537,7 +537,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -553,7 +553,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -569,7 +569,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -585,7 +585,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -601,7 +601,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -617,7 +617,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -633,7 +633,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -649,7 +649,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -665,7 +665,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -681,7 +681,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -698,9 +698,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmpge_epi16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsge  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmpge_epi16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsge  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cmpge_epu8_mask" : {
             "x86_instructions" : {
               "_mm512_mask_cmpge_epu8_mask" : {
@@ -718,7 +718,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -734,7 +734,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -750,7 +750,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -766,7 +766,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -782,7 +782,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -798,7 +798,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -814,7 +814,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -830,7 +830,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -846,7 +846,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epu32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -862,7 +862,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -878,7 +878,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -895,9 +895,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cmpge_epu8_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvuge  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cmpge_epu8_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvuge  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_dpbusd_epi32" : {
             "x86_instructions" : {
               "_mm512_dpbusd_epi32" : {
@@ -915,7 +915,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm_dpbusd_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","32","32","8","0","16"],
                   "in_vectsize" : 128,
@@ -931,7 +931,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_dpbusd_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","8","0","16"],
                   "in_vectsize" : 256,
@@ -948,9 +948,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_dpbusd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %11.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %arg0)))"', '"  (define %10 (bvmul  %4  %9))"', '"  (define %11 (sign-extend  %10 (bitvector %lanesize1)))"', '"  %11"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %62.clone.4 (+  j0.new  %lastidx1))"', '" (define %11.ext0 (extract  %62.clone.4 j0.new dst))"', '" (define %11.acc0 (bvadd %11.red %11.ext0))"', '" %11.acc0"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_dpbusd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %11.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %arg0)))"', '"  (define %10 (bvmul  %4  %9))"', '"  (define %11 (sign-extend  %10 (bitvector %lanesize1)))"', '"  %11"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %62.clone.4 (+  j0.new  %lastidx1))"', '" (define %11.ext0 (extract  %62.clone.4 j0.new dst))"', '" (define %11.acc0 (bvadd %11.red %11.ext0))"', '" %11.acc0"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_broadcast_i64x2" : {
             "x86_instructions" : {
               "_mm512_maskz_broadcast_i64x2" : {
@@ -968,7 +968,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcast_i32x8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","512","512","512","32","0","8"],
                   "in_vectsize" : 256,
@@ -984,7 +984,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcast_i32x2" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","2"],
                   "in_vectsize" : 128,
@@ -1000,7 +1000,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcast_i32x8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_256","512","512","512","32","0","8"],
                   "in_vectsize" : 512,
@@ -1016,7 +1016,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_broadcast_i32x2" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","2"],
                   "in_vectsize" : 128,
@@ -1032,7 +1032,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcast_i32x4" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","4"],
                   "in_vectsize" : 256,
@@ -1048,7 +1048,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","2"],
                   "in_vectsize" : 128,
@@ -1064,7 +1064,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcast_i32x4" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","4"],
                   "in_vectsize" : 128,
@@ -1080,7 +1080,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcast_i32x2" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","512","512","512","32","0","2"],
                   "in_vectsize" : 128,
@@ -1096,7 +1096,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcast_i64x2" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","64","0","2"],
                   "in_vectsize" : 256,
@@ -1112,7 +1112,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcast_i64x2" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","64","0","2"],
                   "in_vectsize" : 128,
@@ -1128,7 +1128,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcast_i64x2" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","512","512","512","64","0","2"],
                   "in_vectsize" : 512,
@@ -1144,7 +1144,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","2"],
                   "in_vectsize" : 256,
@@ -1160,7 +1160,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_128","512","512","512","32","0","2"],
                   "in_vectsize" : 512,
@@ -1177,9 +1177,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_broadcast_i64x2  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %3 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %3 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.3 (/  j0.new  %elemsize))"', '"   (define %1.copy.0 (modulo  j0.new.div.copy.3  %arg1))"', '"   (define %2.copy.0 (*  %1.copy.0  %elemsize))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %5 (+  %2.copy.0  %lastidx1))"', '"   (define %6 (extract  %5 %2.copy.0 a))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx2))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_broadcast_i64x2  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %3 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %3 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.3 (/  j0.new  %elemsize))"', '"   (define %1.copy.0 (modulo  j0.new.div.copy.3  %arg1))"', '"   (define %2.copy.0 (*  %1.copy.0  %elemsize))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %5 (+  %2.copy.0  %lastidx1))"', '"   (define %6 (extract  %5 %2.copy.0 a))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx2))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_blend_epi16" : {
             "x86_instructions" : {
               "_mm256_blend_epi16" : {
@@ -1198,9 +1198,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (modulo  j0.new.div  %arg0))"', '"  (define %2 (extract  %1 %1 imm8))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx0))"', '"   (define %5 (extract  %4 j0.new b))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx1))"', '"   (define %9 (extract  %8 j0.new a))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (modulo  j0.new.div  %arg0))"', '"  (define %2 (extract  %1 %1 imm8))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx0))"', '"   (define %5 (extract  %4 j0.new b))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx1))"', '"   (define %9 (extract  %8 j0.new a))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maddubs_pi16" : {
             "x86_instructions" : {
               "_mm_maddubs_pi16" : {
@@ -1218,7 +1218,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maddubs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","8","0","16","8"],
                   "in_vectsize" : 512,
@@ -1234,7 +1234,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maddubs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","8","0","16","8"],
                   "in_vectsize" : 256,
@@ -1251,9 +1251,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maddubs_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %1 (+  %0.new0  %arg1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx0))"', '"  (define %3 (extract  %2 %1 a))"', '"  (define %6 (extract  %2 %1 b))"', '"  (define %7 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (sign-extend  %6 (bitvector %arg0)))"', '"  (define %9 (bvmul  %7  %8))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %10 (+  %0.new0  %lastidx1))"', '"  (define %11 (extract  %10 %0.new0 a))"', '"  (define %13 (extract  %10 %0.new0 b))"', '"  (define %14 (zero-extend  %11 (bitvector %arg0)))"', '"  (define %15 (sign-extend  %13 (bitvector %arg0)))"', '"  (define %16 (bvmul  %14  %15))"', '"  (define %17 (bvaddnsw  %9  %16 %arg0))"', '"  %17"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maddubs_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %1 (+  %0.new0  %arg1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx0))"', '"  (define %3 (extract  %2 %1 a))"', '"  (define %6 (extract  %2 %1 b))"', '"  (define %7 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (sign-extend  %6 (bitvector %arg0)))"', '"  (define %9 (bvmul  %7  %8))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %10 (+  %0.new0  %lastidx1))"', '"  (define %11 (extract  %10 %0.new0 a))"', '"  (define %13 (extract  %10 %0.new0 b))"', '"  (define %14 (zero-extend  %11 (bitvector %arg0)))"', '"  (define %15 (sign-extend  %13 (bitvector %arg0)))"', '"  (define %16 (bvmul  %14  %15))"', '"  (define %17 (bvaddnsw  %9  %16 %arg0))"', '"  %17"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_min_epi16" : {
             "x86_instructions" : {
               "_mm256_mask_min_epi16" : {
@@ -1271,7 +1271,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -1287,7 +1287,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -1303,7 +1303,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -1319,7 +1319,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -1335,7 +1335,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -1351,7 +1351,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -1367,7 +1367,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -1383,7 +1383,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -1399,7 +1399,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -1415,7 +1415,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -1431,7 +1431,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -1447,7 +1447,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -1463,7 +1463,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -1479,7 +1479,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -1495,7 +1495,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -1511,7 +1511,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -1527,7 +1527,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -1543,7 +1543,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -1559,7 +1559,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -1575,7 +1575,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -1591,7 +1591,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -1607,7 +1607,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -1623,7 +1623,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -1640,9 +1640,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_min_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsmin  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_min_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsmin  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_avg_epu16" : {
             "x86_instructions" : {
               "_mm256_avg_epu16" : {
@@ -1660,7 +1660,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_avg_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 128,
@@ -1676,7 +1676,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_avg_pu16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 64,
@@ -1692,7 +1692,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 128,
@@ -1708,7 +1708,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pavgb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 64,
@@ -1724,7 +1724,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pavgw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 64,
@@ -1740,7 +1740,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 512,
@@ -1756,7 +1756,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_avg_pu8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 64,
@@ -1772,7 +1772,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_avg_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 512,
@@ -1788,7 +1788,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 256,
@@ -1805,9 +1805,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_avg_epu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvadd  %3  %5))"', '"  (define %7 (bvadd  %6  %arg1))"', '"  (define %8 (bvashr  %7  %arg0))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_avg_epu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvadd  %3  %5))"', '"  (define %7 (bvadd  %6  %arg1))"', '"  (define %8 (bvashr  %7  %arg0))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_cmpgt_epi16_mask" : {
             "x86_instructions" : {
               "_mm256_mask_cmpgt_epi16_mask" : {
@@ -1825,7 +1825,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -1841,7 +1841,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -1857,7 +1857,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -1873,7 +1873,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -1889,7 +1889,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -1905,7 +1905,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -1921,7 +1921,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -1937,7 +1937,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -1953,7 +1953,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -1969,7 +1969,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -1985,7 +1985,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -2002,9 +2002,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_cmpgt_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsgt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_cmpgt_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsgt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_dpbusd_epi32" : {
             "x86_instructions" : {
               "_mm512_maskz_dpbusd_epi32" : {
@@ -2022,7 +2022,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm_maskz_dpbusd_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 128,
@@ -2038,7 +2038,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_maskz_dpbusd_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 256,
@@ -2055,9 +2055,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_dpbusd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %63.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %63.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvadd %12.red %12.ext0))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %65 (+  j0.new  %lastidx3))"', '"   (define %66 (extract  %65 j0.new %arg0))"', '"   %66"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_dpbusd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %63.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %63.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvadd %12.red %12.ext0))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %65 (+  j0.new  %lastidx3))"', '"   (define %66 (extract  %65 j0.new %arg0))"', '"   %66"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cvtsepi32_epi16" : {
             "x86_instructions" : {
               "_mm512_mask_cvtsepi32_epi16" : {
@@ -2075,7 +2075,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -2091,7 +2091,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -2107,7 +2107,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -2123,7 +2123,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -2139,7 +2139,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -2155,7 +2155,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -2171,7 +2171,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -2187,7 +2187,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -2203,7 +2203,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -2219,7 +2219,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -2235,7 +2235,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -2251,7 +2251,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -2267,7 +2267,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi64_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -2283,7 +2283,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -2299,7 +2299,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -2315,7 +2315,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -2331,7 +2331,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -2347,7 +2347,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -2363,7 +2363,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -2379,7 +2379,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -2395,7 +2395,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -2411,7 +2411,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -2427,7 +2427,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -2443,7 +2443,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -2459,7 +2459,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -2475,7 +2475,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -2491,7 +2491,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -2507,7 +2507,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -2523,7 +2523,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -2539,7 +2539,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -2555,7 +2555,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -2571,7 +2571,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -2587,7 +2587,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -2603,7 +2603,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -2619,7 +2619,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -2635,7 +2635,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -2651,7 +2651,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi32_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -2667,7 +2667,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -2683,7 +2683,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -2699,7 +2699,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtusepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -2715,7 +2715,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -2731,7 +2731,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -2747,7 +2747,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -2763,7 +2763,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -2779,7 +2779,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -2795,7 +2795,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -2811,7 +2811,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -2827,7 +2827,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -2843,7 +2843,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -2859,7 +2859,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -2875,7 +2875,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -2891,7 +2891,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -2907,7 +2907,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi32_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -2923,7 +2923,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtusepi16_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -2939,7 +2939,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -2955,7 +2955,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -2971,7 +2971,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -2987,7 +2987,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -3003,7 +3003,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -3019,7 +3019,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -3035,7 +3035,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -3051,7 +3051,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -3067,7 +3067,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi64_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -3083,7 +3083,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi16_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -3099,7 +3099,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtusepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -3115,7 +3115,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtsepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -3131,7 +3131,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -3147,7 +3147,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtsepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -3163,7 +3163,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtsepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -3179,7 +3179,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtsepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -3195,7 +3195,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -3212,9 +3212,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cvtsepi32_epi16  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %arg0  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5 (bvssat %4 %arg0 %elemsize ))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cvtsepi32_epi16  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %arg0  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5 (bvssat %4 %arg0 %elemsize ))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mul_epi32" : {
             "x86_instructions" : {
               "_mm_mul_epi32" : {
@@ -3232,7 +3232,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mul_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -3248,7 +3248,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mul_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -3265,9 +3265,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mul_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %arg0)))"', '"  (define %6 (extract  %2 %0.new0 b))"', '"  (define %7 (sign-extend  %6 (bitvector %arg0)))"', '"  (define %8 (bvmul  %4  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mul_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %arg0)))"', '"  (define %6 (extract  %2 %0.new0 b))"', '"  (define %7 (sign-extend  %6 (bitvector %arg0)))"', '"  (define %8 (bvmul  %4  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_sub_epi16" : {
             "x86_instructions" : {
               "_mm_maskz_sub_epi16" : {
@@ -3285,7 +3285,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_sub_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -3301,7 +3301,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -3317,7 +3317,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_sub_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -3333,7 +3333,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_sub_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -3349,7 +3349,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -3365,7 +3365,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -3381,7 +3381,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_sub_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -3397,7 +3397,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_sub_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -3413,7 +3413,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_sub_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -3429,7 +3429,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_sub_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -3445,7 +3445,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_sub_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -3461,7 +3461,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_sub_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -3477,7 +3477,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_sub_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -3493,7 +3493,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -3509,7 +3509,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_sub_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -3525,7 +3525,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_sub_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -3541,7 +3541,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_sub_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -3557,7 +3557,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -3573,7 +3573,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_sub_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -3589,7 +3589,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -3606,9 +3606,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_sub_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvsub  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_sub_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvsub  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_div_epu32" : {
             "x86_instructions" : {
               "_mm512_mask_div_epu32" : {
@@ -3627,9 +3627,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_div_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (zero-extend  %3 (bitvector %arg0)))"', '"   (define %7 (zero-extend  %5 (bitvector %arg0)))"', '"   (define %8 (bvudiv  %6  %7))"', '"   (define %9.high.idx (- %arg0 1))"', '"   (define %9.low.idx (- %9.high.idx %elemsize -1 ))"', '"   (define %9 (extract  %9.high.idx %9.low.idx %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_div_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (zero-extend  %3 (bitvector %arg0)))"', '"   (define %7 (zero-extend  %5 (bitvector %arg0)))"', '"   (define %8 (bvudiv  %6  %7))"', '"   (define %9.high.idx (- %arg0 1))"', '"   (define %9.low.idx (- %9.high.idx %elemsize -1 ))"', '"   (define %9 (extract  %9.high.idx %9.low.idx %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_sub_epi8" : {
             "x86_instructions" : {
               "_mm512_sub_epi8" : {
@@ -3647,7 +3647,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_sub_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -3663,7 +3663,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -3679,7 +3679,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -3695,7 +3695,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -3711,7 +3711,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -3727,7 +3727,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_sub_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -3743,7 +3743,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -3759,7 +3759,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_sub_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -3775,7 +3775,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -3791,7 +3791,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_pi32" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0"],
                   "in_vectsize" : 64,
@@ -3807,7 +3807,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -3823,7 +3823,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -3839,7 +3839,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -3855,7 +3855,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_sub_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -3872,9 +3872,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_sub_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvsub  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_sub_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvsub  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_madd52hi_epu64" : {
             "x86_instructions" : {
               "_mm512_madd52hi_epu64" : {
@@ -3892,7 +3892,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_madd52lo_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","416","52","0","64","52","0","128"],
                   "in_vectsize" : 512,
@@ -3908,7 +3908,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_madd52lo_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","208","52","0","64","52","0","128"],
                   "in_vectsize" : 256,
@@ -3924,7 +3924,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_madd52lo_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","0","128"],
                   "in_vectsize" : 128,
@@ -3940,7 +3940,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_madd52hi_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","52","128"],
                   "in_vectsize" : 128,
@@ -3956,7 +3956,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_madd52hi_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","208","52","0","64","52","52","128"],
                   "in_vectsize" : 256,
@@ -3973,9 +3973,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_madd52hi_epu64  a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %0 (*  j0.new.div  %arg0))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %1 (+  %0  %lastidx2))"', '"  (define %2 (extract  %1 %0 b))"', '"  (define %5 (extract  %1 %0 c))"', '"  (define %7 (zero-extend  %2 (bitvector %arg3)))"', '"  (define %8 (zero-extend  %5 (bitvector %arg3)))"', '"  (define %9 (bvmul  %7  %8))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %12 (+  %0  %lastidx0))"', '"  (define %13 (extract  %12 %0 a))"', '"  (define %lastidx1 (-  %arg1  1))"', '"  (define %highidx0 (+  %lastidx1  %arg2))"', '"  (define %14 (extract  (- (- %arg3 1) %arg2) (- (- %arg3 1) %highidx0) %9))"', '"  (define %15 (zero-extend  %14 (bitvector %arg0)))"', '"  (define %16 (bvadd  %13  %15))"', '"  %16"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_madd52hi_epu64  a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %0 (*  j0.new.div  %arg0))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %1 (+  %0  %lastidx2))"', '"  (define %2 (extract  %1 %0 b))"', '"  (define %5 (extract  %1 %0 c))"', '"  (define %7 (zero-extend  %2 (bitvector %arg3)))"', '"  (define %8 (zero-extend  %5 (bitvector %arg3)))"', '"  (define %9 (bvmul  %7  %8))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %12 (+  %0  %lastidx0))"', '"  (define %13 (extract  %12 %0 a))"', '"  (define %lastidx1 (-  %arg1  1))"', '"  (define %highidx0 (+  %lastidx1  %arg2))"', '"  (define %14 (extract  (- (- %arg3 1) %arg2) (- (- %arg3 1) %highidx0) %9))"', '"  (define %15 (zero-extend  %14 (bitvector %arg0)))"', '"  (define %16 (bvadd  %13  %15))"', '"  %16"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_cvtepi64_epi8" : {
             "x86_instructions" : {
               "_mm256_cvtepi64_epi8" : {
@@ -3993,7 +3993,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -4009,7 +4009,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -4025,7 +4025,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -4041,7 +4041,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -4057,7 +4057,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -4073,7 +4073,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -4089,7 +4089,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -4105,7 +4105,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -4121,7 +4121,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -4137,7 +4137,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -4153,7 +4153,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -4169,7 +4169,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -4185,7 +4185,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -4201,7 +4201,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -4217,7 +4217,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -4233,7 +4233,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -4249,7 +4249,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -4266,9 +4266,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_cvtepi64_epi8  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4.high.idx (- %arg0 1))"', '"  (define %4.low.idx (- %4.high.idx %elemsize -1 ))"', '"  (define %4 (extract  %4.high.idx %4.low.idx %3))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_cvtepi64_epi8  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4.high.idx (- %arg0 1))"', '"  (define %4.low.idx (- %4.high.idx %elemsize -1 ))"', '"  (define %4 (extract  %4.high.idx %4.low.idx %3))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mullo_epi16" : {
             "x86_instructions" : {
               "_mm512_mullo_epi16" : {
@@ -4286,7 +4286,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mullo_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","0","32"],
                   "in_vectsize" : 256,
@@ -4302,7 +4302,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","0","64"],
                   "in_vectsize" : 256,
@@ -4318,7 +4318,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mullo_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","0","32"],
                   "in_vectsize" : 128,
@@ -4335,9 +4335,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mullo_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg1)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg1)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mullo_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg1)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg1)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_cmpneq_epu32_mask" : {
             "x86_instructions" : {
               "_mm256_mask_cmpneq_epu32_mask" : {
@@ -4355,7 +4355,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -4371,7 +4371,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -4387,7 +4387,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -4403,7 +4403,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -4419,7 +4419,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -4435,7 +4435,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -4451,7 +4451,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -4467,7 +4467,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -4483,7 +4483,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -4499,7 +4499,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -4515,7 +4515,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -4531,7 +4531,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -4547,7 +4547,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -4563,7 +4563,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -4579,7 +4579,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -4595,7 +4595,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -4611,7 +4611,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -4627,7 +4627,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -4643,7 +4643,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -4659,7 +4659,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -4675,7 +4675,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpneq_epu32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -4691,7 +4691,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpneq_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -4707,7 +4707,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpneq_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -4724,9 +4724,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_cmpneq_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (not (bveq  %3  %5 )))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_cmpneq_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (not (bveq  %3  %5 )))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_reduce_add_epi64" : {
             "x86_instructions" : {
               "_mm512_mask_reduce_add_epi64" : {
@@ -4744,7 +4744,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_mask_reduce_add_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -4761,9 +4761,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_reduce_add_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvadd"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvadd %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_reduce_add_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvadd"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvadd %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_subr_epi32" : {
             "x86_instructions" : {
               "_mm512_subr_epi32" : {
@@ -4782,9 +4782,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_subr_epi32  v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new v3))"', '"  (define %7 (extract  %4 j0.new v2))"', '"  (define %8 (bvsub  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_subr_epi32  v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new v3))"', '"  (define %7 (extract  %4 j0.new v2))"', '"  (define %8 (bvsub  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_subs_epu8" : {
             "x86_instructions" : {
               "_mm256_subs_epu8" : {
@@ -4802,7 +4802,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_subs_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -4818,7 +4818,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -4834,7 +4834,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_subs_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -4850,7 +4850,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_pu16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -4866,7 +4866,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_subs_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -4882,7 +4882,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_pu8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -4899,9 +4899,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_subs_epu8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsubnuw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_subs_epu8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsubnuw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_abs_epi64" : {
             "x86_instructions" : {
               "_mm512_abs_epi64" : {
@@ -4919,7 +4919,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -4935,7 +4935,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -4951,7 +4951,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -4967,7 +4967,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_pi32" : {
                   "args" : ["SYMBOLIC_BV_64","64","64","64","32","0"],
                   "in_vectsize" : 64,
@@ -4983,7 +4983,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -4999,7 +4999,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -5015,7 +5015,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -5031,7 +5031,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -5047,7 +5047,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_abs_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -5063,7 +5063,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -5079,7 +5079,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -5095,7 +5095,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -5111,7 +5111,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -5127,7 +5127,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_abs_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -5144,9 +5144,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_abs_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (integer->bitvector (abs (bitvector->integer %2)) (bitvector %elemsize)))"', '"  %3"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_abs_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (integer->bitvector (abs (bitvector->integer %2)) (bitvector %elemsize)))"', '"  %3"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_urem_epi32" : {
             "x86_instructions" : {
               "_mm_urem_epi32" : {
@@ -5164,7 +5164,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -5180,7 +5180,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -5196,7 +5196,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -5212,7 +5212,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -5228,7 +5228,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_irem_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -5244,7 +5244,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -5260,7 +5260,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -5276,7 +5276,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -5292,7 +5292,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -5308,7 +5308,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -5324,7 +5324,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -5340,7 +5340,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -5356,7 +5356,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -5372,7 +5372,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -5388,7 +5388,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -5404,7 +5404,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -5420,7 +5420,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_irem_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -5436,7 +5436,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -5452,7 +5452,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -5468,7 +5468,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -5484,7 +5484,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -5500,7 +5500,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -5516,7 +5516,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -5532,7 +5532,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_urem_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -5548,7 +5548,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_rem_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -5564,7 +5564,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_rem_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -5580,7 +5580,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_rem_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -5597,9 +5597,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_urem_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsrem  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_urem_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsrem  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cmple_epi32_mask" : {
             "x86_instructions" : {
               "_mm512_mask_cmple_epi32_mask" : {
@@ -5617,7 +5617,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -5633,7 +5633,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -5649,7 +5649,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -5665,7 +5665,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -5681,7 +5681,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -5697,7 +5697,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -5713,7 +5713,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -5729,7 +5729,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -5745,7 +5745,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -5761,7 +5761,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -5777,7 +5777,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -5794,9 +5794,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cmple_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsle  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cmple_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsle  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmpeq_epi32" : {
             "x86_instructions" : {
               "_mm_cmpeq_epi32" : {
@@ -5814,7 +5814,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 128,
@@ -5830,7 +5830,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 256,
@@ -5846,7 +5846,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : 256,
@@ -5862,7 +5862,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_pi32" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 64,
@@ -5878,7 +5878,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 128,
@@ -5894,7 +5894,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 64,
@@ -5910,7 +5910,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 256,
@@ -5926,7 +5926,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpeqb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 64,
@@ -5942,7 +5942,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpeqd" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 64,
@@ -5958,7 +5958,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpeqw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 64,
@@ -5974,7 +5974,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : 128,
@@ -5990,7 +5990,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 64,
@@ -6006,7 +6006,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 256,
@@ -6023,9 +6023,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmpeq_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bveq  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmpeq_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bveq  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_adds_epu16" : {
             "x86_instructions" : {
               "_mm_maskz_adds_epu16" : {
@@ -6043,7 +6043,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -6059,7 +6059,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -6075,7 +6075,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_adds_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -6091,7 +6091,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -6107,7 +6107,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_adds_epu16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -6123,7 +6123,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_adds_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -6139,7 +6139,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -6155,7 +6155,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -6171,7 +6171,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_adds_epu8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -6187,7 +6187,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_adds_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -6203,7 +6203,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -6220,9 +6220,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_adds_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvaddnuw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new %arg0))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_adds_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvaddnuw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new %arg0))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_dpbusds_epi32" : {
             "x86_instructions" : {
               "_mm_maskz_dpbusds_epi32" : {
@@ -6240,7 +6240,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_maskz_dpbusds_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 512,
@@ -6256,7 +6256,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_maskz_dpbusds_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 256,
@@ -6273,9 +6273,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_dpbusds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %64.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %64.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvaddnsw %12.red %12.ext0 %lanesize1))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %66 (+  j0.new  %lastidx3))"', '"   (define %67 (extract  %66 j0.new %arg0))"', '"   %67"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_dpbusds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %64.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %64.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvaddnsw %12.red %12.ext0 %lanesize1))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %66 (+  j0.new  %lastidx3))"', '"   (define %67 (extract  %66 j0.new %arg0))"', '"   %67"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_andnot_epi32" : {
             "x86_instructions" : {
               "_mm256_maskz_andnot_epi32" : {
@@ -6293,7 +6293,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_andnot_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -6309,7 +6309,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_andnot_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -6325,7 +6325,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_andnot_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -6341,7 +6341,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_andnot_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -6357,7 +6357,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_andnot_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -6373,7 +6373,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_andnot_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -6389,7 +6389,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_andnot_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -6405,7 +6405,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_andnot_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -6421,7 +6421,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_andnot_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -6437,7 +6437,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_andnot_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -6453,7 +6453,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_andnot_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -6470,9 +6470,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_andnot_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (bvnot  %4))"', '"   (define %7 (extract  %3 j0.new b))"', '"   (define %8 (bvand  %5  %7))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %11 (+  j0.new  %lastidx1))"', '"   (define %12 (extract  %11 j0.new %arg0))"', '"   %12"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_andnot_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (bvnot  %4))"', '"   (define %7 (extract  %3 j0.new b))"', '"   (define %8 (bvand  %5  %7))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %11 (+  j0.new  %lastidx1))"', '"   (define %12 (extract  %11 j0.new %arg0))"', '"   %12"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_cvtepu32_epi64" : {
             "x86_instructions" : {
               "_mm256_maskz_cvtepu32_epi64" : {
@@ -6490,7 +6490,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu8_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -6506,7 +6506,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu16_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -6522,7 +6522,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu16_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -6538,7 +6538,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -6554,7 +6554,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -6570,7 +6570,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -6586,7 +6586,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu8_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -6602,7 +6602,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -6618,7 +6618,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepu8_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -6634,7 +6634,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu8_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -6650,7 +6650,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu16_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -6666,7 +6666,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -6682,7 +6682,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu16_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -6698,7 +6698,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu32_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -6714,7 +6714,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepu8_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -6730,7 +6730,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu8_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -6746,7 +6746,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepu8_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -6762,7 +6762,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -6778,7 +6778,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -6794,7 +6794,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -6810,7 +6810,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -6826,7 +6826,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -6842,7 +6842,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepu8_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -6858,7 +6858,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu16_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -6874,7 +6874,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -6890,7 +6890,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu32_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -6906,7 +6906,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu16_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -6922,7 +6922,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepu16_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -6938,7 +6938,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -6954,7 +6954,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -6970,7 +6970,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepu16_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -6986,7 +6986,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -7002,7 +7002,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepu8_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -7018,7 +7018,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -7034,7 +7034,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepu16_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -7051,9 +7051,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_cvtepu32_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx1))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.2.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %8 (+  %0.copy.2.new0  %lastidx2))"', '"   (define %9 (extract  %8 %0.copy.2.new0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_cvtepu32_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx1))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg1)))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.2.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %8 (+  %0.copy.2.new0  %lastidx2))"', '"   (define %9 (extract  %8 %0.copy.2.new0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_xor_epi64" : {
             "x86_instructions" : {
               "_mm256_mask_xor_epi64" : {
@@ -7071,7 +7071,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_xor_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -7087,7 +7087,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_xor_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -7103,7 +7103,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_xor_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -7119,7 +7119,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_xor_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -7135,7 +7135,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_xor_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -7151,7 +7151,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_xor_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -7167,7 +7167,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_xor_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -7183,7 +7183,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_xor_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -7199,7 +7199,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_xor_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -7215,7 +7215,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_xor_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -7231,7 +7231,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_xor_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -7248,9 +7248,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_xor_epi64  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvxor  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_xor_epi64  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvxor  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_rem_epu32" : {
             "x86_instructions" : {
               "_mm512_mask_rem_epu32" : {
@@ -7268,7 +7268,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_rem_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -7285,9 +7285,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_rem_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsrem  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_rem_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsrem  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_cvtepi32_epi64" : {
             "x86_instructions" : {
               "_mm_mask_cvtepi32_epi64" : {
@@ -7305,7 +7305,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -7321,7 +7321,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi8_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -7337,7 +7337,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -7353,7 +7353,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi16_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -7369,7 +7369,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi8_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -7385,7 +7385,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi32_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -7401,7 +7401,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi16_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -7417,7 +7417,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi8_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -7433,7 +7433,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -7449,7 +7449,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi8_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -7465,7 +7465,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi32_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -7481,7 +7481,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi8_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -7497,7 +7497,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -7513,7 +7513,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -7529,7 +7529,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -7545,7 +7545,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi16_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -7561,7 +7561,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -7577,7 +7577,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -7593,7 +7593,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi32_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -7609,7 +7609,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi16_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -7625,7 +7625,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -7641,7 +7641,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi16_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -7657,7 +7657,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi32_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -7673,7 +7673,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -7689,7 +7689,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi8_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -7705,7 +7705,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi16_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -7721,7 +7721,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi8_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -7737,7 +7737,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -7753,7 +7753,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi16_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -7769,7 +7769,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi32_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -7785,7 +7785,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi8_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -7801,7 +7801,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi16_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -7817,7 +7817,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -7833,7 +7833,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi8_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -7849,7 +7849,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -7866,9 +7866,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_cvtepi32_epi64  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx1))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (sign-extend  %4 (bitvector %arg0)))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg0  %elemsize))"', '"   (define %0.copy.2.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg0  1))"', '"   (define %8 (+  %0.copy.2.new0  %lastidx2))"', '"   (define %9 (extract  %8 %0.copy.2.new0 src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_cvtepi32_epi64  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx1))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %5 (sign-extend  %4 (bitvector %arg0)))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg0  %elemsize))"', '"   (define %0.copy.2.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg0  1))"', '"   (define %8 (+  %0.copy.2.new0  %lastidx2))"', '"   (define %9 (extract  %8 %0.copy.2.new0 src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_testn_epi32_mask" : {
             "x86_instructions" : {
               "_mm512_testn_epi32_mask" : {
@@ -7886,7 +7886,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_testn_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 128,
@@ -7902,7 +7902,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_testn_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 512,
@@ -7918,7 +7918,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_testn_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 512,
@@ -7934,7 +7934,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_testn_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 128,
@@ -7950,7 +7950,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_testn_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 128,
@@ -7966,7 +7966,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_testn_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 256,
@@ -7982,7 +7982,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_testn_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 512,
@@ -7998,7 +7998,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_testn_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 128,
@@ -8014,7 +8014,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_testn_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 256,
@@ -8030,7 +8030,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_testn_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 256,
@@ -8046,7 +8046,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_testn_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 256,
@@ -8063,9 +8063,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_testn_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg3))"', '"  (define %lastidx0 (-  %arg3  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvand  %2  %4))"', '"  (define %6 (bveq  %5  %arg2))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_testn_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg3))"', '"  (define %lastidx0 (-  %arg3  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvand  %2  %4))"', '"  (define %6 (bveq  %5  %arg2))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_reduce_add_epi64" : {
             "x86_instructions" : {
               "_mm512_reduce_add_epi64" : {
@@ -8083,7 +8083,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_reduce_add_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -8100,9 +8100,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_reduce_add_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvadd"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvadd %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_reduce_add_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvadd"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvadd %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_blendv_epi8" : {
             "x86_instructions" : {
               "_mm256_blendv_epi8" : {
@@ -8120,7 +8120,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_blendv_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -8137,9 +8137,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_blendv_epi8  a b mask %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 %1 mask))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx1))"', '"   (define %5 (extract  %4 j0.new b))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new a))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_blendv_epi8  a b mask %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 %1 mask))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx1))"', '"   (define %5 (extract  %4 j0.new b))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new a))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_and_epi64" : {
             "x86_instructions" : {
               "_mm512_maskz_and_epi64" : {
@@ -8157,7 +8157,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_and_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -8173,7 +8173,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_and_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -8189,7 +8189,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_and_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -8205,7 +8205,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_and_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -8221,7 +8221,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_and_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -8237,7 +8237,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_and_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -8253,7 +8253,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_and_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -8269,7 +8269,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_and_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -8285,7 +8285,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_and_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -8301,7 +8301,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_and_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -8317,7 +8317,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_and_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -8334,9 +8334,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_and_epi64  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvand  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_and_epi64  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvand  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_cmplt_epi64_mask" : {
             "x86_instructions" : {
               "_mm_mask_cmplt_epi64_mask" : {
@@ -8354,7 +8354,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -8370,7 +8370,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -8386,7 +8386,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -8402,7 +8402,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -8418,7 +8418,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -8434,7 +8434,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -8450,7 +8450,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -8466,7 +8466,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -8482,7 +8482,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -8498,7 +8498,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -8514,7 +8514,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -8530,7 +8530,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -8547,9 +8547,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_cmplt_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvslt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_cmplt_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvslt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_dpwssds_epi32" : {
             "x86_instructions" : {
               "_mm_maskz_dpwssds_epi32" : {
@@ -8567,7 +8567,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_maskz_dpwssds_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","32","16","32","0","0"],
                   "in_vectsize" : 256,
@@ -8583,7 +8583,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_maskz_dpwssds_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","16","32","0","0"],
                   "in_vectsize" : 512,
@@ -8600,9 +8600,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_dpwssds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %32.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %32.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %34 (+  j0.new  %lastidx3))"', '"   (define %35 (extract  %34 j0.new %arg0))"', '"   %35"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_dpwssds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %32.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %32.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %34 (+  j0.new  %lastidx3))"', '"   (define %35 (extract  %34 j0.new %arg0))"', '"   %35"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_andnot_epi32" : {
             "x86_instructions" : {
               "_mm512_andnot_epi32" : {
@@ -8621,9 +8621,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_andnot_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (bvnot  %3))"', '"  (define %6 (extract  %2 j0.new b))"', '"  (define %7 (bvand  %4  %6))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_andnot_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (bvnot  %3))"', '"  (define %6 (extract  %2 j0.new b))"', '"  (define %7 (bvand  %4  %6))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_reduce_and_epi64" : {
             "x86_instructions" : {
               "_mm512_reduce_and_epi64" : {
@@ -8641,7 +8641,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_reduce_and_epi32" : {
                   "args" : ["(bv #x000000000000000000000000ffffffff 32)","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -8658,9 +8658,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_reduce_and_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvand"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvand %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_reduce_and_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvand"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvand %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_m_paddw" : {
             "x86_instructions" : {
               "_m_paddw" : {
@@ -8678,7 +8678,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -8694,7 +8694,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_pi32" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0"],
                   "in_vectsize" : 64,
@@ -8710,7 +8710,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddd" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0"],
                   "in_vectsize" : 64,
@@ -8726,7 +8726,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -8742,7 +8742,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -8758,7 +8758,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -8774,7 +8774,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -8790,7 +8790,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -8806,7 +8806,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -8822,7 +8822,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -8838,7 +8838,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -8854,7 +8854,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -8870,7 +8870,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -8886,7 +8886,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_add_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -8902,7 +8902,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -8918,7 +8918,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -8934,7 +8934,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -8951,9 +8951,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_m_paddw  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvadd  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_m_paddw  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvadd  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_max_epi8" : {
             "x86_instructions" : {
               "_mm256_max_epi8" : {
@@ -8971,7 +8971,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -8987,7 +8987,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -9003,7 +9003,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -9019,7 +9019,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -9035,7 +9035,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -9051,7 +9051,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -9067,7 +9067,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -9083,7 +9083,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -9099,7 +9099,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -9115,7 +9115,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -9131,7 +9131,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -9147,7 +9147,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -9163,7 +9163,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pmaxsw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -9180,9 +9180,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_max_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsmax  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_max_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsmax  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_dpbusds_epi32" : {
             "x86_instructions" : {
               "_mm256_mask_dpbusds_epi32" : {
@@ -9200,7 +9200,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_dpbusds_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 512,
@@ -9216,7 +9216,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_dpbusds_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 128,
@@ -9233,9 +9233,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_dpbusds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg0)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %64.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %64.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvaddnsw %12.red %12.ext0 %lanesize1))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %66 (+  j0.new  %lastidx3))"', '"   (define %67 (extract  %66 j0.new src))"', '"   %67"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_dpbusds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg0)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %64.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %64.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvaddnsw %12.red %12.ext0 %lanesize1))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %66 (+  j0.new  %lastidx3))"', '"   (define %67 (extract  %66 j0.new src))"', '"   %67"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_madd52lo_epu64" : {
             "x86_instructions" : {
               "_mm256_mask_madd52lo_epu64" : {
@@ -9253,7 +9253,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_madd52lo_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","416","52","0","64","52","0","128"],
                   "in_vectsize" : 512,
@@ -9269,7 +9269,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_madd52hi_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","52","128"],
                   "in_vectsize" : 128,
@@ -9285,7 +9285,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_madd52lo_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","0","128"],
                   "in_vectsize" : 128,
@@ -9301,7 +9301,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_madd52hi_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","416","52","0","64","52","52","128"],
                   "in_vectsize" : 512,
@@ -9317,7 +9317,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_madd52hi_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","208","52","0","64","52","52","128"],
                   "in_vectsize" : 256,
@@ -9334,9 +9334,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_madd52lo_epu64  a k b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.2 (/  j0.new  %elemsize))"', '"   (define %0.copy.0 (*  j0.new.div.copy.2  %arg0))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %2 (+  %0.copy.0  %lastidx2))"', '"   (define %3 (extract  %2 %0.copy.0 b))"', '"   (define %6 (extract  %2 %0.copy.0 c))"', '"   (define %8 (zero-extend  %3 (bitvector %arg3)))"', '"   (define %9 (zero-extend  %6 (bitvector %arg3)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx0 (-  %arg0  1))"', '"   (define %13 (+  %0.copy.0  %lastidx0))"', '"   (define %14 (extract  %13 %0.copy.0 a))"', '"   (define %lastidx1 (-  %arg1  1))"', '"   (define %highidx0 (+  %lastidx1  %arg2))"', '"   (define %15 (extract  (- (- %arg3 1) %arg2) (- (- %arg3 1) %highidx0) %10))"', '"   (define %16 (zero-extend  %15 (bitvector %arg0)))"', '"   (define %17 (bvadd  %14  %16))"', '"   %17"', '"   )"', '"   (begin"', '"   (define j0.new.div.copy.8 (/  j0.new  %elemsize))"', '"   (define %0.copy.6 (*  j0.new.div.copy.8  %arg0))"', '"   (define %lastidx3 (-  %arg0  1))"', '"   (define %20 (+  %0.copy.6  %lastidx3))"', '"   (define %21 (extract  %20 %0.copy.6 a))"', '"   %21"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_madd52lo_epu64  a k b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.2 (/  j0.new  %elemsize))"', '"   (define %0.copy.0 (*  j0.new.div.copy.2  %arg0))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %2 (+  %0.copy.0  %lastidx2))"', '"   (define %3 (extract  %2 %0.copy.0 b))"', '"   (define %6 (extract  %2 %0.copy.0 c))"', '"   (define %8 (zero-extend  %3 (bitvector %arg3)))"', '"   (define %9 (zero-extend  %6 (bitvector %arg3)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx0 (-  %arg0  1))"', '"   (define %13 (+  %0.copy.0  %lastidx0))"', '"   (define %14 (extract  %13 %0.copy.0 a))"', '"   (define %lastidx1 (-  %arg1  1))"', '"   (define %highidx0 (+  %lastidx1  %arg2))"', '"   (define %15 (extract  (- (- %arg3 1) %arg2) (- (- %arg3 1) %highidx0) %10))"', '"   (define %16 (zero-extend  %15 (bitvector %arg0)))"', '"   (define %17 (bvadd  %14  %16))"', '"   %17"', '"   )"', '"   (begin"', '"   (define j0.new.div.copy.8 (/  j0.new  %elemsize))"', '"   (define %0.copy.6 (*  j0.new.div.copy.8  %arg0))"', '"   (define %lastidx3 (-  %arg0  1))"', '"   (define %20 (+  %0.copy.6  %lastidx3))"', '"   (define %21 (extract  %20 %0.copy.6 a))"', '"   %21"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_test_epi8_mask" : {
             "x86_instructions" : {
               "_mm256_test_epi8_mask" : {
@@ -9354,7 +9354,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_test_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 512,
@@ -9370,7 +9370,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_test_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 128,
@@ -9386,7 +9386,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_test_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 128,
@@ -9402,7 +9402,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_test_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 256,
@@ -9418,7 +9418,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_test_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 512,
@@ -9434,7 +9434,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_test_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 256,
@@ -9450,7 +9450,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_test_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 512,
@@ -9466,7 +9466,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_test_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 256,
@@ -9482,7 +9482,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_test_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 128,
@@ -9498,7 +9498,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_test_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 128,
@@ -9514,7 +9514,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_test_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 512,
@@ -9531,9 +9531,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_test_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg3))"', '"  (define %lastidx0 (-  %arg3  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvand  %2  %4))"', '"  (define %6 (not (bveq  %5  %arg2 )))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_test_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg3))"', '"  (define %lastidx0 (-  %arg3  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvand  %2  %4))"', '"  (define %6 (not (bveq  %5  %arg2 )))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_xor_epi32" : {
             "x86_instructions" : {
               "_mm256_xor_epi32" : {
@@ -9551,7 +9551,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_xor_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -9567,7 +9567,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_xor_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -9583,7 +9583,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_xor_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -9599,7 +9599,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_xor_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -9615,7 +9615,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_xor_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -9632,9 +9632,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_xor_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvxor  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_xor_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvxor  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_cmpeq_epi64_mask" : {
             "x86_instructions" : {
               "_mm512_cmpeq_epi64_mask" : {
@@ -9652,7 +9652,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -9668,7 +9668,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -9684,7 +9684,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -9700,7 +9700,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -9716,7 +9716,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -9732,7 +9732,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -9748,7 +9748,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -9764,7 +9764,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -9780,7 +9780,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -9796,7 +9796,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -9812,7 +9812,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -9828,7 +9828,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -9844,7 +9844,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -9860,7 +9860,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -9876,7 +9876,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -9892,7 +9892,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -9908,7 +9908,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -9924,7 +9924,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpeq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -9940,7 +9940,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -9956,7 +9956,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -9972,7 +9972,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -9988,7 +9988,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpeq_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -10004,7 +10004,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpeq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -10021,9 +10021,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_cmpeq_epi64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bveq  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_cmpeq_epi64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bveq  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_subs_epi8" : {
             "x86_instructions" : {
               "_mm512_maskz_subs_epi8" : {
@@ -10041,7 +10041,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_subs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -10057,7 +10057,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -10073,7 +10073,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_subs_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -10089,7 +10089,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -10105,7 +10105,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -10121,7 +10121,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_subs_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -10137,7 +10137,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_subs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -10153,7 +10153,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_subs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -10169,7 +10169,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_subs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -10185,7 +10185,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_subs_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -10201,7 +10201,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_subs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -10218,9 +10218,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_subs_epi8  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsubnsw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new %arg0))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_subs_epi8  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsubnsw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new %arg0))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmple_epu32_mask" : {
             "x86_instructions" : {
               "_mm_cmple_epu32_mask" : {
@@ -10238,7 +10238,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -10254,7 +10254,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -10270,7 +10270,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -10286,7 +10286,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -10302,7 +10302,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -10318,7 +10318,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -10334,7 +10334,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -10350,7 +10350,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -10366,7 +10366,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -10382,7 +10382,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -10398,7 +10398,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -10415,9 +10415,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmple_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvule  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmple_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvule  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_mul_epi32" : {
             "x86_instructions" : {
               "_mm_maskz_mul_epi32" : {
@@ -10435,7 +10435,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mul_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -10451,7 +10451,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mul_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -10467,7 +10467,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mul_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -10483,7 +10483,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mul_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -10499,7 +10499,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mul_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -10516,9 +10516,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_mul_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %arg1)))"', '"   (define %7 (extract  %3 %0.copy.0.new0 b))"', '"   (define %8 (sign-extend  %7 (bitvector %arg1)))"', '"   (define %9 (bvmul  %5  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.5.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %12 (+  %0.copy.5.new0  %lastidx2))"', '"   (define %13 (extract  %12 %0.copy.5.new0 %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_mul_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %arg1)))"', '"   (define %7 (extract  %3 %0.copy.0.new0 b))"', '"   (define %8 (sign-extend  %7 (bitvector %arg1)))"', '"   (define %9 (bvmul  %5  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.5.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %12 (+  %0.copy.5.new0  %lastidx2))"', '"   (define %13 (extract  %12 %0.copy.5.new0 %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mulhi_pi16" : {
             "x86_instructions" : {
               "_mm_mulhi_pi16" : {
@@ -10536,7 +10536,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0","0","64"],
                   "in_vectsize" : 512,
@@ -10552,7 +10552,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pmulhuw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","16","32"],
                   "in_vectsize" : 64,
@@ -10568,7 +10568,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -10584,7 +10584,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mullo_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","0","64"],
                   "in_vectsize" : 128,
@@ -10600,7 +10600,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pmulhw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","16","32"],
                   "in_vectsize" : 64,
@@ -10616,7 +10616,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","0","128"],
                   "in_vectsize" : 128,
@@ -10632,7 +10632,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","16","32"],
                   "in_vectsize" : 256,
@@ -10648,7 +10648,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -10664,7 +10664,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","16","32"],
                   "in_vectsize" : 256,
@@ -10680,7 +10680,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mulhi_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","16","32"],
                   "in_vectsize" : 512,
@@ -10696,7 +10696,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pmullw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","0","32"],
                   "in_vectsize" : 64,
@@ -10712,7 +10712,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mulhi_pu16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","16","32"],
                   "in_vectsize" : 64,
@@ -10728,7 +10728,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mullo_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","0","32"],
                   "in_vectsize" : 64,
@@ -10744,7 +10744,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","16","32"],
                   "in_vectsize" : 512,
@@ -10760,7 +10760,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","0","128"],
                   "in_vectsize" : 256,
@@ -10776,7 +10776,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mullo_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0","0","128"],
                   "in_vectsize" : 512,
@@ -10793,9 +10793,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mulhi_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg1)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg1)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mulhi_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg1)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg1)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cmpgt_epu32_mask" : {
             "x86_instructions" : {
               "_mm512_mask_cmpgt_epu32_mask" : {
@@ -10813,7 +10813,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -10829,7 +10829,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -10845,7 +10845,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -10861,7 +10861,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -10877,7 +10877,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -10893,7 +10893,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -10909,7 +10909,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -10925,7 +10925,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpgt_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -10941,7 +10941,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -10957,7 +10957,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpgt_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -10973,7 +10973,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpgt_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -10990,9 +10990,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cmpgt_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvugt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cmpgt_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvugt  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_min_epu16" : {
             "x86_instructions" : {
               "_mm256_maskz_min_epu16" : {
@@ -11010,7 +11010,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -11026,7 +11026,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epu64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -11042,7 +11042,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -11058,7 +11058,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -11074,7 +11074,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -11090,7 +11090,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -11106,7 +11106,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -11122,7 +11122,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -11138,7 +11138,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -11154,7 +11154,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -11170,7 +11170,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -11186,7 +11186,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -11202,7 +11202,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -11218,7 +11218,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epu32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -11234,7 +11234,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -11250,7 +11250,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_min_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -11266,7 +11266,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -11282,7 +11282,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -11298,7 +11298,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -11314,7 +11314,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_min_epu8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -11330,7 +11330,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_min_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -11346,7 +11346,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_min_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -11362,7 +11362,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -11379,9 +11379,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_min_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvumin  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_min_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvumin  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_dpwssd_epi32" : {
             "x86_instructions" : {
               "_mm_mask_dpwssd_epi32" : {
@@ -11399,7 +11399,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_dpwssd_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","16","32","0","0"],
                   "in_vectsize" : 512,
@@ -11415,7 +11415,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_dpwssd_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","32","16","32","0","0"],
                   "in_vectsize" : 256,
@@ -11432,9 +11432,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_dpwssd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %31.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %31.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvadd %11.red %11.ext0))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %33 (+  j0.new  %lastidx3))"', '"   (define %34 (extract  %33 j0.new src))"', '"   %34"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_dpwssd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %31.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %31.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvadd %11.red %11.ext0))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %33 (+  j0.new  %lastidx3))"', '"   (define %34 (extract  %33 j0.new src))"', '"   %34"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_adds_epi16" : {
             "x86_instructions" : {
               "_mm256_adds_epi16" : {
@@ -11452,7 +11452,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -11468,7 +11468,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -11484,7 +11484,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -11500,7 +11500,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddsw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -11516,7 +11516,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddsb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -11532,7 +11532,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -11548,7 +11548,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -11564,7 +11564,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_adds_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -11580,7 +11580,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -11597,9 +11597,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_adds_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvaddnsw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_adds_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvaddnsw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_dpbusds_epi32" : {
             "x86_instructions" : {
               "_mm_dpbusds_epi32" : {
@@ -11617,7 +11617,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_dpbusds_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","8","0","16"],
                   "in_vectsize" : 256,
@@ -11633,7 +11633,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_dpbusds_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","8","0","16"],
                   "in_vectsize" : 512,
@@ -11650,9 +11650,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm_dpbusds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %11.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %arg0)))"', '"  (define %10 (bvmul  %4  %9))"', '"  (define %11 (sign-extend  %10 (bitvector %lanesize1)))"', '"  %11"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %63.clone.4 (+  j0.new  %lastidx1))"', '" (define %11.ext0 (extract  %63.clone.4 j0.new dst))"', '" (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '" %11.acc0"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_dpbusds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %11.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %arg0)))"', '"  (define %10 (bvmul  %4  %9))"', '"  (define %11 (sign-extend  %10 (bitvector %lanesize1)))"', '"  %11"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %63.clone.4 (+  j0.new  %lastidx1))"', '" (define %11.ext0 (extract  %63.clone.4 j0.new dst))"', '" (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '" %11.acc0"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_cmpneq_epi8_mask" : {
             "x86_instructions" : {
               "_mm256_cmpneq_epi8_mask" : {
@@ -11670,7 +11670,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -11686,7 +11686,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -11702,7 +11702,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -11718,7 +11718,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -11734,7 +11734,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -11750,7 +11750,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -11766,7 +11766,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -11782,7 +11782,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -11798,7 +11798,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -11814,7 +11814,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -11830,7 +11830,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -11846,7 +11846,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -11862,7 +11862,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -11878,7 +11878,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -11894,7 +11894,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -11910,7 +11910,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -11926,7 +11926,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -11942,7 +11942,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -11958,7 +11958,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -11974,7 +11974,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpneq_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -11990,7 +11990,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpneq_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -12006,7 +12006,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -12022,7 +12022,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpneq_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -12039,9 +12039,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_cmpneq_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (not (bveq  %2  %4 )))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_cmpneq_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (not (bveq  %2  %4 )))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_m_pmovmskb" : {
             "x86_instructions" : {
               "_m_pmovmskb" : {
@@ -12059,7 +12059,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_movemask_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","32","1","0","8"],
                   "in_vectsize" : None,
@@ -12075,7 +12075,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_movemask_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","64","64","8","1","0","8"],
                   "in_vectsize" : None,
@@ -12091,7 +12091,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_movemask_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","1","0","8"],
                   "in_vectsize" : None,
@@ -12108,9 +12108,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_m_pmovmskb  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg0))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %1 a))"', '"  %2"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_m_pmovmskb  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg0))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %1 a))"', '"  %2"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_div_epi64" : {
             "x86_instructions" : {
               "_mm512_div_epi64" : {
@@ -12128,7 +12128,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","128"],
                   "in_vectsize" : 256,
@@ -12144,7 +12144,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -12160,7 +12160,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0","64"],
                   "in_vectsize" : 512,
@@ -12176,7 +12176,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0","16"],
                   "in_vectsize" : 512,
@@ -12192,7 +12192,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -12208,7 +12208,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -12224,7 +12224,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -12240,7 +12240,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -12256,7 +12256,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -12272,7 +12272,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","32"],
                   "in_vectsize" : 512,
@@ -12288,7 +12288,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","128"],
                   "in_vectsize" : 128,
@@ -12305,9 +12305,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_div_epi64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (sign-extend  %2 (bitvector %arg0)))"', '"  (define %6 (sign-extend  %4 (bitvector %arg0)))"', '"  (define %7 (bvsdiv  %5  %6))"', '"  (define %8.high.idx (- %arg0 1))"', '"  (define %8.low.idx (- %8.high.idx %elemsize -1 ))"', '"  (define %8 (extract  %8.high.idx %8.low.idx %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_div_epi64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (sign-extend  %2 (bitvector %arg0)))"', '"  (define %6 (sign-extend  %4 (bitvector %arg0)))"', '"  (define %7 (bvsdiv  %5  %6))"', '"  (define %8.high.idx (- %arg0 1))"', '"  (define %8.low.idx (- %8.high.idx %elemsize -1 ))"', '"  (define %8 (extract  %8.high.idx %8.low.idx %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cvtepi32_epi8" : {
             "x86_instructions" : {
               "_mm512_mask_cvtepi32_epi8" : {
@@ -12325,7 +12325,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -12341,7 +12341,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -12357,7 +12357,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -12373,7 +12373,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -12389,7 +12389,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -12405,7 +12405,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi32_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -12421,7 +12421,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -12437,7 +12437,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -12453,7 +12453,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi64_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -12469,7 +12469,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -12485,7 +12485,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -12501,7 +12501,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -12517,7 +12517,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -12533,7 +12533,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -12549,7 +12549,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -12565,7 +12565,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -12581,7 +12581,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi64_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -12597,7 +12597,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -12613,7 +12613,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi16_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -12629,7 +12629,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -12645,7 +12645,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi32_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -12661,7 +12661,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -12677,7 +12677,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -12693,7 +12693,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -12709,7 +12709,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_cvtepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -12725,7 +12725,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -12741,7 +12741,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -12757,7 +12757,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -12773,7 +12773,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi64_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -12789,7 +12789,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cvtepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -12805,7 +12805,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi64_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -12821,7 +12821,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -12837,7 +12837,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cvtepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -12853,7 +12853,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_cvtepi32_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -12869,7 +12869,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_cvtepi16_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -12886,9 +12886,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cvtepi32_epi8  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %arg0  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5.high.idx (- %arg0 1))"', '"   (define %5.low.idx (- %5.high.idx %elemsize -1 ))"', '"   (define %5 (extract  %5.high.idx %5.low.idx %4))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cvtepi32_epi8  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %2 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %arg0  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %5.high.idx (- %arg0 1))"', '"   (define %5.low.idx (- %5.high.idx %elemsize -1 ))"', '"   (define %5 (extract  %5.high.idx %5.low.idx %4))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %8 (+  j0.new  %lastidx2))"', '"   (define %9 (extract  %8 j0.new src))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_mul_epu32" : {
             "x86_instructions" : {
               "_mm_mask_mul_epu32" : {
@@ -12906,7 +12906,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mul_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -12922,7 +12922,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mul_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -12938,7 +12938,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mul_epu32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -12954,7 +12954,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mul_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -12970,7 +12970,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mul_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -12987,9 +12987,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_mul_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %6 (extract  %3 %0.copy.0.new0 b))"', '"   (define %7 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %8 (zero-extend  %6 (bitvector %arg0)))"', '"   (define %9 (bvmul  %7  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg0  %elemsize))"', '"   (define %0.copy.5.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg0  1))"', '"   (define %12 (+  %0.copy.5.new0  %lastidx2))"', '"   (define %13 (extract  %12 %0.copy.5.new0 src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_mul_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg0  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %4 (extract  %3 %0.copy.0.new0 a))"', '"   (define %6 (extract  %3 %0.copy.0.new0 b))"', '"   (define %7 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %8 (zero-extend  %6 (bitvector %arg0)))"', '"   (define %9 (bvmul  %7  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg0  %elemsize))"', '"   (define %0.copy.5.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg0  1))"', '"   (define %12 (+  %0.copy.5.new0  %lastidx2))"', '"   (define %13 (extract  %12 %0.copy.5.new0 src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmpgt_epi8_mask" : {
             "x86_instructions" : {
               "_mm_cmpgt_epi8_mask" : {
@@ -13007,7 +13007,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -13023,7 +13023,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -13039,7 +13039,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -13055,7 +13055,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -13071,7 +13071,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -13087,7 +13087,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -13103,7 +13103,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -13119,7 +13119,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -13135,7 +13135,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -13151,7 +13151,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -13167,7 +13167,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -13184,9 +13184,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmpgt_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsgt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmpgt_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsgt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cmplt_epu64_mask" : {
             "x86_instructions" : {
               "_mm512_mask_cmplt_epu64_mask" : {
@@ -13204,7 +13204,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epu32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -13220,7 +13220,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -13236,7 +13236,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -13252,7 +13252,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -13268,7 +13268,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -13284,7 +13284,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -13300,7 +13300,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmplt_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -13316,7 +13316,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -13332,7 +13332,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -13348,7 +13348,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmplt_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -13364,7 +13364,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmplt_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -13381,9 +13381,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cmplt_epu64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvult  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cmplt_epu64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvult  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_reduce_and_epi64" : {
             "x86_instructions" : {
               "_mm512_mask_reduce_and_epi64" : {
@@ -13401,7 +13401,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_mask_reduce_and_epi32" : {
                   "args" : ["(bv #x000000000000000000000000ffffffff 32)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -13418,9 +13418,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_reduce_and_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvand"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvand %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_reduce_and_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvand"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvand %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_dpwssds_epi32" : {
             "x86_instructions" : {
               "_mm256_mask_dpwssds_epi32" : {
@@ -13438,7 +13438,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_dpwssds_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","16","32","0","0"],
                   "in_vectsize" : 512,
@@ -13454,7 +13454,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_dpwssds_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","32","32","32","16","32","0","0"],
                   "in_vectsize" : 128,
@@ -13471,9 +13471,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_dpwssds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %32.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %32.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %34 (+  j0.new  %lastidx3))"', '"   (define %35 (extract  %34 j0.new src))"', '"   %35"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_dpwssds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %32.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %32.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvaddnsw %11.red %11.ext0 %lanesize1))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %34 (+  j0.new  %lastidx3))"', '"   (define %35 (extract  %34 j0.new src))"', '"   %35"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cvtepi16_epi64" : {
             "x86_instructions" : {
               "_mm_cvtepi16_epi64" : {
@@ -13491,7 +13491,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -13507,7 +13507,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -13523,7 +13523,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi32_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -13539,7 +13539,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -13555,7 +13555,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -13571,7 +13571,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -13587,7 +13587,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -13603,7 +13603,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -13619,7 +13619,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -13635,7 +13635,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -13651,7 +13651,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi16_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -13667,7 +13667,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -13683,7 +13683,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -13699,7 +13699,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi32_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -13715,7 +13715,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepi32_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -13731,7 +13731,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -13747,7 +13747,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepi8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -13764,9 +13764,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cvtepi16_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx1))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (sign-extend  %3 (bitvector %arg0)))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cvtepi16_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx1))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (sign-extend  %3 (bitvector %arg0)))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_blend_epi64" : {
             "x86_instructions" : {
               "_mm_mask_blend_epi64" : {
@@ -13784,7 +13784,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_blend_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -13800,7 +13800,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_blend_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -13816,7 +13816,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_blend_epi8" : {
                   "args" : ["SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -13832,7 +13832,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_blend_epi16" : {
                   "args" : ["SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -13848,7 +13848,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_blend_epi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -13864,7 +13864,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_blend_epi32" : {
                   "args" : ["SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -13880,7 +13880,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_blend_epi8" : {
                   "args" : ["SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -13896,7 +13896,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_blend_epi32" : {
                   "args" : ["SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -13912,7 +13912,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_blend_epi16" : {
                   "args" : ["SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -13928,7 +13928,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_blend_epi16" : {
                   "args" : ["SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -13944,7 +13944,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_blend_epi32" : {
                   "args" : ["SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -13961,9 +13961,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_blend_epi64  k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new b))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new a))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_blend_epi64  k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new b))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new a))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_cmple_epu32_mask" : {
             "x86_instructions" : {
               "_mm256_mask_cmple_epu32_mask" : {
@@ -13981,7 +13981,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -13997,7 +13997,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epu32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -14013,7 +14013,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -14029,7 +14029,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -14045,7 +14045,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -14061,7 +14061,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmple_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -14077,7 +14077,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -14093,7 +14093,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -14109,7 +14109,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmple_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -14125,7 +14125,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -14141,7 +14141,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmple_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -14158,9 +14158,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_cmple_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvule  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_cmple_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvule  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_mov_epi64" : {
             "x86_instructions" : {
               "_mm512_maskz_mov_epi64" : {
@@ -14178,7 +14178,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mov_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -14194,7 +14194,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mov_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -14210,7 +14210,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mov_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -14226,7 +14226,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mov_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -14242,7 +14242,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mov_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -14258,7 +14258,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mov_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -14274,7 +14274,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mov_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -14290,7 +14290,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mov_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -14306,7 +14306,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mov_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -14322,7 +14322,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mov_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -14338,7 +14338,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mov_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -14354,7 +14354,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mov_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -14370,7 +14370,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mov_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -14386,7 +14386,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mov_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -14402,7 +14402,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mov_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -14418,7 +14418,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mov_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -14434,7 +14434,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mov_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -14450,7 +14450,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mov_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -14466,7 +14466,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mov_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -14482,7 +14482,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mov_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -14498,7 +14498,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mov_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -14514,7 +14514,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mov_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -14530,7 +14530,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mov_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -14547,9 +14547,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_mov_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_mov_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cvtepu16_epi32" : {
             "x86_instructions" : {
               "_mm_cvtepu16_epi32" : {
@@ -14567,7 +14567,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","64"],
                   "in_vectsize" : 128,
@@ -14583,7 +14583,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0","32"],
                   "in_vectsize" : 128,
@@ -14599,7 +14599,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -14615,7 +14615,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0","64"],
                   "in_vectsize" : 128,
@@ -14631,7 +14631,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -14647,7 +14647,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -14663,7 +14663,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -14679,7 +14679,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -14695,7 +14695,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu8_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","64"],
                   "in_vectsize" : 128,
@@ -14711,7 +14711,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -14727,7 +14727,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -14743,7 +14743,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu16_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -14759,7 +14759,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtepu8_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -14775,7 +14775,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu16_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","64"],
                   "in_vectsize" : 128,
@@ -14791,7 +14791,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtepu16_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -14807,7 +14807,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu8_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","32"],
                   "in_vectsize" : 128,
@@ -14823,7 +14823,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtepu32_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -14840,9 +14840,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cvtepu16_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx1))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cvtepu16_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx1))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %4 (zero-extend  %3 (bitvector %arg0)))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_broadcastmw_epi32" : {
             "x86_instructions" : {
               "_mm256_broadcastmw_epi32" : {
@@ -14860,7 +14860,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastmw_epi32" : {
                   "args" : ["SYMBOLIC_BV_16","16","16","256","16","0","32","0"],
                   "in_vectsize" : 16,
@@ -14876,7 +14876,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastmb_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","8","8","16","8","0","64","0"],
                   "in_vectsize" : 8,
@@ -14892,7 +14892,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastmb_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","8","8","64","8","0","64","0"],
                   "in_vectsize" : 8,
@@ -14908,7 +14908,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastmw_epi32" : {
                   "args" : ["SYMBOLIC_BV_16","16","16","64","16","0","32","0"],
                   "in_vectsize" : 16,
@@ -14924,7 +14924,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcastmb_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","8","8","32","8","0","64","0"],
                   "in_vectsize" : 8,
@@ -14941,9 +14941,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_broadcastmw_epi32  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg1))"', '"  (define %1 (extract  %highidx0 %arg1 k))"', '"  (define %2 (zero-extend  %1 (bitvector %arg0)))"', '"  %2"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_broadcastmw_epi32  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg1))"', '"  (define %1 (extract  %highidx0 %arg1 k))"', '"  (define %2 (zero-extend  %1 (bitvector %arg0)))"', '"  %2"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_div_epi32" : {
             "x86_instructions" : {
               "_mm512_mask_div_epi32" : {
@@ -14962,9 +14962,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_div_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (sign-extend  %3 (bitvector %arg0)))"', '"   (define %7 (sign-extend  %5 (bitvector %arg0)))"', '"   (define %8 (bvsdiv  %6  %7))"', '"   (define %9.high.idx (- %arg0 1))"', '"   (define %9.low.idx (- %9.high.idx %elemsize -1 ))"', '"   (define %9 (extract  %9.high.idx %9.low.idx %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_div_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (sign-extend  %3 (bitvector %arg0)))"', '"   (define %7 (sign-extend  %5 (bitvector %arg0)))"', '"   (define %8 (bvsdiv  %6  %7))"', '"   (define %9.high.idx (- %arg0 1))"', '"   (define %9.low.idx (- %9.high.idx %elemsize -1 ))"', '"   (define %9 (extract  %9.high.idx %9.low.idx %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_maddubs_epi16" : {
             "x86_instructions" : {
               "_mm512_maskz_maddubs_epi16" : {
@@ -14982,7 +14982,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_maddubs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","8","0","16","8"],
                   "in_vectsize" : 128,
@@ -14998,7 +14998,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_maddubs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","8","0","16","8"],
                   "in_vectsize" : 512,
@@ -15014,7 +15014,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_maddubs_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","8","0","16","8"],
                   "in_vectsize" : 256,
@@ -15030,7 +15030,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_maddubs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","8","0","16","8"],
                   "in_vectsize" : 128,
@@ -15046,7 +15046,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_maddubs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","8","0","16","8"],
                   "in_vectsize" : 256,
@@ -15063,9 +15063,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_maddubs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %2 (+  %0.copy.0.new0  %arg2))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx0))"', '"   (define %4 (extract  %3 %2 a))"', '"   (define %7 (extract  %3 %2 b))"', '"   (define %8 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (sign-extend  %7 (bitvector %arg1)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %11 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %12 (extract  %11 %0.copy.0.new0 a))"', '"   (define %14 (extract  %11 %0.copy.0.new0 b))"', '"   (define %15 (zero-extend  %12 (bitvector %arg1)))"', '"   (define %16 (sign-extend  %14 (bitvector %arg1)))"', '"   (define %17 (bvmul  %15  %16))"', '"   (define %18 (bvaddnsw  %10  %17 %arg1))"', '"   %18"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.6.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %22 (+  %0.copy.6.new0  %lastidx2))"', '"   (define %23 (extract  %22 %0.copy.6.new0 %arg0))"', '"   %23"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_maddubs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %2 (+  %0.copy.0.new0  %arg2))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %3 (+  %0.copy.0.new0  %lastidx0))"', '"   (define %4 (extract  %3 %2 a))"', '"   (define %7 (extract  %3 %2 b))"', '"   (define %8 (zero-extend  %4 (bitvector %arg1)))"', '"   (define %9 (sign-extend  %7 (bitvector %arg1)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %11 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %12 (extract  %11 %0.copy.0.new0 a))"', '"   (define %14 (extract  %11 %0.copy.0.new0 b))"', '"   (define %15 (zero-extend  %12 (bitvector %arg1)))"', '"   (define %16 (sign-extend  %14 (bitvector %arg1)))"', '"   (define %17 (bvmul  %15  %16))"', '"   (define %18 (bvaddnsw  %10  %17 %arg1))"', '"   %18"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.6.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %22 (+  %0.copy.6.new0  %lastidx2))"', '"   (define %23 (extract  %22 %0.copy.6.new0 %arg0))"', '"   %23"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_dpwssd_epi32" : {
             "x86_instructions" : {
               "_mm256_maskz_dpwssd_epi32" : {
@@ -15083,7 +15083,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_maskz_dpwssd_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","16","32","0","0"],
                   "in_vectsize" : 512,
@@ -15099,7 +15099,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm_maskz_dpwssd_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","32","32","32","16","32","0","0"],
                   "in_vectsize" : 128,
@@ -15116,9 +15116,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_dpwssd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %31.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %31.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvadd %11.red %11.ext0))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %33 (+  j0.new  %lastidx3))"', '"   (define %34 (extract  %33 j0.new %arg0))"', '"   %34"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_dpwssd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %11.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (sign-extend  %4 (bitvector %lanesize1)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %lanesize1)))"', '"   (define %11 (bvmul  %5  %10))"', '"   %11"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %31.clone.2 (+  j0.new  %lastidx1))"', '"  (define %11.ext0 (extract  %31.clone.2 j0.new dst))"', '"  (define %11.acc0 (bvadd %11.red %11.ext0))"', '"  %11.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %33 (+  j0.new  %lastidx3))"', '"   (define %34 (extract  %33 j0.new %arg0))"', '"   %34"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmplt_epi32_mask" : {
             "x86_instructions" : {
               "_mm_cmplt_epi32_mask" : {
@@ -15136,7 +15136,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -15152,7 +15152,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -15168,7 +15168,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -15184,7 +15184,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -15200,7 +15200,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -15216,7 +15216,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -15232,7 +15232,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -15248,7 +15248,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -15264,7 +15264,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -15280,7 +15280,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -15296,7 +15296,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -15312,7 +15312,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -15329,9 +15329,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmplt_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvslt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmplt_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvslt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_cmpge_epi16_mask" : {
             "x86_instructions" : {
               "_mm512_mask_cmpge_epi16_mask" : {
@@ -15349,7 +15349,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -15365,7 +15365,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -15381,7 +15381,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -15397,7 +15397,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -15413,7 +15413,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -15429,7 +15429,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -15445,7 +15445,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -15461,7 +15461,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -15477,7 +15477,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpge_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -15493,7 +15493,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpge_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -15509,7 +15509,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpge_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -15526,9 +15526,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_cmpge_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsge  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_cmpge_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvsge  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_dpwssds_epi32" : {
             "x86_instructions" : {
               "_mm_dpwssds_epi32" : {
@@ -15546,7 +15546,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_dpwssds_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","16","0"],
                   "in_vectsize" : 256,
@@ -15562,7 +15562,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_dpwssds_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","16","0"],
                   "in_vectsize" : 512,
@@ -15579,9 +15579,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm_dpwssds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %10.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %lanesize1)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %lanesize1)))"', '"  (define %10 (bvmul  %4  %9))"', '"  %10"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %31.clone.2 (+  j0.new  %lastidx1))"', '" (define %10.ext0 (extract  %31.clone.2 j0.new dst))"', '" (define %10.acc0 (bvaddnsw %10.red %10.ext0 %lanesize1))"', '" %10.acc0"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_dpwssds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %10.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %lanesize1)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %lanesize1)))"', '"  (define %10 (bvmul  %4  %9))"', '"  %10"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %31.clone.2 (+  j0.new  %lastidx1))"', '" (define %10.ext0 (extract  %31.clone.2 j0.new dst))"', '" (define %10.acc0 (bvaddnsw %10.red %10.ext0 %lanesize1))"', '" %10.acc0"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_or_epi32" : {
             "x86_instructions" : {
               "_mm_or_epi32" : {
@@ -15599,7 +15599,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_or_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -15615,7 +15615,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_or_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -15631,7 +15631,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -15647,7 +15647,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -15663,7 +15663,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -15680,9 +15680,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_or_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvor  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_or_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvor  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_dpwssd_epi32" : {
             "x86_instructions" : {
               "_mm_dpwssd_epi32" : {
@@ -15700,7 +15700,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_dpwssd_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","16","0"],
                   "in_vectsize" : 512,
@@ -15716,7 +15716,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
-        
+
               "_mm256_dpwssd_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","16","0"],
                   "in_vectsize" : 256,
@@ -15733,9 +15733,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %10.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %lanesize1)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %lanesize1)))"', '"  (define %10 (bvmul  %4  %9))"', '"  %10"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %30.clone.2 (+  j0.new  %lastidx1))"', '" (define %10.ext0 (extract  %30.clone.2 j0.new dst))"', '" (define %10.acc0 (bvadd %10.red %10.ext0))"', '" %10.acc0"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define %10.red"', '"(apply"', '" bvadd"', '" (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1.new0 (+  j0.new  iterator.0.new))"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %2 (+  %1.new0  %lastidx2))"', '"  (define %3 (extract  %2 %1.new0 a))"', '"  (define %4 (sign-extend  %3 (bitvector %lanesize1)))"', '"  (define %8 (extract  %2 %1.new0 b))"', '"  (define %9 (sign-extend  %8 (bitvector %lanesize1)))"', '"  (define %10 (bvmul  %4  %9))"', '"  %10"', '" )"', '"))"', '" (define %lastidx1 (-  %lanesize1  1))"', '" (define %30.clone.2 (+  j0.new  %lastidx1))"', '" (define %10.ext0 (extract  %30.clone.2 j0.new dst))"', '" (define %10.acc0 (bvadd %10.red %10.ext0))"', '" %10.acc0"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_mulhrs_epi16" : {
             "x86_instructions" : {
               "_mm256_maskz_mulhrs_epi16" : {
@@ -15753,7 +15753,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mulhrs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 512,
@@ -15769,7 +15769,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mulhrs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 128,
@@ -15785,7 +15785,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mulhrs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 256,
@@ -15801,7 +15801,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mulhrs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 512,
@@ -15817,7 +15817,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mulhrs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 128,
@@ -15834,9 +15834,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_mulhrs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (sign-extend  %3 (bitvector %arg4)))"', '"   (define %6 (extract  %2 j0.new b))"', '"   (define %7 (sign-extend  %6 (bitvector %arg4)))"', '"   (define %8 (bvmul  %4  %7))"', '"   (define %9 (bvashr  %8  %arg3))"', '"   (define %10 (bvadd  %9  %arg2))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %11 (extract  (- (- %arg4 1) %arg1) (- (- %arg4 1) %highidx0) %10))"', '"   %11"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %14 (+  j0.new  %lastidx2))"', '"   (define %15 (extract  %14 j0.new %arg0))"', '"   %15"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_mulhrs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (sign-extend  %3 (bitvector %arg4)))"', '"   (define %6 (extract  %2 j0.new b))"', '"   (define %7 (sign-extend  %6 (bitvector %arg4)))"', '"   (define %8 (bvmul  %4  %7))"', '"   (define %9 (bvashr  %8  %arg3))"', '"   (define %10 (bvadd  %9  %arg2))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %11 (extract  (- (- %arg4 1) %arg1) (- (- %arg4 1) %highidx0) %10))"', '"   %11"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %14 (+  j0.new  %lastidx2))"', '"   (define %15 (extract  %14 j0.new %arg0))"', '"   %15"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_subs_epi16" : {
             "x86_instructions" : {
               "_mm512_subs_epi16" : {
@@ -15854,7 +15854,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -15870,7 +15870,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -15886,7 +15886,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_subs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -15902,7 +15902,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -15918,7 +15918,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_subs_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -15934,7 +15934,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -15950,7 +15950,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_subs_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -15967,9 +15967,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_subs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsubnsw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_subs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsubnsw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mul_epu32" : {
             "x86_instructions" : {
               "_mm256_mul_epu32" : {
@@ -15987,7 +15987,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mul_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -16003,7 +16003,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mul_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -16020,9 +16020,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mul_epu32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %5 (extract  %2 %0.new0 b))"', '"  (define %6 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %7 (zero-extend  %5 (bitvector %arg0)))"', '"  (define %8 (bvmul  %6  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mul_epu32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %5 (extract  %2 %0.new0 b))"', '"  (define %6 (zero-extend  %3 (bitvector %arg0)))"', '"  (define %7 (zero-extend  %5 (bitvector %arg0)))"', '"  (define %8 (bvmul  %6  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_min_epu64" : {
             "x86_instructions" : {
               "_mm512_min_epu64" : {
@@ -16040,7 +16040,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -16056,7 +16056,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -16072,7 +16072,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pminub" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -16088,7 +16088,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -16104,7 +16104,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -16120,7 +16120,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -16136,7 +16136,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -16152,7 +16152,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_pu8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -16168,7 +16168,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -16184,7 +16184,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -16200,7 +16200,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -16216,7 +16216,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -16232,7 +16232,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -16249,9 +16249,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_min_epu64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvumin  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_min_epu64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvumin  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_reduce_or_epi64" : {
             "x86_instructions" : {
               "_mm512_mask_reduce_or_epi64" : {
@@ -16269,7 +16269,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_mask_reduce_or_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -16286,9 +16286,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_reduce_or_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvor"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvor %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_reduce_or_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %7 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %7)"', '" (define %5.red"', '"(apply"', '" bvor"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx3 (-  %elemsize  1))"', '"   (define %4 (+  j0.new  %lastidx3))"', '"   (define %5 (extract  %4 j0.new a))"', '"   %5"', '"   )"', '"   (begin"', '"   (define %offset2 (+  %arg1  %elemsize))"', '"   (define %lastidx2 (-  %offset2  1))"', '"   (define %8 (extract  %lastidx2 %arg1 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %3 (extract  %lastidx1 %arg1 dst))"', '" (define %6 (bvor %5.red %3))"', '" %6"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_cmpgt_epi8" : {
             "x86_instructions" : {
               "_mm256_cmpgt_epi8" : {
@@ -16306,7 +16306,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 128,
@@ -16322,7 +16322,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpgtw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 64,
@@ -16338,7 +16338,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpgtb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 64,
@@ -16354,7 +16354,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_pi8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 64,
@@ -16370,7 +16370,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 64,
@@ -16386,7 +16386,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pcmpgtd" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 64,
@@ -16402,7 +16402,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 256,
@@ -16418,7 +16418,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 128,
@@ -16434,7 +16434,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 256,
@@ -16450,7 +16450,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 128,
@@ -16466,7 +16466,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : 128,
@@ -16482,7 +16482,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : 256,
@@ -16498,7 +16498,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_pi32" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : 64,
@@ -16515,9 +16515,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_cmpgt_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvsgt  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_cmpgt_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvsgt  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_cmplt_epu16_mask" : {
             "x86_instructions" : {
               "_mm256_cmplt_epu16_mask" : {
@@ -16535,7 +16535,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -16551,7 +16551,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -16567,7 +16567,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -16583,7 +16583,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -16599,7 +16599,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -16615,7 +16615,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -16631,7 +16631,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -16647,7 +16647,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmplt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -16663,7 +16663,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -16679,7 +16679,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -16695,7 +16695,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmplt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -16712,9 +16712,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_cmplt_epu16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvult  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_cmplt_epu16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvult  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mulhrs_epi16" : {
             "x86_instructions" : {
               "_mm256_mulhrs_epi16" : {
@@ -16732,7 +16732,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mulhrs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 512,
@@ -16748,7 +16748,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mulhrs_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 64,
@@ -16764,7 +16764,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mulhrs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","1","(bv #x00000000000000000000000000000001 32)","(bv #x0000000000000000000000000000000e 32)","32"],
                   "in_vectsize" : 128,
@@ -16781,9 +16781,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mulhrs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg3)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg3)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %8 (bvashr  %7  %arg2))"', '"  (define %9 (bvadd  %8  %arg1))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %10 (extract  (- (- %arg3 1) %arg0) (- (- %arg3 1) %highidx0) %9))"', '"  %10"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mulhrs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %3 (sign-extend  %2 (bitvector %arg3)))"', '"  (define %5 (extract  %1 j0.new b))"', '"  (define %6 (sign-extend  %5 (bitvector %arg3)))"', '"  (define %7 (bvmul  %3  %6))"', '"  (define %8 (bvashr  %7  %arg2))"', '"  (define %9 (bvadd  %8  %arg1))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %10 (extract  (- (- %arg3 1) %arg0) (- (- %arg3 1) %highidx0) %9))"', '"  %10"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_min_epi8" : {
             "x86_instructions" : {
               "_mm512_min_epi8" : {
@@ -16801,7 +16801,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -16817,7 +16817,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -16833,7 +16833,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -16849,7 +16849,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -16865,7 +16865,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -16881,7 +16881,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -16897,7 +16897,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -16913,7 +16913,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -16929,7 +16929,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -16945,7 +16945,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_min_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -16961,7 +16961,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_min_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -16977,7 +16977,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_min_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -16993,7 +16993,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pminsw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -17010,9 +17010,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_min_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsmin  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_min_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvsmin  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cvtusepi64_epi32" : {
             "x86_instructions" : {
               "_mm_cvtusepi64_epi32" : {
@@ -17030,7 +17030,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","32","0","64"],
                   "in_vectsize" : 128,
@@ -17046,7 +17046,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -17062,7 +17062,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -17078,7 +17078,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -17094,7 +17094,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -17110,7 +17110,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -17126,7 +17126,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -17142,7 +17142,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","8","0","16"],
                   "in_vectsize" : 256,
@@ -17158,7 +17158,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -17174,7 +17174,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -17190,7 +17190,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -17206,7 +17206,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -17222,7 +17222,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -17238,7 +17238,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -17254,7 +17254,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -17270,7 +17270,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","16","0","64"],
                   "in_vectsize" : 512,
@@ -17286,7 +17286,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","16","0","64"],
                   "in_vectsize" : 128,
@@ -17302,7 +17302,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","16","0","32"],
                   "in_vectsize" : 128,
@@ -17318,7 +17318,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","32","8","0","32"],
                   "in_vectsize" : 128,
@@ -17334,7 +17334,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -17350,7 +17350,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -17366,7 +17366,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","16","8","0","64"],
                   "in_vectsize" : 128,
@@ -17382,7 +17382,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -17398,7 +17398,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","32","8","0","64"],
                   "in_vectsize" : 256,
@@ -17414,7 +17414,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -17430,7 +17430,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","128","8","0","32"],
                   "in_vectsize" : 512,
@@ -17446,7 +17446,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","16","0","32"],
                   "in_vectsize" : 256,
@@ -17462,7 +17462,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtusepi32_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","8","0","32"],
                   "in_vectsize" : 256,
@@ -17478,7 +17478,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi64_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","64","16","0","64"],
                   "in_vectsize" : 256,
@@ -17494,7 +17494,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","8","0","16"],
                   "in_vectsize" : 512,
@@ -17510,7 +17510,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","128","128","128","32","0","64"],
                   "in_vectsize" : 256,
@@ -17526,7 +17526,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi64_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","128","128","64","8","0","64"],
                   "in_vectsize" : 512,
@@ -17542,7 +17542,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtsepi64_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","32","0","64"],
                   "in_vectsize" : 512,
@@ -17558,7 +17558,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cvtusepi16_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","64","8","0","16"],
                   "in_vectsize" : 128,
@@ -17574,7 +17574,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cvtusepi32_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","256","256","256","16","0","32"],
                   "in_vectsize" : 512,
@@ -17591,9 +17591,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cvtusepi64_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4 (bvusat %3 %arg0 %elemsize ))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cvtusepi64_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %lastidx1 (-  %arg0  1))"', '"  (define %2 (+  %0.new0  %lastidx1))"', '"  (define %3 (extract  %2 %0.new0 a))"', '"  (define %4 (bvusat %3 %arg0 %elemsize ))"', '"  %4"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_reduce_or_epi64" : {
             "x86_instructions" : {
               "_mm512_reduce_or_epi64" : {
@@ -17611,7 +17611,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "False",
       },
-        
+
               "_mm512_reduce_or_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_512","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -17628,9 +17628,9 @@ semantcs = {
                   "SIMD" : "False",
       },
         },
-            "semantics" : ['"(define (_mm512_reduce_or_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvor"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvor %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_reduce_or_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (define %offset0 (+  %arg1  %elemsize))"', '" (define %lastidx0 (-  %offset0  1))"', '" (define %6 (extract  %lastidx0 %arg1 %arg0))"', '" (define dst %6)"', '" (define %4.red"', '"(apply"', '" bvor"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx2 (-  %elemsize  1))"', '"  (define %3 (+  j0.new  %lastidx2))"', '"  (define %4 (extract  %3 j0.new a))"', '"  %4"', '" )"', '"))"', '" (define %offset1 (+  %arg1  %elemsize))"', '" (define %lastidx1 (-  %offset1  1))"', '" (define %2 (extract  %lastidx1 %arg1 dst))"', '" (define %5 (bvor %4.red %2))"', '" %5"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_blend_epi16" : {
             "x86_instructions" : {
               "_mm_blend_epi16" : {
@@ -17648,7 +17648,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_blend_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_8","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -17664,7 +17664,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_blend_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_4","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -17681,9 +17681,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div imm8))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new b))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new a))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div imm8))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new b))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new a))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_movm_epi64" : {
             "x86_instructions" : {
               "_mm256_movm_epi64" : {
@@ -17701,7 +17701,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movm_epi16" : {
                   "args" : ["SYMBOLIC_BV_8","128","128","128","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : None,
@@ -17717,7 +17717,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movm_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","512","512","512","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : None,
@@ -17733,7 +17733,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movm_epi8" : {
                   "args" : ["SYMBOLIC_BV_32","256","256","256","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : None,
@@ -17749,7 +17749,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movm_epi8" : {
                   "args" : ["SYMBOLIC_BV_64","512","512","512","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : None,
@@ -17765,7 +17765,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movm_epi8" : {
                   "args" : ["SYMBOLIC_BV_16","128","128","128","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : None,
@@ -17781,7 +17781,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movm_epi64" : {
                   "args" : ["SYMBOLIC_BV_8","128","128","128","64","0","(bv #x000000000000000000000000000000000000000000000000ffffffffffffffff 64)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)"],
                   "in_vectsize" : None,
@@ -17797,7 +17797,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movm_epi32" : {
                   "args" : ["SYMBOLIC_BV_8","256","256","256","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : None,
@@ -17813,7 +17813,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movm_epi16" : {
                   "args" : ["SYMBOLIC_BV_16","256","256","256","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : None,
@@ -17829,7 +17829,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movm_epi16" : {
                   "args" : ["SYMBOLIC_BV_32","512","512","512","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : None,
@@ -17845,7 +17845,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movm_epi32" : {
                   "args" : ["SYMBOLIC_BV_8","128","128","128","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : None,
@@ -17861,7 +17861,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movm_epi32" : {
                   "args" : ["SYMBOLIC_BV_16","512","512","512","32","0","(bv #x000000000000000000000000ffffffff 32)","(bv #x00000000000000000000000000000000 32)"],
                   "in_vectsize" : None,
@@ -17878,9 +17878,9 @@ semantcs = {
                   "SIMD" : "None",
       },
         },
-            "semantics" : ['"(define (_mm256_movm_epi64  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   %arg0"', '"   )"', '"   (begin"', '"   %arg1"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_movm_epi64  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   %arg0"', '"   )"', '"   (begin"', '"   %arg1"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_madd_epi16" : {
             "x86_instructions" : {
               "_mm256_maskz_madd_epi16" : {
@@ -17898,7 +17898,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_madd_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","16","0","32","16"],
                   "in_vectsize" : 128,
@@ -17914,7 +17914,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_madd_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","16","0","32","16"],
                   "in_vectsize" : 256,
@@ -17930,7 +17930,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_madd_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","16","0","32","16"],
                   "in_vectsize" : 512,
@@ -17946,7 +17946,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_madd_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","64","16","0","32","16"],
                   "in_vectsize" : 128,
@@ -17962,7 +17962,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_madd_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","16","0","32","16"],
                   "in_vectsize" : 512,
@@ -17979,9 +17979,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_madd_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %3 (+  %0.copy.0.new0  %arg2))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %4 (+  %0.copy.0.new0  %lastidx0))"', '"   (define %5 (extract  %4 %3 a))"', '"   (define %8 (extract  %4 %3 b))"', '"   (define %9 (sign-extend  %5 (bitvector %arg1)))"', '"   (define %10 (sign-extend  %8 (bitvector %arg1)))"', '"   (define %11 (bvmul  %9  %10))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %13 (extract  %12 %0.copy.0.new0 a))"', '"   (define %15 (extract  %12 %0.copy.0.new0 b))"', '"   (define %16 (sign-extend  %13 (bitvector %arg1)))"', '"   (define %17 (sign-extend  %15 (bitvector %arg1)))"', '"   (define %18 (bvmul  %16  %17))"', '"   (define %19 (bvadd  %11  %18))"', '"   %19"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.6.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %22 (+  %0.copy.6.new0  %lastidx2))"', '"   (define %23 (extract  %22 %0.copy.6.new0 %arg0))"', '"   %23"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_madd_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %factor0 (/  %arg1  %elemsize))"', '"   (define %0.copy.0.new0 (*  j0.new  %factor0))"', '"   (define %3 (+  %0.copy.0.new0  %arg2))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %4 (+  %0.copy.0.new0  %lastidx0))"', '"   (define %5 (extract  %4 %3 a))"', '"   (define %8 (extract  %4 %3 b))"', '"   (define %9 (sign-extend  %5 (bitvector %arg1)))"', '"   (define %10 (sign-extend  %8 (bitvector %arg1)))"', '"   (define %11 (bvmul  %9  %10))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  %0.copy.0.new0  %lastidx1))"', '"   (define %13 (extract  %12 %0.copy.0.new0 a))"', '"   (define %15 (extract  %12 %0.copy.0.new0 b))"', '"   (define %16 (sign-extend  %13 (bitvector %arg1)))"', '"   (define %17 (sign-extend  %15 (bitvector %arg1)))"', '"   (define %18 (bvmul  %16  %17))"', '"   (define %19 (bvadd  %11  %18))"', '"   %19"', '"   )"', '"   (begin"', '"   (define %factor1 (/  %arg1  %elemsize))"', '"   (define %0.copy.6.new0 (*  j0.new  %factor1))"', '"   (define %lastidx2 (-  %arg1  1))"', '"   (define %22 (+  %0.copy.6.new0  %lastidx2))"', '"   (define %23 (extract  %22 %0.copy.6.new0 %arg0))"', '"   %23"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_adds_epi16" : {
             "x86_instructions" : {
               "_mm512_mask_adds_epi16" : {
@@ -17999,7 +17999,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_adds_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -18015,7 +18015,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -18031,7 +18031,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_adds_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -18047,7 +18047,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_adds_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -18063,7 +18063,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -18079,7 +18079,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_adds_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -18095,7 +18095,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_adds_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -18111,7 +18111,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_adds_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -18127,7 +18127,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_adds_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -18143,7 +18143,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_adds_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -18159,7 +18159,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_adds_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -18176,9 +18176,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_adds_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvaddnsw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new src))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_adds_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvaddnsw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new src))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_avg_epu16" : {
             "x86_instructions" : {
               "_mm_maskz_avg_epu16" : {
@@ -18196,7 +18196,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 512,
@@ -18212,7 +18212,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_avg_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 256,
@@ -18228,7 +18228,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_avg_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 128,
@@ -18244,7 +18244,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_avg_epu16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 256,
@@ -18260,7 +18260,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_avg_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 512,
@@ -18276,7 +18276,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_avg_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 512,
@@ -18292,7 +18292,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_avg_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","(bv #x0000000000000001 16)","(bv #x0000000000000001 16)"],
                   "in_vectsize" : 128,
@@ -18308,7 +18308,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_avg_epu8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 256,
@@ -18324,7 +18324,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 256,
@@ -18340,7 +18340,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_avg_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 512,
@@ -18356,7 +18356,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_avg_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x00000001 8)","(bv #x00000001 8)"],
                   "in_vectsize" : 128,
@@ -18373,9 +18373,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_avg_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %6 (extract  %3 j0.new b))"', '"   (define %7 (bvadd  %4  %6))"', '"   (define %8 (bvadd  %7  %arg2))"', '"   (define %9 (bvashr  %8  %arg1))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_avg_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %3 (+  j0.new  %lastidx0))"', '"   (define %4 (extract  %3 j0.new a))"', '"   (define %6 (extract  %3 j0.new b))"', '"   (define %7 (bvadd  %4  %6))"', '"   (define %8 (bvadd  %7  %arg2))"', '"   (define %9 (bvashr  %8  %arg1))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_or_epi32" : {
             "x86_instructions" : {
               "_mm_mask_or_epi32" : {
@@ -18393,7 +18393,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -18409,7 +18409,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_or_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -18425,7 +18425,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_or_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -18441,7 +18441,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -18457,7 +18457,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_or_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -18473,7 +18473,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_or_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -18489,7 +18489,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_or_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -18505,7 +18505,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_or_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -18521,7 +18521,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_or_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -18537,7 +18537,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_or_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -18553,7 +18553,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_or_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -18570,9 +18570,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_or_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvor  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_or_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvor  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_abs_epi16" : {
             "x86_instructions" : {
               "_mm_maskz_abs_epi16" : {
@@ -18590,7 +18590,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -18606,7 +18606,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_abs_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -18622,7 +18622,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_abs_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -18638,7 +18638,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_abs_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -18654,7 +18654,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -18670,7 +18670,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_abs_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -18686,7 +18686,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_abs_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -18702,7 +18702,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -18718,7 +18718,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_abs_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -18734,7 +18734,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -18750,7 +18750,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_abs_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -18766,7 +18766,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -18782,7 +18782,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -18798,7 +18798,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_abs_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -18814,7 +18814,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_abs_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -18830,7 +18830,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_abs_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -18846,7 +18846,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_abs_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -18862,7 +18862,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_abs_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -18878,7 +18878,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_abs_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -18894,7 +18894,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_abs_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -18910,7 +18910,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_abs_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -18926,7 +18926,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_abs_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -18942,7 +18942,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_abs_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -18959,9 +18959,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_abs_epi16  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (integer->bitvector (abs (bitvector->integer %3)) (bitvector %elemsize)))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_abs_epi16  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (integer->bitvector (abs (bitvector->integer %3)) (bitvector %elemsize)))"', '"   %4"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %7 (+  j0.new  %lastidx1))"', '"   (define %8 (extract  %7 j0.new %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_and_epi32" : {
             "x86_instructions" : {
               "_mm512_and_epi32" : {
@@ -18980,9 +18980,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_and_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvand  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_and_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %4 (+  j0.new  %lastidx0))"', '"  (define %5 (extract  %4 j0.new a))"', '"  (define %7 (extract  %4 j0.new b))"', '"  (define %8 (bvand  %5  %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_cmpgt_epu32_mask" : {
             "x86_instructions" : {
               "_mm256_cmpgt_epu32_mask" : {
@@ -19000,7 +19000,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -19016,7 +19016,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -19032,7 +19032,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -19048,7 +19048,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -19064,7 +19064,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -19080,7 +19080,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -19096,7 +19096,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpgt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -19112,7 +19112,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -19128,7 +19128,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -19144,7 +19144,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpgt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -19160,7 +19160,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpgt_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -19177,9 +19177,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_cmpgt_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvugt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_cmpgt_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvugt  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmpge_epu64_mask" : {
             "x86_instructions" : {
               "_mm_cmpge_epu64_mask" : {
@@ -19197,7 +19197,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -19213,7 +19213,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -19229,7 +19229,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epu64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -19245,7 +19245,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -19261,7 +19261,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -19277,7 +19277,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -19293,7 +19293,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epu16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -19309,7 +19309,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -19325,7 +19325,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmpge_epu32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -19341,7 +19341,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmpge_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -19357,7 +19357,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmpge_epu8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -19374,9 +19374,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmpge_epu64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvuge  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmpge_epu64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvuge  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_subs_epu16" : {
             "x86_instructions" : {
               "_mm512_mask_subs_epu16" : {
@@ -19394,7 +19394,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_subs_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -19410,7 +19410,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_subs_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -19426,7 +19426,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_subs_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -19442,7 +19442,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_subs_epu16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -19458,7 +19458,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_subs_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -19474,7 +19474,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_subs_epu8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -19490,7 +19490,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_subs_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -19506,7 +19506,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_subs_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -19522,7 +19522,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_subs_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -19538,7 +19538,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_subs_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -19554,7 +19554,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_subs_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -19571,9 +19571,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_subs_epu16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsubnuw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new src))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_subs_epu16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsubnuw  %3  %5 %elemsize))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %10 (+  j0.new  %lastidx1))"', '"   (define %11 (extract  %10 j0.new src))"', '"   %11"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_cmplt_epi32" : {
             "x86_instructions" : {
               "_mm_cmplt_epi32" : {
@@ -19591,7 +19591,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","(bv #x000000ff 8)","(bv #x00000000 8)"],
                   "in_vectsize" : 128,
@@ -19607,7 +19607,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmplt_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","(bv #x000000000000ffff 16)","(bv #x0000000000000000 16)"],
                   "in_vectsize" : 128,
@@ -19624,9 +19624,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_cmplt_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvslt  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_cmplt_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %2 (+  j0.new  %lastidx0))"', '"  (define %3 (extract  %2 j0.new a))"', '"  (define %5 (extract  %2 j0.new b))"', '"  (define %6 (bvslt  %3  %5))"', '"  (define %7 (if (equal? %6 #t) %arg0 %arg1))"', '"  %7"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_set1_epi8" : {
             "x86_instructions" : {
               "_mm256_maskz_set1_epi8" : {
@@ -19644,7 +19644,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcastb_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_128","256","256","256","8","0","0"],
                   "in_vectsize" : 128,
@@ -19660,7 +19660,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_8","128","128","128","8","0","0"],
                   "in_vectsize" : 128,
@@ -19676,7 +19676,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_broadcastb_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","0"],
                   "in_vectsize" : 128,
@@ -19692,7 +19692,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_set1_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_64","512","512","512","64","0","0"],
                   "in_vectsize" : 512,
@@ -19708,7 +19708,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_set1_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_64","256","256","256","64","0","0"],
                   "in_vectsize" : 256,
@@ -19724,7 +19724,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_128","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -19740,7 +19740,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcastw_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_128","512","512","512","16","0","0"],
                   "in_vectsize" : 128,
@@ -19756,7 +19756,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_set1_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_8","128","128","128","8","0","0"],
                   "in_vectsize" : 8,
@@ -19772,7 +19772,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_set1_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_32","256","256","256","32","0","0"],
                   "in_vectsize" : 32,
@@ -19788,7 +19788,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_32","256","256","256","32","0","0"],
                   "in_vectsize" : 256,
@@ -19804,7 +19804,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_broadcastw_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","0"],
                   "in_vectsize" : 128,
@@ -19820,7 +19820,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_broadcastq_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0","0"],
                   "in_vectsize" : 128,
@@ -19836,7 +19836,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_128","256","256","256","16","0","0"],
                   "in_vectsize" : 256,
@@ -19852,7 +19852,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcastq_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","512","512","512","64","0","0"],
                   "in_vectsize" : 128,
@@ -19868,7 +19868,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_128","512","512","512","8","0","0"],
                   "in_vectsize" : 512,
@@ -19884,7 +19884,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","128","128","128","8","0","0"],
                   "in_vectsize" : 128,
@@ -19900,7 +19900,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_8","256","256","256","8","0","0"],
                   "in_vectsize" : 256,
@@ -19916,7 +19916,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_set1_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_16","512","512","512","16","0","0"],
                   "in_vectsize" : 16,
@@ -19932,7 +19932,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_broadcastq_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","64","0","0"],
                   "in_vectsize" : 128,
@@ -19948,7 +19948,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_set1_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_32","128","128","128","32","0","0"],
                   "in_vectsize" : 32,
@@ -19964,7 +19964,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_128","256","256","256","8","0","0"],
                   "in_vectsize" : 256,
@@ -19980,7 +19980,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_set1_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_64","128","128","128","64","0","0"],
                   "in_vectsize" : 64,
@@ -19996,7 +19996,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_set1_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_16","128","128","128","16","0","0"],
                   "in_vectsize" : 16,
@@ -20012,7 +20012,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_set1_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_64","256","256","256","64","0","0"],
                   "in_vectsize" : 64,
@@ -20028,7 +20028,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_set1_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_32","512","512","512","32","0","0"],
                   "in_vectsize" : 32,
@@ -20044,7 +20044,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_8","512","512","512","8","0","0"],
                   "in_vectsize" : 512,
@@ -20060,7 +20060,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcastd_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","0"],
                   "in_vectsize" : 128,
@@ -20076,7 +20076,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_16","256","256","256","16","0","0"],
                   "in_vectsize" : 256,
@@ -20092,7 +20092,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcastd_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","512","512","512","32","0","0"],
                   "in_vectsize" : 128,
@@ -20108,7 +20108,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_16","512","512","512","16","0","0"],
                   "in_vectsize" : 512,
@@ -20124,7 +20124,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_set1_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_64","128","128","128","64","0","0"],
                   "in_vectsize" : 128,
@@ -20140,7 +20140,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","16","0","0"],
                   "in_vectsize" : 128,
@@ -20156,7 +20156,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcastw_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","256","256","256","16","0","0"],
                   "in_vectsize" : 128,
@@ -20172,7 +20172,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_32","512","512","512","32","0","0"],
                   "in_vectsize" : 512,
@@ -20188,7 +20188,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_set1_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_16","256","256","256","16","0","0"],
                   "in_vectsize" : 16,
@@ -20204,7 +20204,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","0"],
                   "in_vectsize" : 128,
@@ -20220,7 +20220,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_set1_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_8","512","512","512","8","0","0"],
                   "in_vectsize" : 8,
@@ -20236,7 +20236,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_set1_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_64","512","512","512","64","0","0"],
                   "in_vectsize" : 64,
@@ -20252,7 +20252,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_32","128","128","128","32","0","0"],
                   "in_vectsize" : 128,
@@ -20268,7 +20268,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_broadcastb_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_128","512","512","512","8","0","0"],
                   "in_vectsize" : 128,
@@ -20284,7 +20284,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","32","0","0"],
                   "in_vectsize" : 256,
@@ -20300,7 +20300,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_broadcastd_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","128","128","128","32","0","0"],
                   "in_vectsize" : 128,
@@ -20316,7 +20316,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_broadcastq_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","64","0","0"],
                   "in_vectsize" : 256,
@@ -20332,7 +20332,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_128","512","512","512","16","0","0"],
                   "in_vectsize" : 512,
@@ -20348,7 +20348,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_broadcastq_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","256","256","256","64","0","0"],
                   "in_vectsize" : 128,
@@ -20364,7 +20364,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_broadcastq_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_128","512","512","512","64","0","0"],
                   "in_vectsize" : 512,
@@ -20380,7 +20380,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_16","128","128","128","16","0","0"],
                   "in_vectsize" : 128,
@@ -20397,9 +20397,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_set1_epi8  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %2 (extract  %highidx0 %arg1 a))"', '"   %2"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx2))"', '"   (define %6 (extract  %5 j0.new %arg0))"', '"   %6"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_set1_epi8  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %2 (extract  %highidx0 %arg1 a))"', '"   %2"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx2))"', '"   (define %6 (extract  %5 j0.new %arg0))"', '"   %6"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_adds_pu16" : {
             "x86_instructions" : {
               "_mm_adds_pu16" : {
@@ -20417,7 +20417,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -20433,7 +20433,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -20449,7 +20449,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddusb" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -20465,7 +20465,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -20481,7 +20481,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_adds_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -20497,7 +20497,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_paddusw" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","16","0"],
                   "in_vectsize" : 64,
@@ -20513,7 +20513,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -20529,7 +20529,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_pu8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -20545,7 +20545,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_adds_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -20562,9 +20562,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_adds_pu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvaddnuw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_adds_pu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvaddnuw  %2  %4 %elemsize))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_cmpeq_epi32_mask" : {
             "x86_instructions" : {
               "_mm256_mask_cmpeq_epi32_mask" : {
@@ -20582,7 +20582,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epu16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -20598,7 +20598,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -20614,7 +20614,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -20630,7 +20630,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epi16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -20646,7 +20646,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -20662,7 +20662,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -20678,7 +20678,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -20694,7 +20694,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epu16_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -20710,7 +20710,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -20726,7 +20726,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -20742,7 +20742,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -20758,7 +20758,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epu32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -20774,7 +20774,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -20790,7 +20790,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -20806,7 +20806,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -20822,7 +20822,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -20838,7 +20838,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_cmpeq_epu8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -20854,7 +20854,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epu32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -20870,7 +20870,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_cmpeq_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -20886,7 +20886,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epu16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -20902,7 +20902,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epu8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -20918,7 +20918,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epu64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -20934,7 +20934,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_cmpeq_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 512,
@@ -20951,9 +20951,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_cmpeq_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bveq  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_cmpeq_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg3))"', '"   (define %lastidx0 (-  %arg3  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bveq  %3  %5))"', '"   (define %7 (if (equal? %6 #t) %arg1 %arg2))"', '"   %7"', '"   )"', '"   (begin"', '"   (define %8 (extract  j0 j0 %arg0))"', '"   %8"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_maskz_add_epi16" : {
             "x86_instructions" : {
               "_mm_maskz_add_epi16" : {
@@ -20971,7 +20971,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_add_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -20987,7 +20987,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -21003,7 +21003,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -21019,7 +21019,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_add_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -21035,7 +21035,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_add_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -21051,7 +21051,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -21067,7 +21067,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -21083,7 +21083,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_add_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -21099,7 +21099,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -21115,7 +21115,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -21131,7 +21131,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_add_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -21147,7 +21147,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_add_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -21163,7 +21163,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -21179,7 +21179,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_add_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -21195,7 +21195,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -21211,7 +21211,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_add_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -21227,7 +21227,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_add_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -21243,7 +21243,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_add_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -21259,7 +21259,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_add_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -21275,7 +21275,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_add_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -21291,7 +21291,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_add_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -21307,7 +21307,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_add_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -21323,7 +21323,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_add_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -21340,9 +21340,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_maskz_add_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvadd  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_maskz_add_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new a))"', '"   (define %8 (extract  %5 j0.new b))"', '"   (define %9 (bvadd  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_mulhi_epi16" : {
             "x86_instructions" : {
               "_mm256_maskz_mulhi_epi16" : {
@@ -21360,7 +21360,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","16","32"],
                   "in_vectsize" : 256,
@@ -21376,7 +21376,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mulhi_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -21392,7 +21392,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mullo_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","0","32"],
                   "in_vectsize" : 512,
@@ -21408,7 +21408,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_mullo_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","0","32"],
                   "in_vectsize" : 128,
@@ -21424,7 +21424,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mullo_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","0","32"],
                   "in_vectsize" : 128,
@@ -21440,7 +21440,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_mullo_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","0","32"],
                   "in_vectsize" : 256,
@@ -21456,7 +21456,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","16","32"],
                   "in_vectsize" : 128,
@@ -21472,7 +21472,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mulhi_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","16","32"],
                   "in_vectsize" : 512,
@@ -21488,7 +21488,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_mullo_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","0","32"],
                   "in_vectsize" : 512,
@@ -21504,7 +21504,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_mulhi_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","16","32"],
                   "in_vectsize" : 512,
@@ -21520,7 +21520,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_mullo_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","0","32"],
                   "in_vectsize" : 256,
@@ -21537,9 +21537,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_mulhi_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (sign-extend  %3 (bitvector %arg2)))"', '"   (define %6 (extract  %2 j0.new b))"', '"   (define %7 (sign-extend  %6 (bitvector %arg2)))"', '"   (define %8 (bvmul  %4  %7))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %9 (extract  (- (- %arg2 1) %arg1) (- (- %arg2 1) %highidx0) %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx2))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_mulhi_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %4 (sign-extend  %3 (bitvector %arg2)))"', '"   (define %6 (extract  %2 j0.new b))"', '"   (define %7 (sign-extend  %6 (bitvector %arg2)))"', '"   (define %8 (bvmul  %4  %7))"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %highidx0 (+  %lastidx1  %arg1))"', '"   (define %9 (extract  (- (- %arg2 1) %arg1) (- (- %arg2 1) %highidx0) %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx2))"', '"   (define %13 (extract  %12 j0.new %arg0))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_m_pmaxub" : {
             "x86_instructions" : {
               "_m_pmaxub" : {
@@ -21557,7 +21557,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -21573,7 +21573,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -21589,7 +21589,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -21605,7 +21605,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -21621,7 +21621,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -21637,7 +21637,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -21653,7 +21653,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -21669,7 +21669,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_max_pu8" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","64","8","0"],
                   "in_vectsize" : 64,
@@ -21685,7 +21685,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -21701,7 +21701,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -21717,7 +21717,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -21733,7 +21733,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -21749,7 +21749,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -21766,9 +21766,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_m_pmaxub  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvumax  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_m_pmaxub  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (bvumax  %2  %4))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_udiv_epi32" : {
             "x86_instructions" : {
               "_mm_udiv_epi32" : {
@@ -21786,7 +21786,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -21802,7 +21802,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -21818,7 +21818,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0","128"],
                   "in_vectsize" : 512,
@@ -21834,7 +21834,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0","16"],
                   "in_vectsize" : 256,
@@ -21850,7 +21850,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0","64"],
                   "in_vectsize" : 512,
@@ -21866,7 +21866,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_udiv_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -21882,7 +21882,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0","32"],
                   "in_vectsize" : 128,
@@ -21898,7 +21898,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0","32"],
                   "in_vectsize" : 512,
@@ -21914,7 +21914,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0","128"],
                   "in_vectsize" : 128,
@@ -21930,7 +21930,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_idiv_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0","64"],
                   "in_vectsize" : 128,
@@ -21946,7 +21946,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_div_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0","16"],
                   "in_vectsize" : 512,
@@ -21962,7 +21962,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_idiv_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0","64"],
                   "in_vectsize" : 256,
@@ -21978,7 +21978,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0","32"],
                   "in_vectsize" : 256,
@@ -21994,7 +21994,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_div_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0","16"],
                   "in_vectsize" : 128,
@@ -22010,7 +22010,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_div_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0","128"],
                   "in_vectsize" : 256,
@@ -22027,9 +22027,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_udiv_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (zero-extend  %2 (bitvector %arg0)))"', '"  (define %6 (zero-extend  %4 (bitvector %arg0)))"', '"  (define %7 (bvudiv  %5  %6))"', '"  (define %8.high.idx (- %arg0 1))"', '"  (define %8.low.idx (- %8.high.idx %elemsize -1 ))"', '"  (define %8 (extract  %8.high.idx %8.low.idx %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_udiv_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx0 (-  %elemsize  1))"', '"  (define %1 (+  j0.new  %lastidx0))"', '"  (define %2 (extract  %1 j0.new a))"', '"  (define %4 (extract  %1 j0.new b))"', '"  (define %5 (zero-extend  %2 (bitvector %arg0)))"', '"  (define %6 (zero-extend  %4 (bitvector %arg0)))"', '"  (define %7 (bvudiv  %5  %6))"', '"  (define %8.high.idx (- %arg0 1))"', '"  (define %8.low.idx (- %8.high.idx %elemsize -1 ))"', '"  (define %8 (extract  %8.high.idx %8.low.idx %7))"', '"  %8"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_broadcast_i64x2" : {
             "x86_instructions" : {
               "_mm512_broadcast_i64x2" : {
@@ -22047,7 +22047,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcast_i64x2" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","64","0","2"],
                   "in_vectsize" : 128,
@@ -22063,7 +22063,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcast_i32x4" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","32","0","4"],
                   "in_vectsize" : 128,
@@ -22079,7 +22079,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcast_i32x8" : {
                   "args" : ["SYMBOLIC_BV_256","512","512","512","32","0","8"],
                   "in_vectsize" : 256,
@@ -22095,7 +22095,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcast_i32x4" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","32","0","4"],
                   "in_vectsize" : 128,
@@ -22111,7 +22111,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcast_i64x4" : {
                   "args" : ["SYMBOLIC_BV_256","512","512","512","64","0","4"],
                   "in_vectsize" : 256,
@@ -22127,7 +22127,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","32","0","2"],
                   "in_vectsize" : 128,
@@ -22143,7 +22143,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","32","0","2"],
                   "in_vectsize" : 128,
@@ -22159,7 +22159,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcast_i32x2" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","32","0","2"],
                   "in_vectsize" : 128,
@@ -22176,9 +22176,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_broadcast_i64x2  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (modulo  j0.new.div  %arg0))"', '"  (define %2 (*  %1  %elemsize))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %4 (+  %2  %lastidx1))"', '"  (define %5 (extract  %4 %2 a))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_broadcast_i64x2  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (modulo  j0.new.div  %arg0))"', '"  (define %2 (*  %1  %elemsize))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %4 (+  %2  %lastidx1))"', '"  (define %5 (extract  %4 %2 a))"', '"  %5"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_cmple_epi32_mask" : {
             "x86_instructions" : {
               "_mm512_cmple_epi32_mask" : {
@@ -22196,7 +22196,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 128,
@@ -22212,7 +22212,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 256,
@@ -22228,7 +22228,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 512,
@@ -22244,7 +22244,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 256,
@@ -22260,7 +22260,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 512,
@@ -22276,7 +22276,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 128,
@@ -22292,7 +22292,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 256,
@@ -22308,7 +22308,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_cmple_epi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","64"],
                   "in_vectsize" : 256,
@@ -22324,7 +22324,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","32"],
                   "in_vectsize" : 128,
@@ -22340,7 +22340,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_cmple_epi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","16"],
                   "in_vectsize" : 512,
@@ -22356,7 +22356,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_cmple_epi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","8"],
                   "in_vectsize" : 128,
@@ -22373,9 +22373,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_cmple_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsle  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_cmple_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg2))"', '"  (define %lastidx0 (-  %arg2  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %0 a))"', '"  (define %4 (extract  %1 %0 b))"', '"  (define %5 (bvsle  %2  %4))"', '"  (define %6 (if (equal? %5 #t) %arg0 %arg1))"', '"  %6"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_maskz_max_epu16" : {
             "x86_instructions" : {
               "_mm256_maskz_max_epu16" : {
@@ -22393,7 +22393,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -22409,7 +22409,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -22425,7 +22425,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -22441,7 +22441,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -22457,7 +22457,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -22473,7 +22473,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -22489,7 +22489,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epu32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -22505,7 +22505,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epu8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -22521,7 +22521,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -22537,7 +22537,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -22553,7 +22553,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -22569,7 +22569,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epu16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -22585,7 +22585,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -22601,7 +22601,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epu8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -22617,7 +22617,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -22633,7 +22633,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epu16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -22649,7 +22649,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epu64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -22665,7 +22665,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -22681,7 +22681,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epu8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -22697,7 +22697,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epu64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -22713,7 +22713,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -22729,7 +22729,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epu32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -22745,7 +22745,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epu32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -22762,9 +22762,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_maskz_max_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvumax  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_maskz_max_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvumax  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new %arg0))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_maskz_madd52lo_epu64" : {
             "x86_instructions" : {
               "_mm512_maskz_madd52lo_epu64" : {
@@ -22782,7 +22782,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_madd52hi_epu64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","208","52","0","64","52","52","128"],
                   "in_vectsize" : 256,
@@ -22798,7 +22798,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_madd52lo_epu64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","208","52","0","64","52","0","128"],
                   "in_vectsize" : 256,
@@ -22814,7 +22814,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_madd52lo_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","0","128"],
                   "in_vectsize" : 128,
@@ -22830,7 +22830,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_madd52hi_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","104","52","0","64","52","52","128"],
                   "in_vectsize" : 128,
@@ -22846,7 +22846,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_madd52hi_epu64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","416","52","0","64","52","52","128"],
                   "in_vectsize" : 512,
@@ -22863,9 +22863,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_maskz_madd52lo_epu64  %arg0 k a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.2 (/  j0.new  %elemsize))"', '"   (define %0.copy.0 (*  j0.new.div.copy.2  %arg1))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %2 (+  %0.copy.0  %lastidx2))"', '"   (define %3 (extract  %2 %0.copy.0 b))"', '"   (define %6 (extract  %2 %0.copy.0 c))"', '"   (define %8 (zero-extend  %3 (bitvector %arg4)))"', '"   (define %9 (zero-extend  %6 (bitvector %arg4)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %13 (+  %0.copy.0  %lastidx0))"', '"   (define %14 (extract  %13 %0.copy.0 a))"', '"   (define %lastidx1 (-  %arg2  1))"', '"   (define %highidx0 (+  %lastidx1  %arg3))"', '"   (define %15 (extract  (- (- %arg4 1) %arg3) (- (- %arg4 1) %highidx0) %10))"', '"   (define %16 (zero-extend  %15 (bitvector %arg1)))"', '"   (define %17 (bvadd  %14  %16))"', '"   %17"', '"   )"', '"   (begin"', '"   (define j0.new.div.copy.8 (/  j0.new  %elemsize))"', '"   (define %0.copy.6 (*  j0.new.div.copy.8  %arg1))"', '"   (define %lastidx3 (-  %arg1  1))"', '"   (define %20 (+  %0.copy.6  %lastidx3))"', '"   (define %21 (extract  %20 %0.copy.6 %arg0))"', '"   %21"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_maskz_madd52lo_epu64  %arg0 k a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define j0.new.div.copy.2 (/  j0.new  %elemsize))"', '"   (define %0.copy.0 (*  j0.new.div.copy.2  %arg1))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %2 (+  %0.copy.0  %lastidx2))"', '"   (define %3 (extract  %2 %0.copy.0 b))"', '"   (define %6 (extract  %2 %0.copy.0 c))"', '"   (define %8 (zero-extend  %3 (bitvector %arg4)))"', '"   (define %9 (zero-extend  %6 (bitvector %arg4)))"', '"   (define %10 (bvmul  %8  %9))"', '"   (define %lastidx0 (-  %arg1  1))"', '"   (define %13 (+  %0.copy.0  %lastidx0))"', '"   (define %14 (extract  %13 %0.copy.0 a))"', '"   (define %lastidx1 (-  %arg2  1))"', '"   (define %highidx0 (+  %lastidx1  %arg3))"', '"   (define %15 (extract  (- (- %arg4 1) %arg3) (- (- %arg4 1) %highidx0) %10))"', '"   (define %16 (zero-extend  %15 (bitvector %arg1)))"', '"   (define %17 (bvadd  %14  %16))"', '"   %17"', '"   )"', '"   (begin"', '"   (define j0.new.div.copy.8 (/  j0.new  %elemsize))"', '"   (define %0.copy.6 (*  j0.new.div.copy.8  %arg1))"', '"   (define %lastidx3 (-  %arg1  1))"', '"   (define %20 (+  %0.copy.6  %lastidx3))"', '"   (define %21 (extract  %20 %0.copy.6 %arg0))"', '"   %21"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_mask_dpbusd_epi32" : {
             "x86_instructions" : {
               "_mm_mask_dpbusd_epi32" : {
@@ -22883,7 +22883,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_dpbusd_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 512,
@@ -22899,7 +22899,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_dpbusd_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","32","32","32","8","32","0","0","16"],
                   "in_vectsize" : 256,
@@ -22916,9 +22916,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_mask_dpbusd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg0)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %63.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %63.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvadd %12.red %12.ext0))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %65 (+  j0.new  %lastidx3))"', '"   (define %66 (extract  %65 j0.new src))"', '"   %66"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_mask_dpbusd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )"', '"(define dst src)"', '"(apply"', '"concat"', '"(for/list ([j0.new (reverse (range 0 %vectsize %lanesize1))])"', '" (define j0.new.div (/  j0.new  %lanesize1))"', '" (define %0 (extract  j0.new.div j0.new.div k))"', '" (if (equal? %0 (bv #b1 1))"', '"  (begin"', '"  (define %12.red"', '"(apply"', '"  bvadd"', '"  (for/list ([iterator.0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"   (define %2.new0 (+  j0.new  iterator.0.new))"', '"   (define %lastidx2 (-  %elemsize  1))"', '"   (define %3 (+  %2.new0  %lastidx2))"', '"   (define %4 (extract  %3 %2.new0 a))"', '"   (define %5 (zero-extend  %4 (bitvector %arg0)))"', '"   (define %9 (extract  %3 %2.new0 b))"', '"   (define %10 (sign-extend  %9 (bitvector %arg0)))"', '"   (define %11 (bvmul  %5  %10))"', '"   (define %12 (sign-extend  %11 (bitvector %lanesize1)))"', '"   %12"', '"  )"', '"))"', '"  (define %lastidx1 (-  %lanesize1  1))"', '"  (define %63.clone.4 (+  j0.new  %lastidx1))"', '"  (define %12.ext0 (extract  %63.clone.4 j0.new dst))"', '"  (define %12.acc0 (bvadd %12.red %12.ext0))"', '"  %12.acc0"', '"  )"', '"  (begin"', '"  (apply"', '"  concat"', '"  (for/list ([%outer.it (reverse (range %laneoffset1 %lanesize3 %elemsize1))])"', '"   (define %lastidx3 (-  %lanesize1  1))"', '"   (define %65 (+  j0.new  %lastidx3))"', '"   (define %66 (extract  %65 j0.new src))"', '"   %66"', '"  )"', '"  )"', '"  )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_broadcastq_epi64" : {
             "x86_instructions" : {
               "_mm256_broadcastq_epi64" : {
@@ -22936,7 +22936,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","32","0","0"],
                   "in_vectsize" : 128,
@@ -22952,7 +22952,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_16","128","128","128","16","0","0"],
                   "in_vectsize" : 16,
@@ -22968,7 +22968,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","8","0","0"],
                   "in_vectsize" : 128,
@@ -22984,7 +22984,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","32","0","0"],
                   "in_vectsize" : 128,
@@ -23000,7 +23000,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","256","256","256","16","0","0"],
                   "in_vectsize" : 128,
@@ -23016,7 +23016,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_32","256","256","256","32","0","0"],
                   "in_vectsize" : 32,
@@ -23032,7 +23032,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_pi8" : {
                   "args" : ["SYMBOLIC_BV_8","64","64","64","8","0","0"],
                   "in_vectsize" : 8,
@@ -23048,7 +23048,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_8","128","128","128","8","0","0"],
                   "in_vectsize" : 8,
@@ -23064,7 +23064,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","16","0","0"],
                   "in_vectsize" : 128,
@@ -23080,7 +23080,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastd_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","32","0","0"],
                   "in_vectsize" : 128,
@@ -23096,7 +23096,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_16","512","512","512","16","0","0"],
                   "in_vectsize" : 16,
@@ -23112,7 +23112,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","8","0","0"],
                   "in_vectsize" : 128,
@@ -23128,7 +23128,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastb_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","8","0","0"],
                   "in_vectsize" : 128,
@@ -23144,7 +23144,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_epi64" : {
                   "args" : ["SYMBOLIC_BV_64","128","128","128","64","0","0"],
                   "in_vectsize" : 64,
@@ -23160,7 +23160,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_32","128","128","128","32","0","0"],
                   "in_vectsize" : 32,
@@ -23176,7 +23176,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_set1_epi64x" : {
                   "args" : ["SYMBOLIC_BV_64","256","256","256","64","0","0"],
                   "in_vectsize" : 64,
@@ -23192,7 +23192,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_epi64x" : {
                   "args" : ["SYMBOLIC_BV_64","128","128","128","64","0","0"],
                   "in_vectsize" : 64,
@@ -23208,7 +23208,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastw_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","16","0","0"],
                   "in_vectsize" : 128,
@@ -23224,7 +23224,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_pi32" : {
                   "args" : ["SYMBOLIC_BV_32","64","64","64","32","0","0"],
                   "in_vectsize" : 32,
@@ -23240,7 +23240,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_set1_epi16" : {
                   "args" : ["SYMBOLIC_BV_16","256","256","256","16","0","0"],
                   "in_vectsize" : 16,
@@ -23256,7 +23256,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm_set1_pi16" : {
                   "args" : ["SYMBOLIC_BV_16","64","64","64","16","0","0"],
                   "in_vectsize" : 16,
@@ -23272,7 +23272,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_8","512","512","512","8","0","0"],
                   "in_vectsize" : 8,
@@ -23288,7 +23288,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_set1_epi64" : {
                   "args" : ["SYMBOLIC_BV_64","512","512","512","64","0","0"],
                   "in_vectsize" : 64,
@@ -23304,7 +23304,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_set1_epi8" : {
                   "args" : ["SYMBOLIC_BV_8","256","256","256","8","0","0"],
                   "in_vectsize" : 8,
@@ -23320,7 +23320,7 @@ semantcs = {
                   "Cost" : "None",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_broadcastq_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","512","512","512","64","0","0"],
                   "in_vectsize" : 128,
@@ -23336,7 +23336,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_set1_epi32" : {
                   "args" : ["SYMBOLIC_BV_32","512","512","512","32","0","0"],
                   "in_vectsize" : 32,
@@ -23352,7 +23352,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_broadcastq_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","128","128","128","64","0","0"],
                   "in_vectsize" : 128,
@@ -23369,9 +23369,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_broadcastq_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %1 (extract  %highidx0 %arg0 a))"', '"  %1"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_broadcastq_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %highidx0 (+  %lastidx1  %arg0))"', '"  (define %1 (extract  %highidx0 %arg0 a))"', '"  %1"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_movepi16_mask" : {
             "x86_instructions" : {
               "_mm_movepi16_mask" : {
@@ -23389,7 +23389,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movepi32_mask" : {
                   "args" : ["SYMBOLIC_BV_256","8","8","8","1","0","32","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23405,7 +23405,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movepi64_mask" : {
                   "args" : ["SYMBOLIC_BV_256","8","8","4","1","0","64","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23421,7 +23421,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movepi64_mask" : {
                   "args" : ["SYMBOLIC_BV_512","8","8","8","1","0","64","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23437,7 +23437,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movepi16_mask" : {
                   "args" : ["SYMBOLIC_BV_256","16","16","16","1","0","16","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23453,7 +23453,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movepi64_mask" : {
                   "args" : ["SYMBOLIC_BV_128","8","8","2","1","0","64","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23469,7 +23469,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movepi16_mask" : {
                   "args" : ["SYMBOLIC_BV_512","32","32","32","1","0","16","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23485,7 +23485,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movepi8_mask" : {
                   "args" : ["SYMBOLIC_BV_128","16","16","16","1","0","8","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23501,7 +23501,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm_movepi32_mask" : {
                   "args" : ["SYMBOLIC_BV_128","8","8","4","1","0","32","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23517,7 +23517,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movepi32_mask" : {
                   "args" : ["SYMBOLIC_BV_512","16","16","16","1","0","32","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23533,7 +23533,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm256_movepi8_mask" : {
                   "args" : ["SYMBOLIC_BV_256","32","32","32","1","0","8","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23549,7 +23549,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
-        
+
               "_mm512_movepi8_mask" : {
                   "args" : ["SYMBOLIC_BV_512","64","64","64","1","0","8","(bv #b1 1)","(bv #b0 1)"],
                   "in_vectsize" : None,
@@ -23566,9 +23566,9 @@ semantcs = {
                   "SIMD" : "None",
       },
         },
-            "semantics" : ['"(define (_mm_movepi16_mask  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg0))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %1 a))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   %arg1"', '"   )"', '"   (begin"', '"   %arg2"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_movepi16_mask  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %0 (*  j0  %arg0))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %1 (+  %0  %lastidx0))"', '"  (define %2 (extract  %1 %1 a))"', '"  (if (equal? %2 (bv #b1 1))"', '"   (begin"', '"   %arg1"', '"   )"', '"   (begin"', '"   %arg2"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_test_epi16_mask" : {
             "x86_instructions" : {
               "_mm256_mask_test_epi16_mask" : {
@@ -23586,7 +23586,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_test_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 128,
@@ -23602,7 +23602,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_test_epi16_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 512,
@@ -23618,7 +23618,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_test_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","2","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 128,
@@ -23634,7 +23634,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_test_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 128,
@@ -23650,7 +23650,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_test_epi8_mask" : {
                   "args" : ["(bv #x00000000000000000000000000000000 32)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","32","32","32","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 256,
@@ -23666,7 +23666,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_test_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 512,
@@ -23682,7 +23682,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_test_epi64_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","4","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","64"],
                   "in_vectsize" : 256,
@@ -23698,7 +23698,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_test_epi8_mask" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000 64)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","64","64","64","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000 8)","8"],
                   "in_vectsize" : 512,
@@ -23714,7 +23714,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_test_epi16_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x0000000000000000 16)","16"],
                   "in_vectsize" : 128,
@@ -23730,7 +23730,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_test_epi32_mask" : {
                   "args" : ["(bv #x0000000000000000 16)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","16","16","16","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 512,
@@ -23746,7 +23746,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_test_epi32_mask" : {
                   "args" : ["(bv #x00000000 8)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","8","8","8","1","0","(bv #b1 1)","(bv #b0 1)","(bv #x00000000000000000000000000000000 32)","32"],
                   "in_vectsize" : 256,
@@ -23763,9 +23763,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_test_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg4))"', '"   (define %lastidx0 (-  %arg4  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvand  %3  %5))"', '"   (define %7 (not (bveq  %6  %arg3 )))"', '"   (define %8 (if (equal? %7 #t) %arg1 %arg2))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %9 (extract  j0 j0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_test_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0 (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %1 (extract  j0 j0 k1))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %0.copy.0 (*  j0  %arg4))"', '"   (define %lastidx0 (-  %arg4  1))"', '"   (define %2 (+  %0.copy.0  %lastidx0))"', '"   (define %3 (extract  %2 %0.copy.0 a))"', '"   (define %5 (extract  %2 %0.copy.0 b))"', '"   (define %6 (bvand  %3  %5))"', '"   (define %7 (not (bveq  %6  %arg3 )))"', '"   (define %8 (if (equal? %7 #t) %arg1 %arg2))"', '"   %8"', '"   )"', '"   (begin"', '"   (define %9 (extract  j0 j0 %arg0))"', '"   %9"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm256_mask_max_epi8" : {
             "x86_instructions" : {
               "_mm256_mask_max_epi8" : {
@@ -23783,7 +23783,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -23799,7 +23799,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -23815,7 +23815,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epi8" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -23831,7 +23831,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -23847,7 +23847,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epi8" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_32","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","8","0"],
                   "in_vectsize" : 256,
@@ -23863,7 +23863,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -23879,7 +23879,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -23895,7 +23895,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","64","0"],
                   "in_vectsize" : 128,
@@ -23911,7 +23911,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_16","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","8","0"],
                   "in_vectsize" : 128,
@@ -23927,7 +23927,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epi16" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_32","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","16","0"],
                   "in_vectsize" : 512,
@@ -23943,7 +23943,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_mask_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_128","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","16","0"],
                   "in_vectsize" : 128,
@@ -23959,7 +23959,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epi32" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -23975,7 +23975,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epi64" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -23991,7 +23991,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epi64" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","64","0"],
                   "in_vectsize" : 256,
@@ -24007,7 +24007,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epi8" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -24023,7 +24023,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_maskz_max_epi16" : {
                   "args" : ["(bv #x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 256)","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -24039,7 +24039,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epi8" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_64","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","8","0"],
                   "in_vectsize" : 512,
@@ -24055,7 +24055,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_maskz_max_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 128)","SYMBOLIC_BV_8","SYMBOLIC_BV_128","SYMBOLIC_BV_128","128","128","128","32","0"],
                   "in_vectsize" : 128,
@@ -24071,7 +24071,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_8","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","32","0"],
                   "in_vectsize" : 256,
@@ -24087,7 +24087,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_maskz_max_epi32" : {
                   "args" : ["(bv #x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 512)","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -24103,7 +24103,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epi32" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_16","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","32","0"],
                   "in_vectsize" : 512,
@@ -24119,7 +24119,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_mask_max_epi64" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_8","SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","512","64","0"],
                   "in_vectsize" : 512,
@@ -24135,7 +24135,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_mask_max_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_16","SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","256","16","0"],
                   "in_vectsize" : 256,
@@ -24152,9 +24152,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm256_mask_max_epi8  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsmax  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm256_mask_max_epi8  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %2 (+  j0.new  %lastidx0))"', '"   (define %3 (extract  %2 j0.new a))"', '"   (define %5 (extract  %2 j0.new b))"', '"   (define %6 (bvsmax  %3  %5))"', '"   %6"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %9 (+  j0.new  %lastidx1))"', '"   (define %10 (extract  %9 j0.new src))"', '"   %10"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm_madd_epi16" : {
             "x86_instructions" : {
               "_mm_madd_epi16" : {
@@ -24172,7 +24172,7 @@ semantcs = {
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_m_pmaddwd" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","32","16","0","32","16"],
                   "in_vectsize" : 64,
@@ -24188,7 +24188,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm_madd_pi16" : {
                   "args" : ["SYMBOLIC_BV_64","SYMBOLIC_BV_64","64","64","32","16","0","32","16"],
                   "in_vectsize" : 64,
@@ -24204,7 +24204,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm512_madd_epi16" : {
                   "args" : ["SYMBOLIC_BV_512","SYMBOLIC_BV_512","512","512","256","16","0","32","16"],
                   "in_vectsize" : 512,
@@ -24220,7 +24220,7 @@ semantcs = {
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
-        
+
               "_mm256_madd_epi16" : {
                   "args" : ["SYMBOLIC_BV_256","SYMBOLIC_BV_256","256","256","128","16","0","32","16"],
                   "in_vectsize" : 256,
@@ -24237,9 +24237,9 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm_madd_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %2 (+  %0.new0  %arg1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %3 (+  %0.new0  %lastidx0))"', '"  (define %4 (extract  %3 %2 a))"', '"  (define %7 (extract  %3 %2 b))"', '"  (define %8 (sign-extend  %4 (bitvector %arg0)))"', '"  (define %9 (sign-extend  %7 (bitvector %arg0)))"', '"  (define %10 (bvmul  %8  %9))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %11 (+  %0.new0  %lastidx1))"', '"  (define %12 (extract  %11 %0.new0 a))"', '"  (define %14 (extract  %11 %0.new0 b))"', '"  (define %15 (sign-extend  %12 (bitvector %arg0)))"', '"  (define %16 (sign-extend  %14 (bitvector %arg0)))"', '"  (define %17 (bvmul  %15  %16))"', '"  (define %18 (bvadd  %10  %17))"', '"  %18"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm_madd_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define %factor0 (/  %arg0  %elemsize))"', '"  (define %0.new0 (*  j0.new  %factor0))"', '"  (define %2 (+  %0.new0  %arg1))"', '"  (define %lastidx0 (-  %arg0  1))"', '"  (define %3 (+  %0.new0  %lastidx0))"', '"  (define %4 (extract  %3 %2 a))"', '"  (define %7 (extract  %3 %2 b))"', '"  (define %8 (sign-extend  %4 (bitvector %arg0)))"', '"  (define %9 (sign-extend  %7 (bitvector %arg0)))"', '"  (define %10 (bvmul  %8  %9))"', '"  (define %lastidx1 (-  %elemsize  1))"', '"  (define %11 (+  %0.new0  %lastidx1))"', '"  (define %12 (extract  %11 %0.new0 a))"', '"  (define %14 (extract  %11 %0.new0 b))"', '"  (define %15 (sign-extend  %12 (bitvector %arg0)))"', '"  (define %16 (sign-extend  %14 (bitvector %arg0)))"', '"  (define %17 (bvmul  %15  %16))"', '"  (define %18 (bvadd  %10  %17))"', '"  %18"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
-        
+
           "_mm512_mask_subr_epi32" : {
             "x86_instructions" : {
               "_mm512_mask_subr_epi32" : {
@@ -24258,7 +24258,7 @@ semantcs = {
                   "SIMD" : "True",
       },
         },
-            "semantics" : ['"(define (_mm512_mask_subr_epi32  src k v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new v3))"', '"   (define %8 (extract  %5 j0.new v2))"', '"   (define %9 (bvsub  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'], 
+            "semantics" : ['"(define (_mm512_mask_subr_epi32  src k v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )"', '"(apply"', '"concat"', '"(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])"', '"  (define j0.new.div (/  j0.new  %elemsize))"', '"  (define %1 (extract  j0.new.div j0.new.div k))"', '"  (if (equal? %1 (bv #b1 1))"', '"   (begin"', '"   (define %lastidx0 (-  %elemsize  1))"', '"   (define %5 (+  j0.new  %lastidx0))"', '"   (define %6 (extract  %5 j0.new v3))"', '"   (define %8 (extract  %5 j0.new v2))"', '"   (define %9 (bvsub  %6  %8))"', '"   %9"', '"   )"', '"   (begin"', '"   (define %lastidx1 (-  %elemsize  1))"', '"   (define %12 (+  j0.new  %lastidx1))"', '"   (define %13 (extract  %12 j0.new src))"', '"   %13"', '"   )"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '""'],
       },
         }
 
