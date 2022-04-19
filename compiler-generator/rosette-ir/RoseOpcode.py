@@ -554,8 +554,7 @@ class RoseOpcode(Enum):
         or self.value == self.rem.value \
         or self.value == self.mod.value \
         or self.value == self.abs.value \
-        or self.value == self.bvabs.value \
-        or self.value == self.ret.value:
+        or self.value == self.bvabs.value:
             return True
         if self.value == self.bvzero.value \
         or self.value == self.lsb.value \
@@ -589,7 +588,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunc.value \
         or self.value == self.bvsignextend.value \
-        or self.value == self.bvzeroextend.value:
+        or self.value == self.bvzeroextend.value \
+        or self.value == self.ret.value:
             return False
         return None
     
@@ -607,10 +607,6 @@ class RoseOpcode(Enum):
         or self.value == self.bvumin.value \
         or self.value == self.bvsmax.value \
         or self.value == self.bvumax.value \
-        or self.value == self.bvnot.value \
-        or self.value == self.bvneg.value \
-        or self.value == self.bvadd1.value \
-        or self.value == self.bvsub1.value \
         or self.value == self.bvsdiv.value \
         or self.value == self.bvudiv.value \
         or self.value == self.bvsrem.value \
@@ -618,7 +614,6 @@ class RoseOpcode(Enum):
         or self.value == self.bvsmod.value \
         or self.value == self.bvrol.value \
         or self.value == self.bvror.value \
-        or self.value == self.bvzero.value \
         or self.value == self.bveq.value \
         or self.value == self.bvneq.value \
         or self.value == self.bvslt.value \
@@ -629,11 +624,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvugt.value \
         or self.value == self.bvsge.value \
         or self.value == self.bvuge.value \
-        or self.value == self.lsb.value \
-        or self.value == self.msb.value \
         or self.value == self.bit.value \
-        or self.value == self.bvabs.value \
-        or self.value == self.boolnot.value \
         or self.value == self.booland.value \
         or self.value == self.boolnand.value \
         or self.value == self.boolor.value \
@@ -647,8 +638,6 @@ class RoseOpcode(Enum):
         or self.value == self.div.value \
         or self.value == self.rem.value \
         or self.value == self.mod.value \
-        or self.value == self.ret.value \
-        or self.value == self.abs.value \
         or self.value == self.equal.value \
         or self.value == self.notequal.value \
         or self.value == self.lessthan.value \
@@ -667,7 +656,18 @@ class RoseOpcode(Enum):
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
         or self.value == self.select.value \
+        or self.value == self.bvnot.value \
+        or self.value == self.bvneg.value \
+        or self.value == self.ret.value \
+        or self.value == self.abs.value \
+        or self.value == self.bvabs.value \
+        or self.value == self.lsb.value \
+        or self.value == self.msb.value \
+        or self.value == self.bvzero.value \
+        or self.value == self.bvadd1.value \
+        or self.value == self.bvsub1.value \
         or self.value == self.rotateleft.value \
+        or self.value == self.boolnot.value \
         or self.value == self.rotateright.value:
             return False
         return None
