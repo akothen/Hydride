@@ -10,8 +10,11 @@ class GrammarGenerator:
 
 
 
-    def emit_grammar_hole(self, vars_name, depth_name, grammar_name):
-        return "({} {} #:depth (- {} 1))".format(grammar_name, vars_name, depth_name)
+    def emit_grammar_hole(self, vars_name, depth_name, grammar_name, decrement = True):
+        if decrement:
+            return "({} {} #:depth (- {} 1))".format(grammar_name, vars_name, depth_name)
+        else:
+            return "({} {} #:depth {})".format(grammar_name, vars_name, depth_name)
 
     def emit_grammar_clause(self, dsl_inst, grammar_args , vars_name = "vars",
                              depth_name = "k", grammar_name = "operations",
@@ -23,7 +26,9 @@ class GrammarGenerator:
 
         for ga in grammar_args:
 
-            if ga.is_hole:
+            if ga.is_hole and dsl_inst.name == "vector-load":
+                grammar_clause.append("(apply choose* {})".format(vars_name))
+            elif ga.is_hole:
                 grammar_clause.append(self.emit_grammar_hole(vars_name, depth_name, grammar_name) +" "+ga.get_rkt_comment())
             else:
                 grammar_clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
@@ -41,9 +46,9 @@ class GrammarGenerator:
                                      depth_name = "k"):
         command = []
         if last_clause:
-            command = ["\t[else"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar)] +["]"]
+            command = ["\t[else"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar, decrement = False)] +["]"]
         else:
-            command = ["\t[(choose* #t #f)"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar)] +["]"]
+            command = ["\t[(choose* #t #f)"] + [self.emit_grammar_hole(vars_name, depth_name, other_grammar, decrement = False)] +["]"]
 
         return "\n\t".join(command)
 

@@ -26,6 +26,13 @@ class CostDef:
         defaults.append("[(lit v) {} ]".format(LIT_COST))
         defaults.append("[(nop v1) (+ {} (cost v1))]".format(NOP_COST))
 
+        defaults.append("[(dim-x id) {}]".format(DEFAULT_COST))
+        defaults.append("[(dim-y id) {}]".format(DEFAULT_COST))
+
+
+        defaults.append("[(idx-add i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
+        defaults.append("[(idx-mul i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
+
         return ["\t{}".format(d) for d in defaults]
 
     def emit_dsl_cost_def(self, dsl_inst, struct_definer):

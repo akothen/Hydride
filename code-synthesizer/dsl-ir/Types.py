@@ -9,6 +9,7 @@ class OperandType:
         Precision = auto()
         Integer = auto()
         IndexVariable = auto()
+        ShapeVariable = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
@@ -191,7 +192,10 @@ class IndexVariable(OperandType):
 
 
     def get_dsl_value(self):
-        return "(idx-i 0)"
+        if self.name == "idx-i":
+            return "(idx-i 0)"
+        elif self.name == "idx-j":
+            return "(idx-j 0)"
 
 
     def get_rkt_comment(self):
@@ -199,6 +203,68 @@ class IndexVariable(OperandType):
 
     def print_operand(self, prefix = ""):
         print("{}\t| Index Variable {}".format(prefix, self.name))
+
+
+class ShapeVariable(OperandType):
+
+    def __init__(self, name = "dim-x"):
+
+        self.name = name
+
+        assert (name == "dim-x" or name == "dim-y"), "Unsupported Index Variable"
+
+
+        super().__init__(OperandType.OperandTypeEnum.ShapeVariable)
+
+
+    def get_rkt_value(self):
+        assert False , "Shape variable has no corresponding racket value"
+
+
+    def get_dsl_value(self):
+        if self.name == "dim-x":
+            return "(dim-x 0)"
+        elif self.name == "dim-y":
+            return "(dim-y 0)"
+
+
+    def get_rkt_comment(self):
+        return ";; Shape Variable "
+
+    def print_operand(self, prefix = ""):
+        print("{}\t| Shape Variable {}".format(prefix, self.name))
+
+
+class IndexExprTypeEnum(Enum):
+    Add = auto()
+    Mul = auto()
+
+
+class IndexExpr:
+    def __init__(self, lhs, rhs,  expr_type = IndexExprTypeEnum.Add):
+        self.expr_type = expr_type
+        self.lhs = lhs
+        self.rhs = rhs
+        self.is_hole = False
+
+    def get_rkt_value(self):
+        assert False, "Index expression has no corresponding racket value"
+
+
+    def get_rkt_comment(self):
+        return ""
+
+    def get_dsl_value(self):
+
+        lhs_str = self.lhs.get_dsl_value()
+        rhs_str = self.rhs.get_dsl_value()
+
+        if self.expr_type == IndexExprTypeEnum.Add:
+            return "(idx-add {} {})".format(lhs_str, rhs_str)
+        elif self.expr_type == IndexExprTypeEnum.Mul:
+            return "(idx-mul {} {})".format(lhs_str, rhs_str)
+
+
 
 class InstructionType:
 

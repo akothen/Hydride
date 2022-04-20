@@ -11,7 +11,9 @@
 (current-bitwidth 16)
 
 
+
 (custodian-limit-memory (current-custodian) (* 10000 1024 1024))
+
 
 ;; Some uility functions
 (define (ext-bv x i type-size)
@@ -27,9 +29,6 @@
   var)
 
 (define (no-op a) a)
-
-(custodian-limit-memory (current-custodian) (* 10000 1024 1024))
-
 
 
 (define (swizzle idx group_size dis_size rot_factor)
@@ -255,7 +254,6 @@
   )
   result
 )
-
 ;#============================== Hydride File =================================
 ;#
 ;# Part of the Hydride Compiler Infrastructure.
@@ -266,11 +264,9 @@
 ;# Do NOT modify this file. It is automatically generated.
 ;#
 ;#=============================================================================
-
-;; ================================================================================
+(displayln "Running automatically generated file ... ");; ================================================================================
 ;;                                DSL Semantics
 ;; ================================================================================
-
 (define (scalar-load mem mem_size index type_size)
 (define total_num_elems (/ mem_size type_size))
 (define result
@@ -285,8 +281,7 @@ result
 (scalar-load mem mem_size (+ i start) type_size))
 ))
 result
-)
-(define (_mm512_mask_testn_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )
+)(define (_mm512_mask_testn_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
@@ -316,7 +311,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_mulhi_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )
 (apply
 concat
@@ -352,7 +346,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmpge_epi16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -373,7 +366,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cmpge_epu8_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -403,7 +395,6 @@ concat
 )
 )
 )
-
 (define (_mm512_dpbusd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (define dst src)
 (apply
@@ -433,7 +424,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_broadcast_i64x2  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -465,7 +455,6 @@ concat
 )
 )
 )
-
 (define (_mm256_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -495,7 +484,6 @@ concat
 )
 )
 )
-
 (define (_mm_maddubs_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -527,7 +515,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_min_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -558,7 +545,6 @@ concat
 )
 )
 )
-
 (define (_mm256_avg_epu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -579,7 +565,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_cmpgt_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -609,7 +594,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_dpbusd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )
 (define dst src)
 (apply
@@ -656,7 +640,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cvtsepi32_epi16  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -688,7 +671,6 @@ concat
 )
 )
 )
-
 (define (_mm_mul_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -711,7 +693,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_sub_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -742,7 +723,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_div_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -778,7 +758,6 @@ concat
 )
 )
 )
-
 (define (_mm512_sub_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -797,7 +776,6 @@ concat
 )
 )
 )
-
 (define (_mm512_madd52hi_epu64  a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -828,7 +806,6 @@ concat
 )
 )
 )
-
 (define (_mm256_cvtepi64_epi8  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -850,7 +827,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mullo_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -874,7 +850,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_cmpneq_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -904,7 +879,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_reduce_add_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -943,7 +917,6 @@ concat
 )
 )
 )
-
 (define (_mm512_subr_epi32  v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -962,7 +935,6 @@ concat
 )
 )
 )
-
 (define (_mm256_subs_epu8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -981,7 +953,6 @@ concat
 )
 )
 )
-
 (define (_mm512_abs_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -999,7 +970,6 @@ concat
 )
 )
 )
-
 (define (_mm_urem_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1018,7 +988,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cmple_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1048,7 +1017,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmpeq_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -1068,7 +1036,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_adds_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1099,7 +1066,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_dpbusds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg1 )
 (define dst src)
 (apply
@@ -1146,7 +1112,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_andnot_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1178,7 +1143,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_cvtepu32_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -1210,7 +1174,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_xor_epi64  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1241,7 +1204,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_rem_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1272,7 +1234,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_cvtepi32_epi64  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -1304,7 +1265,6 @@ concat
 )
 )
 )
-
 (define (_mm512_testn_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1326,7 +1286,6 @@ concat
 )
 )
 )
-
 (define (_mm512_reduce_add_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -1353,7 +1312,6 @@ concat
 )
 )
 )
-
 (define (_mm256_blendv_epi8  a b mask %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1383,7 +1341,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_and_epi64  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1414,7 +1371,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_cmplt_epi64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1444,7 +1400,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_dpwssds_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )
 (define dst src)
 (apply
@@ -1490,7 +1445,6 @@ concat
 )
 )
 )
-
 (define (_mm512_andnot_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1510,7 +1464,6 @@ concat
 )
 )
 )
-
 (define (_mm512_reduce_and_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -1537,7 +1490,6 @@ concat
 )
 )
 )
-
 (define (_m_paddw  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1556,7 +1508,6 @@ concat
 )
 )
 )
-
 (define (_mm256_max_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1575,7 +1526,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_dpbusds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )
 (define dst src)
 (apply
@@ -1622,7 +1572,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_madd52lo_epu64  a k b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1667,7 +1616,6 @@ concat
 )
 )
 )
-
 (define (_mm256_test_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1689,7 +1637,6 @@ concat
 )
 )
 )
-
 (define (_mm256_xor_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1708,7 +1655,6 @@ concat
 )
 )
 )
-
 (define (_mm512_cmpeq_epi64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -1729,7 +1675,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_subs_epi8  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1760,7 +1705,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmple_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -1781,7 +1725,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_mul_epi32  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -1818,7 +1761,6 @@ concat
 )
 )
 )
-
 (define (_mm_mulhi_pi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -1842,7 +1784,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cmpgt_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -1872,7 +1813,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_min_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1903,7 +1843,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_dpwssd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )
 (define dst src)
 (apply
@@ -1949,7 +1888,6 @@ concat
 )
 )
 )
-
 (define (_mm256_adds_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -1968,7 +1906,6 @@ concat
 )
 )
 )
-
 (define (_mm_dpbusds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (define dst src)
 (apply
@@ -1998,7 +1935,6 @@ concat
 )
 )
 )
-
 (define (_mm256_cmpneq_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -2019,7 +1955,6 @@ concat
 )
 )
 )
-
 (define (_m_pmovmskb  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2037,7 +1972,6 @@ concat
 )
 )
 )
-
 (define (_mm512_div_epi64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2061,7 +1995,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cvtepi32_epi8  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2095,7 +2028,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_mul_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2132,7 +2064,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmpgt_epi8_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -2153,7 +2084,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cmplt_epu64_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -2183,7 +2113,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_reduce_and_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -2222,7 +2151,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_dpwssds_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )
 (define dst src)
 (apply
@@ -2268,7 +2196,6 @@ concat
 )
 )
 )
-
 (define (_mm_cvtepi16_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2286,7 +2213,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_blend_epi64  k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2315,7 +2241,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_cmple_epu32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -2345,7 +2270,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_mov_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2374,7 +2298,6 @@ concat
 )
 )
 )
-
 (define (_mm_cvtepu16_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2392,7 +2315,6 @@ concat
 )
 )
 )
-
 (define (_mm256_broadcastmw_epi32  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -2410,7 +2332,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_div_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2446,7 +2367,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_maddubs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )
 (apply
 concat
@@ -2492,7 +2412,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_dpwssd_epi32  %arg0 k src a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 )
 (define dst src)
 (apply
@@ -2538,7 +2457,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmplt_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -2559,7 +2477,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_cmpge_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -2589,7 +2506,6 @@ concat
 )
 )
 )
-
 (define (_mm_dpwssds_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (define dst src)
 (apply
@@ -2618,7 +2534,6 @@ concat
 )
 )
 )
-
 (define (_mm_or_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2637,7 +2552,6 @@ concat
 )
 )
 )
-
 (define (_mm_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (define dst src)
 (apply
@@ -2666,7 +2580,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_mulhrs_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )
 (apply
 concat
@@ -2704,7 +2617,6 @@ concat
 )
 )
 )
-
 (define (_mm512_subs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2723,7 +2635,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mul_epu32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2746,7 +2657,6 @@ concat
 )
 )
 )
-
 (define (_mm512_min_epu64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2765,7 +2675,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_reduce_or_epi64  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -2804,7 +2713,6 @@ concat
 )
 )
 )
-
 (define (_mm256_cmpgt_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -2824,7 +2732,6 @@ concat
 )
 )
 )
-
 (define (_mm256_cmplt_epu16_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -2845,7 +2752,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mulhrs_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -2871,7 +2777,6 @@ concat
 )
 )
 )
-
 (define (_mm512_min_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2890,7 +2795,6 @@ concat
 )
 )
 )
-
 (define (_mm_cvtusepi64_epi32  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2910,7 +2814,6 @@ concat
 )
 )
 )
-
 (define (_mm512_reduce_or_epi64  %arg0 a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -2937,7 +2840,6 @@ concat
 )
 )
 )
-
 (define (_mm_blend_epi16  a b imm8 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -2966,7 +2868,6 @@ concat
 )
 )
 )
-
 (define (_mm256_movm_epi64  k %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -2989,7 +2890,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_madd_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )
 (apply
 concat
@@ -3035,7 +2935,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_adds_epi16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3066,7 +2965,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_avg_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )
 (apply
 concat
@@ -3099,7 +2997,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_or_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3130,7 +3027,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_abs_epi16  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3160,7 +3056,6 @@ concat
 )
 )
 )
-
 (define (_mm512_and_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3179,7 +3074,6 @@ concat
 )
 )
 )
-
 (define (_mm256_cmpgt_epu32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -3200,7 +3094,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmpge_epu64_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -3221,7 +3114,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_subs_epu16  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3252,7 +3144,6 @@ concat
 )
 )
 )
-
 (define (_mm_cmplt_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -3272,7 +3163,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_set1_epi8  %arg0 k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 )
 (apply
 concat
@@ -3301,7 +3191,6 @@ concat
 )
 )
 )
-
 (define (_mm_adds_pu16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3320,7 +3209,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_cmpeq_epi32_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 )
 (apply
 concat
@@ -3350,7 +3238,6 @@ concat
 )
 )
 )
-
 (define (_mm_maskz_add_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3381,7 +3268,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_mulhi_epi16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 )
 (apply
 concat
@@ -3417,7 +3303,6 @@ concat
 )
 )
 )
-
 (define (_m_pmaxub  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3436,7 +3321,6 @@ concat
 )
 )
 )
-
 (define (_mm_udiv_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -3460,7 +3344,6 @@ concat
 )
 )
 )
-
 (define (_mm512_broadcast_i64x2  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -3480,7 +3363,6 @@ concat
 )
 )
 )
-
 (define (_mm512_cmple_epi32_mask  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -3501,7 +3383,6 @@ concat
 )
 )
 )
-
 (define (_mm256_maskz_max_epu16  %arg0 k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3532,7 +3413,6 @@ concat
 )
 )
 )
-
 (define (_mm512_maskz_madd52lo_epu64  %arg0 k a b c %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )
 (apply
 concat
@@ -3577,7 +3457,6 @@ concat
 )
 )
 )
-
 (define (_mm_mask_dpbusd_epi32  src k a b %vectsize %lanesize1 %lanesize2 %lanesize3 %elemsize %elemsize1 %laneoffset %laneoffset1 %arg0 )
 (define dst src)
 (apply
@@ -3624,7 +3503,6 @@ concat
 )
 )
 )
-
 (define (_mm256_broadcastq_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -3641,7 +3519,6 @@ concat
 )
 )
 )
-
 (define (_mm_movepi16_mask  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 )
 (apply
 concat
@@ -3666,7 +3543,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_test_epi16_mask  %arg0 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg1 %arg2 %arg3 %arg4 )
 (apply
 concat
@@ -3697,7 +3573,6 @@ concat
 )
 )
 )
-
 (define (_mm256_mask_max_epi8  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3728,7 +3603,6 @@ concat
 )
 )
 )
-
 (define (_mm_madd_epi16  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
@@ -3760,7 +3634,6 @@ concat
 )
 )
 )
-
 (define (_mm512_mask_subr_epi32  src k v2 v3 %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -3792,9 +3665,7 @@ concat
 )
 )
 
-
 ;; ================================================================================
-
 ;; ================================================================================
 ;;                                Struct Definitions
 ;; ================================================================================
@@ -3802,6 +3673,8 @@ concat
 (struct lit (val) #:transparent)
 (struct idx-i (id) #:transparent)
 (struct idx-j (id) #:transparent)
+(struct dim-x (id) #:transparent)
+(struct dim-y (id) #:transparent)
 (struct nop (v1) #:transparent)
 (struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
 (struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )
@@ -3930,14 +3803,15 @@ concat
 (struct _mm_madd_epi16_dsl ([v0 #:mutable] [v1 #:mutable] size_i_o lane_size num_4 prec_i num_6 prec_o num_8) #:transparent)
 (struct _mm512_mask_subr_epi32_dsl ([v0 #:mutable] [v1 #:mutable] [v2 #:mutable] [v3 #:mutable] size_i_o lane_size num_6 prec_i_o num_8) #:transparent)
 ;; ================================================================================
-
 ;; ================================================================================
 ;;                                DSL Interpreter
 ;; ================================================================================
 (define (interpret prog env)
  (destruct prog
-	[(idx-i id) (vector-ref env (- (vector-length env) 2))]
-	[(idx-j id) (vector-ref env (- (vector-length env) 1))]
+	[(dim-x id) (vector-ref env (- (vector-length env) 2))]
+	[(dim-y id) (vector-ref env (- (vector-length env) 1))]
+	[(idx-i id) (vector-ref env (- (vector-length env) 4))]
+	[(idx-j id) (vector-ref env (- (vector-length env) 3))]
 	[(reg id) (vector-ref env id)]
 	[(lit v) v]
 	[(nop v1) (interpret v1 env)]
@@ -4622,7 +4496,6 @@ concat
  )
 )
 ;; ================================================================================
-
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
@@ -4757,6 +4630,10 @@ concat
 	[(reg id) 1]
 	[(lit v) 1 ]
 	[(nop v1) (+ 1 (cost v1))]
+	[(dim-x id) 1]
+	[(dim-y id) 1]
+	[(idx-add i1 i2) (+ 1 (cost i1) (cost i2))]
+	[(idx-mul i1 i2) (+ 1 (cost i1) (cost i2))]
 	[ (_mm512_mask_testn_epi64_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 vc_11 prec_i)
 		(+ cost__mm512_mask_testn_epi64_mask_dsl (cost  vc_0) (cost  v1) (cost  v2) 
 		 (cost  v3) (cost  size_i_o) (cost  lane_size) 
@@ -5432,8 +5309,7 @@ concat
  )
 )
 ;; ================================================================================
-
-;; ================================================================================
+(displayln "Creating Grammar ...");; ================================================================================
 ;;                                DSL Grammar
 ;; ================================================================================
 
@@ -5444,46 +5320,37 @@ concat
 	[(choose* #t #f)
 	(
 		vector-load_dsl
-		(mem vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(apply choose* vars)
 		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		2				;; Integer Operand 
-		8				;; Precision Operand 
-	)]
-	[(choose* #t #f)
-	(
-		vector-load_dsl
-		(reg 0) ;; 512-bit Bitvector operand
-		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
+		(idx-add (idx-mul (idx-i 0) (dim-y 0)) (idx-j 0))				
 		4				;; Integer Operand 
 		8				;; Precision Operand 
 	)]
 	[(choose* #t #f)
 	(
 		vector-load_dsl
-		(reg 1) ;; 512-bit Bitvector operand
+		(apply choose* vars)
 		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		4				;; Integer Operand 
+		(idx-add (idx-mul (idx-i 0) (dim-y 0)) (idx-j 0))				
+		8				;; Integer Operand 
 		8				;; Precision Operand 
 	)]
 	[(choose* #t #f)
 	(
 		vector-load_dsl
-		(mem vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(apply choose* vars)
 		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		6				;; Integer Operand 
+		(idx-add (idx-mul (idx-i 0) (dim-y 0)) (idx-j 0))				
+		12				;; Integer Operand 
 		8				;; Precision Operand 
 	)]
 	[else
 	(
 		vector-load_dsl
-		(mem vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(apply choose* vars)
 		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		8				;; Integer Operand 
+		(idx-add (idx-mul (idx-i 0) (dim-y 0)) (idx-j 0))				
+		16				;; Integer Operand 
 		8				;; Precision Operand 
 	)]
 	)
@@ -5508,6 +5375,19 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm256_mask_min_epi16_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm256_cvtepi64_epi8_dsl
 		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
 		128				;; Integer Operand 
@@ -5519,16 +5399,37 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm256_cvtepi64_epi8_dsl
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		256				;; Integer Operand 
+		256				;; Lane Size 
+		256				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+		16				;; Precision Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_m_paddw_dsl
 		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
-		32				;; Integer Operand 
-		32				;; Lane Size 
-		32				;; Integer Operand 
+		64				;; Integer Operand 
+		64				;; Lane Size 
+		64				;; Integer Operand 
 		8				;; Precision Operand 
 		0				;; Integer Operand 
-	)
-    ]
+	)]
+	[(choose* #t #f)
+	(
+		_m_paddw_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
 	[(choose* #t #f)
 	(
 		_mm256_max_epi8_dsl
@@ -5542,8 +5443,32 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm256_max_epi8_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm256_maskz_min_epu16_dsl
 		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		512				;; Integer Operand 
+		512				;; Lane Size 
+		512				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
+		_mm256_maskz_min_epu16_dsl
+		(lit (bv #b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 512)))				;; 512-bit Constant Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
@@ -5568,6 +5493,19 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm512_mask_cvtepi32_epi8_dsl
+		(lit (bv #b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 128)))				;; 128-bit Constant Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+		32				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm_mask_blend_epi64_dsl
 		(operations vars #:depth (- k 1)) ;; 32-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
@@ -5580,8 +5518,32 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm_mask_blend_epi64_dsl
+		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
+		512				;; Integer Operand 
+		512				;; Lane Size 
+		512				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm512_maskz_mov_epi64_dsl
 		(lit (bv #b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 128)))				;; 128-bit Constant Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
+		_mm512_maskz_mov_epi64_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
 		128				;; Integer Operand 
@@ -5603,6 +5565,17 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm512_min_epu64_dsl
+		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
+		64				;; Integer Operand 
+		64				;; Lane Size 
+		64				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm512_min_epi8_dsl
 		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 512-bit Bitvector operand
@@ -5614,10 +5587,34 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm512_min_epi8_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm256_maskz_set1_epi8_dsl
 		(lit (bv #b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 256)))				;; 256-bit Constant Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 32-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 8-bit Bitvector operand
+		256				;; Integer Operand 
+		256				;; Lane Size 
+		256				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
+		_mm256_maskz_set1_epi8_dsl
+		(lit (bv #b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 256)))				;; 256-bit Constant Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 32-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
 		256				;; Integer Operand 
 		256				;; Lane Size 
 		256				;; Integer Operand 
@@ -5640,12 +5637,36 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm_maskz_add_epi16_dsl
+		(lit (bv #b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 256)))				;; 256-bit Constant Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 32-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
+		256				;; Integer Operand 
+		256				;; Lane Size 
+		256				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_m_pmaxub_dsl
 		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 64-bit Bitvector operand
 		64				;; Integer Operand 
 		64				;; Lane Size 
 		64				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
+		_m_pmaxub_dsl
+		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
+		256				;; Integer Operand 
+		256				;; Lane Size 
+		256				;; Integer Operand 
 		8				;; Precision Operand 
 		0				;; Integer Operand 
 	)]
@@ -5664,6 +5685,19 @@ concat
 	)]
 	[(choose* #t #f)
 	(
+		_mm256_maskz_max_epu16_dsl
+		(lit (bv #b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 (bitvector 128)))				;; 128-bit Constant Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
+	[(choose* #t #f)
+	(
 		_mm256_mask_max_epi8_dsl
 		(operations vars #:depth (- k 1)) ;; 256-bit Bitvector operand
 		(operations vars #:depth (- k 1)) ;; 32-bit Bitvector operand
@@ -5675,17 +5709,29 @@ concat
 		8				;; Precision Operand 
 		0				;; Integer Operand 
 	)]
+	[(choose* #t #f)
+	(
+		_mm256_mask_max_epi8_dsl
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 16-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		(operations vars #:depth (- k 1)) ;; 128-bit Bitvector operand
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		8				;; Precision Operand 
+		0				;; Integer Operand 
+	)]
 	[else
-	(mem vars #:depth (- k 1))
+	(mem vars #:depth k)
 	]
 	)
 )
 
-(define tensor_add_grammar (operations (list (reg 0) (reg 1)) #:depth 3 ))
+(define tensor_add_grammar (operations (list (reg 0) (reg 1)) #:depth 2 ))
 
 ;; ================================================================================
-
-;; ================================================================================
+(displayln "Grammar Created ...");; ================================================================================
 ;;                                Reference Specification
 ;; ================================================================================
 (define (tensor-add v1 v2 row col prec)
@@ -5693,10 +5739,9 @@ concat
  (for/list ([i (range row)])
 (apply concat
 (for/list ([j (range col)])
-       (define left_offset (+ (* i col ) j))
-       (define right_offset (- (* row col) left_offset))
-       (define offset (- right_offset 1))
-
+(define left_offset (+ (* i col ) j))
+(define right_offset (- (* row col) left_offset))
+(define offset (- right_offset 1))
 (bvadd
 (extract (+ (* offset prec) (- prec 1)) (* offset prec) v1)
 (extract (+ (* offset prec) (- prec 1)) (* offset prec) v2)
@@ -5707,154 +5752,38 @@ concat
  )
  )
 ;; ================================================================================
-
-;; ================================================================================
+(displayln "Beginning Synthesis ...");; ================================================================================
 ;;                                Synthesis Query
 ;; ================================================================================
-(define cex_0_0 (bv #x00201112020201220111101120221212222100010021210000122020021222221010121020122102122200011120112120100201201101002101211102011011 (bitvector 512)))
-(define cex_0_1 (bv #x01222110211010221201101021210121012120022211100212011100000001211112212102211000121101201221011122221001022211100002122022201111 (bitvector 512)))
-(define env_0_i0_j0 (vector cex_0_0 cex_0_1 0 0))
-(define env_0_i0_j4 (vector cex_0_0 cex_0_1 0 4))
-(define env_0_i1_j0 (vector cex_0_0 cex_0_1 1 0))
-(define env_0_i1_j4 (vector cex_0_0 cex_0_1 1 4))
-(define env_0_i2_j0 (vector cex_0_0 cex_0_1 2 0))
-(define env_0_i2_j4 (vector cex_0_0 cex_0_1 2 4))
-(define env_0_i3_j0 (vector cex_0_0 cex_0_1 3 0))
-(define env_0_i3_j4 (vector cex_0_0 cex_0_1 3 4))
-(define env_0_i4_j0 (vector cex_0_0 cex_0_1 4 0))
-(define env_0_i4_j4 (vector cex_0_0 cex_0_1 4 4))
-(define env_0_i5_j0 (vector cex_0_0 cex_0_1 5 0))
-(define env_0_i5_j4 (vector cex_0_0 cex_0_1 5 4))
-(define env_0_i6_j0 (vector cex_0_0 cex_0_1 6 0))
-(define env_0_i6_j4 (vector cex_0_0 cex_0_1 6 4))
-(define env_0_i7_j0 (vector cex_0_0 cex_0_1 7 0))
-(define env_0_i7_j4 (vector cex_0_0 cex_0_1 7 4))
-
-
-;; Assuming row major matricies
-(define (ext-matrix-row mat rows cols row_idx type-size)
-  (define row_size (* cols type-size))
-  (ext-bv mat row_idx row_size)
-  )
-
-(define (print-vector vec len precision)
-  (for/list ( [i (reverse (range len))] )
-            (define ith_val (ext-bv vec i precision))
-            (print (bitvector->integer ith_val))
-            (display " ")
-            )
-  (displayln "")
-  )
-
-(define (print-mat mat rows cols precision)
-  (for/list ( [i (reverse (range rows))] )
-            (define row (ext-matrix-row mat rows cols i precision))
-            (print-vector row cols precision)
-            )
-  mat
-  )
-
-(displayln "Left Operand")
-(print-mat cex_0_0 8 8 8)
-
-
-(displayln "Right Operand")
-(print-mat cex_0_1 8 8 8)
-
-(displayln "Result")
-
-(print-mat (tensor-add cex_0_0 cex_0_1 8 8 8) 8 8 8)
-
-(define left_op (vector-load_dsl
-		(reg 0 ) ;; 512-bit Bitvector operand
-		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		4				;; Integer Operand 
-		8				;; Precision Operand 
-))
-
-(define right_op (vector-load_dsl
-		(reg 1 ) ;; 512-bit Bitvector operand
-		512				;; Lane Size 
-		(idx-add (idx-mul (idx-i 0) 8)	(idx-j 0))			;; Loop Index Variable 
-		4				;; Integer Operand 
-		8				;; Precision Operand 
-))
-
-(define result 
-	(
-		_m_paddw_dsl
-		left_op  ;; 64-bit Bitvector operand
-		right_op ;; 64-bit Bitvector operand
-		32				;; Integer Operand 
-		32				;; Lane Size 
-		32				;; Integer Operand 
-		8				;; Precision Operand 
-		0				;; Integer Operand 
-	)
-)
-
-(displayln "Sketch Slice")
-(println (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 0 4 8))
-
-(displayln "DSL Slice")
-(println (interpret result env_0_i0_j0))
-
-(displayln "Sketch Slice")
-(println (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 4 4 8))
-
-(displayln "DSL Slice")
-(println (interpret result env_0_i0_j4))
-
-(define (synthesis-res a b) 
-(apply concat
- (for/list ([i (range 8)])
-(apply concat
-(for/list ([j (in-range 0 8 4)])
-          (interpret result (vector a b i j))
-  )
-)
-)
- )
-)
-
-(displayln "Looped Result")
-(print-mat (synthesis-res cex_0_0 cex_0_1) 8 8 8)
-
-(displayln "Are Equal?")
-(println (equal?  (synthesis-res cex_0_0 cex_0_1) (tensor-add cex_0_0 cex_0_1 8 8 8) ) )
-
-
-(displayln "Beginning Synthesis")
+(define cex_0_0 (bv #xd1dbde82b603f059034cb6e2ad3172f81d1d50531d6378a6d4317d6ad90632ee824335d95ab52d734b984654f6a468cfec7c70e6b4b6eca8585e429e4b8107ea (bitvector 512)))
+(define cex_0_1 (bv #xb6e9f9b4c99eb7c3fcd36bff15a45d7bc0618474f3dec2c1aaca6313201b55b6b3b3e68e59a1348696822d344c93f344337f19559690e91cd17f2a624c430e2d (bitvector 512)))
+(define env_0_i0_j0 (vector cex_0_0 cex_0_1 0 0 8 8))
+(define env_0_i1_j0 (vector cex_0_0 cex_0_1 1 0 8 8))
+(define env_0_i2_j0 (vector cex_0_0 cex_0_1 2 0 8 8))
+(define env_0_i3_j0 (vector cex_0_0 cex_0_1 3 0 8 8))
+(define env_0_i4_j0 (vector cex_0_0 cex_0_1 4 0 8 8))
+(define env_0_i5_j0 (vector cex_0_0 cex_0_1 5 0 8 8))
+(define env_0_i6_j0 (vector cex_0_0 cex_0_1 6 0 8 8))
+(define env_0_i7_j0 (vector cex_0_0 cex_0_1 7 0 8 8))
 (define sol
 (synthesize 
  #:forall (list cex_0_0 cex_0_1 )
  #:guarantee 
 	(begin
-
-		(assert (equal? (interpret tensor_add_grammar env_0_i0_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 0 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i0_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 4 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i1_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 8 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i1_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 12 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i2_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 16 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i2_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 20 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i3_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 24 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i3_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 28 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i4_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 32 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i4_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 36 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i5_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 40 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i5_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 44 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i6_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 48 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i6_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 52 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i7_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 56 4 8)))
-		(assert (equal? (interpret tensor_add_grammar env_0_i7_j4) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 60 4 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i0_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 0 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i1_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 8 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i2_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 16 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i3_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 24 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i4_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 32 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i5_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 40 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i6_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 48 8 8)))
+		(assert (equal? (interpret tensor_add_grammar env_0_i7_j0) (vector-load (tensor-add cex_0_0 cex_0_1 8 8 8) 512 56 8 8)))
 		))
 )
-;; ================================================================================
-
-
 (assert (sat? sol) "Unsatisfiable")
 (define synth_res (evaluate tensor_add_grammar sol))
 (pretty-print synth_res)
-(display "synth cost: ")
+(displayln "Cost:")
 (println (cost synth_res))
+;; ================================================================================
+(displayln "Synthesis ...")

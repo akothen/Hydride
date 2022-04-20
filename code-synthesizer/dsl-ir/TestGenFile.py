@@ -1,4 +1,5 @@
 import sys
+import subprocess as sb
 from DSLParser import parse_dict
 from semantics import semantics
 from semantics_with_costs import cost_semantics
@@ -25,8 +26,9 @@ gg = GrammarGenerator()
 
 syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 1,
-                  vectorization_factor = 4,
+                  contexts_per_dsl_inst = 2,
+                  vectorization_factor = 8,
+                  depth = 2
                   )
 
 
@@ -42,33 +44,52 @@ hydride_header = """;#============================== Hydride File ==============
 ;#=============================================================================
 """
 
-## Dumping contents into racket file
-print(hydride_header)
+util_content = ""
+with open("racket_utils.rkt", "r") as UtilFile:
+    util_content = UtilFile.read()
 
 
-prefix = ";; "+"="*80 + "\n"
-prefix += ";; "+" "*30 +" DSL Semantics"+'\n'
-prefix += ";; "+"="*80 + "\n"
+with open("gen.rkt","w+") as RacketFile:
+    def write_to_file(line):
+        RacketFile.write(line)
 
-sufix = "\n;; "+"="*80 + "\n"
+    write_to_file(util_content)
 
-print(prefix)
+    write_to_file(hydride_header)
 
-print(dummy_vector_load_dsl.get_semantics())
+    write_to_file("(displayln \"Running automatically generated file ... \")")
 
-for dsl_inst in dsl_list:
-    print(dsl_inst.get_semantics())
+    prefix = ";; "+"="*80 + "\n"
+    prefix += ";; "+" "*30 +" DSL Semantics"+'\n'
+    prefix += ";; "+"="*80 + "\n"
 
-print(sufix)
+    sufix = "\n;; "+"="*80 + "\n"
 
-print(sd.emit_struct_defs(dsl_list))
+    write_to_file(prefix)
 
-print(idd.emit_interpreter(dsl_list, sd))
+    write_to_file(dummy_vector_load_dsl.get_semantics())
 
-print(cd.emit_cost_model(dsl_list, sd))
+    for dsl_inst in dsl_list:
+        write_to_file(dsl_inst.get_semantics())
 
-print(syn.emit_synthesis_grammar(main_grammar_name = "tensor_add_grammar"))
+    write_to_file(sufix)
 
-print(sp.emit_specification())
+    write_to_file(sd.emit_struct_defs(dsl_list))
 
-print(syn.emit_synthesis_query("tensor_add_grammar"))
+    write_to_file(idd.emit_interpreter(dsl_list, sd))
+
+    write_to_file(cd.emit_cost_model(dsl_list, sd))
+
+    write_to_file("(displayln \"Creating Grammar ...\")")
+    write_to_file(syn.emit_synthesis_grammar(main_grammar_name = "tensor_add_grammar"))
+    write_to_file("(displayln \"Grammar Created ...\")")
+
+    write_to_file(sp.emit_specification())
+
+
+    write_to_file("(displayln \"Beginning Synthesis ...\")")
+    write_to_file(syn.emit_synthesis_query("tensor_add_grammar"))
+    write_to_file("(displayln \"Synthesis ...\")")
+
+print("Generated File, now executing ...")
+sb.call("racket gen.rkt" , shell=True)

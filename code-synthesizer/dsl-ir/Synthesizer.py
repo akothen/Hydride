@@ -38,7 +38,7 @@ class Synthesizer:
         for lf in load_factors:
             for input_size in self.input_sizes:
                 num_elem = int(lf * self.VF)
-                offset = "IDX_I"
+                offset = "IDX_IJ"
                 precision = self.spec.input_precision
 
                 input_vector_sizes.append(input_size)
@@ -99,7 +99,7 @@ class Synthesizer:
     def get_random_bv(self, bv_size, name = "rand_val"):
         # If can be represented using Hex values
         if bv_size % 4  == 0:
-            values = [str(i) for i in range(0,3)] #+ ["a","b","c", "d","e", "f"]
+            values = [str(i) for i in range(0,10)] + ["a","b","c", "d","e", "f"]
             bv_val ="#x" +  "".join(random.choices(values, k = bv_size // 4))
             return ConstBitVector(bv_val, bv_size, name = name )
         else:
@@ -129,6 +129,8 @@ class Synthesizer:
 
     def create_concrete_inputs_vector(self, args_list, i_range, i_step,
                                       j_range, j_step):
+
+        output_shape = self.spec.output_shape
         definitions = []
         concrete_vector_map = {}
         for idx, arg_tupple in enumerate(args_list):
@@ -139,7 +141,7 @@ class Synthesizer:
                     arg_names = [arg.name for arg in arg_tupple]
 
                     env_name = "env_{}_i{}_j{}".format(idx, i, j)
-                    vector_args = arg_names + [str(i), str(j)]
+                    vector_args = arg_names + [str(i), str(j)] + [str(output_shape[0]), str(output_shape[1])]
 
                     vector_def = "(define {} (vector {}))".format(env_name, " ".join(vector_args))
                     definitions.append(vector_def)
@@ -181,6 +183,16 @@ class Synthesizer:
 
 
 
+    def emit_evaluate_synth_res(self, prog):
+        assert_sol = "(assert (sat? sol) \"Unsatisfiable\")"
+        define_sol = "(define synth_res (evaluate {} sol))".format(prog)
+        print_sol = "(pretty-print synth_res)"
+        print_cost = "(displayln \"Cost:\")"
+        print_cost += "\n" + "(println (cost synth_res))"
+
+
+        return "\n".join([assert_sol, define_sol, print_sol, print_cost])
+
 
 
 
@@ -212,6 +224,8 @@ class Synthesizer:
             synthesis_query = "(synthesize \n #:forall (list {} )\n #:guarantee \n".format(" ".join(v.name for v in new_values))
 
 
+        eval_sketch = self.emit_evaluate_synth_res(program)
+
 
 
         prefix = ";; "+"="*80 + "\n"
@@ -220,7 +234,7 @@ class Synthesizer:
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        return prefix + definitions + "\n" + "(define sol" +"\n"+ synthesis_query + constraints  +")\n)" + sufix
+        return prefix + definitions + "\n" + "(define sol" +"\n"+ synthesis_query + constraints  +")\n)" +"\n"+ eval_sketch + sufix
 
 
 

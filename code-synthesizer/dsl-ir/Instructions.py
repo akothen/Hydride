@@ -5,6 +5,8 @@ SYM_BV_STR =  "SYMBOLIC_BV_"
 CONST_BV_STR = "(bv"
 IDX_I_STR = "IDX_I"
 IDX_J_STR = "IDX_J"
+IDX_IJ_STR = "IDX_IJ"
+IDX_JI_STR = "IDX_JI"
 
 BV_OPS = [
     "bveq", "bvslt", "bvult",
@@ -21,6 +23,10 @@ BV_OPS = [
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
     "bvmulnsw", "bvmulnuw",
 ]
+
+
+
+
 
 
 class Context:
@@ -115,6 +121,19 @@ class Context:
 
                 context_arg = ConstBitVector(value, size, name = "vc_{}".format(idx))
 
+
+            elif arg.startswith(IDX_IJ_STR):
+                input_y_dim = ShapeVariable(name = "dim-y")
+                i_index = IndexVariable(name = "idx-i")
+                j_index = IndexVariable(name = "idx-j")
+                i_x_y_dim = IndexExpr(i_index, input_y_dim, expr_type = IndexExprTypeEnum.Mul)
+                context_arg = IndexExpr(i_x_y_dim, j_index, IndexExprTypeEnum.Add)
+            elif arg.startswith(IDX_JI_STR):
+                input_y_dim = ShapeVariable(name = "dim-y")
+                i_index = IndexVariable(name = "idx-i")
+                j_index = IndexVariable(name = "idx-j")
+                j_x_y_dim = IndexExpr(j_index, input_y_dim, expr_type = IndexExprTypeEnum.Mul)
+                context_arg = IndexExpr(j_x_y_dim, i_index, IndexExprTypeEnum.Add)
             elif arg.startswith(IDX_I_STR):
                 context_arg = IndexVariable(name = "idx-i")
             elif arg.startswith(IDX_J_STR):

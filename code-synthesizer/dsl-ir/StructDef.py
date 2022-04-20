@@ -14,6 +14,8 @@ class StructDef:
         defaults.append("(struct lit (val) #:transparent)")
         defaults.append("(struct idx-i (id) #:transparent)")
         defaults.append("(struct idx-j (id) #:transparent)")
+        defaults.append("(struct dim-x (id) #:transparent)")
+        defaults.append("(struct dim-y (id) #:transparent)")
         defaults.append("(struct nop (v1) #:transparent)")
         defaults.append("(struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
         defaults.append("(struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
