@@ -1,4 +1,3 @@
-
 import ply.lex as lex
 from AST import Number, Var
 
@@ -14,6 +13,7 @@ reserved = {
     'IF',
     'THEN',
     'ELSE',
+    'ELSEIF',
     'FI',
 
     'DO',
@@ -174,25 +174,4 @@ t_QUEST = r'\?'
 t_ignore  = ' \t'
 
 lexer = lex.lex()
-if __name__ == '__main__':
-  test_spec = '''
-  CASE 0 OF
-0: // individual-address invalidation retaining global translations
-	OP_PCID := descriptor[11:0]
-	ADDR := descriptor[127:64]
-	BREAK
-//1: // single PCID invalidation retaining globals
-//	OP_PCID := descriptor[11:0]
-//	// invalidate all mappings tagged with OP_PCID except global translations
-//	BREAK
-//2: // all PCID invalidation
-//	// invalidate all mappings tagged with any PCID
-//	BREAK
-//3: // all PCID invalidation retaining global translations
-//	// invalidate all mappings tagged with any PCID except global translations
-//	BREAK
-ESAC
-      '''
-  lexer.input(test_spec)
-  for token in iter(lexer.token, None):
-    print(token.type, token.value)
+
