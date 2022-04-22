@@ -195,6 +195,63 @@ class Synthesizer:
 
 
 
+    def emit_synth_function_body(self, function_name , grammar_name, num_inputs, output_shape, i_step, j_step):
+        bv_args = ["arg{}".format(i) for i in range(num_inputs)]
+        argument_vector = "(vector {} i j num_rows num_cols)".format(" ".join(bv_args), output_shape[0], output_shape[1])
+
+        func = ["\n"]
+        func += ["(define ({} {} num_rows num_cols)".format(function_name, " ".join(bv_args))]
+        func +=  ["\t(apply concat (for/list ([i (in-range 0 num_rows {})])".format(i_step)]
+        func +=  ["\t\t(apply concat (for/list ([j (in-range 0 num_cols {})])".format(j_step)]
+        func += ["\t\t\t(interpret {} {})".format(grammar_name, argument_vector)]
+        func += ["\t\t))"]
+        func += ["\t))"]
+        func += [")"]
+
+        synth_invoke_str = ("({}".format(function_name))+" {} " + ("{} {})".format(output_shape[0], output_shape[1]))
+
+        return "\n".join(func), synth_invoke_str
+
+
+    def emit_display_evaluate_symbolic(self, sym_label, cex_name = "cex"):
+        display_str = ["(displayln \"{}\")".format(sym_label)]
+        display_str += ["(println (evaluate {} {}))".format(sym_label, cex_name)]
+        return display_str
+
+
+    def emit_verification_query(self, synthesized_function_invoke_str , inputs ):
+        sym_args = []
+
+        for idx, arg in enumerate(inputs):
+            sym_label = "arg_{}".format(idx)
+            sym_arg = BitVector(sym_label, arg.size)
+            sym_args.append(sym_arg)
+
+
+        definitions = [arg.define_symbolic()[1] for arg in sym_args]
+        sym_labels = [arg.define_symbolic()[0] for arg in sym_args]
+
+        synth_invoke_str = synthesized_function_invoke_str.format(" ".join(sym_labels))
+        spec_invoke_str = self.spec.emit_invoke_spec(sym_labels)
+
+        verify_synth = ["\n"]
+        verify_synth += ["(define cex (verify"]
+        verify_synth += ["\t(begin"]
+        verify_synth += ["\t\t"+self.emit_assert_eq(synth_invoke_str, spec_invoke_str)]
+        verify_synth += ["\t)"]
+        verify_synth += [" )"]
+        verify_synth += [")"]
+
+        verify_synth += ["(assert (sat? cex) \"Verification Passed!\")"]
+
+        for sym_label in sym_labels:
+            verify_synth += self.emit_display_evaluate_symbolic(sym_label, cex_name = "cex")
+
+        def_str = "\n".join(["(clear-vc!)"] + definitions)
+        verify_str = "\n".join(verify_synth)
+
+        return def_str +"\n"+verify_str
+
 
 
 
@@ -219,12 +276,14 @@ class Synthesizer:
         synthesis_query = None
 
         if optimize:
-            synthesis_query = "(optimize \n #:minimize (list (cost {}))\n #:guarantee \n".format(grammar_name)
+            synthesis_query = "(optimize \n #:minimize (list (cost {}))\n #:guarantee \n".format(program)
         else:
             synthesis_query = "(synthesize \n #:forall (list {} )\n #:guarantee \n".format(" ".join(v.name for v in new_values))
 
 
         eval_sketch = self.emit_evaluate_synth_res(program)
+        synth_function, synth_invoke_str = self.emit_synth_function_body("synth_func", "synth_res" , len(new_values), self.spec.output_shape, 1, self.VF)
+        verify_str = self.emit_verification_query(synth_invoke_str , new_values)
 
 
 
@@ -234,7 +293,7 @@ class Synthesizer:
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        return prefix + definitions + "\n" + "(define sol" +"\n"+ synthesis_query + constraints  +")\n)" +"\n"+ eval_sketch + sufix
+        return "\n".join([prefix , definitions , "\n" , "(define sol" ,"\n", synthesis_query , constraints  ,")\n)" ,"\n", eval_sketch ,"\n" , synth_function , verify_str ,sufix])
 
 
 

@@ -45,7 +45,7 @@ class BitVector(OperandType):
 
 
     def define_symbolic(self):
-        label = "sym_"+this.name
+        label = "sym_"+self.name
         def_str = "(define-symbolic {} (bitvector {}))".format(label, self.size)
 
         return (label, def_str)

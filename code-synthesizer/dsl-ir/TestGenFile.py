@@ -51,7 +51,7 @@ with open("racket_utils.rkt", "r") as UtilFile:
 
 with open("gen.rkt","w+") as RacketFile:
     def write_to_file(line):
-        RacketFile.write(line)
+        RacketFile.write(line + "\n")
 
     write_to_file(util_content)
 
@@ -88,8 +88,8 @@ with open("gen.rkt","w+") as RacketFile:
 
 
     write_to_file("(displayln \"Beginning Synthesis ...\")")
-    write_to_file(syn.emit_synthesis_query("tensor_add_grammar"))
-    write_to_file("(displayln \"Synthesis ...\")")
+    write_to_file(syn.emit_synthesis_query("tensor_add_grammar", optimize = False))
+    write_to_file("(displayln \"Synthesis  Completed ...\")")
 
 print("Generated File, now executing ...")
 sb.call("racket gen.rkt" , shell=True)
