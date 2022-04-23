@@ -6,6 +6,7 @@
 
 
 import x86RoseLang
+import HexRoseLang
 
 import RoseCSE
 import RoseDCE
@@ -15,13 +16,15 @@ import RoseFunctionInliner
 import RoseExtractConstants
 import RoseCanonicalize
 import RoseOpCombine
+import RoseOpSimplify
 import RosetteGen
 
 
 class RoseCodeGenerator:
   # Keep a record of all target-specific APIs here
   TargetAPI = {
-    "x86" : x86RoseLang
+    "x86" : x86RoseLang,
+    "Hexagon" : HexRoseLang,
   }
 
   def __init__(self, Target : str):
@@ -52,6 +55,9 @@ class RoseCodeGenerator:
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseLoopReroller.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      RoseOpSimplify.Run(Function)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseOpCombine.Run(Function, Context)
@@ -104,6 +110,7 @@ class RoseCodeGenerator:
 
 
 if __name__ == '__main__':
+  #CodeGenerator = RoseCodeGenerator(Target="x86")
   CodeGenerator = RoseCodeGenerator(Target="x86")
   CodeGenerator.codeGen(JustGenRosette=False, ExtractConstants=True)
 
