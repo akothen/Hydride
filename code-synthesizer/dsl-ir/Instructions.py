@@ -116,7 +116,7 @@ class Context:
 
                 # FIXME: dictionary currently says #x for values when it should be
                 # using #b. Manually fix later
-                value = tokens[1].replace("#x","#b")
+                value = tokens[1]#.replace("#x","#b")
                 size = int(tokens[2].split(")")[0])
 
                 context_arg = ConstBitVector(value, size, name = "vc_{}".format(idx))

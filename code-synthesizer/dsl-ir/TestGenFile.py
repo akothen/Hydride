@@ -9,7 +9,7 @@ from InterpreterDef import InterpreterDef
 from CostDef import CostDef
 
 from Specification import Specification, parse_spec
-from test_spec import specification
+from mul_spec import specification
 
 from GrammarGenerator import GrammarGenerator
 
@@ -26,7 +26,7 @@ gg = GrammarGenerator()
 
 syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 2,
+                  contexts_per_dsl_inst = 3,
                   vectorization_factor = 8,
                   depth = 2
                   )
@@ -80,15 +80,17 @@ with open("gen.rkt","w+") as RacketFile:
 
     write_to_file(cd.emit_cost_model(dsl_list, sd))
 
+    grammar_name = "tensor_mul_grammar"
+
     write_to_file("(displayln \"Creating Grammar ...\")")
-    write_to_file(syn.emit_synthesis_grammar(main_grammar_name = "tensor_add_grammar"))
+    write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))
     write_to_file("(displayln \"Grammar Created ...\")")
 
     write_to_file(sp.emit_specification())
 
 
     write_to_file("(displayln \"Beginning Synthesis ...\")")
-    write_to_file(syn.emit_synthesis_query("tensor_add_grammar", optimize = False))
+    write_to_file(syn.emit_synthesis_query(grammar_name, optimize = False))
     write_to_file("(displayln \"Synthesis  Completed ...\")")
 
 print("Generated File, now executing ...")

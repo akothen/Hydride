@@ -99,7 +99,7 @@ class Synthesizer:
     def get_random_bv(self, bv_size, name = "rand_val"):
         # If can be represented using Hex values
         if bv_size % 4  == 0:
-            values = [str(i) for i in range(0,10)] + ["a","b","c", "d","e", "f"]
+            values = [str(i) for i in range(0,3)] #+ ["a","b","c", "d","e", "f"]
             bv_val ="#x" +  "".join(random.choices(values, k = bv_size // 4))
             return ConstBitVector(bv_val, bv_size, name = name )
         else:
@@ -329,15 +329,28 @@ class Synthesizer:
     # by a DSL instruction form a contigous
     # slice of operations within the
     # specification
-    def does_dsl_ops_overlap(self, dsl_inst):
+    def does_dsl_ops_overlap(self, dsl_inst, match_exact_order = True):
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        for idx in range(0, len(spec_ops) - len(dsl_ops) + 1):
-            if spec_ops[idx:idx+len(dsl_ops)] == dsl_ops:
-                return True
+        if dsl_inst.name == "_mm_mul_epi32":
+            print("Spec Ops", spec_ops)
+            print("DSL Ops", dsl_ops)
 
-        return False
+        if match_exact_order:
+            for idx in range(0, len(spec_ops) - len(dsl_ops) + 1):
+                if spec_ops[idx:idx+len(dsl_ops)] == dsl_ops:
+                    return True
+
+            return False
+        else:
+            # Match in any order
+            for bv_op in dsl_ops:
+                if bv_op not in dsl_ops:
+                    return False
+            return True
+
+
 
 
     # Check if the precisions of the specifications
@@ -357,12 +370,17 @@ class Synthesizer:
 
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
 
-            return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
+            #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
+            return (supports_inputs_prec or supports_input_length) and (supports_outputs_prec or supports_output_length)
 
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
+        if dsl_inst.name == "_mm_mul_epi32":
+            print("Going Over {}".format(dsl_inst.name))
+            print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
+            print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))
+        return self.does_dsl_configs_overlap(dsl_inst) or self.does_dsl_ops_overlap(dsl_inst)
 
 
 
