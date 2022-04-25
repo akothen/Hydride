@@ -23,10 +23,63 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
 
   # Get the op that we can use to canonicalize the loop bounds
   PrimaryOps = GetOpDeterminingLoopBounds(Loop)
+  print("PrimaryOps list:")
+  print(PrimaryOps)
+  if PrimaryOps == None:
+    BlockList = Loop.getRegionsOfType(RoseBlock)
+    for Block in BlockList:
+      OpList = list()
+      OpList.extend(Block.getOperations())
+      for Op in OpList:
+        if isinstance(Op, RoseBVInsertSliceOp):
+          IndexingOps = GatherIndexingOps(Op)
+          # Look for dependence of an indexing op to the iterator 
+          # the given loop.
+          for IndexingOp in IndexingOps:
+            for Operand in IndexingOp.getOperands():
+              if Operand == Loop.getIterator():
+                # Now must look at the loop end if it is same
+                # as the length of the input bitvector.
+                assert isinstance(Loop.getEndIndex(), RoseConstant)
+                if Loop.getEndIndex().getValue() \
+                      != Op.getInputBitVector().getType().getBitwidth():
+                  assert Loop.getEndIndex().getValue() \
+                       < Op.getInputBitVector().getType().getBitwidth()
+                  # Compute factor
+                  LoopEnd = Loop.getEndIndex()
+                  BitWidth = Op.getInputBitVector().getType().getBitwidth()
+                  if BitWidth > LoopEnd.getValue():
+                    Factor = BitWidth / LoopEnd.getValue()
+                    assert Factor == int(Factor)
+                    Factor = int(Factor)
+                    Start = Loop.getStartIndex()
+                    Step = Loop.getStep()
+                    assert isinstance(Start, RoseConstant)
+                    # Fix the loop bounds now
+                    Loop.setStartIndex(Factor * Start.getValue())
+                    Loop.setEndIndex(Factor * LoopEnd.getValue())
+                    Loop.setStep(Factor * Step.getValue())
+                    # Now change the iterator name
+                    OldIterator = Loop.getIterator()
+                    Loop.setIteratorName(OldIterator.getName() + ".new")
+                    # Replace the old iterator value with new one
+                    NewIterator = Loop.getIterator()
+                    FactorVal = RoseConstant(Factor, NewIterator.getType())
+                    IteratorReplacement = RoseDivOp.create(OldIterator.getName() + ".new.div", \
+                                            NewIterator, FactorVal)
+                    # Check if the loop's first child region is a block, if not we insert one
+                    if not isinstance(Loop.getChild(0), RoseBlock):
+                      Block = RoseBlock.create([IteratorReplacement])
+                      Loop.addRegionBefore(0, Block)
+                    else:
+                      Block = Loop.getChild(0)
+                      Block.addOperationBefore(IteratorReplacement, Block.getOperation(0))
+                    ReplaceUsesWithUniqueCopiesOf(Loop, OldIterator, IteratorReplacement, Context)
+                    # Combine some ops in the loop
+                    RoseOpCombine.RunOpCombineOnRegion(Loop, Context)
+    return
   print("PrimaryOps:")
   PrimaryOps[0].print()
-  if PrimaryOps == None:
-    return
   BitWidth = PrimaryOps[0].getOutputBitwidth()
 
   # Go over the bvinserts/bvextracts and see if the bitwidth and loop step are the same.
@@ -35,27 +88,49 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   assert isinstance(LoopStep, RoseConstant)
   if BitWidth != LoopStep.getValue():
     # Compute factor
-    assert LoopStep.getValue() < BitWidth
-    Factor = BitWidth / LoopStep.getValue()
-    assert Factor == int(Factor)
-    Factor = int(Factor)
-    # Assuming loop start and end are constant values as well.
-    Start = Loop.getStartIndex()
-    End = Loop.getEndIndex()
-    assert isinstance(Start, RoseConstant)
-    assert isinstance(End, RoseConstant)
-    # Fix the loop bounds now
-    Loop.setStartIndex(Factor * Start.getValue())
-    Loop.setEndIndex(Factor * End.getValue())
-    Loop.setStep(Factor * LoopStep.getValue())
-    # Now change the iterator name
-    OldIterator = Loop.getIterator()
-    Loop.setIteratorName(OldIterator.getName() + ".new")
-    # Replace the old iterator value with new one
-    NewIterator = Loop.getIterator()
-    FactorVal = RoseConstant(Factor, NewIterator.getType())
-    IteratorReplacement = RoseDivOp.create(OldIterator.getName() + ".new.div", \
-                            NewIterator, FactorVal)
+    #assert LoopStep.getValue() < BitWidth
+    if BitWidth > LoopStep.getValue():
+      Factor = BitWidth / LoopStep.getValue()
+      assert Factor == int(Factor)
+      Factor = int(Factor)
+      # Assuming loop start and end are constant values as well.
+      Start = Loop.getStartIndex()
+      End = Loop.getEndIndex()
+      assert isinstance(Start, RoseConstant)
+      assert isinstance(End, RoseConstant)
+      # Fix the loop bounds now
+      Loop.setStartIndex(Factor * Start.getValue())
+      Loop.setEndIndex(Factor * End.getValue())
+      Loop.setStep(Factor * LoopStep.getValue())
+      # Now change the iterator name
+      OldIterator = Loop.getIterator()
+      Loop.setIteratorName(OldIterator.getName() + ".new")
+      # Replace the old iterator value with new one
+      NewIterator = Loop.getIterator()
+      FactorVal = RoseConstant(Factor, NewIterator.getType())
+      IteratorReplacement = RoseDivOp.create(OldIterator.getName() + ".new.div", \
+                              NewIterator, FactorVal)
+    else:
+      Factor = LoopStep.getValue() / BitWidth
+      assert Factor == int(Factor)
+      Factor = int(Factor)
+      # Assuming loop start and end are constant values as well.
+      Start = Loop.getStartIndex()
+      End = Loop.getEndIndex()
+      assert isinstance(Start, RoseConstant)
+      assert isinstance(End, RoseConstant)
+      # Fix the loop bounds now
+      Loop.setStartIndex(int(Start.getValue() / Factor))
+      Loop.setEndIndex(int(End.getValue() / Factor))
+      Loop.setStep(int(LoopStep.getValue() / Factor))
+      # Now change the iterator name
+      OldIterator = Loop.getIterator()
+      Loop.setIteratorName(OldIterator.getName() + ".new")
+      # Replace the old iterator value with new one
+      NewIterator = Loop.getIterator()
+      FactorVal = RoseConstant(Factor, NewIterator.getType())
+      IteratorReplacement = RoseMulOp.create(OldIterator.getName() + ".new.mul", \
+                              [NewIterator, FactorVal])
     # Check if the loop's first child region is a block, if not we insert one
     if not isinstance(Loop.getChild(0), RoseBlock):
       Block = RoseBlock.create([IteratorReplacement])
@@ -116,7 +191,7 @@ def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
   ParentRegion.getFunction().print()
 
 
-def AddOuterLoopInFunction(Function : RoseFunction):
+def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
   print("AddOuterLoopInFunction")
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
@@ -152,6 +227,33 @@ def AddOuterLoopInFunction(Function : RoseFunction):
     Loop.addRegion(Region)
   # Now add the loop to the function
   Function.addRegionBefore(0, Loop)
+  # Now we will modify indexing for ops that perform
+  # cross lane operations.
+  #OpList = GetAllCrossLaneOpsInFunction(Function)
+  #if len(OpList) != 0:
+  #  ModifiedOp = set()
+  #  for Op in OpList:
+  #    # Sanity check
+  #    assert isinstance(Op, RoseBVExtractSliceOp)
+  #    assert isinstance(Op.getLowIndex(), RoseOperation)
+  #    print("CROSS LANE OP:")
+  #    Op.print()
+  #    IndexingOp = Op.getLowIndex()
+  #    if IndexingOp in ModifiedOp:
+  #      continue
+  #    OuterIterator = Loop.getIterator()
+  #    NewIndexingOp = RoseAddOp.create(Context.genName(IndexingOp.getName()), \
+  #                    [IndexingOp, OuterIterator])
+  #    IndexingOp.replaceUsesWith(NewIndexingOp)
+  #    Block = IndexingOp.getParent()
+  #    Block.addOperationAfter(NewIndexingOp, IndexingOp)
+  #    print("NewIndexingOp:")
+  #    NewIndexingOp.print()
+  #    print("Block:")
+  #    Block.print()
+  #    ModifiedOp.add(NewIndexingOp)
+  #print("FINAL FUNCTION:")
+  #Function.print()
 
 
 def AddTwoNestedLoopsInFunction(Function : RoseFunction):
@@ -200,7 +302,7 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   Function.addRegionBefore(0, OuterLoop)
 
 
-def FixLoopNestingInFunction(Function : RoseFunction):
+def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):
   # Get number of loops at different levels
   NumLoopsAtLevel0 = Function.numLevelsOfRegion(RoseForLoop, 0)
   print("NumLoopsAtLevel0:")
@@ -230,7 +332,7 @@ def FixLoopNestingInFunction(Function : RoseFunction):
         AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
         return
     print("ADDING OUTER LOOP IN FUNCTION")
-    AddOuterLoopInFunction(Function)
+    AddOuterLoopInFunction(Function, Context)
 
 
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
@@ -614,7 +716,7 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
     return
 
   # We may need to add more loops
-  FixLoopNestingInFunction(Function)
+  FixLoopNestingInFunction(Function, Context)
   if IsFunctionInCanonicalForm(Function):
     return
 
