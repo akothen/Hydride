@@ -4,9 +4,9 @@ from Instructions import *
 
 vector_load_sem =  [
 
-"(define (scalar-load mem mem_size index type_size)",
-  "(define total_num_elems (/ mem_size type_size))",
-   "(define result",
+    "(define (scalar-load mem mem_size index type_size)",
+    "(define total_num_elems (/ mem_size type_size))",
+    "(define result",
     "(ext-bv mem (- (- total_num_elems  1) index) type_size))",
     "result",
     ")",
@@ -89,7 +89,7 @@ def create_vector_load_dsl(input_vector_sizes = [],
             out_precision = precisions[i],
             SIMD = "False",
             args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]),
-                    str(offsets[i]), str(num_elem_sizes[i]), str(precisions[i])],
+                    offsets[i], str(num_elem_sizes[i]), str(precisions[i])],
             in_vectsize_index = 1,
             out_vectsize_index = 1,
             lanesize_index = 1,
@@ -100,15 +100,6 @@ def create_vector_load_dsl(input_vector_sizes = [],
 
     return vec_load_dsl
 
-
-# Placeholder instruction definition to faciliate other classes
-# emitting racket code for interpreter
-dummy_vector_load_dsl = create_vector_load_dsl(
-    input_vector_sizes = [64],
-    offsets = [0],
-    num_elem_sizes = [4],
-    precisions = [8]
-)
 
 def create_two_input_swizzle(input_vector_sizes = [],
                              num_elem_sizes = [],
@@ -150,4 +141,26 @@ def create_two_input_swizzle(input_vector_sizes = [],
         )
 
     return swizzle_dsl
+
+# Placeholder instruction definition to faciliate other classes
+# emitting racket code for interpreter
+dummy_vector_load_dsl = create_vector_load_dsl(
+    input_vector_sizes = [64],
+    offsets = [0],
+    num_elem_sizes = [4],
+    precisions = [8]
+)
+
+
+dummy_vector_swizzle_dsl = create_two_input_swizzle(
+    input_vector_sizes = [64],
+    num_elem_sizes = [6],
+    group_sizes = [3],
+    lane_offsets = [0],
+    lane_sizes = [3],
+    dis_sizes = [1],
+    rotate_sizes = [0],
+    precisions = [8]
+)
+
 

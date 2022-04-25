@@ -1,7 +1,6 @@
 from enum import Enum, auto
 
 class OperandType:
-
     class OperandTypeEnum(Enum):
         BitVector = auto()
         ConstBitVector = auto()
@@ -10,16 +9,22 @@ class OperandType:
         Integer = auto()
         IndexVariable = auto()
         ShapeVariable = auto()
+        IndexExpr = auto()
 
     def __init__(self, Enum):
         self.TypeEnum = Enum
         self.is_hole = False
 
     def __eq__(self, Other):
+        if Other == None:
+            return False
+
         assert isinstance(Other, OperandType)
         return self.TypeEnum == Other.TypeEnum
 
     def __ne__(self, Other):
+        if Other == None:
+            return True
         assert isinstance(Other, OperandType)
         return self.TypeEnum != Other.TypeEnum
 
@@ -240,12 +245,13 @@ class IndexExprTypeEnum(Enum):
     Mul = auto()
 
 
-class IndexExpr:
+class IndexExpr(OperandType):
     def __init__(self, lhs, rhs,  expr_type = IndexExprTypeEnum.Add):
         self.expr_type = expr_type
         self.lhs = lhs
         self.rhs = rhs
         self.is_hole = False
+        super().__init__(OperandType.OperandTypeEnum.IndexExpr)
 
     def get_rkt_value(self):
         assert False, "Index expression has no corresponding racket value"
@@ -263,6 +269,79 @@ class IndexExpr:
             return "(idx-add {} {})".format(lhs_str, rhs_str)
         elif self.expr_type == IndexExprTypeEnum.Mul:
             return "(idx-mul {} {})".format(lhs_str, rhs_str)
+
+
+# Utility function to create expressions of the form
+# a x (idx-i) + b x (idx-j) + k
+def create_affine_index_expr(i_coef, j_coef, bias):
+    i_expr = None
+    j_expr = None
+    bias_expr = None
+
+    i_index = IndexVariable(name = "idx-i")
+    j_index = IndexVariable(name = "idx-j")
+
+    if i_coef == "dim-x":
+        dim_x = ShapeVariable(name = "dim-x")
+        i_expr = IndexExpr(i_index, dim_x, expr_type = IndexExprTypeEnum.Mul)
+    elif i_coef == "dim-y":
+        dim_y = ShapeVariable(name = "dim-y")
+        i_expr = IndexExpr(i_index, dim_y, expr_type = IndexExprTypeEnum.Mul)
+    elif i_coef == None:
+        i_expr = None
+    else:
+        integer = Integer("i_coef", value = int(i_coef))
+        i_expr = IndexExpr(i_index, integer , expr_type = IndexExprTypeEnum.Mul)
+
+
+    if j_coef == "dim-x":
+        dim_x = ShapeVariable(name = "dim-x")
+        j_expr = IndexExpr(j_index, dim_x, expr_type = IndexExprTypeEnum.Mul)
+    elif j_coef == "dim-y":
+        dim_y = ShapeVariable(name = "dim-y")
+        j_expr = IndexExpr(j_index, dim_y, expr_type = IndexExprTypeEnum.Mul)
+    elif j_coef == None:
+        j_expr = None
+    else:
+        integer = Integer("j_coef", value = int(j_coef))
+        j_expr = IndexExpr(j_index, integer , expr_type = IndexExprTypeEnum.Mul)
+
+
+    if bias == "dim-x":
+        bias_expr = ShapeVariable(name = "dim-x")
+    elif bias == "dim-y":
+        bias_expr = ShapeVariable(name = "dim-y")
+    elif bias == None:
+        bias_expr = None
+    else:
+        bias_expr = Integer("bias", value = int(bias))
+
+    expr = None
+
+    if i_expr != None:
+        if expr == None:
+            expr = i_expr
+        else:
+            expr = i_expr
+
+
+    if j_expr != None:
+        if expr == None:
+            expr = j_expr
+        else:
+            expr = IndexExpr(expr, j_expr, expr_type = IndexExprTypeEnum.Add)
+
+
+    if bias_expr != None:
+        if expr == None:
+            expr = bias_expr
+        else:
+            expr = IndexExpr(expr, bias_expr, expr_type = IndexExprTypeEnum.Add)
+
+    assert expr != None, "Should not be creating a undefined expression"
+
+    return expr
+
 
 
 

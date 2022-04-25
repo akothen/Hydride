@@ -38,7 +38,7 @@ class Synthesizer:
         for lf in load_factors:
             for input_size in self.input_sizes:
                 num_elem = int(lf * self.VF)
-                offset = "IDX_IJ"
+                offset = create_affine_index_expr("dim-y", 1, None ) #"IDX_IJ"
                 precision = self.spec.input_precision
 
                 input_vector_sizes.append(input_size)
@@ -52,6 +52,52 @@ class Synthesizer:
                                       num_elem_sizes = num_elem_sizes,
                                       precisions = precisions)
 
+
+    def get_memory_shuffles(self):
+        load_factors = [0.5, 1.0, 1.5, 2.0]
+        group_factors = [0.25, 0.5, 1.0]
+        lane_offsets_factors = [0, "IDX_J"]
+        dis_factors = [1]
+        rotate_factors = [0]
+
+
+        input_vector_sizes = []
+        num_elem_sizes = []
+        group_sizes = []
+        dis_sizes = []
+        rotate_sizes = []
+        precisions = []
+        lane_offsets = []
+        lane_sizes = []
+
+
+
+
+        for lf in load_factors:
+            for input_size in self.input_sizes:
+                for gf in group_factors:
+                    for lo in lane_offsets_factors:
+                        for d in dis_factors:
+                            for r in rotate_factors:
+                                input_vector_sizes.append(input_size)
+                                num_elem_sizes.append(self.VF)
+                                precisions.append(self.spec.input_precision)
+                                lane_offsets.append(lo)
+                                lane_sizes.append(self.VF)
+                                group_sizes.append(int(gf * self.VF))
+                                dis_sizes.append(d)
+                                rotate_sizes.append(r)
+
+        return create_two_input_swizzle(input_vector_sizes = input_vector_sizes,
+                                        num_elem_sizes = num_elem_sizes,
+                                        group_sizes = group_sizes,
+                                        lane_offsets = lane_offsets,
+                                        lane_sizes = lane_sizes,
+                                        dis_sizes = dis_sizes,
+                                        rotate_sizes = rotate_sizes,
+                                        precisions = precisions)
+
+
     def get_top_level_grammar_args(self):
         registers = 0
         for arg in self.spec.args:
@@ -61,13 +107,27 @@ class Synthesizer:
         return ["(reg {})".format(i) for i in range(0, registers)]
 
 
+    def get_lit_holes(self, use_lit_holes):
 
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar"):
+        load_factors = [0.5, 1.0, 1.25]
+        holes = []
+
+        if use_lit_holes:
+            holes = [int(lf * self.VF * self.spec.input_precision) for lf in load_factors]
+
+        return holes
+
+    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = False):
 
         ## Memory loading layer
         spec_memory_loads = self.get_memory_loads()
         memory_dsl_insts = [spec_memory_loads] * len(spec_memory_loads.contexts)
         memory_dsl_args_list = [ctx.context_args for ctx in spec_memory_loads.contexts]
+
+        ## Memory Shuffle layer
+        spec_memory_shuffles = self.get_memory_shuffles()
+        memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        memory_shuffle_args_list = [ctx.context_args for ctx in spec_memory_shuffles.contexts]
 
         ## Operation Layers
 
@@ -84,14 +144,23 @@ class Synthesizer:
 
         top_level_grammar_args = self.get_top_level_grammar_args()
 
+        print("Number of Load DSL Instructions:\t",len(memory_dsl_args_list))
+        print("Number of Shuffle DSL Instructions:\t",len(memory_shuffle_args_list))
+        print("Number of DSL Compute Instructions:\t",len(operation_dsl_args_list))
+
+        lit_holes = self.get_lit_holes(use_lit_holes)
+
         return self.grammar_generator.emit_grammar(
             memory_dsl_insts = memory_dsl_insts,
             memory_dsl_args_list = memory_dsl_args_list,
+            shuffle_dsl_insts = memory_shuffle_insts,
+            shuffle_dsl_args_list = memory_shuffle_args_list,
             operation_dsl_insts = operation_dsl_insts,
             operation_dsl_args_list = operation_dsl_args_list,
             top_level_grammar_name = main_grammar_name,
             top_level_grammar_args = top_level_grammar_args,
-            depth = self.depth
+            depth = self.depth,
+            lit_holes = lit_holes
         )
 
 
@@ -333,7 +402,7 @@ class Synthesizer:
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        if dsl_inst.name == "_mm_mul_epi32":
+        if dsl_inst.name == "_mm_mul_epi32" and False:
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -376,7 +445,7 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name == "_mm_mul_epi32":
+        if dsl_inst.name == "_mm_mul_epi32" and False:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))

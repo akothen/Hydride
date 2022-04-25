@@ -1,4 +1,5 @@
 import sys
+import time
 import subprocess as sb
 from DSLParser import parse_dict
 from semantics import semantics
@@ -16,6 +17,9 @@ from GrammarGenerator import GrammarGenerator
 from Synthesizer import Synthesizer
 
 dsl_list = parse_dict(cost_semantics)
+
+print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
+print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
 
 
 sd = StructDef()
@@ -94,4 +98,8 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file("(displayln \"Synthesis  Completed ...\")")
 
 print("Generated File, now executing ...")
+start_time = time.time()
 sb.call("racket gen.rkt" , shell=True)
+end_time = time.time()
+
+print("Synthesis and verification took {} seconds ...".format(end_time - start_time))

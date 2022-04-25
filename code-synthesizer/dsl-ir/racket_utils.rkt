@@ -12,7 +12,7 @@
 
 
 
-(custodian-limit-memory (current-custodian) (* 10000 1024 1024))
+(custodian-limit-memory (current-custodian) (* 12000 1024 1024))
 
 
 ;; Some uility functions

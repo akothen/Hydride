@@ -23,6 +23,7 @@ class InterpreterDef:
         defaults.append("[(idx-add i1 i2) (+ (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
         defaults.append("[(idx-mul i1 i2) (* (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
         defaults.append(self.emit_interpret_def(dummy_vector_load_dsl, struct_definer)[1:])
+        defaults.append(self.emit_interpret_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
 
         return ["\t{}".format(d) for d in defaults]
 

@@ -22,6 +22,7 @@ class StructDef:
 
 
         defaults.append(self.emit_dsl_struct_def(dummy_vector_load_dsl))
+        defaults.append(self.emit_dsl_struct_def(dummy_vector_swizzle_dsl))
 
         return defaults
 
