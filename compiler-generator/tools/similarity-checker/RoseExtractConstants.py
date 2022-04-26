@@ -5,6 +5,7 @@
 #############################################################
 
 
+from re import L
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -315,6 +316,72 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
               Visited.add(MulOp)
               Visited.add(LastIdx)
               return
+      # Account for a case where there are two bvinserts in a single
+      # block and they insert contiguous bit slices.
+      Block = Op.getParent()
+      BVInsertOps = list()
+      for Operation in Block:
+        if isinstance(Operation, RoseBVInsertSliceOp):
+          BVInsertOps.append(Operation)
+      if len(BVInsertOps) > 1:
+        # See if the given op is an indexing op
+        for InsertOp in BVInsertOps:
+          if Op == InsertOp:
+            IndexingOps = GatherIndexingOps(InsertOp)
+            if LowIndex in IndexingOps:
+              if isinstance(LowIndex.getOperand(0), RoseAddOp):
+                AddOp = LowIndex.getOperand(0)
+                if isinstance(AddOp.getOperand(0), RoseConstant) \
+                  and AddOp.getOperand(0).getValue() == Bitwidth.getValue():
+                  AddOp.setOperand(0, InsertOp.getOutputBitwidth())
+                  Visited.add(LowIndex)
+                  Visited.add(AddOp)
+                  return
+                if isinstance(AddOp.getOperand(1), RoseConstant) \
+                  and AddOp.getOperand(1).getValue() == Bitwidth.getValue():
+                  AddOp.setOperand(1, InsertOp.getOutputBitwidth())
+                  Visited.add(LowIndex)
+                  Visited.add(AddOp)
+                  return
+                if isinstance(AddOp.getOperand(0), RoseConstant) \
+                  and AddOp.getOperand(0).getValue() == ArgToConstantValsMap[LoopStep].getValue():
+                  AddOp.setOperand(0, ArgToConstantValsMap[LoopStep])
+                  Visited.add(LowIndex)
+                  Visited.add(AddOp)
+                  return
+                if isinstance(AddOp.getOperand(1), RoseConstant) \
+                  and AddOp.getOperand(1).getValue() == ArgToConstantValsMap[LoopStep].getValue():
+                  AddOp.setOperand(1, ArgToConstantValsMap[LoopStep])
+                  Visited.add(LowIndex)
+                  Visited.add(AddOp)
+                  return
+                if isinstance(LowIndex.getOperand(1), RoseAddOp):
+                  AddOp = LowIndex.getOperand(1)
+                  if isinstance(AddOp.getOperand(0), RoseConstant) \
+                    and AddOp.getOperand(0).getValue() == Bitwidth.getValue():
+                    AddOp.setOperand(0, InsertOp.getOutputBitwidth())
+                    Visited.add(LowIndex)
+                    Visited.add(AddOp)
+                    return
+                  if isinstance(AddOp.getOperand(1), RoseConstant) \
+                    and AddOp.getOperand(1).getValue() == Bitwidth.getValue():
+                    AddOp.setOperand(1, InsertOp.getOutputBitwidth())
+                    Visited.add(LowIndex)
+                    Visited.add(AddOp)
+                    return
+                  if isinstance(AddOp.getOperand(0), RoseConstant) \
+                    and AddOp.getOperand(0).getValue() == ArgToConstantValsMap[LoopStep].getValue():
+                    AddOp.setOperand(0, ArgToConstantValsMap[LoopStep])
+                    Visited.add(LowIndex)
+                    Visited.add(AddOp)
+                    return
+                  if isinstance(AddOp.getOperand(1), RoseConstant) \
+                    and AddOp.getOperand(1).getValue() == ArgToConstantValsMap[LoopStep].getValue():
+                    AddOp.setOperand(1, ArgToConstantValsMap[LoopStep])
+                    Visited.add(LowIndex)
+                    Visited.add(AddOp)
+                    return
+
     # Account for other casess
     if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
       or LowIndex.getOpcode().typesOfOperandsAreEqual():
@@ -332,7 +399,7 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
           assert DivOp.getOperand(0) == LoopIterator
           DivOp.setOperand(1, LoopStep)
           Visited.add(DivOp)
-          return
+          return 
 
 
 def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
