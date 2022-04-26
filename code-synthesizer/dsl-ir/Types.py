@@ -307,7 +307,9 @@ def create_affine_index_expr(i_coef, j_coef, bias):
         j_expr = IndexExpr(j_index, integer , expr_type = IndexExprTypeEnum.Mul)
 
 
-    if bias == "dim-x":
+    if isinstance(bias, OperandType):
+        bias_expr = bias
+    elif bias == "dim-x":
         bias_expr = ShapeVariable(name = "dim-x")
     elif bias == "dim-y":
         bias_expr = ShapeVariable(name = "dim-y")

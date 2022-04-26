@@ -10,7 +10,8 @@ from InterpreterDef import InterpreterDef
 from CostDef import CostDef
 
 from Specification import Specification, parse_spec
-from mul_spec import specification
+#from mul_spec import specification
+from box_blur_spec import specification
 
 from GrammarGenerator import GrammarGenerator
 
@@ -30,9 +31,9 @@ gg = GrammarGenerator()
 
 syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 3,
-                  vectorization_factor = 8,
-                  depth = 2
+                  contexts_per_dsl_inst = 2,
+                  vectorization_factor = 2,
+                  depth = 3
                   )
 
 
@@ -56,6 +57,8 @@ with open("racket_utils.rkt", "r") as UtilFile:
 with open("gen.rkt","w+") as RacketFile:
     def write_to_file(line):
         RacketFile.write(line + "\n")
+
+    dsl_list = [dsl_inst for dsl_inst in dsl_list if syn.consider_dsl_inst(dsl_inst)]
 
     write_to_file(util_content)
 
@@ -84,7 +87,7 @@ with open("gen.rkt","w+") as RacketFile:
 
     write_to_file(cd.emit_cost_model(dsl_list, sd))
 
-    grammar_name = "tensor_mul_grammar"
+    grammar_name = "box_blur_grammar"
 
     write_to_file("(displayln \"Creating Grammar ...\")")
     write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))

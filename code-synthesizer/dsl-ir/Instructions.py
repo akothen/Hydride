@@ -21,7 +21,7 @@ BV_OPS = [
     "integer->bitvector", "bvumaxval", "bvsmaxval",
     "bvuminval", "bvsminval", "bvssat", "bvusat",
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
-    "bvmulnsw", "bvmulnuw",
+    "bvmulnsw", "bvmulnuw","if",
 ]
 
 
@@ -70,6 +70,16 @@ class Context:
 
     def supports_output_precision(self, prec):
         return self.out_precision == prec
+
+
+    def get_max_arg_size(self):
+        max_arg_size = 0
+        for arg in self.context_args:
+            if isinstance(arg, BitVector):
+                if arg.size >= max_arg_size:
+                    max_arg_size = arg.size
+
+        return max_arg_size
 
     def supports_input_size(self, input_size):
         for arg in self.context_args:

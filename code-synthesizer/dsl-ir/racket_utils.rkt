@@ -8,11 +8,11 @@
 
 
 (current-solver (boolector))
-(current-bitwidth 16)
+(current-bitwidth 8)
 
 
 
-(custodian-limit-memory (current-custodian) (* 12000 1024 1024))
+(custodian-limit-memory (current-custodian) (* 22000 1024 1024))
 
 
 ;; Some uility functions

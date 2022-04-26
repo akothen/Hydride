@@ -25,7 +25,26 @@ class Synthesizer:
 
 
     def get_memory_loads(self):
-        load_factors = [0.5, 1.0, 1.5, 2.0]
+
+        def create_scalar_mul(scale, rhs):
+            scale_factor = Integer("scale", value = scale)
+
+            if rhs == "dim-y":
+                rhs = ShapeVariable(name = "dim-y")
+            elif rhs == "dim-x":
+                rhs = ShapeVariable(name = "dim-x")
+            elif isinstance(rhs, OperandType):
+                pass
+            else:
+                rhs = Integer("rhs_scalar", value = rhs)
+
+            return IndexExpr(scale_factor, rhs, expr_type = IndexExprTypeEnum.Mul)
+
+        load_factors = [1.0, 1.5]
+        offset_exprs = [ create_affine_index_expr("dim-y", 1, None ), # (i * dim-y) + j
+                        create_affine_index_expr("dim-y", 1, create_scalar_mul(1, "dim-y") ), # ((i+1) * dim-y) + j = (i * dim-y) + j + dim-y
+                        create_affine_index_expr("dim-y", 1, create_scalar_mul(2, "dim-y"))
+                        ]
 
         input_vector_sizes = []
         offsets = []
@@ -37,14 +56,15 @@ class Synthesizer:
 
         for lf in load_factors:
             for input_size in self.input_sizes:
-                num_elem = int(lf * self.VF)
-                offset = create_affine_index_expr("dim-y", 1, None ) #"IDX_IJ"
-                precision = self.spec.input_precision
+                for of in offset_exprs:
+                    num_elem = int(lf * self.VF)
+                    offset =  of #create_affine_index_expr("dim-y", 1, None ) #"IDX_IJ"
+                    precision = self.spec.input_precision
 
-                input_vector_sizes.append(input_size)
-                offsets.append(offset)
-                num_elem_sizes.append(num_elem)
-                precisions.append(precision)
+                    input_vector_sizes.append(input_size)
+                    offsets.append(offset)
+                    num_elem_sizes.append(num_elem)
+                    precisions.append(precision)
 
 
         return create_vector_load_dsl(input_vector_sizes = input_vector_sizes,
@@ -54,9 +74,9 @@ class Synthesizer:
 
 
     def get_memory_shuffles(self):
-        load_factors = [0.5, 1.0, 1.5, 2.0]
-        group_factors = [0.25, 0.5, 1.0]
-        lane_offsets_factors = [0, "IDX_J"]
+        load_factors = [1.0, 1.5]
+        group_factors = [0.25, 0.5]#, 1.0]
+        lane_offsets_factors = [0] #[0, "IDX_J"]
         dis_factors = [1]
         rotate_factors = [0]
 
@@ -109,7 +129,7 @@ class Synthesizer:
 
     def get_lit_holes(self, use_lit_holes):
 
-        load_factors = [0.5, 1.0, 1.25]
+        load_factors = [1.0]
         holes = []
 
         if use_lit_holes:
@@ -117,7 +137,7 @@ class Synthesizer:
 
         return holes
 
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = False):
+    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = True):
 
         ## Memory loading layer
         spec_memory_loads = self.get_memory_loads()
@@ -128,6 +148,10 @@ class Synthesizer:
         spec_memory_shuffles = self.get_memory_shuffles()
         memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list = [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
+        #TEMP:
+        #memory_shuffle_insts = []
+        #memory_shuffle_args_list = []
 
         ## Operation Layers
 
@@ -377,8 +401,12 @@ class Synthesizer:
             supports_inputs_prec = ctx.supports_input_precision(self.spec.input_precision)
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
+            supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
 
-            if supports_inputs_prec or supports_outputs_prec or supports_output_length:
+            #print("Input limit: ", int((self.VF * self.spec.input_precision * 1.5)))
+            #print(dsl_inst.name, supports_input_length)
+
+            if (supports_inputs_prec or supports_outputs_prec or supports_output_length) and supports_input_length :
                 contexts.append(ctx)
 
         if limit != None and len(contexts) > limit:
@@ -398,11 +426,11 @@ class Synthesizer:
     # by a DSL instruction form a contigous
     # slice of operations within the
     # specification
-    def does_dsl_ops_overlap(self, dsl_inst, match_exact_order = True):
+    def does_dsl_ops_overlap(self, dsl_inst, match_exact_order = False):
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        if dsl_inst.name == "_mm_mul_epi32" and False:
+        if dsl_inst.name in ["_mm_mul_epi32", "_mm512_div_epi64"] and False:
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -415,7 +443,7 @@ class Synthesizer:
         else:
             # Match in any order
             for bv_op in dsl_ops:
-                if bv_op not in dsl_ops:
+                if bv_op not in spec_ops:
                     return False
             return True
 
@@ -445,11 +473,11 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name == "_mm_mul_epi32" and False:
+        if dsl_inst.name in ["_mm_mul_epi32",  "_mm512_div_epi64"] and False:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))
-        return self.does_dsl_configs_overlap(dsl_inst) or self.does_dsl_ops_overlap(dsl_inst)
+        return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
 
 
 
