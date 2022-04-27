@@ -388,6 +388,10 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
     # Now generate the bvextract op
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
                                       LowIndex, HighIndex, BitwidthValue)
+    Context.addSignednessInfoForValue(Operation, \
+                            HexTypeSignedness[IndexExpr.obj.elemtype])
+    Context.addSignednessInfoForValue(Vector, \
+                            HexTypeSignedness[IndexExpr.obj.elemtype])
   else:
     # Account for another case
     assert type(IndexExpr.obj) == ElemTypeInfo
@@ -462,6 +466,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
       # Now generate the bvextract op
       Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
                                         LowIndex, HighIndex, BitwidthValue)
+      Context.addSignednessInfoForValue(Operation, \
+                             HexTypeSignedness[InnerBitIndex.obj.elemtype])
       Context.addSignednessInfoForValue(BitVector, \
                              HexTypeSignedness[InnerBitIndex.obj.elemtype])
       # Add this op to context for the inner bitindex
@@ -505,6 +511,8 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
       Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
                                           LowIndex, HighIndex, BitwidthValue)
       Context.addSignednessInfoForValue(Operation, \
+                             HexTypeSignedness[IndexExpr.obj.elemtype])
+      Context.addSignednessInfoForValue(Vector, \
                              HexTypeSignedness[IndexExpr.obj.elemtype])
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -1205,13 +1213,19 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   print(BinaryExpr)
   # Compile the operands
   Operand1 = CompileExpression(BinaryExpr.a, Context)
-  Operand2 = CompileExpression(BinaryExpr.b, Context)
   print("--Operand1:")
   Operand1.print()
   Operand1.getType().print()
+  if isinstance(Operand1.getType(), RoseBitVectorType):
+    print("Context.isValueSigned(Operand1):")
+    print(Context.isValueSigned(Operand1))
+  Operand2 = CompileExpression(BinaryExpr.b, Context)
   print("--Operand2:")
   Operand2.print()
   Operand2.getType().print()
+  if isinstance(Operand2.getType(), RoseBitVectorType):
+    print("Context.isValueSigned(Operand2):")
+    print(Context.isValueSigned(Operand2))
 
   # We have to deal with the special case
   ExtendOperandSize = False
