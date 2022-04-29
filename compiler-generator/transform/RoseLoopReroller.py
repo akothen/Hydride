@@ -190,6 +190,94 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
+# Op1 is an add ops and op2 is not.
+def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
+            Pack : list, OpsList1 : list, OpsList2 : list, \
+            Visited : list, ValueToValueMap : dict):
+  print("FIXING PACK")
+  # See if adding on Add op before Op2 would do.
+  if not isinstance(Op1, RoseAddOp):
+    return False
+  if len(Op1.getOperands()) != 2:
+    return False
+  if isinstance(Op1.getOperand(0), RoseConstant) \
+    or isinstance(Op1.getOperand(1), RoseConstant):
+    print("FIRST CONDITION")
+    #return False
+    # Generate a new add op
+    Zero = RoseConstant(0, Op2.getType())
+    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
+    print("NEW ADD OP:")
+    NewOp2.print()
+    # Replace the uses of Op2 with NewOp2
+    Op2.replaceUsesWith(NewOp2)
+    # Add the new op to the block
+    Block2.addOperationAfter(NewOp2, Op2)
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(NewOp2.getOperands())
+    # Extend the pack
+    Index = Pack.index(Op2)
+    Pack.insert(Index + 1, NewOp2)
+    # Fix the visited ops list
+    Visited.remove(Op2)
+    Visited.add(NewOp2)
+    print("NEW BLOCK:")
+    Block2.print()
+    print("---AFTER PACK:")
+    for Op in Pack:
+      Op.print()
+  elif Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2:
+    print("Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2")
+    Operand = Op1.getOperand(1) if Op1.getOperand(0) == Op2 else Op1.getOperand(0)
+    if not isinstance(Operand, RoseOperation):
+      return False
+    if not Operand.getOpcode().typesOfOperandsAreEqual():
+      return False
+    ClonedOperand = Operand.clone(Operand.getName() + ".new")
+    Zero = RoseConstant(0, ClonedOperand.getType())
+    ClonedOperand.setOperand(0, Zero)
+    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, ClonedOperand])
+    print("NEW ADD OP:")
+    NewOp2.print()
+    # Replace the uses of Op2 with NewOp2
+    #Function = Op1.getParent().getFunction()
+    #Function.replaceUsesWith(Op2, NewOp2)
+    for OperandIndex, Operand in enumerate(ValueToValueMap[Op2].getOperands()):
+      if Operand == Op2:
+        ValueToValueMap[Op2].setOperand(OperandIndex, NewOp2)
+    # Add the new op to the block
+    Block2.addOperationBefore(ClonedOperand, ValueToValueMap[Op2])
+    Block2.addOperationBefore(NewOp2, ValueToValueMap[Op2])
+    # Consider all other instructions
+    OpsList1.extend(Op1.getOperands())
+    OpsList2.extend(NewOp2.getOperands())
+    # Extend the pack
+    Index = Pack.index(ValueToValueMap[Op2])
+    if Index == 0:
+      Pack.insert(0, NewOp2)
+      #Pack = [NewOp2] + Pack
+    else:
+      Pack.insert(Index - 1, NewOp2)
+    Index = Pack.index(NewOp2)
+    if Index == 0:
+      Pack.insert(0, ClonedOperand)
+      #Pack = [ClonedOperand] + Pack
+    else:
+      Pack.insert(Index - 1, ClonedOperand)
+    # Fix the visited ops list
+    #Visited.remove(Op2)
+    Visited.add(NewOp2)
+    print("NEW BLOCK:")
+    Block2.print()
+    print("---AFTER PACK:")
+    for Op in Pack:
+      Op.print()
+  else:
+    return False
+  return True
+
+
 def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   print("FixDFGIsomorphism")
   assert len(Pack1) != 0 and len(Pack2) != 0
@@ -223,91 +311,6 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         for IndexingOp in IndexingOps:
           IndexingToBVOpsMap[IndexingOp] = Op
     return IndexingToBVOpsMap
-
-  # Op1 is an add ops and op2 is not.
-  def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
-              Pack : list, OpsList1 : list, OpsList2 : list, \
-              Visited : list, ValueToValueMap : dict):
-    print("FIXING PACK")
-    # See if adding on Add op before Op2 would do.
-    if not isinstance(Op1, RoseAddOp):
-      return False
-    if len(Op1.getOperands()) != 2:
-      return False
-    if isinstance(Op1.getOperand(0), RoseConstant) \
-      or isinstance(Op1.getOperand(1), RoseConstant):
-      print("FIRST CONDITION")
-      #return False
-      # Generate a new add op
-      Zero = RoseConstant(0, Op2.getType())
-      NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
-      print("NEW ADD OP:")
-      NewOp2.print()
-      # Replace the uses of Op2 with NewOp2
-      Op2.replaceUsesWith(NewOp2)
-      # Add the new op to the block
-      Block2.addOperationAfter(NewOp2, Op2)
-      # Consider all other instructions
-      OpsList1.extend(Op1.getOperands())
-      OpsList2.extend(NewOp2.getOperands())
-      # Extend the pack
-      Index = Pack.index(Op2)
-      Pack.insert(Index + 1, NewOp2)
-      # Fix the visited ops list
-      Visited.remove(Op2)
-      Visited.add(NewOp2)
-      print("NEW BLOCK:")
-      Block2.print()
-      print("---AFTER PACK:")
-      for Op in Pack:
-        Op.print()
-    elif Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2:
-      print("Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2")
-      Operand = Op1.getOperand(1) if Op1.getOperand(0) == Op2 else Op1.getOperand(0)
-      if not isinstance(Operand, RoseOperation):
-        return False
-      if not Operand.getOpcode().typesOfOperandsAreEqual():
-        return False
-      ClonedOperand = Operand.clone(Operand.getName() + ".new")
-      Zero = RoseConstant(0, ClonedOperand.getType())
-      ClonedOperand.setOperand(0, Zero)
-      NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, ClonedOperand])
-      print("NEW ADD OP:")
-      NewOp2.print()
-      # Replace the uses of Op2 with NewOp2
-      #Function = Op1.getParent().getFunction()
-      #Function.replaceUsesWith(Op2, NewOp2)
-      for OperandIndex, Operand in enumerate(ValueToValueMap[Op2].getOperands()):
-        if Operand == Op2:
-          ValueToValueMap[Op2].setOperand(OperandIndex, NewOp2)
-      # Add the new op to the block
-      Block2.addOperationBefore(ClonedOperand, ValueToValueMap[Op2])
-      Block2.addOperationBefore(NewOp2, ValueToValueMap[Op2])
-      # Consider all other instructions
-      OpsList1.extend(Op1.getOperands())
-      OpsList2.extend(NewOp2.getOperands())
-      # Extend the pack
-      Index = Pack.index(ValueToValueMap[Op2])
-      if Index == 0:
-        Pack = [NewOp2] + Pack
-      else:
-        Pack.insert(Index - 1, NewOp2)
-      Index = Pack.index(NewOp2)
-      if Index == 0:
-        Pack = [ClonedOperand] + Pack
-      else:
-        Pack.insert(Index - 1, ClonedOperand)
-      # Fix the visited ops list
-      #Visited.remove(Op2)
-      Visited.add(NewOp2)
-      print("NEW BLOCK:")
-      Block2.print()
-      print("---AFTER PACK:")
-      for Op in Pack:
-        Op.print()
-    else:
-      return False
-    return True
 
   # First get number of different number of bv ops
   NumExtractOps1, NumInsertOps1, NumOtherBVOps1 = GetNumBVOps(Pack1)
@@ -348,6 +351,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         # Fix the pack if possible
         if FixPack(Op2, Op1, Block1, Pack1, \
                   OpsList2, OpsList1, Visited, ValueToValueMap) == True:
+          print("---AFTER PACK1:")
+          for Op in Pack1:
+            Op.print()
           continue
         return False
       if Op1 != Op2:
@@ -359,6 +365,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         # Fix the pack if possible
         if FixPack(Op1, Op2, Block2, Pack2, \
                   OpsList1, OpsList2, Visited, ValueToValueMap) == True:
+          print("---AFTER PACK2:")
+          for Op in Pack2:
+            Op.print()
           continue
         return False
       if Op1 != Op2:
@@ -390,6 +399,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         Op2.print()
         if FixPack(Op2, Op1, Block1, Pack1, \
                    OpsList2, OpsList1, Visited, ValueToValueMap) == True:
+          print("---AFTER PACK1:")
+          for Op in Pack1:
+            Op.print()
           continue
       elif  Op2 in IndexingToBVOpsMap2:
         print("Op2 in IndexingToBVOpsMap2")
@@ -399,6 +411,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         Op2.print()
         if FixPack(Op1, Op2, Block2, Pack2,\
                    OpsList1, OpsList2, Visited, ValueToValueMap) == True:
+          print("---AFTER PACK2:")
+          for Op in Pack2:
+            Op.print()
           continue
       return False
     if Op1.getType() != Op2.getType():
@@ -840,7 +855,7 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
   IndexingToBVOpsMap2 = GatherLowIndexingOps(Pack2)
 
   Indices = list()
-  OperandIndices = list()
+  OperandIndicesMap = dict()
   for Index in reversed(range(len(Pack1))):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
@@ -868,12 +883,15 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
           assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
           if Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue():
             Indices.append(Index)
-            OperandIndices.append(OperandIndex)
+            if Index in OperandIndicesMap:
+              OperandIndicesMap[Index].append(OperandIndex)
+            else:
+              OperandIndicesMap[Index] = [OperandIndex]
             break
   if Indices == []:
-    assert OperandIndices == []
+    assert len(list(OperandIndicesMap.keys())) == 0
     return None, None
-  return Indices, OperandIndices
+  return Indices, OperandIndicesMap
 
 
 def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
@@ -1070,10 +1088,10 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
   # Reroll the candidares in the list
   for PackList in RerollableCandidatesList:
     # Get the non-constant index
-    PackIndices, OperandIndices = AreStartingIndicesNonConstant(PackList[0], PackList[1])
+    PackIndices, OperandIndicesMap = AreStartingIndicesNonConstant(PackList[0], PackList[1])
     NonConstantIndexing = False
     if PackIndices == None:
-      assert OperandIndices == None
+      assert OperandIndicesMap == None
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
                 GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
@@ -1081,18 +1099,18 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
       Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
       End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     else:
-      assert OperandIndices != None
+      assert OperandIndicesMap != None
       NonConstantIndexing = True
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsList, CoFactactorsList = \
                 GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
-                                                          PackIndices[0], OperandIndices[0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
       Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
-                                                      PackIndices[0], OperandIndices[0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
       Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
-                                                       PackIndices[0], OperandIndices[0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
       End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
-                                                    PackIndices[0], OperandIndices[0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
     print("START:")
     print(Start)
     print("END:")
@@ -1104,7 +1122,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     print("PackIndices:")
     print(PackIndices)
     print("OperandIndices:")
-    print(OperandIndices)
+    print(OperandIndicesMap)
     # Because of the way ranges in Rosette work, we have to add step to end before
     # generating a loop
     End += Step
@@ -1128,6 +1146,8 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
               # Operand is coming from some other source, just use 
               # the same operand as the old op.
               NewOperand = Op.getOperand(Index)
+          print("----NewOperand:")
+          NewOperand.print()
           NewOp.setOperand(Index, NewOperand)
         OldToNewOPsMap[Op] = NewOp
         Loop.addAbstraction(NewOp)
@@ -1147,6 +1167,8 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
                 # Operand is coming from some other source, just use 
                 # the same operand as the old op.
                 NewOperand = Op.getOperand(Index)
+            print("----NewOperand:")
+            NewOperand.print()
             NewOp.setOperand(Index, NewOperand)
           OldToNewOPsMap[Op] = NewOp
           Loop.addAbstraction(NewOp)
@@ -1205,11 +1227,18 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         NewOp = Op.clone()
         for Index, Operand in enumerate(Op.getOperands()):
           if isinstance(Operand, RoseConstant):
-            if OpIndex in PackIndices and Index in OperandIndices:
+            if OpIndex in PackIndices and Index in OperandIndicesMap[OpIndex]:
               # Replace this constant with the iterator
+              print("PackIndices:")
+              print(PackIndices)
+              print("OperandIndices:")
+              print(OperandIndicesMap)
+              print("----NewOperand:")
               NewOp.setOperand(Index, Loop.getIterator())
             else:
               # Just copy this constant over
+              print("+++++NewOperand:")
+              Operand.print()
               NewOp.setOperand(Index, Operand)
             continue
           NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
