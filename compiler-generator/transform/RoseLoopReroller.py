@@ -192,6 +192,10 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
 
 def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   print("FixDFGIsomorphism")
+  assert len(Pack1) != 0 and len(Pack2) != 0
+  Block1 = Pack1[0].getParent()
+  Block2 = Pack2[0].getParent()
+
   # We need to see if we can make these two packs isomorphic.
   # First step is to see where the DFG isomorphism is violated
   # and correct it if it has to do with one special case --
@@ -221,43 +225,88 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
     return IndexingToBVOpsMap
 
   # Op1 is an add ops and op2 is not.
-  def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, \
+  def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
               Pack : list, OpsList1 : list, OpsList2 : list, \
-              Visited : list):
+              Visited : list, ValueToValueMap : dict):
     print("FIXING PACK")
     # See if adding on Add op before Op2 would do.
     if not isinstance(Op1, RoseAddOp):
       return False
     if len(Op1.getOperands()) != 2:
       return False
-    if not isinstance(Op1.getOperand(0), RoseConstant) \
-    and not isinstance(Op1.getOperand(1), RoseConstant):
+    if isinstance(Op1.getOperand(0), RoseConstant) \
+      or isinstance(Op1.getOperand(1), RoseConstant):
+      print("FIRST CONDITION")
+      #return False
+      # Generate a new add op
+      Zero = RoseConstant(0, Op2.getType())
+      NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
+      print("NEW ADD OP:")
+      NewOp2.print()
+      # Replace the uses of Op2 with NewOp2
+      Op2.replaceUsesWith(NewOp2)
+      # Add the new op to the block
+      Block2.addOperationAfter(NewOp2, Op2)
+      # Consider all other instructions
+      OpsList1.extend(Op1.getOperands())
+      OpsList2.extend(NewOp2.getOperands())
+      # Extend the pack
+      Index = Pack.index(Op2)
+      Pack.insert(Index + 1, NewOp2)
+      # Fix the visited ops list
+      Visited.remove(Op2)
+      Visited.add(NewOp2)
+      print("NEW BLOCK:")
+      Block2.print()
+      print("---AFTER PACK:")
+      for Op in Pack:
+        Op.print()
+    elif Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2:
+      print("Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2")
+      Operand = Op1.getOperand(1) if Op1.getOperand(0) == Op2 else Op1.getOperand(0)
+      if not isinstance(Operand, RoseOperation):
+        return False
+      if not Operand.getOpcode().typesOfOperandsAreEqual():
+        return False
+      ClonedOperand = Operand.clone(Operand.getName() + ".new")
+      Zero = RoseConstant(0, ClonedOperand.getType())
+      ClonedOperand.setOperand(0, Zero)
+      NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, ClonedOperand])
+      print("NEW ADD OP:")
+      NewOp2.print()
+      # Replace the uses of Op2 with NewOp2
+      #Function = Op1.getParent().getFunction()
+      #Function.replaceUsesWith(Op2, NewOp2)
+      for OperandIndex, Operand in enumerate(ValueToValueMap[Op2].getOperands()):
+        if Operand == Op2:
+          ValueToValueMap[Op2].setOperand(OperandIndex, NewOp2)
+      # Add the new op to the block
+      Block2.addOperationBefore(ClonedOperand, ValueToValueMap[Op2])
+      Block2.addOperationBefore(NewOp2, ValueToValueMap[Op2])
+      # Consider all other instructions
+      OpsList1.extend(Op1.getOperands())
+      OpsList2.extend(NewOp2.getOperands())
+      # Extend the pack
+      Index = Pack.index(ValueToValueMap[Op2])
+      if Index == 0:
+        Pack = [NewOp2] + Pack
+      else:
+        Pack.insert(Index - 1, NewOp2)
+      Index = Pack.index(NewOp2)
+      if Index == 0:
+        Pack = [ClonedOperand] + Pack
+      else:
+        Pack.insert(Index - 1, ClonedOperand)
+      # Fix the visited ops list
+      #Visited.remove(Op2)
+      Visited.add(NewOp2)
+      print("NEW BLOCK:")
+      Block2.print()
+      print("---AFTER PACK:")
+      for Op in Pack:
+        Op.print()
+    else:
       return False
-    # Generate a new add op
-    Zero = RoseConstant(0, Op2.getType())
-    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
-    print("NEW ADD OP:")
-    NewOp2.print()
-    # Replace the uses of Op2 with NewOp2
-    Op2.replaceUsesWith(NewOp2)
-    # Add the new op to the block
-    Block = Op2.getParent()
-    assert isinstance(Block, RoseBlock)
-    Block.addOperationAfter(NewOp2, Op2)
-    # Consider all other instructions
-    OpsList1.extend(Op1.getOperands())
-    OpsList2.extend(NewOp2.getOperands())
-    # Extend the pack
-    Index = Pack.index(Op2)
-    Pack.insert(Index + 1, NewOp2)
-    # Fix the visited ops list
-    Visited.remove(Op2)
-    Visited.add(NewOp2)
-    print("NEW BLOCK:")
-    Block.print()
-    print("---AFTER PACK:")
-    for Op in Pack:
-      Op.print()
     return True
 
   # First get number of different number of bv ops
@@ -276,6 +325,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
+  ValueToValueMap = dict()
   while len(OpsList1) != 0:
     #print("OpsList1:")
     #print(OpsList1)
@@ -294,12 +344,22 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       continue
     if not isinstance(Op1, RoseOperation):
       if isinstance(Op2, RoseOperation):
+        print("TRY FIXING PACK 1")
+        # Fix the pack if possible
+        if FixPack(Op2, Op1, Block1, Pack1, \
+                  OpsList2, OpsList1, Visited, ValueToValueMap) == True:
+          continue
         return False
       if Op1 != Op2:
         return False
       continue
     if not isinstance(Op2, RoseOperation):
       if isinstance(Op1, RoseOperation):
+        print("TRY FIXING PACK 2")
+        # Fix the pack if possible
+        if FixPack(Op1, Op2, Block2, Pack2, \
+                  OpsList1, OpsList2, Visited, ValueToValueMap) == True:
+          continue
         return False
       if Op1 != Op2:
         return False
@@ -328,7 +388,8 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op2, Op1, Pack1, OpsList2, OpsList1, Visited) == True:
+        if FixPack(Op2, Op1, Block1, Pack1, \
+                   OpsList2, OpsList1, Visited, ValueToValueMap) == True:
           continue
       elif  Op2 in IndexingToBVOpsMap2:
         print("Op2 in IndexingToBVOpsMap2")
@@ -336,7 +397,8 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         Op1.print()
         print("OP2:")
         Op2.print()
-        if FixPack(Op1, Op2, Pack2, OpsList1, OpsList2, Visited) == True:
+        if FixPack(Op1, Op2, Block2, Pack2,\
+                   OpsList1, OpsList2, Visited, ValueToValueMap) == True:
           continue
       return False
     if Op1.getType() != Op2.getType():
@@ -349,6 +411,10 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         return False
       OpsList1.extend(Op1.getCallOperands())
       OpsList2.extend(Op2.getCallOperands())
+      for Operand1 in Op1.getCallOperands():
+        ValueToValueMap[Operand1] = Op1
+      for Operand2 in Op2.getCallOperands():
+        ValueToValueMap[Operand2] = Op2
       continue
     # If this operation has not indexing operands, add None
     if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
@@ -362,10 +428,18 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       OpsList2.extend(Op2.getBitVectorOperands())
       OpsList2.append(Op2.getLowIndex())
       OpsList2.append(Op2.getHighIndex())
+      for Operand in Op1.getBitVectorOperands():
+        ValueToValueMap[Operand] = Op1
+      for Operand in Op2.getBitVectorOperands():
+        ValueToValueMap[Operand] = Op2
       continue
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(Op2.getOperands())
+    for Operand1 in Op1.getOperands():
+      ValueToValueMap[Operand1] = Op1
+    for Operand2 in Op2.getOperands():
+      ValueToValueMap[Operand2] = Op2
   # We are done exploring the DFGs
   print("AFTER PACK1:")
   for Op in Pack1:
@@ -559,13 +633,17 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
           if isinstance(Op, RoseBitVectorOp):
             if Op.getBitVectorOperands() == NewPackOp.getBitVectorOperands():
               MergePacks = False
+              print("Op:")
+              Op.print()
+              print("NewPackOp:")
+              NewPackOp.print()
               break
           elif isinstance(Op, RoseCallOp):
             if Op.getCallee().getName() == NewPackOp.getCallee().getName():
               MergePacks = False
               break
-          else:
-            MergePacks = False
+          #else:
+          #  MergePacks = False
     if MergePacks == True:
       if AllowPackExtension != False:
         NewPack.extend(Pack)
@@ -1758,7 +1836,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   print("___________")
   print("\n\n\n\n")
   Function.print()
-
 
 
 
