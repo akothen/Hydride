@@ -827,6 +827,55 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       Block.eraseOperation(BVInsertOp)
 
 
+def SwitchBinaryOperations(Block : RoseBlock, Context : RoseContext):
+  OpList = list()
+  OpList.extend(Block.getOperations())
+  for Op in OpList:
+    if isinstance(Op, RoseAddOp):
+      Operand1 = Op.getOperand(0)
+      Operand2 = Op.getOperand(1)
+      if isinstance(Operand1, RoseConstant) \
+        and not isinstance(Operand2, RoseConstant):
+        if Operand1.getValue() < 0:
+          NewOperand1 = RoseConstant(-1 * Operand1.getValue(), Operand1.getType())
+          NewOp = RoseSubOp.create(Context.genName(Op.getName() + ".new"), [NewOperand1, Operand2])
+          Block.addOperationBefore(NewOp, Op)
+          Op.replaceUsesWith(NewOp)
+          Block.eraseOperation(Op)
+        continue
+      if isinstance(Operand2, RoseConstant) \
+        and not isinstance(Operand1, RoseConstant):
+        if Operand2.getValue() < 0:
+          NewOperand2 = RoseConstant(-1 * Operand2.getValue(), Operand2.getType())
+          NewOp = RoseSubOp.create(Context.genName(Op.getName() + ".new"), [Operand1, NewOperand2])
+          Block.addOperationBefore(NewOp, Op)
+          Op.replaceUsesWith(NewOp)
+          Block.eraseOperation(Op)
+        continue
+      continue
+    if isinstance(Op, RoseSubOp):
+      Operand1 = Op.getOperand(0)
+      Operand2 = Op.getOperand(1)
+      if isinstance(Operand1, RoseConstant) \
+        and not isinstance(Operand2, RoseConstant):
+        if Operand1.getValue() < 0:
+          NewOperand1 = RoseConstant(-1 * Operand1.getValue(), Operand1.getType())
+          NewOp = RoseAddOp.create(Context.genName(Op.getName() + ".new"), [NewOperand1, Operand2])
+          Block.addOperationBefore(NewOp, Op)
+          Op.replaceUsesWith(NewOp)
+          Block.eraseOperation(Op)
+        continue
+      if isinstance(Operand2, RoseConstant) \
+        and not isinstance(Operand1, RoseConstant):
+        if Operand2.getValue() < 0:
+          NewOperand2 = RoseConstant(-1 * Operand2.getValue(), Operand2.getType())
+          NewOp = RoseAddOp.create(Context.genName(Op.getName() + ".new"), [Operand1, NewOperand2])
+          Block.addOperationBefore(NewOp, Op)
+          Op.replaceUsesWith(NewOp)
+          Block.eraseOperation(Op)
+        continue
+      continue
+    
 
 def CombineSizeExtendingOps(Operation : RoseOperation, Context : RoseContext):
   print("COMBINE SIZE EXTENDING OPS")
@@ -1146,9 +1195,11 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
           Block.eraseOperation(Op)
       continue
       
-
   # Remove the redundant bvinserts from the block
-  RemoveRedundantBVInsertOps(Block)  
+  RemoveRedundantBVInsertOps(Block)
+
+  # Some binary operations need to be switched.
+  SwitchBinaryOperations(Block, Context)
 
 
 def RunOpCombineOnRegion(Region, Context : RoseContext):
