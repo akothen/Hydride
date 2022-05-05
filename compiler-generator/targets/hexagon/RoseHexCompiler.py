@@ -632,7 +632,7 @@ def GetBitSliceIndex(ExprIndex, Context : HexRoseContext, Recurse = True):
         Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
                                         Operand2, Operand1.getType().getBitwidth())
     # Perform the binary operation
-    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2)
+    return BinaryOps[ExprIndex.op]()(Context.genName(), Operand1, Operand2, Context)
 
   # The given bitslice index could be a compiled expression
   if Context.isCompiledAbstraction(ExprIndex.id):
