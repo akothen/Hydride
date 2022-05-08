@@ -252,19 +252,33 @@ def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(NewOp2.getOperands())
+    print("---BEFORE PACK:")
+    for Op in Pack:
+      Op.print()
+    print("ValueToValueMap[Op2]:")
+    ValueToValueMap[Op2].print()
     # Extend the pack
     Index = Pack.index(ValueToValueMap[Op2])
-    if Index == 0:
-      Pack.insert(0, NewOp2)
-      #Pack = [NewOp2] + Pack
-    else:
-      Pack.insert(Index - 1, NewOp2)
+    print("INDEX:")
+    print(Index)
+    Pack.insert(Index, NewOp2)
+    #if Index == 0:
+    #  Pack.insert(0, NewOp2)
+    #else:
+    #  Pack.insert(Index - 1, NewOp2)
+    print("+++++BEFORE PACK:")
+    for Op in Pack:
+      Op.print()
+    print("NewOp2:")
+    NewOp2.print()
     Index = Pack.index(NewOp2)
-    if Index == 0:
-      Pack.insert(0, ClonedOperand)
-      #Pack = [ClonedOperand] + Pack
-    else:
-      Pack.insert(Index - 1, ClonedOperand)
+    print("INDEX:")
+    print(Index)
+    Pack.insert(Index, ClonedOperand)
+    #if Index == 0:
+    #  Pack.insert(0, ClonedOperand)
+    #else:
+    #  Pack.insert(Index - 1, ClonedOperand)
     # Fix the visited ops list
     #Visited.remove(Op2)
     Visited.add(NewOp2)
@@ -328,7 +342,8 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
-  ValueToValueMap = dict()
+  ValueToValuePack1Map = dict()
+  ValueToValuePack2Map = dict()
   while len(OpsList1) != 0:
     #print("OpsList1:")
     #print(OpsList1)
@@ -350,7 +365,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("TRY FIXING PACK 1")
         # Fix the pack if possible
         if FixPack(Op2, Op1, Block1, Pack1, \
-                  OpsList2, OpsList1, Visited, ValueToValueMap) == True:
+                  OpsList2, OpsList1, Visited, ValueToValuePack1Map) == True:
           print("---AFTER PACK1:")
           for Op in Pack1:
             Op.print()
@@ -364,7 +379,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("TRY FIXING PACK 2")
         # Fix the pack if possible
         if FixPack(Op1, Op2, Block2, Pack2, \
-                  OpsList1, OpsList2, Visited, ValueToValueMap) == True:
+                  OpsList1, OpsList2, Visited, ValueToValuePack2Map) == True:
           print("---AFTER PACK2:")
           for Op in Pack2:
             Op.print()
@@ -398,7 +413,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("OP2:")
         Op2.print()
         if FixPack(Op2, Op1, Block1, Pack1, \
-                   OpsList2, OpsList1, Visited, ValueToValueMap) == True:
+                   OpsList2, OpsList1, Visited, ValueToValuePack1Map) == True:
           print("---AFTER PACK1:")
           for Op in Pack1:
             Op.print()
@@ -410,7 +425,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("OP2:")
         Op2.print()
         if FixPack(Op1, Op2, Block2, Pack2,\
-                   OpsList1, OpsList2, Visited, ValueToValueMap) == True:
+                   OpsList1, OpsList2, Visited, ValueToValuePack2Map) == True:
           print("---AFTER PACK2:")
           for Op in Pack2:
             Op.print()
@@ -427,9 +442,9 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       OpsList1.extend(Op1.getCallOperands())
       OpsList2.extend(Op2.getCallOperands())
       for Operand1 in Op1.getCallOperands():
-        ValueToValueMap[Operand1] = Op1
+        ValueToValuePack1Map[Operand1] = Op1
       for Operand2 in Op2.getCallOperands():
-        ValueToValueMap[Operand2] = Op2
+        ValueToValuePack2Map[Operand2] = Op2
       continue
     # If this operation has not indexing operands, add None
     if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
@@ -444,17 +459,17 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       OpsList2.append(Op2.getLowIndex())
       OpsList2.append(Op2.getHighIndex())
       for Operand in Op1.getBitVectorOperands():
-        ValueToValueMap[Operand] = Op1
+        ValueToValuePack1Map[Operand] = Op1
       for Operand in Op2.getBitVectorOperands():
-        ValueToValueMap[Operand] = Op2
+        ValueToValuePack2Map[Operand] = Op2
       continue
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(Op2.getOperands())
     for Operand1 in Op1.getOperands():
-      ValueToValueMap[Operand1] = Op1
+      ValueToValuePack1Map[Operand1] = Op1
     for Operand2 in Op2.getOperands():
-      ValueToValueMap[Operand2] = Op2
+      ValueToValuePack2Map[Operand2] = Op2
   # We are done exploring the DFGs
   print("AFTER PACK1:")
   for Op in Pack1:
@@ -597,12 +612,15 @@ def FuseCandidatePacks2(RerollableCandidatePacks : list):
       if AllowPackExtension != False:
         NewPack.extend(Pack)
         AllowPackExtension = True
+        print("HERE1")
       else:
         # Since packs are not allowed to extend,
         # create a new pack.
         NewCandidatePacks.append(NewPack)
         NewPack = Pack
+        print("HERE2")
     else:
+      print("HERE3")
       # Add the new pack to the list of new candidate packs
       if AllowPackExtension == None:
         print("FUSION OF PACKS NOT ALLOWD!!")
@@ -660,15 +678,24 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
           #else:
           #  MergePacks = False
     if MergePacks == True:
+      # If the two packs contain two bvinsert ops, the packs cannot be merged.
+      NewPackInsertOp = NewPack[-1]
+      InsertOp = Pack[-1]
+      if InsertOp.getInputBitVector() == NewPackInsertOp.getInputBitVector():
+        MergePacks = False
+    if MergePacks == True:
       if AllowPackExtension != False:
         NewPack.extend(Pack)
         AllowPackExtension = True
+        print("HERE1")
       else:
         # Since packs are not allowed to extend,
         # create a new pack.
         NewCandidatePacks.append(NewPack)
         NewPack = Pack
+        print("HERE2")
     else:
+      print("HERE3")
       # Add the new pack to the list of new candidate packs
       if AllowPackExtension == None:
         print("FUSION OF PACKS NOT ALLOWD!!")
@@ -676,11 +703,15 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
       NewCandidatePacks.append(NewPack)
       NewPack = Pack
   
+  print("NewPack:")
+  print(NewPack)
   if NewPack != []:
     NewCandidatePacks.append(NewPack)
   # We expect to see multiple new candidate packs
   if len(NewCandidatePacks) == 1:
     NewCandidatePacks = []
+  #elif len(NewCandidatePacks) == 0:
+  #  NewCandidatePacks = RerollableCandidatePacks
   
   print("AFTER FUSING:")
   for Pack in NewCandidatePacks:
@@ -831,6 +862,7 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
 
 
 def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
+  print("AreStartingIndicesNonConstant")
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
 
   def GatherLowIndexingOps(Pack : list):
@@ -878,6 +910,10 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
     if Op1 in IndexingToBVOpsMap1:
       assert Op2 in IndexingToBVOpsMap2
       assert len(Op1.getOperands()) == len(Op2.getOperands())
+      print("OP1:")
+      Op1.print()
+      print("OP2:")
+      Op2.print()
       for OperandIndex in range(len(Op1.getOperands())):
         if isinstance(Op1.getOperand(OperandIndex), RoseConstant):
           assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
@@ -899,6 +935,11 @@ def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
   assert type(PackIndex) == int
   assert type(OperandIndex) == int
   assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  print("GetLowOffsetsWithinPackNonConstantIndices")
+  print("PACK1:")
+  PrintPack(Pack1)
+  print("PACK2:")
+  PrintPack(Pack2)
 
   StartIndex1 = None
   StartIndex2 = None
@@ -986,6 +1027,10 @@ def GetStepForRerolledLoopNonConstantIndices(Pack1 : list, Pack2 : list,  \
   assert Op1.getOperand(OperandIndex).getValue() != Op2.getOperand(OperandIndex).getValue()
   Offset = Op2.getOperand(OperandIndex).getValue() - Op1.getOperand(OperandIndex).getValue()
   assert Offset != None
+  print("PackIndex")
+  print(PackIndex)
+  print("OperandIndex:")
+  print(OperandIndex)
   print("Offset:")
   print(Offset)
   return Offset
@@ -1234,7 +1279,18 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
               print("OperandIndices:")
               print(OperandIndicesMap)
               print("----NewOperand:")
-              NewOp.setOperand(Index, Loop.getIterator())
+              # Check if the next pack has the operation with an operand 
+              # at "Index" with a constant value of "Step".
+              OpInSecondPack = PackList[1][OpIndex]
+              if OpInSecondPack.getOperand(Index).getValue() == Loop.getStep().getValue():
+                NewOp.setOperand(Index, Loop.getIterator())
+              else:
+                MulOp = RoseMulOp.create(Context.genName(), 
+                    [Loop.getIterator(), OpInSecondPack.getOperand(Index)])
+                DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
+                NewOp.setOperand(Index, DivOp)
+                Loop.addAbstraction(MulOp)
+                Loop.addAbstraction(DivOp)
             else:
               # Just copy this constant over
               print("+++++NewOperand:")
