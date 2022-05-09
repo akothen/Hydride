@@ -678,11 +678,17 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
           #else:
           #  MergePacks = False
     if MergePacks == True:
-      # If the two packs contain two bvinsert ops, the packs cannot be merged.
+      # If the two packs contain two bvinsert ops with insert values coming
+      # from the bvextract ops from the same bitvector, the packs cannot be merged.
       NewPackInsertOp = NewPack[-1]
       InsertOp = Pack[-1]
       if InsertOp.getInputBitVector() == NewPackInsertOp.getInputBitVector():
-        MergePacks = False
+        if isinstance(InsertOp.getInsertValue(), RoseBVExtractSliceOp) \
+          and isinstance(NewPackInsertOp.getInsertValue(), RoseBVExtractSliceOp):
+          if  InsertOp.getInsertValue() == NewPackInsertOp.getInsertValue():
+            MergePacks = False
+        else:
+          MergePacks = False
     if MergePacks == True:
       if AllowPackExtension != False:
         NewPack.extend(Pack)
