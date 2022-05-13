@@ -471,7 +471,7 @@ def IsVariableScalar(Variable):
   return False
 
 
-def GetSpecFrom(inst, Pseudocode):
+def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
   inst_specs = inst.split(':')
   reg_inst = inst_specs[0]
   ParsedInst = Parse(reg_inst)
@@ -572,18 +572,20 @@ def GetSpecFrom(inst, Pseudocode):
   print("param_sizes:")
   print(param_sizes)
   retsize = GetVariableSize(retname)
-  sema = Sema(intrin="TODO", inst=name, params=param_args, spec=Parse(Pseudocode), \
+  sema = Sema(intrin=intrinsic, inst=name, params=param_args, spec=Parse(Pseudocode), \
     retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
   return sema
 
 
 def ParseHVXSemantics(Semantics):
+  semaList = []
   for inst, Pseudocode in Semantics.items():
     # We currently ignore any instructions that are just assembler syntactic sugar
     if Pseudocode.startswith("Assembler mapped to"):
       continue 
     Sema = GetSpecFrom(inst, Pseudocode)
-    print(Sema)
+    semaList.append(Sema)
+  return semaList
 
 
 if __name__ == '__main__':
