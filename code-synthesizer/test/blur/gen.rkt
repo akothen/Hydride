@@ -860,7 +860,7 @@ concat
 	;	32				;; Integer Operand 
 	;)]
 	[else
-	(mem vars #:depth k)
+	(shuffle vars #:depth k)
 	]
 	)
 )
@@ -1149,6 +1149,8 @@ concat
 ;; Synthesizing each sub-expression seperately:
 
 
+(define synth_depth 3)
+
 
 ;; ========= Sub expression 1 ========
 (clear-vc!)
@@ -1156,7 +1158,7 @@ concat
 (define subexpr1_env_i0_j0 (vector sym_subexpr1 0 0 1 8))
 
 
-(define blur_x_subexpr1_grammar (operations (list (reg 0)) #:depth 2 ))
+(define blur_x_subexpr1_grammar (operations (list (reg 0)) #:depth synth_depth ))
 
 (define start_time (current-seconds))
 (define subexpr1_sol
@@ -1185,7 +1187,7 @@ concat
 (define subexpr2_env_i0_j0 (vector sym_subexpr2 0 0 1 8))
 
 
-(define blur_x_subexpr2_grammar (operations (list (reg 0)) #:depth 2 ))
+(define blur_x_subexpr2_grammar (operations (list (reg 0)) #:depth synth_depth ))
 
 (define subexpr2_sol
 (synthesize 
@@ -1215,7 +1217,7 @@ concat
 (define subexpr3_env_i0_j0 (vector sym_subexpr3 0 0 1 8))
 
 
-(define blur_x_subexpr3_grammar (operations (list (reg 0)) #:depth 2 ))
+(define blur_x_subexpr3_grammar (operations (list (reg 0)) #:depth synth_depth ))
 
 (define subexpr3_sol
 (synthesize 
@@ -1244,7 +1246,7 @@ concat
 (define subexpr4_env_i0_j0 (vector sym_subexpr4_0 sym_subexpr4_1 0 0 1 8))
 
 
-(define blur_x_subexpr4_grammar (operations (list (reg 0) (reg 1) ) #:depth 2 ))
+(define blur_x_subexpr4_grammar (operations (list (reg 0) (reg 1) ) #:depth synth_depth ))
 
 (define subexpr4_sol
 (synthesize 
@@ -1276,7 +1278,7 @@ concat
 (define subexpr6_env_i0_j0 (vector sym_subexpr6_0  0 0 1 8))
 
 
-(define blur_x_subexpr6_grammar (operations (list (reg 0) (reg 1) ) #:depth 2 ))
+(define blur_x_subexpr6_grammar (operations (list (reg 0) (reg 1) ) #:depth synth_depth ))
 
 (define subexpr6_sol
 (synthesize 
