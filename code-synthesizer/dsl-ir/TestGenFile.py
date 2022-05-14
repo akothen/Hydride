@@ -8,6 +8,7 @@ from PredefinedDSL import *
 from StructDef import StructDef
 from InterpreterDef import InterpreterDef
 from CostDef import CostDef
+from GetLengthDef import GetLengthDef
 
 from Specification import Specification, parse_spec
 #from mul_spec import specification
@@ -28,11 +29,12 @@ idd = InterpreterDef()
 cd = CostDef()
 sp = parse_spec(specification)
 gg = GrammarGenerator()
+gl = GetLengthDef(get_len_name = "get-length")
 
 syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
                   contexts_per_dsl_inst = 2,
-                  vectorization_factor = 2,
+                  vectorization_factor = 8,
                   depth = 3
                   )
 
@@ -58,7 +60,7 @@ with open("gen.rkt","w+") as RacketFile:
     def write_to_file(line):
         RacketFile.write(line + "\n")
 
-    dsl_list = [dsl_inst for dsl_inst in dsl_list if syn.consider_dsl_inst(dsl_inst)]
+    #dsl_list = [dsl_inst for dsl_inst in dsl_list if syn.consider_dsl_inst(dsl_inst)]
 
     write_to_file(util_content)
 
@@ -82,6 +84,8 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file(sufix)
 
     write_to_file(sd.emit_struct_defs(dsl_list))
+
+    write_to_file(gl.emit_get_length(dsl_list, sd))
 
     write_to_file(idd.emit_interpreter(dsl_list, sd))
 

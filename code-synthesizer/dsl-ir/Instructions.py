@@ -155,6 +155,21 @@ class Context:
                 context_arg = IndexVariable(name = "idx-i")
             elif arg.startswith(IDX_J_STR):
                 context_arg = IndexVariable(name = "idx-j")
+            elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
+
+                is_in = (idx == self.in_vectsize_index)
+                is_out = (idx == self.out_vectsize_index)
+
+                in_str  = ""
+                out_str = ""
+
+                if is_in:
+                    in_str = "_i"
+                if is_out:
+                    out_str = "_o"
+
+                context_arg = Integer("size{}{}".format(in_str,out_str), value = int(arg))
+
             elif idx == self.lanesize_index:
                 lane_size = int(arg)
                 context_arg = LaneSize("lane_size", value =  lane_size)
@@ -176,21 +191,6 @@ class Context:
                                         input_precision = is_in,
                                         output_precision = is_out,
                                         value = precision_value)
-            elif idx == self.in_vectsize_index or idx == self.out_vectsize_index:
-
-                is_in = (idx == self.in_vectsize_index)
-                is_out = (idx == self.out_vectsize_index)
-
-                in_str  = ""
-                out_str = ""
-
-                if is_in:
-                    in_str = "_i"
-                if is_out:
-                    out_str = "_o"
-
-                context_arg = Integer("size{}{}".format(in_str,out_str), value = int(arg))
-
             elif arg.isnumeric() or type(arg) == int:
 
                 context_arg = Integer("num_{}".format(idx), int(arg))
