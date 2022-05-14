@@ -32,6 +32,7 @@ class CostDef:
 
         defaults.append("[(idx-add i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
         defaults.append("[(idx-mul i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
+        defaults.append("[(vector-choose_dsl n ) n]")
 
         return ["\t{}".format(d) for d in defaults]
 

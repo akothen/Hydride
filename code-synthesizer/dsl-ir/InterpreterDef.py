@@ -1,11 +1,12 @@
 from Instructions import DSLInstruction
 from Types import *
 from PredefinedDSL import *
+from InterpreterConstraintsDef import *
 
 class InterpreterDef:
 
     def __init__(self):
-        return
+        self.constraints_def = InterpreterConstraintsDef()
 
 
     def emit_default_def(self, struct_definer , env_name = "env"):
@@ -22,6 +23,17 @@ class InterpreterDef:
         defaults.append("[(nop v1) (interpret v1 {})]".format(env_name))
         defaults.append("[(idx-add i1 i2) (+ (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
         defaults.append("[(idx-mul i1 i2) (* (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
+
+        choose_interpret = """
+	[ (vector-choose_dsl  num_elems)
+        (define random-regs (for/list ([i (range (vector-length {}))])  (reg i)))
+        (apply concat
+         (for/list ([i (range num_elems)])
+                  (interpret (apply choose* random-regs) {})
+            )
+         )
+	]""".format(env_name, env_name)
+        defaults.append(choose_interpret)
         defaults.append(self.emit_interpret_def(dummy_vector_load_dsl, struct_definer)[1:])
         defaults.append(self.emit_interpret_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
 
@@ -31,11 +43,19 @@ class InterpreterDef:
     def emit_fallback_def(self, env_name = "env"):
         return "\t[v v]"
 
+    def get_asserts(self, dsl_inst, struct_definer):
+        return self.constraints_def.emit_dsl_interpreter_constraints(dsl_inst, struct_definer)
+
+
     def emit_interpret_def(self, dsl_inst, struct_definer  , add_assertions = True,  env_name = "env"):
         interpret = [struct_definer.emit_dsl_struct_use(dsl_inst)]
 
+        assertions = []
         if add_assertions:
-            pass
+            assertions += self.get_asserts(dsl_inst, struct_definer)
+
+
+        interpret += assertions
 
 
         sample_ctx = dsl_inst.get_sample_context()

@@ -19,6 +19,7 @@ class StructDef:
         defaults.append("(struct nop (v1) #:transparent)")
         defaults.append("(struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
         defaults.append("(struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
+        defaults.append("(struct vector-choose_dsl (num_elems) #:transparent)")
 
 
         defaults.append(self.emit_dsl_struct_def(dummy_vector_load_dsl))
