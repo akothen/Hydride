@@ -793,7 +793,8 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context :
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap, Context)
       continue
-    FixReductionPatternToMakeBlockRerollable(Abstraction, Context)
+    if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context) == False:
+      FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
   return BlockToRerollableCandidatesMap
@@ -1671,7 +1672,7 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContex
       ParentRegion.eraseChild(Block, ParentKey)
 
 
-def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
+def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPatternToMakeBlockRerollable")
   # Look for chains of bvadd ops
@@ -1902,6 +1903,72 @@ def FixReductionPatternToMakeBlockRerollable(Block : RoseBlock, Context : RoseCo
 
   print("FIXED BLOCK:")
   Block.print()
+  return True
+
+
+def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
+  print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
+  print("FixReductionPattern2ToMakeBlockRerollable")
+  # Look for chains of bvadd ops
+  Function = Block.getFunction()
+  BVExtractOps = list()
+  FirstInsertOp = RoseUndefValue()
+  DstInsertPrecededByExtract = None
+  for Op in Block.getOperations():
+    if isinstance(Op, RoseBVExtractSliceOp):
+      print("EXTRACT OP:")
+      Op.print()
+      if Op.getInputBitVector() == Function.getReturnValue():
+        if DstInsertPrecededByExtract == None:
+          DstInsertPrecededByExtract = False
+      #if len(BVExtractOps) != 0:
+        #if Op.getLowIndex() != BVExtractOps[-1].getLowIndex():
+        #  return False
+      BVExtractOps.append(Op)
+      continue
+    if isinstance(Op, RoseBVInsertSliceOp):
+      print("INSERT OP:")
+      Op.print()
+      if Op.getInputBitVector() == Function.getReturnValue():
+        if DstInsertPrecededByExtract == False:
+          DstInsertPrecededByExtract = True
+      if isinstance(FirstInsertOp, RoseUndefValue):
+        FirstInsertOp = Op
+      continue
+  
+  print("LOOPED ALREADY")
+  if DstInsertPrecededByExtract != True:
+    return False
+  if len(BVExtractOps) == 0:
+    return False
+
+  print("INSERTING INSTRUCTIONS")
+  # Get the new op for external operand
+  FirstOp = Block.getOperation(0)
+  ExtractOp = BVExtractOps[0]
+  BitwidthVal = RoseConstant.create(ExtractOp.getOutputBitwidth(), \
+                                    ExtractOp.getLowIndex().getType())
+  InsertValue = FirstInsertOp.getInsertValue()
+  # Get the indices
+  if isinstance(ExtractOp.getLowIndex(), RoseOperation):
+    LowIndex = CloneAndInsertOperation(ExtractOp.getLowIndex(), FirstOp, Context)
+  else:
+    LowIndex = ExtractOp.getLowIndex()
+  if isinstance(ExtractOp.getHighIndex(), RoseOperation):
+    HighIndex = CloneAndInsertOperation(ExtractOp.getHighIndex(), FirstOp, Context)
+  else:
+    HighIndex = ExtractOp.getHighIndex()
+  NewExtractOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".ext"), \
+                                        ExtractOp.getInputBitVector(), \
+                                        LowIndex, HighIndex, BitwidthVal)
+  AddOp = RoseBVAddOp.create(Context.genName(ExtractOp.getName() + ".acc"), \
+                                            [NewExtractOp, InsertValue])
+  FirstInsertOp.setOperand(0, AddOp)
+  Block.addOperationBefore(ExtractOp, FirstOp)
+  Block.addOperationAfter(AddOp, InsertValue)
+
+  print("FUNCTION FIX REDUCTION PATTERN:")
+  Function.print()
 
   return True
 
