@@ -26,7 +26,15 @@ class GetLengthDef:
         defaults.append("[(idx-add i1 i2) 1]".format(env_name, env_name))
         defaults.append("[(idx-mul i1 i2) 1]".format(env_name, env_name))
 
-        defaults.append(self.emit_get_len_def(dummy_vector_load_dsl, struct_definer)[1:])
+        #defaults.append(self.emit_get_len_def(dummy_vector_load_dsl, struct_definer)[1:])
+
+
+        # Special case handling for vector loads
+
+        load_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_load_dsl)
+        load_args = dummy_vector_load_dsl.get_sample_context().context_args
+        load_len_expr = "(* {} {})".format(load_args[3].name, load_args[4].name)
+        defaults.append("[{} {}]".format(load_dsl_use, load_len_expr))
 
         # Special case handling for two input swizzle
 
@@ -35,7 +43,6 @@ class GetLengthDef:
         swizzle_len_expr = "(* (/ {} {}) (* 2 {}) {})".format(
             swizzle_args[2].name, swizzle_args[5].name, swizzle_args[6].name, swizzle_args[3].name
         )
-        #defaults.append(self.emit_get_len_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
         defaults.append("[{} {}]".format(swizzle_dsl_use, swizzle_len_expr))
 
         return ["\t{}".format(d) for d in defaults]
@@ -71,7 +78,7 @@ class GetLengthDef:
             clause.append(output_size_arg.name)
         else:
             self.unclear_lengths.append(dsl_inst)
-            clause.append("-1")
+            clause.append("-1 ;; Unable to reason about length")
 
 
 
