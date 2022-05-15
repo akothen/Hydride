@@ -337,6 +337,9 @@ def CompileBitSlice(BitSliceExpr, Context : RoseContext):
   # Add signedness info on the op
   if Context.isValueSignKnown(BitVector):
     Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
+  else:
+    Context.addSignednessInfoForValue(BitVector, IsSigned=True)
+    Context.addSignednessInfoForValue(Operation, Context.isValueSigned(BitVector))
 
   # Add the op to the IR
   Context.addAbstractionToIR(Operation)
@@ -921,9 +924,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
     RHSExprVal.getType().print()
     # Sometimes size extension of the RHS is required, so we have to handle it here
     if RHSExprVal.getType().getBitwidth() < Bitwidth:
-      # Let's sign-extend
-      RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                          RHSExprVal, Bitwidth)
+      # Let's size-extend
+      if Context.isValueSignKnown(RHSExprVal):
+        if Context.isValueSigned(RHSExprVal) == True:
+           RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+        else:
+           RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+      else:
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                              RHSExprVal, Bitwidth)
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
@@ -994,9 +1005,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
         # Now generate the bvinsert op
         # Sometimes size extension of the RHS is required, so we have to handle it here
         if RHSExprVal.getType().getBitwidth() < BitwidthValue.getValue():
-          # Let's sign-extend
-          RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                        RHSExprVal, BitwidthValue.getValue())
+          # Let's size-extend
+          if Context.isValueSignKnown(RHSExprVal):
+            if Context.isValueSigned(RHSExprVal) == True:
+              RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                    RHSExprVal, BitwidthValue.getValue())
+            else:
+              RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                    RHSExprVal, BitwidthValue.getValue())
+          else:
+            RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                  RHSExprVal, BitwidthValue.getValue())
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
@@ -1072,9 +1091,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
         # Now generate the bvinsert op
         # Sometimes size extension of the RHS is required, so we have to handle it here
         if RHSExprVal.getType().getBitwidth() < BitwidthValue.getValue():
-          # Let's sign-extend
-          RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                        RHSExprVal, BitwidthValue.getValue())
+          # Let's size-extend
+          if Context.isValueSignKnown(RHSExprVal):
+            if Context.isValueSigned(RHSExprVal) == True:
+              RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                    RHSExprVal, BitwidthValue.getValue())
+            else:
+              RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                    RHSExprVal, BitwidthValue.getValue())
+          else:
+            RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                  RHSExprVal, BitwidthValue.getValue())
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
@@ -1137,9 +1164,17 @@ def CompileUpdate(Update, Context : HexRoseContext):
       print("+++ElemType:")
       ElemType.print()
       if RHSExprVal.getType().getBitwidth() < ElemType.getBitwidth():
-        # Let's sign-extend
-        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
-                      RHSExprVal, ElemType.getBitwidth())
+        # Let's size-extend
+        if Context.isValueSignKnown(RHSExprVal):
+          if Context.isValueSigned(RHSExprVal) == True:
+            RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                  RHSExprVal, ElemType.getBitwidth())
+          else:
+            RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                  RHSExprVal, ElemType.getBitwidth())
+        else:
+          RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                RHSExprVal, ElemType.getBitwidth())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
@@ -1223,6 +1258,12 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   print("--Operand2:")
   Operand2.print()
   Operand2.getType().print()
+  print("--Operand1:")
+  Operand1.print()
+  Operand1.getType().print()
+  print("--Operand2:")
+  Operand2.print()
+  Operand2.getType().print()
   if isinstance(Operand2.getType(), RoseBitVectorType):
     print("Context.isValueSigned(Operand2):")
     print(Context.isValueSigned(Operand2))
@@ -1232,6 +1273,42 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   OperandBitwidth = None
   if (type(BinaryExpr.a) == BitSlice and type(BinaryExpr.b) == BitSlice) \
   or (type(BinaryExpr.a) == BitIndex and type(BinaryExpr.b) == BitIndex):
+    # Fix the operands' bitwidths
+    if Operand1.getType() != Operand2.getType():
+      if Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        if Context.isValueSigned(Operand1) == False:
+          Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                          Operand1, Operand2.getType().getBitwidth())
+          # Add signedness info
+          Context.addSignednessInfoForValue(Operand1, IsSigned=False)
+        else:
+          Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                                          Operand1, Operand2.getType().getBitwidth())
+          # Add signedness info
+          Context.addSignednessInfoForValue(Operand1, IsSigned=True)
+        # Add the operations to the IR
+        Context.addAbstractionToIR(Operand1)
+        # Add operations to the context
+        Context.addCompiledAbstraction(Operand1.getName(), Operand1)
+        ExtendOperandSize = True
+      elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
+        # We need to extend the size of the other operand
+        if Context.isValueSigned(Operand2) == False:
+          Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                          Operand2, Operand1.getType().getBitwidth())
+          # Add signedness info
+          Context.addSignednessInfoForValue(Operand2, IsSigned=False)
+        else:
+          Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+                                          Operand2, Operand1.getType().getBitwidth())
+          # Add signedness info
+          Context.addSignednessInfoForValue(Operand2, IsSigned=True)
+        # Add the operations to the IR
+        Context.addAbstractionToIR(Operand2)
+        # Add operations to the context
+        Context.addCompiledAbstraction(Operand2.getName(), Operand2)
+        ExtendOperandSize = True
     if NeedToExtendOperandSize(BinaryExpr.op):
       # We need to sign extend the operands first. Double the operands' bitwidths
       assert Operand1.getType().getBitwidth() == Operand2.getType().getBitwidth()
@@ -1327,11 +1404,14 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       Operand1.setType(Operand2.getType())
     elif isinstance(Operand2, RoseConstant):
       Operand2.setType(Operand1.getType())
-
     elif Operand1.getType().getBitwidth() < Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
-                                      Operand1, Operand2.getType().getBitwidth())
+      if Context.isValueSigned(Operand1) == False:
+        Operand1 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                        Operand1, Operand2.getType().getBitwidth())
+      else:
+        Operand1 = RoseBVSignExtendOp.create(Context.genName(), \
+                                        Operand1, Operand2.getType().getBitwidth())
       # Add signedness info
       Context.addSignednessInfoForValue(Operand1, IsSigned=False)
       # Add the operations to the IR
@@ -1341,8 +1421,12 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
       ExtendOperandSize = True
     elif Operand1.getType().getBitwidth() > Operand2.getType().getBitwidth():
       # We need to extend the size of the other operand
-      Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
-                                      Operand2, Operand1.getType().getBitwidth())
+      if Context.isValueSigned(Operand2) == False:
+        Operand2 = RoseBVZeroExtendOp.create(Context.genName(), \
+                                        Operand2, Operand1.getType().getBitwidth())
+      else:
+        Operand2 = RoseBVSignExtendOp.create(Context.genName(), \
+                                        Operand2, Operand1.getType().getBitwidth())
       # Add signedness info
       Context.addSignednessInfoForValue(Operand2, IsSigned=False)
       # Add the operations to the IR
@@ -2026,8 +2110,19 @@ def HandleToMul():
     if isinstance(Operand1.getType(), RoseBitVectorType) \
     and isinstance(Operand2.getType(), RoseBitVectorType):
       Op = RoseBVMulOp.create(Name, Operands)
+      print("HANDLING MUL")
+      print("Operand1:")
+      Operand1.print()
+      print("Operand2:")
+      Operand2.print()
+      print("Context.isValueSigned(Operand1):")
+      print(Context.isValueSigned(Operand1))
+      print("Context.isValueSigned(Operand2):")
+      print(Context.isValueSigned(Operand2))
       Context.addSignednessInfoForValue(Op, \
         Context.isValueSigned(Operand1) or Context.isValueSigned(Operand2))
+      print("Context.isValueSigned(Op):")
+      print(Context.isValueSigned(Op))
       return Op
     return RoseMulOp.create(Name, Operands)
   
