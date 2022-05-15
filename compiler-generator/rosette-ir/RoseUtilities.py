@@ -92,7 +92,11 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   # Some sanity checks
   assert isinstance(BVOp1, RoseBVInsertSliceOp) or isinstance(BVOp1, RoseBVExtractSliceOp)
   assert isinstance(BVOp2, RoseBVInsertSliceOp) or isinstance(BVOp2, RoseBVExtractSliceOp)
-  assert isinstance(BVOp1.getOutputBitwidth() == BVOp2.getOutputBitwidth())
+  assert BVOp1.getOutputBitwidth() == BVOp2.getOutputBitwidth()
+  print("BVOp1:")
+  BVOp1.print()
+  print("BVOp2:")
+  BVOp2.print()
   Low1 = BVOp1.getLowIndex()
   Low2 = BVOp2.getLowIndex()
   # Expected difference between the low indices of the bitvectos
@@ -235,8 +239,8 @@ def GetInvariantsInRegion(Abstraction, Invariants = dict()):
   return Invariants
 
 
-def CloneAndInsertOperation(Operation : RoseOperation, \
-                            InsertBefore : RoseOperation, Context : RoseContext):
+def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperation, \
+                            Context : RoseContext, OrginalValToClonedValMap : dict = dict()):
   # Both operation and insertion point must be in the same block
   assert Operation.getParent() == InsertBefore.getParent()
 
@@ -258,13 +262,18 @@ def CloneAndInsertOperation(Operation : RoseOperation, \
     if not isinstance(Operand, RoseOperation):
       OperandList.append(Operand)
       continue
-    NewOperand = CloneAndInsertOperation(Operand, InsertBefore, Context)
+    if Operand in OrginalValToClonedValMap:
+      NewOperand = OrginalValToClonedValMap[Operand]
+    else:
+      NewOperand = CloneAndInsertOperation(Operand, InsertBefore, Context)
+      OrginalValToClonedValMap[Operand] = NewOperand
     OperandList.append(NewOperand)
   # Clone and replace the operands in the operation
   ClonedOperation = Operation.clone(Context.genName(Operation.getName() + ".clone."))
   ClonedOperation.replaceOperands(OperandList)
   # Insert the op to the IR
   ParentBlock.addOperationBefore(ClonedOperation, InsertBefore)
+  OrginalValToClonedValMap[Operation] = ClonedOperation
   return ClonedOperation
 
 
@@ -415,6 +424,24 @@ def IsBlockPreheader(Block : RoseBlock):
     if isinstance(NextRegion, RoseForLoop):
       return True
   return False
+
+
+def GetAllCrossLaneOpsInFunction(Function : RoseFunction):
+  print("GetAllCrossLaneOpsInFunction")
+  assert isinstance(Function, RoseFunction)
+  OpList = list()
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    for Op in Block:
+      if isinstance(Op, RoseBVInsertSliceOp):
+        InsertValue = Op.getInsertValue()
+        if isinstance(InsertValue, RoseBVExtractSliceOp):
+          if isinstance(InsertValue.getLowIndex(), RoseOperation) \
+          and isinstance(Op.getOperand(Op.getBitwidthPos()), RoseConstant):
+            OpList.append(InsertValue)
+  print("+++++OpList:")
+  print(OpList)
+  return OpList
 
 
 def GenerateOpWithSameInputsAndOutputType(Name : str, Opcode : RoseOpcode, Operands : list):
