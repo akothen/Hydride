@@ -985,23 +985,6 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                           LowIndex.getType())
         HighIndex = RoseAddOp.create(Context.genName(), \
                                           [LowIndex, HighIndexOff])
-        # Add the generated ops to the IR and the context
-        Context.addAbstractionToIR(OuterLowIndex)
-        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
-        Context.addAbstractionToIR(InnerLowIndex)
-        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
-        Context.addAbstractionToIR(LowIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
-        Context.addAbstractionToIR(HighIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
-        print("OuterLowIndex:")
-        OuterLowIndex.print()
-        print("InnerLowIndex:")
-        InnerLowIndex.print()
-        print("LOW INDEX: ")
-        LowIndex.print()
-        print("HIGH INDEX:")
-        HighIndex.print()
         # Now generate the bvinsert op
         # Sometimes size extension of the RHS is required, so we have to handle it here
         if RHSExprVal.getType().getBitwidth() < BitwidthValue.getValue():
@@ -1029,6 +1012,23 @@ def CompileUpdate(Update, Context : HexRoseContext):
         print("RHSExprVal:")
         RHSExprVal.print()
         BitwidthValue.print()
+        # Add the generated ops to the IR and the context
+        Context.addAbstractionToIR(OuterLowIndex)
+        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
+        Context.addAbstractionToIR(InnerLowIndex)
+        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
+        Context.addAbstractionToIR(LowIndex)
+        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+        Context.addAbstractionToIR(HighIndex)
+        Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
+        print("OuterLowIndex:")
+        OuterLowIndex.print()
+        print("InnerLowIndex:")
+        InnerLowIndex.print()
+        print("LOW INDEX: ")
+        LowIndex.print()
+        print("HIGH INDEX:")
+        HighIndex.print()
         LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, \
                                       LowIndex, HighIndex, BitwidthValue)
         print("---BIT SLICE INSERT OP:")
@@ -1065,29 +1065,6 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                           LowIndex.getType())
         HighIndex = RoseAddOp.create(Context.genName(), \
                                           [LowIndex, HighIndexOff])
-        # Add the generated ops to the IR and the context
-        Context.addAbstractionToIR(OuterLowIndex)
-        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
-        Context.addAbstractionToIR(InnerLowIndex)
-        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
-        Context.addAbstractionToIR(InnermostLowIndex)
-        Context.addCompiledAbstraction(InnermostLowIndex.getName(), InnermostLowIndex)
-        Context.addAbstractionToIR(TempLowIndex)
-        Context.addCompiledAbstraction(TempLowIndex.getName(), TempLowIndex)
-        Context.addAbstractionToIR(LowIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
-        Context.addAbstractionToIR(HighIndex)
-        Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
-        print("OuterLowIndex:")
-        OuterLowIndex.print()
-        print("InnerLowIndex:")
-        InnerLowIndex.print()
-        print("InnermostLowIndex:")
-        InnermostLowIndex.print()
-        print("LOW INDEX: ")
-        LowIndex.print()
-        print("HIGH INDEX:")
-        HighIndex.print()
         # Now generate the bvinsert op
         # Sometimes size extension of the RHS is required, so we have to handle it here
         if RHSExprVal.getType().getBitwidth() < BitwidthValue.getValue():
@@ -1111,6 +1088,29 @@ def CompileUpdate(Update, Context : HexRoseContext):
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+        # Add the generated ops to the IR and the context
+        Context.addAbstractionToIR(OuterLowIndex)
+        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
+        Context.addAbstractionToIR(InnerLowIndex)
+        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
+        Context.addAbstractionToIR(InnermostLowIndex)
+        Context.addCompiledAbstraction(InnermostLowIndex.getName(), InnermostLowIndex)
+        Context.addAbstractionToIR(TempLowIndex)
+        Context.addCompiledAbstraction(TempLowIndex.getName(), TempLowIndex)
+        Context.addAbstractionToIR(LowIndex)
+        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+        Context.addAbstractionToIR(HighIndex)
+        Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
+        print("OuterLowIndex:")
+        OuterLowIndex.print()
+        print("InnerLowIndex:")
+        InnerLowIndex.print()
+        print("InnermostLowIndex:")
+        InnermostLowIndex.print()
+        print("LOW INDEX: ")
+        LowIndex.print()
+        print("HIGH INDEX:")
+        HighIndex.print()
         # Compile the op
         print("RHSExprVal:")
         RHSExprVal.print()
@@ -1134,8 +1134,6 @@ def CompileUpdate(Update, Context : HexRoseContext):
                                 CompiledLowIndex.getType())
       LowIndex = RoseMulOp.create(Context.genName(), \
                                 [LowCoFactor, CompiledLowIndex])
-      Context.addAbstractionToIR(LowIndex)
-      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
       print("---INDEX:")
       print(LowIndex)
       LowIndex.print()
@@ -1154,9 +1152,6 @@ def CompileUpdate(Update, Context : HexRoseContext):
       IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
       HighIndex = RoseAddOp.create(Context.genName(), \
                                         [LowIndex, IndexDiff])
-      # Add this add op to the IR and the context
-      Context.addAbstractionToIR(HighIndex)
-      Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
       # Generate value for bitwidth
       BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
       # Now generate the bvinsert op
@@ -1184,6 +1179,11 @@ def CompileUpdate(Update, Context : HexRoseContext):
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+      # Add low and high indices to the IR
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
       # Compile the op
       LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, LowIndex, HighIndex, BitwidthValue)
       print("---BIT SLICE INSERT OP:")
