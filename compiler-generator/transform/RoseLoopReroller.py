@@ -1924,7 +1924,7 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseC
       #if len(BVExtractOps) != 0:
         #if Op.getLowIndex() != BVExtractOps[-1].getLowIndex():
         #  return False
-      BVExtractOps.append(Op)
+        BVExtractOps.append(Op)
       continue
     if isinstance(Op, RoseBVInsertSliceOp):
       print("INSERT OP:")
@@ -1949,13 +1949,15 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseC
   BitwidthVal = RoseConstant.create(ExtractOp.getOutputBitwidth(), \
                                     ExtractOp.getLowIndex().getType())
   InsertValue = FirstInsertOp.getInsertValue()
-  # Get the indices
+  OrginalValToClonedValMap = dict()
   if isinstance(ExtractOp.getLowIndex(), RoseOperation):
-    LowIndex = CloneAndInsertOperation(ExtractOp.getLowIndex(), FirstOp, Context)
+    LowIndex = CloneAndInsertOperation(ExtractOp.getLowIndex(), FirstOp, \
+                                       Context, OrginalValToClonedValMap)
   else:
     LowIndex = ExtractOp.getLowIndex()
   if isinstance(ExtractOp.getHighIndex(), RoseOperation):
-    HighIndex = CloneAndInsertOperation(ExtractOp.getHighIndex(), FirstOp, Context)
+    HighIndex = CloneAndInsertOperation(ExtractOp.getHighIndex(), FirstOp, \
+                                        Context, OrginalValToClonedValMap)
   else:
     HighIndex = ExtractOp.getHighIndex()
   NewExtractOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".ext"), \
@@ -1964,7 +1966,7 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseC
   AddOp = RoseBVAddOp.create(Context.genName(ExtractOp.getName() + ".acc"), \
                                             [NewExtractOp, InsertValue])
   FirstInsertOp.setOperand(0, AddOp)
-  Block.addOperationBefore(ExtractOp, FirstOp)
+  Block.addOperationBefore(NewExtractOp, FirstOp)
   Block.addOperationAfter(AddOp, InsertValue)
 
   print("FUNCTION FIX REDUCTION PATTERN:")
