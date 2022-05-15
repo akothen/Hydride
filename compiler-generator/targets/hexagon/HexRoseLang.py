@@ -998,123 +998,157 @@ test141 = {
 }
 
 test142 = {
-    'Vx|=vand(Qu4,Rt)': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i] |= (QuV[i]) ? '
-                     'Rt.ub[i % 4] : 0 ;}',
+ 'hexagon_V6_vandvrt_128B': {'hvx_intrinsic': 'Qd4=vand(Vu,Rt)',
+                        'spec': 'for (i = 0; i < VELEM(8); i++) '
+                                '{QdV[i]=((Vu.ub[i] & Rt.ub[i % 4]) != 0) ? 1 '
+                                ': 0 ;}'},
 }
 
 test143 = {
- 'Vd.w=vadd(Vu.w,Vv.w,Qs4):carry:sat': 'for (i = 0; i < VELEM(32); i++) '
-                                       '{Vd.w[i] = '
-                                       'sat32(Vu.w[i]+Vv.w[i]+QsV[i*4]) ;}'
+ 'hexagon_V6_vandqrt_128B': {'hvx_intrinsic': 'Vd=vand(Qu4,Rt)',
+                        'spec': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                'QuV[i] ? Rt.ub[i % 4] : 0 ;}'},
 }
 
 test144 = {
- 'Vx.w+=vmpyi(Vu.w,Rt.b)': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] += '
-                           '(Vu.w[i] * Rt.b[i % 4]) ;}',
+ 'hexagon_V6_vandnqrt_128B': {'hvx_intrinsic': 'Vd=vand(!Qu4,Rt)',
+                         'spec': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
+                                 '!QuV[i] ? Rt.ub[i % 4] : 0 ;}'},
 }
 
 test145 = {
- 'Vx.w+=vdmpy(Vu.h,Rt.b)': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] += '
-                           '(Vu.w[i].h[0] * Rt.b[(2*i+0)%4]);Vx.w[i] += '
-                           '(Vu.w[i].h[1] * Rt.b[(2*i+1)%4]);}',
+ 'hexagon_V6_pred_not_128B': {
+                         'hvx_intrinsic': 'Qd4=not(Qs4)',
+                         'spec': 'for (i = 0; i < VELEM(8); i++) '
+                                 '{QdV[i]=!QsV[i] ;}'
+                        },
 }
 
 test146 = {
- 'Vx.h+=vmpyi(Vu.h,Rt.b)': 'for (i = 0; i < VELEM(16); i++) {Vx.h[i] += '
-                           '(Vu.h[i] * Rt.b[i % 4]) ;}',
+ 'hexagon_V6_vmpyh_128B': {'hvx_intrinsic': 'Vdd.w=vmpy(Vu.h,Rt.h)',
+                      'spec': 'for (i = 0; i < VELEM(32); i++) {Vdd.v[0].w[i] '
+                              '= (Vu.w[i].h[0] * Rt.h[0]);Vdd.v[1].w[i] = '
+                              '(Vu.w[i].h[1] * Rt.h[1]) ;}'},
 }
 
 test147 = {
- 'Vx.h+=vdmpy(Vu.ub,Rt.b)': 'for (i = 0; i < VELEM(16); i++) {Vx.h[i] += '
-                            '(Vu.uh[i].ub[0] * Rt.b[(2*i) %4]);Vx.h[i] += '
-                            '(Vu.uh[i].ub[1] *Rt.b[(2*i+1)%4]) ;}',
+ 'hexagon_V6_vmpyih_128B': {'hvx_intrinsic': 'Vd.h=vmpyi(Vu.h,Vv.h)',
+                       'spec': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                               '(Vu.h[i] * Vv.h[i]) ;}'},
 }
 
 test148 = {
- 'Vd=vand(Vu,Vv)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = Vu.uh[i] & '
-                   'Vv.h[i] ;}',
+ 'hexagon_V6_vmpyih_acc_128B': {'hvx_intrinsic': 'Vx.h+=vmpyi(Vu.h,Vv.h)',
+                           'spec': 'for (i = 0; i < VELEM(16); i++) {Vx.h[i] '
+                                   '+= (Vu.h[i] * Vv.h[i]) ;}'},
 }
 
 test149 = {
- 'Vd=vand(Qv4,Vu)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = QvV[i] ? '
-                    'Vu.b[i] : 0 ;}',
+ 'hexagon_V6_vmpyuh_128B': {'hvx_intrinsic': 'Vdd.uw=vmpy(Vu.uh,Rt.uh)',
+                       'spec': 'for (i = 0; i < VELEM(32); i++) '
+                               '{Vdd.v[0].uw[i] = (Vu.uw[i].uh[0] '
+                               '*Rt.uh[0]);Vdd.v[1].uw[i] = (Vu.uw[i].uh[1] * '
+                               'Rt.uh[1]);}'},
 }
 
 test150 = {
- 'Vd=vand(Qu4,Rt)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = QuV[i] ? '
-                    'Rt.ub[i % 4] : 0 ;}',
+ 'hexagon_V6_veqb_128B': {'hvx_intrinsic': 'Qd4=vcmp.eq(Vu.b,Vv.b)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 1) {QdV[i+1-1:i] = '
+                             '((Vu.b[i/1] == Vv.b[i/1]) ?0x1 : 0);}'},
 }
 
 test151 = {
- 'Vd=vand(!Qv4,Vu)': 'for (i = 0; i < VELEM(8); i++) {Vd.b[i] = !QvV[i] ? '
-                     'Vu.b[i] : 0 ;}',
+ 'hexagon_V6_veqh_128B': {'hvx_intrinsic': 'Qd4=vcmp.eq(Vu.h,Vv.h)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 2) {QdV[i+2-1:i] = '
+                             '((Vu.h[i/2] == Vv.h[i/2]) ?0x3 : 0);}'},
 }
 
 test152 = {
- 'Vd=vand(!Qu4,Rt)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = !QuV[i] ? '
-                     'Rt.ub[i % 4] : 0 ;}',
+ 'hexagon_V6_veqb_128B': {'hvx_intrinsic': 'Qd4=vcmp.eq(Vu.b,Vv.b)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 1) {QdV[i+1-1:i] = '
+                             '((Vu.b[i/1] == Vv.b[i/1]) ?0x1 : 0);}'},
 }
 
 test153 = {
- 'Qd4=or(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] || QtV[i] '
-                    ';}',
+ 'hexagon_V6_veqw_128B': {'hvx_intrinsic': 'Qd4=vcmp.eq(Vu.w,Vv.w)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
+                             '((Vu.w[i/4] == Vv.w[i/4]) ?0xF : 0);}'},
 }
 
 test154 = {
- 'Qd4=or(Qs4,!Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] || !QtV[i] '
-                     ';}',
+ 'hexagon_V6_vgtb_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.b,Vv.b)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 1) {QdV[i+1-1:i] = '
+                             '((Vu.b[i/1] > Vv.b[i/1]) ?0x1 : 0);}'},
 }
 
 test155 = {
- 'Qd4=not(Qs4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=!QsV[i] ;}',
+ 'hexagon_V6_vgth_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.h,Vv.h)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 2) {QdV[i+2-1:i] = '
+                             '((Vu.h[i/2] > Vv.h[i/2]) ?0x3 : 0);}'},
 }
 
 test156 = {
- 'Qd4=vand(Vu,Rt)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=((Vu.ub[i] & '
-                    'Rt.ub[i % 4]) != 0) ? 1 : 0 ;}',
+ 'hexagon_V6_vgtub_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.ub,Vv.ub)',
+                      'spec': 'for( i = 0; i < VWIDTH; i += 1) {QdV[i+1-1:i] = '
+                              '((Vu.ub[i/1] > Vv.ub[i/1]) ?0x1 : 0);}'},
 }
 
 test157 = {
- 'Qd4=and(Qs4,Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] && QtV[i] '
-                     ';}',
+ 'hexagon_V6_vgtuh_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.uh,Vv.uh)',
+                      'spec': 'for( i = 0; i < VWIDTH; i += 2) {QdV[i+2-1:i] = '
+                              '((Vu.uh[i/2] > Vv.uh[i/2]) ?0x3 : 0);}'},
 }
 
 test158 = {
- 'Qd4=and(Qs4,!Qt4)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=QsV[i] && '
-                      '!QtV[i] ;}',
+ 'hexagon_V6_vgtuw_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.uw,Vv.uw)',
+                      'spec': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
+                              '((Vu.uw[i/4] > Vv.uw[i/4]) ?0xF : 0);}'},
 }
 
-# Compilation fails
 test159 = {
- 'Qd4.h=vshuffe(Qs4.w,Qt4.w)': 'for (i = 0; i < VELEM(8); i++) {QdV[i]=(i & 2) '
-                               '? QsV[i-2] : QtV[i] ;}',
+ 'hexagon_V6_vgtw_128B': {'hvx_intrinsic': 'Qd4=vcmp.gt(Vu.w,Vv.w)',
+                     'spec': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
+                             '((Vu.w[i/4] > Vv.w[i/4]) ?0xF : 0);}'},
 }
 
 test160 = {
- 'Vx.w=vinsert(Rt)': 'Vx.uw[0] = Rt;',
+ 'hexagon_V6_vinsertwr_128B': {'hvx_intrinsic': 'Vx.w=vinsert(Rt)',
+                          'spec': 'Vx.uw[0] = Rt;'},
 }
 
 test161 = {
- 'Vd=Vu': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i]=Vu.w[i] ;}',
+ 'hexagon_V6_vdealb_128B': {'hvx_intrinsic': 'Vd.b=vdeal(Vu.b)',
+                       'spec': 'for (i = 0; i < VELEM(16); i++) {Vd.ub[i ] = '
+                               'Vu.uh[i].ub[0];Vd.ub[i+VBITS/16] = '
+                               'Vu.uh[i].ub[1] ;}'},
 }
 
 test162 = {
- 'Qx4|=vand(Vu,Rt)': 'for (i = 0; i < VELEM(8); i++) '
-                     '{QxV[i]=QxV[i]|(((Vu.ub[i] & Rt.ub[i % 4]) != 0) ? 1: 0) '
-                     ';}',
+ 'hexagon_V6_vdealh_128B': {'hvx_intrinsic': 'Vd.h=vdeal(Vu.h)',
+                       'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.uh[i ] = '
+                               'Vu.uw[i].uh[0];Vd.uh[i+VBITS/32] = '
+                               'Vu.uw[i].uh[1] ;}'},
 }
 
 test163 = {
-    'Vd=vsplat(Rt)': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = Rt ;}',
+ 'hexagon_V6_vmpyuhe_128B': {'hvx_intrinsic': 'Vd.uw=vmpye(Vu.uh,Rt.uh)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                '(Vu.uw[i].uh[0] * Rt.uh[0]) ;}'},
 }
 
 test164 =  {
-    'if (Qv4) Vx.b+=Vu.b': 'for (i = 0; i < VELEM(8); i++) {Vx.ub[i]=QvV.i ? '
-                        'Vx.ub[i] : Vx.ub[i]+Vu.ub[i] ;}',
+ 'hexagon_V6_vmpyuhe_acc_128B': {'hvx_intrinsic': 'Vx.uw+=vmpye(Vu.uh,Rt.uh)',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) {Vx.uw[i] '
+                                    '+= (Vu.uw[i].uh[0] * Rt.uh[0]) ;}'},
 }
 
 test165 = {
- 'Vd.h=vsplat(Rt)': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] = Rt ;}',
+ 'hexagon_V6_vrmpyub_128B': {'hvx_intrinsic': 'Vd.uw=vrmpy(Vu.ub,Rt.ub)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                '(Vu.uw[i].ub[0] * Rt.ub[0]);Vd.uw[i] += '
+                                '(Vu.uw[i].ub[1] * Rt.ub[1]);Vd.uw[i] += '
+                                '(Vu.uw[i].ub[2] * Rt.ub[2]);Vd.uw[i] += '
+                                '(Vu.uw[i].ub[3] * Rt.ub[3]) ;}'},
 }
 
 
@@ -1399,19 +1433,10 @@ test213 = {
 }
 
 
-def Compile2():
-  Test = test213
-  for Inst, Pseudocode in Test.items():
-    Spec = GetSpecFrom(Inst, Pseudocode)
-    print(Spec)
-    CompiledFunction = CompileSemantics(Spec)
-    return CompiledFunction
-
-
 from RoseHexPseudoCodeParser import *
 
 def Compile():
-   Test = test141
+   Test = test165
    SemaList = list()
    for Name, Dictionary in Test.items():
       Pseudocode = Dictionary['spec']
