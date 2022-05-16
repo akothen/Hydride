@@ -233,9 +233,15 @@ class InterpreterConstraintsDef:
 
         across_ctx_cons = []
 
+        # During the constraint analysis, a bitvector operand may be a constant bv in some contexts and a symbolic bv in another. Hence the naming convention for each context will vary slightly. Hence we only keep the constraints which use the cannonical naming convention (which is the sample context)
+        sample_ctx = dsl_inst.get_sample_context()
+        sample_arg_names = [arg.name for arg in sample_ctx.context_args]
+        skip_constraint = lambda v : v not in sample_arg_names
+
         for key_name in constraints:
             if key_name in inconsistent:
                 continue
+
 
             for cons in constraints[key_name]:
 
@@ -245,6 +251,12 @@ class InterpreterConstraintsDef:
                 if cons['type'] == 'NEQ':
                     continue
 
+
+                if skip_constraint(cons['lhs']):
+                    continue
+
+                if skip_constraint(cons['rhs']):
+                    continue
 
                 pair_ctx = None
 
