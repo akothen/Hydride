@@ -247,9 +247,19 @@ class RoseBVTruncateOp(RoseBitVectorOp):
     else:
       String = Spaces + "(define " + HighIndexName + " "  \
               + str(BVSize - 1) + ")\n"
-    String += Spaces + "(define " + LowIndexName + " "  \
-            + "(- " + HighIndexName + " " \
-            + self.getOperand(1).getName() + " -1 ))\n"
+    if ReverseIndexing == False:
+      String += Spaces + "(define " + LowIndexName + " "  \
+              + "(- " + HighIndexName + " " \
+              + self.getOperand(1).getName() + " -1 ))\n"
+    else:
+      InputBVSize = self.getInputBitVector().getType().getBitwidth()
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+         ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
+      # DO NOT CHANGE THIS ORDER
+      String += " " + ReverseIndexString + LowIndexName + ")"
+      String += " " + ReverseIndexString + HighIndexName + ")"
     String += Spaces + "(define " + Name + " ("
     String += RoseOpcode.bvextract.getRosetteOp() + " "
     String += " " + HighIndexName
@@ -1264,6 +1274,5 @@ class RoseBVAbsOp(RoseBitVectorOp):
             + str(self.getOperand(0).getOutputBitwidth()) + "))"
     String += ")\n"
     return String
-
 
 
