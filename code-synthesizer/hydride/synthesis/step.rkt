@@ -32,7 +32,7 @@
 (define (create-symbolic-bvs bw-list) 
   (define num-bw (length bw-list))
   (define (helper i)
-    (list-ref bw-list i)
+    (create-symbolic-bv (list-ref bw-list i))
     )
   (build-vector num-bw helper)
   )
@@ -48,14 +48,15 @@
   ;; Save current solver environment and restore 
   ;; after synthesis step
   (define curr-bw (current-bitwidth))
-  (define curr-solver (current-bitwidth))
+  (define curr-solver (current-solver))
+
+
+  ;; Clear the verification condition up till this point
+  ;; (clear-vc!)
 
   ;; Create the symbolic bitvectors to use in synthesis
   (define symbols (create-symbolic-bvs bitwidth-list))
 
-  ;; Clear the verification condition up till this point
-
-  (clear-vc!)
   (define start_time (current-seconds))
   (define sol?
 
