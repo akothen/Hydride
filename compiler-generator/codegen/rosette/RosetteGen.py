@@ -110,6 +110,14 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       if Operation.getInputBitVector() in Block.getOperations():
         RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
         continue
+    if isinstance(Operation, RoseBVTruncateOp):
+      # There are situations where value being extracted is defined
+      # outside a loop. In Rosette, the indexing into bitvectors takes
+      # place from right to left, instead of left to right. So we need
+      # to reverse the order of extraction as well.
+      if Operation.getInputBitVector() in Block.getOperations():
+        RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
+        continue
     print("Operation:")
     Operation.print()
     RosetteCode += Operation.to_rosette(NumSpace)
@@ -162,12 +170,12 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       Pack = [Op]
       continue
     print("AreBitSlicesContiguous:")
-    if not AreBitSlicesContiguous(Pack[len(Pack) - 1], Op):
-      print("FALSE")
+    #if not AreBitSlicesContiguous(Pack[len(Pack) - 1], Op):
+    #  print("FALSE")
       # Pack list ends here
-      ListOfPacks.append(Pack)
-      Pack = [Op]
-      continue
+    #  ListOfPacks.append(Pack)
+    #  Pack = [Op]
+    #  continue
     print("TRUE")
     # Add the op to the current pack list
     Pack.append(Op)
