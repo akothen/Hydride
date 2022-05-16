@@ -779,7 +779,10 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
   return BlockToRerollableCandidatesMap
 
 
-def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context : RoseContext):
+def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
+                        Context : RoseContext, VisitedRegion : set = set()):
+  if Region in VisitedRegion:
+    return BlockToRerollableCandidatesMap
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
   for Abstraction in Region: #Region.getChildren():
@@ -793,10 +796,11 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, Context :
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap, Context)
       continue
-    if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context) == False:
-      FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context)
+    if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
+      FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
+  VisitedRegion.add(Region)
   return BlockToRerollableCandidatesMap
 
 # The assumption here is that the relationship between the 
@@ -1672,7 +1676,8 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContex
       ParentRegion.eraseChild(Block, ParentKey)
 
 
-def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
+def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
+                              Context : RoseContext, VisitedRegion : set = set()):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPatternToMakeBlockRerollable")
   # Look for chains of bvadd ops
@@ -1899,14 +1904,16 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, Context : RoseC
   # Now let's split this block 
   print("FirstOp:")
   FirstOp.print()
-  Block.splitAt(Block.getPosOfChild(FirstOp))
+  NewBlock = Block.splitAt(Block.getPosOfChild(FirstOp))
+  VisitedRegion.add(NewBlock)
 
   print("FIXED BLOCK:")
   Block.print()
   return True
 
 
-def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseContext):
+def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, \
+                          Context : RoseContext, VisitedRegion : set = set()):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPattern2ToMakeBlockRerollable")
   # Look for chains of bvadd ops
@@ -1968,6 +1975,32 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, Context : RoseC
   FirstInsertOp.setOperand(0, AddOp)
   Block.addOperationBefore(NewExtractOp, FirstOp)
   Block.addOperationAfter(AddOp, InsertValue)
+
+  # Now initialize the function return register in the first block
+  Region = Function.getChild(0)
+  if not isinstance(Region, RoseBlock):
+    FirstBlock = Block.create()
+    Function.addRegionBefore(0, FirstBlock)
+    print("ALLOCATED NEW BLOCK")
+    print("----FirstBlock:")
+    FirstBlock.print()
+    print(FirstBlock)
+  else:
+    FirstBlock = Region
+  ReturnVal = Function.getReturnValue()
+  InitVal = RoseConstant.create(0, ReturnVal.getType())
+  InitLowIndex = RoseConstant.create(0, RoseIntegerType.create(32))
+  InitHighIndex = RoseConstant.create(ReturnVal.getType().getBitwidth() - 1, \
+                                      RoseIntegerType.create(32))
+  InitBitwidth = RoseConstant.create(ReturnVal.getType().getBitwidth(), \
+                                RoseIntegerType.create(32))
+  InitOp = RoseBVInsertSliceOp.create(InitVal, ReturnVal, InitLowIndex, \
+                                      InitHighIndex, InitBitwidth)
+  if FirstBlock.getNumOperations() == 0:
+    FirstBlock.addRegion(InitOp)
+  else:
+    FirstBlock.addOperationBefore(InitOp, FirstBlock.getOperation(0))
+  VisitedRegion.add(FirstBlock)
 
   print("FUNCTION FIX REDUCTION PATTERN:")
   Function.print()
