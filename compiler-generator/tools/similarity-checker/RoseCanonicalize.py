@@ -198,13 +198,17 @@ def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
   # Get the op that we can use to canonicalize the loop bounds
   LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
   assert len(LoopList) != 0
-  PrimaryOps = GetOpDeterminingLoopBounds(LoopList[0])
+  PrimaryOps = GetOpDeterminingOuterLoopBounds(LoopList[0])
   assert PrimaryOps != None
   print("PrimaryOps[0]:")
   PrimaryOps[0].print()
   # Find the maximum bitwidth and use that
   MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+  print("PrimaryOps[0]:")
+  PrimaryOps[0].print()
   for Op in PrimaryOps[1:]:
+    print("PrimaryOp:")
+    Op.print()
     if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
       MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
   # Create a new loop
@@ -524,7 +528,7 @@ def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
   print("AccumulationPatterFound:")
   print(AccumulationPatterFound)
   if len( NewInitInstructions) == 0:
-    assert AccumulationPatterFound == False
+    #assert AccumulationPatterFound == False
     return False
   if AccumulationPatterFound == False:
     return False
