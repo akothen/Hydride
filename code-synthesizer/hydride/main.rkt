@@ -36,6 +36,9 @@
 (require hydride/ir/hydride/interpreter)
 
 
+(require hydride/synthesis/step)
+
+
 (provide 
   (all-from-out hydride/utils/bvops)
   (all-from-out hydride/utils/misc)
@@ -45,6 +48,7 @@
   (all-from-out hydride/ir/hydride/cost_model)
   (all-from-out hydride/ir/hydride/length)
   (all-from-out hydride/ir/hydride/interpreter)
+  (all-from-out hydride/synthesis/step)
 
   )
 

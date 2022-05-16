@@ -1,7 +1,7 @@
 hydride
 =======
 
-This directory defines the Racket Package for **Hyride**. It consists of automatically generated files for defining the semantics of Target ISA's as well as the interpreter and other utilities needed by the Hydride code-synthesizer.
+This directory defines the Racket Package for **Hydride**. It consists of automatically generated files for defining the semantics of Target ISA's as well as the interpreter and other utilities needed by the Hydride code-synthesizer.
 
 
 ## Install
