@@ -541,9 +541,9 @@ concat
             )
          )
 	]
-	[ (vector-load_dsl v0 lane_size num_2 num_3 prec_i_o)
-     (assert (equal? (get-length v0) lane_size ))
-		(vector-load (interpret v0 env) (interpret lane_size env) (interpret num_2 env) 
+	[ (vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o)
+		(assert (equal? size_i_o (get-length v0 env)))
+		(vector-load (interpret v0 env) (interpret size_i_o env) (interpret num_2 env) 
 		 (interpret num_3 env) (interpret prec_i_o env))
 	]
 	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
@@ -552,6 +552,9 @@ concat
 		 (interpret num_6 env) (interpret num_7 env) (interpret num_8 env))
 	]
 	[ (_mm_mulhi_pi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		(assert (equal? (get-length v0 env) (get-length v1 env)))
+		(assert (equal? size_i_o (get-length v0 env)))
+		(assert (equal? size_i_o (get-length v1 env)))
 		(_mm_mulhi_pi16 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
 		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
 		 (interpret num_6 env) (interpret num_7 env) (interpret num_8 env))
@@ -562,8 +565,9 @@ concat
 		 (interpret prec_i env))
 	]
 	[ (_m_paddw_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6)
-
-       (assert (equal? (get-length v0) (get-length v1)))
+		(assert (equal? (get-length v0 env) (get-length v1 env)))
+		(assert (equal? size_i_o (get-length v0 env)))
+		(assert (equal? size_i_o (get-length v1 env)))
 		(_m_paddw (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
 		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
 		 (interpret num_6 env))
@@ -574,7 +578,9 @@ concat
 		 (interpret num_6 env))
 	]
 	[ (_mm512_div_epi64_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-       (assert (equal? (get-length v0) (get-length v1)))
+		(assert (equal? (get-length v0 env) (get-length v1 env)))
+		(assert (equal? size_i_o (get-length v0 env)))
+		(assert (equal? size_i_o (get-length v1 env)))
 		(_mm512_div_epi64 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
 		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
 		 (interpret num_6 env) (interpret num_7 env))
@@ -696,13 +702,13 @@ concat
 (define scale_factor 1)
 
 
-(define (get-length prog)
+(define (get-length prog env)
  (destruct prog
 	[(idx-i id) 1]
 	[(idx-j id) 1]
-	[(reg id) (/ 384 scale_factor)]
+	[(reg id) (bvlength (vector-ref env id))]
 	[(lit v) (bvlength v) ]
-	[(nop v1)  (get-length v1)]
+	[(nop v1)  (get-length v1 env)]
 	[(dim-x id) 1]
 	[(dim-y id) 1]
 	[(idx-add i1 i2) 1]
@@ -1149,7 +1155,7 @@ concat
 ;; Synthesizing each sub-expression seperately:
 
 
-(define synth_depth 3)
+(define synth_depth 2)
 
 
 ;; ========= Sub expression 1 ========

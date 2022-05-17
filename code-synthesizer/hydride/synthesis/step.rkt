@@ -22,7 +22,7 @@
 
 
 (define (create-symbolic-bv bw) 
-  (define-symbolic sym_bv (bitvector bw))
+  (define-symbolic* sym_bv (bitvector bw))
   sym_bv
   )
 
@@ -37,6 +37,18 @@
   (build-vector num-bw helper)
   )
 
+
+(define (print-symbols symbol-vector)
+  (define vlen (vector-length symbol-vector))
+  (displayln "Printing Symbolic Bitvectors length")
+  (for/list ([i (range vlen)])
+            (display i)
+            (display ": ")
+            (displayln (bvlength (vector-ref symbol-vector i)))
+            
+            )
+  symbol-vector
+  )
 
 ;; Performs synthesis using a provided grammar and a reference specification. This method creates symbolic bitvectors for the bitvector operands and returns multiple values:
 ;; satisfiable? : Whether there exists a synthesizable solution for the reference implementation using the current grammar?
@@ -56,6 +68,8 @@
 
   ;; Create the symbolic bitvectors to use in synthesis
   (define symbols (create-symbolic-bvs bitwidth-list))
+  (displayln "Symbols for synthesis")
+  (print-symbols symbols)
 
   (define start_time (current-seconds))
   (define sol?
