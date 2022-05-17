@@ -797,7 +797,8 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
                                             BlockToRerollableCandidatesMap, Context)
       continue
     if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
-      FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
+      if FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
+        FixReductionPattern3ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
   VisitedRegion.add(Region)
@@ -1977,6 +1978,231 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, \
   Block.addOperationAfter(AddOp, InsertValue)
 
   # Now initialize the function return register in the first block
+  Region = Function.getChild(0)
+  if not isinstance(Region, RoseBlock):
+    FirstBlock = Block.create()
+    Function.addRegionBefore(0, FirstBlock)
+    print("ALLOCATED NEW BLOCK")
+    print("----FirstBlock:")
+    FirstBlock.print()
+    print(FirstBlock)
+  else:
+    FirstBlock = Region
+  ReturnVal = Function.getReturnValue()
+  InitVal = RoseConstant.create(0, ReturnVal.getType())
+  InitLowIndex = RoseConstant.create(0, RoseIntegerType.create(32))
+  InitHighIndex = RoseConstant.create(ReturnVal.getType().getBitwidth() - 1, \
+                                      RoseIntegerType.create(32))
+  InitBitwidth = RoseConstant.create(ReturnVal.getType().getBitwidth(), \
+                                RoseIntegerType.create(32))
+  InitOp = RoseBVInsertSliceOp.create(InitVal, ReturnVal, InitLowIndex, \
+                                      InitHighIndex, InitBitwidth)
+  if FirstBlock.getNumOperations() == 0:
+    FirstBlock.addRegion(InitOp)
+  else:
+    FirstBlock.addOperationBefore(InitOp, FirstBlock.getOperation(0))
+  VisitedRegion.add(FirstBlock)
+
+  print("FUNCTION FIX REDUCTION PATTERN:")
+  Function.print()
+
+  return True
+
+
+def FixReductionPattern3ToMakeBlockRerollable(Block : RoseBlock, \
+                              Context : RoseContext, VisitedRegion : set = set()):
+  print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
+  print("FixReductionPattern3ToMakeBlockRerollable")
+  # Look for chains of bvadd ops
+  BVAddChain = list()
+  BVInsertOp = RoseUndefValue()
+  IntermediateOp = RoseUndefValue()
+  for Op in reversed(Block.getOperations()):
+    if isinstance(Op, RoseBVInsertSliceOp):
+      # Go up the use-def chain to look for add ops.
+      # Skip bvsat and bvusat ops.
+      InsertValue = Op.getInsertValue()
+      if isinstance(InsertValue, RoseBVSSaturateOp) \
+      or isinstance(InsertValue, RoseBVUSaturateOp):
+        IntermediateOp = InsertValue
+        InsertValue = IntermediateOp.getInputBitVector()
+      if isinstance(InsertValue, RoseBVAddOp):
+        Worklist = [InsertValue]
+        while len(Worklist) != 0:
+          AddOp = Worklist.pop()
+          # Number of uses for the add op must be only 1.
+          if AddOp.getNumUsers() == 1:
+            BVAddChain.append(AddOp)
+          for Operand in AddOp.getOperands():
+            if isinstance(Operand, RoseBVAddOp) \
+            and Operand.getParent() == Block:
+              Worklist.append(Operand)
+        BVInsertOp = Op
+        break
+  if len(BVAddChain) == 0 or BVInsertOp == RoseUndefValue():
+    print("EXIT1")
+    return False
+
+  if len(BVAddChain) == 1:
+    # Check if there is any distant possibility that this reduction
+    # pattern is reroller. Trace back two threads.
+    AddOp = BVAddChain[0]
+    assert isinstance(AddOp, RoseBVAddOp)
+    assert len(AddOp.getOperands()) == 2
+    Trace1 = [AddOp.getOperand(0)]
+    Trace2 = [AddOp.getOperand(1)]
+    while len(Trace1) != 0 and len(Trace2) != 0:
+      Trace1Op = Trace1.pop()
+      Trace2Op = Trace2.pop()
+      if type(Trace1Op) != type(Trace2Op):
+        print("EXIT2")
+        return False
+      if isinstance(Trace1Op, RoseArgument) \
+        and isinstance(Trace2Op, RoseArgument):
+        continue
+      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+        and isinstance(Trace2Op, RoseBVExtractSliceOp):
+        Trace1.append(Trace1Op.getInputBitVector())
+        Trace2.append(Trace2Op.getInputBitVector())
+        continue
+      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
+        Trace1.append(Trace1Op.getOperand(0))
+        Trace2.append(Trace2Op.getOperand(0))
+        continue
+      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
+      for Operand in Trace1Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace1.append(Operand)
+      for Operand in Trace2Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace2.append(Operand)
+
+  if not isinstance(IntermediateOp, RoseUndefValue):
+    assert isinstance(IntermediateOp, RoseBVSSaturateOp) \
+        or isinstance(IntermediateOp, RoseBVUSaturateOp)
+  
+  # One of the bvadds must be coming from external source
+  # (some other block or function argument).
+  TempValues = []
+  OpsWithTempVals = []
+  for Op in BVAddChain:
+    for Operand in Op.getOperands():
+      if Operand in BVAddChain:
+        continue
+      if Operand not in Block:
+        continue
+      print("--####Operand:")
+      Operand.print()
+      TempValues.append(Operand)
+    OpsWithTempVals.append(Op)
+  if TempValues == []:
+    print("EXIT3")
+    return False
+  # Limit the reduction pattern we analyze
+  if len(OpsWithTempVals) == 0:
+    print("EXIT4")
+    return False
+
+  # Insert bvinserts after TempValues
+  print("INSERTING BVINSERTS")
+  InsertOpLowIndex = BVInsertOp.getLowIndex()
+  InsertOpHighIndex = BVInsertOp.getHighIndex()
+  BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
+                                      InsertOpLowIndex.getType())
+  FirstOp = Block.getOperation(0)
+  # Insert bvinserts after TempValues
+  for Op in TempValues:
+    print("TEMP:")
+    Op.print()
+    InsertionPoint = Block.getPosOfOperation(Op) + 1
+    InsertBefore = Block.getChild(InsertionPoint)
+    if isinstance(InsertOpLowIndex, RoseOperation):
+      LowIndex = CloneAndInsertOperation(InsertOpLowIndex, InsertBefore, Context)
+    else:
+      LowIndex = InsertOpLowIndex
+    if isinstance(InsertOpHighIndex, RoseOperation):
+      HighIndex = CloneAndInsertOperation(InsertOpHighIndex, InsertBefore, Context)
+    else:
+      HighIndex = InsertOpHighIndex
+    print("LowIndex:")
+    LowIndex.print()
+    print("HighIndex:")
+    HighIndex.print()
+    ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
+                                          BVInsertOp.getInputBitVector(), \
+                                          LowIndex, HighIndex, BitwidthVal)
+    print("Op:")
+    Op.print()
+    AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, Op])
+    if isinstance(IntermediateOp, RoseBVSSaturateOp):
+      InsertValue = RoseBVSSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                              AddOp, BitwidthVal)
+    elif isinstance(IntermediateOp, RoseBVUSaturateOp):
+      InsertValue = RoseBVUSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
+                                              AddOp, BitwidthVal)
+    else:
+      InsertValue = AddOp
+    InsertOp = RoseBVInsertSliceOp.create(InsertValue, BVInsertOp.getInputBitVector(), \
+                                          LowIndex, HighIndex, BitwidthVal)
+    Block.addOperationBefore(ExtractOp, InsertBefore)
+    Block.addOperationBefore(AddOp, InsertBefore)
+    if not isinstance(IntermediateOp, RoseUndefValue):
+      Block.addOperationBefore(InsertValue, InsertBefore)
+    Block.addOperationBefore(InsertOp, InsertBefore)
+
+  def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
+    assert isinstance(BVOp, RoseBVExtractSliceOp) \
+        or isinstance(BVOp, RoseBVInsertSliceOp)
+    print("EraseIndexingBVOp")
+    ParentBlock = BVOp.getParent()
+    assert not isinstance(ParentBlock, RoseUndefRegion)
+    ErasedOps = []
+    # Get all the indexing operations for bvinsert
+    IndexingOps = []
+    if isinstance(BVOp.getLowIndex(), RoseOperation):
+      IndexingOps.append(BVOp.getLowIndex())
+    if isinstance(BVOp.getHighIndex(), RoseOperation):
+      IndexingOps.append(BVOp.getHighIndex())
+    # Erase the bvinsert op
+    ParentBlock.eraseOperation(BVOp)
+    print("BV OP ERASED")
+    ParentBlock.print()
+    ErasedOps.append(BVOp)
+    while len(IndexingOps) != 0:
+      Op = IndexingOps.pop()
+      print("--INDEXING OP:")
+      Op.print()
+      # If we have already erased this op, continue
+      if Op in ErasedOps:
+        continue
+      if ParentBlock.hasUsesOf(Op) == False:
+        print("INDEXING OP HAS NO MORE USES")
+        # We can erase Op, but first get the operands
+        for Operand in Op.getOperands():
+          if isinstance(Operand, RoseOperation):
+            IndexingOps.append(Operand)
+        # Erase the op
+        ParentBlock.eraseOperation(Op)
+        ErasedOps.append(Op)
+    return ErasedOps
+    
+  print("---FIXED BLOCK:")
+  Block.print()
+
+  # Erase the bvinsert op
+  print("ERASE INSERT OP")
+  EraseIndexingBVOp(BVInsertOp)
+  if not isinstance(IntermediateOp, RoseUndefValue):
+    Block.eraseOperation(IntermediateOp)
+  # Remove the temp values
+  for Op in OpsWithTempVals:
+    Block.eraseOperation(Op)
+
+  print("++++++FIXED BLOCK:")
+  Block.print()
+
+  # Now initialize the function return register in the first block
+  Function = Block.getFunction()
   Region = Function.getChild(0)
   if not isinstance(Region, RoseBlock):
     FirstBlock = Block.create()
