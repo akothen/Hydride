@@ -1799,7 +1799,8 @@ concat
   (define %7 (bvsdiv  %5  %6))
   (define %8.high.idx (- %arg0 1))
   (define %8.low.idx (- %8.high.idx %elemsize -1 ))
-  (define %8 (extract  %8.high.idx %8.low.idx %7))
+  ;(define %8 (extract  %8.high.idx %8.low.idx %7))
+  (define %8 (extract (- %elemsize 1)  0  %7))
   %8
  )
  )
