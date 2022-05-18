@@ -804,6 +804,7 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
   VisitedRegion.add(Region)
   return BlockToRerollableCandidatesMap
 
+
 # The assumption here is that the relationship between the 
 # indices is of the form: A * iterator + B. 
 # We need to find A and B for every indexed bitvector operation.
@@ -828,15 +829,17 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
   print(StartIndex1)
   print("StartIndex2:")
   print(StartIndex2)
-  LowOffsetsList = list()
-  CoFactactorsList = list()
+  LowOffsetsListMap = dict()
+  CoFactactorsListMap = dict()
   for Index in range(len(Pack1)):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
-    if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == 0:
-      assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == 0
-      LowOffsetsList.append(None)
-      CoFactactorsList.append(None)
+    LowOffsetsListMap[Index] = list()
+    CoFactactorsListMap[Index] = list()
+    if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == False:
+      assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == False
+      LowOffsetsListMap[Index].append(None)
+      CoFactactorsListMap[Index].append(None)
       continue
     # Now we are dealing with bitvector ops that index into bitvectors
     # First get the start index and get offsets relative to
@@ -868,9 +871,9 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
     Offset = int(Offset)
     print("Offset:")
     print(Offset)
-    LowOffsetsList.append(Offset)
-    CoFactactorsList.append(Cofactor)
-  return LowOffsetsList, CoFactactorsList
+    LowOffsetsListMap[Index].append(Offset)
+    CoFactactorsListMap[Index].append(Cofactor)
+  return LowOffsetsListMap, CoFactactorsListMap
 
 
 def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
@@ -969,30 +972,32 @@ def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
   print("StartIndex2:")
   print(StartIndex2)
 
-  LowOffsetsList = list()
-  CoFactactorsList = list()
+  LowOffsetsListMap = dict()
+  CoFactactorsListMap = dict()
   for Index in range(len(Pack1)):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
+    LowOffsetsListMap[Index] = list()
+    CoFactactorsListMap[Index] = list()
     if isinstance(Op1, RoseCallOp):
       assert isinstance(Op2, RoseCallOp)
-      LowOffsetsList.append(None)
+      LowOffsetsListMap[Index].append(None)
     elif isinstance(Op1, RoseBitVectorOp):
       assert isinstance(Op2, RoseBitVectorOp)
-      LowOffsetsList.append(None)
+      LowOffsetsListMap[Index].append(None)
     else:
       assert not isinstance(Op2, RoseBitVectorOp)
       for OperandIndex in range(len(Op1.getOperands())):
         if not isinstance(Op1.getOperand(OperandIndex), RoseConstant):
           assert not isinstance(Op2.getOperand(OperandIndex), RoseConstant)
-          LowOffsetsList.append(None)
+          LowOffsetsListMap[Index].append(None)
         else:
           assert isinstance(Op2.getOperand(OperandIndex), RoseConstant)
-          LowOffsetsList.append(Op2.getOperand(OperandIndex).getValue() \
+          LowOffsetsListMap[Index].append(Op2.getOperand(OperandIndex).getValue() \
                               - Op1.getOperand(OperandIndex).getValue())
-    CoFactactorsList.append(None)
+    CoFactactorsListMap[Index].append(None)
 
-  return LowOffsetsList, CoFactactorsList
+  return LowOffsetsListMap, CoFactactorsListMap
 
 
 def GetFirstLowIndexInPackNonConstantIndices(Pack : list, \
@@ -1150,7 +1155,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     if PackIndices == None:
       assert OperandIndicesMap == None
       # Lets get the offsets across windows and other info for generating a loop
-      LowOffsetsList, CoFactactorsList = \
+      LowOffsetsListMap, CoFactactorsListMap = \
                 GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
       Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
       Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
@@ -1159,7 +1164,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
       assert OperandIndicesMap != None
       NonConstantIndexing = True
       # Lets get the offsets across windows and other info for generating a loop
-      LowOffsetsList, CoFactactorsList = \
+      LowOffsetsListMap, CoFactactorsListMap = \
                 GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
                                           PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
       Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
@@ -1174,8 +1179,10 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
     print(End)
     print("STEP:")
     print(Step)
-    print("LowOffsetsList:")
-    print(LowOffsetsList)
+    print("CoFactactorsListMap:")
+    print(CoFactactorsListMap)
+    print("LowOffsetsListMap:")
+    print(LowOffsetsListMap)
     print("PackIndices:")
     print(PackIndices)
     print("OperandIndices:")
@@ -1231,7 +1238,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
           Loop.addAbstraction(NewOp)
           continue
         # Handle bitvector operations (especially the indexing operations)
-        LowCofactor = CoFactactorsList[OpIndex]
+        [LowCofactor] = CoFactactorsListMap[OpIndex]
         Op.print()
         assert LowCofactor != None
         if LowCofactor == 1:
@@ -1249,7 +1256,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
             ScaledIterator = RoseMulOp.create(Context.genName("%" + "low.cofactor"),\
                                                [Iterator, LowCofactorVal])
           Loop.addAbstraction(ScaledIterator)
-        LowOffset = LowOffsetsList[OpIndex]
+        [LowOffset] = LowOffsetsListMap[OpIndex]
         assert LowOffset != None
         if LowOffset != 0:
         # Generate an add instruction
@@ -1294,15 +1301,18 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
               # Check if the next pack has the operation with an operand 
               # at "Index" with a constant value of "Step".
               OpInSecondPack = PackList[1][OpIndex]
-              if OpInSecondPack.getOperand(Index).getValue() == Loop.getStep().getValue():
+              if LowOffsetsListMap[OpIndex][Index] == Loop.getStep().getValue():
                 NewOp.setOperand(Index, Loop.getIterator())
               else:
-                MulOp = RoseMulOp.create(Context.genName(), 
-                    [Loop.getIterator(), OpInSecondPack.getOperand(Index)])
-                DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
-                NewOp.setOperand(Index, DivOp)
-                Loop.addAbstraction(MulOp)
-                Loop.addAbstraction(DivOp)
+                print("LowOffsetsListMap[OpIndex][Index]:")
+                if LowOffsetsListMap[OpIndex][Index] > 0:
+                  print(LowOffsetsListMap[OpIndex][Index])
+                  MulOp = RoseMulOp.create(Context.genName(), 
+                      [Loop.getIterator(), OpInSecondPack.getOperand(Index)])
+                  DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
+                  NewOp.setOperand(Index, DivOp)
+                  Loop.addAbstraction(MulOp)
+                  Loop.addAbstraction(DivOp)
             else:
               # Just copy this constant over
               print("+++++NewOperand:")
@@ -1411,9 +1421,9 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
       return X
     return X
 
-  LowOffsetsList = list()
-  CoFactactorsList1 = list()
-  CoFactactorsList2 = list()
+  LowOffsetsListMap = list()
+  CoFactactorsListMap1 = list()
+  CoFactactorsListMap2 = list()
   for Index in range(len(Pack1)):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
@@ -1421,9 +1431,9 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
     if isinstance(Op1, RoseCallOp) or Op1.isIndexingBVOp() == False:
       assert isinstance(Op2, RoseCallOp) or Op2.isIndexingBVOp() == False
       assert isinstance(Op3, RoseCallOp) or Op3.isIndexingBVOp() == False
-      LowOffsetsList.append(None)
-      CoFactactorsList1.append(None)
-      CoFactactorsList2.append(None)
+      LowOffsetsListMap.append(None)
+      CoFactactorsListMap1.append(None)
+      CoFactactorsListMap2.append(None)
       continue
     # Now we are dealing with bitvector ops that index into bitvectors
     # First get the start index and get offsets relative to
@@ -1470,10 +1480,10 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
       Cofactor2 = int(Cofactor2)
     assert Offset == int(Offset)
     Offset = int(Offset)
-    LowOffsetsList.append(Offset)
-    CoFactactorsList1.append(Cofactor1)
-    CoFactactorsList2.append(Cofactor2)
-  return LowOffsetsList, CoFactactorsList1, CoFactactorsList2
+    LowOffsetsListMap.append(Offset)
+    CoFactactorsListMap1.append(Cofactor1)
+    CoFactactorsListMap2.append(Cofactor2)
+  return LowOffsetsListMap, CoFactactorsListMap1, CoFactactorsListMap2
 
 
 def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists : list, \
@@ -1493,14 +1503,14 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
   # Now pack the code for inner loops
   for ListOfPackLists in ListOfCandidateIsomorphicPackLists: 
    # Lets get the offsets across windows and other info for generating a loop
-    LowOffsetsList, CoFactactorsList1, CoFactactorsList2 = \
+    LowOffsetsListMap, CoFactactorsListMap1, CoFactactorsListMap2 = \
                 GetIndexRelationsAcrossPacks(ListOfPackLists)
-    print("LowOffsetsList:")
-    print(LowOffsetsList)
-    print("CoFactactorsList1:")
-    print(CoFactactorsList1)
-    print("CoFactactorsList2:")
-    print(CoFactactorsList2)
+    print("LowOffsetsListMap:")
+    print(LowOffsetsListMap)
+    print("CoFactactorsListMap1:")
+    print(CoFactactorsListMap1)
+    print("CoFactactorsListMap2:")
+    print(CoFactactorsListMap2)
     PackList = ListOfPackLists[0]
     Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
     Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
@@ -1540,7 +1550,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         continue
       # Handle instructions with indices as operands
       print("HANDLING THE INSTRUCTIONS WITH INDICES AS OPERANDS")
-      LowCofactor1 = CoFactactorsList1[OpIndex]
+      LowCofactor1 = CoFactactorsListMap1[OpIndex]
       assert LowCofactor1 != None
       if LowCofactor1 == 1:
         ScaledIterator1 = OutIterator
@@ -1557,7 +1567,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
           ScaledIterator1 = RoseMulOp.create(Context.genName("%" + "low.out.cofactor"), \
                                                 [OutIterator, LowCofactorVal1])
         Loop.addAbstraction(ScaledIterator1)
-      LowCofactor2 = CoFactactorsList2[OpIndex]
+      LowCofactor2 = CoFactactorsListMap2[OpIndex]
       assert LowCofactor2 != None
       if LowCofactor2 == 1:
         ScaledIterator2 = Iterator
@@ -1582,7 +1592,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         ScaledIterator = RoseAddOp.create(Context.genName("%" + "low.scaled.it"), \
                                                        [ScaledIterator1, ScaledIterator2])
         Loop.addAbstraction(ScaledIterator)
-      LowOffset = LowOffsetsList[OpIndex]
+      LowOffset = LowOffsetsListMap[OpIndex]
       assert LowOffset != None
       if LowOffset != 0:
         # Generate an add instruction
