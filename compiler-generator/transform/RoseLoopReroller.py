@@ -1300,19 +1300,37 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
               print("----NewOperand:")
               # Check if the next pack has the operation with an operand 
               # at "Index" with a constant value of "Step".
-              OpInSecondPack = PackList[1][OpIndex]
               if LowOffsetsListMap[OpIndex][Index] == Loop.getStep().getValue():
                 NewOp.setOperand(Index, Loop.getIterator())
               else:
                 print("LowOffsetsListMap[OpIndex][Index]:")
                 if LowOffsetsListMap[OpIndex][Index] > 0:
                   print(LowOffsetsListMap[OpIndex][Index])
+                  OpInFirstPack = PackList[0][OpIndex]
+                  OpInSecondPack = PackList[1][OpIndex]
+                  assert OpInFirstPack.getOperand(Index).getValue() \
+                          > OpInSecondPack.getOperand(Index).getValue()
+                  Factor = int(OpInFirstPack.getOperand(Index).getValue() \
+                              / OpInSecondPack.getOperand(Index).getValue())
+                  assert Factor * OpInSecondPack.getOperand(Index).getValue() \
+                            == OpInFirstPack.getOperand(Index).getValue()
+                  FactorVal = RoseConstant.create(Factor, Loop.getStep().getType())
                   MulOp = RoseMulOp.create(Context.genName(), 
-                      [Loop.getIterator(), OpInSecondPack.getOperand(Index)])
+                      [Loop.getIterator(), FactorVal])
                   DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
                   NewOp.setOperand(Index, DivOp)
                   Loop.addAbstraction(MulOp)
                   Loop.addAbstraction(DivOp)
+                else:
+                  # Only support special case for now
+                  assert LowOffsetsListMap[OpIndex][Index] + Loop.getStep().getValue() == 0
+                  SubOp1 = RoseSubOp.create(Context.genName(), 
+                      [Loop.getEndIndex(), Loop.getIterator()])
+                  SubOp2 = RoseSubOp.create(Context.genName(), 
+                            [SubOp1, Loop.getStep()])
+                  NewOp.setOperand(Index, SubOp2)
+                  Loop.addAbstraction(SubOp1)
+                  Loop.addAbstraction(SubOp2)
             else:
               # Just copy this constant over
               print("+++++NewOperand:")
