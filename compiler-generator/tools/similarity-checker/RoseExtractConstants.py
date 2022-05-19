@@ -99,7 +99,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
               return
             if isinstance(DivOp.getOperand(1), RoseConstant):
               if DivOp.getOperand(1) == Bitwidth:
-                DivOp.setOperand(0, Op.getOutputBitwidth())
+                print("FUCK YEAH")
+                DivOp.setOperand(1, Op.getOutputBitwidth())
                 Visited.add(DivOp)
                 return
           else:
@@ -109,7 +110,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                 return
               if isinstance(DivOp.getOperand(0), RoseConstant):
                 if DivOp.getOperand(1) == Bitwidth:
-                  DivOp.setOperand(1, Op.getOutputBitwidth())
+                  print("FUCK YEAH2")
+                  DivOp.setOperand(0, Op.getOutputBitwidth())
                   Visited.add(DivOp)
                   return
     elif isinstance(LowIndex.getOperand(1), RoseConstant):
@@ -138,8 +140,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
               if DivOp in Visited:
                 return
               if isinstance(DivOp.getOperand(0), RoseConstant):
-                if DivOp.getOperand(1) == Bitwidth:
-                  DivOp.setOperand(1, Op.getOutputBitwidth())
+                if DivOp.getOperand(0) == Bitwidth:
+                  DivOp.setOperand(0, Op.getOutputBitwidth())
                   Visited.add(DivOp)
                   return
 
