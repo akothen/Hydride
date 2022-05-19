@@ -642,6 +642,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       Op.print()
   print("--------OpBitwidthEqLoopStepList:")
   print(OpBitwidthEqLoopStepList)
+  IndicesToBitwidth = dict()
   for Op in reversed(OpList):
     if Op in Visited:
       print("ALREADY VISITED")
@@ -787,6 +788,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           for IndexingOp in GatherIndexingOps(Op):
             IndexingOps.add(IndexingOp)
           Visited.add(Op)
+          IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
           continue
         if Op in BVValToBitwidthVal:
           Op.setOperand(Op.getBitwidthPos(), BVValToBitwidthVal[Op])
@@ -801,6 +803,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           print("MODIFIED EXTRACT OP:")
           Op.print()
           AddBitwidthValForUnknownVal(Op, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
+        elif (Op.getLowIndex(), Op.getHighIndex()) in IndicesToBitwidth:
+          BitwidthVal = IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())]
+          Op.setOperand(Op.getBitwidthPos(), BitwidthVal)
+          Op.setType(RoseBitVectorType.create(BitwidthVal))
+          BVValToBitwidthVal[Op] = Op.getOperand(Op.getBitwidthPos())
         else:
           # Add a new argument
           Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
@@ -822,6 +829,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         for IndexingOp in GatherIndexingOps(Op):
           IndexingOps.add(IndexingOp)
       Visited.add(Op)
+      IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
       continue
 
     if isinstance(Op, RoseBVInsertSliceOp):
@@ -846,6 +854,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         # Map the output bitwidth of corresponding bvinsert, if any.
         if CorrespondingCondOp in CondBlocksBVInsertsMap:
           BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
+        IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
         continue
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
       print("Loop.getParentOfType(RoseForLoop):")
@@ -871,6 +880,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           Op.setOperand(Op.getBitwidthPos(), BVValToBitwidthVal[Op])
           Op.setType(RoseBitVectorType.create(BVValToBitwidthVal[Op]))
           BVValToBitwidthVal[Op] =  Op.getOperand(Op.getBitwidthPos())
+        elif (Op.getLowIndex(), Op.getHighIndex()) in IndicesToBitwidth:
+          BitwidthVal = IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())]
+          Op.setOperand(Op.getBitwidthPos(), BitwidthVal)
+          Op.setType(RoseBitVectorType.create(BitwidthVal))
+          BVValToBitwidthVal[Op] = Op.getOperand(Op.getBitwidthPos())
         else:
           # Add a new argument
           Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
@@ -905,6 +919,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           print("CorrespondingCondOp:")
           CorrespondingCondOp.print()
           BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
+      IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
       continue
   return
 
