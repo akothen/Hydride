@@ -5,7 +5,6 @@
 #############################################################
 
 
-from re import L
 from RoseValue import RoseValue
 from RoseAbstractions import *
 from RoseValues import *
@@ -218,7 +217,7 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
           Visited.add(LowIndex)
           Visited.add(LastIdx)
           return
-        elif LowIndex.getOperand(1).getValue() ==  ArgToConstantValsMap[LoopStep].getValue() - 1:
+        elif LowIndex.getOperand(1).getValue() == ArgToConstantValsMap[LoopStep].getValue() - 1:
           LowIndex.getOperand(0) == LoopIterator
           One = RoseConstant.create(1, LoopStep.getType())
           LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [LoopStep, One])
@@ -386,20 +385,22 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
     if LowIndex.getOpcode().typesOfInputsAndOutputEqual() \
       or LowIndex.getOpcode().typesOfOperandsAreEqual():
       assert len(LowIndex.getOperands()) == 2
-      if isinstance(LowIndex.getOperand(0), RoseDivOp):
-        DivOp = LowIndex.getOperand(0)
-        if isinstance(DivOp.getOperand(1), RoseConstant):
-          assert DivOp.getOperand(0) == LoopIterator
-          DivOp.setOperand(1, LoopStep)
-          Visited.add(DivOp)
-          return
-      elif isinstance(LowIndex.getOperand(1), RoseDivOp):
-        DivOp = LowIndex.getOperand(1)
-        if isinstance(DivOp.getOperand(1), RoseConstant):
-          assert DivOp.getOperand(0) == LoopIterator
-          DivOp.setOperand(1, LoopStep)
-          Visited.add(DivOp)
-          return 
+      Worklist = [LowIndex.getOperand(0), LowIndex.getOperand(1)]
+      while len(Worklist) != 0:
+        Operation = Worklist.pop()
+        if not isinstance(Operation, RoseOperation):
+          continue
+        if Operation.getOpcode().typesOfInputsAndOutputEqual() \
+          or Operation.getOpcode().typesOfOperandsAreEqual():   
+          if isinstance(Operation, RoseDivOp):
+            if isinstance(Operation.getOperand(1), RoseConstant):
+              assert Operation.getOperand(0) == LoopIterator
+              Operation.setOperand(1, LoopStep)
+              Visited.add(Operation)
+            return
+          Worklist.extend(Operation.getOperands())
+          continue
+  return
 
 
 def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
