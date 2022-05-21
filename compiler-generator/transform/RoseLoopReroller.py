@@ -1784,11 +1784,14 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   FirstOp = Block.getOperation(0)
 
   # Put the ExternalOperand ops in the beginning of the loop
+  LastInsertOp = RoseUndefValue()
   for Index, Op in enumerate(ExternalOperands):
     print("TEMP:")
     Op.print()
     # Get the new op for external operand
     NewOp = CloneAndInsertOperation(Op, FirstOp, Context)
+    print("NEWOP:")
+    NewOp.print()
     # Get the indices
     if isinstance(InsertOpLowIndex, RoseOperation):
       LowIndex = CloneAndInsertOperation(InsertOpLowIndex, FirstOp, Context)
@@ -1830,6 +1833,10 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
       InsertOp = RoseBVInsertSliceOp.create(NewOp, BVInsertOp.getInputBitVector(), \
                                           LowIndex, HighIndex, BitwidthVal)
       Block.addOperationBefore(InsertOp, FirstOp)
+      LastInsertOp = InsertOp
+
+  print("^^^^^FIXED BLOCK:")
+  Block.print()
 
   # Insert bvinserts after TempValues
   for Op in TempValues:
@@ -1930,14 +1937,32 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   print("++++++FIXED BLOCK:")
   Block.print()
 
+  # Create a new block
+  FirstBlock = Block.create()
+  ParentRegion = Block.getParent()
+  ParentKey = ParentRegion.getKeyForChild(Block)
+  Index = ParentRegion.getPosOfChild(Block, ParentKey)
+  ParentRegion.addRegionBefore(Index, FirstBlock, ParentKey)
+
+  # Add instructions to the first block
+  OpList = list()
+  OpList.extend(Block.getOperations())
+  for Op in OpList:
+    Block.removeOperation(Op)
+    FirstBlock.addOperation(Op)
+    if Op == LastInsertOp:
+      break
+
   # Now let's split this block 
-  print("FirstOp:")
-  FirstOp.print()
-  NewBlock = Block.splitAt(Block.getPosOfChild(FirstOp))
-  VisitedRegion.add(NewBlock)
+  #print("LastInsertOp:")
+  #LastInsertOp.print()
+  #NewBlock = Block.splitAt(Block.getPosOfChild(LastInsertOp) + 1)
+  VisitedRegion.add(FirstBlock)
 
   print("FIXED BLOCK:")
   Block.print()
+  print("FIRST BLOCK:")
+  FirstBlock.print()
   return True
 
 
