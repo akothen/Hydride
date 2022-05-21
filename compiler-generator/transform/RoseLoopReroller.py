@@ -786,6 +786,8 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
   for Abstraction in Region: #Region.getChildren():
+    print("NEXT ABSTRACTION:")
+    Abstraction.print()
     # Run reroller on a nested function
     if isinstance(Abstraction, RoseFunction):
       RunRerollerOnFunction(Abstraction, Context)
@@ -796,11 +798,16 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
       BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
                                             BlockToRerollableCandidatesMap, Context)
       continue
+    if Abstraction in VisitedRegion:
+      continue
     if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
       if FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
         FixReductionPattern3ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
                                             BlockToRerollableCandidatesMap)
+    print("^^^^^^^ABSTRACTION:")
+    Abstraction.print()
+    VisitedRegion.add(Abstraction)
   VisitedRegion.add(Region)
   return BlockToRerollableCandidatesMap
 
@@ -1709,6 +1716,8 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
                               Context : RoseContext, VisitedRegion : set = set()):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPatternToMakeBlockRerollable")
+  print("BLOCK:")
+  Block.print()
   # Look for chains of bvadd ops
   BVAddChain = list()
   BVInsertOp = RoseUndefValue()
@@ -1970,6 +1979,8 @@ def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, \
                           Context : RoseContext, VisitedRegion : set = set()):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
   print("FixReductionPattern2ToMakeBlockRerollable")
+  print("BLOCK:")
+  Block.print()
   # Look for chains of bvadd ops
   Function = Block.getFunction()
   BVExtractOps = list()
