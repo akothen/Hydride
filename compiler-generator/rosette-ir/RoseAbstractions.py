@@ -11,8 +11,6 @@ from RoseTypes import *
 from RoseValue import RoseValue
 from RoseRegion import RoseRegion
 
-from copy import deepcopy
-
 
 ####################################### ROSE UNDEF REGION #######################################
 
@@ -42,8 +40,6 @@ class RoseFunction(RoseValue, RoseRegion):
     # Sanity checks
     for ArgIndex, Arg in enumerate(ArgsList):
         assert isinstance(Arg, RoseArgument)
-    print("ArgsList:")
-    print(ArgsList)
     ArgTyList = [Arg.getType() for Arg in ArgsList]
     FunctionType = RoseFunctionType.create(ArgTyList, RetType)
     self.ArgList = ArgsList
@@ -111,7 +107,7 @@ class RoseFunction(RoseValue, RoseRegion):
       return self.cloneRegion()
     ClonedArgsList = list()
     for Arg in self.getArgs():
-      ClonedArg = Arg.clone(Suffix)
+      ClonedArg = Arg.clone(Arg.getName() + "." + Suffix)
       ValueToValueMap[Arg] = ClonedArg
       ClonedArgsList.append(ClonedArg)
     FunctionName = self.getName() + "." + Suffix
@@ -122,10 +118,6 @@ class RoseFunction(RoseValue, RoseRegion):
       and not isinstance(ReturnValue, RoseArgument):
       ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
       ClonedFunction.setRetVal(ClonedReturnVal)
-      print("ReturnValue:")
-      ReturnValue.print()
-      print("ClonedReturnVal:")
-      ClonedReturnVal.print()
       ValueToValueMap[ReturnValue] = ClonedReturnVal
     for Abstraction in self:
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
@@ -291,16 +283,9 @@ class RoseBlock(RoseRegion):
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
     Users = list()
-    print("Abstraction:")
-    Abstraction.print()
     for Op in self.getOperations():
-      print("CHECK OPERATION:")
-      Op.print()
       if Op.usesValue(Abstraction):
-        print("TRUE")
         Users.append(Op)
-    print("Users list:")
-    print(Users)
     return Users
 
   def getNumUsersInRegion(self, Abstraction):
@@ -308,16 +293,9 @@ class RoseBlock(RoseRegion):
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
     NumUsers = 0
-    print("Abstraction:")
-    Abstraction.print()
     for Op in self.getOperations():
-      print("CHECK OPERATION:")
-      Op.print()
       if Op.usesValue(Abstraction):
-        print("TRUE")
         NumUsers += 1
-    print("Users NUM:")
-    print(NumUsers)
     return NumUsers
 
   # Insert the given op in the end of the block
@@ -369,14 +347,16 @@ class RoseBlock(RoseRegion):
     # Ensure this operation does not have any uses left.
     # This is to prevent deletion of operations before their
     # uses are removed/fixed.
-    print("OPERATION TO BE ERASED:")
-    #Operation.print()
     Function = self.getFunction()
-    #self.print()
-    Operation.print()
     assert not Function.hasUsesOf(Operation)
-    print("NO USES")
     self.eraseChild(Operation)
+  
+  # This helps remove an instruction from this block with
+  # an expectation that operation will be used again.
+  def removeOperation(self, Operation):
+    self.eraseChild(Operation)
+    return Operation
+
 
 
 ####################################### ROSE LOOP ############################################
