@@ -1153,193 +1153,251 @@ test165 = {
 
 
 test166 = {
- 'Vd.b=vsplat(Rt)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = Rt ;}',
+ 'hexagon_V6_vrmpybv_128B': {'hvx_intrinsic': 'Vd.w=vrmpy(Vu.b,Vv.b)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                '(Vu.w[i].b[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                                '(Vu.w[i].b[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                                '(Vu.w[i].b[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                                '(Vu.w[i].b[3] * Vv.w[i].b[3]) ;}'},
 }
 
 
-# fails
 test167 = {
- 'Qd4=vsetq2(Rt)': 'for(i = 0; i < VWIDTH; i++) QdV[i]=(i <= ((Rt-1)& '
-                   '(VWIDTH-1))) ? 1 : 0;',
+ 'hexagon_V6_vrmpybusv_128B': {'hvx_intrinsic': 'Vd.w=vrmpy(Vu.ub,Vv.b)',
+                          'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                  '(Vu.uw[i].ub[0] * Vv.w[i].b[0]);Vd.w[i] += '
+                                  '(Vu.uw[i].ub[1] * Vv.w[i].b[1]);Vd.w[i] += '
+                                  '(Vu.uw[i].ub[2] * Vv.w[i].b[2]);Vd.w[i] += '
+                                  '(Vu.uw[i].ub[3] * Vv.w[i].b[3]) ;}'},
 }
 
 test168 = {
- 'Qd4=vcmp.gt(Vu.h,Vv.h)': 'for( i = 0; i < VWIDTH; i += 2) {QdV[i+2-1:i] = '
-                           '((Vu.h[i/2] > Vv.h[i/2]) ?0x3 : 0);}',
+ 'hexagon_V6_vrmpyubv_128B': {'hvx_intrinsic': 'Vd.uw=vrmpy(Vu.ub,Vv.ub)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.uw[i] = '
+                                 '(Vu.uw[i].ub[0] *Vv.uw[i].ub[0]);Vd.uw[i] += '
+                                 '(Vu.uw[i].ub[1] *Vv.uw[i].ub[1]);Vd.uw[i] += '
+                                 '(Vu.uw[i].ub[2] *Vv.uw[i].ub[2]);Vd.uw[i] += '
+                                 '(Vu.uw[i].ub[3] *Vv.uw[i].ub[3]) ;}'},
 }
 
 test169 = {
- 'Vd=vmux(Qt4,Vu,Vv)': 'for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = QtV[i] ? '
-                       'Vu.ub[i] : Vv.ub[i] ;}',
+ 'hexagon_V6_vrmpybus_128B': {'hvx_intrinsic': 'Vd.w=vrmpy(Vu.ub,Rt.b)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                 '(Vu.uw[i].ub[0] * Rt.b[0]);Vd.w[i] += '
+                                 '(Vu.uw[i].ub[1] * Rt.b[1]);Vd.w[i] += '
+                                 '(Vu.uw[i].ub[2] * Rt.b[2]);Vd.w[i] += '
+                                 '(Vu.uw[i].ub[3] * Rt.b[3]) ;}'},
 }
 
 test170 = {
-    'Vdd.b=vadd(Vuu.b,Vvv.b):sat': 'for (i = 0; i < VELEM(8); i++) {Vdd.v[0].b[i] '
-                                '=sat8(Vuu.v[0].b[i]+Vvv.v[0].b[i]);Vdd.v[1].b[i] '
-                                '=sat8(Vuu.v[1].b[i]+Vvv.v[1].b[i]) ;}',
+ 'hexagon_V6_vmpyhv_acc_128B': {'hvx_intrinsic': 'Vxx.w+=vmpy(Vu.h,Vv.h)',
+                           'spec': 'for (i = 0; i < VELEM(32); i++) '
+                                   '{Vxx.v[0].w[i] += (Vu.w[i].h[0] '
+                                   '*Vv.w[i].h[0]);Vxx.v[1].w[i] += '
+                                   '(Vu.w[i].h[1] *Vv.w[i].h[1]) ;}'},
 }
 
 test171 = {
- 'Vdd.b=vadd(Vuu.b,Vvv.b)': 'for (i = 0; i < VELEM(8); i++) {Vdd.v[0].b[i] '
-                            '=(Vuu.v[0].b[i]+Vvv.v[0].b[i]);Vdd.v[1].b[i] '
-                            '=(Vuu.v[1].b[i]+Vvv.v[1].b[i]) ;}',
+ 'hexagon_V6_vmpyhus_acc_128B': {'hvx_intrinsic': 'Vxx.w+=vmpy(Vu.h,Vv.uh)',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) '
+                                    '{Vxx.v[0].w[i] += (Vu.w[i].h[0] '
+                                    '*Vv.uw[i].uh[0]);Vxx.v[1].w[i] += '
+                                    '(Vu.w[i].h[1] *Vv.uw[i].uh[1]) ;}'},
 }
 
 test172 = {
- 'if (!Qv4) Vx.w+=Vu.w': 'for (i = 0; i < VELEM(32); i++) '
-                         '{Vx.w[i]=select_bytes(QvV,i,Vx.w[i],Vx.w[i]+Vu.w[i]) '
-                         ';}',
+ 'hexagon_V6_vmpybusv_acc_128B': {'hvx_intrinsic': 'Vxx.h+=vmpy(Vu.ub,Vv.b)',
+                             'spec': 'for (i = 0; i < VELEM(16); i++) '
+                                     '{Vxx.v[0].h[i] += (Vu.uh[i].ub[0] '
+                                     '*Vv.h[i].b[0]);Vxx.v[1].h[i] += '
+                                     '(Vu.uh[i].ub[1] *Vv.h[i].b[1]) ;}'},
 }
 
 test173 = {
- 'if (!Qv4) Vx.h-=Vu.h': 'for (i = 0; i < VELEM(16); i--) '
-                         '{Vx.h[i]=select_bytes(QvV,i,Vx.h[i],Vx.h[i]-Vu.h[i]) '
-                         ';}',
+ 'hexagon_V6_vmpybv_acc_128B': {'hvx_intrinsic': 'Vxx.h+=vmpy(Vu.b,Vv.b)',
+                           'spec': 'for (i = 0; i < VELEM(16); i++) '
+                                   '{Vxx.v[0].h[i] += (Vu.h[i].b[0] '
+                                   '*Vv.h[i].b[0]);Vxx.v[1].h[i] += '
+                                   '(Vu.h[i].b[1] *Vv.h[i].b[1]) ;}'},
 }
 
 test174 = {
- 'if (!Qv4) Vx.h+=Vu.h': 'for (i = 0; i < VELEM(16); i++) '
-                         '{Vx.h[i]=select_bytes(QvV,i,Vx.h[i],Vx.h[i]+Vu.h[i]) '
-                         ';}',
+ 'hexagon_V6_vmpyewuh_128B': {'hvx_intrinsic': 'Vd.w=vmpye(Vu.w,Vv.uh)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                 '(Vu.w[i] * Vv.w[i].uh[0]) >> 16 ;}'},
 }
 
 test175 = {
- 'if (!Qv4) Vx.w-=Vu.w': 'for (i = 0; i < VELEM(32); i--) '
-                         '{Vx.w[i]=select_bytes(QvV,i,Vx.w[i],Vx.w[i]-Vu.w[i]) '
-                         ';}',
+ 'hexagon_V6_vmpyowh_rnd_128B': {'hvx_intrinsic': 'Vd.w=vmpyo(Vu.w,Vv.h):<<1:rnd:sat',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] '
+                                    '= sat32(((((Vu.w[i] * Vv.w[i].h[1])>> 14) '
+                                    '+ 1) >> 1)) ;}'},
 }
 
 test176 = {
- 'if (Qv4) Vx.w+=Vu.w': 'for (i = 0; i < VELEM(32); i++) '
-                        '{Vx.w[i]=select_bytes(QvV,i,Vx.w[i],Vx.w[i]+Vu.w[i]) '
-                        ';}',
+ 'hexagon_V6_vmpyowh_128B': {'hvx_intrinsic': 'Vd.w=vmpyo(Vu.w,Vv.h):<<1:sat',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                'sat32(((((Vu.w[i] * Vv.w[i].h[1])>> 14) + 1) '
+                                '>> 1)) ;}'},
 }
 
 test177 = {
- 'if (Qv4) Vx.w-=Vu.w': 'for (i = 0; i < VELEM(32); i--) '
-                        '{Vx.w[i]=select_bytes(QvV,i,Vx.w[i],Vx.w[i]-Vu.w[i]) '
-                        ';}',
+ 'hexagon_V6_vmpyowh_rnd_sacc_128B': {'hvx_intrinsic': 'Vx.w+=vmpyo(Vu.w,Vv.h):<<1:rnd:sat:shift',
+                                 'spec': 'for (i = 0; i < VELEM(32); i++) '
+                                         '{Vx.w[i] = sat32(((((Vx.w[i] + '
+                                         '(Vu.w[i] *Vv.w[i].h[1])) >> 14) + 1) '
+                                         '>> 1)) ;}'},
 }
 
 test178 = {
- 'if (Qv4) Vx.h-=Vu.h': 'for (i = 0; i < VELEM(16); i--) '
-                        '{Vx.h[i]=select_bytes(QvV,i,Vx.h[i],Vx.h[i]-Vu.h[i]) '
-                        ';}',
+ 'hexagon_V6_vmpyowh_sacc_128B': {'hvx_intrinsic': 'Vx.w+=vmpyo(Vu.w,Vv.h):<<1:sat:shift',
+                             'spec': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] '
+                                     '= sat32(((((Vx.w[i] + (Vu.w[i] '
+                                     '*Vv.w[i].h[1])) >> 14) + 1) >> 1)) ;}'},
 }
 
 test179 = {
- 'if (Qv4) Vx.h+=Vu.h': 'for (i = 0; i < VELEM(16); i++) '
-                        '{Vx.h[i]=select_bytes(QvV,i,Vx.h[i],Vx.h[i]+Vu.h[i]) '
-                        ';}',
+ 'hexagon_V6_vmpyieoh_128B': {'hvx_intrinsic': 'Vd.w=vmpyieo(Vu.h,Vv.h)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                 '(Vu.w[i].h[0]*Vv.w[i].h[1]) << 16;}'},
 }
 
 test180 = {
- 'if (Qv4) Vx.b-=Vu.b': 'for (i = 0; i < VELEM(8); i--) {Vx.ub[i]=QvV.i ? '
-                        'Vx.ub[i] : Vx.ub[i]-Vu.ub[i] ;}',
+ 'hexagon_V6_vdmpyhsat_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vu.h,Rt.h):sat',
+                          'spec': 'for (i = 0; i < VELEM(32); i++) {accum = '
+                                  '(Vu.w[i].h[0] * Rt.h[0]);accum += '
+                                  '(Vu.w[i].h[1] * Rt.h[1]);Vd.w[i] = '
+                                  'sat32(accum) ;}'},
 }
 
-# fails
 test181 = {
- 'if (!Ps) Vdd=vcombine(Vu,Vv)': 'if (!Ps[0]) {for (i = 0; i < VELEM(8); i++) '
-                                 '{Vdd.v[0].ub[i] = Vv.ub[i];Vdd.v[1].ub[i] = '
-                                 'Vu.ub[i];}} else {NOP;}',
+ 'hexagon_V6_vdmpyhsusat_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vu.h,Rt.uh):sat',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) {accum = '
+                                    '(Vu.w[i].h[0] * Rt.uh[0]);accum += '
+                                    '(Vu.w[i].h[1] * Rt.uh[1]);Vd.w[i] = '
+                                    'sat32(accum) ;}'},
 }
 
-# fails
 test182 = {
- 'if (Ps) Vd=Vu': 'if (Ps[0]) {for (i = 0; i < VELEM(8); i++) {Vd.ub[i] = '
-                  'Vu.ub[i];}} else {NOP;}',
+ 'hexagon_V6_vdmpyhisat_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vuu.h,Rt.h):sat',
+                           'spec': 'for (i = 0; i < VELEM(32); i++) {accum = '
+                                   '(Vuu.v[0].w[i].h[1] * Rt.h[0]);accum += '
+                                   '(Vuu.v[1].w[i].h[0] * Rt.h[1]);Vd.w[i] = '
+                                   'sat32(accum) ;}'}, 
 }
 
 test183 = {
- 'Qd4=vcmp.gt(Vu.uw,Vv.uw)': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
-                             '((Vu.uw[i/4] > Vv.uw[i/4]) ?0xF : 0);}',
+ 'hexagon_V6_vdmpyhsuisat_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vuu.h,Rt.uh,#1):sat',
+                             'spec': 'for (i = 0; i < VELEM(32); i++) {accum = '
+                                     '(Vuu.v[0].w[i].h[1] * Rt.uh[0]);accum += '
+                                     '(Vuu.v[1].w[i].h[0] * Rt.uh[1]);Vd.w[i] '
+                                     '= sat32(accum) ;}'},
 }
 
 test184 = {
- 'Qd4=vcmp.gt(Vu.w,Vv.w)': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
-                           '((Vu.w[i/4] > Vv.w[i/4]) ?0xF : 0);}',
+ 'hexagon_V6_vdmpyhvsat_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vu.h,Vv.h):sat',
+                           'spec': 'for (i = 0; i < VELEM(32); i++) {accum = '
+                                   '(Vu.w[i].h[0] * Vv.w[i].h[0]);accum += '
+                                   '(Vu.w[i].h[1] * Vv.w[i].h[1]);Vd.w[i] = '
+                                   'sat32(accum) ;}'},
 }
 
 test185 = {
- 'Qd4=vcmp.gt(Vu.uh,Vv.uh)': 'for( i = 0; i < VWIDTH; i += 2) {QdV[i+2-1:i] = '
-                             '((Vu.uh[i/2] > Vv.uh[i/2]) ?0x3 : 0);}',
+ 'hexagon_V6_vmpybus_128B': {'hvx_intrinsic': 'Vdd.h=vmpy(Vu.ub,Rt.b)',
+                        'spec': 'for (i = 0; i < VELEM(16); i++) '
+                                '{Vdd.v[0].h[i] = (Vu.uh[i].ub[0] '
+                                '*Rt.b[(2*i+0)%4]);Vdd.v[1].h[i] = '
+                                '(Vu.uh[i].ub[1] *Rt.b[(2*i+1)%4]) ;}'},
 }
 
 test186 = {
- 'Qd4=vcmp.gt(Vu.ub,Vv.ub)': 'for( i = 0; i < VWIDTH; i += 1) {QdV[i+1-1:i] = '
-                             '((Vu.ub[i/1] > Vv.ub[i/1]) ?0x1 : 0);}',
+ 'hexagon_V6_vmpyihb_128B': {'hvx_intrinsic': 'Vd.h=vmpyi(Vu.h,Rt.b)',
+                        'spec': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                                '(Vu.h[i] * Rt.b[i % 4]) ;}'},
 }
 
 test187 = {
- 'Qd4=vcmp.eq(Vu.w,Vv.w)': 'for( i = 0; i < VWIDTH; i += 4) {QdV[i+4-1:i] = '
-                           '((Vu.w[i/4] == Vv.w[i/4]) ?0xF : 0);}',
+ 'hexagon_V6_vmpyihb_acc_128B': {'hvx_intrinsic': 'Vx.h+=vmpyi(Vu.h,Rt.b)',
+                            'spec': 'for (i = 0; i < VELEM(16); i++) {Vx.h[i] '
+                                    '+= (Vu.h[i] * Rt.b[i % 4]) ;}'},
 }
 
 test188 = {
- 'Qx4&=vcmp.eq(Vu.b,Vv.b)': 'for( i = 0; i < VWIDTH; i += 1) {QxV[i+1-1:i] = '
-                            'QxV[i+1-1:i] & ((Vu.b[i/1]== Vv.b[i/1]) ? 0x1 : '
-                            '0);}',
+ 'hexagon_V6_vmpyiwub_acc_128B': {'hvx_intrinsic': 'Vx.w+=vmpyi(Vu.w,Rt.ub)',
+                             'spec': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] '
+                                     '+= (Vu.w[i] * Rt.ub[i % 4]) ;}'},
 }
 
 test189 = {
- 'Qx4&=vcmp.eq(Vu.h,Vv.h)': 'for( i = 0; i < VWIDTH; i += 2) {QxV[i+2-1:i] = '
-                            'QxV[i+2-1:i] & ((Vu.h[i/2]== Vv.h[i/2]) ? 0x3 : '
-                            '0);}',
+ 'hexagon_V6_vmpyiwub_128B': {'hvx_intrinsic': 'Vd.w=vmpyi(Vu.w,Rt.ub)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                 '(Vu.w[i] * Rt.ub[i % 4]) ;}'},
 }
 
 test190 = {
- 'Qx4&=vcmp.eq(Vu.w,Vv.w)': 'for( i = 0; i < VWIDTH; i += 4) {QxV[i+4-1:i] = '
-                            'QxV[i+4-1:i] & ((Vu.w[i/4]== Vv.w[i/4]) ? 0xF : '
-                            '0);}',
+ 'hexagon_V6_vmpyiwh_acc_128B': {'hvx_intrinsic': 'Vx.w+=vmpyi(Vu.w,Rt.h)',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] '
+                                    '+= (Vu.w[i] * Rt.h[i % 2]) ;}'},
 }
 
 test191 = {
- 'Qx4&=vcmp.gt(Vu.ub,Vv.ub)': 'for( i = 0; i < VWIDTH; i += 1) {QxV[i+1-1:i] = '
-                              'QxV[i+1-1:i] &((Vu.ub[i/1] > Vv.ub[i/1]) ? 0x1 '
-                              ': 0);}',
+ 'hexagon_V6_vmpyiwh_128B': {'hvx_intrinsic': 'Vd.w=vmpyi(Vu.w,Rt.h)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                '(Vu.w[i] * Rt.h[i % 2]) ;}'},
 }
 
 test192 = {
- 'Qx4&=vcmp.gt(Vu.uh,Vv.uh)': 'for( i = 0; i < VWIDTH; i += 2) {QxV[i+2-1:i] = '
-                              'QxV[i+2-1:i] &((Vu.uh[i/2] > Vv.uh[i/2]) ? 0x3 '
-                              ': 0);}',
+ 'hexagon_V6_vmpyiwb_acc_128B': {'hvx_intrinsic': 'Vx.w+=vmpyi(Vu.w,Rt.b)',
+                            'spec': 'for (i = 0; i < VELEM(32); i++) {Vx.w[i] '
+                                    '+= (Vu.w[i] * Rt.b[i % 4]) ;}'},
 }
 
 test193 = {
- 'Qx4&=vcmp.gt(Vu.uw,Vv.uw)': 'for( i = 0; i < VWIDTH; i += 4) {QxV[i+4-1:i] = '
-                              'QxV[i+4-1:i] &((Vu.uw[i/4] > Vv.uw[i/4]) ? 0xF '
-                              ': 0);}',
+ 'hexagon_V6_vmpyiwb_128B': {'hvx_intrinsic': 'Vd.w=vmpyi(Vu.w,Rt.b)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                '(Vu.w[i] * Rt.b[i % 4]) ;}'},
 }
 
 test194 = {
- 'Qx4&=vcmp.gt(Vu.w,Vv.w)': 'for( i = 0; i < VWIDTH; i += 4) {QxV[i+4-1:i] = '
-                            'QxV[i+4-1:i] & ((Vu.w[i/4]> Vv.w[i/4]) ? 0xF : '
-                            '0);}',
+ 'hexagon_V6_vdmpyhsat_acc_128B': {'hvx_intrinsic': 'Vx.w+=vdmpy(Vu.h,Rt.h):sat',
+                              'spec': 'for (i = 0; i < VELEM(32); i++) {accum '
+                                      '= Vx.w[i];accum += (Vu.w[i].h[0] * '
+                                      'Rt.h[0]);accum += (Vu.w[i].h[1] * '
+                                      'Rt.h[1]);Vx.w[i] = sat32(accum) ;}'},
 }
 
 test195 = {
- 'Qx4^=vcmp.eq(Vu.b,Vv.b)': 'for( i = 0; i < VWIDTH; i += 1) {QxV[i+1-1:i] = '
-                            'QxV[i+1-1:i] ^ ((Vu.b[i/1] ==Vv.b[i/1]) ? 0x1 : '
-                            '0);}',
+ 'hexagon_V6_vdmpyhisat_acc_128B': {'hvx_intrinsic': 'Vx.w+=vdmpy(Vuu.h,Rt.h):sat',
+                               'spec': 'for (i = 0; i < VELEM(32); i++) {accum '
+                                       '= Vx.w[i];accum += (Vuu.v[0].w[i].h[1] '
+                                       '* Rt.h[0]);accum += '
+                                       '(Vuu.v[1].w[i].h[0] * Rt.h[1]);Vx.w[i] '
+                                       '= sat32(accum) ;}'},
 }
 
 test196 = {
- 'Qx4^=vcmp.eq(Vu.h,Vv.h)': 'for( i = 0; i < VWIDTH; i += 2) {QxV[i+2-1:i] = '
-                            'QxV[i+2-1:i] ^ ((Vu.h[i/2] ==Vv.h[i/2]) ? 0x3 : '
-                            '0);}',
+ 'hexagon_V6_vdmpyhsusat_acc_128B': {'hvx_intrinsic': 'Vx.w+=vdmpy(Vu.h,Rt.uh):sat',
+                                'spec': 'for (i = 0; i < VELEM(32); i++) '
+                                        '{accum=Vx.w[i];accum += (Vu.w[i].h[0] '
+                                        '* Rt.uh[0]);accum += (Vu.w[i].h[1] * '
+                                        'Rt.uh[1]);Vx.w[i] = sat32(accum) ;}'},
 }
 
 test197 = {
- 'Qx4^=vcmp.eq(Vu.w,Vv.w)': 'for( i = 0; i < VWIDTH; i += 4) {QxV[i+4-1:i] = '
-                            'QxV[i+4-1:i] ^ ((Vu.w[i/4] ==Vv.w[i/4]) ? 0xF : '
-                            '0);}',
+ 'hexagon_V6_vdmpyhsuisat_acc_128B': {'hvx_intrinsic': 'Vx.w+=vdmpy(Vuu.h,Rt.uh,#1):sat',
+                                 'spec': 'for (i = 0; i < VELEM(32); i++) '
+                                         '{accum=Vx.w[i];accum += '
+                                         '(Vuu.v[0].w[i].h[1] * '
+                                         'Rt.uh[0]);accum += '
+                                         '(Vuu.v[1].w[i].h[0] * '
+                                         'Rt.uh[1]);Vx.w[i] = sat32(accum) ;}'},
 }
 
 test198 = {
- 'Qx4^=vcmp.gt(Vu.b,Vv.b)': 'for( i = 0; i < VWIDTH; i += 1) {QxV[i+1-1:i] = '
-                            'QxV[i+1-1:i] ^ ((Vu.b[i/1] >Vv.b[i/1]) ? 0x1 : '
-                            '0);}',
+ 'hexagon_V6_vdmpybus_128B': {'hvx_intrinsic': 'Vd.h=vdmpy(Vu.ub,Rt.b)',
+                         'spec': 'for (i = 0; i < VELEM(16); i++) {Vd.h[i] = '
+                                 '(Vu.uh[i].ub[0] * Rt.b[(2*i) %4]);Vd.h[i] += '
+                                 '(Vu.uh[i].ub[1] *Rt.b[(2*i+1)%4]) ;}'},
 }
 
 test199 = {
@@ -1436,7 +1494,7 @@ test213 = {
 from RoseHexPseudoCodeParser import *
 
 def Compile():
-   Test = test165
+   Test = test198
    SemaList = list()
    for Name, Dictionary in Test.items():
       Pseudocode = Dictionary['spec']
