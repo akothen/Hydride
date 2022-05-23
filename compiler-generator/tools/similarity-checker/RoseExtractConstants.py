@@ -80,7 +80,13 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
   if LowIndex in Visited:
     return
   Block = Op.getParent()
-  if isinstance(LowIndex,  RoseMulOp):
+  print("FixLowIndices OP:")
+  Op.print()
+  print("Bitwidth:")
+  Bitwidth.print()
+  if isinstance(LowIndex, RoseMulOp):
+    print("MUL OP:")
+    LowIndex.print()
     assert len(LowIndex.getOperands()) == 2
     if isinstance(LowIndex.getOperand(0), RoseConstant):
       if LowIndex.getOperand(0) == Bitwidth:
@@ -88,62 +94,126 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
         Visited.add(LowIndex)
         if isinstance(LowIndex.getOperand(1), RoseOperation):
           IntermediateOp = LowIndex.getOperand(1)
+          print("IntermediateOp:")
+          IntermediateOp.print()
           assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
             and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
           assert len(IntermediateOp.getOperands()) == 2
           if IntermediateOp in Visited:
             return
-          DivOp = IntermediateOp.getOperand(0)
-          if isinstance(DivOp, RoseDivOp):
-            if DivOp in Visited:
-              return
-            if isinstance(DivOp.getOperand(1), RoseConstant):
-              if DivOp.getOperand(1) == Bitwidth:
-                print("FUCK YEAH")
-                DivOp.setOperand(1, Op.getOutputBitwidth())
-                Visited.add(DivOp)
-                return
-          else:
-            DivOp = IntermediateOp.getOperand(1)
-            if isinstance(DivOp, RoseDivOp):
-              if DivOp in Visited:
-                return
-              if isinstance(DivOp.getOperand(0), RoseConstant):
-                if DivOp.getOperand(1) == Bitwidth:
-                  print("FUCK YEAH2")
-                  DivOp.setOperand(0, Op.getOutputBitwidth())
-                  Visited.add(DivOp)
-                  return
+          assert len(IntermediateOp.getOperands()) == 2
+          Worklist = [IntermediateOp.getOperand(0), IntermediateOp.getOperand(1)]
+          while len(Worklist) != 0:
+            Operation = Worklist.pop()
+            print("Operation in loop:")
+            Operation.print()
+            if not isinstance(Operation, RoseOperation):
+              continue
+            if Operation.getOpcode().typesOfInputsAndOutputEqual() \
+              or Operation.getOpcode().typesOfOperandsAreEqual():   
+              print("--Operation in loop:")
+              Operation.print()
+              if isinstance(Operation, RoseDivOp):
+                if isinstance(Operation.getOperand(1), RoseConstant):
+                  if type(Operation.getOperand(1)) == type(Bitwidth):
+                    print("HERE")
+                    Bitwidth.print()
+                    Operation.getOperand(1).print()
+                    if Operation.getOperand(1) == Bitwidth:
+                      print("HERE1")
+                      Operation.setOperand(1, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                  elif not isinstance(Bitwidth, RoseConstant):
+                    print("ArgToConstantValsMap[Bitwidth]:")
+                    ArgToConstantValsMap[Bitwidth].print()
+                    if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(1):
+                      Operation.setOperand(1, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                elif isinstance(Operation.getOperand(0), RoseConstant):
+                  if type(Operation.getOperand(0)) == type(Bitwidth):
+                    print("HERE")
+                    Bitwidth.print()
+                    Operation.getOperand(0).print()
+                    if Operation.getOperand(0) == Bitwidth:
+                      print("HERE1")
+                      Operation.setOperand(0, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return    
+                  elif not isinstance(Bitwidth, RoseConstant):
+                    print("ArgToConstantValsMap[Bitwidth]:")
+                    ArgToConstantValsMap[Bitwidth].print()
+                    if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(0):
+                      Operation.setOperand(0, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                break
+              Worklist.extend(Operation.getOperands())
+              continue
     elif isinstance(LowIndex.getOperand(1), RoseConstant):
       if LowIndex.getOperand(1) == Bitwidth:
         LowIndex.setOperand(1, Op.getOutputBitwidth())
         Visited.add(LowIndex)
         if isinstance(LowIndex.getOperand(0), RoseOperation):
           IntermediateOp = LowIndex.getOperand(0)
+          print("IntermediateOp:")
+          IntermediateOp.print()
           assert IntermediateOp.getOpcode().typesOfOperandsAreEqual() \
             and IntermediateOp.getOpcode().typesOfInputsAndOutputEqual()
           assert len(IntermediateOp.getOperands()) == 2
           if IntermediateOp in Visited:
             return
-          DivOp = IntermediateOp.getOperand(0)
-          if isinstance(DivOp, RoseDivOp):
-            if DivOp in Visited:
-              return
-            if isinstance(DivOp.getOperand(1), RoseConstant):
-              if DivOp.getOperand(1) == Bitwidth:
-                DivOp.setOperand(1, Op.getOutputBitwidth())
-                Visited.add(DivOp)
-                return
-          else:
-            DivOp = IntermediateOp.getOperand(1)
-            if isinstance(DivOp, RoseDivOp):
-              if DivOp in Visited:
-                return
-              if isinstance(DivOp.getOperand(0), RoseConstant):
-                if DivOp.getOperand(0) == Bitwidth:
-                  DivOp.setOperand(0, Op.getOutputBitwidth())
-                  Visited.add(DivOp)
-                  return
+          assert len(IntermediateOp.getOperands()) == 2
+          Worklist = [IntermediateOp.getOperand(0), IntermediateOp.getOperand(1)]
+          while len(Worklist) != 0:
+            Operation = Worklist.pop()
+            print("Operation in loop:")
+            Operation.print()
+            if not isinstance(Operation, RoseOperation):
+              continue
+            if Operation.getOpcode().typesOfInputsAndOutputEqual() \
+              or Operation.getOpcode().typesOfOperandsAreEqual():   
+              print("--Operation in loop:")
+              Operation.print()
+              if isinstance(Operation, RoseDivOp):
+                if isinstance(Operation.getOperand(1), RoseConstant):
+                  if type(Operation.getOperand(1)) == type(Bitwidth):
+                    print("HERE")
+                    Bitwidth.print()
+                    Operation.getOperand(1).print()
+                    if Operation.getOperand(1) == Bitwidth:
+                      print("HERE1")
+                      Operation.setOperand(1, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                  elif not isinstance(Bitwidth, RoseConstant):
+                    print("ArgToConstantValsMap[Bitwidth]:")
+                    ArgToConstantValsMap[Bitwidth].print()
+                    if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(1):
+                      Operation.setOperand(1, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                elif isinstance(Operation.getOperand(0), RoseConstant):
+                  if type(Operation.getOperand(0)) == type(Bitwidth):
+                    print("HERE")
+                    Bitwidth.print()
+                    Operation.getOperand(0).print()
+                    if Operation.getOperand(0) == Bitwidth:
+                      print("HERE1")
+                      Operation.setOperand(0, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return
+                  elif not isinstance(Bitwidth, RoseConstant):
+                    print("ArgToConstantValsMap[Bitwidth]:")
+                    ArgToConstantValsMap[Bitwidth].print()
+                    if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(0):
+                      Operation.setOperand(0, Op.getOutputBitwidth())
+                      Visited.add(Operation)
+                      return 
+                break
+              Worklist.extend(Operation.getOperands())
+              continue
 
     if isinstance(LowIndex.getOperand(0), RoseOperation):
       DivOp = LowIndex.getOperand(0)
@@ -415,8 +485,9 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
   assert Op.isIndexingBVOp() == True
   Block = Op.getParent()
   assert not isinstance(Block, RoseUndefRegion)
-
   if Op in SkipBVExtracts:
+    print("SKIPPED EXTRACT:")
+    Op.print()
     assert Op.getOutputBitwidth() == 1
     LowIndex = Op.getLowIndex()
     assert Op.getHighIndex() == LowIndex
