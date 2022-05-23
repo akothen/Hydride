@@ -103,6 +103,7 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
             return
           assert len(IntermediateOp.getOperands()) == 2
           Worklist = [IntermediateOp.getOperand(0), IntermediateOp.getOperand(1)]
+          DivFound = False
           while len(Worklist) != 0:
             Operation = Worklist.pop()
             print("Operation in loop:")
@@ -123,14 +124,16 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                       print("HERE1")
                       Operation.setOperand(1, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                   elif not isinstance(Bitwidth, RoseConstant):
                     print("ArgToConstantValsMap[Bitwidth]:")
                     ArgToConstantValsMap[Bitwidth].print()
                     if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(1):
                       Operation.setOperand(1, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                 elif isinstance(Operation.getOperand(0), RoseConstant):
                   if type(Operation.getOperand(0)) == type(Bitwidth):
                     print("HERE")
@@ -140,17 +143,21 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                       print("HERE1")
                       Operation.setOperand(0, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return    
+                      DivFound = True
+                      continue    
                   elif not isinstance(Bitwidth, RoseConstant):
                     print("ArgToConstantValsMap[Bitwidth]:")
                     ArgToConstantValsMap[Bitwidth].print()
                     if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(0):
                       Operation.setOperand(0, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                 break
               Worklist.extend(Operation.getOperands())
               continue
+          if DivFound == True:
+            return
     elif isinstance(LowIndex.getOperand(1), RoseConstant):
       if LowIndex.getOperand(1) == Bitwidth:
         LowIndex.setOperand(1, Op.getOutputBitwidth())
@@ -166,6 +173,7 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
             return
           assert len(IntermediateOp.getOperands()) == 2
           Worklist = [IntermediateOp.getOperand(0), IntermediateOp.getOperand(1)]
+          DivFound = False
           while len(Worklist) != 0:
             Operation = Worklist.pop()
             print("Operation in loop:")
@@ -186,14 +194,16 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                       print("HERE1")
                       Operation.setOperand(1, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                   elif not isinstance(Bitwidth, RoseConstant):
                     print("ArgToConstantValsMap[Bitwidth]:")
                     ArgToConstantValsMap[Bitwidth].print()
                     if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(1):
                       Operation.setOperand(1, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                 elif isinstance(Operation.getOperand(0), RoseConstant):
                   if type(Operation.getOperand(0)) == type(Bitwidth):
                     print("HERE")
@@ -203,17 +213,21 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                       print("HERE1")
                       Operation.setOperand(0, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return
+                      DivFound = True
+                      continue
                   elif not isinstance(Bitwidth, RoseConstant):
                     print("ArgToConstantValsMap[Bitwidth]:")
                     ArgToConstantValsMap[Bitwidth].print()
                     if ArgToConstantValsMap[Bitwidth] == Operation.getOperand(0):
                       Operation.setOperand(0, Op.getOutputBitwidth())
                       Visited.add(Operation)
-                      return 
+                      DivFound = True
+                      continue 
                 break
               Worklist.extend(Operation.getOperands())
               continue
+          if DivFound == True:
+            return
 
     if isinstance(LowIndex.getOperand(0), RoseOperation):
       DivOp = LowIndex.getOperand(0)
