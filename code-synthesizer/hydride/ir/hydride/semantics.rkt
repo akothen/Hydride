@@ -488,7 +488,7 @@ concat
 )
 )
 
-(define (_mm512_mask_div_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
+(define (_mm512_mask_div_epu32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
@@ -503,17 +503,17 @@ concat
    (define %2 (+  j0.new  %lastidx0))
    (define %3 (extract  %2 j0.new a))
    (define %5 (extract  %2 j0.new b))
-   (define %6 (zero-extend  %3 (bitvector %arg0)))
-   (define %7 (zero-extend  %5 (bitvector %arg0)))
+   (define %6 (zero-extend  %3 (bitvector %arg1)))
+   (define %7 (zero-extend  %5 (bitvector %arg1)))
    (define %8 (bvudiv  %6  %7))
-   (define %9.high.idx (- %arg0 1))
-   (define %9.low.idx (- %9.high.idx %elemsize -1 ))
-   (define %9 (extract  %9.high.idx %9.low.idx %8))
-   %9
+   (define %lastidx1 (-  %elemsize  1))
+   (define %highidx0 (+  %lastidx1  %arg0))
+   (define new.%9 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %8))
+   new.%9
    )
    (begin
-   (define %lastidx1 (-  %elemsize  1))
-   (define %12 (+  j0.new  %lastidx1))
+   (define %lastidx2 (-  %elemsize  1))
+   (define %12 (+  j0.new  %lastidx2))
    (define %13 (extract  %12 j0.new src))
    %13
    )
@@ -1783,31 +1783,6 @@ concat
 )
 )
 
-(define (_mm512_div_epi64  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
- (apply
- concat
- (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
-  (define %lastidx0 (-  %elemsize  1))
-  (define %1 (+  j0.new  %lastidx0))
-  (define %2 (extract  %1 j0.new a))
-  (define %4 (extract  %1 j0.new b))
-  (define %5 (sign-extend  %2 (bitvector %arg0)))
-  (define %6 (sign-extend  %4 (bitvector %arg0)))
-  (define %7 (bvsdiv  %5  %6))
-  (define %8.high.idx (- %arg0 1))
-  (define %8.low.idx (- %8.high.idx %elemsize -1 ))
-  ;(define %8 (extract  %8.high.idx %8.low.idx %7))
-  (define %8 (extract (- %elemsize 1)  0  %7))
-  %8
- )
- )
-)
-)
-)
-
 (define (_mm512_mask_cvtepi32_epi8  src k a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -2157,7 +2132,7 @@ concat
 )
 )
 
-(define (_mm512_mask_div_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
+(define (_mm512_mask_div_epi32  src k a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
 (apply
 concat
 (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
@@ -2172,17 +2147,17 @@ concat
    (define %2 (+  j0.new  %lastidx0))
    (define %3 (extract  %2 j0.new a))
    (define %5 (extract  %2 j0.new b))
-   (define %6 (sign-extend  %3 (bitvector %arg0)))
-   (define %7 (sign-extend  %5 (bitvector %arg0)))
+   (define %6 (sign-extend  %3 (bitvector %arg1)))
+   (define %7 (sign-extend  %5 (bitvector %arg1)))
    (define %8 (bvsdiv  %6  %7))
-   (define %9.high.idx (- %arg0 1))
-   (define %9.low.idx (- %9.high.idx %elemsize -1 ))
-   (define %9 (extract  %9.high.idx %9.low.idx %8))
-   %9
+   (define %lastidx1 (-  %elemsize  1))
+   (define %highidx0 (+  %lastidx1  %arg0))
+   (define new.%9 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %8))
+   new.%9
    )
    (begin
-   (define %lastidx1 (-  %elemsize  1))
-   (define %12 (+  j0.new  %lastidx1))
+   (define %lastidx2 (-  %elemsize  1))
+   (define %12 (+  j0.new  %lastidx2))
    (define %13 (extract  %12 j0.new src))
    %13
    )
@@ -3183,30 +3158,6 @@ concat
 )
 )
 
-(define (_mm_udiv_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
-(apply
-concat
-(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
- (apply
- concat
- (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
-  (define %lastidx0 (-  %elemsize  1))
-  (define %1 (+  j0.new  %lastidx0))
-  (define %2 (extract  %1 j0.new a))
-  (define %4 (extract  %1 j0.new b))
-  (define %5 (zero-extend  %2 (bitvector %arg0)))
-  (define %6 (zero-extend  %4 (bitvector %arg0)))
-  (define %7 (bvudiv  %5  %6))
-  (define %8.high.idx (- %arg0 1))
-  (define %8.low.idx (- %8.high.idx %elemsize -1 ))
-  (define %8 (extract  %8.high.idx %8.low.idx %7))
-  %8
- )
- )
-)
-)
-)
-
 (define (_mm512_broadcast_i64x2  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
 (apply
 concat
@@ -3532,6 +3483,54 @@ concat
    %13
    )
   )
+ )
+ )
+)
+)
+)
+
+(define (_mm_div_epi8  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
+ (apply
+ concat
+ (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
+  (define %lastidx0 (-  %elemsize  1))
+  (define %1 (+  j0.new  %lastidx0))
+  (define %2 (extract  %1 j0.new a))
+  (define %4 (extract  %1 j0.new b))
+  (define %5 (sign-extend  %2 (bitvector %arg1)))
+  (define %6 (sign-extend  %4 (bitvector %arg1)))
+  (define %7 (bvsdiv  %5  %6))
+  (define %lastidx1 (-  %elemsize  1))
+  (define %highidx0 (+  %lastidx1  %arg0))
+  (define new.%8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))
+  new.%8
+ )
+ )
+)
+)
+)
+
+(define (_mm256_idiv_epi32  a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 )
+(apply
+concat
+(for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
+ (apply
+ concat
+ (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))])
+  (define %lastidx0 (-  %elemsize  1))
+  (define %1 (+  j0.new  %lastidx0))
+  (define %2 (extract  %1 j0.new a))
+  (define %4 (extract  %1 j0.new b))
+  (define %5 (zero-extend  %2 (bitvector %arg1)))
+  (define %6 (zero-extend  %4 (bitvector %arg1)))
+  (define %7 (bvudiv  %5  %6))
+  (define %lastidx1 (-  %elemsize  1))
+  (define %highidx0 (+  %lastidx1  %arg0))
+  (define new.%8 (extract  (- (- %arg1 1) %arg0) (- (- %arg1 1) %highidx0) %7))
+  new.%8
  )
  )
 )

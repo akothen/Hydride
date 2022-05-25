@@ -79,7 +79,6 @@
 (define cost__mm_dpbusds_epi32_dsl 1)
 (define cost__mm256_cmpneq_epi8_mask_dsl 3)
 (define cost__m_pmovmskb_dsl 2)
-(define cost__mm512_div_epi64_dsl 1)
 (define cost__mm512_mask_cvtepi32_epi8_dsl 4)
 (define cost__mm_mask_mul_epu32_dsl 5)
 (define cost__mm_cmpgt_epi8_mask_dsl 3)
@@ -129,7 +128,6 @@
 (define cost__mm_maskz_add_epi16_dsl 1)
 (define cost__mm256_maskz_mulhi_epi16_dsl 5)
 (define cost__m_pmaxub_dsl 1)
-(define cost__mm_udiv_epi32_dsl 1)
 (define cost__mm512_broadcast_i64x2_dsl 8)
 (define cost__mm512_cmple_epi32_mask_dsl 3)
 (define cost__mm256_maskz_max_epu16_dsl 1)
@@ -141,6 +139,8 @@
 (define cost__mm256_mask_max_epi8_dsl 1)
 (define cost__mm_madd_epi16_dsl 5)
 (define cost__mm512_mask_subr_epi32_dsl 1)
+(define cost__mm_div_epi8_dsl 1)
+(define cost__mm256_idiv_epi32_dsl 1)
 
 (define (cost prog)
  (destruct prog
@@ -237,11 +237,11 @@
 		 (cost  v3) (cost  size_i_o) (cost  lane_size) 
 		 (cost  num_6) (cost  prec_i_o) (cost  num_8))
 	]
-	[ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		(+ cost__mm512_mask_div_epu32_dsl (cost  v0) (cost  v1) (cost  v2) 
 		 (cost  v3) (cost  size_i_o) (cost  lane_size) 
 		 (cost  num_6) (cost  prec_i_o) (cost  num_8) 
-		 (cost  num_9))
+		 (cost  num_9) (cost  num_10))
 	]
 	[ (_mm512_sub_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6)
 		(+ cost__mm512_sub_epi8_dsl (cost  v0) (cost  v1) (cost  size_i_o) 
@@ -487,11 +487,6 @@
 		 (cost  num_3) (cost  prec_o) (cost  num_5) 
 		 (cost  num_6))
 	]
-	[ (_mm512_div_epi64_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		(+ cost__mm512_div_epi64_dsl (cost  v0) (cost  v1) (cost  size_i_o) 
-		 (cost  lane_size) (cost  num_4) (cost  prec_i_o) 
-		 (cost  num_6) (cost  num_7))
-	]
 	[ (_mm512_mask_cvtepi32_epi8_dsl v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8)
 		(+ cost__mm512_mask_cvtepi32_epi8_dsl (cost  v0) (cost  v1) (cost  v2) 
 		 (cost  size_i_o) (cost  lane_size) (cost  num_5) 
@@ -557,11 +552,11 @@
 		 (cost  num_3) (cost  prec_i) (cost  num_5) 
 		 (cost  prec_o) (cost  num_7))
 	]
-	[ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		(+ cost__mm512_mask_div_epi32_dsl (cost  v0) (cost  v1) (cost  v2) 
 		 (cost  v3) (cost  size_i_o) (cost  lane_size) 
 		 (cost  num_6) (cost  prec_i_o) (cost  num_8) 
-		 (cost  num_9))
+		 (cost  num_9) (cost  num_10))
 	]
 	[ (_mm512_maskz_maddubs_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 num_7 num_8 prec_i_o num_10)
 		(+ cost__mm512_maskz_maddubs_epi16_dsl (cost  vc_0) (cost  v1) (cost  v2) 
@@ -758,11 +753,6 @@
 		 (cost  lane_size) (cost  num_4) (cost  prec_i_o) 
 		 (cost  num_6))
 	]
-	[ (_mm_udiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		(+ cost__mm_udiv_epi32_dsl (cost  v0) (cost  v1) (cost  size_i_o) 
-		 (cost  lane_size) (cost  num_4) (cost  prec_i_o) 
-		 (cost  num_6) (cost  num_7))
-	]
 	[ (_mm512_broadcast_i64x2_dsl v0 size_i_o lane_size num_3 prec_i_o num_5 num_6)
 		(+ cost__mm512_broadcast_i64x2_dsl (cost  v0) (cost  size_i_o) (cost  lane_size) 
 		 (cost  num_3) (cost  prec_i_o) (cost  num_5) 
@@ -824,6 +814,16 @@
 		(+ cost__mm512_mask_subr_epi32_dsl (cost  v0) (cost  v1) (cost  v2) 
 		 (cost  v3) (cost  size_i_o) (cost  lane_size) 
 		 (cost  num_6) (cost  prec_i_o) (cost  num_8))
+	]
+	[ (_mm_div_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		(+ cost__mm_div_epi8_dsl (cost  v0) (cost  v1) (cost  size_i_o) 
+		 (cost  lane_size) (cost  num_4) (cost  prec_i_o) 
+		 (cost  num_6) (cost  num_7) (cost  num_8))
+	]
+	[ (_mm256_idiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		(+ cost__mm256_idiv_epi32_dsl (cost  v0) (cost  v1) (cost  size_i_o) 
+		 (cost  lane_size) (cost  num_4) (cost  prec_i_o) 
+		 (cost  num_6) (cost  num_7) (cost  num_8))
 	]
 	[_ 1]
  )

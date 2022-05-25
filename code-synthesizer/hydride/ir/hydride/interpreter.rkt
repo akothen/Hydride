@@ -178,7 +178,7 @@
 		 (interpret v3 env) (interpret size_i_o env) (interpret lane_size env) 
 		 (interpret num_6 env) (interpret prec_i_o env) (interpret num_8 env))
 	]
-	[ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		(assert (equal? (get-length v0 env) (get-length v2 env)))
 		(assert (equal? (get-length v0 env) (get-length v3 env)))
 		(assert (equal? (get-length v2 env) (get-length v3 env)))
@@ -188,7 +188,7 @@
 		(_mm512_mask_div_epu32 (interpret v0 env) (interpret v1 env) (interpret v2 env) 
 		 (interpret v3 env) (interpret size_i_o env) (interpret lane_size env) 
 		 (interpret num_6 env) (interpret prec_i_o env) (interpret num_8 env) 
-		 (interpret num_9 env))
+		 (interpret num_9 env) (interpret num_10 env))
 	]
 	[ (_mm512_sub_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6)
 		(assert (equal? (get-length v0 env) (get-length v1 env)))
@@ -568,14 +568,6 @@
 		 (interpret num_3 env) (interpret prec_o env) (interpret num_5 env) 
 		 (interpret num_6 env))
 	]
-	[ (_mm512_div_epi64_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		(assert (equal? (get-length v0 env) (get-length v1 env)))
-		(assert (equal? size_i_o (get-length v0 env)))
-		(assert (equal? size_i_o (get-length v1 env)))
-		(_mm512_div_epi64 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
-		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
-		 (interpret num_6 env) (interpret num_7 env))
-	]
 	[ (_mm512_mask_cvtepi32_epi8_dsl v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8)
 		(assert (equal? size_i_o (get-length v0 env)))
 		(_mm512_mask_cvtepi32_epi8 (interpret v0 env) (interpret v1 env) (interpret v2 env) 
@@ -666,7 +658,7 @@
 		 (interpret num_3 env) (interpret prec_i env) (interpret num_5 env) 
 		 (interpret prec_o env) (interpret num_7 env))
 	]
-	[ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		(assert (equal? (get-length v0 env) (get-length v2 env)))
 		(assert (equal? (get-length v0 env) (get-length v3 env)))
 		(assert (equal? (get-length v2 env) (get-length v3 env)))
@@ -676,7 +668,7 @@
 		(_mm512_mask_div_epi32 (interpret v0 env) (interpret v1 env) (interpret v2 env) 
 		 (interpret v3 env) (interpret size_i_o env) (interpret lane_size env) 
 		 (interpret num_6 env) (interpret prec_i_o env) (interpret num_8 env) 
-		 (interpret num_9 env))
+		 (interpret num_9 env) (interpret num_10 env))
 	]
 	[ (_mm512_maskz_maddubs_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 num_7 num_8 prec_i_o num_10)
 		(assert (equal? (get-length v2 env) (get-length v3 env)))
@@ -974,14 +966,6 @@
 		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
 		 (interpret num_6 env))
 	]
-	[ (_mm_udiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		(assert (equal? (get-length v0 env) (get-length v1 env)))
-		(assert (equal? size_i_o (get-length v0 env)))
-		(assert (equal? size_i_o (get-length v1 env)))
-		(_mm_udiv_epi32 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
-		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
-		 (interpret num_6 env) (interpret num_7 env))
-	]
 	[ (_mm512_broadcast_i64x2_dsl v0 size_i_o lane_size num_3 prec_i_o num_5 num_6)
 		(_mm512_broadcast_i64x2 (interpret v0 env) (interpret size_i_o env) (interpret lane_size env) 
 		 (interpret num_3 env) (interpret prec_i_o env) (interpret num_5 env) 
@@ -1076,6 +1060,22 @@
 		(_mm512_mask_subr_epi32 (interpret v0 env) (interpret v1 env) (interpret v2 env) 
 		 (interpret v3 env) (interpret size_i_o env) (interpret lane_size env) 
 		 (interpret num_6 env) (interpret prec_i_o env) (interpret num_8 env))
+	]
+	[ (_mm_div_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		(assert (equal? (get-length v0 env) (get-length v1 env)))
+		(assert (equal? size_i_o (get-length v0 env)))
+		(assert (equal? size_i_o (get-length v1 env)))
+		(_mm_div_epi8 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
+		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
+		 (interpret num_6 env) (interpret num_7 env) (interpret num_8 env))
+	]
+	[ (_mm256_idiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		(assert (equal? (get-length v0 env) (get-length v1 env)))
+		(assert (equal? size_i_o (get-length v0 env)))
+		(assert (equal? size_i_o (get-length v1 env)))
+		(_mm256_idiv_epi32 (interpret v0 env) (interpret v1 env) (interpret size_i_o env) 
+		 (interpret lane_size env) (interpret num_4 env) (interpret prec_i_o env) 
+		 (interpret num_6 env) (interpret num_7 env) (interpret num_8 env))
 	]
 	[v v]
  )

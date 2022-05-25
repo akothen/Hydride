@@ -77,7 +77,7 @@
 	[(_mm_maskz_sub_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8)
 		size_i_o
 	]
-	[(_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[(_mm512_mask_div_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		size_i_o
 	]
 	[(_mm512_sub_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6)
@@ -215,9 +215,6 @@
 	[(_m_pmovmskb_dsl v0 size_o lane_size num_3 prec_o num_5 num_6)
 		size_o
 	]
-	[(_mm512_div_epi64_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		size_i_o
-	]
 	[(_mm512_mask_cvtepi32_epi8_dsl v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8)
 		size_i_o
 	]
@@ -254,7 +251,7 @@
 	[(_mm256_broadcastmw_epi32_dsl v0 size_o lane_size num_3 prec_i num_5 prec_o num_7)
 		size_o
 	]
-	[(_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
+	[(_mm512_mask_div_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
 		size_i_o
 	]
 	[(_mm512_maskz_maddubs_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 num_7 num_8 prec_i_o num_10)
@@ -365,9 +362,6 @@
 	[(_m_pmaxub_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6)
 		size_i_o
 	]
-	[(_mm_udiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7)
-		size_i_o
-	]
 	[(_mm512_broadcast_i64x2_dsl v0 size_i_o lane_size num_3 prec_i_o num_5 num_6)
 		size_i_o
 	]
@@ -399,6 +393,12 @@
 		size_i_o
 	]
 	[(_mm512_mask_subr_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8)
+		size_i_o
+	]
+	[(_mm_div_epi8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
+		size_i_o
+	]
+	[(_mm256_idiv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8)
 		size_i_o
 	]
  )
