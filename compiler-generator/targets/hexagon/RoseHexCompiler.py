@@ -418,126 +418,64 @@ def CompileBitIndex(IndexExpr, Context : HexRoseContext):
       OuterBitIndexType.print()
       print("InnerBitIndexType:")
       InnerBitIndexType.print()
-      if type(InnerBitIndex.obj.obj) == Var:
-        BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
-        # First compute the low index
-        OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
-                                      OuterIndex.getType())
-        InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
-                                      InnerIndex.getType())
-        print("OuterCoFactor:")
-        OuterCoFactor.print()
-        OuterCoFactor.getType().print()
-        print("OuterIndex:")
-        OuterIndex.print()
-        OuterIndex.getType().print()
-        print("InnerCoFactor:")
-        InnerCoFactor.print()
-        InnerCoFactor.getType().print()
-        print("InnerIndex:")
-        InnerIndex.print()
-        InnerIndex.getType().print()
-        OuterLowIndex = RoseMulOp.create(Context.genName(), \
-                                  [OuterCoFactor, OuterIndex])
-        InnerLowIndex = RoseMulOp.create(Context.genName(), \
-                                  [InnerCoFactor, InnerIndex])
-        LowIndex = RoseAddOp.create(Context.genName(), \
-                                  [OuterLowIndex, InnerLowIndex])
-        # Generate value for bitwidth
-        BitwidthValue = OuterCoFactor
-        HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
-                                          LowIndex.getType())
-        HighIndex = RoseAddOp.create(Context.genName(), \
-                                      [LowIndex, HighIndexOff])
-        # Add the generated ops to the IR and the context
-        Context.addAbstractionToIR(OuterLowIndex)
-        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
-        Context.addAbstractionToIR(InnerLowIndex)
-        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
-        Context.addAbstractionToIR(LowIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
-        Context.addAbstractionToIR(HighIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
-        print("OuterLowIndex:")
-        OuterLowIndex.print()
-        print("InnerLowIndex:")
-        InnerLowIndex.print()
-        print("LOW INDEX: ")
-        LowIndex.print()
-        print("HIGH INDEX:")
-        HighIndex.print()
-        # Now generate the bvextract op
-        Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
-                                          LowIndex, HighIndex, BitwidthValue)
-        Context.addSignednessInfoForValue(Operation, \
-                              HexTypeSignedness[InnerBitIndex.obj.elemtype])
-        Context.addSignednessInfoForValue(BitVector, \
-                              HexTypeSignedness[InnerBitIndex.obj.elemtype])
-        # Add this op to context for the inner bitindex
-        print(InnerBitIndex)
-        Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
-      else:
-        assert type(InnerBitIndex.obj.obj.obj.obj) == Var
-        InnermostBitIndex = IndexExpr.obj.obj.obj.obj
-        InnermostBitIndexType = HexTypes[InnermostBitIndex.obj.elemtype]
-        InnermostIndex = CompileIndex(InnermostBitIndex.idx, Context)
-        BitVector = CompileExpression(InnermostBitIndex.obj.obj, Context)
-        # First compute the low index
-        OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
+      assert type(InnerBitIndex.obj.obj) == Var
+      BitVector = CompileExpression(InnerBitIndex.obj.obj, Context)
+      # First compute the low index
+      OuterCoFactor = RoseConstant.create(OuterBitIndexType.getBitwidth(),\
                                     OuterIndex.getType())
-        InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
+      InnerCoFactor = RoseConstant.create(InnerBitIndexType.getBitwidth(),\
                                     InnerIndex.getType())
-        InnermostCoFactor = RoseConstant.create(InnermostBitIndexType.getBitwidth(),\
-                                    InnermostIndex.getType())
-        OuterLowIndex = RoseMulOp.create(Context.genName(), \
-                                  [OuterCoFactor, OuterIndex])
-        InnerLowIndex = RoseMulOp.create(Context.genName(), \
-                                  [InnerCoFactor, InnerIndex])
-        InnermostLowIndex = RoseMulOp.create(Context.genName(), \
-                                  [InnermostCoFactor, InnermostIndex])
-        TempLowIndex = RoseAddOp.create(Context.genName(), \
-                                  [OuterLowIndex, InnerLowIndex])
-        LowIndex = RoseAddOp.create(Context.genName(), \
-                                  [TempLowIndex, InnermostLowIndex])
-        # Generate value for bitwidth
-        BitwidthValue = OuterCoFactor
-        HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
-                                          LowIndex.getType())
-        HighIndex = RoseAddOp.create(Context.genName(), \
-                                          [LowIndex, HighIndexOff])
-        # Add the generated ops to the IR and the context
-        Context.addAbstractionToIR(OuterLowIndex)
-        Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
-        Context.addAbstractionToIR(InnerLowIndex)
-        Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
-        Context.addAbstractionToIR(InnermostLowIndex)
-        Context.addCompiledAbstraction(InnermostLowIndex.getName(), InnermostLowIndex)
-        Context.addAbstractionToIR(TempLowIndex)
-        Context.addCompiledAbstraction(TempLowIndex.getName(), TempLowIndex)
-        Context.addAbstractionToIR(LowIndex)
-        Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
-        Context.addAbstractionToIR(HighIndex)
-        Context.addCompiledAbstraction(HighIndex.getName(), HighIndex)
-        print("OuterLowIndex:")
-        OuterLowIndex.print()
-        print("InnerLowIndex:")
-        InnerLowIndex.print()
-        print("InnermostLowIndex:")
-        InnermostLowIndex.print()
-        print("LOW INDEX: ")
-        LowIndex.print()
-        print("HIGH INDEX:")
-        HighIndex.print()
-        # Now generate the bvextract op
-        Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
-                                          LowIndex, HighIndex, BitwidthValue)
-        Context.addSignednessInfoForValue(Operation, \
-                              HexTypeSignedness[InnerBitIndex.obj.elemtype])
-        Context.addSignednessInfoForValue(BitVector, \
-                              HexTypeSignedness[InnerBitIndex.obj.elemtype])
-        # Add this op to context for the inner bitindex
-        print(InnermostBitIndex)
-        Context.addCompiledAbstraction(InnermostBitIndex.id, Operation)
+      print("OuterCoFactor:")
+      OuterCoFactor.print()
+      OuterCoFactor.getType().print()
+      print("OuterIndex:")
+      OuterIndex.print()
+      OuterIndex.getType().print()
+      print("InnerCoFactor:")
+      InnerCoFactor.print()
+      InnerCoFactor.getType().print()
+      print("InnerIndex:")
+      InnerIndex.print()
+      InnerIndex.getType().print()
+      OuterLowIndex = RoseMulOp.create(Context.genName(), \
+                                [OuterCoFactor, OuterIndex])
+      InnerLowIndex = RoseMulOp.create(Context.genName(), \
+                                [InnerCoFactor, InnerIndex])
+      LowIndex = RoseAddOp.create(Context.genName(), \
+                                [OuterLowIndex, InnerLowIndex])
+      # Generate value for bitwidth
+      BitwidthValue = OuterCoFactor
+      HighIndexOff = RoseConstant.create(BitwidthValue.getValue() - 1, \
+                                        LowIndex.getType())
+      HighIndex = RoseAddOp.create(Context.genName(), \
+                                    [LowIndex, HighIndexOff])
+      # Add the generated ops to the IR and the context
+      Context.addAbstractionToIR(OuterLowIndex)
+      Context.addCompiledAbstraction(OuterLowIndex.getName(), OuterLowIndex)
+      Context.addAbstractionToIR(InnerLowIndex)
+      Context.addCompiledAbstraction(InnerLowIndex.getName(), InnerLowIndex)
+      Context.addAbstractionToIR(LowIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), LowIndex)
+      Context.addAbstractionToIR(HighIndex)
+      Context.addCompiledAbstraction(LowIndex.getName(), HighIndex)
+      print("OuterLowIndex:")
+      OuterLowIndex.print()
+      print("InnerLowIndex:")
+      InnerLowIndex.print()
+      print("LOW INDEX: ")
+      LowIndex.print()
+      print("HIGH INDEX:")
+      HighIndex.print()
+      # Now generate the bvextract op
+      Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, \
+                                        LowIndex, HighIndex, BitwidthValue)
+      Context.addSignednessInfoForValue(Operation, \
+                             HexTypeSignedness[InnerBitIndex.obj.elemtype])
+      Context.addSignednessInfoForValue(BitVector, \
+                             HexTypeSignedness[InnerBitIndex.obj.elemtype])
+      # Add this op to context for the inner bitindex
+      print(InnerBitIndex)
+      Context.addCompiledAbstraction(InnerBitIndex.id, Operation)
     else:
       # Compile the low index first
       ElemType = HexTypes[IndexExpr.obj.elemtype]
@@ -1275,9 +1213,6 @@ def CompileSelect(Select, Context : HexRoseContext):
   Then = CompileExpression(Select.then, Context)
   Otherwise = CompileExpression(Select.otherwise, Context)
   Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
-  # Add signedness info
-  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Then) \
-                                    or Context.isValueSigned(Otherwise))
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
