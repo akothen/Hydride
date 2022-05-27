@@ -1275,6 +1275,9 @@ def CompileSelect(Select, Context : HexRoseContext):
   Then = CompileExpression(Select.then, Context)
   Otherwise = CompileExpression(Select.otherwise, Context)
   Operation = RoseSelectOp.create(Context.genName(), Cond, Then, Otherwise)
+  # Add signedness info
+  Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Then) \
+                                    or Context.isValueSigned(Otherwise))
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
