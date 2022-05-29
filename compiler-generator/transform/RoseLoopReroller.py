@@ -1751,6 +1751,64 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   if not isinstance(IntermediateOp, RoseUndefValue):
     assert isinstance(IntermediateOp, RoseBVSSaturateOp) \
         or isinstance(IntermediateOp, RoseBVUSaturateOp)
+
+  if len(BVAddChain) == 2:
+    print("SPECIAL CHECK")
+    # Check if there is any distant possibility that this reduction
+    # pattern is rerollable. Trace back two threads.
+    AddOp = BVAddChain[0]
+    assert isinstance(AddOp, RoseBVAddOp)
+    assert len(AddOp.getOperands()) == 2
+    Trace1 = [AddOp.getOperand(0)]
+    Trace2 = [AddOp.getOperand(1)]
+    while len(Trace1) != 0 and len(Trace2) != 0:
+      Trace1Op = Trace1.pop()
+      Trace2Op = Trace2.pop()
+      print("TRACE1 OP:")
+      Trace1Op.print()
+      print("TRACE2 OP:")
+      Trace2Op.print()
+      if type(Trace1Op) != type(Trace2Op):
+        print("EXIT2")
+        if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+          or Trace1Op.isSizeChangingOp():
+          if isinstance(Trace2Op, RoseBVAddOp):
+            Trace1 = [Trace2Op.getOperand(0)]
+            Trace2 = [Trace2Op.getOperand(1)]
+            continue
+        if isinstance(Trace2Op, RoseBVExtractSliceOp) \
+          or Trace2Op.isSizeChangingOp():
+          if isinstance(Trace1Op, RoseBVAddOp):
+            Trace1 = [Trace1Op.getOperand(0)]
+            Trace2 = [Trace1Op.getOperand(1)]
+            continue
+        return False
+      if isinstance(Trace1Op, RoseArgument) \
+        and isinstance(Trace2Op, RoseArgument):
+        print("ARGUMENTS:")
+        print("TRACE1 OP:")
+        Trace1Op.print()
+        print("TRACE2 OP:")
+        Trace2Op.print()
+        if Trace1Op != Trace2Op:
+          return False
+        continue
+      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+        and isinstance(Trace2Op, RoseBVExtractSliceOp):
+        Trace1.append(Trace1Op.getInputBitVector())
+        Trace2.append(Trace2Op.getInputBitVector())
+        continue
+      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
+        Trace1.append(Trace1Op.getOperand(0))
+        Trace2.append(Trace2Op.getOperand(0))
+        continue
+      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
+      for Operand in Trace1Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace1.append(Operand)
+      for Operand in Trace2Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace2.append(Operand)
   
   # One of the bvadds must be coming from external source
   # (some other block or function argument).
@@ -2106,6 +2164,64 @@ def FixReductionPattern3ToMakeBlockRerollable(Block : RoseBlock, \
   if len(BVAddChain) == 0 or BVInsertOp == RoseUndefValue():
     print("EXIT1")
     return False
+
+  if len(BVAddChain) == 2:
+    print("SPECIAL CHECK")
+    # Check if there is any distant possibility that this reduction
+    # pattern is rerollable. Trace back two threads.
+    AddOp = BVAddChain[0]
+    assert isinstance(AddOp, RoseBVAddOp)
+    assert len(AddOp.getOperands()) == 2
+    Trace1 = [AddOp.getOperand(0)]
+    Trace2 = [AddOp.getOperand(1)]
+    while len(Trace1) != 0 and len(Trace2) != 0:
+      Trace1Op = Trace1.pop()
+      Trace2Op = Trace2.pop()
+      print("TRACE1 OP:")
+      Trace1Op.print()
+      print("TRACE2 OP:")
+      Trace2Op.print()
+      if type(Trace1Op) != type(Trace2Op):
+        print("EXIT2")
+        if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+          or Trace1Op.isSizeChangingOp():
+          if isinstance(Trace2Op, RoseBVAddOp):
+            Trace1 = [Trace2Op.getOperand(0)]
+            Trace2 = [Trace2Op.getOperand(1)]
+            continue
+        if isinstance(Trace2Op, RoseBVExtractSliceOp) \
+          or Trace2Op.isSizeChangingOp():
+          if isinstance(Trace1Op, RoseBVAddOp):
+            Trace1 = [Trace1Op.getOperand(0)]
+            Trace2 = [Trace1Op.getOperand(1)]
+            continue
+        return False
+      if isinstance(Trace1Op, RoseArgument) \
+        and isinstance(Trace2Op, RoseArgument):
+        print("ARGUMENTS:")
+        print("TRACE1 OP:")
+        Trace1Op.print()
+        print("TRACE2 OP:")
+        Trace2Op.print()
+        if Trace1Op != Trace2Op:
+          return False
+        continue
+      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+        and isinstance(Trace2Op, RoseBVExtractSliceOp):
+        Trace1.append(Trace1Op.getInputBitVector())
+        Trace2.append(Trace2Op.getInputBitVector())
+        continue
+      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
+        Trace1.append(Trace1Op.getOperand(0))
+        Trace2.append(Trace2Op.getOperand(0))
+        continue
+      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
+      for Operand in Trace1Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace1.append(Operand)
+      for Operand in Trace2Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace2.append(Operand)
 
   if len(BVAddChain) == 1:
     # Check if there is any distant possibility that this reduction
