@@ -1989,13 +1989,21 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   EraseIndexingBVOp(BVInsertOp)
   if not isinstance(IntermediateOp, RoseUndefValue):
     Block.eraseOperation(IntermediateOp)
-  # Remove the temp values
-  for Op in OpsWithTempVals:
-    Block.eraseOperation(Op)
+  
 
   # Erase some other extraneous ops
-  for Op in OpsWithExternalOperands:
+  for Op in reversed(OpsWithExternalOperands):
       Block.eraseOperation(Op)
+
+  print("BLOCK AGAIN:")
+  Block.print()
+  # Remove the temp values
+  print("OpsWithTempVals:")
+  print(OpsWithTempVals)
+  for Op in reversed(OpsWithTempVals):
+    print("OP WITH TEMP VAL:")
+    Op.print()
+    Block.eraseOperation(Op)
   
   # Now erase the externaloperands
   for Op in ExternalOperands:
