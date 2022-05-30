@@ -14,6 +14,17 @@ from RoseContext import *
 from RoseUtilities import *
 
 
+# Loop distrubution is legal if multiple bvinserts in a single block
+# are not inserting to contiguous bit slices.
+def IsLoopDistrbutionLegal(InsertOps : list):
+  if len(InsertOps) < 2:
+    return False
+  for Index, _ in enumerate(InsertOps[:-1]):
+    if AreBitSlicesContiguous(InsertOps[Index], InsertOps[Index + 1]):
+      return False
+  return True
+
+
 def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
   # If the block is not inside a loop, we cannot distrbute the loop.
   if not isinstance(Block.getParent(), RoseForLoop):
@@ -24,7 +35,8 @@ def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
   for Op in Block:
     if isinstance(Op, RoseBVInsertSliceOp):
       InsertOps.append(Op)
-  if len(InsertOps) < 2:
+
+  if IsLoopDistrbutionLegal(InsertOps) == False:
     return
 
   OuterLoop = Block.getParent()
@@ -37,6 +49,8 @@ def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
                       OuterLoop.getEndIndex().getValue(), OuterLoop.getStep().getValue())
     for Operation in ParentBlock:
       NewOperation = Operation.clone()
+      # Replace the uses of the iterator of the outerloop with the 
+      # iterator of the newly generated loop.
       if NewOperation.usesValue(OuterLoop.getIterator()):
         NewOperation.replaceUsesWith(OuterLoop.getIterator(), Loop.getIterator())
       Loop.addAbstraction(NewOperation)       
