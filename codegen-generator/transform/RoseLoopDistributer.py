@@ -15,6 +15,11 @@ from RoseUtilities import *
 
 
 def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
+  # If the block is not inside a loop, we cannot distrbute the loop.
+  if not isinstance(Block.getParent(), RoseForLoop):
+    return
+  
+  Function = Block.getFunction()
   InsertOps = list()
   for Op in Block:
     if isinstance(Op, RoseBVInsertSliceOp):
@@ -22,18 +27,37 @@ def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
   if len(InsertOps) < 2:
     return
 
-  for Op in InsertOps[:-1]:
+  OuterLoop = Block.getParent()
+  for Op in InsertOps:
     ParentBlock = Op.getParent()
-    ParentBlock.splitAt(ParentBlock.getPosOfOperation(Op) + 1)
-    Loop = RoseForLoop.create(Context.genName("%" + "iterator"), 0, \
-                       Op.getOutputBitwidth(), Op.getOutputBitwidth())
+    if Op != InsertOps[-1]:
+      ParentBlock.splitAt(ParentBlock.getPosOfOperation(Op) + 1)
+    Loop = RoseForLoop.create(Context.genName("%" + "iterator"), \
+                      OuterLoop.getStartIndex().getValue(), \
+                      OuterLoop.getEndIndex().getValue(), OuterLoop.getStep().getValue())
     for Operation in ParentBlock:
-      Loop.addAbstraction(Operation.clone())
-    ParentRegion = ParentBlock.getParent()
-    ParentKey = ParentRegion.getKeyForChild(ParentBlock)
-    Index = ParentRegion.getPosOfChild(ParentBlock, ParentKey)
-    ParentRegion.addRegionBefore(Index, Loop, ParentKey)
-    ParentRegion.eraseChild(ParentBlock, ParentKey)
+      NewOperation = Operation.clone()
+      if NewOperation.usesValue(OuterLoop.getIterator()):
+        NewOperation.replaceUsesWith(OuterLoop.getIterator(), Loop.getIterator())
+      Loop.addAbstraction(NewOperation)       
+    ParentKey = OuterLoop.getKeyForChild(ParentBlock)
+    Index = OuterLoop.getPosOfChild(ParentBlock, ParentKey)
+    OuterLoop.addRegionBefore(Index, Loop, ParentKey)
+    OuterLoop.eraseChild(ParentBlock, ParentKey)
+
+  # Remove the outer loop
+  ParentRegion = OuterLoop.getParent()
+  ParentKey = ParentRegion.getKeyForChild(OuterLoop)
+  for Region in OuterLoop:
+    Index = ParentRegion.getPosOfChild(OuterLoop, ParentKey)
+    print("--INDEX:")
+    print(Index)
+    print("REGION:")
+    Region.print()
+    ParentRegion.addRegionBefore(Index, Region.clone(), ParentKey)
+  print("FUNCTION++++:")
+  Function.print()
+  ParentRegion.eraseChild(OuterLoop, ParentKey)
 
 
 def RunLoopDistributerOnFunction(Function : RoseFunction, Context : RoseContext):
@@ -45,11 +69,14 @@ def RunLoopDistributerOnFunction(Function : RoseFunction, Context : RoseContext)
   BlockList.extend(Function.getRegionsOfType(RoseBlock))
   for Block in BlockList:
     RunLoopDistributerOnBlock(Block, Context)
+  
+  print("NEW FUNCTION:")
+  Function.print()
 
 
 # Runs loop distribution pass
 def Run(Function : RoseFunction, Context : RoseContext):
-  print("RUN FUNCTION INLINER")
+  print("RUN LOOP DISTRIBUTER")
   RunLoopDistributerOnFunction(Function, Context)
   Function.print()
 
