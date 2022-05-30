@@ -499,6 +499,21 @@ def FixIndicesForBVOpsInsideOfLoops(Function : RoseFunction, Op : RoseBitVectorO
   assert Op.isIndexingBVOp() == True
   Block = Op.getParent()
   assert not isinstance(Block, RoseUndefRegion)
+
+  # Deal with easy cases where low_index == high_index
+  if Op.getLowIndex() == Op.getHighIndex():
+    BitwidthVal = Op.getOperand(Op.getBitwidthPos())
+    if not isinstance(BitwidthVal, RoseConstant):
+      One = RoseConstant.create(1, BitwidthVal.getType())
+      LastIdx = RoseSubOp.create(Context.genName("%" + "lastidx"), [BitwidthVal, One])
+      HighIndex = RoseAddOp.create(Context.genName("%" + "highidx"), [Op.getLowIndex(), LastIdx])
+      Block.addOperationBefore(LastIdx, Op)
+      Block.addOperationBefore(HighIndex, Op)
+      Op.setOperand(Op.getHighIndexPos(), HighIndex)
+      Visited.add(HighIndex)
+      Visited.add(LastIdx)
+      return
+
   if Op in SkipBVExtracts:
     print("SKIPPED EXTRACT:")
     Op.print()
