@@ -12,6 +12,7 @@ import RoseCSE
 import RoseDCE
 import RoseBVLengthReduction
 import RoseLoopReroller
+import RoseLoopDistributer
 import RoseFunctionInliner
 import RoseExtractConstants
 import RoseCanonicalize
@@ -55,6 +56,9 @@ class RoseCodeGenerator:
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseLoopReroller.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      RoseLoopDistributer.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
       RoseOpSimplify.Run(Function)
