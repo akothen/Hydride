@@ -40,7 +40,7 @@ class Synthesizer:
 
             return IndexExpr(scale_factor, rhs, expr_type = IndexExprTypeEnum.Mul)
 
-        load_factors = [1.0, 1.5]
+        load_factors = []#[1.0, 1.5]
         offset_exprs = [ create_affine_index_expr("dim-y", 1, None ), # (i * dim-y) + j
                         create_affine_index_expr("dim-y", 1, create_scalar_mul(1, "dim-y") ), # ((i+1) * dim-y) + j = (i * dim-y) + j + dim-y
                         create_affine_index_expr("dim-y", 1, create_scalar_mul(2, "dim-y"))
@@ -175,10 +175,13 @@ class Synthesizer:
         lit_holes = self.get_lit_holes(use_lit_holes)
 
         return self.grammar_generator.emit_grammar(
+            memory_layer_name = main_grammar_name + "_mem",
             memory_dsl_insts = memory_dsl_insts,
             memory_dsl_args_list = memory_dsl_args_list,
+            shuffle_layer_name = main_grammar_name + "_shuffle",
             shuffle_dsl_insts = memory_shuffle_insts,
             shuffle_dsl_args_list = memory_shuffle_args_list,
+            operation_layer_name = main_grammar_name + "_operations",
             operation_dsl_insts = operation_dsl_insts,
             operation_dsl_args_list = operation_dsl_args_list,
             top_level_grammar_name = main_grammar_name,
@@ -192,7 +195,7 @@ class Synthesizer:
     def get_random_bv(self, bv_size, name = "rand_val"):
         # If can be represented using Hex values
         if bv_size % 4  == 0:
-            values = [str(i) for i in range(0,3)] #+ ["a","b","c", "d","e", "f"]
+            values = [str(i) for i in range(0,10)] + ["a","b","c", "d","e", "f"]
             bv_val ="#x" +  "".join(random.choices(values, k = bv_size // 4))
             return ConstBitVector(bv_val, bv_size, name = name )
         else:
@@ -397,16 +400,29 @@ class Synthesizer:
 
         contexts = []
 
+        check = dsl_inst.name == "_mm_cvtepi16_epi64" and False
+
+        if check:
+            print("Here")
+
         for ctx in dsl_inst.contexts:
             supports_inputs_prec = ctx.supports_input_precision(self.spec.input_precision)
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
-            supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
+            #supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
+            supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
 
-            #print("Input limit: ", int((self.VF * self.spec.input_precision * 1.5)))
-            #print(dsl_inst.name, supports_input_length)
+            if check:
+                print(ctx.name, "Supports Input Prec:", supports_inputs_prec)
+                print(ctx.name, "Supports Input Length:",supports_input_length)
+                print(ctx.name,"Supports Output prec", supports_outputs_prec)
+                print(ctx.name, "Supports Output Length:", supports_output_length)
 
-            if (supports_inputs_prec or supports_outputs_prec or supports_output_length) and supports_input_length :
+
+            #if (supports_inputs_prec or supports_outputs_prec or supports_output_length) or supports_input_length :
+            if (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length):
+                if check:
+                    ctx.print_context()
                 contexts.append(ctx)
 
         if limit != None and len(contexts) > limit:
@@ -430,7 +446,7 @@ class Synthesizer:
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        if dsl_inst.name in ["_mm_mul_epi32", "_mm512_div_epi64"] and False:
+        if dsl_inst.name in ["_mm512_mullo_epi16","_mm512_abs_epi64"] :
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -468,12 +484,12 @@ class Synthesizer:
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
 
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
-            return (supports_inputs_prec or supports_input_length) and (supports_outputs_prec or supports_output_length)
+            return (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name in ["_mm_mul_epi32",  "_mm512_div_epi64"] and False:
+        if dsl_inst.name in ["_mm512_abs_epi64", "_mm_cvtepi16_epi64"] and True:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))

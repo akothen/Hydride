@@ -17,11 +17,13 @@ BV_OPS = [
     "bvmul", "bvsdiv", "bvudiv", "bvsrem",
     "bvurem", "bvurem", "bvsmod", "concat",
     "extract", "sign-extend", "zero-extend",
-    "bitvector->integer", "bitvector->natural",
-    "integer->bitvector", "bvumaxval", "bvsmaxval",
+    # "bitvector->integer", "bitvector->natural", "integer->bitvector",
+    "bvumaxval", "bvsmaxval",
     "bvuminval", "bvsminval", "bvssat", "bvusat",
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
-    "bvmulnsw", "bvmulnuw","if",
+    "bvmulnsw", "bvmulnuw","if", "abs",
+    "bvsmax", "bvumax", "bvsmin", "bvumin",
+    "bvrol", "bvror"
 ]
 
 
@@ -84,7 +86,7 @@ class Context:
     def supports_input_size(self, input_size):
         for arg in self.context_args:
             if isinstance(arg, BitVector):
-                if arg.size >= input_size:
+                if arg.size == input_size:
                     return True
 
         return False
