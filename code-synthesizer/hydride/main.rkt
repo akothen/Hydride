@@ -37,6 +37,7 @@
 
 
 (require hydride/synthesis/step)
+(require hydride/synthesis/iterative_synthesis)
 
 
 (provide 
@@ -49,6 +50,6 @@
   (all-from-out hydride/ir/hydride/length)
   (all-from-out hydride/ir/hydride/interpreter)
   (all-from-out hydride/synthesis/step)
-
+  (all-from-out hydride/synthesis/iterative_synthesis)
   )
 
