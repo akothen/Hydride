@@ -267,10 +267,8 @@
 
 (define (output v1 v2)
   (define (clamp_res val low high)
-    (define low_bv (bv low (bitvector (bvlength val))))
-    (define high_bv (bv high (bitvector (bvlength val))))
-    (define clamp_low (bvsmax val low_bv))
-    (define clamp_high (bvsmin clamp_low high_bv))
+    (define clamp_low (bvsmax val low))
+    (define clamp_high (bvsmin clamp_low high))
     clamp_high
 
     )
@@ -282,7 +280,8 @@
                             (ext-bv v2 i 16) 
                             )
             )
-          (clamp_res add_res 0 255) ;; Clamp the value between 0 and 255
+          (clamp_res add_res (bv 0 16) (bv 255 16)) ;; Clamp the value between 0 and 255
+
 
                    ))
   ) 
@@ -292,6 +291,75 @@
 (printf "v2:\t~a\n" test)
 (printf "output:\t~a\n" (output test test))
 
+(define add_expr 
+
+	(
+		_m_paddw_dsl
+        (reg 0)
+        (reg 1)
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		16				;; Precision Operand 
+		0				;; Integer Operand 
+  )
+    )
+
+(define clamp_low 
+  (
+
+		_mm256_max_epi8_dsl
+        add_expr
+        (lit (bv 0 (bitvector 128)))
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		16				;; Precision Operand 
+		0				;; Integer Operand 
+
+   )
+
+  )
+
+
+(define manual
+  (
+
+		_mm512_min_epi8_dsl
+        clamp_low
+        (lit 
+          (concat 
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+            (bv 255 (bitvector 16))
+          )
+          )
+		128				;; Integer Operand 
+		128				;; Lane Size 
+		128				;; Integer Operand 
+		16				;; Precision Operand 
+		0				;; Integer Operand 
+   )
+  )
+
+; (define-symbolic sv1 (bitvector 128))
+; (define-symbolic sv2 (bitvector 128))
+
+; (define cex (verify  (begin (assert (equal? (output sv1 sv2) (interpret manual (vector sv1 sv2)))))))
+
+
+;(assert (sat? cex) "Verification Passed!")
+
+
+;(define cv1 (evaluate sv1 cex))
+;(define cv2 (evaluate sv2 cex))
+;(printf "cv1:\t~a\n" cv1)
+;(printf "cv2:\t~a\n" cv2)
 
 (define (invoke_sext env)
   (sext (vector-ref env 0)
@@ -341,12 +409,13 @@
 ;;                                DSL Grammar
 ;; ================================================================================
 
+
 (define (sext_grammar_mem vars #:depth k)
 	(assert (> k 0))
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
 	[else
-	(lit (?? (bitvector 64)))
+	(lit (create-symbolic-bv 64))
 	]
 	)
 )
@@ -457,7 +526,7 @@
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
 	[else
-	(lit (?? (bitvector 128)))
+	(lit (create-symbolic-bv 128))
 	]
 	)
 )
@@ -694,7 +763,7 @@
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
 	[else
-	(lit (?? (bitvector 128)))
+	(lit (create-symbolic-bv 128))
 	]
 	)
 )
@@ -931,7 +1000,7 @@
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
 	[else
-	(lit (?? (bitvector 128)))
+	(lit (create-symbolic-bv 128))
 	]
 	)
 )
@@ -1380,7 +1449,7 @@
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
 	[else
-	(lit (?? (bitvector 128)))
+	(lit (create-symbolic-bv 128))
 	]
 	)
 )
@@ -1828,11 +1897,8 @@
 	(assert (> k 0))
 	(cond
 	[(choose* #t #f) (apply choose* vars)]
-	[(choose* #t #f) 
-	(lit (?? (bitvector 128)))
-     ]
 	[else
-	(lit (?? (bitvector 128)))
+	(lit (create-symbolic-bv 128))
 	]
 	)
 )

@@ -43,7 +43,7 @@ class GrammarGenerator:
         return "\n\t".join(grammar_clause)
 
     def emit_lit_hole(self, bv_size):
-        return "(lit (?? (bitvector {})))".format(bv_size)
+        return "(lit (create-symbolic-bv {}))".format(bv_size)
 
     def emit_lit_hole_clause(self, bv_size, last_clause = False):
         condition = None
