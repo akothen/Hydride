@@ -9,9 +9,9 @@
 (require hydride/utils/bvops)
 (require hydride/ir/hydride/interpreter)
 
-;; Use 8 bits as a default bitwidth for
+;; Use 16 bits as a default bitwidth for
 ;; the Boolector solver
-(define boolector-bw 8)
+(define boolector-bw 16)
 
 
 
@@ -78,7 +78,7 @@
       ;; Use Z3 for optimization
       (begin 
         (current-solver (z3))
-        ;;(current-bitwidth #f) 
+        (current-bitwidth #f) 
 
         (optimize 
           #:minimize (list (cost-fn grammar))
@@ -136,39 +136,4 @@
   )
 
 
-
-(define (synthesize-sol-with-depth depth depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn)
-  (printf "Synthesizing solution with depth ~a and depth-limit ~a ...\n" depth depth-limit)
-
-  (if
-    (<= depth depth-limit)
-
-    (begin
-
-      (define grammar (grammar-fn depth))
-
-      (define-values 
-        (satisfiable? materialize elapsed_time)
-        (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn)
-        )
-
-
-      (if satisfiable? 
-        (values satisfiable? materialize elapsed_time)
-
-        (begin
-          (define-values 
-            (_satisfiable? _materialize _elapsed_time)
-            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn)
-            )
-          (values _satisfiable? _materialize (+ elapsed_time _elapsed_time)) ;; Accumulate synthesis time 
-          )
-        )
-      )
-
-    (begin
-      (values #f '() 0)
-      )
-    )
-  )
 

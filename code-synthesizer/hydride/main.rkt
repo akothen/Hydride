@@ -36,8 +36,9 @@
 (require hydride/ir/hydride/interpreter)
 
 
-(require hydride/synthesis/step)
+(require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
+(require hydride/synthesis/synth_main)
 
 
 (provide 
@@ -49,7 +50,8 @@
   (all-from-out hydride/ir/hydride/cost_model)
   (all-from-out hydride/ir/hydride/length)
   (all-from-out hydride/ir/hydride/interpreter)
-  (all-from-out hydride/synthesis/step)
+  (all-from-out hydride/synthesis/symbolic_synthesis)
   (all-from-out hydride/synthesis/iterative_synthesis)
+  (all-from-out hydride/synthesis/synth_main)
   )
 
