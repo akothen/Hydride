@@ -3,6 +3,8 @@ from Instructions import *
 from PredefinedDSL import *
 import random
 
+DEBUG = False
+
 class Synthesizer:
 
     def __init__(self, spec = None, dsl_operators = [],
@@ -168,6 +170,7 @@ class Synthesizer:
 
         top_level_grammar_args = self.get_top_level_grammar_args()
 
+        print("="*50)
         print("Number of Load DSL Instructions:\t",len(memory_dsl_args_list))
         print("Number of Shuffle DSL Instructions:\t",len(memory_shuffle_args_list))
         print("Number of DSL Compute Instructions:\t",len(operation_dsl_args_list))
@@ -400,7 +403,7 @@ class Synthesizer:
 
         contexts = []
 
-        check = dsl_inst.name == "_mm_cvtepi16_epi64" and False
+        check = dsl_inst.name == "_mm_cvtepi16_epi64" and DEBUG
 
         if check:
             print("Here")
@@ -446,7 +449,7 @@ class Synthesizer:
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        if dsl_inst.name in ["_mm512_mullo_epi16","_mm512_abs_epi64"] :
+        if dsl_inst.name in ["_mm512_mullo_epi16","_mm512_abs_epi64"] and DEBUG :
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -489,7 +492,7 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name in ["_mm512_abs_epi64", "_mm_cvtepi16_epi64"] and True:
+        if dsl_inst.name in ["_mm512_abs_epi64", "_mm_cvtepi16_epi64"] and DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))

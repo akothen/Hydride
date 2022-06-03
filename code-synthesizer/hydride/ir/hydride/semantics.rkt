@@ -727,6 +727,18 @@ concat
 )
 )
 
+(define (temp_abs v)
+  (define bvlen (bvlength v))
+  (define zero (bv 0 (bitvector bvlen)))
+  (define neg-one (bv -1 (bitvector bvlen)))
+
+  (if
+    (bvsge v zero)
+    v
+    (bvmul neg-one v)
+    )
+  )
+
 (define (_mm512_abs_epi64  a %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset )
 (apply
 concat
@@ -737,7 +749,8 @@ concat
   (define %lastidx0 (-  %elemsize  1))
   (define %1 (+  j0.new  %lastidx0))
   (define %2 (extract  %1 j0.new a))
-  (define %3 (integer->bitvector (abs (bitvector->integer %2)) (bitvector %elemsize)))
+  ;(define %3 (integer->bitvector (abs (bitvector->integer %2)) (bitvector %elemsize)))
+  (define %3 (temp_abs %2))
   %3
  )
  )

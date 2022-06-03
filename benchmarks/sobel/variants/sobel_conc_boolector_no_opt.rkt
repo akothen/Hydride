@@ -9,7 +9,7 @@
 
 
 (current-solver (boolector))
-(current-bitwidth 8)
+(current-bitwidth 16)
 
 
 
@@ -2100,7 +2100,7 @@
           (println bw-list)
 
           (define optimize? #f)
-          (define symbolic? #t)
+          (define symbolic? #f)
 
           (define test-start (current-seconds))
           (define-values (satisfiable? materialize elap) 

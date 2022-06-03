@@ -1,0 +1,160 @@
+Testing Sext
+(bv #x000102030405060708090a0b0c0d0e0f 128)
+(bv #x00080009000a000b000c000d000e000f 128)
+(bv #x00080009000a000b000c000d000e000f 128)
+Testing Sobel x
+v1:	(bv #x000102030405060708090a0b0c0d0e0f 128)
+1 515 1029 1543 2057 2571 3085 3599 
+(bv #x000102030405060708090a0b0c0d0e0f 128)
+v2:	(bv #xfffefdfcfbfaf9f8f7f6f5f4f3f2f1f1 128)
+-2 -516 -1030 -1544 -2058 -2572 -3086 -3599 
+(bv #xfffefdfcfbfaf9f8f7f6f5f4f3f2f1f1 128)
+(bv #x00030407080b0c0f10131417181b1c1e 128)
+3 1031 2059 3087 4115 5143 6171 7198 
+(bv #x00030407080b0c0f10131417181b1c1e 128)
+Testing Output
+v1:	(bv #x000102030405060708090a0b0c0d0e0f 128)
+v2:	(bv #x000102030405060708090a0b0c0d0e0f 128)
+output:	(bv #x00020406080a0c0e10121416181a1c1e 128)
+===================================
+Synthesizing Subexpression #0
+#<procedure:invoke_sext>
+'(128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+Test elapsed time: 0 
+Synthesis step completed!
+Solution
+(_mm_cvtepi16_epi64_dsl (reg 0) 128 128 64 8 0 16)
+===================================
+Synthesizing Subexpression #1
+#<procedure:invoke_x_avg>
+'(128 128 128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+2: 128
+Synthesizing solution with depth 3 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+2: 128
+Test elapsed time: 61 
+Synthesis step completed!
+Solution
+(_m_paddw_dsl
+ (_m_paddw_dsl (reg 2) (reg 0) 128 128 128 16 0)
+ (_m_paddw_dsl (reg 1) (reg 1) 128 128 128 16 0)
+ 128
+ 128
+ 128
+ 16
+ 0)
+===================================
+Synthesizing Subexpression #2
+#<procedure:invoke_sobel_x>
+'(128 128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+Synthesizing solution with depth 3 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+Test elapsed time: 663 
+Synthesis step completed!
+Solution
+(_mm512_abs_epi64_dsl
+ (_mm512_sub_epi8_dsl (reg 0) (reg 1) 128 128 128 16 0)
+ 128
+ 128
+ 128
+ 16
+ 0)
+===================================
+Synthesizing Subexpression #3
+#<procedure:invoke_y_avg>
+'(128 128 128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+2: 128
+Synthesizing solution with depth 3 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+2: 128
+Test elapsed time: 63 
+Synthesis step completed!
+Solution
+(_m_paddw_dsl
+ (_m_paddw_dsl (reg 2) (reg 0) 128 128 128 16 0)
+ (_m_paddw_dsl (reg 1) (reg 1) 128 128 128 16 0)
+ 128
+ 128
+ 128
+ 16
+ 0)
+===================================
+Synthesizing Subexpression #4
+#<procedure:invoke_add_output>
+'(128 128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+1: 128
+Test elapsed time: 4 
+Synthesis step completed!
+Solution
+(_m_paddw_dsl (reg 1) (reg 0) 128 128 128 16 0)
+===================================
+Synthesizing Subexpression #5
+#<procedure:invoke_clamp>
+'(128)
+Synthesizing solution with depth 2 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+Synthesizing solution with depth 3 and depth-limit 5 ...
+Symbols for synthesis
+Printing Symbolic Bitvectors length
+0: 128
+Test elapsed time: 23 
+Synthesis step completed!
+Solution
+(_mm512_min_epi8_dsl
+ (_mm256_max_epi8_dsl
+  (reg 0)
+  (lit (bv #x00000000000000000000000000000000 128))
+  128
+  128
+  128
+  16
+  0)
+ (_mm256_broadcastq_epi64_dsl
+  (lit (bv #x000000000000000000000000000000ff 128))
+  128
+  128
+  128
+  16
+  0
+  0)
+ 128
+ 128
+ 128
+ 16
+ 0)
+'(#<void> #<void> #<void> #<void> #<void> #<void>)
+Total Synthesis took 814 seconds ...

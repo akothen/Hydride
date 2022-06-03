@@ -9,7 +9,7 @@
 
 
 (current-solver (boolector))
-(current-bitwidth 8)
+(current-bitwidth 16)
 
 
 

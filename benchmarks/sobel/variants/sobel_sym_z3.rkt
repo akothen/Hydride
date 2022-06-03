@@ -8,8 +8,8 @@
 (require hydride)
 
 
-(current-solver (boolector))
-(current-bitwidth 8)
+;(current-solver (boolector))
+(current-bitwidth 16)
 
 
 

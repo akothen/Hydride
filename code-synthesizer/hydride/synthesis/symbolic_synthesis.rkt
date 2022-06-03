@@ -78,7 +78,7 @@
       ;; Use Z3 for optimization
       (begin 
         (current-solver (z3))
-        (current-bitwidth #f) 
+        ;(current-bitwidth #f) 
 
         (optimize 
           #:minimize (list (cost-fn grammar))
@@ -96,8 +96,8 @@
 
       ;; Use regular synthesis, default boolector
       (begin
-        (current-solver (boolector))
-        (current-bitwidth boolector-bw) 
+        ;(current-solver (boolector))
+        ;(current-bitwidth boolector-bw) 
 
         (synthesize 
           #:forall (list (symbolics symbols))

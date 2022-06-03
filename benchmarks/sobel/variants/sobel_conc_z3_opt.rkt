@@ -8,8 +8,8 @@
 (require hydride)
 
 
-(current-solver (boolector))
-(current-bitwidth 8)
+;(current-solver (boolector))
+(current-bitwidth 16)
 
 
 
@@ -2099,8 +2099,8 @@
           (println sub_expr)
           (println bw-list)
 
-          (define optimize? #f)
-          (define symbolic? #t)
+          (define optimize? #t)
+          (define symbolic? #f)
 
           (define test-start (current-seconds))
           (define-values (satisfiable? materialize elap) 

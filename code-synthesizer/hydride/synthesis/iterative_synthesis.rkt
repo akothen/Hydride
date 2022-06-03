@@ -17,7 +17,20 @@
 ;; to use in iterative synthesis
 (define (create-concrete-bv bw) 
   ;(random-bv (/ bw 8))
-  (bv -1 (bitvector bw))
+  ;(define cur_time (current-seconds))
+  (if 
+    (<= bw 16)
+    (begin
+          (define max-val (expt 2 bw))
+          (define rand-val (random max-val))
+          (bv rand-val (bitvector bw))
+      )
+    (concat
+      (create-concrete-bv (/ bw 2))
+      (create-concrete-bv (/ bw 2))
+      )
+
+    )
   )
 
 
@@ -100,7 +113,7 @@
     ;; Use Z3 for optimization
     (begin 
       (current-solver (z3))
-      (current-bitwidth #f) 
+      ;(current-bitwidth #f) 
 
       (optimize 
         #:minimize (list (cost-fn grammar))
@@ -116,8 +129,8 @@
 
     ;; Use regular synthesis, default boolector
     (begin
-      (current-solver (boolector))
-      (current-bitwidth boolector-bw) 
+      ;(current-solver (boolector))
+      ;(current-bitwidth boolector-bw) 
 
       (synthesize 
         #:forall (list cex-ls)
