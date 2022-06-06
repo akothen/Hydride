@@ -9,7 +9,7 @@ int main() {
     Func output;
     //Input<Buffer<uint8_t>> input{"input", 2};
     //Output<Buffer<uint8_t>> output{"output", 2};
-
+    
     Var x{"x"}, y{"y"};
     Func sobel_x_avg{"sobel_x_avg"}, sobel_y_avg{"sobel_y_avg"};
     Func sobel_x{"sobel_x"}, sobel_y{"sobel_y"};
@@ -44,9 +44,10 @@ int main() {
    output.compile_jit();
   printf("KERNEL COMPILED\n");
   Target t("host-no_asserts-no_runtime-no_bounds_query");
-  //output.compile_to_assembly("/home/akashk4/598/Halide/build/test/performance/sobel.s", output.infer_arguments(), t);
-  //printf("ASSEMBLY GENERATED\n");
+  output.compile_to_assembly("/home/akashk4/598/Halide/build/test/performance/sobel.s", output.infer_arguments(), t);
+  printf("ASSEMBLY GENERATED\n");
   output.compile_to_bitcode("/home/akashk4/598/Halide/build/test/performance/sobel.bc", output.infer_arguments(), t);
   printf("BITCODE GENERATED\n");
   return 0;
+
 }
