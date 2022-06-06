@@ -7,7 +7,7 @@
 
 from RoseAbstractions import *
 from RoseContext import *
-from RosetteCodeEmitter import *
+#from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
@@ -16,12 +16,14 @@ from RoseSimilarityCheckerUtilities import *
 from RoseSimilarityCheckerSummaryGen import *
 from RoseLLVMIntrinsicsGen import *
 from RoseIRToLLVMMappingGen import *
+from RoseTargetInfo import *
 
 
 class RoseSimilarityChecker():
   def __init__(self, TargetList : list):
     self.TargetList = TargetList
     self.FunctionInfoList = list()
+    self.FunctionInfoListToTarget = dict()
     self.FunctionToFunctionInfo = dict()
     self.FunctionToRosetteCodeMap = dict()
     self.EquivalenceClasses = set()
@@ -32,11 +34,13 @@ class RoseSimilarityChecker():
     #assert False
     # Compute some semantics info for the functions
     for FunctionInfo in FunctionInfoList:
-      FunctionInfo.computeSemanticsInfo()
+      FunctionInfo.computeSemanticsInfoFromTargetSpecficFunction()
       FunctionInfo.print()
-    for Target in self.TargetList:
+    for TargetName in self.TargetList:
+      # Create target info
+      TargetInfo = RoseTargetInfo(TargetName)
       # Generate code for all semantics first
-      CodeGenerator = RoseCodeGenerator(Target)
+      CodeGenerator = RoseCodeGenerator(TargetName)
       FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=True)
       self.FunctionInfoList.extend(FunctionInfoList)
       # Generate rosette code
@@ -44,6 +48,7 @@ class RoseSimilarityChecker():
         Function = FunctionInfo.getLatestFunction()
         FunctionInfo.computeSemanticsInfo()
         FunctionInfo.print()
+        self.FunctionInfoListToTarget[FunctionInfo] = TargetInfo
         self.FunctionToFunctionInfo[Function] = FunctionInfo
         assert not isinstance(Function, RoseUndefRegion)
         self.FunctionToRosetteCodeMap[Function] = \
@@ -205,7 +210,8 @@ class RoseSimilarityChecker():
     # Generate an elaborate summary
     SummaryFileName = "semantics.py"
     SummaryGen = RoseSimilarityCheckerSummaryGen(self.FunctionToFunctionInfo, \
-                self.FunctionToRosetteCodeMap, self.EquivalenceClasses)
+                self.FunctionToRosetteCodeMap, self.EquivalenceClasses,
+                self.FunctionInfoListToTarget)
     SummaryGen.summarize(SummaryFileName)
     return True
 
@@ -596,6 +602,7 @@ class RoseSimilarityChecker():
 
 
 if __name__ == '__main__':
-  SimilarityChecker = RoseSimilarityChecker(["x86"])
+  SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
+  #SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.fastest_run() #parallel_run()
 
