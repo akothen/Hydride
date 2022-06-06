@@ -14,9 +14,12 @@ from RoseBitVectorOperations import *
 from RoseUtilities import *
 from RoseCodeGenerator import RoseCodeGenerator
 
+import uuid
+
 
 class RoseFunctionInfo():
   def __init__(self):
+    self.ID = uuid.uuid4()
     self.FunctionAtStages = list()
     self.TargetAgnosticFunction = RoseUndefRegion()
     self.TargetSpecificFunction = RoseUndefRegion()
@@ -35,6 +38,9 @@ class RoseFunctionInfo():
     self.InVectorLengthIndex = None
     self.OutVectorLengthIndex = None
     self.IsSIMD = None
+
+  def __hash__(self):
+    return hash(self.ID)
 
   def getInElemType(self):
     return self.InElemType
