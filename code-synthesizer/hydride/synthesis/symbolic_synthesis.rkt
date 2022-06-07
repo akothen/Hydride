@@ -55,7 +55,7 @@
 ;; materialize  : If a solutio exists, refers to the specific solution. else it returns a '()
 ;; elapsed_time : Returns the synthesis time (in seconds)
 
-(define (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn)
+(define (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn cost-bound)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -96,8 +96,6 @@
 
       ;; Use regular synthesis, default boolector
       (begin
-        ;(current-solver (boolector))
-        ;(current-bitwidth boolector-bw) 
 
         (synthesize 
           #:forall (list (symbolics symbols))

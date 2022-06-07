@@ -21,9 +21,9 @@
   (if 
     (<= bw 16)
     (begin
-          (define max-val (expt 2 bw))
-          (define rand-val (random max-val))
-          (bv rand-val (bitvector bw))
+      (define max-val (expt 2 bw))
+      (define rand-val (random max-val))
+      (bv rand-val (bitvector bw))
       )
     (concat
       (create-concrete-bv (/ bw 2))
@@ -108,49 +108,96 @@
   )
 
 
-(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn) 
-  (if optimize?
-    ;; Use Z3 for optimization
-    (begin 
-      (current-solver (z3))
-      ;(current-bitwidth #f) 
 
-      (optimize 
-        #:minimize (list (cost-fn grammar))
-        #:guarantee 
-        (begin 
-          ;; loop over inputs and add asserts
-          (get-concrete-asserts assert-query-fn cex-ls)
-
-          )
+(define (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn)
+  (begin 
+    (synthesize 
+      #:forall (list cex-ls)
+      #:guarantee 
+      (begin 
+        ;; loop over inputs and add asserts
+        (get-concrete-asserts assert-query-fn cex-ls)
         )
+      ) 
+    )
+  )
 
+(define (z3-optimize assert-query-fn grammar cex-ls cost-fn)
+  (begin 
+    (current-solver (z3))
+
+    (optimize 
+      #:minimize (list (cost-fn grammar))
+      #:guarantee 
+      (begin 
+        ;; loop over inputs and add asserts
+        (get-concrete-asserts assert-query-fn cex-ls)
+
+        )
       )
 
-    ;; Use regular synthesis, default boolector
-    (begin
-      ;(current-solver (boolector))
-      ;(current-bitwidth boolector-bw) 
+    )
+  )
 
+
+(define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
+  (begin
+    (printf "Boolector optimize with cost-bound ~a ...\n" cost-bound)
+    (current-solver (boolector))
+
+    (define sol?
       (synthesize 
         #:forall (list cex-ls)
         #:guarantee 
         (begin 
           ;; loop over inputs and add asserts
           (get-concrete-asserts assert-query-fn cex-ls)
-
+          (assert (< (cost-fn grammar) cost-bound))
           )
-        )
-
+        ) 
       )
-    )
 
+
+    (define satisfiable? (sat? sol?))
+
+
+
+
+    (define materialize 
+      (if satisfiable? 
+        (evaluate grammar sol?)
+        '()
+        )
+      )
+
+    (if satisfiable?
+      (pretty-print materialize)
+      '()
+      )
+
+    sol?
+
+
+    )
+  )
+
+
+(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound) 
+  (if optimize?
+    (if 
+      (equal? (current-solver) (z3))
+      (z3-optimize assert-query-fn grammar cex-ls cost-fn)
+      (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
+      )
+
+    (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn)
+    )
   )
 
 
 
 
-(define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs)
+(define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs cost-bound)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -183,7 +230,7 @@
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn)
+    (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound)
     )
 
   (define end_time (current-seconds))
@@ -192,6 +239,7 @@
   (define satisfiable? (sat? sol?))
 
   (println satisfiable?)
+
 
   ;; Restore solvers
   (current-solver curr-solver)
@@ -205,6 +253,13 @@
       '()
       )
     )
+
+  (define boolector-opt-case (and
+    optimize?
+    (not (equal? (current-solver) (z3)))
+    ))
+
+  (printf "Is this boolector optimization case ~a ?\n" boolector-opt-case)
 
   (if 
     satisfiable?
@@ -220,10 +275,40 @@
         )
 
       (if
-        verified?
-        (values satisfiable? materialize elapsed_time)
+        verified? ;; If solution is found to be correct for all possible inputs
+
+        (if 
+
+          ;; Check if optimizations is enabled and the current solver is boolector
+          boolector-opt-case
+
+          ;; If true, then attempt synthesizing a solution with a tighter cost bound
+          (begin
+            (printf "Searching for better solution with cost < ~a \n" (cost-fn materialize))
+            (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
+              (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
+                                        cex-ls  
+                                        (cost-fn materialize) ;; Use tighter cost bound
+                                        )
+              )
+
+            ;; If a tighter solution exists then return that, else return current found solution
+            (if 
+              tighter-sol-sat?
+              (values tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time)
+              (values satisfiable? materialize elapsed_time)
+              )
+            )
+
+          ;; If not doing optimizaiton and boolector then return current verified solution directly
+          (values satisfiable? materialize elapsed_time)
+          )
+
+
+        ;; If not verified then attempt synthesizing with appended counter example
         (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
                                   (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
+                                  cost-bound
                                   )
         )
       )
