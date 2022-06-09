@@ -671,6 +671,7 @@ Encoding get_encoding(const Expr &expr, const std::map<std::string, Expr> &let_v
 }
 
 std::string expr_to_racket(const Expr &expr, int indent) {
+    std::cout << "Invoked Expression to Racket" << "\n";
     std::map<std::string, Expr> let_vars;  // Empty by default.
     const auto encoding = get_encoding(expr, let_vars, let_vars);
     return expr_to_racket(expr, encoding, let_vars, indent);
@@ -681,5 +682,526 @@ std::string expr_to_racket(const Expr &expr, const Encoding &encoding, const std
     ExprPrinter specPrinter(std::cout, encoding, let_vars, indent);
     return specPrinter.dispatch(expr);
 }
+
+std::function<std::string(const Expr &, bool, bool)> get_expr_racket_dispatch(const Expr &expr, const Encoding &encoding, const std::map<std::string, Expr> &let_vars) {
+    // Print spec expr as Rosette code
+    // Reference: https://stackoverflow.com/questions/27775233/lambdas-and-capture-by-reference-local-variables-accessing-after-the-scope
+    auto specPrinter = std::make_shared<ExprPrinter>(std::cout, encoding, let_vars);
+    return [specPrinter](const Expr &expr, bool set_mode, bool int_mode) {
+        // TODO: this got really messy... Is there a cleaner way?
+        if (set_mode) {
+            if (int_mode) {
+                specPrinter->int_mode();
+            } else {
+                specPrinter->bv_mode();
+            }
+        }
+        return specPrinter->dispatch(expr);
+    };
+}
+
+std::string type_to_rake_type(Type type, bool include_space, bool c_plus_plus) {
+    bool needs_space = true;
+    std::ostringstream oss;
+
+    if (type.is_bfloat()) {
+        oss << "bfloat" << type.bits() << "_t";
+    } else if (type.is_float()) {
+        if (type.bits() == 32) {
+            oss << "float";
+        } else if (type.bits() == 64) {
+            oss << "double";
+        } else {
+            oss << "float" << type.bits() << "_t";
+        }
+        if (type.is_vector()) {
+            oss << type.lanes();
+        }
+    } else {
+        switch (type.bits()) {
+        case 1:
+            // bool vectors are always emitted as uint8 in the C++ backend
+            if (type.is_vector()) {
+                oss << "uint8x" << type.lanes() << "_t";
+            } else {
+                oss << "uint1_t";
+            }
+            break;
+        default:
+            if (type.is_uint()) {
+                oss << "u";
+            }
+            oss << "int" << type.bits();
+            if (type.is_vector()) {
+                oss << "x" << type.lanes();
+            }
+            oss << "_t";
+        }
+    }
+    if (include_space && needs_space) {
+        oss << " ";
+    }
+    return oss.str();
+}
+
+//>>>>>>>>>>>>>>>>> Hydride Integration
+
+namespace Hydride {
+
+bool should_inline_let(std::map<std::string, Expr> external_let_vars, std::string var_name) {
+    if (external_let_vars.count(var_name)) {
+        Expr e = external_let_vars[var_name];
+        return e.node_type() == IRNodeType::Ramp || e.node_type() == IRNodeType::Load ||
+               e.node_type() == IRNodeType::Broadcast;
+    }
+    return false;
+}
+
+// Extract the set of input variables that appear in the expression. These are modelled as symbolic
+// constants in the synthesizer queries
+class InferSymbolics : public IRVisitor {
+
+    std::map<std::string, Expr> external_let_vars;
+    std::map<std::string, Expr> external_llet_vars;
+    Scope<Interval> &bounds;
+    FuncValueBounds func_value_bounds;
+    Encoding encoding;
+
+    std::set<std::string> live_lets;
+    std::set<const Variable *> live_vars;
+    std::set<std::string> local_vars;
+    std::set<std::pair<std::string, Type>> buffers;
+
+public:
+    using IRVisitor::visit;
+
+    InferSymbolics(std::map<std::string, Expr> lvs, std::map<std::string, Expr> llvs, Scope<Interval> &bnds,
+                   FuncValueBounds fvb, Encoding enc)
+        : external_let_vars(lvs), external_llet_vars(llvs), bounds(bnds), func_value_bounds(fvb), encoding(enc) {
+    }
+
+    void visit(const Variable *op) override {
+        if (op->type.is_vector()) {
+            auto b = bounds_of_expr_in_scope(op, bounds, func_value_bounds);
+            debug(1) << "Var Found: " << op->name << "\n"
+                     << "Bounds: " << b.min << " ... " << b.max << "\n";
+        }
+
+        if (external_llet_vars.count(op->name) && encoding[op->name] == Integer) {
+            external_llet_vars[op->name].accept(this);
+            live_lets.insert(op->name);
+        } else if (should_inline_let(external_let_vars, op->name)) {
+            external_let_vars[op->name].accept(this);
+            live_lets.insert(op->name);
+        } else {
+            live_vars.insert(op);
+        }
+    }
+
+    void visit(const Let *op) override {
+        local_vars.insert(op->name);
+        IRVisitor::visit(op);
+    }
+
+    void visit(const Load *op) override {
+        auto b = bounds_of_expr_in_scope(op, bounds, func_value_bounds);
+        debug(1) << "Load Found: " << op->name << "\n"
+                 << "Bound: " << b.min << " ... " << b.max << "\n";
+        buffers.insert(std::pair<std::string, Type>(op->name, (op->type.is_vector() ? op->type.element_of() : op->type)));
+
+        IRVisitor::visit(op);
+    }
+
+    std::set<const Variable *> getSymVars() {
+        std::set<const Variable *> l;
+        for (auto var : live_vars) {
+            if (local_vars.count(var->name) == 0)
+                l.insert(var);
+        }
+        return l;
+    }
+
+    std::set<std::pair<std::string, Type>> getSymBufs() {
+        return buffers;
+    }
+
+    std::set<std::string> getLiveLets() {
+        return live_lets;
+    }
+};
+
+// This IR mutator optimizes vector expressions for the Hexagon HVX ISA
+class IROptimizer : public IRMutator {
+
+public:
+    using IRMutator::mutate;
+
+    enum Architecture {
+        HVX, ARM, X86
+    };
+
+    IROptimizer(FuncValueBounds fvb, Architecture _arch, std::set<const BaseExprNode *> &ms)
+        : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms) {
+    }
+
+    // We don't currently perform any optimizations at the Stmt level
+    Stmt mutate(const Stmt &stmt) override {
+        return IRMutator::mutate(stmt);
+    }
+
+    Expr mutate(const Expr &expr) override {
+        if (arch == IROptimizer::HVX) {
+            /* Disqualify expressions we do not currently support */
+
+            // If the expression produces a scalar output, ignore it
+            if (!expr.type().is_vector())
+                return IRMutator::mutate(expr);
+
+            // If the expression produces an output of float type, ignore it
+            if (expr.type().element_of().is_float())
+                return IRMutator::mutate(expr);
+
+            // If the expression produces an output of boolean type, ignore it
+            if (expr.type().element_of().is_bool())
+                return IRMutator::mutate(expr);
+
+            // If the expression produces a vector that is not a multiple of the base vector length, ignore it
+            if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1))
+                return IRMutator::mutate(expr);
+
+            // If the expression is a dynamic shuffle, ignore it
+            const Call *c = expr.as<Call>();
+            if (c && c->is_intrinsic(Call::dynamic_shuffle))
+                return expr;
+
+            /* Ignore some qualifying but trivial expressions to reduce noise in the results */
+            Expr base_e = expr;
+            while (base_e.node_type() == IRNodeType::Let)
+                base_e = base_e.as<Let>()->body;
+
+            // If the expression is just a single ramp instruction, ignore it
+            if (base_e.node_type() == IRNodeType::Ramp)
+                return IRMutator::mutate(expr);
+
+            // If the expression is just a single load instruction, ignore it
+            if (base_e.node_type() == IRNodeType::Load)
+                return IRMutator::mutate(expr);
+
+            // If the expression is just a single broadcast instruction, ignore it
+            if (base_e.node_type() == IRNodeType::Broadcast)
+                return IRMutator::mutate(expr);
+
+            // If the expression is just a variable, ignore it
+            if (base_e.node_type() == IRNodeType::Variable)
+                return IRMutator::mutate(expr);
+
+            // If the expression is a conditional, optimize the branches individually
+            if (base_e.node_type() == IRNodeType::Select)
+                return IRMutator::mutate(expr);
+
+            // Abstract out unsupported nodes if they appear as sub-expressions
+            Expr spec_expr = AbstractUnsupportedNodes(IROptimizer::HVX, abstractions).mutate(expr);
+
+            // Lower intrinsics
+            spec_expr = LowerIntrinsics().mutate(spec_expr);
+
+            // Lift cse for more readable specs
+            spec_expr = common_subexpression_elimination(spec_expr);
+
+            // Re-write expression using synthesis
+            Expr optimized_expr = spec_expr ;//synthesize_impl(spec_expr, expr);
+
+            // Replace abstracted abstractions
+            Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
+
+            // Register that this node has been optimzied
+            mutated_exprs.insert(final_expr.get());
+
+            debug(0) << "\nOptimized expression: " << final_expr << "\n";
+
+            return final_expr;
+        }  else {
+            return expr;
+        }
+    }
+
+private:
+
+    Architecture arch;
+    FuncValueBounds func_value_bounds;
+    std::set<const BaseExprNode *> &mutated_exprs;
+    Scope<Interval> bounds;
+
+    std::map<std::string, Expr> let_vars;
+    std::map<std::string, Expr> linearized_let_vars;
+    std::vector<std::string> let_decl_order;
+
+    std::map<std::string, Expr> abstractions;
+
+    /* Helper functions and visitors */
+
+    // A custom version of lower intrinsics that skips a TODO in the existing lower_intrinsics
+    class LowerIntrinsics : public IRMutator {
+        using IRMutator::visit;
+
+        Expr widen(Expr a) {
+            Type result_type = a.type().widen();
+            return Cast::make(result_type, std::move(a));
+        }
+
+        Expr narrow(Expr a) {
+            Type result_type = a.type().narrow();
+            return Cast::make(result_type, std::move(a));
+        }
+
+        Expr visit(const Call *op) override {
+            Expr lowered;
+            // Generate cleaner specs. Since performance is not a concern, we can freely
+            // use widening casts etc.
+            if (op->is_intrinsic(Call::saturating_add)) {
+                lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
+                                       op->args[0].type().min(), op->args[0].type().max()));
+            } 
+            else if (op->is_intrinsic(Call::saturating_sub)) {
+                lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
+                                       op->args[0].type().min(), op->args[0].type().max()));
+            } 
+            else if (op->is_intrinsic(Call::halving_add)) {
+                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+            } 
+            else if (op->is_intrinsic(Call::halving_sub)) {
+                lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+            } 
+            else if (op->is_intrinsic(Call::rounding_halving_add)) {
+                lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+            } 
+            else if (op->is_intrinsic(Call::rounding_halving_sub)) {
+                lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+            } 
+            else if (op->is_intrinsic(Call::rounding_halving_sub)) {
+                lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+            } 
+            else if (op->is_intrinsic(Call::sorted_avg)) {
+                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+            } 
+            else {
+                lowered = lower_intrinsic(op);
+            }
+            if (lowered.defined()) {
+                return mutate(lowered);
+            }
+            return IRMutator::visit(op);
+        }
+    };
+
+    class FloatFinder : public IRVisitor {
+        using IRVisitor::visit;
+
+        bool f = false;
+
+        void visit(const Variable *op) override {
+            if (op->type.is_float())
+                f = true;
+        }
+
+        void visit(const FloatImm *op) override {
+            f = true;
+        }
+
+        void visit(const Cast *op) override {
+            if (op->type.is_float())
+                f = true;
+            return IRVisitor::visit(op);
+        }
+
+    public:
+        bool found() {
+            return f;
+        }
+    };
+
+    class AbstractUnsupportedNodes : public IRMutator {
+        using IRMutator::visit;
+
+        std::map<std::string, Expr> &abstractions;
+        Architecture _arch;
+
+        Expr visit(const Call *op) override {
+            if (op->is_intrinsic(Call::dynamic_shuffle)) {
+                std::string uname = unique_name('t');
+                abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            } 
+            else if (op->is_intrinsic(Call::if_then_else)) {
+                //debug(0) << "ITE found: " << op << "\n";
+                std::string uname = unique_name('t');
+                //debug(0) << "Replaced with: " << uname << "\n";
+                abstractions[uname] = IRMutator::visit(op);
+                return Variable::make(op->type, uname);
+            } 
+            else
+                return IRMutator::visit(op);
+        }
+
+        Expr visit(const Cast *op) override {
+            Expr v = op->value;
+
+            std::vector<int> vec_lens;
+
+
+            switch(_arch){
+                case Architecture::ARM:
+                    vec_lens.push_back(64);
+                    break;
+                case Architecture::HVX:
+                    vec_lens.push_back(1024);
+                    break;
+                case Architecture::X86:
+                    // Push in vector register sizes in descending order
+                    vec_lens.push_back(1024);
+                    vec_lens.push_back(512);
+                    vec_lens.push_back(256);
+                    vec_lens.push_back(128);
+
+
+            };
+            
+            for(int vec_len : vec_lens){
+                if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
+                    std::string uname = unique_name('t');
+                    abstractions[uname] = IRMutator::visit(op);
+                    return Variable::make(op->type, uname);
+                }
+
+            }
+            return IRMutator::visit(op);
+        }
+
+    public:
+
+        AbstractUnsupportedNodes(Architecture a, std::map<std::string, Expr> &abstrs)
+            : abstractions(abstrs), _arch(a) {
+        }
+    };
+
+    class ReplaceAbstractedNodes : public IRMutator {
+        using IRMutator::visit;
+
+        std::map<std::string, Expr> &abstractions;
+        std::map<std::string, Expr> &letvars;
+
+        Expr visit(const Variable *v) override {
+            if (abstractions.count(v->name) == 0)
+                return IRMutator::visit(v);
+            return abstractions[v->name];
+        }
+
+        Expr visit(const Load *v) override {
+            //debug(0) << "LOAD NAME: " << v->name << "\n";
+            if (v->name.length() > 4) {
+                // Trim the "-buf" suffix generated by rake
+                std::string vname = v->name.substr(0, v->name.length() - 4);
+                //debug(0) << vname << abstractions.count(vname) << "\n ";
+                if (abstractions.count(vname) > 0) {
+                    if (const Ramp *ramp = v->index.as<Ramp>()) {
+                        return Shuffle::make_slice(
+                            abstractions[vname],
+                            ((ramp->base).as<IntImm>())->value,
+                            ((ramp->stride).as<IntImm>())->value,
+                            ramp->lanes
+                        );
+                    } else
+                        return abstractions[vname];
+                } else if (letvars.count(vname)) {
+                    if (const Ramp *ramp = v->index.as<Ramp>()) {
+                        return Shuffle::make_slice(
+                            Variable::make(letvars[vname].type(), vname),
+                            ((ramp->base).as<IntImm>())->value,
+                            ((ramp->stride).as<IntImm>())->value,
+                            ramp->lanes);
+                    }
+                } else if (v->name.substr(v->name.length() - 4, 4) == std::string("-buf")) {
+                    if (const Ramp *ramp = v->index.as<Ramp>()) {
+                        return Shuffle::make_slice(
+                            // Todo: look for the actual variable, this type could be wrong
+                            Variable::make(v->type, vname),
+                            ((ramp->base).as<IntImm>())->value,
+                            ((ramp->stride).as<IntImm>())->value,
+                            ramp->lanes);
+                    }
+                }
+            }
+            return IRMutator::visit(v);
+        }
+
+    public:
+        ReplaceAbstractedNodes(std::map<std::string, Expr> &abstrs, std::map<std::string, Expr> &lvs)
+            : abstractions(abstrs), letvars(lvs) {}
+    };
+
+    bool containsFloat(const Expr &e) {
+        FloatFinder ff;
+        e.accept(&ff);
+        return ff.found();
+    }
+
+    Expr linearize(const Expr &e) {
+        if (is_const(e)) {
+            return e;
+        } else if (e.as<Variable>()) {
+            return e;
+        } else if (const Add *add = e.as<Add>()) {
+            return linearize(add->a) + linearize(add->b);
+        } else if (const Sub *sub = e.as<Sub>()) {
+            return linearize(sub->a) - linearize(sub->b);
+        } else if (const Mul *mul = e.as<Mul>()) {
+            // Assume the simplifier has run, so constants are to the right
+            if (is_const(mul->b)) {
+                return linearize(mul->a) * mul->b;
+            }
+        } else if (const Min *m = e.as<Min>()) {
+            return min(linearize(m->a), linearize(m->b));
+        } else if (const Max *m = e.as<Max>()) {
+            return max(linearize(m->a), linearize(m->b));
+        }
+        // TODO: Select nodes? Need to decide which kinds of
+        // conditions are OK if so. Or we could abstract the condition
+        // as a new variable.
+
+        // Just treat it as a symbolic unknown
+        std::string uname = unique_name('t');
+        abstractions[uname] = e;
+        return Variable::make(e.type(), uname);
+    }
+
+    /* Some visitor overrides to track the context within which each expr appears */
+    using IRMutator::visit;
+
+    Stmt visit(const LetStmt *stmt) override {
+        // debug(0) << "Let Found: " << stmt->name << " = " << stmt->value << "\n";
+
+        Expr value = stmt->value;
+        value = LowerIntrinsics().mutate(value);
+        value = AbstractUnsupportedNodes(arch, abstractions).mutate(value);
+
+        bounds.push(stmt->name, bounds_of_expr_in_scope(value, bounds, func_value_bounds));
+        let_vars[stmt->name] = value;
+        linearized_let_vars[stmt->name] = linearize(value);
+        let_decl_order.push_back(stmt->name);
+        return IRMutator::visit(stmt);
+    }
+
+    // synthesis
+    Expr synthesize_impl(Expr spec_expr, Expr orig_expr);
+};
+
+
+Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
+    return spec_expr;
+
+}
+
+}
+
 }
 }
