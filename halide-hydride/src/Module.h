@@ -11,6 +11,7 @@
 #include <memory>
 #include <string>
 
+#include "Bounds.h"
 #include "Argument.h"
 #include "Expr.h"
 #include "ExternalCode.h"
@@ -236,6 +237,11 @@ public:
 
     /** Set whether this module uses strict floating-point directives anywhere. */
     void set_any_strict_float(bool any_strict_float);
+
+
+    /** Getter & Setter for function value bounds */
+    void set_func_value_bounds(Halide::Internal::FuncValueBounds func_bounds);
+    Halide::Internal::FuncValueBounds get_func_value_bounds() const;
 };
 
 /** Link a set of modules together into one module. */

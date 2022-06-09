@@ -5,7 +5,11 @@
  * Tools for optimizing IR for Hexagon.
  */
 
+#include "Bounds.h"
 #include "Expr.h"
+
+
+#include <set>
 
 namespace Halide {
 
@@ -30,6 +34,9 @@ Stmt scatter_gather_generator(Stmt s);
  * attempts to simplify away most of the
  * interleaving/deinterleaving. */
 Stmt optimize_hexagon_instructions(Stmt s, const Target &t);
+
+
+Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb);
 
 /** Generate deinterleave or interleave operations, operating on
  * groups of vectors at a time. */

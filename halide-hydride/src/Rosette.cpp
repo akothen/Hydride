@@ -909,7 +909,7 @@ public:
             spec_expr = common_subexpression_elimination(spec_expr);
 
             // Re-write expression using synthesis
-            Expr optimized_expr = spec_expr ;//synthesize_impl(spec_expr, expr);
+            Expr optimized_expr = synthesize_impl(spec_expr, expr);
 
             // Replace abstracted abstractions
             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
@@ -1197,10 +1197,26 @@ private:
 
 
 Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
+
+
+    Encoding encoding = get_encoding(spec_expr, let_vars, linearized_let_vars);
+
+    // Infer symbolic variables
+    InferSymbolics symFinder(let_vars, linearized_let_vars, bounds, func_value_bounds, encoding);
+    spec_expr.accept(&symFinder);
+
+    auto spec_dispatch = get_expr_racket_dispatch(spec_expr, encoding, let_vars);
+    std::string expr = spec_dispatch(spec_expr, false /* set_mode */, false /* int_mode */);
+    std::cout << "EXPR:\n" << expr << "\n";
     return spec_expr;
 
 }
 
+} // namespace Hydride
+
+
+Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
+    return Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs).mutate(s);
 }
 
 }

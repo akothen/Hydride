@@ -11,6 +11,7 @@
 #include "IRMutator.h"
 #include "IROperator.h"
 #include "Lerp.h"
+#include "Rosette.h"
 #include "Scope.h"
 #include "Simplify.h"
 #include "Substitute.h"
@@ -2456,7 +2457,12 @@ Stmt scatter_gather_generator(Stmt s) {
     return s;
 }
 
+
+
+
 Stmt optimize_hexagon_instructions(Stmt s, const Target &t) {
+
+
     // We need to redo intrinsic matching due to simplification that has
     // happened after the end of target independent lowering.
     s = find_intrinsics(s);
@@ -2481,6 +2487,17 @@ Stmt optimize_hexagon_instructions(Stmt s, const Target &t) {
     // operations.
     s = FuseInterleaves().mutate(s);
     return s;
+}
+
+
+Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
+
+
+    std::set<const BaseExprNode *> mutated_exprs;
+    s = hydride_optimize_hvx(fvb, s, mutated_exprs);
+
+    return s;
+
 }
 
 }  // namespace Internal

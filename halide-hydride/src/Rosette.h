@@ -16,6 +16,8 @@ enum VarEncoding { Bitvector, Integer };
 std::string expr_to_racket(const Expr &expr, int indent = 1);
 std::string expr_to_racket(const Expr &expr, const std::map<std::string, VarEncoding> &encoding, const std::map<std::string, Expr> &let_vars, int indent = 1);
 
+Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs);
+
 }  // namespace Internal
 
 }  // namespace Halide
