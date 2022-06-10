@@ -661,6 +661,28 @@ public:
     }
 };
 
+
+class GatherVars : public IRVisitor {
+    Scope<> let_vars;
+
+public:
+    using IRVisitor::visit;
+
+    void visit(const Variable *var) override {
+        if (!let_vars.contains(var->name)) {
+            names.insert(var->name);
+        }
+    }
+
+    void visit (const Let *let) override {
+        let->value.accept(this);
+        ScopedBinding<>(let_vars, let->name);
+        let->body.accept(this);
+    }
+
+    std::set<std::string> names;
+};
+
 }
 
 Encoding get_encoding(const Expr &expr, const std::map<std::string, Expr> &let_vars, const std::map<std::string, Expr> &llet_vars) {
@@ -1207,7 +1229,166 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
     auto spec_dispatch = get_expr_racket_dispatch(spec_expr, encoding, let_vars);
     std::string expr = spec_dispatch(spec_expr, false /* set_mode */, false /* int_mode */);
-    std::cout << "EXPR:\n" << expr << "\n";
+
+
+    // Prepare spec file for Rake
+    std::stringstream axioms;
+    std::stringstream sym_bufs;
+
+    axioms << "(define axioms \n"
+           << "  (list ";
+
+    std::set<std::string> printed_vars;
+    Encoding bounds_encodings;
+    GatherVars bounds_vars;
+
+    for (auto buf : symFinder.getSymBufs()) {
+        debug(1) << "Symbolic buffer: " << buf.first << "\n";
+        if (encoding[buf.first] == Integer) {
+            sym_bufs << "(define-symbolic " << buf.first << " " << "(~> integer? integer?))\n";
+        } else {
+            sym_bufs << "(define-symbolic-buffer " << buf.first << " " << type_to_rake_type(buf.second, false, true) << ")\n";
+        }
+
+        printed_vars.insert(buf.first);
+
+        std::pair<std::string, int> key(buf.first, 0);
+        if (func_value_bounds.count(key)) {
+            auto in = func_value_bounds[key];
+            if (!in.is_everything()) {
+                if (!in.has_lower_bound()) {
+                    in.min = in.max.type().min();
+                }
+                if (!in.has_upper_bound()) {
+                    in.max = in.min.type().max();
+                }
+                if (!(containsFloat(in.min) || containsFloat(in.max))) {
+                    debug(0) << "Bounds:\t" << buf.first << " : " << in.min << " ----- " << in.max << "\n";
+                    axioms << "\n   (values-range-from "
+                           << buf.first
+                           << spec_dispatch(in.min, false /* set_mode */, false /* int_mode */)
+                           << spec_dispatch(in.max, false /* set_mode */, false /* int_mode */) << ")";
+
+                    std::map<std::string, Expr> let_vars;
+                    auto temp_encoding = get_encoding(in.min, let_vars, linearized_let_vars);
+                    insert_encodings(bounds_encodings, temp_encoding);
+                    temp_encoding = get_encoding(in.max, let_vars, linearized_let_vars);
+                    insert_encodings(bounds_encodings, temp_encoding);
+                    // Gather all referred-to variables
+                    in.min.accept(&bounds_vars);
+                    in.max.accept(&bounds_vars);
+                }
+            }
+        }
+    }
+
+    std::stringstream sym_vars;
+    for (auto var : symFinder.getSymVars()) {
+        debug(1) << "Symbolic var: " << var->name << "\n";
+        if (var->type.is_vector() && !var->type.is_bool()) {
+            sym_bufs << "(define-symbolic-buffer " << var->name << "-buf " << type_to_rake_type(var->type.element_of(), false, true) << ")\n";
+            sym_vars << "(define " << var->name << " (load " << var->name
+                     << "-buf (ramp 0 1 " << var->type.lanes() << ") (aligned 0 0)))\n";
+
+            // debug(0) << "Finding bounds_of_expr_in_scope:\n";
+            // debug(0) << "\t" << var->name << "\n";
+            // debug(0) << "B{\n";
+            // for (auto elem = bounds.cbegin(); elem != bounds.cend(); ++elem) {
+            //     debug(0) << "\t" << elem.name() << " : [" << elem.value().min << ", " << elem.value().max << "]\n";
+            // }
+            // debug(0) << "}\nFVB{\n";
+            // for (const auto &elem : func_value_bounds) {
+            //     debug(0) << "\t{" << elem.first.first << ", " << elem.first.second << "} -> [" << elem.second.min << ", " << elem.second.max << "]\n";
+            // }
+            // debug(0) << "}\n";
+
+            auto in = bounds_of_expr_in_scope(var, bounds, func_value_bounds);
+            if (!in.is_everything()) {
+                if (!in.has_lower_bound()) {
+                    in.min = var->type.min();
+                }
+                if (!in.has_upper_bound()) {
+                    in.max = var->type.max();
+                }
+
+                if (in.min.node_type() == IRNodeType::Broadcast)
+                    in.min = in.min.as<Broadcast>()->value;
+
+                if (in.max.node_type() == IRNodeType::Broadcast)
+                    in.max = in.max.as<Broadcast>()->value;
+
+                debug(0) << "Bounds:\t" << var->name << " : " << in.min << " ----- " << in.max << "\n";
+                axioms << "\n   (values-range-from "
+                       << var->name << "-buf"
+                       << spec_dispatch(in.min, false /* set_mode */, false /* int_mode */)
+                       << spec_dispatch(in.max, false /* set_mode */, false /* int_mode */) << ")";
+
+                std::map<std::string, Expr> let_vars;
+                auto temp_encoding = get_encoding(in.min, let_vars, linearized_let_vars);
+                insert_encodings(bounds_encodings, temp_encoding);
+                temp_encoding = get_encoding(in.max, let_vars, linearized_let_vars);
+                insert_encodings(bounds_encodings, temp_encoding);
+                // Gather all referred-to variables
+                in.min.accept(&bounds_vars);
+                in.max.accept(&bounds_vars);
+            }
+        } else {
+            if (encoding[var->name] == Bitvector) {
+                sym_vars << "(define-symbolic-var " << var->name
+                         << " " << type_to_rake_type(var->type.element_of(), false, true) << ")\n";
+            } else {
+                sym_vars << "(define-symbolic " << var->name << " integer?)\n";
+            }
+        }
+        printed_vars.insert(var->name);
+    }
+
+    axioms << "))\n";
+
+    // Order let-stmts so we don't use any vars before they are defined
+    std::set<std::string> live_lets = symFinder.getLiveLets();
+    std::vector<std::string> ordered_live_lets(live_lets.begin(), live_lets.end());
+    std::sort(
+        ordered_live_lets.begin(),
+        ordered_live_lets.end(),
+        [this](std::string n1, std::string n2) -> int {
+            int pos1 = std::find(let_decl_order.begin(), let_decl_order.end(), n1) - let_decl_order.begin();
+            int pos2 = std::find(let_decl_order.begin(), let_decl_order.end(), n2) - let_decl_order.begin();
+            return pos1 < pos2;
+        });
+
+    std::stringstream let_stmts;
+    for (auto var_name : ordered_live_lets) {
+        if (encoding[var_name] == Integer) {
+            Expr val = linearized_let_vars[var_name];
+            let_stmts << "(define " << var_name << " (var-lookup '" << var_name << spec_dispatch(val, true /* set_mode */, true /* int_mode */) << "))\n";
+        } else {
+            Expr val = let_vars[var_name];
+            let_stmts << "(define " << var_name << spec_dispatch(val, true /* set_mode */, false /* int_mode */) << ")\n";
+        }
+        printed_vars.insert(var_name);
+    }
+
+    for (const auto &name : bounds_vars.names) {
+        if (printed_vars.find(name) == printed_vars.end()) {
+            internal_assert(bounds_encodings.count(name) != 0) << "Found bounds Variable with no encoding: " << name << "\n";
+            internal_assert(bounds_encodings[name] == Bitvector) << "AJ didn't handle the bitvector case yet\n";
+            sym_vars << "(define-symbolic " << name << " integer?)\n";
+        }
+    }
+
+
+    std::cout << "============== Racket File Contents ============\n";
+    std::cout << sym_bufs.str() << "\n";
+    std::cout << sym_vars.str() << "\n";
+    std::cout << axioms.str() << "\n";
+    std::cout << let_stmts.str() << "\n";
+
+    std::cout << expr << "\n";
+
+
+    std::cout << "================================================\n";
+
     return spec_expr;
 
 }

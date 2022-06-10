@@ -1319,12 +1319,6 @@ Value *CodeGen_LLVM::codegen(const Expr &e) {
     e.accept(this);
     internal_assert(value) << "Codegen of an expr did not produce an llvm value\n"
                            << e;
-    //if(getenv("RACKET_GEN") || true){
-    if(true){
-        debug(0) << "RACKET: " << expr_to_racket(e) << "\n";
-        std::cout << "RACKET: " << expr_to_racket(e) << "\n";
-    }
-    // auto s = expr_to_racket(e);
 
 
     // Halide's type system doesn't distinguish between scalars and
