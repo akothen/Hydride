@@ -1,9 +1,7 @@
 
 import ply.yacc as yacc
 from lex import tokens
-import json
 from HexAST import *
-from collections import defaultdict
 
 from RoseHexCommon import *
 
@@ -21,6 +19,8 @@ def new_binary_expr(parser, op, a, b):
   return expr
 
 def parse_binary(op, p):
+  print("p:")
+  print(p)
   p[0] = new_binary_expr(p.parser, op, p[1], p[3])
 
 def parse_unary(op, p):
@@ -83,6 +83,7 @@ def p_expr_or_equal(p):
 def p_expr_xor_equal(p):
   'expr : expr XOR_EQUAL expr'
   #expr_id = GenUniqueID(parser)
+  print("here--")
   p[0] = Update(p[1], new_binary_expr(p.parser, op='^', a=p[1], b=p[3]))
 
 def p_expr_and_equal(p):
@@ -237,6 +238,7 @@ def p_args(p):
 
 def p_expr_bit_index(p):
   'expr : expr LBRACE expr RBRACE'
+  print("HERE+++++")
   expr_id = "index." + GenUniqueID(parser)
   if type(p[1]) == Var:
     if "Q" in p[1].name:
@@ -426,7 +428,6 @@ precedence = (
     ('right', 'UPDATE'),
     ('right', 'QUEST'),
     ('left', 'COLON'),
-
     ('left', 'BITWISE_OR'),
     ('left', 'BITWISE_AND'),
     ('left', 'BITWISE_XOR'),
@@ -440,24 +441,28 @@ precedence = (
     ('left', 'TIMES', 'DIV', 'MOD'),
     ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
     ('left', 'DOT', 'LPAREN', 'RPAREN'),
-    ('left', 'LBRACE', 'RBRACE',),
-
-    
+    ('left', 'LBRACE', 'RBRACE',),   
 )
 
-parser = yacc.yacc()
+
+parser = None
 
 def ResetParser(parser):
   parser.id_counter = 0
   parser.binary_exprs = []
 
 def Parse(src):
+  global parser
+  parser = yacc.yacc()
   ResetParser(parser)
-  AST = parser.parse(src)
+  AST = parser.parse(src, debug=True, tracking=True)
   return AST
 
 
-def GetVariableSize(Variable):
+def GetVariableSize(Variable, Pseudocode):
+  if ".v[" in Pseudocode:
+    if Variable == "Vdd" or Variable == "Vxx":
+      return 2048
   if "Q" in Variable:
     return 128
   elif "R" in Variable:
@@ -471,10 +476,10 @@ def IsVariableScalar(Variable):
   return False
 
 
-def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
-  inst_specs = inst.split(':')
-  reg_inst = inst_specs[0]
-  ParsedInst = Parse(reg_inst)
+def GetSpecFrom(Name : str, Inst : str, Pseudocode : str):
+  Inst_specs = Inst.split(':')
+  reg_Inst = Inst_specs[0]
+  ParsedInst = Parse(reg_Inst)
   print("ParsedInst:")
   print(ParsedInst)
   if isinstance(ParsedInst, list):
@@ -494,7 +499,7 @@ def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
       rhs = assign
   else: 
     lhs = assign.lhs
-    if isinstance(lhs, list): # some annoying instructions return 2 things, TODO: ask Akash about this
+    if isinstance(lhs, list): # some annoying Instructions return 2 things, TODO: ask Akash about this
       lhs = lhs[0]
     # += or *=
     if isinstance(assign.rhs, BinaryExpr):
@@ -524,7 +529,7 @@ def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
     else:
       rhs =  [assign.rhs]
     
-  # SIMD instruction
+  # SIMD Instruction
   if isinstance(lhs, ElemTypeInfo):
     var = lhs.obj
     rettype = lhs.elemtype 
@@ -542,12 +547,12 @@ def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
     name = rhs.funcname
     params = rhs.args
   elif isinstance(rhs, list):
-    name = "TODO"
+    name = Name
     params = rhs
     print("params:")
     print(params)
   else:
-    name = "TODO"
+    name = Name
     params = []
   
   param_sizes = []
@@ -559,37 +564,35 @@ def GetSpecFrom(inst, Pseudocode, intrinsic="TODO"):
     if isinstance(param, UnaryExpr):
       param = param.a
     if type(param) == Var:
-      param_sizes.append(GetVariableSize(param.name))
+      param_sizes.append(GetVariableSize(param.name, Pseudocode))
       if IsVariableScalar(param.name):
         scalarregs.append(param.name)
     elif type(param) == ElemTypeInfo:
       assert type(param.obj) == Var
-      param_sizes.append(GetVariableSize(param.obj.name))
+      param_sizes.append(GetVariableSize(param.obj.name, Pseudocode))
       if IsVariableScalar(param.obj.name):
         scalarregs.append(param.obj.name)
     param_args.append(param)
 
   print("param_sizes:")
   print(param_sizes)
-  retsize = GetVariableSize(retname)
-  sema = Sema(intrin=intrinsic, inst=name, params=param_args, spec=Parse(Pseudocode), \
+  retsize = GetVariableSize(retname, Pseudocode)
+  sema = Sema(intrin=Name, inst=name, params=param_args, spec=Parse(Pseudocode), \
     retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
   return sema
 
 
 def ParseHVXSemantics(Semantics):
-  semaList = []
-  for inst, Pseudocode in Semantics.items():
-    # We currently ignore any instructions that are just assembler syntactic sugar
+  for Inst, Pseudocode in Semantics.items():
+    # We currently ignore any Instructions that are just assembler syntactic sugar
     if Pseudocode.startswith("Assembler mapped to"):
       continue 
-    Sema = GetSpecFrom(inst, Pseudocode)
-    semaList.append(Sema)
-  return semaList
+    Sema = GetSpecFrom(Inst, Pseudocode)
+    print(Sema)
 
 
 if __name__ == '__main__':
-  from dict.HexInsts import HexInsts
+  from HexInsts import HexInsts
   ParseHVXSemantics(HexInsts)
 
 
