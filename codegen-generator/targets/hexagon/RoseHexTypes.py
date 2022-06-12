@@ -13,7 +13,7 @@ from RoseHexCommon import *
 
 # Define types used in HVX pseudocode
 HexTypes = {
-    'v': RoseBitVectorType.create(HVXVectorWidth >> 1),
+    'v': RoseBitVectorType.create(1024),
     'w': RoseBitVectorType.create(32),
     'uw': RoseBitVectorType.create(32),
     'h': RoseBitVectorType.create(16),
