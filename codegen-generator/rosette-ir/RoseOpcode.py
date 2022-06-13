@@ -60,6 +60,7 @@ class RoseOpcode(Enum):
     bvextract = auto()
     bvsignextend = auto()
     bvzeroextend = auto()
+    bvsizeextend = auto()
     
     # Some primitive ops
     add = auto()
@@ -238,6 +239,13 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() > BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
+        if self.value == self.bvsizeextend.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            assert isinstance(Inputs[1], RoseValues.RoseConstant)
+            assert isinstance(Inputs[2], RoseValues.RoseConstant)
+            assert Inputs[1].getValue() > BVInputs[0].getType().getBitwidth()
+            return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvssat.value \
         or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
@@ -357,6 +365,18 @@ class RoseOpcode(Enum):
         or self.value == self.bvzeroextend.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
+                return False
+            if Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth():
+                return False
+            if len(BVInputs) == 1:
+                return True
+            else:
+                return False
+        if self.value == self.bvsizeextend.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            if not isinstance(Inputs[1], RoseValues.RoseConstant):
+                return False
+            if not isinstance(Inputs[2], RoseValues.RoseConstant):
                 return False
             if Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth():
                 return False
@@ -589,6 +609,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvtrunc.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
+        or self.value == self.bvsizeextend.value \
         or self.value == self.ret.value:
             return False
         return None
@@ -650,6 +671,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
+        or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunc.value \
@@ -726,7 +748,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunc.value:
             return (NumInputs == 2)
-        if self.value == self.select.value:
+        if self.value == self.select.value \
+        or self.value == self.bvsizeextend.value:
             return (NumInputs == 3)
         if self.value == self.call.value \
         or self.value == self.opaquecall.value:
@@ -811,6 +834,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
+        or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunc.value:
@@ -820,6 +844,7 @@ class RoseOpcode(Enum):
     def isSizeChangingOp(self):
         if self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
+        or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunc.value:
@@ -917,6 +942,7 @@ class RoseOpcode(Enum):
         # These ops exist in Rose IR but not in Rosette
         if self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsizeextend.value \
         or self.value == self.bvtrunc.value \
         or self.value == self.bvinsert.value \
         or self.value == self.call.value \
