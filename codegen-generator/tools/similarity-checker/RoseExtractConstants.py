@@ -480,9 +480,9 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
           or Operation.getOpcode().typesOfOperandsAreEqual():   
           if isinstance(Operation, RoseDivOp):
             if isinstance(Operation.getOperand(1), RoseConstant):
-              assert Operation.getOperand(0) == LoopIterator
-              Operation.setOperand(1, LoopStep)
-              Visited.add(Operation)
+              if Operation.getOperand(0) == LoopIterator:
+                Operation.setOperand(1, LoopStep)
+                Visited.add(Operation)
             return
           Worklist.extend(Operation.getOperands())
           continue
