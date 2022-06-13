@@ -2250,6 +2250,8 @@ def FixReductionPattern3ToMakeBlockRerollable(Block : RoseBlock, \
         continue
       if isinstance(Trace1Op, RoseBVExtractSliceOp) \
         and isinstance(Trace2Op, RoseBVExtractSliceOp):
+        if Trace1Op.getInputBitVector() != Trace2Op.getInputBitVector():
+          return False
         Trace1.append(Trace1Op.getInputBitVector())
         Trace2.append(Trace2Op.getInputBitVector())
         continue
