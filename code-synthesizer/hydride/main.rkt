@@ -29,16 +29,24 @@
 (require hydride/utils/misc)
 
 
+;; Hydride IR
 (require hydride/ir/hydride/semantics)
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/length)
 (require hydride/ir/hydride/interpreter)
 
+;; CPP IR
+(require hydride/cpp)
+
+;; Halide IR
+(require hydride/halide)
+
 
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
+
 
 
 (provide 
@@ -50,6 +58,15 @@
   (all-from-out hydride/ir/hydride/cost_model)
   (all-from-out hydride/ir/hydride/length)
   (all-from-out hydride/ir/hydride/interpreter)
+
+
+  (all-from-out hydride/cpp)
+
+  (all-from-out hydride/halide)
+
+
+
+
   (all-from-out hydride/synthesis/symbolic_synthesis)
   (all-from-out hydride/synthesis/iterative_synthesis)
   (all-from-out hydride/synthesis/synth_main)
