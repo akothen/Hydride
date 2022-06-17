@@ -60,11 +60,17 @@ class RoseBVSizeExensionOp(RoseBitVectorOp):
                                               args[3], RoseUndefRegion())
     assert(False)
   
+  def getExtensionKindPos(self):
+    return 2
+  
+  def getExtensionSize(self):
+    return 0
+
   def getInputBitVector(self):
-    return self.getOperand(0)
+    return self.getOperand(self.getExtensionSize())
 
   def getExtensionKind(self):
-    return self.getOperand(2)
+    return self.getOperand(self.getExtensionKindPos())
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
