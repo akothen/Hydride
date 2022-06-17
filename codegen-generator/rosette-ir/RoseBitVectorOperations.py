@@ -14,90 +14,18 @@ from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
+from RoseSizeExtBitVectorOperation import RoseBVSizeExensionOp
 from RoseLLVMContext import *
 
 import llvmlite
 
 
-class RoseBVSizeExensionOp(RoseBitVectorOp):
-  def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, \
-                           ExtensionKind : RoseValue, ParentBlock):
-    assert isinstance(Bitvector.getType(), RoseBitVectorType) 
-    OperandList = [Bitvector, TargetBitwidth, ExtensionKind]
-    super().__init__(RoseOpcode.bvsizeextend, Name, OperandList, ParentBlock)
 
-  @staticmethod
-  def create(*args):
-    if len(args) == 5:
-      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
-        if isinstance(args[3], bool):
-          IsSignedVal = RoseConstant.create(args[3], RoseBooleanType.create())
-          return RoseBVSizeExensionOp(args[0], args[1], TargetBitwidthVal, IsSignedVal, args[4])
-        if isinstance(args[3], RoseValue):
-          return RoseBVSizeExensionOp(args[0], args[1], TargetBitwidthVal, args[3], args[4])
-      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
-        if isinstance(args[3], bool):
-          IsSignedVal = RoseConstant.create(args[3], RoseBooleanType.create())
-          return RoseBVSizeExensionOp(args[0], args[1], args[2], IsSignedVal, args[4])
-        if isinstance(args[3], RoseValue):
-          return RoseBVSizeExensionOp(args[0], args[1], args[2], args[3], args[4])
-    if len(args) == 4:
-      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-      and isinstance(args[2], int):
-        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
-        if isinstance(args[3], bool):
-          IsSignedVal = RoseConstant.create(args[3], RoseBooleanType.create())
-          return RoseBVSizeExensionOp(args[0], args[1], TargetBitwidthVal, \
-                                          IsSignedVal, RoseUndefRegion())
-        if isinstance(args[3], RoseValue):
-          return RoseBVSizeExensionOp(args[0], args[1], TargetBitwidthVal, \
-                                          args[3], RoseUndefRegion())
-      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
-      and isinstance(args[2], RoseValue):
-        if isinstance(args[3], bool):
-          IsSignedVal = RoseConstant.create(args[3], RoseBooleanType.create())
-          return RoseBVSizeExensionOp(args[0], args[1], args[2], \
-                                            IsSignedVal, RoseUndefRegion())
-        if isinstance(args[3], RoseValue):
-          return RoseBVSizeExensionOp(args[0], args[1], args[2], \
-                                              args[3], RoseUndefRegion())
-    assert(False)
-  
-  def getInputBitVector(self):
-    return self.getOperand(0)
-
-  def getExtensionKind(self):
-    return self.getOperand(2)
-
-  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
-    assert ReverseIndexing == False
-    Spaces = ""
-    for _ in range(NumSpace):
-      Spaces += " "
-    Name = super().getName()
-    String = Spaces + "(define " + Name + " ("
-    String += ("bvsizeext ")
-    String += " " + self.getInputBitVector().getName()
-    String += " " + str(self.getOutputBitwidth())
-    if isinstance(self.getExtensionKind(), RoseConstant):
-      if self.getExtensionKind().getValue() == 1:
-        String += " #t"
-      else:
-        String += " #f"
-    else:
-      String += " " + self.getExtensionKind().getName()
-    String += "))\n"
-    return String
-
-
-class RoseBVSignExtendOp(RoseBitVectorOp):
+class RoseBVSignExtendOp(RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType) 
-    OperandList = [Bitvector, TargetBitwidth]
-    super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
+    TrueVal = RoseConstant.create(1, RoseBooleanType.create())
+    super().__init__(Name, Bitvector, TargetBitwidth, TrueVal, ParentBlock)
   
   @staticmethod
   def create(*args):
@@ -119,17 +47,17 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
         return RoseBVSignExtendOp(args[0], args[1], args[2], RoseUndefRegion())
     assert(False)
 
-  def getInputBitVector(self):
-    return self.getOperand(0)
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
+    if not isinstance(self.getExtensionKind(), RoseConstant):
+      return super().to_rosette(NumSpace, ReverseIndexing)
+    # Use existing Rosette function
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    String += (self.Opcode.getRosetteOp() + " ")
+    String += ("sign-extend ")
     String += " " + self.getInputBitVector().getName()
     String += " (bitvector " + str(self.getOutputBitwidth())
     String += ")))\n"
@@ -142,11 +70,11 @@ class RoseBVSignExtendOp(RoseBitVectorOp):
     return IRBuilder.sext(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
-class RoseBVZeroExtendOp(RoseBitVectorOp):
+class RoseBVZeroExtendOp(RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
-    OperandList = [Bitvector, TargetBitwidth]
-    super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
+    FalseVal = RoseConstant.create(0, RoseBooleanType.create())
+    super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
 
   @staticmethod
   def create(*args):
@@ -168,17 +96,17 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):
         return RoseBVZeroExtendOp(args[0], args[1], args[2], RoseUndefRegion())
     assert(False)
 
-  def getInputBitVector(self):
-    return self.getOperand(0)
-
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
+    if not isinstance(self.getExtensionKind(), RoseConstant):
+      return super().to_rosette(NumSpace, ReverseIndexing)
+    # Use existing Rosette function
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     Name = super().getName()
     String = Spaces + "(define " + Name + " ("
-    String += (self.Opcode.getRosetteOp() + " ")
+    String += ("zero-extend ")
     String += " " + self.getInputBitVector().getName()
     String += " (bitvector " + str(self.getOutputBitwidth())
     String += ")))\n"
