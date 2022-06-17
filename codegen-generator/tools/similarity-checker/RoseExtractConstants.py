@@ -718,6 +718,58 @@ def FixIndicesForBVOpsOutsideOfLoops(Op : RoseBitVectorOp, Visited : set, \
   return
 
 
+def ExtractBVSignedness(Function : RoseFunction, SizeExtOp : RoseBVSizeExensionOp, \
+                       ArgToConstantValsMap : dict, OpsWithUnknownExtensionKind : set, \
+                       Visited : set, Context : RoseContext):
+  print("SizeExtOp:")
+  SizeExtOp.print()
+  assert isinstance(SizeExtOp, RoseBVSizeExensionOp)
+  Worklist = list()
+  Worklist.append(SizeExtOp.getInputBitVector())
+  if isinstance(SizeExtOp.getInputBitVector(), RoseBVExtractSliceOp):
+    ExtensionKindArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                    SizeExtOp.getOperand(SizeExtOp.getExtensionKindPos()).getType()))
+    ArgToConstantValsMap[ExtensionKindArg] = \
+              SizeExtOp.getOperand(SizeExtOp.getExtensionKindPos()).clone()
+    SizeExtOp.setOperand(SizeExtOp.getExtensionKindPos(), ExtensionKindArg)
+    return True
+  # Trace back to see what ops affect the signedness of the size extension op
+  ExtKindList = list()
+  Worklist = [SizeExtOp.getInputBitVector()]
+  while len(Worklist) != 0:
+    Op = Worklist.pop()
+    if isinstance(Op, RoseOperation):
+      if Op.getOpcode().typesOfInputsAndOutputEqual() \
+        or Op.getOpcode().typesOfOperandsAreEqual():
+        Worklist.extend(Op.getOperands())
+        continue
+      if isinstance(Op, RoseBVSizeExensionOp):
+        if isinstance(Op.getOperand(Op.getExtensionKindPos()), RoseConstant):
+          OpsWithUnknownExtensionKind.add(SizeExtOp)
+          return False
+        ExtKindList.append(Op.getOperand(Op.getExtensionKindPos()))
+        continue
+      if isinstance(Op, RoseBVExtractSliceOp):
+        ExtensionKindArg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          SizeExtOp.getOperand(SizeExtOp.getExtensionKindPos()).getType()))
+        ArgToConstantValsMap[ExtensionKindArg] = \
+                        SizeExtOp.getOperand(SizeExtOp.getExtensionKindPos()).clone()
+        SizeExtOp.setOperand(SizeExtOp.getExtensionKindPos(), ExtensionKindArg)
+        return True
+  # OR the extension kind operands
+  OrOp = RoseOrOp.create(Context.genName("%" + "extkind"), ExtKindList[:2])
+  Block = SizeExtOp.getParent()
+  Block.addOperationBefore(OrOp, SizeExtOp)
+  Visited.add(OrOp)
+  if len(ExtKindList) > 2:
+    for Operation in ExtKindList[2:]:
+      OrOp = RoseOrOp.create(Context.genName("%" + "extkind"), [OrOp, Operation])
+      Block.addOperationBefore(OrOp, SizeExtOp)
+      Visited.add(OrOp)
+  SizeExtOp.setOperand(SizeExtOp.getExtensionKindPos(), OrOp)
+  return True
+
+
 def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
                               Visited : set, UnknownVal : set,  IndexingOps : set, \
                               LoopList : list, SkipBVExtracts : set, \
@@ -745,6 +797,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   print("--------OpBitwidthEqLoopStepList:")
   print(OpBitwidthEqLoopStepList)
   IndicesToBitwidth = dict()
+  OpsWithUnknownExtensionKind = set()
   for Op in reversed(OpList):
     if Op in Visited:
       print("ALREADY VISITED")
@@ -768,9 +821,19 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       # if this is an indexing op, we can ignore it
       if Op in IndexingOps:
         continue
+      if isinstance(Op, RoseBVSizeExensionOp):
+        ExtractBVSignedness(Function, Op, ArgToConstantValsMap, \
+                      OpsWithUnknownExtensionKind, Visited, Context)
+        OpsToTry = set()
+        OpsToTry.update(OpsWithUnknownExtensionKind)
+        for Operation in OpsToTry:
+          if ExtractBVSignedness(Function, Operation, ArgToConstantValsMap, \
+                        OpsWithUnknownExtensionKind, Visited, Context) == True:
+            OpsWithUnknownExtensionKind.remove(Operation)
       if Op in BVValToBitwidthVal:
         Op.setOperand(1, BVValToBitwidthVal[Op])
         Op.setType(RoseBitVectorType.create(BVValToBitwidthVal[Op]))
+
         BVValToBitwidthVal[Op] =  Op.getOperand(1)
         if Op.getOperand(0) not in BVValToBitwidthVal:
           UnknownVal.add(Op.getOperand(0))
