@@ -140,6 +140,7 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
   BVInsertOps = list()
   BVExtractOps = list()
   Result = list()
+  #BlockToBVInsertOp = dict()
   for Block in BlockList:
     print("BLOCK IN BLOCKLIST:")
     Block.print()
@@ -149,9 +150,15 @@ def GetOpDeterminingLoopBoundsInBlockList(Function : RoseFunction, BlockList : l
       if isinstance(Op, RoseBVInsertSliceOp):
         if Op.getInputBitVector() == FunctionOutput:
           if isinstance(Op.getOutputBitwidth(), RoseArgument):
+            #if Block in BlockToBVInsertOp:
+            #  return None
             Result.append(Op)
+            #BlockToBVInsertOp[Block] = Op
             continue
+          #if Block in BlockToBVInsertOp:
+          # return None
           BVInsertOps.append(Op)
+          #BlockToBVInsertOp[Block] = Op
           continue
       if isinstance(Op, RoseBVExtractSliceOp):
         if Op in SkipBVExtracts:
@@ -244,6 +251,7 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   return GetOpDeterminingLoopBoundsInBlockList(Loop.getFunction(), BlockList, SkipBVExtracts)
 
 
+
 def GenConcreteValue(ConcreteValue : RoseConstant):
   assert isinstance(ConcreteValue, RoseConstant)
   if isinstance(ConcreteValue.getType(), RoseBitVectorType):
@@ -258,7 +266,7 @@ def GenConcreteValue(ConcreteValue : RoseConstant):
       Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"
     else:
       Input = "(bv #b"
-      HexVal = hex(ConcreteValue.getValue())
+      HexVal = bin(ConcreteValue.getValue())
       HexValString = str(HexVal[2:])
       LeftOver = ConcreteValue.getType().getBitwidth() - len(HexValString)
       for _ in range(LeftOver):
@@ -269,3 +277,19 @@ def GenConcreteValue(ConcreteValue : RoseConstant):
     assert isinstance(ConcreteValue.getType(), RoseIntegerType)
     Input = str(ConcreteValue.getValue())
   return Input
+
+
+# The names in Rosette IR need to be changed to names of instructions
+# in LLVM IR.
+def RoseIRToLLVM(Name : str):
+  assert isinstance(Name, str)
+  NameList = list(Name)
+  Index = 0
+  for Char in NameList:
+    if Char != "_":
+      break
+    Index += 1
+  Name = "".join(NameList[Index:])
+  return "hydride_" + Name
+
+
