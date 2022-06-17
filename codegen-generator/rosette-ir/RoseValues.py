@@ -6,7 +6,6 @@
 #############################################################
 
 
-from re import L
 from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
@@ -42,7 +41,8 @@ class RoseConstant(RoseValue):
     if type(Value) == int:
       assert isinstance(Type, RoseBitVectorType) \
           or isinstance(Type, RoseIntegerType) \
-          or isinstance(Type, RoseStringType)
+          or isinstance(Type, RoseStringType) \
+          or isinstance(Type, RoseBooleanType)
       if not isinstance(Type, RoseStringType):
         assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
