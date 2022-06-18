@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="alphaindex.xsl" version="1.0"?>
+<!DOCTYPE alphaindex PUBLIC "-//ARM//DTD alphaindex //EN" "alphaindex.dtd">
+<!-- Copyright (c) 2010-2022 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<alphaindex>
+  <toptitle instructionset="A64" />
+  <iforms title="A64 -- SME Instructions (alphabetic order)">
+    <iform iformfile="addha_za_pp_z.xml" heading="ADDHA" id="addha_za_pp_z">Add horizontally vector elements to ZA tile.</iform>
+    <iform iformfile="addspl_r_ri.xml" heading="ADDSPL" id="addspl_r_ri">Add multiple of Streaming SVE predicate register size to scalar register.</iform>
+    <iform iformfile="addsvl_r_ri.xml" heading="ADDSVL" id="addsvl_r_ri">Add multiple of Streaming SVE vector register size to scalar register.</iform>
+    <iform iformfile="addva_za_pp_z.xml" heading="ADDVA" id="addva_za_pp_z">Add vertically vector elements to ZA tile.</iform>
+    <iform iformfile="bfmopa_za32_pp_zz.xml" heading="BFMOPA" id="bfmopa_za32_pp_zz">BFloat16 sum of outer products and accumulate.</iform>
+    <iform iformfile="bfmops_za32_pp_zz.xml" heading="BFMOPS" id="bfmops_za32_pp_zz">BFloat16 sum of outer products and subtract.</iform>
+    <iform iformfile="fmopa_za_pp_zz.xml" heading="FMOPA (non-widening)" id="fmopa_za_pp_zz">Floating-point outer product and accumulate.</iform>
+    <iform iformfile="fmopa_za32_pp_zz.xml" heading="FMOPA (widening)" id="fmopa_za32_pp_zz">Half-precision floating-point sum of outer products and accumulate.</iform>
+    <iform iformfile="fmops_za_pp_zz.xml" heading="FMOPS (non-widening)" id="fmops_za_pp_zz">Floating-point outer product and subtract.</iform>
+    <iform iformfile="fmops_za32_pp_zz.xml" heading="FMOPS (widening)" id="fmops_za32_pp_zz">Half-precision floating-point sum of outer products and subtract.</iform>
+    <iform iformfile="ld1b_za_p_rrr.xml" heading="LD1B" id="ld1b_za_p_rrr">Contiguous load of bytes to 8-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1d_za_p_rrr.xml" heading="LD1D" id="ld1d_za_p_rrr">Contiguous load of doublewords to 64-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1h_za_p_rrr.xml" heading="LD1H" id="ld1h_za_p_rrr">Contiguous load of halfwords to 16-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1q_za_p_rrr.xml" heading="LD1Q" id="ld1q_za_p_rrr">Contiguous load of quadwords to 128-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1w_za_p_rrr.xml" heading="LD1W" id="ld1w_za_p_rrr">Contiguous load of words to 32-bit element ZA tile slice.</iform>
+    <iform iformfile="ldr_za_ri.xml" heading="LDR" id="ldr_za_ri">Load vector to ZA array.</iform>
+    <iform iformfile="mov_mova_z_p_rza.xml" heading="MOV (tile to vector)" id="MOV_mova_z_p_rza">Move ZA tile slice to vector register: an alias of MOVA (tile to vector).</iform>
+    <iform iformfile="mov_mova_za_p_rz.xml" heading="MOV (vector to tile)" id="MOV_mova_za_p_rz">Move vector register to ZA tile slice: an alias of MOVA (vector to tile).</iform>
+    <iform iformfile="mova_z_p_rza.xml" heading="MOVA (tile to vector)" id="mova_z_p_rza">Move ZA tile slice to vector register.</iform>
+    <iform iformfile="mova_za_p_rz.xml" heading="MOVA (vector to tile)" id="mova_za_p_rz">Move vector register to ZA tile slice.</iform>
+    <iform iformfile="rdsvl_r_i.xml" heading="RDSVL" id="rdsvl_r_i">Read multiple of Streaming SVE vector register size to scalar register.</iform>
+    <iform iformfile="smopa_za_pp_zz.xml" heading="SMOPA" id="smopa_za_pp_zz">Signed integer sum of outer products and accumulate.</iform>
+    <iform iformfile="smops_za_pp_zz.xml" heading="SMOPS" id="smops_za_pp_zz">Signed integer sum of outer products and subtract.</iform>
+    <iform iformfile="st1b_za_p_rrr.xml" heading="ST1B" id="st1b_za_p_rrr">Contiguous store of bytes from 8-bit element ZA tile slice.</iform>
+    <iform iformfile="st1d_za_p_rrr.xml" heading="ST1D" id="st1d_za_p_rrr">Contiguous store of doublewords from 64-bit element ZA tile slice.</iform>
+    <iform iformfile="st1h_za_p_rrr.xml" heading="ST1H" id="st1h_za_p_rrr">Contiguous store of halfwords from 16-bit element ZA tile slice.</iform>
+    <iform iformfile="st1q_za_p_rrr.xml" heading="ST1Q" id="st1q_za_p_rrr">Contiguous store of quadwords from 128-bit element ZA tile slice.</iform>
+    <iform iformfile="st1w_za_p_rrr.xml" heading="ST1W" id="st1w_za_p_rrr">Contiguous store of words from 32-bit element ZA tile slice.</iform>
+    <iform iformfile="str_za_ri.xml" heading="STR" id="str_za_ri">Store vector from ZA array.</iform>
+    <iform iformfile="sumopa_za_pp_zz.xml" heading="SUMOPA" id="sumopa_za_pp_zz">Signed by unsigned integer sum of outer products and accumulate.</iform>
+    <iform iformfile="sumops_za_pp_zz.xml" heading="SUMOPS" id="sumops_za_pp_zz">Signed by unsigned integer sum of outer products and subtract.</iform>
+    <iform iformfile="umopa_za_pp_zz.xml" heading="UMOPA" id="umopa_za_pp_zz">Unsigned integer sum of outer products and accumulate.</iform>
+    <iform iformfile="umops_za_pp_zz.xml" heading="UMOPS" id="umops_za_pp_zz">Unsigned integer sum of outer products and subtract.</iform>
+    <iform iformfile="usmopa_za_pp_zz.xml" heading="USMOPA" id="usmopa_za_pp_zz">Unsigned by signed integer sum of outer products and accumulate.</iform>
+    <iform iformfile="usmops_za_pp_zz.xml" heading="USMOPS" id="usmops_za_pp_zz">Unsigned by signed integer sum of outer products and subtract.</iform>
+    <iform iformfile="zero_za_i.xml" heading="ZERO" id="zero_za_i">Zero a list of 64-bit element ZA tiles.</iform>
+  </iforms>
+</alphaindex>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2022 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="WFIT" title="WFIT -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="WFIT" />
+  </docvars>
+  <heading>WFIT</heading>
+  <desc>
+    <brief>
+      <para>Wait For Interrupt with Timeout</para>
+    </brief>
+    <authored>
+      <para>Wait For Interrupt with Timeout is a hint instruction that indicates that the PE can enter a low-power state and remain there until either a local timeout event or a wakeup event occurs. For more information, see <xref linkend="BEIJBEJD">Wait For Interrupt</xref>.</para>
+      <para>As described in <xref linkend="BEIJBEJD">Wait For Interrupt</xref>, the execution of a <instruction>WFIT</instruction> instruction that  would otherwise cause entry to a low-power state can be trapped to a higher Exception level.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="WFIT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="ARMv8.7" feature="FEAT_WFxT" />
+      </arch_variants>
+      <regdiagram form="32" psname="aarch64/instrs/system/sysinstwithreg/wfit">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="WFIT_only_systeminstrswithreg" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="system" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="WFIT" />
+        </docvars>
+        <asmtemplate><text>WFIT  </text><a link="sa_xt" hover="64-bit general-purpose source register (field &quot;Rd&quot;)">&lt;Xt&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="aarch64/instrs/system/sysinstwithreg/wfit" mylink="aarch64.instrs.system.sysinstwithreg.wfit" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !<a link="impl-shared.HaveFeatWFxT.0" file="shared_pseudocode.xml" hover="function: boolean HaveFeatWFxT()">HaveFeatWFxT</a>() then UNDEFINED;
+
+integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="WFIT_only_systeminstrswithreg" symboldefcount="1">
+      <symbol link="sa_xt">&lt;Xt&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="aarch64/instrs/system/sysinstwithreg/wfit" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">integer localtimeout = UInt(X[d, 64]);
+
+if <a link="impl-shared.Halted.0" file="shared_pseudocode.xml" hover="function: boolean Halted()">Halted</a>() &amp;&amp; <a link="impl-shared.ConstrainUnpredictableBool.1" file="shared_pseudocode.xml" hover="function: boolean ConstrainUnpredictableBool(Unpredictable which)">ConstrainUnpredictableBool</a>(<a link="Unpredictable_WFxTDEBUG" file="shared_pseudocode.xml" hover="enumeration Unpredictable { Unpredictable_VMSR,&#13;  Unpredictable_WBOVERLAPLD,&#13;  Unpredictable_WBOVERLAPST,&#13;  Unpredictable_LDPOVERLAP,&#13;  Unpredictable_BASEOVERLAP,&#13;  Unpredictable_DATAOVERLAP,&#13;  Unpredictable_DEVPAGE2,&#13;  Unpredictable_INSTRDEVICE,&#13;  Unpredictable_RESCPACR,&#13;  Unpredictable_RESMAIR,&#13;  Unpredictable_S1CTAGGED,&#13;  Unpredictable_S2RESMEMATTR,&#13;  Unpredictable_RESTEXCB,&#13;  Unpredictable_RESPRRR,&#13;  Unpredictable_RESDACR,&#13;  Unpredictable_RESVTCRS,&#13;  Unpredictable_RESTnSZ,&#13;  Unpredictable_RESTCF,&#13;  Unpredictable_DEVICETAGSTORE,&#13;  Unpredictable_OORTnSZ,&#13;  Unpredictable_LARGEIPA,&#13;  Unpredictable_ESRCONDPASS,&#13;  Unpredictable_ILZEROIT,&#13;  Unpredictable_ILZEROT,&#13;  Unpredictable_BPVECTORCATCHPRI,&#13;  Unpredictable_VCMATCHHALF,&#13;  Unpredictable_VCMATCHDAPA,&#13;  Unpredictable_WPMASKANDBAS,&#13;  Unpredictable_WPBASCONTIGUOUS,&#13;  Unpredictable_RESWPMASK,&#13;  Unpredictable_WPMASKEDBITS,&#13;  Unpredictable_RESBPWPCTRL,&#13;  Unpredictable_BPNOTIMPL,&#13;  Unpredictable_RESBPTYPE,&#13;  Unpredictable_BPNOTCTXCMP,&#13;  Unpredictable_BPMATCHHALF,&#13;  Unpredictable_BPMISMATCHHALF,&#13;  Unpredictable_RESTARTALIGNPC,&#13;  Unpredictable_RESTARTZEROUPPERPC,&#13;  Unpredictable_ZEROUPPER,&#13;  Unpredictable_ERETZEROUPPERPC,&#13;  Unpredictable_A32FORCEALIGNPC,&#13;  Unpredictable_SMD,&#13;  Unpredictable_NONFAULT,&#13;  Unpredictable_SVEZEROUPPER,&#13;  Unpredictable_SVELDNFDATA,&#13;  Unpredictable_SVELDNFZERO,&#13;  Unpredictable_CHECKSPNONEACTIVE,&#13;  Unpredictable_SMEZEROUPPER,&#13;  Unpredictable_NVNV1,&#13;  Unpredictable_Shareability,&#13;  Unpredictable_AFUPDATE,&#13;  Unpredictable_IESBinDebug,&#13;  Unpredictable_BADPMSFCR,&#13;  Unpredictable_ZEROBTYPE,&#13;  Unpredictable_EL2TIMESTAMP,&#13; Unpredictable_EL1TIMESTAMP,&#13;  Unpredictable_RESERVEDNSxB,&#13;  Unpredictable_WFxTDEBUG,&#13;  Unpredictable_LS64UNSUPPORTED,&#13;  Unpredictable_MISALIGNEDATOMIC,&#13;  Unpredictable_CLEARERRITEZERO,&#13;  Unpredictable_ALUEXCEPTIONRETURN,&#13;  Unpredictable_IGNORETRAPINDEBUG,&#13;  Unpredictable_DBGxVR_RESS,&#13;  Unpredictable_PMUEVENTCOUNTER,&#13;  Unpredictable_PMSCR_PCT,&#13;  Unpredictable_BRBFILTRATE,&#13; }">Unpredictable_WFxTDEBUG</a>) then
+    <a link="impl-shared.EndOfInstruction.0" file="shared_pseudocode.xml" hover="function: EndOfInstruction()">EndOfInstruction</a>();
+
+<a link="impl-shared.Hint_WFI.2" file="shared_pseudocode.xml" hover="function: Hint_WFI(integer localtimeout, WFxType wfxtype)">Hint_WFI</a>(localtimeout, <a link="WFxType_WFIT" file="shared_pseudocode.xml" hover="enumeration WFxType {WFxType_WFE, WFxType_WFI, WFxType_WFET, WFxType_WFIT}">WFxType_WFIT</a>);</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>
