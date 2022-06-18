@@ -32,8 +32,10 @@ Hydride has two major components:
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
 - `codegen-generator` contains the custom compiler to generate target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
 - `rosette` tracks all the changes made to Rosette to synthesize code for Hydride.
+- `halide-hydride` is the modified version of Halide. Modifications to Halide required to integrate Hydride with Halide.
 - `benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions. It also contains Halide basline kernels.
 
 ## Targets Supported (WIP)
 - x86 (AVX, SSE, VNNI)
 - Hexagon (HVX)
+- ARM A64
