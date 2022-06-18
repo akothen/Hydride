@@ -251,6 +251,89 @@ def GetOpDeterminingLoopBounds(Loop : RoseForLoop):
   return GetOpDeterminingLoopBoundsInBlockList(Loop.getFunction(), BlockList, SkipBVExtracts)
 
 
+# The loop bounds must be determined by the bvinsert or bvextract to inputs/output 
+# of the smallest bitwidth.
+def GetOpDeterminingOuterLoopBoundsInBlockList(Function : RoseFunction, BlockList : list, \
+                                              SkipBVExtracts : list = list()):
+  # Sanity check
+  assert isinstance(Function, RoseFunction)
+  # Now gather the bvinserts and bvextracts.
+  FunctionOutput = Function.getReturnValue()
+  Params = Function.getArgs()
+  Result = list()
+  #BlockToBVInsertOp = dict()
+  for Block in BlockList:
+    print("BLOCK IN BLOCKLIST:")
+    Block.print()
+    assert isinstance(Block, RoseBlock)
+    assert Function == Block.getFunction()
+    for Op in reversed(Block.getOperations()):
+      if isinstance(Op, RoseBVInsertSliceOp):
+        if Op.getInputBitVector() == FunctionOutput:
+          if isinstance(Op.getOutputBitwidth(), RoseArgument):
+            #if Block in BlockToBVInsertOp:
+            #  return None
+            #BlockToBVInsertOp[Block] = Op
+            continue
+          #if Block in BlockToBVInsertOp:
+          # return None
+          Result.append(Op)
+          #BlockToBVInsertOp[Block] = Op
+          continue
+      if isinstance(Op, RoseBVExtractSliceOp):
+        if Op in SkipBVExtracts:
+          continue
+        if Op.getInputBitVector() in Params:
+          if isinstance(Op.getOutputBitwidth(), RoseArgument):
+            continue
+          print("RELEVANT BV EXTRACT OP:")
+          Op.print()
+          Result.append(Op)
+
+  # If we already have some results in the result list, just return that
+  if len(Result) != 0:
+    print("RETUTNING RESULT")
+    return Result
+  return None
+
+
+# The loop bounds must be determined by the bvinsert or bvextract to inputs/output 
+# of the smallest bitwidth.
+def GetOpDeterminingOuterLoopBounds(Loop : RoseForLoop):
+  # Sanity check
+  assert not isinstance(Loop, RoseUndefRegion)
+  print("FIX BOUNDS OF LOOP")
+  print("LOOP:")
+  print(Loop)
+  Loop.print()
+  # Get all the blocks in this loop at level 0.
+  BlockList = Loop.getRegionsOfType(RoseBlock, Level=0)
+  # Take into account any cond blocks in the loop
+  CondRegions = Loop.getRegionsOfType(RoseCond, Level=0)
+  for CondRegion in CondRegions:
+    CondRegionBlockList = list()
+    CondRegionBlockList.extend(CondRegion.getRegionsOfType(RoseBlock, Level=0, \
+                                              Key=CondRegion.getKeyForThenRegion()))
+    if CondRegion.hasElseIfRegion():
+      CondRegionBlockList.extend(CondRegion.getRegionsOfType(RoseBlock, Level=0, \
+                                              Key=CondRegion.getKeyForElseIfRegion()))
+    if CondRegion.hasElseRegion():
+      CondRegionBlockList.extend(CondRegion.getRegionsOfType(RoseBlock, Level=0, \
+                                              Key=CondRegion.getKeyForElseRegion()))
+    print("CondRegionBlockList:")
+    for Block in CondRegionBlockList:
+      print("BLOCK:")
+      Block.print()
+      print("*********")
+    BlockList.extend(CondRegionBlockList)
+
+  # Gather bvextract ops that index into masks and serve as conditions for
+  # cond regions in the function. We will not need to extract output bitwidths
+  # of these ops because the bitwidth of conditions for bitwidths is always one.
+  SkipBVExtracts = GetBVExtractsToBeSkipped(Loop)
+
+  return GetOpDeterminingOuterLoopBoundsInBlockList(Loop.getFunction(), BlockList, SkipBVExtracts)
+
 
 def GenConcreteValue(ConcreteValue : RoseConstant):
   assert isinstance(ConcreteValue, RoseConstant)
