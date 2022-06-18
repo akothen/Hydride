@@ -357,7 +357,8 @@ def GenConcreteValue(ConcreteValue : RoseConstant):
       Input += HexValString
       Input += " " + str(ConcreteValue.getType().getBitwidth()) + ")"    
   else:
-    assert isinstance(ConcreteValue.getType(), RoseIntegerType)
+    assert isinstance(ConcreteValue.getType(), RoseIntegerType) \
+        or isinstance(ConcreteValue.getType(), RoseBooleanType)
     Input = str(ConcreteValue.getValue())
   return Input
 
