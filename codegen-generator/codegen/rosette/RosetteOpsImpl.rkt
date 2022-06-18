@@ -229,6 +229,21 @@
 )
 
 
+(define (bvsizeext vect ext_size is_signed)
+  (define result 
+    (if (equal? is_signed #t)
+      (begin
+        (sign-extend vect (bitvector ext_size))
+      )
+      (begin
+        (zero-extend vect (bitvector ext_size))
+      )
+    )
+  )
+  result
+)
+
+
 ;; Tests
 (define (test)
   (define au64 (bvumaxval 64))
@@ -252,4 +267,6 @@
   (pretty-print "(bvmulnuw au64 bu64 64):")
   (pretty-print (bvmulnuw au64 bu64 64))
 )
+
+
 
