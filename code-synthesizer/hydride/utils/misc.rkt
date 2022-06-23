@@ -102,3 +102,11 @@
   mat
   )
 
+
+(define (create-tensor rows cols precision)
+  (apply concat
+         (for/list ([i (range (* rows cols))])
+                   (bv i (bitvector precision))
+                   ))
+
+  )

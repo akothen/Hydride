@@ -1,5 +1,9 @@
-#lang rosette/safe
+#lang rosette
+;#lang rosette/safe
 
+(require rosette/lib/synthax)
+(require rosette/lib/angelic)
+(require rosette/lib/destruct)
 (require
   (only-in racket/base error bitwise-and)
   rosette/lib/destruct
@@ -282,6 +286,7 @@
            (cpp:type intr-base)))])]
 
     [(load buf idxs alignment) (lambda (i) (buffer-ref (interpret buf) ((interpret idxs) i)))]
+    [(buffer data elemT) (lambda (i) (buffer-ref p  i))]
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
     ;; Type Casts
@@ -413,6 +418,42 @@
     
     ;; Base case
     [_ p]))
+
+
+
+(define (create-buffer data elemT)
+  (define step-size
+    (cond
+        [(eq? elemT 'int8) 8]
+        [(eq? elemT 'int16) 16]
+        [(eq? elemT 'int32) 32]
+        [(eq? elemT 'int64) 64]
+        [(eq? elemT 'uint1) 1]
+        [(eq? elemT 'uint8) 8]
+        [(eq? elemT 'uint16) 16]
+        [(eq? elemT 'uint32) 32]
+        [(eq? elemT 'uint64) 64]
+        [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" buffer)])
+    )
+  (define buffer-size (bvlength data))
+  (define buffer-num-elem (/ buffer-size step-size))
+  (define (buffer-fn i)
+    (define offset-from-left (- (- buffer-num-elem 1) i)) ;; bit offsets start from LSB and ascend towards MSB
+    (extract (+ (* offset-from-left step-size) (- step-size 1)) (* offset-from-left step-size) data)
+    )
+
+  ;; Create buffer object with
+  ;; specified buffer function
+  (buffer buffer-fn elemT)
+
+)
+
+(define (assemble-bitvector halide-expr-fn len)
+      (apply concat (for/list ([i (range len)])
+                (cpp:eval (halide-expr-fn i))
+                )
+      )
+  )
 
 (define (buffer-ref buffer idx)
   (define elemT (buffer-elemT buffer))

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <stack>
 #include <set>
+#include <map>
 
 using namespace std;
 
@@ -22,6 +23,10 @@ namespace Internal {
 namespace {
 
 typedef std::map<std::string, VarEncoding> Encoding;
+
+
+std::map<std::string, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
+std::map<const Load*, std::string> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
 
 // Takes the input Halide IR and converts it to Rosette syntax
 class ExprPrinter : public VariadicVisitor<ExprPrinter, std::string, std::string> {
@@ -395,6 +400,18 @@ public:
         }
     }
 
+    std::string define_load_buffer(const Load *op){
+        std::string reg_name = LoadToRegMap[op];
+        size_t bitwidth = op->type.bits() * op->type.lanes();
+
+        std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); // TODO
+        
+        std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+        std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
+
+        return define_bitvector_str + "\n" + define_buffer_str;
+    }
+
     std::string visit(const Load *op) {
         indent.push(0);
 
@@ -407,12 +424,24 @@ public:
         mode.pop();
         indent.pop();
 
+        if(LoadToRegMap.find(op) != LoadToRegMap.end()){
+            return LoadToRegMap[op];
+        }
+
         if (op->type.is_scalar() && mode.top() == VarEncoding::Integer)
             return tabs() + "(" + op->name + " " + rkt_idx + ")";
         else if (op->type.is_scalar())
             return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
-        else
-            return tabs() + "(load " + op->name + " " + rkt_idx + " " + alignment + ")";
+        else{
+            std::string bits = std::to_string(op->type.bits() * op->type.lanes());
+            unsigned reg_counter = RegToLoadMap.size();
+            std::string reg_name = "reg_"+std::to_string(reg_counter);
+            RegToLoadMap[reg_name] = op;
+            LoadToRegMap[op] = reg_name;
+            std::string load_buff = define_load_buffer(op);
+            return tabs()   + reg_name; //+ load_buff + "\n"+ "(load " + reg_name + " " + rkt_idx + " " + alignment + ")";
+        }
+            
     }
 
     std::string visit(const Ramp *op) {
@@ -722,6 +751,43 @@ std::function<std::string(const Expr &, bool, bool)> get_expr_racket_dispatch(co
     };
 }
 
+std::string type_to_rake_elem_type(Type type, bool include_space, bool c_plus_plus) {
+    bool needs_space = true;
+    std::ostringstream oss;
+
+    if (type.is_bfloat()) {
+        oss << "bfloat" << type.bits() ;
+    } else if (type.is_float()) {
+        if (type.bits() == 32) {
+            oss << "float";
+        } else if (type.bits() == 64) {
+            oss << "double";
+        } else {
+            oss << "float" << type.bits();
+        }
+    } else {
+        switch (type.bits()) {
+        case 1:
+            // bool vectors are always emitted as uint8 in the C++ backend
+            if (type.is_vector()) {
+                oss << "uint8x" << type.lanes() << "_t";
+            } else {
+                oss << "uint1";
+            }
+            break;
+        default:
+            if (type.is_uint()) {
+                oss << "u";
+            }
+            oss << "int" << type.bits();
+        }
+    }
+    if (include_space && needs_space) {
+        oss << " ";
+    }
+    return oss.str();
+}
+
 std::string type_to_rake_type(Type type, bool include_space, bool c_plus_plus) {
     bool needs_space = true;
     std::ostringstream oss;
@@ -851,6 +917,7 @@ public:
         return live_lets;
     }
 };
+
 
 // This IR mutator optimizes vector expressions for the Hexagon HVX ISA
 class IROptimizer : public IRMutator {
@@ -1218,8 +1285,67 @@ private:
 };
 
 
+class HydrideSynthEmitter {
+    public:
+        HydrideSynthEmitter() {};
+
+        std::string define_load_buffer(const Load *op){
+            std::string reg_name = LoadToRegMap[op];
+            size_t bitwidth = op->type.bits() * op->type.lanes();
+
+            std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
+            
+            std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+            std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
+
+            return define_bitvector_str + "\n" + define_buffer_str;
+        }
+
+        std::string emit_symbolic_buffers(){
+            std::string buffers = "";
+            for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
+                const Load* op = bi->first;
+                buffers += define_load_buffer(op) + "\n";
+            }
+
+            return buffers;
+
+        }
+
+        std::string emit_racket_imports(){
+            return "#lang rosette\n \
+            (require rosette/lib/synthax)\n \
+            (require rosette/lib/angelic)\n \
+            (require racket/pretty)\n \
+            (require data/bit-vector)\n \
+            (require rosette/lib/destruct)\n \
+            (require rosette/solver/smt/boolector)\n \
+            (require hydride)\n ";
+        }
+
+        std::string emit_interpret_expr(std::string expr_name){
+            return "(halide:interpret "+expr_name+")";
+        }
+
+
+        std::string emit_assemble_result(std::string result_name , std::string expr_name,  size_t lanes){
+            return "(define "+ result_name +" (halide:assemble-bitvector "+emit_interpret_expr(expr_name) + " "+ std::to_string(lanes)+")"+")";
+        }
+            
+
+
+
+
+
+
+
+};
+
+
 Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
+    RegToLoadMap.clear();
+    LoadToRegMap.clear();
 
     Encoding encoding = get_encoding(spec_expr, let_vars, linearized_let_vars);
 
@@ -1290,17 +1416,6 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
             sym_vars << "(define " << var->name << " (load " << var->name
                      << "-buf (ramp 0 1 " << var->type.lanes() << ") (aligned 0 0)))\n";
 
-            // debug(0) << "Finding bounds_of_expr_in_scope:\n";
-            // debug(0) << "\t" << var->name << "\n";
-            // debug(0) << "B{\n";
-            // for (auto elem = bounds.cbegin(); elem != bounds.cend(); ++elem) {
-            //     debug(0) << "\t" << elem.name() << " : [" << elem.value().min << ", " << elem.value().max << "]\n";
-            // }
-            // debug(0) << "}\nFVB{\n";
-            // for (const auto &elem : func_value_bounds) {
-            //     debug(0) << "\t{" << elem.first.first << ", " << elem.first.second << "} -> [" << elem.second.min << ", " << elem.second.max << "]\n";
-            // }
-            // debug(0) << "}\n";
 
             auto in = bounds_of_expr_in_scope(var, bounds, func_value_bounds);
             if (!in.is_everything()) {
@@ -1320,8 +1435,8 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
                 debug(0) << "Bounds:\t" << var->name << " : " << in.min << " ----- " << in.max << "\n";
                 axioms << "\n   (values-range-from "
                        << var->name << "-buf"
-                       << spec_dispatch(in.min, false /* set_mode */, false /* int_mode */)
-                       << spec_dispatch(in.max, false /* set_mode */, false /* int_mode */) << ")";
+                       << spec_dispatch(in.min, false , false )
+                       << spec_dispatch(in.max, false , false ) << ")";
 
                 std::map<std::string, Expr> let_vars;
                 auto temp_encoding = get_encoding(in.min, let_vars, linearized_let_vars);
@@ -1377,14 +1492,22 @@ Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
         }
     }
 
+    HydrideSynthEmitter HSE;
+
 
     std::cout << "============== Racket File Contents ============\n";
+    std::cout << HSE.emit_racket_imports() << "\n";
+    std::cout << HSE.emit_symbolic_buffers() << "\n";
     std::cout << sym_bufs.str() << "\n";
     std::cout << sym_vars.str() << "\n";
     std::cout << axioms.str() << "\n";
     std::cout << let_stmts.str() << "\n";
 
+    std::cout << "(define halide-expr \n";
     std::cout << expr << "\n";
+    std::cout << ")\n";
+    
+    std::cout << HSE.emit_assemble_result("result", "halide-expr", orig_expr.type().lanes()) << "\n";
 
 
     std::cout << "================================================\n";
