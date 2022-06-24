@@ -2490,15 +2490,6 @@ Stmt optimize_hexagon_instructions(Stmt s, const Target &t) {
 }
 
 
-Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
-
-
-    std::set<const BaseExprNode *> mutated_exprs;
-    s = hydride_optimize_hvx(fvb, s, mutated_exprs);
-
-    return s;
-
-}
 
 }  // namespace Internal
 }  // namespace Halide

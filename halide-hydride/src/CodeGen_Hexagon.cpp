@@ -7,6 +7,7 @@
 #include "CodeGen_Posix.h"
 #include "Debug.h"
 #include "HexagonOptimize.h"
+#include "Rosette.h"
 #include "IREquality.h"
 #include "IRMutator.h"
 #include "IROperator.h"

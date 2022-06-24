@@ -681,6 +681,16 @@ void CodeGen_LLVM::compile_func(const LoweredFunc &f, const std::string &simple_
     debug(1) << "Generating llvm bitcode for function " << f.name << "...\n";
     f.body.accept(this);
 
+    Stmt body = f.body;
+
+    if(target.arch == Target::X86){
+        body = optimize_x86_instructions_synthesis(body, target, this->func_value_bounds);
+    } else if(target.arch == Target::Hexagon){
+        body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+    }
+    body.accept(this);
+
+
     // Clean up and return.
     end_func(f.args);
 }
