@@ -420,6 +420,162 @@
     [_ p]))
 
 
+;; Gather the list of bv-ops involved in the halide IR expressions.
+;; This information will be used to identify the list of hydride IR
+;; instructions to include.
+
+(define empty-list (list ))
+
+(define (get-bv-ops p)
+  (destruct p
+    ;; Abstract expressions
+    [(abstr-halide-expr orig-expr abstr-vals) empty-list]
+
+    ;; Var lookups
+    [(var-lookup var val) empty-list]
+    
+    ;; Constructors
+    [(x32 sca) empty-list]
+    [(x64 sca) empty-list]
+    [(x128 sca) empty-list]
+    [(x256 sca) empty-list]
+    [(x512 sca) empty-list]
+
+    [(ramp base stride len)
+     empty-list
+     ]
+
+    [(load buf idxs alignment) empty-list]
+    [(buffer data elemT) empty-list]
+    [(load-sca buf idx) empty-list]
+
+    ;; Type Casts
+    [(uint8x1 sca) (list extract sign-extend)]
+    [(uint16x1 sca) (list extract sign-extend)]    
+    [(uint32x1 sca) (list extract sign-extend)]
+    [(uint64x1 sca) (list extract sign-extend)]
+
+    [(int8x1 sca) (list extract sign-extend)]
+    [(int16x1 sca) (list extract sign-extend)]
+    [(int32x1 sca) (list extract sign-extend)]
+    [(int64x1 sca) (list extract sign-extend)]
+
+    ;[(uint1x32 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x64 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x128 vec) NYI: Not sure what would be casted into uint1?]
+    ;[(uint1x256 vec) NYI: Not sure what would be casted into uint1?]    
+
+    [(uint8x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint8x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint8x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint8x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint8x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+
+    [(int8x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int8x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int8x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int8x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int8x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+
+    [(uint16x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint16x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint16x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint16x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint16x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+
+    [(int16x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int16x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int16x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int16x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int16x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    
+    [(uint32x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint32x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint32x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint32x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint32x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+
+    [(int32x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int32x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int32x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int32x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int32x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    
+    [(uint64x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint64x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint64x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint64x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(uint64x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+
+    [(int64x32 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int64x64 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int64x128 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int64x256 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    [(int64x512 vec) (append (list extract sign-extend) (get-bv-ops vec))]
+    
+    ;; Operations
+    [(sca-add v1 v2) (append (list extract bvadd) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(sca-sub v1 v2) (append (list extract bvsub) (get-bv-ops v1)  (get-bv-ops v2) ) ]
+    [(sca-mul v1 v2) (append (list extract bvmul) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-div v1 v2) (append (list extract bvsdiv bvudiv) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-mod v1 v2) (append (list extract bvsrem bvurem) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-min v1 v2) (append (list extract bvsmin bvumin) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-max v1 v2) (append (list extract bvsmax bvumax) (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(sca-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
+    [(sca-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
+    [(sca-lt v1 v2) (append (list bvslt bvult) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-le v1 v2) (append (list bvsle bvule) (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
+    [(sca-absd v1 v2) (append (list bvsge bvmul abs bvsub) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shr v1 v2) (append (list bvashr bvlshr) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
+
+    [(sca-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    
+    [(vec-add v1 v2) (append (list extract bvadd) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sub v1 v2) (append (list extract bvsub) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-mul v1 v2) (append (list extract bvmul) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-div v1 v2) (append (list extract bvsdiv bvudiv) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mod v1 v2) (append (list extract bvsrem bvurem) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract bvsmin bvumin) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-max v1 v2) (append (list extract bvsmax bvumax) (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(vec-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
+    [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
+    [(vec-lt v1 v2) (append (list bvslt bvult) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-le v1 v2) (append (list bvsle bvule) (get-bv-ops v1)  (get-bv-ops v2))]
+
+    [(vec-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
+    [(vec-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append (list bvashr bvlshr) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-absd v1 v2) (append (list bvsge bvmul abs bvsub) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
+
+    [(vec-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+
+    [(vector_reduce op width vec)
+     (cond
+       [(eq? op 'add)
+        (append (list extract bvadd) (get-bv-ops vec))]
+       [else (error "Unexpected vector_reduce op:" op)])]
+
+    ;; Shuffles
+    [(vec-broadcast n vec) (append (list extract concat) (get-bv-ops vec)  )]
+    [(slice_vectors vec base stride len) (append (list extract concat) (get-bv-ops vec)  )]
+    [(concat_vectors v1 v2) (append (list extract concat) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(dynamic_shuffle vec idxs st end) (append (list extract concat) (get-bv-ops vec) )]
+    [(interleave v1 v2) (append (list extract concat) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(interleave4 v1 v2 v3 v4) 
+     (append (list extract concat) (get-bv-ops v1) (get-bv-ops v2) (get-bv-ops v3)  (get-bv-ops v4) )
+     ]
+    
+    ;; Base case
+    [_ empty-list]))
+
+
 
 (define (create-buffer data elemT)
   (define step-size
