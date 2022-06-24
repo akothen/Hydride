@@ -182,10 +182,10 @@
   )
 
 
-(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound) 
+(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver) 
   (if optimize?
     (if 
-      (equal? (current-solver) (z3))
+      (equal? solver 'z3)
       (z3-optimize assert-query-fn grammar cex-ls cost-fn)
       (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
       )
@@ -197,7 +197,7 @@
 
 
 
-(define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs cost-bound)
+(define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs cost-bound solver)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -230,7 +230,7 @@
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound)
+    (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver)
     )
 
   (define end_time (current-seconds))
@@ -256,7 +256,7 @@
 
   (define boolector-opt-case (and
     optimize?
-    (not (equal? (current-solver) (z3)))
+    (equal? solver 'boolector)
     ))
 
   (printf "Is this boolector optimization case ~a ?\n" boolector-opt-case)
@@ -289,6 +289,7 @@
               (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
                                         cex-ls  
                                         (cost-fn materialize) ;; Use tighter cost bound
+                                        solver
                                         )
               )
 
@@ -309,6 +310,7 @@
         (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
                                   (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
                                   cost-bound
+                                  solver
                                   )
         )
       )

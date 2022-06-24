@@ -14,7 +14,7 @@
 
 (provide (all-defined-out))
 
-(define (synthesize-sol-with-depth depth depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound)
+(define (synthesize-sol-with-depth depth depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
   (printf "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n" depth depth-limit cost-bound)
 
   (if
@@ -27,8 +27,8 @@
       (define-values 
         (satisfiable? materialize elapsed_time)
         (if symbolic?
-            (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn cost-bound)
-            (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn '() cost-bound)
+            (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn cost-bound solver)
+            (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn '() cost-bound solver)
           )
         )
 
@@ -39,7 +39,7 @@
         (begin
           (define-values 
             (_satisfiable? _materialize _elapsed_time)
-            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound)
+            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
             )
           (values _satisfiable? _materialize (+ elapsed_time _elapsed_time)) ;; Accumulate synthesis time 
           )
