@@ -298,6 +298,28 @@ function _mm512_unpackhi_epi32 ( %a, %b, %offset, %vector_length, %lane_size, %p
 )
 
 
+(define-symbolic %a_1 (bitvector 512))
+(define-symbolic %b_1 (bitvector 512))
+(define %offset_1 0)
+(define %vector_length_1 512)
+(define %lane_size_1 256)
+(define %precision_1 32)
+
+(verify (assert (equal? (_mm512_unpackhi_epi32 %a_1 %b_1 %offset_1 %vector_length_1 %lane_size_1 %precision_1) 
+                        (_mm256_unpacklo_epi8  %a_1 %b_1 %offset_1 %vector_length_1 %lane_size_1 %precision_1))))
+
+(define-symbolic %a_2 (bitvector 256))
+(define-symbolic %b_2 (bitvector 256))
+(define %offset_2 64)
+(define %vector_length_2 256)
+(define %lane_size_2 64)
+(define %precision_2 8)
+
+(verify (assert (equal? (_mm512_unpackhi_epi32 %a_2 %b_2 %offset_2 %vector_length_2 %lane_size_2 %precision_2) 
+                        (_mm256_unpacklo_epi8  %a_2 %b_2 %offset_2 %vector_length_2 %lane_size_2 %precision_2))))
+                        
+                      
+
 function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
   for ([%i (range 0 %vector_length %lane_size)]) {
     %lane_last_idx = sub %lane_size, 1
