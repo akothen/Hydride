@@ -28,6 +28,9 @@ namespace Halide {
             std::map<std::string, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Load*, std::string> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
 
+            std::map<std::string, const Variable*> RegToVariableMap; // Map racket register expressions to Halide Load Instructions
+            std::map<const Variable*, std::string> VariableToRegMap; // Map racket register expressions to Halide Load Instructions
+
             // Takes the input Halide IR and converts it to Rosette syntax
             class ExprPrinter : public VariadicVisitor<ExprPrinter, std::string, std::string> {
 
@@ -184,7 +187,19 @@ namespace Halide {
                     /* Constants and Variables */
 
                     std::string visit(const Variable *op) {
-                        return tabs() + op->name;
+
+                        if(VariableToRegMap.find(op) != VariableToRegMap.end()){
+                            return VariableToRegMap[op];
+                        }
+
+                            std::string bits = std::to_string(op->type.bits() * op->type.lanes());
+                            unsigned reg_counter = (RegToLoadMap.size()+ RegToVariableMap.size());
+
+                            std::string reg_name = "reg_"+std::to_string(reg_counter);
+
+                            RegToVariableMap[reg_name] = op;
+                            VariableToRegMap[op] = reg_name;
+                        return tabs() + reg_name;//op->name;
                     }
 
                     std::string visit(const IntImm *op) {
@@ -434,7 +449,7 @@ namespace Halide {
                             return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
                         else{
                             std::string bits = std::to_string(op->type.bits() * op->type.lanes());
-                            unsigned reg_counter = RegToLoadMap.size();
+                            unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
                             std::string reg_name = "reg_"+std::to_string(reg_counter);
                             RegToLoadMap[reg_name] = op;
                             LoadToRegMap[op] = reg_name;
@@ -941,6 +956,17 @@ namespace Halide {
                         Expr mutate(const Expr &expr) override {
                             if (arch == IROptimizer::ARM){
                                 return expr;
+                            }
+
+                            switch(arch){
+                                case IROptimizer::X86:
+                                    std::cout << "Using X86 Optimizer" <<"\n";
+                                    break;
+                                case IROptimizer::HVX:
+                                    std::cout << "Using Hexagon Optimizer" <<"\n";
+                                    break;
+                                default:
+                                    break;
 
                             }
 
@@ -964,6 +990,7 @@ namespace Halide {
                                 if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1))
                                     return IRMutator::mutate(expr);
                             } else if (arch == IROptimizer::X86){
+                                std::cout << "Using X86 Optimizer" << "\n";
                                 if ((expr.type().bits() * expr.type().lanes() % 128 != 0) && (expr.type().bits() > 1))
                                     return IRMutator::mutate(expr);
 
@@ -1312,11 +1339,29 @@ namespace Halide {
                         return define_bitvector_str + "\n" + define_buffer_str;
                     }
 
+
+                    std::string define_variable_buffer(const Variable *op){
+                        std::string reg_name = VariableToRegMap[op];
+                        size_t bitwidth = op->type.bits() * op->type.lanes();
+
+                        std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
+
+                        std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
+
+                        return define_bitvector_str + "\n" + define_buffer_str;
+                    }
+
                     std::string emit_symbolic_buffers(){
                         std::string buffers = "";
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             const Load* op = bi->first;
                             buffers += define_load_buffer(op) + "\n";
+                        }
+
+                        for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
+                            const Variable* op = bi->first;
+                            buffers += define_variable_buffer(op) + "\n";
                         }
 
                         return buffers;
@@ -1372,6 +1417,9 @@ namespace Halide {
 
                 RegToLoadMap.clear();
                 LoadToRegMap.clear();
+
+                RegToVariableMap.clear();
+                VariableToRegMap.clear();
 
                 Encoding encoding = get_encoding(spec_expr, let_vars, linearized_let_vars);
 
