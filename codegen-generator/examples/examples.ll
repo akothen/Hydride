@@ -55,10 +55,6 @@ function _mm256_unpacklo_epi8 ( %a, %b ) {
     bvinsert %1, %dst, 0, 7, 8
     %2 = bvextract %src2, 0, 7, 8
     bvinsert %2, %dst, 8, 15, 8
-    %3 = bvextract %src1, 8, 15, 8
-    bvinsert %3, %dst, 16, 23, 8
-    %4 = bvextract %src2, 8, 15, 8
-    bvinsert %4, %dst, 24, 31, 8
     ...
     %15 = bvextract %src1, 56, 63, 8
     bvinsert %15, %dst, 112, 119, 8
