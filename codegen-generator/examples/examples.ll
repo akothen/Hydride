@@ -228,6 +228,29 @@ function _mm256_unpacklo_epi8 ( %a, %b, %offset, %vector_length, %lane_size, %pr
   ret %dst
 }
 
+(define (_mm256_unpacklo_epi8 %a %b %offset %vector_length %lane_size %precision)
+  (define %dst
+    (apply
+     concat
+     (for/list ([i (reverse (range 0 %vector_length %lane_size))])
+       (apply
+        concat
+        (for/list ([j (reverse (range %offset %lane_size %precision))])
+          (define %1 (+ i (- %lane_size 1)))
+          (define %2 (extract %1 i %a))
+          (define %4 (extract %1 i %b))
+          (define %5 (+ j (- %precision 1)))
+          (define %6 (extract %5 j %2))
+          (define %7 (extract %5 j %4))
+          (concat %6 %7)
+         )
+        )
+       )
+     )
+    )
+    %dst
+)
+
 
 function _mm512_unpackhi_epi32 ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
   for ([%i (range 0 %vector_length %lane_size)]) {
@@ -250,6 +273,29 @@ function _mm512_unpackhi_epi32 ( %a, %b, %offset, %vector_length, %lane_size, %p
   }
   ret %dst
 }
+
+(define (_mm512_unpackhi_epi32 %a %b %offset %vector_length %lane_size %precision)
+  (define %dst
+    (apply
+     concat
+     (for/list ([i (reverse (range 0 %vector_length %lane_size))])
+       (apply
+        concat
+        (for/list ([j (reverse (range %offset %lane_size %precision))])
+          (define %1 (+ i (- %lane_size 1)))
+          (define %2 (extract %1 i %a))
+          (define %4 (extract %1 i %b))
+          (define %5 (+ j (- %precision 1)))
+          (define %6 (extract %5 j %2))
+          (define %7 (extract %5 j %4))
+          (concat %6 %7)
+         )
+        )
+       )
+     )
+    )
+    %dst
+)
 
 
 function interleave_shuffle ( %a, %b, %offset, %vector_length, %lane_size, %precision ) {
