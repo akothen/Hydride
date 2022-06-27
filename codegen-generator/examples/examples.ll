@@ -49,6 +49,36 @@ function _mm256_unpacklo_epi8 ( %a, %b ) {
 
 
 
+function _mm256_unpacklo_epi8 ( %a, %b ) {
+  function INTERLEAVE_BYTES ( %src1, %src2 ) {
+    %1 = bvextract %src1, 0, 7, 8
+    bvinsert %1, %dst, 0, 7, 8
+    %2 = bvextract %src2, 0, 7, 8
+    bvinsert %2, %dst, 8, 15, 8
+    %3 = bvextract %src1, 8, 15, 8
+    bvinsert %3, %dst, 16, 23, 8
+    %4 = bvextract %src2, 8, 15, 8
+    bvinsert %4, %dst, 24, 31, 8
+    ...
+    %15 = bvextract %src1, 56, 63, 8
+    bvinsert %15, %dst, 112, 119, 8
+    %16 = bvextract %src2, 56, 63, 8
+    bvinsert %16, %dst, 120, 127, 8
+    %17 = bvextract %dst, 0, 127, 128
+    ret %17
+  }
+  %1 = bvextract %a, 0, 127, 128
+  %2 = bvextract %b, 0, 127, 128
+  %3 = call INTERLEAVE_BYTES(%1, %2)
+  bvinsert %3, %dst, 0, 127, 128
+  %4 = bvextract %a, 128, 255, 128
+  %5 = bvextract %b, 128, 255, 128
+  %6 = call INTERLEAVE_BYTES(%4, %5)
+  bvinsert %6, %dst, 128, 255, 128
+  ret %dst
+}
+
+
 
 
 ;; ROSE IR AFTER LOOP REROLLING
