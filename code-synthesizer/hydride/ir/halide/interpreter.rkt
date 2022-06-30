@@ -666,7 +666,8 @@
      (define outT (infer-out-type lhs rhs))
      (cond
        [(cpp:signed-type? outT)
-        (cpp:euclidean-div lhs rhs outT)]
+        ;(cpp:euclidean-div lhs rhs outT)]
+        (mk-cpp-expr (bvsdiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
        [else
         (mk-cpp-expr (bvudiv (cpp:eval lhs) (cpp:eval rhs)) outT)])]))
 

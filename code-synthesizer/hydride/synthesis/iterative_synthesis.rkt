@@ -215,7 +215,7 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list) (create-concrete-bvs bitwidth-list))
       cexs
       )
     )

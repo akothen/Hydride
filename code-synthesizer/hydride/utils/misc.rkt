@@ -108,5 +108,18 @@
          (for/list ([i (range (* rows cols))])
                    (bv i (bitvector precision))
                    ))
+  )
 
+
+(define (create-splat val rows precision)
+  (apply concat
+         (for/list ([i (range rows )])
+                   (bv val (bitvector precision))
+                   ))
+  )
+
+(define (pad-with-zeros vec extended-len)
+  (define remaining-bits (- extended-len (bvlength vec)))
+  (define zero (bv 0 (bitvector remaining-bits)))
+  (concat vec zero)
   )

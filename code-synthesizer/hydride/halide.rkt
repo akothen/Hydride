@@ -6,6 +6,7 @@
   hydride/ir/halide/interpreter
   hydride/ir/halide/visitor
   hydride/ir/halide/analysis
+  hydride/ir/halide/utils
   )
 
 (provide
@@ -15,5 +16,6 @@
   (all-from-out hydride/ir/halide/interpreter)
   (all-from-out hydride/ir/halide/visitor)
   (all-from-out hydride/ir/halide/analysis)
+  (all-from-out hydride/ir/halide/utils)
 
   )
