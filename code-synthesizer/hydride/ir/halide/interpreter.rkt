@@ -33,6 +33,7 @@
     [(ramp base stride len) len]
     [(load buf idxs alignment) (vec-len idxs)]
     [(load-sca buf idx) 1]
+    [(buffer data elemT buffsize) buffsize]
 
     ;; Type Casts
     [(uint8x1 sca) 1]
@@ -151,6 +152,7 @@
     [(ramp base stride len) (list)]
     [(load buf idxs alignment) (list)]
     [(load-sca buf idx) (list)]
+    [(buffer data elemT buffsize) (list)]
 
     ;; Type Casts
     [(uint8x1 sca) (list)]
@@ -286,7 +288,7 @@
            (cpp:type intr-base)))])]
 
     [(load buf idxs alignment) (lambda (i) (buffer-ref (interpret buf) ((interpret idxs) i)))]
-    [(buffer data elemT) (lambda (i) (buffer-ref p  i))]
+    [(buffer data elemT buffsize) (lambda (i) (buffer-ref p  i))]
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
     ;; Type Casts
@@ -446,7 +448,7 @@
      ]
 
     [(load buf idxs alignment) empty-list]
-    [(buffer data elemT) empty-list]
+    [(buffer data elemT buffsize) empty-list]
     [(load-sca buf idx) empty-list]
 
     ;; Type Casts
@@ -600,7 +602,7 @@
 
   ;; Create buffer object with
   ;; specified buffer function
-  (buffer buffer-fn elemT)
+  (buffer buffer-fn elemT (bvlength data))
 
 )
 

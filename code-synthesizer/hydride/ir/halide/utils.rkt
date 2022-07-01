@@ -8,7 +8,9 @@
   (only-in racket/base error bitwise-and)
   rosette/lib/destruct
   hydride/cpp
-  hydride/ir/halide/types)
+  hydride/ir/halide/types
+  hydride/ir/halide/interpreter
+  )
 
 (provide (prefix-out halide: (all-defined-out)))
 
@@ -858,6 +860,41 @@
     
     ;; Base case
     [v (values v 0)])
+  
+  )
+
+;; Returns the sub-expressions at depth away from
+;; the root of expr. In the case where a leaf is reached
+;; before at an earleir depth, we return '().
+(define (get-sub-exprs expr depth)
+
+  (cond
+    [(equal? expr '())
+     expr
+     ]
+
+    [(equal? depth 1)
+     (list expr)
+     ]
+
+    [else
+      (define imm-sub-exprs (halide:sub-exprs expr))
+      (apply append
+             (for/list ([i (range (length imm-sub-exprs))])
+                       (get-sub-exprs (list-ref imm-sub-exprs i) (- depth 1))
+                       )
+             )
+     ]
+    
+    )
+
+  )
+
+
+(define (get-expr-bv-sizes expr-list)
+  (for/list ([i (range (length expr-list))])
+            (halide:vec-len (list-ref expr-list i))
+            )
   
   )
 
