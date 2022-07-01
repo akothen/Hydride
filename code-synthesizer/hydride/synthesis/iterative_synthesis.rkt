@@ -65,6 +65,7 @@
 ;; values we return the counter example
 ;; which it failed on
 (define (verify-synth-sol sol bw-list invoke_ref)
+  (displayln "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
   (define cex 

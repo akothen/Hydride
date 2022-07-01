@@ -46,6 +46,7 @@
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
+(require hydride/synthesis/spec_utils)
 
 
 
@@ -70,5 +71,6 @@
   (all-from-out hydride/synthesis/symbolic_synthesis)
   (all-from-out hydride/synthesis/iterative_synthesis)
   (all-from-out hydride/synthesis/synth_main)
+  (all-from-out hydride/synthesis/spec_utils)
   )
 
