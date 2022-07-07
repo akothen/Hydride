@@ -123,3 +123,12 @@
   (define zero (bv 0 (bitvector remaining-bits)))
   (concat vec zero)
   )
+
+
+(define (write-str-to-file str file)
+  (printf "Writing [~a] to file" str)
+  (system (string-append "rm " file))
+  (define out (open-output-file file))
+  (fprintf out str)
+  (close-output-port out)
+  )

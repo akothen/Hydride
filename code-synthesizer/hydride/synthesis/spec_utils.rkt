@@ -8,8 +8,6 @@
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
 (require hydride/ir/hydride/interpreter)
-(require hydride/synthesis/symbolic_synthesis)
-(require hydride/synthesis/iterative_synthesis)
 (require hydride/halide)
 
 
@@ -88,7 +86,7 @@
   (define args (get-args-str sub-expr-ls))
   (define spec_invoke "\"\"")
   (string-append 
-    spec-name " = { \n"
+    "{ \n"
     "\"name\": " name " , \n"
     "\"semantics\": " sema " , \n" 
     "\"input_shapes\": " input_shapes ", \n"
@@ -96,7 +94,7 @@
     "\"input_precision\": " input_precision ", \n"
     "\"output_precision\": " output_precision ", \n"
     "\"args\": " args ", \n"
-    "\"spec_invokation\": " spec_invoke ", \n" 
+    "\"spec_invokation\": " spec_invoke "\n" 
     "}\n"
     )
   )

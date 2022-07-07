@@ -147,7 +147,7 @@ class GrammarGenerator:
         prefix += ";; "+" "*30 +" DSL Grammar"+'\n'
         prefix += ";; "+"="*80 + "\n"
 
-        grammar_tree = mem_layer + "\n" + shuffle_layer  + "\n" + operation_layer +"\n" + top_level_grammar
+        grammar_tree = mem_layer + "\n" + shuffle_layer  + "\n" + operation_layer +"\n" # + top_level_grammar
 
         sufix = "\n;; "+"="*80 + "\n"
 

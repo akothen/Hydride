@@ -21,18 +21,29 @@
 ;; Given an expression of size len(sub-expressions) -> Bind elements of vectors accordingly
 
 
+(define (is-broadcast expr)
+  (destruct expr
+    [(x32 sca) #t]
+    [(x64 sca) #t]
+    [(x128 sca) #t]
+    [(x256 sca) #t]
+    [(x512 sca) #t]
+    [_ #f]
+   )
+)
 
 ;; Binds
 (define (bind-expr-args expr args depth)
+  (printf "Bind-expr-args with expr ~a\n args: ~a\n depth: ~a\n\n" expr args depth)
   (define (arg i) (vector-ref args i))
   (define is-leaf-depth (eq? depth 1))
   (destruct expr
     ;; Constructors
-    [(x32 sca) (values (x32 (arg 0)) 1)]
-    [(x64 sca) (values (x64 (arg 0)) 1)]
-    [(x128 sca) (values (x128 (arg 0)) 1)]
-    [(x256 sca) (values (x256 (arg 0)) 1)]
-    [(x512 sca) (values (x512 (arg 0)) 1)]
+    [(x32 sca) (values (x32 sca) 0)]
+    [(x64 sca) (values (x64 sca) 0)]
+    [(x128 sca) (values (x128 sca) 0)]
+    [(x256 sca) (values (x256 sca) 0)]
+    [(x512 sca) (values (x512 sca) 0)]
 
     [(ramp base stride len) (values '() 0)]
     [(load buf idxs alignment) 
@@ -53,6 +64,18 @@
         )
         )
      ]
+
+     [(buffer data elemT buffsize)  
+      (displayln "Bind Args")
+      (println args)
+       (if is-leaf-depth
+        (values (halide:create-buffer (arg 0) elemT)   1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args data args (- depth 1)))
+          (values (buffer leaf-sol elemT buffsize) args-used)
+        )
+        )
+      ]
 
     ;; Type Casts
     [(uint8x1 sca) 
@@ -897,6 +920,8 @@
             )
   
   )
+
+
 
 
 (define (get-expr-precisions expr-list)

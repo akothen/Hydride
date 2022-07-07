@@ -47,6 +47,8 @@
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
 (require hydride/synthesis/spec_utils)
+(require hydride/synthesis/python)
+(require hydride/synthesis/algorithm)
 
 
 
@@ -72,5 +74,7 @@
   (all-from-out hydride/synthesis/iterative_synthesis)
   (all-from-out hydride/synthesis/synth_main)
   (all-from-out hydride/synthesis/spec_utils)
+  (all-from-out hydride/synthesis/algorithm)
+  (all-from-out hydride/synthesis/python)
   )
 

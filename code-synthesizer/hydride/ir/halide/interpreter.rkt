@@ -158,16 +158,16 @@
 (define (sub-exprs expr)
   (destruct expr
     ;; Constructors
-    [(x32 sca) (list)]
-    [(x64 sca) (list)]
-    [(x128 sca) (list)]
-    [(x256 sca) (list)]
-    [(x512 sca) (list)]
+    [(x32 sca) (list )]
+    [(x64 sca) (list )]
+    [(x128 sca) (list )]
+    [(x256 sca) (list )]
+    [(x512 sca) (list )]
 
     [(ramp base stride len) (list)]
-    [(load buf idxs alignment) (list)]
+    [(load buf idxs alignment) (list buf)]
     [(load-sca buf idx) (list)]
-    [(buffer data elemT buffsize) (list)]
+    [(buffer data elemT buffsize) (list expr)]
 
     ;; Type Casts
     [(uint8x1 sca) (list)]
@@ -595,6 +595,8 @@
 
 
 (define (create-buffer data elemT)
+  (println data)
+  (println elemT)
   (define step-size
     (cond
         [(eq? elemT 'int8) 8]
