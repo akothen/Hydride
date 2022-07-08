@@ -23,6 +23,7 @@
 
 (define (is-broadcast expr)
   (destruct expr
+    [(x8 sca) #t]
     [(x32 sca) #t]
     [(x64 sca) #t]
     [(x128 sca) #t]
@@ -39,6 +40,7 @@
   (define is-leaf-depth (eq? depth 1))
   (destruct expr
     ;; Constructors
+    [(x8 sca) (values (x8 sca) 0)]
     [(x32 sca) (values (x32 sca) 0)]
     [(x64 sca) (values (x64 sca) 0)]
     [(x128 sca) (values (x128 sca) 0)]
@@ -958,6 +960,7 @@
 (define (create-expr expr-ty sub-expr-vector)
   (define (arg i) (vector-ref sub-expr-vector i))
   (cond
+    [(eq? expr-ty x8) (x8 (arg 0))]
     [(eq? expr-ty x32) (x32 (arg 0))]
     [(eq? expr-ty x64) (x64 (arg 0))]
     [(eq? expr-ty x128) (x128 (arg 0))]
@@ -1014,6 +1017,7 @@
     [(abstr-halide-expr orig-expr abstr-vals) (vec-size orig-expr)]
     
     ;; Constructors
+    [(x8 sca) (* 8 (bvlength sca))]
     [(x32 sca) (* 32 (bvlength sca))]
     [(x64 sca) (* 64 (bvlength sca))]
     [(x128 sca) (* 128 (bvlength sca))]
@@ -1163,6 +1167,7 @@
     [(abstr-halide-expr orig-expr abstr-vals) (vec-precision orig-expr)]
     
     ;; Constructors
+    [(x8 sca) (size-to-elemT (vec-precision expr))]
     [(x32 sca) (size-to-elemT (vec-precision expr))]
     [(x64 sca) (size-to-elemT (vec-precision expr))]
     [(x128 sca) (size-to-elemT (vec-precision expr))]
@@ -1288,6 +1293,7 @@
     [(abstr-halide-expr orig-expr abstr-vals) (vec-precision orig-expr)]
     
     ;; Constructors
+    [(x8 sca) (bvlength sca)]
     [(x32 sca) (bvlength sca)]
     [(x64 sca) (bvlength sca)]
     [(x128 sca) (bvlength sca)]

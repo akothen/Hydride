@@ -13,6 +13,7 @@
     [(abstr-halide-expr orig-expr abstr-vals) (handler (abstr-halide-expr orig-expr (visit abstr-vals handler)))]
     
     ;; Constructors
+    [(x8 sca) (handler (x8 (visit sca handler)))]
     [(x32 sca) (handler (x32 (visit sca handler)))]
     [(x64 sca) (handler (x64 (visit sca handler)))]
     [(x128 sca) (handler (x128 (visit sca handler)))]

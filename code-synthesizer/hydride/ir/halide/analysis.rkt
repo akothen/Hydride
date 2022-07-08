@@ -263,6 +263,7 @@
 (define (extract-scalars vec)
   (define v (strip-casts vec))
   (match v
+    [(x8 sca) (set (x8-sca v))]
     [(x32 sca) (set (x32-sca v))]
     [(x64 sca) (set (x64-sca v))]
     [(x128 sca) (set (x128-sca v))]

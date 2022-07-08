@@ -2,6 +2,7 @@
 (require rosette/lib/synthax)
 (require rosette/lib/angelic)
 (require racket/pretty)
+(require racket/sandbox)
 (require data/bit-vector)
 (require rosette/lib/destruct)
 (require rosette/solver/smt/boolector)
@@ -64,7 +65,8 @@
 ;; the solution is not true for all
 ;; values we return the counter example
 ;; which it failed on
-(define (verify-synth-sol sol bw-list invoke_ref)
+(define (verify-synth-sol sol bw-list invoke_ref solver)
+  (define start (current-seconds))
   (displayln "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
@@ -74,6 +76,8 @@
         (equal? (interpret sol symbols) (invoke_ref symbols) )
         ))
     )
+  (define end (current-seconds))
+  (printf "Verification took ~a seconds\n" (- end start))
   (begin
     (if
       (sat? cex) ;; If there exists some cex for which it is not equal
@@ -144,6 +148,7 @@
 (define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
   (begin
     (printf "Boolector optimize with cost-bound ~a ...\n" cost-bound)
+    (displayln "Synthesizing...\n")
     (current-solver (boolector))
 
     (define sol?
@@ -202,8 +207,13 @@
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
-  (define curr-bw (current-bitwidth))
-  (define curr-solver (current-solver))
+  ;(define curr-bw (current-bitwidth))
+  ;(define curr-solver (current-solver))
+  
+  (if (equal? solver 'boolector)
+    (current-solver (boolector))
+    (current-solver (z3))
+    )
 
 
   ;; Clear the verification condition up till this point
@@ -242,9 +252,6 @@
   (println satisfiable?)
 
 
-  ;; Restore solvers
-  (current-solver curr-solver)
-  (current-bitwidth curr-bw) 
 
 
   (define materialize 
@@ -270,10 +277,34 @@
     (begin
       (displayln "Unchecked solution:")
       (pretty-print materialize)
+      (define cur-out-port (current-output-port))
+      (define cur-err-port (current-error-port))
+      (define cur-inp-port (current-input-port))
+      (define cur-solver (current-solver))
+
+      (printf "Current Output port: ~a\n" cur-out-port)
+      (printf "Current Error  port: ~a\n" cur-err-port)
+      (printf "Current Input  port: ~a\n" cur-inp-port)
+      (printf "Current Solver: ~a\n" cur-solver)
+
       (define-values 
         (verified? new-cex) 
-        (verify-synth-sol materialize bitwidth-list invoke_ref)
+            ;(with-handlers 
+            ;  ([exn:fail? (lambda (exn) (begin
+            ;                             (values #t '())
+            ;                             )
+            ;                )])  
+            ;  (with-deep-time-limit 10 
+                                    (verify-synth-sol materialize bitwidth-list invoke_ref solver)
+            ;                        ))
         )
+
+
+      (current-solver cur-solver)
+      (current-output-port cur-out-port)
+      (current-input-port cur-inp-port)
+      (current-error-port cur-err-port)
+
 
       (if
         verified? ;; If solution is found to be correct for all possible inputs

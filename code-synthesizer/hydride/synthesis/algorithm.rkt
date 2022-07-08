@@ -65,6 +65,18 @@
                (define broadcasted-val (apply concat (for/list ([i (range 32)]) sca)))
                (lit broadcasted-val)
                ]
+
+              [(x8 sca)
+               (displayln "synth-base case x8 scalar")
+               (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))
+               (displayln "Synthesizing sub-expression")
+               (pretty-print halide-expr)
+               (displayln "Leaves are bitvectors of sizes:")
+               (println expr-sizes)
+               ;; perform synthesis using expr sizes
+               (define broadcasted-val (apply concat (for/list ([i (range 8)]) sca)))
+               (lit broadcasted-val)
+               ]
               [_ 
                 (begin
 

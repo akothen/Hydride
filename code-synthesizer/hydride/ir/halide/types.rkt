@@ -27,6 +27,8 @@
       (lambda (obj) (list (var-lookup-var obj)))))])
 
 ;; Constructors
+(struct x4 (sca) #:transparent)
+(struct x8 (sca) #:transparent)
 (struct x32 (sca) #:transparent)
 (struct x64 (sca) #:transparent)
 (struct x128 (sca) #:transparent)

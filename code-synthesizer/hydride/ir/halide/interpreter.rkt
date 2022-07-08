@@ -39,6 +39,7 @@
     [(abstr-halide-expr orig-expr abstr-vals) (vec-len orig-expr)]
     
     ;; Constructors
+    [(x8 sca) 8]
     [(x32 sca) 32]
     [(x64 sca) 64]
     [(x128 sca) 128]
@@ -158,6 +159,7 @@
 (define (sub-exprs expr)
   (destruct expr
     ;; Constructors
+    [(x8 sca) (list )]
     [(x32 sca) (list )]
     [(x64 sca) (list )]
     [(x128 sca) (list )]
@@ -280,6 +282,7 @@
     [(var-lookup var val) (interpret val)]
     
     ;; Constructors
+    [(x8 sca) (lambda (i) (interpret sca))]
     [(x32 sca) (lambda (i) (interpret sca))]
     [(x64 sca) (lambda (i) (interpret sca))]
     [(x128 sca) (lambda (i) (interpret sca))]
@@ -452,6 +455,7 @@
     [(var-lookup var val) empty-list]
     
     ;; Constructors
+    [(x8 sca) empty-list]
     [(x32 sca) empty-list]
     [(x64 sca) empty-list]
     [(x128 sca) empty-list]
