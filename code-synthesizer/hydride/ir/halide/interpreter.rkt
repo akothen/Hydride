@@ -595,6 +595,7 @@
 
 
 (define (create-buffer data elemT)
+  (displayln "Create buffer:")
   (println data)
   (println elemT)
   (define step-size

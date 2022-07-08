@@ -35,6 +35,7 @@
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/length)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/binder)
 
 ;; CPP IR
 (require hydride/cpp)
@@ -61,6 +62,7 @@
   (all-from-out hydride/ir/hydride/cost_model)
   (all-from-out hydride/ir/hydride/length)
   (all-from-out hydride/ir/hydride/interpreter)
+  (all-from-out hydride/ir/hydride/binder)
 
 
   (all-from-out hydride/cpp)

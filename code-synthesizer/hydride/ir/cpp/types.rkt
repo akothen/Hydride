@@ -31,7 +31,10 @@
     [(uint32_t v) v]
     [(uint32_t v) v]
     [(uint64_t v) v]
-    [_ (error "Cannot eval: ~a" e)]))
+    ;[_ (error "Cannot eval: ~a" e)]
+    [_ e]
+    )
+  )
 
 ;; Get integer value of the integer expression
 (define (cpp:eval-to-int e)
@@ -46,7 +49,8 @@
     [(uint32_t v) (bitvector->natural v)]
     [(uint32_t v) (bitvector->natural v)]
     [(uint64_t v) (bitvector->natural v)]
-    [_ (error "Cannot eval: ~a" e)]))
+    [_ (bitvector->natural e)]))
+    ;[_ (error "Cannot eval: ~a" e)]))
 
 ;; Type constructor
 (define (mk-cpp-type bw signed?)
@@ -135,7 +139,9 @@
     [(uint16_t v) #f]
     [(uint32_t v) #f]
     [(uint64_t v) #f]
-    [_ (error "Cannot infer signed-ness of expr" e)]))
+    ;[_ (error "Cannot infer signed-ness of expr" e)]
+    [_ #t]
+    ))
 
 (define (cpp:unsigned-expr? e)
   (not (cpp:signed-expr? e)))
@@ -176,7 +182,10 @@
     [(uint16_t v) 16]
     [(uint32_t v) 32]
     [(uint64_t v) 64]
-    [_ (error "Cannot infer bit-width from expression: ~a" e)]))
+    ;[_ (error "Cannot infer bit-width from expression: ~a" e)])
+    [_ (bvlength e)]
+  )
+  )
 
 (define (cpp:type-bw t)
   (cond

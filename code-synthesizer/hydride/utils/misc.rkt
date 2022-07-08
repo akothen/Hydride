@@ -126,9 +126,10 @@
 
 
 (define (write-str-to-file str file)
-  (printf "Writing [~a] to file" str)
+  (printf "Writing [~a] to file ~a\n" str file)
   (system (string-append "rm " file))
   (define out (open-output-file file))
   (fprintf out str)
   (close-output-port out)
+  (displayln "Completed writing to file ...")
   )
