@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ERRPIDR4</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ERRPIDR4, Peripheral Identification Register 4</h1><p>The ERRPIDR4 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides discovery information about the component.</p>
+
+      
+        <p>For more information, see <span class="xref">About the Peripheral identification scheme</span> in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile.</p>
+      <h2>Configuration</h2><p></p><p>Implementation of this register is <span class="arm-defined-word">OPTIONAL</span>.</p><p>This register is present only
+    when RAS is implemented.
+      
+    Otherwise, direct accesses to ERRPIDR4 are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>ERRPIDR4 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The ERRPIDR4 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="24"><a href="#0_31">RES0</a></td><td class="lr" colspan="4"><a href="#SIZE_7">SIZE</a></td><td class="lr" colspan="4"><a href="#DES_2_3">DES_2</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_31">
+                Bits [31:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SIZE_7">SIZE, bits [7:4]
+                  </h4>
+          
+  <p>Size of the component. The distance from the start of the address space used by this component to the end of the component identification registers.</p>
+<p>If the value of this field is non-zero, then the component occupies 2<sup>ERRPIDR4.SIZE</sup> 4KB blocks.</p>
+
+        <table class="valuetable"><tr><th>SIZE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>One of the following is true:</p>
+<ul>
+<li>
+<p>The component uses a single 4KB block.</p>
+
+</li><li>
+<p>The component uses an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> number of 4KB blocks.</p>
+
+</li></ul>
+</td></tr></table>
+              
+  <p>Using this bit field to indicate the size of the component is deprecated. This bit field might not correctly indicate the size of the component.</p>
+<p>Arm recommends that software determine the size of the component from the Unique Component Identifier fields, and other <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> registers in the component.</p>
+<p>This register reads as an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> value.</p>
+
+            <h4 id="DES_2_3">DES_2, bits [3:0]
+                  </h4>
+          
+  <p>Designer, JEP106 continuation code. This is the JEDEC-assigned JEP106 bank identifier for the designer of the component, minus 1.</p>
+<p>The code identifies the designer of the component, which might not be not the same as the implementer of the device containing the component.</p>
+<p>This field reads as an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> value.</p>
+
+        
+              
+  <div class="note"><span class="note-header">Note</span><p>For a component designed by Arm Limited, the JEP106 bank is 5, meaning this field has the value <span class="hexnumber">0x4</span>.</p></div>
+
+            <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the ERRPIDR4</h2><h4>ERRPIDR4 can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>RAS</td><td><span class="hexnumber">0xFD0</span></td><td>ERRPIDR4</td></tr></table><p>Accesses on this interface are <span class="access_level">RO</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

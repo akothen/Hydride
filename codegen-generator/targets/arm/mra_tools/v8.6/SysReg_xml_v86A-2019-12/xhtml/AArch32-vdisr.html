@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>VDISR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">VDISR, Virtual Deferred Interrupt Status Register</h1><p>The VDISR characteristics are:</p><h2>Purpose</h2>
+        <p>Records that an SError interrupt has been consumed by an <span class="instruction">ESB</span> instruction.</p>
+      <h2>Configuration</h2><p>AArch32 System register VDISR bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-vdisr_el2.html">VDISR_EL2[31:0]
+            </a>.
+          </p><p>This register is present only
+    when RAS is implemented.
+      
+    Otherwise, direct accesses to VDISR are <span class="arm-defined-word">UNDEFINED</span>.</p>
+        <p>If EL2 is not implemented, then VDISR is <span class="arm-defined-word">RES0</span> from Monitor mode when SCR.NS == 1.</p>
+      <h2>Attributes</h2>
+            <p>VDISR is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The VDISR bit assignments are:</p><h3>When TTBCR.EAE == 0:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_A_31">A</a></td><td class="lr" colspan="15"><a href="#WhenTTBCR.EAE0_0_30">RES0</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_AET_15">AET</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_0_13">RES0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_ExT_12">ExT</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_0_11">RES0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_FS4_10">FS[4]</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_LPAE_9">LPAE</a></td><td class="lr" colspan="5"><a href="#WhenTTBCR.EAE0_0_8">RES0</a></td><td class="lr" colspan="4"><a href="#WhenTTBCR.EAE0_FS3:0_3">FS[3:0]</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenTTBCR.EAE0_A_31">A, bit [31]
+              </h4>
+          
+  <p>Set to 1 when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_0_30">
+                Bits [30:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE0_AET_15">AET, bits [15:14]
+                  </h4>
+          
+  <p>The value copied from <a href="AArch32-vdfsr.html">VDFSR</a>.AET.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_0_13">
+                Bit [13]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE0_ExT_12">ExT, bit [12]
+              </h4>
+          
+  <p>The value copied from <a href="AArch32-vdfsr.html">VDFSR</a>.ExT.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_0_11">
+                Bit [11]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE0_FS4_10">FS[4], bit [10]
+              </h4>
+          
+  <p>This field is bit[4] of FS[4:0].</p>
+<p>Fault status code. Set to <span class="binarynumber">0b10110</span> when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          <table class="valuetable"><tr><th>FS</th><th>Meaning</th></tr><tr><td class="bitfield">0b10110</td><td>
+  <p>Asynchronous SError interrupt.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>The FS field is split as follows:</p>
+<ul>
+<li>FS[4] is VDISR[10].
+</li><li>FS[3:0] is VDISR[3:0].
+</li></ul>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_LPAE_9">LPAE, bit [9]
+              </h4>
+          
+  <p>Format.</p>
+<p>Set to <a href="AArch32-ttbcr.html">TTBCR</a>.EAE when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          <table class="valuetable"><tr><th>LPAE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Using the Short-descriptor translation table format.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_0_8">
+                Bits [8:4]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE0_FS3:0_3">FS[3:0], bits [3:0]
+                  </h4>
+          
+  <p>This field is bits[3:0] of FS[4:0].</p>
+<p>See FS[4] for the field description.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h3>When TTBCR.EAE == 1:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE1_A_31">A</a></td><td class="lr" colspan="15"><a href="#WhenTTBCR.EAE1_0_30">RES0</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE1_AET_15">AET</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE1_0_13">RES0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE1_ExT_12">ExT</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE1_0_11">RES0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE1_LPAE_9">LPAE</a></td><td class="lr" colspan="3"><a href="#WhenTTBCR.EAE1_0_8">RES0</a></td><td class="lr" colspan="6"><a href="#WhenTTBCR.EAE1_STATUS_5">STATUS</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenTTBCR.EAE1_A_31">A, bit [31]
+              </h4>
+          
+  <p>Set to 1 when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE1_0_30">
+                Bits [30:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE1_AET_15">AET, bits [15:14]
+                  </h4>
+          
+  <p>The value copied from <a href="AArch32-vdfsr.html">VDFSR</a>.AET.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE1_0_13">
+                Bit [13]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE1_ExT_12">ExT, bit [12]
+              </h4>
+          
+  <p>The value copied from <a href="AArch32-vdfsr.html">VDFSR</a>.ExT.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE1_0_11">
+                Bits [11:10]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE1_LPAE_9">LPAE, bit [9]
+              </h4>
+          
+  <p>Format.</p>
+<p>Set to <a href="AArch32-ttbcr.html">TTBCR</a>.EAE when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          <table class="valuetable"><tr><th>LPAE</th><th>Meaning</th></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Using the Long-descriptor translation table format.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE1_0_8">
+                Bits [8:6]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenTTBCR.EAE1_STATUS_5">STATUS, bits [5:0]
+                  </h4>
+          
+  <p>Fault status code. Set to <span class="binarynumber">0b010001</span> when an <span class="instruction">ESB</span> instruction defers a virtual SError interrupt.</p>
+
+          <table class="valuetable"><tr><th>STATUS</th><th>Meaning</th></tr><tr><td class="bitfield">0b010001</td><td>
+  <p>Asynchronous SError interrupt.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the VDISR</h2>
+        <p>Direct reads and writes of VDFSR are <span class="arm-defined-word">UNDEFINED</span> if EL3 is implemented and using AArch32 in all Secure privileged modes other than Monitor mode.</p>
+
+      
+        <p>An indirect write to VDISR made by an <span class="instruction">ESB</span> instruction does not require an explicit synchronization operation for the value that is written to be observed by a direct read of <a href="AArch32-disr.html">DISR</a> occurring in program order after the <span class="instruction">ESB</span> instruction.</p>
+
+      
+        <p>If EL2 is not implemented, then VDISR is <span class="arm-defined-word">RES0</span> from Monitor mode when <a href="AArch32-scr.html">SCR</a>.NS == 1.</p>
+      <p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b100</td><td>0b1100</td><td>0b0001</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T12 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T12 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    return VDISR;
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        return VDISR;
+              </p><h4 class="assembler">MCR{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b100</td><td>0b1100</td><td>0b0001</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T12 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T12 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    VDISR = R[t];
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        VDISR = R[t];
+              </p><h4 class="assembler">MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1100</td><td>0b0001</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T12 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T12 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.AMO == '1' then
+        return VDISR_EL2;
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.AMO == '1' then
+        return VDISR;
+    else
+        return DISR;
+elsif PSTATE.EL == EL2 then
+    return DISR;
+elsif PSTATE.EL == EL3 then
+    return DISR;
+              </p><h4 class="assembler">MCR{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1100</td><td>0b0001</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T12 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T12 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.AMO == '1' then
+        VDISR_EL2 = R[t];
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.AMO == '1' then
+        VDISR = R[t];
+    else
+        DISR = R[t];
+elsif PSTATE.EL == EL2 then
+    DISR = R[t];
+elsif PSTATE.EL == EL3 then
+    DISR = R[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

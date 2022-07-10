@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>TTBR1_EL2</reg_short_name>
+      <reg_long_name>Translation Table Base Register 1 (EL2)</reg_long_name>
+        <reg_condition otherwise="UNDEFINED">when ARMv8.1-VHE is implemented</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>When <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H is 1, holds the base address of the translation table for the initial lookup for stage 1 of the translation of an address from the higher VA range in the EL2&amp;0 translation regime, and other information for this translation regime.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <note><para>When <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H is 0, the contents of this register are ignored by the PE, except for a direct read or write of the register.</para></note>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>Virtual memory control registers</reg_group>
+            <reg_group>Virtualization registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If EL2 is not implemented, this register is <arm-defined-word>RES0</arm-defined-word> from EL3.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>This register has no effect if EL2 is not enabled in the current Security state.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>TTBR1_EL2 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="ASID_63_48"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ASID</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+          
+  <para>An ASID for the translation table base address. The <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.A1 field selects either TTBR0_EL2.ASID or TTBR1_EL2.ASID.</para>
+<para>If the implementation has only 8 bits of ASID, then the upper 8 bits of this field are <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="BADDR_47_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>BADDR</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Translation table base address, A[47:x] or A[51:x], bits[47:1].</para>
+<note><list type="unordered"><listitem><content>Translation table base addresses of 52 bits, A[51:x], are supported only in an implementation that includes <xref browsertext="ARMv8.2-LPA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVAandPA"></xref> and is using the 64KB translation granule.</content></listitem><listitem><content>A translation table must be aligned to the size of the table, except that when using a translation table base address larger than 48 bits the minimum alignment of a table containing fewer than eight entries is 64 bytes.</content></listitem></list></note><para>In an implementation that includes <xref browsertext="ARMv8.2-LPA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVAandPA"></xref>, if the value of <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.{I}PS is <binarynumber>0b110</binarynumber>, then:</para>
+<list type="unordered">
+<listitem><content>Register bits[47:z] hold bits[47:z] of the stage 1 translation table base address, where z is determined as follows:<list type="unordered">
+<listitem><content>If x &gt;= 6 then z=x.</content>
+</listitem><listitem><content>Otherwise, z=6.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>Register bits[5:2] hold bits[51:48] of the stage 1 translation table base address.</content>
+</listitem><listitem><content>When z&gt;x register bits[(z-1):x] are <arm-defined-word>RES0</arm-defined-word>, and bits[(z-1):x] of the translation table base address are zero.</content>
+</listitem><listitem><content>When x&gt;6  register bits[(x-1):6] are <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content>Register bit[1] is <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content>Bits[5:2] of the stage 1 translation table base address are zero.</content>
+</listitem><listitem><content>In an implementation that includes <xref browsertext="ARMv8.2-TTCNP" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.TTCNP"></xref> bit[0] of the stage 1 translation table base address is zero.</content>
+</listitem></list>
+<note><list type="unordered"><listitem><content>In an implementation that includes <xref browsertext="ARMv8.2-LPA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVAandPA"></xref> a <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.IPS value of <binarynumber>0b110</binarynumber>, that selects an OA size of 52 bits, is permitted only when using the 64KB translation granule.</content></listitem><listitem><content>When the value of <register_link state="AArch64" id="AArch64-id_aa64mmfr0_el1.xml">ID_AA64MMFR0_EL1</register_link>.PARange indicates that the implementation does not support a 52 bit PA size, if a translation table lookup uses this register with the 64KB translation granule when the value of <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.IPS is <binarynumber>0b110</binarynumber> and the value of register bits[5:2] is nonzero, an Address size fault is generated.</content></listitem></list></note><para>If the Effective value of <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.IPS is not <binarynumber>0b110</binarynumber> then:</para>
+<list type="unordered">
+<listitem><content>Register bits[47:x] hold bits[47:x] of the stage 1 translation table base address.</content>
+</listitem><listitem><content>Register bits[(x-1):1] are <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content>If the implementation supports 52-bit PAs and IPAs, then bits[51:48] of the translation table base addresses used in this stage of translation are <binarynumber>0b0000</binarynumber>.</content>
+</listitem></list>
+<note><para>This definition applies:</para><list type="unordered"><listitem><content>To an implementation that includes <xref browsertext="ARMv8.2-LPA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVAandPA"></xref> and is using a translation granule smaller than 64KB.</content></listitem><listitem><content>To any implementation that does not include <xref browsertext="ARMv8.2-LPA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVAandPA"></xref>.</content></listitem></list></note><para>If any TTBR1_EL2[47:0] bit that is defined as <arm-defined-word>RES0</arm-defined-word> has the value 1 when a translation table walk is performed using  TTBR1_EL2, then the translation table base address might be misaligned, with effects that are <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word>, and must be one of the following:</para>
+<list type="unordered">
+<listitem><content>Bits[x-1:0] of the translation table base address are treated as if all the bits are zero. The value read back from the corresponding register bits is either the value written to the register or zero.</content>
+</listitem><listitem><content>The result of the calculation of an address for a translation table walk using this register can be corrupted in those bits that are nonzero.</content>
+</listitem></list>
+<para>The AArch64 Virtual Memory System Architecture chapter describes how x is calculated based on the value of <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.T1SZ, the stage of translation, and the translation granule size.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CnP_0_0_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>CnP</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Common not Private. This bit indicates whether each entry that is pointed to by TBR1_EL2 is a member of a common set that can be used by every PE in the Inner Shareable domain for which the value of TTBR1_EL2.CnP is 1.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The translation table entries pointed to by TTBR1_EL2 for the current ASID are permitted to differ from corresponding entries for TTBR1_EL2 for other PEs in the Inner Shareable domain. This is not affected by:</para>
+<list type="unordered">
+<listitem><content>
+<para>The value of TTBR1_EL2.CnP on those other PEs.</para>
+</content>
+</listitem><listitem><content>
+<para>The value of the current ASID.</para>
+</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The translation table entries pointed to by TTBR1_EL2 are the same as the translation table entries for every other PE in the Inner Shareable domain for which the value of TTBR1_EL2.CnP is 1 and all of the following apply:</para>
+<list type="unordered">
+<listitem><content>
+<para>The translation table entries are pointed to by TTBR1_EL2.</para>
+</content>
+</listitem><listitem><content>
+<para>The ASID is the same as the current ASID.</para>
+</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is permitted to be cached in a TLB.</para>
+<note><list type="unordered"><listitem><content>TTBR1_EL2 is accessible only when the value of <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H is 1, meaning the current translation regime is the EL2&amp;0 regime.</content></listitem><listitem><content>If the value of the TTBR1_EL2.CnP bit is 1 on multiple PEs in the same Inner Shareable domain and those TTBR1_EL2s do not point to the same translation table entries when the other conditions specified for the case when the value of CnP is 1 apply, then the results of translations are <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word>, see <xref browsertext="'CONSTRAINED UNPREDICTABLE behaviors due to caching of control or data values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile" filename="appx_architectural_constraints_on_unpredictable__.fm" linkend="CEGHBJBH"></xref>.</content></listitem></list></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-TTCNP is implemented</fields_condition>
+      </field>
+        <field
+           id="0_0_0_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="ASID_63_48" msb="63" lsb="48"/>
+        <fieldat id="BADDR_47_1" msb="47" lsb="1"/>
+        <fieldat id="CnP_0_0_1" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>When <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H is 1, without explicit synchronization, access from EL2 using the mnemonic TTBR1_EL2 or TTBR1_EL1 are not guaranteed to be ordered with respect to accesses using the other mnemonic.</para>
+      </access_permission_text>
+
+
+      <access_mechanism accessor="MRS TTBR1_EL2">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, TTBR1_EL2</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0010"/>
+            
+            <enc n="CRm" v="0b0000"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    return TTBR1_EL2;
+elsif PSTATE.EL == EL3 then
+    return TTBR1_EL2;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister TTBR1_EL2">
+        <encoding>
+          
+          <access_instruction>MSR TTBR1_EL2, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0010"/>
+            
+            <enc n="CRm" v="0b0000"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    TTBR1_EL2 = X[t];
+elsif PSTATE.EL == EL3 then
+    TTBR1_EL2 = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MRS TTBR1_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, TTBR1_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0010"/>
+            
+            <enc n="CRm" v="0b0000"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TRVM == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGRTR_EL2.TTBR1_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;NV2,NV1,NV&gt; == '111' then
+        return NVMem[0x210];
+    else
+        return TTBR1_EL1;
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '1' then
+        return TTBR1_EL2;
+    else
+        return TTBR1_EL1;
+elsif PSTATE.EL == EL3 then
+    return TTBR1_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister TTBR1_EL1">
+        <encoding>
+          
+          <access_instruction>MSR TTBR1_EL1, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0010"/>
+            
+            <enc n="CRm" v="0b0000"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TVM == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGWTR_EL2.TTBR1_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;NV2,NV1,NV&gt; == '111' then
+        NVMem[0x210] = X[t];
+    else
+        TTBR1_EL1 = X[t];
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '1' then
+        TTBR1_EL2 = X[t];
+    else
+        TTBR1_EL1 = X[t];
+elsif PSTATE.EL == EL3 then
+    TTBR1_EL1 = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

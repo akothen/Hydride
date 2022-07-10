@@ -1,0 +1,3503 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>HFGITR_EL2</reg_short_name>
+      <reg_long_name>Hypervisor Fine-Grained Instruction Trap Register</reg_long_name>
+        <reg_condition otherwise="UNDEFINED">when ARMv8.6-FGT is implemented</reg_condition>
+      
+
+          <reg_reset_value>
+            <reg_reset_limited_to_el>EL2</reg_reset_limited_to_el>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides controls for traps of execution of System instructions.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>A group mapping that does not have a known primary</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>HFGITR_EL2 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_instance>HFGITR_EL2</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_55"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>55</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="DCCVAC_54_54"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCVAC</field_name>
+          <field_msb>54</field_msb>
+          <field_lsb>54</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 and EL0 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cgdvac.xml" state="AArch64">DC CGDVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cgvac.xml" state="AArch64">DC CGVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cvac.xml" state="AArch64">DC CVAC</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 and EL0 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="SVC_EL1_53_53"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SVC_EL1</field_name>
+          <field_msb>53</field_msb>
+          <field_lsb>53</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <instruction>SVC</instruction> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <instruction>SVC</instruction> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <instruction>SVC</instruction> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x15</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="SVC_EL0_52_52"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SVC_EL0</field_name>
+          <field_msb>52</field_msb>
+          <field_lsb>52</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <instruction>SVC</instruction> at EL0 using AArch64 and execution of <instruction>SVC</instruction> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <instruction>SVC</instruction> at EL0 using AArch64 and execution of <instruction>SVC</instruction> at EL0 using AArch32 is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the instruction generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content>Execution of <instruction>SVC</instruction> at EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x15</hexnumber>.</content>
+</listitem><listitem><content>Execution of <instruction>SVC</instruction> at EL0 using AArch32 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x11</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ERET_51_51"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ERET</field_name>
+          <field_msb>51</field_msb>
+          <field_lsb>51</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><instruction>ERET</instruction>.</content>
+</listitem><listitem><content><instruction>ERETAA</instruction>, if ARMv8.3-PAuth is implemented.</content>
+</listitem><listitem><content><instruction>ERETAB</instruction>, if ARMv8.3-PAuth is implemented.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x1A</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CPPRCTX_50_50_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>CPPRCTX</field_name>
+          <field_msb>50</field_msb>
+          <field_lsb>50</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-cpp-rctx.xml" state="AArch64">CPP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-cpprctx.xml">CPPRCTX</register_link> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-cpp-rctx.xml" state="AArch64">CPP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-cpprctx.xml">CPPRCTX</register_link> at EL0 using AArch32 is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the instruction generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content>Execution of <register_link id="AArch64-cpp-rctx.xml" state="AArch64">CPP RCTX</register_link> at EL1 and EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content>Execution of <register_link state="AArch32" id="AArch32-cpprctx.xml">CPPRCTX</register_link> at EL0 using AArch32 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.0-PredInv is implemented</fields_condition>
+      </field>
+        <field
+           id="0_50_50_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>50</field_msb>
+          <field_lsb>50</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="DVPRCTX_49_49_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DVPRCTX</field_name>
+          <field_msb>49</field_msb>
+          <field_lsb>49</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-dvp-rctx.xml" state="AArch64">DVP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-dvprctx.xml">DVPRCTX</register_link> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-dvp-rctx.xml" state="AArch64">DVP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-dvprctx.xml">DVPRCTX</register_link> at EL0 using AArch32 is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the instruction generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content>Execution of <register_link id="AArch64-dvp-rctx.xml" state="AArch64">DVP RCTX</register_link> at EL1 and EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content>Execution of <register_link state="AArch32" id="AArch32-dvprctx.xml">DVPRCTX</register_link> at EL0 using AArch32 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.0-PredInv is implemented</fields_condition>
+      </field>
+        <field
+           id="0_49_49_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>49</field_msb>
+          <field_lsb>49</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="CFPRCTX_48_48_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>CFPRCTX</field_name>
+          <field_msb>48</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-cfp-rctx.xml" state="AArch64">CFP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-cfprctx.xml">CFPRCTX</register_link> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-cfp-rctx.xml" state="AArch64">CFP RCTX</register_link> at EL1 and EL0 using AArch64 and execution of <register_link state="AArch32" id="AArch32-cfprctx.xml">CFPRCTX</register_link> at EL0 using AArch32 is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the instruction generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content>Execution of <register_link id="AArch64-cfp-rctx.xml" state="AArch64">CFP RCTX</register_link> at EL1 and EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content>Execution of <register_link state="AArch32" id="AArch32-cfprctx.xml">CFPRCTX</register_link> at EL0 using AArch32 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.0-PredInv is implemented</fields_condition>
+      </field>
+        <field
+           id="0_48_48_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>48</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVAALE1_47_47"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAALE1</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>47</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaale1.xml" state="AArch64">TLBI VAALE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaale1.xml" state="AArch64">TLBI VAALE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaale1.xml" state="AArch64">TLBI VAALE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVALE1_46_46"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVALE1</field_name>
+          <field_msb>46</field_msb>
+          <field_lsb>46</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vale1.xml" state="AArch64">TLBI VALE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vale1.xml" state="AArch64">TLBI VALE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vale1.xml" state="AArch64">TLBI VALE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVAAE1_45_45"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAAE1</field_name>
+          <field_msb>45</field_msb>
+          <field_lsb>45</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaae1.xml" state="AArch64">TLBI VAAE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaae1.xml" state="AArch64">TLBI VAAE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaae1.xml" state="AArch64">TLBI VAAE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIASIDE1_44_44"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIASIDE1</field_name>
+          <field_msb>44</field_msb>
+          <field_lsb>44</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-aside1.xml" state="AArch64">TLBI ASIDE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-aside1.xml" state="AArch64">TLBI ASIDE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-aside1.xml" state="AArch64">TLBI ASIDE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVAE1_43_43"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAE1</field_name>
+          <field_msb>43</field_msb>
+          <field_lsb>43</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vae1.xml" state="AArch64">TLBI VAE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vae1.xml" state="AArch64">TLBI VAE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vae1.xml" state="AArch64">TLBI VAE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVMALLE1_42_42"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVMALLE1</field_name>
+          <field_msb>42</field_msb>
+          <field_lsb>42</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vmalle1.xml" state="AArch64">TLBI VMALLE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vmalle1.xml" state="AArch64">TLBI VMALLE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vmalle1.xml" state="AArch64">TLBI VMALLE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIRVAALE1_41_41_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAALE1</field_name>
+          <field_msb>41</field_msb>
+          <field_lsb>41</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaale1.xml" state="AArch64">TLBI RVAALE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaale1.xml" state="AArch64">TLBI RVAALE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaale1.xml" state="AArch64">TLBI RVAALE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_41_41_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>41</field_msb>
+          <field_lsb>41</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVALE1_40_40_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVALE1</field_name>
+          <field_msb>40</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvale1.xml" state="AArch64">TLBI RVALE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvale1.xml" state="AArch64">TLBI RVALE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvale1.xml" state="AArch64">TLBI RVALE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_40_40_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>40</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAAE1_39_39_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAAE1</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>39</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaae1.xml" state="AArch64">TLBI RVAAE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaae1.xml" state="AArch64">TLBI RVAAE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaae1.xml" state="AArch64">TLBI RVAAE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_39_39_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>39</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAE1_38_38_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAE1</field_name>
+          <field_msb>38</field_msb>
+          <field_lsb>38</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvae1.xml" state="AArch64">TLBI RVAE1</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvae1.xml" state="AArch64">TLBI RVAE1</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvae1.xml" state="AArch64">TLBI RVAE1</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_38_38_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>38</field_msb>
+          <field_lsb>38</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAALE1IS_37_37_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAALE1IS</field_name>
+          <field_msb>37</field_msb>
+          <field_lsb>37</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaale1is.xml" state="AArch64">TLBI RVAALE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaale1is.xml" state="AArch64">TLBI RVAALE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaale1is.xml" state="AArch64">TLBI RVAALE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_37_37_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>37</field_msb>
+          <field_lsb>37</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVALE1IS_36_36_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVALE1IS</field_name>
+          <field_msb>36</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvale1is.xml" state="AArch64">TLBI RVALE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvale1is.xml" state="AArch64">TLBI RVALE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvale1is.xml" state="AArch64">TLBI RVALE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_36_36_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>36</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAAE1IS_35_35_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAAE1IS</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>35</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaae1is.xml" state="AArch64">TLBI RVAAE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaae1is.xml" state="AArch64">TLBI RVAAE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaae1is.xml" state="AArch64">TLBI RVAAE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_35_35_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>35</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAE1IS_34_34_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAE1IS</field_name>
+          <field_msb>34</field_msb>
+          <field_lsb>34</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvae1is.xml" state="AArch64">TLBI RVAE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvae1is.xml" state="AArch64">TLBI RVAE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvae1is.xml" state="AArch64">TLBI RVAE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_34_34_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>34</field_msb>
+          <field_lsb>34</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVAALE1IS_33_33"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAALE1IS</field_name>
+          <field_msb>33</field_msb>
+          <field_lsb>33</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaale1is.xml" state="AArch64">TLBI VAALE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaale1is.xml" state="AArch64">TLBI VAALE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaale1is.xml" state="AArch64">TLBI VAALE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVALE1IS_32_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVALE1IS</field_name>
+          <field_msb>32</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vale1is.xml" state="AArch64">TLBI VALE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vale1is.xml" state="AArch64">TLBI VALE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vale1is.xml" state="AArch64">TLBI VALE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVAAE1IS_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAAE1IS</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaae1is.xml" state="AArch64">TLBI VAAE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaae1is.xml" state="AArch64">TLBI VAAE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaae1is.xml" state="AArch64">TLBI VAAE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIASIDE1IS_30_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIASIDE1IS</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-aside1is.xml" state="AArch64">TLBI ASIDE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-aside1is.xml" state="AArch64">TLBI ASIDE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-aside1is.xml" state="AArch64">TLBI ASIDE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVAE1IS_29_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVAE1IS</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vae1is.xml" state="AArch64">TLBI VAE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vae1is.xml" state="AArch64">TLBI VAE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vae1is.xml" state="AArch64">TLBI VAE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIVMALLE1IS_28_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TLBIVMALLE1IS</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vmalle1is.xml" state="AArch64">TLBI VMALLE1IS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vmalle1is.xml" state="AArch64">TLBI VMALLE1IS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vmalle1is.xml" state="AArch64">TLBI VMALLE1IS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="TLBIRVAALE1OS_27_27_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAALE1OS</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaale1os.xml" state="AArch64">TLBI RVAALE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaale1os.xml" state="AArch64">TLBI RVAALE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaale1os.xml" state="AArch64">TLBI RVAALE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_27_27_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVALE1OS_26_26_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVALE1OS</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvale1os.xml" state="AArch64">TLBI RVALE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvale1os.xml" state="AArch64">TLBI RVALE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvale1os.xml" state="AArch64">TLBI RVALE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_26_26_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAAE1OS_25_25_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAAE1OS</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvaae1os.xml" state="AArch64">TLBI RVAAE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvaae1os.xml" state="AArch64">TLBI RVAAE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvaae1os.xml" state="AArch64">TLBI RVAAE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_25_25_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIRVAE1OS_24_24_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIRVAE1OS</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-rvae1os.xml" state="AArch64">TLBI RVAE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-rvae1os.xml" state="AArch64">TLBI RVAE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-rvae1os.xml" state="AArch64">TLBI RVAE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_24_24_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVAALE1OS_23_23_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIVAALE1OS</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaale1os.xml" state="AArch64">TLBI VAALE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaale1os.xml" state="AArch64">TLBI VAALE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaale1os.xml" state="AArch64">TLBI VAALE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_23_23_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVALE1OS_22_22_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIVALE1OS</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vale1os.xml" state="AArch64">TLBI VALE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vale1os.xml" state="AArch64">TLBI VALE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vale1os.xml" state="AArch64">TLBI VALE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_22_22_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVAAE1OS_21_21_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIVAAE1OS</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vaae1os.xml" state="AArch64">TLBI VAAE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vaae1os.xml" state="AArch64">TLBI VAAE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vaae1os.xml" state="AArch64">TLBI VAAE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_21_21_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIASIDE1OS_20_20_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIASIDE1OS</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-aside1os.xml" state="AArch64">TLBI ASIDE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-aside1os.xml" state="AArch64">TLBI ASIDE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-aside1os.xml" state="AArch64">TLBI ASIDE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_20_20_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVAE1OS_19_19_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIVAE1OS</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>19</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vae1os.xml" state="AArch64">TLBI VAE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vae1os.xml" state="AArch64">TLBI VAE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vae1os.xml" state="AArch64">TLBI VAE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_19_19_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>19</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TLBIVMALLE1OS_18_18_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TLBIVMALLE1OS</field_name>
+          <field_msb>18</field_msb>
+          <field_lsb>18</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-tlbi-vmalle1os.xml" state="AArch64">TLBI VMALLE1OS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-tlbi-vmalle1os.xml" state="AArch64">TLBI VMALLE1OS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-tlbi-vmalle1os.xml" state="AArch64">TLBI VMALLE1OS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-TLBI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_18_18_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>18</field_msb>
+          <field_lsb>18</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="ATS1E1WP_17_17_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>ATS1E1WP</field_name>
+          <field_msb>17</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e1wp.xml" state="AArch64">AT S1E1WP</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e1wp.xml" state="AArch64">AT S1E1WP</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e1wp.xml" state="AArch64">AT S1E1WP</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-ATS1E1 is implemented</fields_condition>
+      </field>
+        <field
+           id="0_17_17_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>17</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="ATS1E1RP_16_16_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>ATS1E1RP</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e1rp.xml" state="AArch64">AT S1E1RP</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e1rp.xml" state="AArch64">AT S1E1RP</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e1rp.xml" state="AArch64">AT S1E1RP</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-ATS1E1 is implemented</fields_condition>
+      </field>
+        <field
+           id="0_16_16_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="ATS1E0W_15_15"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ATS1E0W</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>15</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e0w.xml" state="AArch64">AT S1E0W</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e0w.xml" state="AArch64">AT S1E0W</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e0w.xml" state="AArch64">AT S1E0W</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ATS1E0R_14_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ATS1E0R</field_name>
+          <field_msb>14</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e0r.xml" state="AArch64">AT S1E0R</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e0r.xml" state="AArch64">AT S1E0R</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e0r.xml" state="AArch64">AT S1E0R</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ATS1E1W_13_13"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ATS1E1W</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e1w.xml" state="AArch64">AT S1E1W</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e1w.xml" state="AArch64">AT S1E1W</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e1w.xml" state="AArch64">AT S1E1W</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ATS1E1R_12_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ATS1E1R</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-at-s1e1r.xml" state="AArch64">AT S1E1R</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-at-s1e1r.xml" state="AArch64">AT S1E1R</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-at-s1e1r.xml" state="AArch64">AT S1E1R</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCZVA_11_11"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCZVA</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 and EL0 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-gva.xml" state="AArch64">DC GVA</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-gzva.xml" state="AArch64">DC GZVA</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-zva.xml" state="AArch64">DC ZVA</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 and EL0 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCCIVAC_10_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCIVAC</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 and EL0 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cigdvac.xml" state="AArch64">DC CIGDVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cigvac.xml" state="AArch64">DC CIGVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-civac.xml" state="AArch64">DC CIVAC</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 and EL0 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCCVADP_9_9_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DCCVADP</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 and EL0 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cgdvadp.xml" state="AArch64">DC CGDVADP</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cgvadp.xml" state="AArch64">DC CGVADP</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cvadp.xml" state="AArch64">DC CVADP</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 and EL0 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-DCCVADP is implemented</fields_condition>
+      </field>
+        <field
+           id="0_9_9_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="DCCVAP_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCVAP</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 and EL0 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cgdvap.xml" state="AArch64">DC CGDVAP</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cgvap.xml" state="AArch64">DC CGVAP</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cvap.xml" state="AArch64">DC CVAP</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 and EL0 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCCVAU_7_7"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCVAU</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-dc-cvau.xml" state="AArch64">DC CVAU</register_link> at EL1 and EL0 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-dc-cvau.xml" state="AArch64">DC CVAU</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-dc-cvau.xml" state="AArch64">DC CVAU</register_link> at EL1 and EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCCISW_6_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCISW</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cigdsw.xml" state="AArch64">DC CIGDSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cigsw.xml" state="AArch64">DC CIGSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cisw.xml" state="AArch64">DC CISW</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCCSW_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCCSW</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cgdsw.xml" state="AArch64">DC CGDSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-cgsw.xml" state="AArch64">DC CGSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-csw.xml" state="AArch64">DC CSW</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCISW_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCISW</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-igdsw.xml" state="AArch64">DC IGDSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-igsw.xml" state="AArch64">DC IGSW</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-isw.xml" state="AArch64">DC ISW</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DCIVAC_3_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DCIVAC</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of multiple System instructions. Enables a trap on execution at EL1 using AArch64 of any of the following AArch64 System instructions to EL2:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-igdvac.xml" state="AArch64">DC IGDVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-igvac.xml" state="AArch64">DC IGVAC</register_link>, if ARMv8.5-MemTag is implemented.</content>
+</listitem><listitem><content><register_link id="AArch64-dc-ivac.xml" state="AArch64">DC IVAC</register_link>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of the System instructions listed above is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution at EL1 using AArch64 of any of the System instructions listed above is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ICIVAU_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ICIVAU</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-ic-ivau.xml" state="AArch64">IC IVAU</register_link> at EL1 and EL0 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-ic-ivau.xml" state="AArch64">IC IVAU</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-ic-ivau.xml" state="AArch64">IC IVAU</register_link> at EL1 and EL0 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ICIALLU_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ICIALLU</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-ic-iallu.xml" state="AArch64">IC IALLU</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-ic-iallu.xml" state="AArch64">IC IALLU</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-ic-iallu.xml" state="AArch64">IC IALLU</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ICIALLUIS_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ICIALLUIS</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap execution of <register_link id="AArch64-ic-ialluis.xml" state="AArch64">IC IALLUIS</register_link> at EL1 using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Execution of <register_link id="AArch64-ic-ialluis.xml" state="AArch64">IC IALLUIS</register_link> is not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, execution of <register_link id="AArch64-ic-ialluis.xml" state="AArch64">IC IALLUIS</register_link> at EL1 using AArch64 is trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>, unless the instruction generates a higher priority exception.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_55" msb="63" lsb="55"/>
+        <fieldat id="DCCVAC_54_54" msb="54" lsb="54"/>
+        <fieldat id="SVC_EL1_53_53" msb="53" lsb="53"/>
+        <fieldat id="SVC_EL0_52_52" msb="52" lsb="52"/>
+        <fieldat id="ERET_51_51" msb="51" lsb="51"/>
+        <fieldat id="CPPRCTX_50_50_1" msb="50" lsb="50"/>
+        <fieldat id="DVPRCTX_49_49_1" msb="49" lsb="49"/>
+        <fieldat id="CFPRCTX_48_48_1" msb="48" lsb="48"/>
+        <fieldat id="TLBIVAALE1_47_47" msb="47" lsb="47"/>
+        <fieldat id="TLBIVALE1_46_46" msb="46" lsb="46"/>
+        <fieldat id="TLBIVAAE1_45_45" msb="45" lsb="45"/>
+        <fieldat id="TLBIASIDE1_44_44" msb="44" lsb="44"/>
+        <fieldat id="TLBIVAE1_43_43" msb="43" lsb="43"/>
+        <fieldat id="TLBIVMALLE1_42_42" msb="42" lsb="42"/>
+        <fieldat id="TLBIRVAALE1_41_41_1" msb="41" lsb="41"/>
+        <fieldat id="TLBIRVALE1_40_40_1" msb="40" lsb="40"/>
+        <fieldat id="TLBIRVAAE1_39_39_1" msb="39" lsb="39"/>
+        <fieldat id="TLBIRVAE1_38_38_1" msb="38" lsb="38"/>
+        <fieldat id="TLBIRVAALE1IS_37_37_1" msb="37" lsb="37"/>
+        <fieldat id="TLBIRVALE1IS_36_36_1" msb="36" lsb="36"/>
+        <fieldat id="TLBIRVAAE1IS_35_35_1" msb="35" lsb="35"/>
+        <fieldat id="TLBIRVAE1IS_34_34_1" msb="34" lsb="34"/>
+        <fieldat id="TLBIVAALE1IS_33_33" msb="33" lsb="33"/>
+        <fieldat id="TLBIVALE1IS_32_32" msb="32" lsb="32"/>
+        <fieldat id="TLBIVAAE1IS_31_31" msb="31" lsb="31"/>
+        <fieldat id="TLBIASIDE1IS_30_30" msb="30" lsb="30"/>
+        <fieldat id="TLBIVAE1IS_29_29" msb="29" lsb="29"/>
+        <fieldat id="TLBIVMALLE1IS_28_28" msb="28" lsb="28"/>
+        <fieldat id="TLBIRVAALE1OS_27_27_1" msb="27" lsb="27"/>
+        <fieldat id="TLBIRVALE1OS_26_26_1" msb="26" lsb="26"/>
+        <fieldat id="TLBIRVAAE1OS_25_25_1" msb="25" lsb="25"/>
+        <fieldat id="TLBIRVAE1OS_24_24_1" msb="24" lsb="24"/>
+        <fieldat id="TLBIVAALE1OS_23_23_1" msb="23" lsb="23"/>
+        <fieldat id="TLBIVALE1OS_22_22_1" msb="22" lsb="22"/>
+        <fieldat id="TLBIVAAE1OS_21_21_1" msb="21" lsb="21"/>
+        <fieldat id="TLBIASIDE1OS_20_20_1" msb="20" lsb="20"/>
+        <fieldat id="TLBIVAE1OS_19_19_1" msb="19" lsb="19"/>
+        <fieldat id="TLBIVMALLE1OS_18_18_1" msb="18" lsb="18"/>
+        <fieldat id="ATS1E1WP_17_17_1" msb="17" lsb="17"/>
+        <fieldat id="ATS1E1RP_16_16_1" msb="16" lsb="16"/>
+        <fieldat id="ATS1E0W_15_15" msb="15" lsb="15"/>
+        <fieldat id="ATS1E0R_14_14" msb="14" lsb="14"/>
+        <fieldat id="ATS1E1W_13_13" msb="13" lsb="13"/>
+        <fieldat id="ATS1E1R_12_12" msb="12" lsb="12"/>
+        <fieldat id="DCZVA_11_11" msb="11" lsb="11"/>
+        <fieldat id="DCCIVAC_10_10" msb="10" lsb="10"/>
+        <fieldat id="DCCVADP_9_9_1" msb="9" lsb="9"/>
+        <fieldat id="DCCVAP_8_8" msb="8" lsb="8"/>
+        <fieldat id="DCCVAU_7_7" msb="7" lsb="7"/>
+        <fieldat id="DCCISW_6_6" msb="6" lsb="6"/>
+        <fieldat id="DCCSW_5_5" msb="5" lsb="5"/>
+        <fieldat id="DCISW_4_4" msb="4" lsb="4"/>
+        <fieldat id="DCIVAC_3_3" msb="3" lsb="3"/>
+        <fieldat id="ICIVAU_2_2" msb="2" lsb="2"/>
+        <fieldat id="ICIALLU_1_1" msb="1" lsb="1"/>
+        <fieldat id="ICIALLUIS_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS HFGITR_EL2">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, HFGITR_EL2</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0001"/>
+            
+            <enc n="CRm" v="0b0001"/>
+            
+            <enc n="op2" v="0b110"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        return NVMem[0x1C8];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return HFGITR_EL2;
+elsif PSTATE.EL == EL3 then
+    return HFGITR_EL2;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister HFGITR_EL2">
+        <encoding>
+          
+          <access_instruction>MSR HFGITR_EL2, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0001"/>
+            
+            <enc n="CRm" v="0b0001"/>
+            
+            <enc n="op2" v="0b110"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        NVMem[0x1C8] = X[t];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        HFGITR_EL2 = X[t];
+elsif PSTATE.EL == EL3 then
+    HFGITR_EL2 = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MPAMF_IDR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MPAMF_IDR, MPAM Features Identification Register</h1><p>The MPAMF_IDR characteristics are:</p><h2>Purpose</h2>
+        <p>Indicates which memory partitioning and monitoring features are present on this MSC. MPAMF_IDR_s indicates the MPAM features accessed from the Secure MPAM feature page. MPAMF_IDR_ns indicates the MPAM features accessed from the Non-secure MPAM feature page.</p>
+      <h2>Configuration</h2><p>
+          The power domain of MPAMF_IDR is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+        </p><h2>Attributes</h2>
+        <p>MAMPF_IDR is 64-bit register when ARMv8.6-MPAM is implemented.</p>
+
+      
+        <p>Otherwise, MAMPF_IDR is a 32-bit register.</p>
+      <h2>Field descriptions</h2><p>The MPAMF_IDR bit assignments are:</p><h3>When ARMv8.6-MPAM is implemented:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="4"><a href="#WhenARMv8.6-MPAMisimplemented_0_63">RES0</a></td><td class="lr" colspan="4"><a href="#WhenARMv8.6-MPAMisimplemented_RIS_MAX_59">RIS_MAX</a></td><td class="lr" colspan="16"><a href="#WhenARMv8.6-MPAMisimplemented_0_55">RES0</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_ESR_39">HAS_ESR</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_EXTD_ESR_38">HAS_EXTD_ESR</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_NO_IMPL_MSMON_37">NO_IMPL_MSMON</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_NO_IMPL_PART_36">NO_IMPL_PART</a></td><td class="lr" colspan="3"><a href="#WhenARMv8.6-MPAMisimplemented_0_35">RES0</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_RIS_32">HAS_RIS</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_PARTID_NRW_31">HAS_PARTID_NRW</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_MSMON_30">HAS_MSMON</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_IMPL_IDR_29">HAS_IMPL_IDR</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_EXT_28">EXT</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_PRI_PART_27">HAS_PRI_PART</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_MBW_PART_26">HAS_MBW_PART</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_CPOR_PART_25">HAS_CPOR_PART</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.6-MPAMisimplemented_HAS_CCAP_PART_24">HAS_CCAP_PART</a></td><td class="lr" colspan="8"><a href="#WhenARMv8.6-MPAMisimplemented_PMG_MAX_23">PMG_MAX</a></td><td class="lr" colspan="16"><a href="#WhenARMv8.6-MPAMisimplemented_PARTID_MAX_15">PARTID_MAX</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenARMv8.6-MPAMisimplemented_0_63">
+                Bits [63:60]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_RIS_MAX_59">RIS_MAX, bits [59:56]
+                  <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1 and MPAMF_IDR.HAS_RIS == 1:
+                </div></h4>
+          
+  <p>Maximum RIS value supported in <a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a>. Must be <span class="binarynumber">0b0000</span> if <a href="ext-mpamf_idr.html">MPAMF_IDR</a>.HAS_RIS == 0.</p>
+
+          
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_59"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_55">
+                Bits [55:40]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_ESR_39">HAS_ESR, bit [39]
+              <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1:
+                </div></h4>
+          
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a> is implemented.</p>
+
+          <table class="valuetable"><tr><th>HAS_ESR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a>, <a href="ext-mpam_ecr.html">MPAM_ECR</a> and MPAM error handling are not implemented.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a>, <a href="ext-mpam_ecr.html">MPAM_ECR</a> and MPAM error handling are implemented.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_39"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_EXTD_ESR_38">HAS_EXTD_ESR, bit [38]
+              <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1:
+                </div></h4>
+          
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a> is 64 bits.</p>
+
+          <table class="valuetable"><tr><th>HAS_EXTD_ESR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a> is 32 bits.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-mpamf_esr.html">MPAMF_ESR</a> is 64 bits.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_38"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_NO_IMPL_MSMON_37">NO_IMPL_MSMON, bit [37]
+              <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1 and MPAMF_IDR.HAS_IMPL_IDR == 1:
+                </div></h4>
+          
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> defines no <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource monitors.</p>
+
+          <table class="valuetable"><tr><th>NO_IMPL_MSMON</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> defines at least one <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource monitor.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> does not define any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource monitors.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_37"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_NO_IMPL_PART_36">NO_IMPL_PART, bit [36]
+              <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1 and MPAMF_IDR.HAS_IMPL_IDR == 1:
+                </div></h4>
+          
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> defines no <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource controls.</p>
+
+          <table class="valuetable"><tr><th>NO_IMPL_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> defines at least one <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource control.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a> does not define any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> resource controls.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_36"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_35">
+                Bits [35:33]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_RIS_32">HAS_RIS, bit [32]
+              <div style="font-size:smaller;"><br />When MPAMF_IDR.EXT == 1:
+                </div></h4>
+          
+  <p>Has resource instance selector. Indicates that <a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a> contains the RIS field that selects a resource instance to control.</p>
+
+          <table class="valuetable"><tr><th>HAS_RIS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a> does not implement the <a href="ext-mpamfcfg_part_sel.html">MPAMFCFG_PART_SEL</a>.RIS field or multiple resource instance suport.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a> implements the <a href="ext-mpamfcfg_part_sel.html">MPAMFCFG_PART_SEL</a>.RIS field and MPAM resource instance numbers up to and including MPAMF_IDR.RIS_MAX.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_32"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_PARTID_NRW_31">HAS_PARTID_NRW, bit [31]
+              </h4>
+          
+  <p>Has PARTID narrowing.</p>
+
+          <table class="valuetable"><tr><th>HAS_PARTID_NRW</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not have <a href="ext-mpamf_partid_nrw_idr.html">MPAMF_PARTID_NRW_IDR</a>, <a href="ext-mpamcfg_intpartid.html">MPAMCFG_INTPARTID</a> or intPARTID mapping support.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Supports the <a href="ext-mpamf_partid_nrw_idr.html">MPAMF_PARTID_NRW_IDR</a>, <a href="ext-mpamcfg_intpartid.html">MPAMCFG_INTPARTID</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_MSMON_30">HAS_MSMON, bit [30]
+              </h4>
+          
+  <p>Has resource monitors. Indicates whether this MSC has MPAM resource monitors.</p>
+
+          <table class="valuetable"><tr><th>HAS_MSMON</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support MPAM resource monitoring by groups or <a href="ext-mpamf_msmon_idr.html">MPAMF_MSMON_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Supports resource monitoring by matching a combination of PARTID and PMG. See <a href="ext-mpamf_msmon_idr.html">MPAMF_MSMON_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_IMPL_IDR_29">HAS_IMPL_IDR, bit [29]
+              </h4>
+          
+  <p>Has <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>. Indicates whether this MSC has the implementation-specific MPAM features register, <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_IMPL_IDR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not have <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_EXT_28">EXT, bit [28]
+              <div style="font-size:smaller;"><br />From Armv8.6:
+                </div></h4>
+          
+  <p>Extended MPAMF_IDR.</p>
+
+          <table class="valuetable"><tr><th>EXT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>MPAMF_IDR has no defined bits in [63:32]. The register is effectively 32 bits.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>MPAMF_IDR has bits defined in [63:32]. The register is 64-bits.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_0_28"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_PRI_PART_27">HAS_PRI_PART, bit [27]
+              </h4>
+          
+  <p>Has priority partitioning. Indicates whether this MSC implements MPAM priority partitioning and <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_PRI_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support priority partitioning or have <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_MBW_PART_26">HAS_MBW_PART, bit [26]
+              </h4>
+          
+  <p>Has memory bandwidth partitioning. Indicates whether this MSC implements MPAM memory bandwidth partitioning and <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_MBW_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support memory bandwidth partitioning or have <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a> register.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a> register.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_CPOR_PART_25">HAS_CPOR_PART, bit [25]
+              </h4>
+          
+  <p>Has cache portion partitioning. Indicates whether this MSC implements MPAM cache portion partitioning and <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_CPOR_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support cache portion partitioning or have <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a> or <a href="ext-mpamcfg_cpbm.html">MPAMCFG_CPBM</a> registers.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a> and <a href="ext-mpamcfg_cpbm.html">MPAMCFG_CPBM</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_HAS_CCAP_PART_24">HAS_CCAP_PART, bit [24]
+              </h4>
+          
+  <p>Has cache capacity partitioning. Indicates whether this MSC implements MPAM cache capacity partitioning and the <a href="ext-mpamf_ccap_idr.html">MPAMF_CCAP_IDR</a> and <a href="ext-mpamcfg_cmax.html">MPAMCFG_CMAX</a> registers.</p>
+
+          <table class="valuetable"><tr><th>HAS_CCAP_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support cache capacity partitioning or have <a href="ext-mpamf_ccap_idr.html">MPAMF_CCAP_IDR</a> and <a href="ext-mpamcfg_cmax.html">MPAMCFG_CMAX</a> registers.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_ccap_idr.html">MPAMF_CCAP_IDR</a> and <a href="ext-mpamcfg_cmax.html">MPAMCFG_CMAX</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_PMG_MAX_23">PMG_MAX, bits [23:16]
+                  </h4>
+          
+  <p>Maximum value of Non-secure PMG supported by this component.</p>
+
+          
+            
+  
+
+          <h4 id="WhenARMv8.6-MPAMisimplemented_PARTID_MAX_15">PARTID_MAX, bits [15:0]
+                  </h4>
+          
+  <p>Maximum value of Non-secure PARTID supported by this component.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h3>Otherwise:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#Otherwise_HAS_PARTID_NRW_31">HAS_PARTID_NRW</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_MSMON_30">HAS_MSMON</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_IMPL_IDR_29">HAS_IMPL_IDR</a></td><td class="lr" colspan="1"><a href="#Otherwise_EXT_28">EXT</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_PRI_PART_27">HAS_PRI_PART</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_MBW_PART_26">HAS_MBW_PART</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_CPOR_PART_25">HAS_CPOR_PART</a></td><td class="lr" colspan="1"><a href="#Otherwise_HAS_CCAP_PART_24">HAS_CCAP_PART</a></td><td class="lr" colspan="8"><a href="#Otherwise_PMG_MAX_23">PMG_MAX</a></td><td class="lr" colspan="16"><a href="#Otherwise_PARTID_MAX_15">PARTID_MAX</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="Otherwise_HAS_PARTID_NRW_31">HAS_PARTID_NRW, bit [31]
+              </h4>
+          
+  <p>Has PARTID narrowing.</p>
+
+          <table class="valuetable"><tr><th>HAS_PARTID_NRW</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not have <a href="ext-mpamf_partid_nrw_idr.html">MPAMF_PARTID_NRW_IDR</a>, <a href="ext-mpamcfg_intpartid.html">MPAMCFG_INTPARTID</a> or intPARTID mapping support.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Supports the <a href="ext-mpamf_partid_nrw_idr.html">MPAMF_PARTID_NRW_IDR</a>, <a href="ext-mpamcfg_intpartid.html">MPAMCFG_INTPARTID</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_HAS_MSMON_30">HAS_MSMON, bit [30]
+              </h4>
+          
+  <p>Has resource monitors. Indicates whether this MSC has MPAM resource monitors.</p>
+
+          <table class="valuetable"><tr><th>HAS_MSMON</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support MPAM resource monitoring by groups or <a href="ext-mpamf_msmon_idr.html">MPAMF_MSMON_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Supports resource monitoring by matching a combination of PARTID and PMG. See <a href="ext-mpamf_msmon_idr.html">MPAMF_MSMON_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_HAS_IMPL_IDR_29">HAS_IMPL_IDR, bit [29]
+              </h4>
+          
+  <p>Has <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>. Indicates whether this MSC has the implementation-specific MPAM features register, <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_IMPL_IDR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not have <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_impl_idr.html">MPAMF_IMPL_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_EXT_28">EXT, bit [28]
+              <div style="font-size:smaller;"><br />From Armv8.6:
+                </div></h4>
+          
+  <p>Extended MPAMF_IDR.</p>
+
+          <table class="valuetable"><tr><th>EXT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>MPAMF_IDR has no defined bits in [63:32]. The register is effectively 32 bits.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>MPAMF_IDR has bits defined in [63:32]. The register is 64-bits.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_0_28"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="Otherwise_HAS_PRI_PART_27">HAS_PRI_PART, bit [27]
+              </h4>
+          
+  <p>Has priority partitioning. Indicates whether this MSC implements MPAM priority partitioning and <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_PRI_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support priority partitioning or have <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_pri_idr.html">MPAMF_PRI_IDR</a>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_HAS_MBW_PART_26">HAS_MBW_PART, bit [26]
+              </h4>
+          
+  <p>Has memory bandwidth partitioning. Indicates whether this MSC implements MPAM memory bandwidth partitioning and MPAMF_MBW_IDR.</p>
+
+          <table class="valuetable"><tr><th>HAS_MBW_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support memory bandwidth partitioning or have <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a> register.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a> register.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_HAS_CPOR_PART_25">HAS_CPOR_PART, bit [25]
+              </h4>
+          
+  <p>Has cache portion partitioning. Indicates whether this MSC implements MPAM cache portion partitioning and <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a>.</p>
+
+          <table class="valuetable"><tr><th>HAS_CPOR_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support cache portion partitioning or have <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a> or <a href="ext-mpamcfg_cpbm.html">MPAMCFG_CPBM</a> registers.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_cpor_idr.html">MPAMF_CPOR_IDR</a> and <a href="ext-mpamcfg_cpbm.html">MPAMCFG_CPBM</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_HAS_CCAP_PART_24">HAS_CCAP_PART, bit [24]
+              </h4>
+          
+  <p>Has cache capacity partitioning. Indicates whether this MSC implements MPAM cache capacity partitioning and the MPAMF_CCAP_IDR and MPAMCFG_CMAX registers.</p>
+
+          <table class="valuetable"><tr><th>HAS_CCAP_PART</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not support cache capacity partitioning or have <a href="ext-mpamf_ccap_idr.html">MPAMF_CCAP_IDR</a> and <a href="ext-mpamcfg_cmax.html">MPAMCFG_CMAX</a> registers.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Has <a href="ext-mpamf_ccap_idr.html">MPAMF_CCAP_IDR</a> and <a href="ext-mpamcfg_cmax.html">MPAMCFG_CMAX</a> registers.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Otherwise_PMG_MAX_23">PMG_MAX, bits [23:16]
+                  </h4>
+          
+  <p>Maximum value of Non-secure PMG supported by this component.</p>
+
+          
+            
+  
+
+          <h4 id="Otherwise_PARTID_MAX_15">PARTID_MAX, bits [15:0]
+                  </h4>
+          
+  <p>Maximum value of Non-secure PARTID supported by this component.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the MPAMF_IDR</h2>
+        <p>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</p>
+
+      
+        <p>MPAMF_IDR is read-only.</p>
+
+      
+        <p>MPAMF_IDR must be readable from the Non-secure and Secure MPAM feature pages.</p>
+
+      
+        <p>MPAMF_IDR is permitted to have the same contents when read from either the Secure and Non-secure MPAM feature pages unless the register contents is different for Secure and Non-secure versions, when there must be separate registers in the Secure (MPAMF_IDR_s) and Non-secure (MPAMF_IDR_ns) MPAM feature pages.</p>
+      <h4>MPAMF_IDR can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_s</td><td><span class="hexnumber">0x0000</span></td><td>MPAMF_IDR_s</td></tr></table><p>Accesses on this interface are <span class="access_level">RO</span>.</p><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_ns</td><td><span class="hexnumber">0x0000</span></td><td>MPAMF_IDR_ns</td></tr></table><p>Accesses on this interface are <span class="access_level">RO</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

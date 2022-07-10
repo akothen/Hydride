@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2019 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="WFE" title="WFE -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="WFE" />
+  </docvars>
+  <heading>WFE</heading>
+  <desc>
+    <brief>
+      <para>Wait For Event</para>
+    </brief>
+    <authored>
+      <para>Wait For Event is a hint instruction that indicates that the PE can enter a low-power state and remain there until a wakeup event occurs. Wakeup events include the event signaled as a result of executing the <instruction>SEV</instruction> instruction on any PE in the multiprocessor system. For more information, see <xref linkend="BEIJHBBD">Wait For Event mechanism and Send event</xref>.</para>
+      <para>As described in <xref linkend="BEIJHBBD">Wait For Event mechanism and Send event</xref>, the execution of a <instruction>WFE</instruction> instruction that would otherwise cause entry to a low-power state can be trapped to a higher Exception level. See:</para>
+      <list type="unordered">
+        <listitem><content><xref linkend="D1CHDJGAIC">Traps to EL1 of EL0 execution of WFE and WFI instructions</xref>.</content></listitem>
+        <listitem><content><xref linkend="D1BEIBHJCJ">Traps to EL2 of Non-secure EL0 and EL1 execution of WFE and WFI instructions</xref>.</content></listitem>
+        <listitem><content><xref linkend="D1CHDEGCIJ">Traps to EL3 of EL2, EL1, and EL0 execution of WFE and WFI instructions</xref>.</content></listitem>
+      </list>
+    </authored>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="System" oneof="1" id="WFE_HI_hints" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="WFE" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="aarch64/instrs/system/hints/WFE_HI_hints" tworows="1">
+        <box hibit="31" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" name="L" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="2" name="op0" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="3" name="op1" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" name="CRn" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="WFE_HI_hints" oneofinclass="1" oneof="1" label="System">
+        <docvars>
+          <docvar key="instr-class" value="system" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="WFE" />
+        </docvars>
+        <asmtemplate><text>WFE</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="aarch64/instrs/system/hints/WFE_HI_hints" mylink="aarch64.instrs.system.hints.WFE_HI_hints" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// Empty.</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"></explanations>
+  <ps_section howmany="1">
+    <ps name="aarch64/instrs/system/hints/WFE_HI_hints" mylink="commonps" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if <a link="impl-shared.IsEventRegisterSet.0" file="shared_pseudocode.xml" hover="function: boolean IsEventRegisterSet()">IsEventRegisterSet</a>() then
+    <a link="impl-shared.ClearEventRegister.0" file="shared_pseudocode.xml" hover="function: ClearEventRegister()">ClearEventRegister</a>();
+else
+    if PSTATE.EL == <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a> then
+        // Check for traps described by the OS which may be EL1 or EL2.
+        <a link="AArch64.CheckForWFxTrap.2" file="shared_pseudocode.xml" hover="function: AArch64.CheckForWFxTrap(bits(2) target_el, boolean is_wfe)">AArch64.CheckForWFxTrap</a>(<a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>, TRUE);
+    if PSTATE.EL IN {<a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>, <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>} &amp;&amp; <a link="impl-shared.EL2Enabled.0" file="shared_pseudocode.xml" hover="function: boolean EL2Enabled()">EL2Enabled</a>() &amp;&amp; !<a link="impl-shared.IsInHost.0" file="shared_pseudocode.xml" hover="function: boolean IsInHost()">IsInHost</a>() then
+        // Check for traps described by the Hypervisor.
+        <a link="AArch64.CheckForWFxTrap.2" file="shared_pseudocode.xml" hover="function: AArch64.CheckForWFxTrap(bits(2) target_el, boolean is_wfe)">AArch64.CheckForWFxTrap</a>(<a link="EL2" file="shared_pseudocode.xml" hover="constant bits(2) EL2 = '10'">EL2</a>, TRUE);
+    if <a link="impl-shared.HaveEL.1" file="shared_pseudocode.xml" hover="function: boolean HaveEL(bits(2) el)">HaveEL</a>(<a link="EL3" file="shared_pseudocode.xml" hover="constant bits(2) EL3 = '11'">EL3</a>) &amp;&amp; PSTATE.EL != <a link="EL3" file="shared_pseudocode.xml" hover="constant bits(2) EL3 = '11'">EL3</a> then
+        // Check for traps described by the Secure Monitor.
+        <a link="AArch64.CheckForWFxTrap.2" file="shared_pseudocode.xml" hover="function: AArch64.CheckForWFxTrap(bits(2) target_el, boolean is_wfe)">AArch64.CheckForWFxTrap</a>(<a link="EL3" file="shared_pseudocode.xml" hover="constant bits(2) EL3 = '11'">EL3</a>, TRUE);
+    <a link="impl-shared.WaitForEvent.0" file="shared_pseudocode.xml" hover="function: WaitForEvent()">WaitForEvent</a>();</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

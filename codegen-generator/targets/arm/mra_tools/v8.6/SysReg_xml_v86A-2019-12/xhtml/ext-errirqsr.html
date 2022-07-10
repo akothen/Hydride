@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ERRIRQSR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ERRIRQSR, Error Interrupt Status Register</h1><p>The ERRIRQSR characteristics are:</p><h2>Purpose</h2>
+        <p>Interrupt status register.</p>
+      <h2>Configuration</h2><p>External register ERRIRQSR
+                is architecturally mapped to
+              External register <a href="ext-errirqcrn.html">ERRIRQCR15</a>.
+          </p><p>This register is present only
+    when interrupt configuration registers use the recommended format.
+      
+    Otherwise, direct accesses to ERRIRQSR are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>ERRIRQSR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ERRIRQSR bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="26"><a href="#0_63">RES0</a></td><td class="lr" colspan="1"><a href="#CRIERR_5">CRIERR</a></td><td class="lr" colspan="1"><a href="#CRI_4">CRI</a></td><td class="lr" colspan="1"><a href="#ERIERR_3">ERIERR</a></td><td class="lr" colspan="1"><a href="#ERI_2">ERI</a></td><td class="lr" colspan="1"><a href="#FHIERR_1">FHIERR</a></td><td class="lr" colspan="1"><a href="#FHI_0">FHI</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:6]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="CRIERR_5">CRIERR, bit [5]
+              <div style="font-size:smaller;"><br />When Critical Error Interrupt is implemented:
+                </div></h4>
+          
+  <p>Critical Error Interrupt error.</p>
+
+          <table class="valuetable"><tr><th>CRIERR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Critical Error Interrupt write has not returned an error since this bit was last cleared to zero.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Critical Error Interrupt write has returned an error since this bit was last cleared to zero.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="0_5"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="CRI_4">CRI, bit [4]
+              <div style="font-size:smaller;"><br />When Critical Error Interrupt is implemented:
+                </div></h4>
+          
+  <p>Critical Error Interrupt write in progress.</p>
+
+          <table class="valuetable"><tr><th>CRI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Critical Error Interrupt write not in progress.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Critical Error Interrupt write in progress.</p>
+</td></tr></table>
+            
+  <p>Software must not disable an interrupt whilst the write is in progress.</p>
+<div class="note"><span class="note-header">Note</span><p>This bit does not indicate whether an interrupt is active, but rather whether a write triggered by the interrupt is in progress.</p><p>To determine whether an interrupt is active, software must examine the individual <a href="ext-errnstatus.html">ERR&lt;n&gt;STATUS</a> registers.</p></div>
+
+          <p>Access to this field is <span class="access_level">RO</span>.</p><h4 id="0_4"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="ERIERR_3">ERIERR, bit [3]
+              <div style="font-size:smaller;"><br />When Error Recovery Interrupt is implemented:
+                </div></h4>
+          
+  <p>Error Recovery Interrupt error.</p>
+
+          <table class="valuetable"><tr><th>ERIERR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Error Recovery Interrupt write has not returned an error since this bit was last cleared to zero.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Error Recovery Interrupt write has returned an error since this bit was last cleared to zero.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="0_3"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="ERI_2">ERI, bit [2]
+              <div style="font-size:smaller;"><br />When Error Recovery Interrupt is implemented:
+                </div></h4>
+          
+  <p>Error Recovery Interrupt write in progress.</p>
+
+          <table class="valuetable"><tr><th>ERI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Error Recovery Interrupt write not in progress.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Error Recovery Interrupt write in progress.</p>
+</td></tr></table>
+            
+  <p>Software must not disable an interrupt whilst the write is in progress.</p>
+<div class="note"><span class="note-header">Note</span><p>This bit does not indicate whether an interrupt is active, but rather whether a write triggered by the interrupt is in progress.</p><p>To determine whether an interrupt is active, software must examine the individual <a href="ext-errnstatus.html">ERR&lt;n&gt;STATUS</a> registers.</p></div>
+
+          <p>Access to this field is <span class="access_level">RO</span>.</p><h4 id="0_2"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="FHIERR_1">FHIERR, bit [1]
+              <div style="font-size:smaller;"><br />When Fault Handling Interrupt is implemented:
+                </div></h4>
+          
+  <p>Fault Handling Interrupt error.</p>
+
+          <table class="valuetable"><tr><th>FHIERR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Fault Handling Interrupt write has not returned an error since this bit was last cleared to zero.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Fault Handling Interrupt write has returned an error since this bit was last cleared to zero.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="0_1"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="FHI_0">FHI, bit [0]
+              <div style="font-size:smaller;"><br />When Fault Handling Interrupt is implemented:
+                </div></h4>
+          
+  <p>Fault Handling Interrupt write in progress.</p>
+
+          <table class="valuetable"><tr><th>FHI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Fault Handling Interrupt write not in progress.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Fault Handling Interrupt write in progress.</p>
+</td></tr></table>
+            
+  <p>Software must not disable an interrupt whilst the write is in progress.</p>
+<div class="note"><span class="note-header">Note</span><p>This bit does not indicate whether an interrupt is active, but rather whether a write triggered by the interrupt is in progress.</p><p>To determine whether an interrupt is active, software must examine the individual <a href="ext-errnstatus.html">ERR&lt;n&gt;STATUS</a> registers.</p></div>
+
+          <p>Access to this field is <span class="access_level">RO</span>.</p><h4 id="0_0"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the ERRIRQSR</h2><h4>ERRIRQSR can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th></tr><tr><td>RAS</td><td><span class="hexnumber">0xEF8</span></td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

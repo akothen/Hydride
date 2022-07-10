@@ -1,0 +1,604 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ID_AA64MMFR1_EL1</reg_short_name>
+      <reg_long_name>AArch64 Memory Model Feature Register 1</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides information about the implemented memory model and memory management support in AArch64 state.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For general information about the interpretation of the ID registers, see <xref browsertext="Principles of the ID scheme for fields in ID registers" filename="D_aarch64_system_register_descriptions.fm" linkend="BABFAFHI"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ID_AA64MMFR1_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_40"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="ETS_39_36"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ETS</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for Enhanced Translation Synchronization. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Enhanced Translation Synchronization is not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Enhanced Translation Synchronization is supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.0-ETS" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.ETS"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.0, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="TWED_35_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TWED</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for the configurable delayed trapping of WFE. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Configurable delayed trapping of WFE is not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Configurable delayed trapping of WFE is supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.6-TWED" filename="A_armv8_architecture_extensions.fm" linkend="v8.6.TWED"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.6, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="XNX_31_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>XNX</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for execute-never control distinction by Exception level at stage 2. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Distinction between EL0 and EL1 execute-never control at stage 2 not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Distinction between EL0 and EL1 execute-never control at stage 2 supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.2-TTS2UXN" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.TTS2UXN"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.2, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SpecSEI_27_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SpecSEI</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Describes whether the PE can generate SError interrupt exceptions from speculative reads of memory, including speculative instruction fetches. The defined values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>The PE never generates an SError interrupt due to an External abort on a speculative read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>The PE might generate an SError interrupt due to an External abort on a speculative read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="PAN_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PAN</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Privileged Access Never. Indicates support for the PAN bit in PSTATE, <register_link state="AArch64" id="AArch64-spsr_el1.xml">SPSR_EL1</register_link>, <register_link state="AArch64" id="AArch64-spsr_el2.xml">SPSR_EL2</register_link>, <register_link state="AArch64" id="AArch64-spsr_el3.xml">SPSR_EL3</register_link>, and <register_link state="AArch64" id="AArch64-dspsr_el0.xml">DSPSR_EL0</register_link>. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>PAN not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>PAN supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>PAN supported and <register_link id="AArch64-at-s1e1rp.xml" state="AArch64">AT S1E1RP</register_link> and <register_link id="AArch64-at-s1e1wp.xml" state="AArch64">AT S1E1WP</register_link> instructions supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-PAN" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.PAN"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para><xref browsertext="ARMv8.2-ATS1E1" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.ATS1E1"></xref> implements the functionality added by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>In Armv8.1, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.2, the only permitted value is <binarynumber>0b0010</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="LO_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LO</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>LORegions. Indicates support for LORegions. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>LORegions not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>LORegions supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-LOR" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.LOR"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.1, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="HPDS_15_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HPDS</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>Hierarchical Permission Disables. Indicates support for disabling hierarchical controls in translation tables. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Disabling of hierarchical controls not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Disabling of hierarchical controls supported with the <register_link state="AArch64" id="AArch64-tcr_el1.xml">TCR_EL1</register_link>.{HPD1, HPD0}, <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.HPD or <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.{HPD1, HPD0}, and <register_link state="AArch64" id="AArch64-tcr_el3.xml">TCR_EL3</register_link>.HPD bits.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>As for value <binarynumber>0b0001</binarynumber>, and adds possible hardware allocation of bits[62:59] of the translation table descriptors from the final lookup level for <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> use.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-HPD" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.HPD"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para><xref browsertext="ARMv8.2-TTPBHA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.TTPBHA"></xref> implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>From Armv8.1, the value <binarynumber>0b0000</binarynumber> is not permitted.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="VH_11_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>VH</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Virtualization Host Extensions. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Virtualization Host Extensions not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Virtualization Host Extensions supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-VHE" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.VHE"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.1, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="VMIDBits_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>VMIDBits</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Number of VMID bits. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>8 bits</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>16 bits</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-VMID16" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.VMID16"></xref> implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>From Armv8.1, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0010</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="HAFDBS_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HAFDBS</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Hardware updates to Access flag and Dirty state in translation tables. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Hardware update of the Access flag and dirty state are not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Hardware update of the Access flag is supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>Hardware update of both the Access flag and dirty state is supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.1-TTHM" filename="A_armv8_architecture_extensions.fm" linkend="v8.1.TTHM"></xref> implements the functionality identified by the values <binarynumber>0b0001</binarynumber> and <binarynumber>0b0010</binarynumber>.</para>
+<para>From Armv8.1, the permitted values are <binarynumber>0b0000</binarynumber>, <binarynumber>0b0001</binarynumber>, and <binarynumber>0b0010</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_40" msb="63" lsb="40"/>
+        <fieldat id="ETS_39_36" msb="39" lsb="36"/>
+        <fieldat id="TWED_35_32" msb="35" lsb="32"/>
+        <fieldat id="XNX_31_28" msb="31" lsb="28"/>
+        <fieldat id="SpecSEI_27_24" msb="27" lsb="24"/>
+        <fieldat id="PAN_23_20" msb="23" lsb="20"/>
+        <fieldat id="LO_19_16" msb="19" lsb="16"/>
+        <fieldat id="HPDS_15_12" msb="15" lsb="12"/>
+        <fieldat id="VH_11_8" msb="11" lsb="8"/>
+        <fieldat id="VMIDBits_7_4" msb="7" lsb="4"/>
+        <fieldat id="HAFDBS_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS ID_AA64MMFR1_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, ID_AA64MMFR1_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="0b0111"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64MMFR1_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64MMFR1_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64MMFR1_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

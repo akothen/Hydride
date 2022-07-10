@@ -1,0 +1,761 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ERR&lt;n&gt;PFGF</reg_short_name>
+      <reg_long_name>Pseudo-fault Generation Feature Register</reg_long_name>
+        <reg_condition otherwise="RES0">when error record &lt;n&gt; is implemented, the node implements the RAS Common Fault Injection Model Extension (ERR&lt;n&gt;FR.INJ != 0b00) and error record &lt;n&gt; is the first error record owned by a node</reg_condition>
+          <reg_array>
+              <reg_array_start>0</reg_array_start>
+              <reg_array_end>65534</reg_array_end>
+         </reg_array>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>RAS</reg_component>
+    <reg_offset><hexnumber>0x800</hexnumber> + 64n</reg_offset>
+    <reg_instance>ERR&lt;n&gt;PFGF</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Defines which common architecturally-defined fault generation features are implemented.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>RAS registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para><register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link> describes the features implemented by the node.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ERR&lt;n&gt;PFGF is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_instance>ERR&lt;n&gt;PFGF</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="R_30_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>R</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Restartable. Support for Error Generation Counter restart mode.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The node does not support this feature.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Feature controllable.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SYN_29_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SYN</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+          
+  <para>Syndrome. Fault syndrome injection.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.{IERR, SERR} to <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> values. <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.{IERR, SERR} are <arm-defined-word>UNKNOWN</arm-defined-word> when <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.V == <binarynumber>0b0</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node does not update the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.{IERR, SERR} fields. <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.{IERR, SERR} are writable when <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.V == <binarynumber>0b0</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <note><para>If ERR&lt;n&gt;PFGF.SYN == <binarynumber>0b1</binarynumber>, software can write specific values into the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.{IERR, SERR} fields when setting up a fault injection event. The sets of values that can be written to these fields is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_28_13"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="MV_12_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>MV</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>Miscellaneous syndrome.</para>
+<para>Additional syndrome injection. Defines whether software can control all or part of the syndrome recorded in the ERR&lt;n&gt;MISC&lt;m&gt; registers when an injected error is recorded.</para>
+<para>It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> which syndrome fields in ERR&lt;n&gt;MISC&lt;m&gt; this refers to, as some fields might always be recorded by an error. For example, a Corrected Error counter.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node might record <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> additional syndrome in ERR&lt;n&gt;MISC&lt;m&gt;. If any syndrome is recorded in ERR&lt;n&gt;MISC&lt;m&gt;, then <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.MV is set to <binarynumber>0b1</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node does not update all the syndrome fields in the ERR&lt;n&gt;MISC&lt;m&gt; and does one of:</para>
+<list type="unordered">
+<listitem><content>The node does not update any fields in ERR&lt;n&gt;MISC&lt;m&gt; and sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.MV to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.MV.</content>
+</listitem><listitem><content>The node records some syndrome in ERR&lt;n&gt;MISC&lt;m&gt; and sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.MV to <binarynumber>0b1</binarynumber>. ERR&lt;n&gt;PGFCTL.MV is RAO.</content>
+</listitem></list>
+<para>The syndrome fields that the node does not update are unchanged and must be writable when <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.MV == <binarynumber>0b0</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <note><para>If ERR&lt;n&gt;PFGF.MV == <binarynumber>0b1</binarynumber>, software can write specific values into the ERR&lt;n&gt;MISC&lt;m&gt; registers when setting up a fault injection event. The values that can be written to these registers are <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="AV_11_11"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AV</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+          
+  <para>Address syndrome. Address syndrome injection.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node either sets <register_link state="ext" id="ext-errnaddr.xml">ERR&lt;n&gt;ADDR</register_link> and <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.AV for the access, or leaves these unchanged.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node does not update <register_link state="ext" id="ext-errnaddr.xml">ERR&lt;n&gt;ADDR</register_link> and does one of:</para>
+<list type="unordered">
+<listitem><content>Sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.AV to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.AV.</content>
+</listitem><listitem><content>Sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.AV to <binarynumber>0b1</binarynumber>. <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.AV is RAO.</content>
+</listitem></list>
+<para><register_link state="ext" id="ext-errnaddr.xml">ERR&lt;n&gt;ADDR</register_link> must be writable when <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.AV == <binarynumber>0b0</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <note><para>If ERR&lt;n&gt;PFGF.AV == <binarynumber>0b1</binarynumber>, software can write a specific value into <register_link state="ext" id="ext-errnaddr.xml">ERR&lt;n&gt;ADDR</register_link> when setting up a fault injection event.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="PN_10_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PN</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Poison flag. Describes how the fault generation feature of the node sets the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.PN status flag.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the node sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.PN to <binarynumber>0b1</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.PN is set to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.PN.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This behavior replaces the architecture-defined rules for setting the PN bit.</para>
+<para>This bit reads-as-zero if the node does not support this flag.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="ER_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ER</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>Error Reported flag. Describes how the fault generation feature of the node sets the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.ER status flag.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.ER according to the architecture-defined rules for setting the ER bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.ER is set to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.ER. This behavior replaces the architecture-defined rules for setting the ER bit.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this flag.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="CI_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CI</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Critical Error flag. Describes how the fault generation feature of the node sets the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.CI status flag.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the node sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.CI to <binarynumber>0b1</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.CI is set to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.CI.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This behavior replaces the architecture-defined rules for setting the CI bit.</para>
+<para>This bit reads-as-zero if the node does not support this flag.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="CE_7_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CE</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Corrected Error generation. Describes the types of Corrected Error that the fault generation feature of the node can generate.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of a non-specific Corrected Error, that is, a Corrected Error that is recorded as <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.CE == <binarynumber>0b10</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of transient or persistent Corrected Errors, that is, Corrected Errors that are recorded as <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.CE == <binarynumber>0b01</binarynumber> and <binarynumber>0b11</binarynumber>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>This field reads-as-zeros if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="DE_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DE</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>Deferred Error generation. Describes whether the fault generation feature of the node can generate this type of error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UEO_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>UEO</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Latent or Restartable Error generation. Describes whether the fault generation feature of the node can generate this type of error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UER_3_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>UER</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Signaled or Recoverable Error generation. Describes whether the fault generation feature of the node can generate this type of error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UEU_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>UEU</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Unrecoverable Error generation. Describes whether the fault generation feature of the node can generate this type of error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UC_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>UC</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Uncontainable Error generation. Describes whether the fault generation feature of the node can generate this type of error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node cannot generate this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The fault generation feature of the node allows generation of this type of error.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this type of error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="OF_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>OF</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Overflow flag. Describes how the fault generation feature of the node sets the <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.OF status flag.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, the node sets <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.OF according to the architecture-defined rules for setting the OF bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When an injected error is recorded, <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.OF is set to <register_link state="ext" id="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</register_link>.OF. This behavior replaces the architecture-defined rules for setting the OF bit.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit reads-as-zero if the node does not support this flag.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_31" msb="63" lsb="31"/>
+        <fieldat id="R_30_30" msb="30" lsb="30"/>
+        <fieldat id="SYN_29_29" msb="29" lsb="29"/>
+        <fieldat id="0_28_13" msb="28" lsb="13"/>
+        <fieldat id="MV_12_12" msb="12" lsb="12"/>
+        <fieldat id="AV_11_11" msb="11" lsb="11"/>
+        <fieldat id="PN_10_10" msb="10" lsb="10"/>
+        <fieldat id="ER_9_9" msb="9" lsb="9"/>
+        <fieldat id="CI_8_8" msb="8" lsb="8"/>
+        <fieldat id="CE_7_6" msb="7" lsb="6"/>
+        <fieldat id="DE_5_5" msb="5" lsb="5"/>
+        <fieldat id="UEO_4_4" msb="4" lsb="4"/>
+        <fieldat id="UER_3_3" msb="3" lsb="3"/>
+        <fieldat id="UEU_2_2" msb="2" lsb="2"/>
+        <fieldat id="UC_1_1" msb="1" lsb="1"/>
+        <fieldat id="OF_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" max="65534"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

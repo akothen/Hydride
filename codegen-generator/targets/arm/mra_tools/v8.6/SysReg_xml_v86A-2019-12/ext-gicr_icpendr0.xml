@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>GICR_ICPENDR0</reg_short_name>
+      <reg_long_name>Interrupt Clear-Pending Register 0</reg_long_name>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="Unknown"
+  >
+    <reg_component>GIC Redistributor</reg_component>
+    <reg_frame>SGI_base</reg_frame>
+    <reg_offset><hexnumber>0x0280</hexnumber></reg_offset>
+    <reg_instance>GICR_ICPENDR0</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When GICD_CTLR.DS == 0b0</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When IsAccessSecure()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When !IsAccessSecure()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Removes the pending state from the corresponding SGI or PPI.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>GIC Redistributor registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>A copy of this register is provided for each Redistributor.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>GICR_ICPENDR0 is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="Clear_pending_bit&lt;x&gt;_31_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Clear_pending_bit&lt;x&gt;</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>31</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>x</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Removes the pending state from interrupt number x. Reads and writes have the following behavior:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>If read, indicates that the corresponding interrupt is not pending.</para>
+<para>If written, has no effect.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If read, indicates that the corresponding interrupt is pending, or active and pending.</para>
+<para>If written, changes the state of the corresponding interrupt from pending to inactive, or from active and pending to active. This has no effect in the following cases:</para>
+<list type="unordered">
+<listitem><content>If the interrupt is not pending and is not active and pending.</content>
+</listitem><listitem><content>If the interrupt is a level-sensitive interrupt that is pending or active and pending for a reason other than a write to <register_link state="ext" id="ext-gicd_ispendrn.xml">GICD_ISPENDR&lt;n&gt;</register_link>. In this case, if the interrupt signal continues to be asserted, the interrupt remains pending or active and pending.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="Clear_pending_bit&lt;x&gt;_31_0" msb="31" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>When affinity routing is not enabled for the Security state of an interrupt in GICR_ICPENDR0, the corresponding bit is RAZ/WI and equivalent functionality is provided by <register_link state="ext" id="ext-gicd_icpendrn.xml">GICD_ICPENDR&lt;n&gt;</register_link> with n=0.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>This register only applies to SGIs (bits [15:0]) and PPIs (bits [31:16]). For SPIs, this functionality is provided by <register_link state="ext" id="ext-gicd_icenablern.xml">GICD_ICENABLER&lt;n&gt;</register_link>.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>When <register_link state="ext" id="ext-gicd_ctlr.xml">GICD_CTLR</register_link>.DS == 0, bits corresponding to Secure SGIs and PPIs are RAZ/WI to Non-secure accesses.</para>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

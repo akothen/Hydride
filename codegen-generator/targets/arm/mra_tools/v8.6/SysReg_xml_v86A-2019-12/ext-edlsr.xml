@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>EDLSR</reg_short_name>
+      <reg_long_name>External Debug Lock Status Register</reg_long_name>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0xFB4</hexnumber></reg_offset>
+    <reg_instance>EDLSR</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When ARMv8.3-DoPD is not implemented or IsCorePowered()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>ERROR</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Indicates the current status of the software lock for external debug registers.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>The optional Software Lock provides a lock to prevent memory-mapped writes to the debug registers. Use of this lock mechanism reduces the risk of accidental damage to the contents of the debug registers. It does not, and cannot, prevent all accidental or malicious damage.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If ARMv8.3-DoPD is implemented, then ARMv8.0-SoftwareLock is not implemented by the architecturally-defined debug components of the PE in the Core power domain.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>If ARMv8.3-DoPD is not implemented, then this register is in the Debug power domain.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>Software uses <register_link state="ext" id="ext-edlar.xml">EDLAR</register_link> to set or clear the lock, and EDLSR to check the current status of the lock.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>EDLSR is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="nTT_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>nTT</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Not thirty-two bit access required. RAZ.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SLK_1_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RAZ"
+        >
+          <field_name>SLK</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Software Lock status for this component. For an access to LSR that is not a memory-mapped access, or when the Software Lock is not implemented, this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+<para>For memory-mapped accesses when the Software Lock is implemented, possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Lock clear. Writes are permitted to this component's registers.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Lock set. Writes to this component's registers are ignored, and reads have no side effects.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    <field_reset>
+      <field_reset_special_text>
+  <para>If Armv8.3-DoPD is implemented, this register is reset by Cold reset and not affected by External debug reset. If Armv8.3-DoPD is not implemented, this register is reset by External debug reset and not affected by Cold reset.</para>
+</field_reset_special_text>
+    </field_reset>
+        
+    
+        <field_reset>
+          
+      <field_reset_number>1</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When the Software Lock is implemented.</fields_condition>
+      </field>
+        <field
+           id="0_1_1_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RAZ"
+        >
+          <field_name>0</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RAZ</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SLI_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SLI</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Software Lock implemented. For an access to LSR that is not a memory-mapped access, this field is RAZ. For memory-mapped accesses, the value of this field is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>. Permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Software Lock not implemented or not memory-mapped access.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Software Lock implemented and memory-mapped access.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="0_31_3" msb="31" lsb="3"/>
+        <fieldat id="nTT_2_2" msb="2" lsb="2"/>
+        <fieldat id="SLK_1_1_1" msb="1" lsb="1"/>
+        <fieldat id="SLI_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

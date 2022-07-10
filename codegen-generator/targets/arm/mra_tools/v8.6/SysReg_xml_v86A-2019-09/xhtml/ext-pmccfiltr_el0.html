@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMCCFILTR_EL0</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMCCFILTR_EL0, Performance Monitors Cycle Counter Filter Register</h1><p>The PMCCFILTR_EL0 characteristics are:</p><h2>Purpose</h2>
+        <p>Determines the modes in which the Cycle Counter, <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>, increments.</p>
+      <h2>Configuration</h2><p>External register PMCCFILTR_EL0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-pmccfiltr_el0.html">PMCCFILTR_EL0[31:0]
+            </a>.
+          </p><p>External register PMCCFILTR_EL0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-pmccfiltr.html">PMCCFILTR[31:0]
+            </a>.
+          </p><p>PMCCFILTR_EL0 is in the Core power domain.
+      </p>
+              <p>On a Warm or Cold reset RW fields in this register reset:</p>
+<ul>
+<li>
+<p>To architecturally <span class="arm-defined-word">UNKNOWN</span> values if the reset is to an Exception level that is using AArch64.</p>
+
+</li><li>
+<p>To 0 if the reset is to an Exception level that is using AArch32.</p>
+
+</li></ul>
+<p>The register is not affected by an External debug reset.</p>
+          <h2>Attributes</h2>
+            <p>PMCCFILTR_EL0 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMCCFILTR_EL0 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#P_31">P</a></td><td class="lr" colspan="1"><a href="#U_30">U</a></td><td class="lr" colspan="1"><a href="#NSK_29">NSK</a></td><td class="lr" colspan="1"><a href="#NSU_28">NSU</a></td><td class="lr" colspan="1"><a href="#NSH_27">NSH</a></td><td class="lr" colspan="1"><a href="#M_26">M</a></td><td class="lr" colspan="1"><a href="#0_25">RES0</a></td><td class="lr" colspan="1"><a href="#SH_24">SH</a></td><td class="lr" colspan="24"><a href="#0_23">RES0</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="P_31">P, bit [31]
+              </h4>
+          
+  <p>Privileged filtering bit. Controls counting in EL1.</p>
+<p>If EL3 is implemented, then counting in Non-secure EL1 is further controlled by the PMCCFILTR_EL0.NSK bit.</p>
+
+        <table class="valuetable"><tr><th>P</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Count cycles in EL1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not count cycles in EL1.</p>
+</td></tr></table><h4 id="U_30">U, bit [30]
+              </h4>
+          
+  <p>User filtering bit. Controls counting in EL0.</p>
+<p>If EL3 is implemented, then counting in Non-secure EL0 is further controlled by the PMCCFILTR_EL0.NSU bit.</p>
+
+        <table class="valuetable"><tr><th>U</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Count cycles in EL0.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not count cycles in EL0.</p>
+</td></tr></table><h4 id="NSK_29">NSK, bit [29]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Non-secure EL1 (kernel) modes filtering bit. Controls counting in Non-secure EL1.</p>
+<p>If the value of this bit is equal to the value of the PMCCFILTR_EL0.P bit, cycles in Non-secure EL1 are counted.</p>
+<p>Otherwise, cycles in Non-secure EL1 are not counted.</p>
+
+        <h4 id="0_29"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="NSU_28">NSU, bit [28]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Non-secure EL0 (Unprivileged) filtering bit. Controls counting in Non-secure EL0.</p>
+<p>If the value of this bit is equal to the value of the PMCCFILTR_EL0.U bit, cycles in Non-secure EL0 are counted.</p>
+<p>Otherwise, cycles in Non-secure EL0 are not counted.</p>
+
+        <h4 id="0_28"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="NSH_27">NSH, bit [27]
+              <div style="font-size:smaller;"><br />When HaveEL(EL2):
+                </div></h4>
+          
+  <p>EL2 (Hypervisor) filtering bit. Controls counting in EL2.</p>
+<p>If Secure EL2 is implemented, counting in Secure EL2 is further controlled by the PMCCFILTR_EL0.SH bit.</p>
+
+        <table class="valuetable"><tr><th>NSH</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Do not count cycles in EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Count cycles in EL2.</p>
+</td></tr></table><h4 id="0_27"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="M_26">M, bit [26]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Secure EL3 filtering bit.</p>
+<p>If the value of this bit is equal to the value of the PMCCFILTR_EL0.P bit, cycles in Secure EL3 are counted.</p>
+<p>Otherwise, cycles in Secure EL3 are not counted.</p>
+<p>Most applications can ignore this field and set its value to 0.</p>
+<div class="note"><span class="note-header">Note</span><p>This field is not visible in the AArch32 <a href="AArch32-pmccfiltr.html">PMCCFILTR</a> System register.</p></div>
+
+        <h4 id="0_26"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_25">
+                Bit [25]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SH_24">SH, bit [24]
+              <div style="font-size:smaller;"><br />When ARMv8.4-SecEL2 is implemented:
+                </div></h4>
+          
+  <p>Secure EL2 filtering.</p>
+<p>If the value of this bit is not equal to the value of the PMCCFILTR_EL0.NSH bit, cycles in Secure EL2 are counted.</p>
+<p>Otherwise, cycles in Secure EL2 are not counted.</p>
+<p>If Secure EL2 is not implemented or is disabled, this field is <span class="arm-defined-word">RES0</span>.</p>
+<div class="note"><span class="note-header">Note</span><p>This field is not visible in the AArch32 <a href="AArch32-pmccfiltr.html">PMCCFILTR</a> System register.</p></div>
+
+        <h4 id="0_24"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_23">
+                Bits [23:0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the PMCCFILTR_EL0</h2>
+        <div class="note"><span class="note-header">Note</span><p>SoftwareLockStatus() depends on the type of access attempted and AllowExternalPMUAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</p></div>
+      <h4>PMCCFILTR_EL0 can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>PMU</td><td><span class="hexnumber">0x47C</span></td><td>PMCCFILTR_EL0</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and !SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>Otherwise 
+            accesses to this register generate an error response.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

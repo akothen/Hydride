@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>EDVIDSR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">EDVIDSR, External Debug Virtual Context Sample Register</h1><p>The EDVIDSR characteristics are:</p><h2>Purpose</h2>
+        <p>Contains sampled values captured on reading <a href="ext-edpcsr.html">EDPCSR</a>[31:0].</p>
+      <h2>Configuration</h2><p>EDVIDSR is in the Core power domain.
+      RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values. These apply only on a Cold reset. The register is not affected by a Warm reset and is not affected by an External debug reset.</p><p>This register is present only
+    when ARMv8.0-PCSample is implemented and ARMv8.2-PCSample is not implemented.
+      
+    Otherwise, direct accesses to EDVIDSR are <span class="arm-defined-word">RES0</span>.</p>
+        <p>Implemented only if the <span class="arm-defined-word">OPTIONAL</span> PC Sample-based Profiling Extension is implemented in the external debug registers space.</p>
+
+      
+        <p>When the PC Sample-based Profiling Extension is implemented in the external debug registers space, if EL2 is not implemented and EL3 is not implemented, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether EDVIDSR is implemented.</p>
+
+      
+        <div class="note"><span class="note-header">Note</span><p><span class="xref">ARMv8.2-PCSample</span> implements the PC Sample-based Profiling Extension in the Performance Monitors registers space.</p></div>
+      <h2>Attributes</h2>
+        <p>If <span class="xref">ARMv8.1-VHE</span> is implemented, the format of this register differs depending on the value of <a href="ext-edscr.html">EDSCR</a>.SC2.</p>
+      <h2>Field descriptions</h2><p>The EDVIDSR bit assignments are:</p><h3>When ARMv8.1-VHE is not implemented or EDSCR.SC2 == 0:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_NS_31">NS</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_E2_30">E2</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_E3_29">E3</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_HV_28">HV</a></td><td class="lr" colspan="12"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_27">RES0</a></td><td class="lr" colspan="8"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_VMID15:8_15">VMID[15:8]</a></td><td class="lr" colspan="8"><a href="#WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_VMID_7">VMID</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  <p>This format applies in all Armv8.0 implementations.</p>
+
+    </div><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_NS_31">NS, bit [31]
+              </h4>
+          
+  <p>Non-secure state sample. Indicates the Security state associated with the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample.</p>
+<p>If EL3 is not implemented, this bit indicates the Effective value of <span class="xref">SCR</span>.NS.</p>
+
+        <table class="valuetable"><tr><th>NS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Sample is from Secure state.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Sample is from Non-secure state.</p>
+</td></tr></table><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_E2_30">E2, bit [30]
+              <div style="font-size:smaller;"><br />When HaveEL(EL2):
+                </div></h4>
+          
+  <p>Exception level 2 status sample. Indicates whether the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample was associated with EL2.</p>
+
+        <table class="valuetable"><tr><th>E2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Sample is not from EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Sample is from EL2.</p>
+</td></tr></table><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_30"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_E3_29">E3, bit [29]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3) and !HighestELUsingAArch32():
+                </div></h4>
+          
+  <p>Exception level 3 status sample. Indicates whether the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample was associated with EL3 using AArch64.</p>
+
+        <table class="valuetable"><tr><th>E3</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Sample is not from EL3 using AArch64.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Sample is from EL3 using AArch64.</p>
+</td></tr></table><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_29"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_HV_28">HV, bit [28]
+              </h4>
+          
+  <p>EDPCSRhi (<a href="ext-edpcsr.html">EDPCSR</a>[63:32]) valid. Indicates whether bits [63:32] of the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample might be nonzero:</p>
+
+        <table class="valuetable"><tr><th>HV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Bits[63:32] of the most recent EDPCSR sample are zero.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Bits[63:32] of the most recent EDPCSR sample might be nonzero.</p>
+</td></tr></table>
+              
+  <p>An EDVIDSR.HV value of 1 does not mean that the value of EDPCSRhi is nonzero. An EDVIDSR.HV value of 0 is a hint that EDPCSRhi (<a href="ext-edpcsr.html">EDPCSR</a>[63:32]) does not need to be read.</p>
+
+            <p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_27">
+                Bits [27:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_VMID15:8_15">VMID[15:8], bits [15:8]
+                  <div style="font-size:smaller;"><br />When ARMv8.1-VMID16 is implemented and HaveEL(EL2):
+                </div></h4>
+          
+  <p>Extension to VMID[7:0]. See VMID[7:0] for more details.</p>
+
+        <p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_VMID_7">VMID, bits [7:0]
+                  <div style="font-size:smaller;"><br />When HaveEL(EL2):
+                </div></h4>
+          
+  <p>VMID sample. The VMID associated with the most recent EDPCSRlo (<a href="ext-edpcsr.html">EDPCSR</a>[31:0]) sample. When the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample was generated:</p>
+<ul>
+<li>This field is <span class="arm-defined-word">RES0</span> if any of the following apply:<ul>
+<li>The PE is executing in Secure state.
+</li><li>The PE is executing at EL2.
+</li></ul>
+
+</li><li>Otherwise:<ul>
+<li>If EL2 is using AArch64 and either <span class="xref">ARMv8.1-VMID16</span> is not implemented or <a href="AArch64-vtcr_el2.html">VTCR_EL2</a>.VS is 1, this field is set to <a href="AArch64-vttbr_el2.html">VTTBR_EL2</a>.VMID.
+</li><li>If EL2 is using AArch64, <span class="xref">ARMv8.1-VMID16</span> is implemented, and <a href="AArch64-vtcr_el2.html">VTCR_EL2</a>.VS is 0, PMVIDSR.VMID[7:0] is set to <a href="AArch64-vttbr_el2.html">VTTBR_EL2</a>.VMID[7:0] and PMVIDSR.VMID[15:8] is <span class="arm-defined-word">RES0</span>.
+</li><li>If EL2 is using AArch32, this field is set to <a href="AArch32-vttbr.html">VTTBR</a>.VMID.
+</li></ul>
+
+</li></ul>
+
+        <p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisnotimplementedorEDSCR.SC20_0_7"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <div class="text_after_fields">
+    
+  
+
+    </div><h3>When ARMv8.1-VHE is implemented and EDSCR.SC2 == 1:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenARMv8.1-VHEisimplementedandEDSCR.SC21_CONTEXTIDR_EL2_31">CONTEXTIDR_EL2</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenARMv8.1-VHEisimplementedandEDSCR.SC21_CONTEXTIDR_EL2_31">CONTEXTIDR_EL2, bits [31:0]
+                  </h4>
+          
+  <p>Context ID. The value of <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a> that is associated with the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample. When the most recent <a href="ext-edpcsr.html">EDPCSR</a> sample was generated:</p>
+<ul>
+<li>If EL2 was using AArch64 and the PE was executing in Non-secure state, then this field is set to the Context ID sampled from <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a>.
+</li><li>If EL2 was using AArch32 or the PE was executing in Secure state, then this field is set to an <span class="arm-defined-word">UNKNOWN</span> value.
+</li></ul>
+
+        <p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the EDVIDSR</h2>
+        <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> extensions to external debug might make the value of this register <span class="arm-defined-word">UNKNOWN</span>, see <span class="xref">'Permitted behavior that might make the PC Sample-based profiling registers UNKNOWN' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile</span></p>
+      <h4>EDVIDSR can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>Debug</td><td><span class="hexnumber">0x0A8</span></td><td>EDVIDSR</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered(), !DoubleLockStatus() and !OSLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>Otherwise 
+            accesses to this register generate an error response.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

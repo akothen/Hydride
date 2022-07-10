@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMCR_EL0</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMCR_EL0, Performance Monitors Control Register</h1><p>The PMCR_EL0 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides details of the Performance Monitors implementation, including the number of counters implemented, and configures and controls the counters.</p>
+      <h2>Configuration</h2><p>External register PMCR_EL0 bits [7:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-pmcr.html">PMCR[7:0]
+            </a>.
+          </p><p>External register PMCR_EL0 bits [7:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-pmcr_el0.html">PMCR_EL0[7:0]
+            </a>.
+          </p><p>PMCR_EL0 is in the Core power domain.
+      Some or all RW fields of this register have defined reset values. The field descriptions identify when the reset values apply.</p>
+        <p>This register is only partially mapped to the internal <a href="AArch32-pmcr.html">PMCR</a> System register. An external agent must use other means to discover the information held in <a href="AArch32-pmcr.html">PMCR</a>[31:11], such as accessing <a href="ext-pmcfgr.html">PMCFGR</a> and the ID registers.</p>
+      <h2>Attributes</h2>
+            <p>PMCR_EL0 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMCR_EL0 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="21"><a href="#0_31">RAZ/WI</a></td><td class="lr" colspan="3"><a href="#0_10">RES0</a></td><td class="lr" colspan="1"><a href="#LP_7">LP</a></td><td class="lr" colspan="1"><a href="#LC_6">LC</a></td><td class="lr" colspan="1"><a href="#DP_5">DP</a></td><td class="lr" colspan="1"><a href="#X_4">X</a></td><td class="lr" colspan="1"><a href="#D_3">D</a></td><td class="lr" colspan="1"><a href="#C_2">C</a></td><td class="lr" colspan="1"><a href="#P_1">P</a></td><td class="lr" colspan="1"><a href="#E_0">E</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_31">
+                Bits [31:11]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+        
+              
+  <p>Hardware must implement this field as RAZ/WI. Software must not rely on the register reading as zero, and must use a read-modify-write sequence to write to the register.</p>
+
+            <h4 id="0_10">
+                Bits [10:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LP_7">LP, bit [7]
+              <div style="font-size:smaller;"><br />When ARMv8.5-PMU is implemented:
+                </div></h4>
+          
+  <p>Long event counter enable. Determines when unsigned overflow is recorded by a counter overflow bit.</p>
+
+        <table class="valuetable"><tr><th>LP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event counter overflow on increment that causes unsigned overflow of <a href="ext-pmevcntrn_el0.html">PMEVCNTR&lt;n&gt;_EL0</a>[31:0].</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Event counter overflow on increment that causes unsigned overflow of <a href="ext-pmevcntrn_el0.html">PMEVCNTR&lt;n&gt;_EL0</a>[63:0].</p>
+</td></tr></table>
+              
+  <p>If EL2 is implemented and <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN or <a href="AArch32-hdcr.html">HDCR</a>.HPMN is less than PMCR_EL0.N, this bit does not affect the operation of event counters in the range [<a href="AArch32-hdcr.html">HDCR</a>.HPMN..(PMCR_EL0.N-1)] or [<a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN:(PMCR_EL0.N-1)].</p>
+<div class="note"><span class="note-header">Note</span><p>The effect of <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN or <a href="AArch32-hdcr.html">HDCR</a>.HPMN on the operation of this bit always applies if EL2 is implemented, at all Exception levels including EL2 and EL3, and regardless of whether EL2 is enabled in the current Security state. For more information, see the description of <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN or <a href="AArch32-hdcr.html">HDCR</a>.HPMN.</p></div><p>If the highest implemented Exception level is using AArch32, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is RW or RAZ/WI.</p>
+
+            <h4 id="0_7"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LC_6">LC, bit [6]
+              </h4>
+          
+  <p>Long cycle counter enable. Determines when unsigned overflow is recorded by the cycle counter overflow bit.</p>
+
+        <table class="valuetable"><tr><th>LC</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Cycle counter overflow on increment that causes unsigned overflow of <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>[31:0].</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Cycle counter overflow on increment that causes unsigned overflow of <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>[63:0].</p>
+</td></tr></table>
+              
+  <p>Arm deprecates use of <a href="ext-pmcr_el0.html">PMCR_EL0</a>.LC = 0.</p>
+<p>In an AArch64 only implementation, this field is <span class="arm-defined-word">RES1</span>.</p>
+
+            <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="DP_5">DP, bit [5]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3) or (ARMv8.1-PMU is implemented and HaveEL(EL2)):
+                </div></h4>
+          
+  <p>Disable cycle counter when event counting is prohibited. The possible values of this bit are:</p>
+
+        <table class="valuetable"><tr><th>DP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Cycle counting by <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> is not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>When event counting for counters in the range [0..(<a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN-1)] is prohibited, cycle counting by <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> is disabled.</p>
+</td></tr></table>
+              
+  <p>For more information about the interaction between the Performance Monitors and EL3, see <span class="xref">'Effect of EL3 and EL2' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile</span>.</p>
+
+            
+  <p>When this register has an architecturally-defined reset value, if this field is implemented as an RW field it resets to:</p>
+<ul>
+<li>A value that is architecturally <span class="arm-defined-word">UNKNOWN</span> if the reset is into an Exception level that is using AArch64.
+</li><li>0 if the reset is into an Exception level that is using AArch32.
+</li></ul>
+<h4 id="0_5"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="X_4">X, bit [4]
+              <div style="font-size:smaller;"><br />When the implementation includes a PMU event export bus:
+                </div></h4>
+          
+  <p>Enable export of events in an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> PMU event export bus.</p>
+
+        <table class="valuetable"><tr><th>X</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Do not export events.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Export events where not prohibited.</p>
+</td></tr></table>
+              
+  <p>This field enables the exporting of events over an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> PMU event export bus to another device, for example to an <span class="arm-defined-word">OPTIONAL</span> PE trace unit.</p>
+<p>No events are exported when counting is prohibited.</p>
+<p>This field does not affect the generation of Performance Monitors overflow interrupt requests or signaling to a cross-trigger interface (CTI) that can be implemented as signals exported from the PE.</p>
+
+            
+  <p>When this register has an architecturally-defined reset value, if this field is implemented as an RW field it resets to:</p>
+<ul>
+<li>A value that is architecturally <span class="arm-defined-word">UNKNOWN</span> if the reset is into an Exception level that is using AArch64.
+</li><li>0 if the reset is into an Exception level that is using AArch32.
+</li></ul>
+<h4 id="0_4"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+        <h4 id="D_3">D, bit [3]
+              <div style="font-size:smaller;"><br />When AArch32 is supported at any Exception level:
+                </div></h4>
+          
+  <p>Clock divider.</p>
+
+        <table class="valuetable"><tr><th>D</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>When enabled, <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> counts every clock cycle.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>When enabled, <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> counts once every 64 clock cycles.</p>
+</td></tr></table>
+              
+  <p>If PMCR_EL0.LC == 1, this bit is ignored and the cycle counter counts every clock cycle.</p>
+<p>Arm deprecates use of PMCR_EL0.D = 1.</p>
+
+            
+  <p>When this register has an architecturally-defined reset value, if this field is implemented as an RW field it resets to:</p>
+<ul>
+<li>A value that is architecturally <span class="arm-defined-word">UNKNOWN</span> if the reset is into an Exception level that is using AArch64.
+</li><li>0 if the reset is into an Exception level that is using AArch32.
+</li></ul>
+<h4 id="0_3"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="C_2">C, bit [2]
+              </h4>
+          
+  <p>Cycle counter reset. The effects of writing to this bit are:</p>
+
+        <table class="valuetable"><tr><th>C</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No action.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Reset <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> to zero.</p>
+</td></tr></table>
+              
+  <p>This bit is always RAZ.</p>
+<div class="note"><span class="note-header">Note</span><p>Resetting <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> does not change the cycle counter overflow bit.</p></div>
+
+            <p>Access to this field is <span class="access_level">WO</span>.</p><h4 id="P_1">P, bit [1]
+              </h4>
+          
+  <p>Event counter reset. The effects of writing to this bit are:</p>
+
+        <table class="valuetable"><tr><th>P</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No action.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Reset all event counters, not including <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>, to zero.</p>
+</td></tr></table>
+              
+  <p>This bit is always RAZ.</p>
+<div class="note"><span class="note-header">Note</span><p>Resetting the event counters does not change the event counter overflow bits.</p><p>If <span class="xref">ARMv8.5-PMU</span> is implemented, the value of <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HLP, or PMCR_EL0.LP is ignored and bits [63:0] of all event counters are reset.</p></div>
+
+            <p>Access to this field is <span class="access_level">WO</span>.</p><h4 id="E_0">E, bit [0]
+              </h4>
+          
+  <p>Enable.</p>
+
+        <table class="valuetable"><tr><th>E</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>All event counters in the range [0..(PMN-1)] and <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>, are disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>All event counters in the range [0..(PMN-1)] and <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>, are enabled by <a href="ext-pmcntenset_el0.html">PMCNTENSET_EL0</a>.</p>
+</td></tr></table>
+              
+  <p>If EL2 is implemented then:</p>
+<ul>
+<li>If EL2 is using AArch32, PMN is <a href="AArch32-hdcr.html">HDCR</a>.HPMN.
+</li><li>If EL2 is using AArch64, PMN is <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN.
+</li><li>If PMN is less than PMCR_EL0.N, this bit does not affect the operation of event counters in the range [PMN..(PMCR_EL0.N-1)].
+</li></ul>
+<p>If EL2 is not implemented, PMN is PMCR_EL0.N.</p>
+<div class="note"><span class="note-header">Note</span><p>The effect of <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN or <a href="AArch32-hdcr.html">HDCR</a>.HPMN on the operation of this bit applies if EL2 is implemented regardless of whether EL2 is enabled in the current Security state. For more information, see the description of <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMN or <a href="AArch32-hdcr.html">HDCR</a>.HPMN.</p></div>
+
+            <p>On a Warm reset, this field resets to <span class="binarynumber">0</span>.
+</p><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the PMCR_EL0</h2>
+        <div class="note"><span class="note-header">Note</span><p>SoftwareLockStatus() depends on the type of access attempted and AllowExternalPMUAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</p></div>
+      <h4>PMCR_EL0 can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>PMU</td><td><span class="hexnumber">0xE04</span></td><td>PMCR_EL0</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and !SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>Otherwise 
+            accesses to this register generate an error response.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

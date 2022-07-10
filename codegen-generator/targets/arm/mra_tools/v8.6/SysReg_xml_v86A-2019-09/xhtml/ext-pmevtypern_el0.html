@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMEVTYPER&lt;n&gt;_EL0</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMEVTYPER&lt;n&gt;_EL0, Performance Monitors Event Type Registers, n =
+      0 - 30</h1><p>The PMEVTYPER&lt;n&gt;_EL0 characteristics are:</p><h2>Purpose</h2>
+        <p>Configures event counter n, where n is 0 to 30.</p>
+      <h2>Configuration</h2><p>External register PMEVTYPER&lt;n&gt;_EL0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0[31:0]
+            </a>.
+          </p><p>External register PMEVTYPER&lt;n&gt;_EL0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-pmevtypern.html">PMEVTYPER&lt;n&gt;[31:0]
+            </a>.
+          </p><p>PMEVTYPER&lt;n&gt;_EL0 is in the Core power domain.
+      RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values. These apply on a Warm or Cold reset. The register is not affected by an External debug reset.</p>
+        <p>If event counter n is not implemented then accesses to this register are:</p>
+
+      
+        <ul>
+<li><span class="arm-defined-word">RES0</span> when IsCorePowered() &amp;&amp; !DoubleLockStatus() &amp;&amp; !OSLockStatus() &amp;&amp; AllowExternalPMUAccess().
+</li><li>A <span class="arm-defined-word">CONSTRAINED UNPREDICTABLE</span> choice of <span class="arm-defined-word">RES0</span> or ERROR otherwise.
+</li></ul>
+      <h2>Attributes</h2>
+            <p>PMEVTYPER&lt;n&gt;_EL0 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMEVTYPER&lt;n&gt;_EL0 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#P_31">P</a></td><td class="lr" colspan="1"><a href="#U_30">U</a></td><td class="lr" colspan="1"><a href="#NSK_29">NSK</a></td><td class="lr" colspan="1"><a href="#NSU_28">NSU</a></td><td class="lr" colspan="1"><a href="#NSH_27">NSH</a></td><td class="lr" colspan="1"><a href="#M_26">M</a></td><td class="lr" colspan="1"><a href="#MT_25">MT</a></td><td class="lr" colspan="1"><a href="#SH_24">SH</a></td><td class="lr" colspan="8"><a href="#0_23">RES0</a></td><td class="lr" colspan="6"><a href="#evtCount15:10_15">evtCount[15:10]</a></td><td class="lr" colspan="10"><a href="#evtCount9:0_9">evtCount[9:0]</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="P_31">P, bit [31]
+              </h4>
+          
+  <p>Privileged filtering bit. Controls counting in EL1.</p>
+<p>If EL3 is implemented, then counting in Non-secure EL1 is further controlled by the PMEVTYPER&lt;n&gt;_EL0.NSK bit.</p>
+
+        <table class="valuetable"><tr><th>P</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Count events in EL1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not count events in EL1.</p>
+</td></tr></table><p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="U_30">U, bit [30]
+              </h4>
+          
+  <p>User filtering bit. Controls counting in EL0.</p>
+<p>If EL3 is implemented, then counting in Non-secure EL0 is further controlled by the PMEVTYPER&lt;n&gt;_EL0.NSU bit.</p>
+
+        <table class="valuetable"><tr><th>U</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Count events in EL0.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not count events in EL0.</p>
+</td></tr></table><p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="NSK_29">NSK, bit [29]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Non-secure EL1 (kernel) modes filtering bit. Controls counting in Non-secure EL1.</p>
+<p>If the value of this bit is equal to the value of the PMEVTYPER&lt;n&gt;_EL0.P bit, events in Non-secure EL1 are counted.</p>
+<p>Otherwise, events in Non-secure EL1 are not counted.</p>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_29"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="NSU_28">NSU, bit [28]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Non-secure EL0 (Unprivileged) filtering bit. Controls counting in Non-secure EL0.</p>
+<p>If the value of this bit is equal to the value of the PMEVTYPER&lt;n&gt;_EL0.U bit, events in Non-secure EL0 are counted.</p>
+<p>Otherwise, events in Non-secure EL0 are not counted.</p>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_28"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="NSH_27">NSH, bit [27]
+              <div style="font-size:smaller;"><br />When HaveEL(EL2):
+                </div></h4>
+          
+  <p>EL2 (Hypervisor) filtering bit. Controls counting in EL2.</p>
+<p>If Secure EL2 is implemented, counting in Secure EL2 is further controlled by the PMEVTYPER&lt;n&gt;_EL0.SH bit.</p>
+
+        <table class="valuetable"><tr><th>NSH</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Do not count events in EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Count events in EL2.</p>
+</td></tr></table><p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_27"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="M_26">M, bit [26]
+              <div style="font-size:smaller;"><br />When HaveEL(EL3):
+                </div></h4>
+          
+  <p>Secure EL3 filtering bit.</p>
+<p>If the value of this bit is equal to the value of the PMEVTYPER&lt;n&gt;_EL0.P bit, events in Secure EL3 are counted.</p>
+<p>Otherwise, events in Secure EL3 are not counted.</p>
+<p>Most applications can ignore this field and set its value to <span class="binarynumber">0b0</span>.</p>
+<div class="note"><span class="note-header">Note</span><p>This field is not visible in the AArch32 <a href="AArch32-pmevtypern.html">PMEVTYPER&lt;n&gt;</a> System register.</p></div>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_26"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="MT_25">MT, bit [25]
+              <div style="font-size:smaller;"><br />When ARMv8.6-MTPMU is implemented or IMPLEMENTATION DEFINED multi-threaded PMU Extension is implemented:
+                </div></h4>
+          
+  <p>Multithreading.</p>
+
+        <table class="valuetable"><tr><th>MT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Count events only on controlling PE.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Count events from any PE with the same affinity at level 1 and above as this PE.</p>
+</td></tr></table>
+              
+  <div class="note"><span class="note-header">Note</span><ul><li>When the lowest level of <span class="xref">affinity</span> consists of logical PEs that are implemented using a multi-threading type approach, an implementation is described as multi-threaded. That is, the performance of PEs at the lowest affinity level is highly interdependent.</li><li>Events from a different thread of a multithreaded implementation are not Attributable to the thread counting the event.</li></ul></div>
+
+            <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_25"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SH_24">SH, bit [24]
+              <div style="font-size:smaller;"><br />When ARMv8.4-SecEL2 is implemented:
+                </div></h4>
+          
+  <p>Secure EL2 filtering.</p>
+<p>If the value of this bit is not equal to the value of the PMEVTYPER&lt;n&gt;_EL0.NSH bit, events in Secure EL2 are counted.</p>
+<p>Otherwise, events in Secure EL2 are not counted.</p>
+<div class="note"><span class="note-header">Note</span><p>This field is not visible in the AArch32 <a href="AArch32-pmevtypern.html">PMEVTYPER&lt;n&gt;</a> System register.</p></div>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_24"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_23">
+                Bits [23:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="evtCount15:10_15">evtCount[15:10], bits [15:10]
+                  <div style="font-size:smaller;"><br />When ARMv8.1-PMU is implemented:
+                </div></h4>
+          
+  <p>Extension to evtCount[9:0]. See evtCount[9:0] for more details.</p>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="evtCount9:0_9">evtCount[9:0], bits [9:0]
+                  </h4>
+          
+  <p>Event to count. The event number of the event that is counted by event counter <a href="ext-pmevcntrn_el0.html">PMEVCNTR&lt;n&gt;_EL0</a>.</p>
+<p>Software must program this field with an event that is supported by the PE being programmed.</p>
+<p>The ranges of event numbers allocated to each type of event are shown in <span class="xref">Allocation of the PMU event number space</span>.</p>
+<p>If evtCount is programmed to an event that is reserved or not supported by the PE, the behavior depends on the value written:</p>
+<ul>
+<li>For the range <span class="hexnumber">0x0000</span> to <span class="hexnumber">0x003F</span>, no events are counted, and the value returned by a direct or external read of the evtCount field is the value written to the field.
+</li><li>If 16-bit evtCount is implemented, for the range <span class="hexnumber">0x4000</span> to <span class="hexnumber">0x403F</span>, no events are counted, and the value returned by a direct or external read of the evtCount field is the value written to the field.
+</li><li>For <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> events, it is <span class="arm-defined-word">UNPREDICTABLE</span> what event, if any, is counted, and the value returned by a direct or external read of the evtCount field is <span class="arm-defined-word">UNKNOWN</span>.
+</li></ul>
+<div class="note"><span class="note-header">Note</span><p><span class="arm-defined-word">UNPREDICTABLE</span> means the event must not expose privileged information.</p></div><p>Arm recommends that the behavior across a family of implementations is defined such that if a given implementation does not include an event from a set of common <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> events, then no event is counted and the value read back on evtCount is the value written.</p>
+
+        <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the PMEVTYPER&lt;n&gt;_EL0</h2>
+        <div class="note"><span class="note-header">Note</span><p>SoftwareLockStatus() depends on the type of access attempted and AllowExternalPMUAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</p></div>
+      <h4>PMEVTYPER&lt;n&gt;_EL0 can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>PMU</td><td><span class="hexnumber">0x400</span> + 4n</td><td>PMEVTYPER&lt;n&gt;_EL0</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and !SoftwareLockStatus()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>Otherwise 
+            accesses to this register generate an error response.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

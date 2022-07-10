@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ID_AA64MMFR1_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ID_AA64MMFR1_EL1, AArch64 Memory Model Feature Register 1</h1><p>The ID_AA64MMFR1_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides information about the implemented memory model and memory management support in AArch64 state.</p>
+
+      
+        <p>For general information about the interpretation of the ID registers see <span class="xref">'Principles of the ID scheme for fields in ID registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D10.4.1</span>.</p>
+      <h2>Configuration</h2><h2>Attributes</h2>
+            <p>ID_AA64MMFR1_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ID_AA64MMFR1_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="24"><a href="#0_63">RES0</a></td><td class="lr" colspan="4"><a href="#ETS_39">ETS</a></td><td class="lr" colspan="4"><a href="#TWED_35">TWED</a></td></tr><tr class="firstrow"><td class="lr" colspan="4"><a href="#XNX_31">XNX</a></td><td class="lr" colspan="4"><a href="#SpecSEI_27">SpecSEI</a></td><td class="lr" colspan="4"><a href="#PAN_23">PAN</a></td><td class="lr" colspan="4"><a href="#LO_19">LO</a></td><td class="lr" colspan="4"><a href="#HPDS_15">HPDS</a></td><td class="lr" colspan="4"><a href="#VH_11">VH</a></td><td class="lr" colspan="4"><a href="#VMIDBits_7">VMIDBits</a></td><td class="lr" colspan="4"><a href="#HAFDBS_3">HAFDBS</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:40]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ETS_39">ETS, bits [39:36]
+                  <div style="font-size:smaller;"><br />From Armv8.0:
+                </div></h4>
+          
+  <p>Support for Enhanced Translation Synchronization. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>ETS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Enhanced Translation Synchronization is not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Enhanced Translation Synchronization is supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.0-ETS</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.0, the permitted values are <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0001</span>.</p>
+
+            <h4 id="0_39"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TWED_35">TWED, bits [35:32]
+                  <div style="font-size:smaller;"><br />From Armv8.6:
+                </div></h4>
+          
+  <p>Support for the configurable delayed trapping of WFE. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>TWED</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Configurable delayed trapping of WFE is not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Configurable delayed trapping of WFE is supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.6-TWED</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.6, the permitted values are <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0001</span>.</p>
+
+            <h4 id="0_35"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="XNX_31">XNX, bits [31:28]
+                  <div style="font-size:smaller;"><br />From Armv8.2:
+                </div></h4>
+          
+  <p>Support for execute-never control distinction by Exception level at stage 2. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>XNX</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Distinction between EL0 and EL1 execute-never control at stage 2 not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Distinction between EL0 and EL1 execute-never control at stage 2 supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.2-TTS2UXN</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.2, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+
+            <h4 id="0_31"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SpecSEI_27">SpecSEI, bits [27:24]
+                  <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Describes whether the PE can generate SError interrupt exceptions from speculative reads of memory, including speculative instruction fetches. The defined values of this field are:</p>
+
+        <table class="valuetable"><tr><th>SpecSEI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>The PE never generates an SError interrupt due to an External abort on a speculative read.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>The PE might generate an SError interrupt due to an External abort on a speculative read.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="SpecSEI_27"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+          
+  <p>Reserved, <span class="arm-defined-word">RES0</span>. This provides no information about whether the PE generates a speculative SError interrupt.</p>
+
+        <h4 id="PAN_23">PAN, bits [23:20]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>Privileged Access Never. Indicates support for the PAN bit in PSTATE, <a href="AArch64-spsr_el1.html">SPSR_EL1</a>, <a href="AArch64-spsr_el2.html">SPSR_EL2</a>, <a href="AArch64-spsr_el3.html">SPSR_EL3</a>, and <a href="AArch64-dspsr_el0.html">DSPSR_EL0</a>. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>PAN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>PAN not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>PAN supported.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>PAN supported and <a href="AArch64-at-s1e1rp.html">AT S1E1RP</a> and <a href="AArch64-at-s1e1wp.html">AT S1E1WP</a> instructions supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-PAN</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p><span class="xref">ARMv8.2-ATS1E1</span> implements the functionality added by the value <span class="binarynumber">0b0010</span>.</p>
+<p>In Armv8.1, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.2, the only permitted value is <span class="binarynumber">0b0010</span>.</p>
+
+            <h4 id="0_23"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LO_19">LO, bits [19:16]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>LORegions. Indicates support for LORegions. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>LO</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>LORegions not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>LORegions supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-LOR</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.1, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+
+            <h4 id="0_19"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="HPDS_15">HPDS, bits [15:12]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>Hierarchical permission disables bits in translation tables. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>HPDS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Disabling of hierarchical controls not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Disabling of hierarchical controls supported with the <a href="AArch64-tcr_el1.html">TCR_EL1</a>.{HPD1, HPD0}, <a href="AArch64-tcr_el2.html">TCR_EL2</a>.HPD or <a href="AArch64-tcr_el2.html">TCR_EL2</a>.{HPD1, HPD0}, and <a href="AArch64-tcr_el3.html">TCR_EL3</a>.HPD bits.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>As for value <span class="binarynumber">0b0001</span>, and adds possible hardware allocation of bits[62:59] of the translation table descriptors from the final lookup level for <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> use.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-HPD</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p><span class="xref">ARMv8.2-TTPBHA</span> implements the functionality identified by the value <span class="binarynumber">0b0010</span>.</p>
+<p>From Armv8.1, the value <span class="binarynumber">0b0000</span> is not permitted.</p>
+
+            <h4 id="0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="VH_11">VH, bits [11:8]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>Virtualization Host Extensions. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>VH</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Virtualization Host Extensions not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Virtualization Host Extensions supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-VHE</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.1, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+
+            <h4 id="0_11"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="VMIDBits_7">VMIDBits, bits [7:4]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>Number of VMID bits. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>VMIDBits</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>8 bits</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>16 bits</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-VMID16</span> implements the functionality identified by the value <span class="binarynumber">0b0010</span>.</p>
+<p>From Armv8.1, the permitted values are <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0010</span>.</p>
+
+            <h4 id="0_7"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="HAFDBS_3">HAFDBS, bits [3:0]
+                  <div style="font-size:smaller;"><br />From Armv8.1:
+                </div></h4>
+          
+  <p>Hardware updates to Access flag and Dirty state in translation tables. Defined values are:</p>
+
+        <table class="valuetable"><tr><th>HAFDBS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Hardware update of the Access flag and dirty state are not supported.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Hardware update of the Access flag is supported.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>Hardware update of both the Access flag and dirty state is supported.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-TTHM</span> implements the functionality identified by the values <span class="binarynumber">0b0001</span> and <span class="binarynumber">0b0010</span>.</p>
+<p>From Armv8.1, the permitted values are <span class="binarynumber">0b0000</span>, <span class="binarynumber">0b0001</span>, and <span class="binarynumber">0b0010</span>.</p>
+
+            <h4 id="0_3"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the ID_AA64MMFR1_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, ID_AA64MMFR1_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b0000</td><td>0b0111</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64MMFR1_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64MMFR1_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64MMFR1_EL1;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

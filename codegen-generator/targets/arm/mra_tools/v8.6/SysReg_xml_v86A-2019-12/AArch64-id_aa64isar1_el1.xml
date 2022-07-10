@@ -1,0 +1,861 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ID_AA64ISAR1_EL1</reg_short_name>
+      <reg_long_name>AArch64 Instruction Set Attribute Register 1</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides information about the features and instructions implemented in AArch64 state.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For general information about the interpretation of the ID registers, see <xref browsertext="Principles of the ID scheme for fields in ID registers" filename="D_aarch64_system_register_descriptions.fm" linkend="BABFAFHI"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If ID_AA64ISAR1_EL1.{API, APA} == {0000, 0000}, then:</para>
+
+      </configuration_text>
+      <configuration_text>
+        <list type="unordered">
+<listitem><content>The <register_link state="AArch64" id="AArch64-tcr_el1.xml">TCR_EL1</register_link>.{TBID,TBID0}, <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.{TBID0,TBID1}, <register_link state="AArch64" id="AArch64-tcr_el2.xml">TCR_EL2</register_link>.TBID and <register_link state="AArch64" id="AArch64-tcr_el3.xml">TCR_EL3</register_link>.TBID bits are <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content><register_link state="AArch64" id="AArch64-apiakeyhi_el1.xml">APIAKeyHi_EL1</register_link>, <register_link state="AArch64" id="AArch64-apiakeylo_el1.xml">APIAKeyLo_EL1</register_link>, <register_link state="AArch64" id="AArch64-apibkeyhi_el1.xml">APIBKeyHi_EL1</register_link>, <register_link state="AArch64" id="AArch64-apibkeylo_el1.xml">APIBKeyLo_EL1</register_link>, <register_link state="AArch64" id="AArch64-apdakeyhi_el1.xml">APDAKeyHi_EL1</register_link>, <register_link state="AArch64" id="AArch64-apdakeylo_el1.xml">APDAKeyLo_EL1</register_link>, <register_link state="AArch64" id="AArch64-apdbkeyhi_el1.xml">APDBKeyHi_EL1</register_link>, <register_link state="AArch64" id="AArch64-apdbkeylo_el1.xml">APDBKeyLo_EL1</register_link> are not allocated.</content>
+</listitem><listitem><content><xref linkend="BABBCBCH" browsertext="SCTLR_ELx"/>.EnIA, <xref linkend="BABBCBCH" browsertext="SCTLR_ELx"/>.EnIB, <xref linkend="BABBCBCH" browsertext="SCTLR_ELx"/>.EnDA, <xref linkend="BABBCBCH" browsertext="SCTLR_ELx"/>.EnDB are all <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem></list>
+
+      </configuration_text>
+      <configuration_text>
+        <para>If ID_AA64ISAR1_EL1.{GPI, GPA, API, APA} == {0000, 0000, 0000, 0000}, then:</para>
+
+      </configuration_text>
+      <configuration_text>
+        <list type="unordered">
+<listitem><content><register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.APK and <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.API are <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content><register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.APK and <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.API are <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem></list>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ID_AA64ISAR1_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_56"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>56</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="I8MM_55_52"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>I8MM</field_name>
+          <field_msb>55</field_msb>
+          <field_lsb>52</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for Floating-point and Advanced SIMD Int8 matrix multiplication instructions in AArch64 state. Defined values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Int8 matrix multiplication instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>SMMLA, SUDOT, UMMLA, USMMLA, and USDOT instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.2-I8MM" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.I8MM"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>When Advanced SIMD and SVE are both implemented, this field must return the same value as <register_link state="AArch64" id="AArch64-id_aa64zfr0_el1.xml">ID_AA64ZFR0_EL1</register_link>.I8MM.</para>
+<para>From Armv8.6, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="DGH_51_48"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DGH</field_name>
+          <field_msb>51</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for the Data Gathering Hint instruction. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Data Gathering Hint is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Data Gathering Hint is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.0-DGH" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DGH"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>From ARMv8.0, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+<para>If the <instruction>DGH</instruction> instruction has no effect in preventing the merging of memory accesses, the value of this field is 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="BF16_47_44"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>BF16</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>44</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for Advanced SIMD and Floating-point BFloat16 instructions in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>BFloat16 instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>BFDOT, BFMLAL, BFMLAL2, BFMMLA, BFCVT, and BFCVT2 instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.2-BF16" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.BF16"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>When Advanced SIMD and SVE are both implemented, this field must return the same value as <register_link state="AArch64" id="AArch64-id_aa64zfr0_el1.xml">ID_AA64ZFR0_EL1</register_link>.BF16.</para>
+<para>From ARMv8.6, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SPECRES_43_40"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SPECRES</field_name>
+          <field_msb>43</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for prediction invalidation instructions in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>CFP RCTX, DVP RCTX, and CPP RCTX instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>CFP RCTX, DVP RCTX, and CPP RCTX instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.0-PredInv" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.PredInv"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SB_39_36"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SB</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for SB instruction in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>SB instruction is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>SB instruction is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.0-SB" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.SB"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="FRINTTS_35_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>FRINTTS</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for the FRINT32Z, FRINT32X, FRINT64Z, and FRINT64X instructions are implemented. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>FRINT32Z, FRINT32X, FRINT64Z, and FRINT64X instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>FRINT32Z, FRINT32X, FRINT64Z, and FRINT64X instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.5-FRINT" filename="A_armv8_architecture_extensions.fm" linkend="v8.5.FRINT"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="GPI_31_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GPI</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented in the PE for generic code authentication in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Generic Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Generic Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented. This includes the PACGA instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>From Armv8.3, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+<para>If the value of ID_AA64ISAR1_EL1.GPA is non-zero, this field must have the value <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="GPA_27_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GPA</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether QARMA or Architected algorithm is implemented in the PE for generic code authentication in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Generic Authentication using an Architected algorithm is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Generic Authentication using the QARMA algorithm is implemented. This includes the PACGA instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>From Armv8.3, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+<para>If the value of ID_AA64ISAR1_EL1.GPI is non-zero, this field must have the value <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="LRCPC_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LRCPC</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for weaker release consistency, RCpc, based model. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>The LDAPR*, LDAPUR*, and STLUR* instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>The LDAPR* instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>The LDAPR*, LDAPUR*, and STLUR* instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>ARMv8.3-RCPC implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>ARMv8.4-RCPC implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>In Armv8.3, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.4, the only permitted value is <binarynumber>0b0010</binarynumber>.</para>
+<para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="FCMA_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>FCMA</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for complex number addition and multiplication, where numbers are stored in vectors. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>The FCMLA and FCADD instructions are not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>The FCMLA and FCADD instructions are implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>ARMv8.3-CompNum implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>In Armv8.0, Armv8.1, and Armv8.2, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+<para>From Armv8.3, if Advanced SIMD or Floating-point is implemented, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.3, if Advanced SIMD or Floating-point is not implemented, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="JSCVT_15_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>JSCVT</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates support for JavaScript conversion from double precision floating point values to integers in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>The FJCVTZS instruction is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>The FJCVTZS instruction is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>ARMv8.3.JSConv implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>In Armv8.0, Armv8.1, and Armv8.2, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+<para>From Armv8.3, if Advanced SIMD or Floating-point is implemented, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.3, if Advanced SIMD or Floating-point is not implemented, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="API_11_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>API</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented in the PE for address authentication, in AArch64 state. This applies to all Pointer Authentication instructions other than the PACGA instruction. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented, with the HaveEnhancedPAC() and HaveEnhancedPAC2() functions returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented, with the HaveEnhancedPAC() function returning TRUE, and the HaveEnhancedPAC2() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0011</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0100</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, the HaveFPAC() function returning TRUE, the HaveFPACCombined() function returning FALSE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0101</field_value>
+        <field_value_description>
+  <para>Address Authentication using an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, the HaveFPAC() function returning TRUE, the HaveFPACCombined() function returning TRUE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>ARMv8.3-PAuth implements the functionality added by the values <binarynumber>0b0000</binarynumber>, <binarynumber>0b0001</binarynumber>, and <binarynumber>0b0010</binarynumber>.</para>
+<para>ARMv8.3-PAuth2 implements the functionality added by the value <binarynumber>0b0011</binarynumber>.</para>
+<para>ARMv8.3-FPAC implements the functionality added by the values <binarynumber>0b0100</binarynumber> and <binarynumber>0b0101</binarynumber>.</para>
+<para>From Armv8.6, the permitted values are <binarynumber>0b0011</binarynumber>, <binarynumber>0b0100</binarynumber>, and <binarynumber>0b0101</binarynumber>.</para>
+<para>If the value of ID_AA64ISAR1_EL1.APA is non-zero, this field must have the value <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="APA_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>APA</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether QARMA or Architected algorithm is implemented in the PE for address authentication, in AArch64 state. This applies to all Pointer Authentication instructions other than the PACGA instruction. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Address Authentication using an Architected algorithm is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Address Authentication using the QARMA algorithm is implemented, with the HaveEnhancedPAC() and HaveEnhancedPAC2() functions returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>Address Authentication using the QARMA algorithm is implemented, with the HaveEnhancedPAC() function returning TRUE and the HaveEnhancedPAC2() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0011</field_value>
+        <field_value_description>
+  <para>Address Authentication using the QARMA algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, the HaveFPAC() function returning FALSE, the HaveFPACCombined() function returning FALSE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0100</field_value>
+        <field_value_description>
+  <para>Address Authentication using the QARMA algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, the HaveFPAC() function returning TRUE, the HaveFPACCombined() function returning FALSE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0101</field_value>
+        <field_value_description>
+  <para>Address Authentication using the QARMA algorithm is implemented, with the HaveEnhancedPAC2() function returning TRUE, the HaveFPAC() function returning TRUE, the HaveFPACCombined() function returning TRUE, and the HaveEnhancedPAC() function returning FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>ARMv8.3-PAuth implements the functionality added by the values <binarynumber>0b0000</binarynumber>, <binarynumber>0b0001</binarynumber>, and <binarynumber>0b0010</binarynumber>.</para>
+<para>ARMv8.3-PAuth2 implements the functionality added by the value <binarynumber>0b0011</binarynumber>.</para>
+<para>ARMv8.3-FPAC implements the functionality added by the values <binarynumber>0b0100</binarynumber> and <binarynumber>0b0101</binarynumber>.</para>
+<para>From Armv8.6, the permitted values are <binarynumber>0b0011</binarynumber>, <binarynumber>0b0100</binarynumber>, and <binarynumber>0b0101</binarynumber>.</para>
+<para>If the value of the ID_AA64ISAR1_EL1.API is non-zero, this field must have the value <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="DPB_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DPB</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Data Persistence writeback. Indicates support for the <register_link id="AArch64-dc-cvap.xml" state="AArch64">DC CVAP</register_link> and <register_link id="AArch64-dc-cvadp.xml" state="AArch64">DC CVADP</register_link> instructions in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para><register_link id="AArch64-dc-cvap.xml" state="AArch64">DC CVAP</register_link> not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para><register_link id="AArch64-dc-cvap.xml" state="AArch64">DC CVAP</register_link> supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para><register_link id="AArch64-dc-cvap.xml" state="AArch64">DC CVAP</register_link> and <register_link id="AArch64-dc-cvadp.xml" state="AArch64">DC CVADP</register_link> supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.2-DCPoP" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.DCPoP"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para><xref browsertext="ARMv8.2-DCCVADP" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.DCCVADP"></xref> implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>From Armv8.2 to Armv8.4, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0010</binarynumber></para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_56" msb="63" lsb="56"/>
+        <fieldat id="I8MM_55_52" msb="55" lsb="52"/>
+        <fieldat id="DGH_51_48" msb="51" lsb="48"/>
+        <fieldat id="BF16_47_44" msb="47" lsb="44"/>
+        <fieldat id="SPECRES_43_40" msb="43" lsb="40"/>
+        <fieldat id="SB_39_36" msb="39" lsb="36"/>
+        <fieldat id="FRINTTS_35_32" msb="35" lsb="32"/>
+        <fieldat id="GPI_31_28" msb="31" lsb="28"/>
+        <fieldat id="GPA_27_24" msb="27" lsb="24"/>
+        <fieldat id="LRCPC_23_20" msb="23" lsb="20"/>
+        <fieldat id="FCMA_19_16" msb="19" lsb="16"/>
+        <fieldat id="JSCVT_15_12" msb="15" lsb="12"/>
+        <fieldat id="API_11_8" msb="11" lsb="8"/>
+        <fieldat id="APA_7_4" msb="7" lsb="4"/>
+        <fieldat id="DPB_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS ID_AA64ISAR1_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, ID_AA64ISAR1_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="0b0110"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64ISAR1_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64ISAR1_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64ISAR1_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

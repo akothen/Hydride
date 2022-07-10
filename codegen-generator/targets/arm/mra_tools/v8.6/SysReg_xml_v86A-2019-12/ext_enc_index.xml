@@ -1,0 +1,3470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sysregindex SYSTEM 'enc_index.dtd'>
+<!--Copyright (c) 2010-2017 ARM Limited or its affiliates. All rights reserved.-->
+<!--This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by ARM and the party that ARM delivered this document to.-->
+<!--The data contained in this document is preliminary and subject to change or correction following further review.-->
+<?xml-stylesheet href="enc_index.xsl" type="text/xsl"?>
+<sysregindex indextype="encoding" is_internal="False">
+  <typelist>
+    <typegroup groupname="Components">
+      <typelink link="AMU" type="AMU"/>
+      <typelink link="CTI" type="CTI"/>
+      <typelink link="Debug" type="Debug"/>
+      <typelink link="GIC CPU interface" type="GIC CPU interface"/>
+      <typelink link="GIC Distributor" type="GIC Distributor"/>
+      <typelink link="GIC ITS control" type="GIC ITS control"/>
+      <typelink link="GIC ITS translation" type="GIC ITS translation"/>
+      <typelink link="GIC Redistributor" type="GIC Redistributor"/>
+      <typelink link="GIC Virtual CPU interface" type="GIC Virtual CPU interface"/>
+      <typelink link="GIC Virtual interface control" type="GIC Virtual interface control"/>
+      <typelink link="MPAM" type="MPAM"/>
+      <typelink link="PMU" type="PMU"/>
+      <typelink link="RAS" type="RAS"/>
+      <typelink link="Timer" type="Timer"/>
+    </typegroup>
+  </typelist>
+  <sectiongroup groupname="Components">
+    <section anchor="AMU" type="AMU">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x000 + 8n</entry>
+          <entry>
+            <a href="ext-amevcntr0n.xml">AMEVCNTR0&lt;n&gt;[31:0]</a>
+          </entry>
+          <entry>Activity Monitors Event Counter Registers 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x004 + 8n</entry>
+          <entry>
+            <a href="ext-amevcntr0n.xml">AMEVCNTR0&lt;n&gt;[63:32]</a>
+          </entry>
+          <entry>Activity Monitors Event Counter Registers 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x100 + 8n</entry>
+          <entry>
+            <a href="ext-amevcntr1n.xml">AMEVCNTR1&lt;n&gt;[31:0]</a>
+          </entry>
+          <entry>Activity Monitors Event Counter Registers 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x104 + 8n</entry>
+          <entry>
+            <a href="ext-amevcntr1n.xml">AMEVCNTR1&lt;n&gt;[63:32]</a>
+          </entry>
+          <entry>Activity Monitors Event Counter Registers 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x400 + 4n</entry>
+          <entry>
+            <a href="ext-amevtyper0n.xml">AMEVTYPER0&lt;n&gt;</a>
+          </entry>
+          <entry>Activity Monitors Event Type Registers 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x480 + 4n</entry>
+          <entry>
+            <a href="ext-amevtyper1n.xml">AMEVTYPER1&lt;n&gt;</a>
+          </entry>
+          <entry>Activity Monitors Event Type Registers 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC00</entry>
+          <entry>
+            <a href="ext-amcntenset0.xml">AMCNTENSET0</a>
+          </entry>
+          <entry>Activity Monitors Count Enable Set Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC04</entry>
+          <entry>
+            <a href="ext-amcntenset1.xml">AMCNTENSET1</a>
+          </entry>
+          <entry>Activity Monitors Count Enable Set Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC20</entry>
+          <entry>
+            <a href="ext-amcntenclr0.xml">AMCNTENCLR0</a>
+          </entry>
+          <entry>Activity Monitors Count Enable Clear Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC24</entry>
+          <entry>
+            <a href="ext-amcntenclr1.xml">AMCNTENCLR1</a>
+          </entry>
+          <entry>Activity Monitors Count Enable Clear Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xCE0</entry>
+          <entry>
+            <a href="ext-amcgcr.xml">AMCGCR</a>
+          </entry>
+          <entry>Activity Monitors Counter Group Configuration Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE00</entry>
+          <entry>
+            <a href="ext-amcfgr.xml">AMCFGR</a>
+          </entry>
+          <entry>Activity Monitors Configuration Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE04</entry>
+          <entry>
+            <a href="ext-amcr.xml">AMCR</a>
+          </entry>
+          <entry>Activity Monitors Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE08</entry>
+          <entry>
+            <a href="ext-amiidr.xml">AMIIDR</a>
+          </entry>
+          <entry>Activity Monitors Implementation Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA8</entry>
+          <entry>
+            <a href="ext-amdevaff0.xml">AMDEVAFF0</a>
+          </entry>
+          <entry>Activity Monitors Device Affinity Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFAC</entry>
+          <entry>
+            <a href="ext-amdevaff1.xml">AMDEVAFF1</a>
+          </entry>
+          <entry>Activity Monitors Device Affinity Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFBC</entry>
+          <entry>
+            <a href="ext-amdevarch.xml">AMDEVARCH</a>
+          </entry>
+          <entry>Activity Monitors Device Architecture Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFCC</entry>
+          <entry>
+            <a href="ext-amdevtype.xml">AMDEVTYPE</a>
+          </entry>
+          <entry>Activity Monitors Device Type Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFD0</entry>
+          <entry>
+            <a href="ext-ampidr4.xml">AMPIDR4</a>
+          </entry>
+          <entry>Activity Monitors Peripheral Identification Register 4</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE0</entry>
+          <entry>
+            <a href="ext-ampidr0.xml">AMPIDR0</a>
+          </entry>
+          <entry>Activity Monitors Peripheral Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE4</entry>
+          <entry>
+            <a href="ext-ampidr1.xml">AMPIDR1</a>
+          </entry>
+          <entry>Activity Monitors Peripheral Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE8</entry>
+          <entry>
+            <a href="ext-ampidr2.xml">AMPIDR2</a>
+          </entry>
+          <entry>Activity Monitors Peripheral Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFEC</entry>
+          <entry>
+            <a href="ext-ampidr3.xml">AMPIDR3</a>
+          </entry>
+          <entry>Activity Monitors Peripheral Identification Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF0</entry>
+          <entry>
+            <a href="ext-amcidr0.xml">AMCIDR0</a>
+          </entry>
+          <entry>Activity Monitors Component Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF4</entry>
+          <entry>
+            <a href="ext-amcidr1.xml">AMCIDR1</a>
+          </entry>
+          <entry>Activity Monitors Component Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF8</entry>
+          <entry>
+            <a href="ext-amcidr2.xml">AMCIDR2</a>
+          </entry>
+          <entry>Activity Monitors Component Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFFC</entry>
+          <entry>
+            <a href="ext-amcidr3.xml">AMCIDR3</a>
+          </entry>
+          <entry>Activity Monitors Component Identification Register 3</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="CTI" type="CTI">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cticontrol.xml">CTICONTROL</a>
+          </entry>
+          <entry>CTI Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x010</entry>
+          <entry>
+            <a href="ext-ctiintack.xml">CTIINTACK</a>
+          </entry>
+          <entry>CTI Output Trigger Acknowledge register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x014</entry>
+          <entry>
+            <a href="ext-ctiappset.xml">CTIAPPSET</a>
+          </entry>
+          <entry>CTI Application Trigger Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x018</entry>
+          <entry>
+            <a href="ext-ctiappclear.xml">CTIAPPCLEAR</a>
+          </entry>
+          <entry>CTI Application Trigger Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x01C</entry>
+          <entry>
+            <a href="ext-ctiapppulse.xml">CTIAPPPULSE</a>
+          </entry>
+          <entry>CTI Application Pulse register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x020 + 4n</entry>
+          <entry>
+            <a href="ext-ctiinenn.xml">CTIINEN&lt;n&gt;</a>
+          </entry>
+          <entry>CTI Input Trigger to Output Channel Enable registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0A0 + 4n</entry>
+          <entry>
+            <a href="ext-ctioutenn.xml">CTIOUTEN&lt;n&gt;</a>
+          </entry>
+          <entry>CTI Input Channel to Output Trigger Enable registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x130</entry>
+          <entry>
+            <a href="ext-ctitriginstatus.xml">CTITRIGINSTATUS</a>
+          </entry>
+          <entry>CTI Trigger In Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x134</entry>
+          <entry>
+            <a href="ext-ctitrigoutstatus.xml">CTITRIGOUTSTATUS</a>
+          </entry>
+          <entry>CTI Trigger Out Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x138</entry>
+          <entry>
+            <a href="ext-ctichinstatus.xml">CTICHINSTATUS</a>
+          </entry>
+          <entry>CTI Channel In Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x13C</entry>
+          <entry>
+            <a href="ext-ctichoutstatus.xml">CTICHOUTSTATUS</a>
+          </entry>
+          <entry>CTI Channel Out Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x140</entry>
+          <entry>
+            <a href="ext-ctigate.xml">CTIGATE</a>
+          </entry>
+          <entry>CTI Channel Gate Enable register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x144</entry>
+          <entry>
+            <a href="ext-asicctl.xml">ASICCTL</a>
+          </entry>
+          <entry>CTI External Multiplexer Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x150</entry>
+          <entry>
+            <a href="ext-ctidevctl.xml">CTIDEVCTL</a>
+          </entry>
+          <entry>CTI Device Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xF00</entry>
+          <entry>
+            <a href="ext-ctiitctrl.xml">CTIITCTRL</a>
+          </entry>
+          <entry>CTI Integration mode Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA0</entry>
+          <entry>
+            <a href="ext-cticlaimset.xml">CTICLAIMSET</a>
+          </entry>
+          <entry>CTI CLAIM Tag Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA4</entry>
+          <entry>
+            <a href="ext-cticlaimclr.xml">CTICLAIMCLR</a>
+          </entry>
+          <entry>CTI CLAIM Tag Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA8</entry>
+          <entry>
+            <a href="ext-ctidevaff0.xml">CTIDEVAFF0</a>
+          </entry>
+          <entry>CTI Device Affinity register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFAC</entry>
+          <entry>
+            <a href="ext-ctidevaff1.xml">CTIDEVAFF1</a>
+          </entry>
+          <entry>CTI Device Affinity register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB0</entry>
+          <entry>
+            <a href="ext-ctilar.xml">CTILAR</a>
+          </entry>
+          <entry>CTI Lock Access Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB4</entry>
+          <entry>
+            <a href="ext-ctilsr.xml">CTILSR</a>
+          </entry>
+          <entry>CTI Lock Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB8</entry>
+          <entry>
+            <a href="ext-ctiauthstatus.xml">CTIAUTHSTATUS</a>
+          </entry>
+          <entry>CTI Authentication Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFBC</entry>
+          <entry>
+            <a href="ext-ctidevarch.xml">CTIDEVARCH</a>
+          </entry>
+          <entry>CTI Device Architecture register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC0</entry>
+          <entry>
+            <a href="ext-ctidevid2.xml">CTIDEVID2</a>
+          </entry>
+          <entry>CTI Device ID register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC4</entry>
+          <entry>
+            <a href="ext-ctidevid1.xml">CTIDEVID1</a>
+          </entry>
+          <entry>CTI Device ID register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC8</entry>
+          <entry>
+            <a href="ext-ctidevid.xml">CTIDEVID</a>
+          </entry>
+          <entry>CTI Device ID register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFCC</entry>
+          <entry>
+            <a href="ext-ctidevtype.xml">CTIDEVTYPE</a>
+          </entry>
+          <entry>CTI Device Type register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFD0</entry>
+          <entry>
+            <a href="ext-ctipidr4.xml">CTIPIDR4</a>
+          </entry>
+          <entry>CTI Peripheral Identification Register 4</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE0</entry>
+          <entry>
+            <a href="ext-ctipidr0.xml">CTIPIDR0</a>
+          </entry>
+          <entry>CTI Peripheral Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE4</entry>
+          <entry>
+            <a href="ext-ctipidr1.xml">CTIPIDR1</a>
+          </entry>
+          <entry>CTI Peripheral Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE8</entry>
+          <entry>
+            <a href="ext-ctipidr2.xml">CTIPIDR2</a>
+          </entry>
+          <entry>CTI Peripheral Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFEC</entry>
+          <entry>
+            <a href="ext-ctipidr3.xml">CTIPIDR3</a>
+          </entry>
+          <entry>CTI Peripheral Identification Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF0</entry>
+          <entry>
+            <a href="ext-cticidr0.xml">CTICIDR0</a>
+          </entry>
+          <entry>CTI Component Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF4</entry>
+          <entry>
+            <a href="ext-cticidr1.xml">CTICIDR1</a>
+          </entry>
+          <entry>CTI Component Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF8</entry>
+          <entry>
+            <a href="ext-cticidr2.xml">CTICIDR2</a>
+          </entry>
+          <entry>CTI Component Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFFC</entry>
+          <entry>
+            <a href="ext-cticidr3.xml">CTICIDR3</a>
+          </entry>
+          <entry>CTI Component Identification Register 3</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="Debug" type="Debug">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x020</entry>
+          <entry>
+            <a href="ext-edesr.xml">EDESR</a>
+          </entry>
+          <entry>External Debug Event Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x024</entry>
+          <entry>
+            <a href="ext-edecr.xml">EDECR</a>
+          </entry>
+          <entry>External Debug Execution Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x030</entry>
+          <entry>
+            <a href="ext-edwar.xml">EDWAR[31:0]</a>
+          </entry>
+          <entry>External Debug Watchpoint Address Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x034</entry>
+          <entry>
+            <a href="ext-edwar.xml">EDWAR[63:32]</a>
+          </entry>
+          <entry>External Debug Watchpoint Address Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x080</entry>
+          <entry>
+            <a href="ext-dbgdtrrx_el0.xml">DBGDTRRX_EL0</a>
+          </entry>
+          <entry>Debug Data Transfer Register, Receive</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x084</entry>
+          <entry>
+            <a href="ext-editr.xml">EDITR</a>
+          </entry>
+          <entry>External Debug Instruction Transfer Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x088</entry>
+          <entry>
+            <a href="ext-edscr.xml">EDSCR</a>
+          </entry>
+          <entry>External Debug Status and Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x08C</entry>
+          <entry>
+            <a href="ext-dbgdtrtx_el0.xml">DBGDTRTX_EL0</a>
+          </entry>
+          <entry>Debug Data Transfer Register, Transmit</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x090</entry>
+          <entry>
+            <a href="ext-edrcr.xml">EDRCR</a>
+          </entry>
+          <entry>External Debug Reserve Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x094</entry>
+          <entry>
+            <a href="ext-edacr.xml">EDACR</a>
+          </entry>
+          <entry>External Debug Auxiliary Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x098</entry>
+          <entry>
+            <a href="ext-edeccr.xml">EDECCR</a>
+          </entry>
+          <entry>External Debug Exception Catch Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0A0</entry>
+          <entry>
+            <a href="ext-edpcsr.xml">EDPCSR[31:0]</a>
+          </entry>
+          <entry>External Debug Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0A4</entry>
+          <entry>
+            <a href="ext-edcidsr.xml">EDCIDSR</a>
+          </entry>
+          <entry>External Debug Context ID Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0A8</entry>
+          <entry>
+            <a href="ext-edvidsr.xml">EDVIDSR</a>
+          </entry>
+          <entry>External Debug Virtual Context Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0AC</entry>
+          <entry>
+            <a href="ext-edpcsr.xml">EDPCSR[63:32]</a>
+          </entry>
+          <entry>External Debug Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x300</entry>
+          <entry>
+            <a href="ext-oslar_el1.xml">OSLAR_EL1</a>
+          </entry>
+          <entry>OS Lock Access Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x310</entry>
+          <entry>
+            <a href="ext-edprcr.xml">EDPRCR</a>
+          </entry>
+          <entry>External Debug Power/Reset Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x314</entry>
+          <entry>
+            <a href="ext-edprsr.xml">EDPRSR</a>
+          </entry>
+          <entry>External Debug Processor Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x400 + 16n</entry>
+          <entry>
+            <a href="ext-dbgbvrn_el1.xml">DBGBVR&lt;n&gt;_EL1[63:0]</a>
+          </entry>
+          <entry>Debug Breakpoint Value Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x408 + 16n</entry>
+          <entry>
+            <a href="ext-dbgbcrn_el1.xml">DBGBCR&lt;n&gt;_EL1</a>
+          </entry>
+          <entry>Debug Breakpoint Control Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x800 + 16n</entry>
+          <entry>
+            <a href="ext-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1[63:0]</a>
+          </entry>
+          <entry>Debug Watchpoint Value Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x808 + 16n</entry>
+          <entry>
+            <a href="ext-dbgwcrn_el1.xml">DBGWCR&lt;n&gt;_EL1</a>
+          </entry>
+          <entry>Debug Watchpoint Control Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD00</entry>
+          <entry>
+            <a href="ext-midr_el1.xml">MIDR_EL1</a>
+          </entry>
+          <entry>Main ID Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD20</entry>
+          <entry>
+            <a href="ext-edpfr.xml">EDPFR[31:0]</a>
+          </entry>
+          <entry>External Debug Processor Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD24</entry>
+          <entry>
+            <a href="ext-edpfr.xml">EDPFR[63:32]</a>
+          </entry>
+          <entry>External Debug Processor Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD28</entry>
+          <entry>
+            <a href="ext-eddfr.xml">EDDFR[31:0]</a>
+          </entry>
+          <entry>External Debug Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD2C</entry>
+          <entry>
+            <a href="ext-eddfr.xml">EDDFR[63:32]</a>
+          </entry>
+          <entry>External Debug Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xD60</entry>
+          <entry>
+            <a href="ext-edaa32pfr.xml">EDAA32PFR</a>
+          </entry>
+          <entry>External Debug AArch32 Processor Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xF00</entry>
+          <entry>
+            <a href="ext-editctrl.xml">EDITCTRL</a>
+          </entry>
+          <entry>External Debug Integration mode Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA0</entry>
+          <entry>
+            <a href="ext-dbgclaimset_el1.xml">DBGCLAIMSET_EL1</a>
+          </entry>
+          <entry>Debug CLAIM Tag Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA4</entry>
+          <entry>
+            <a href="ext-dbgclaimclr_el1.xml">DBGCLAIMCLR_EL1</a>
+          </entry>
+          <entry>Debug CLAIM Tag Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA8</entry>
+          <entry>
+            <a href="ext-eddevaff0.xml">EDDEVAFF0</a>
+          </entry>
+          <entry>External Debug Device Affinity register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFAC</entry>
+          <entry>
+            <a href="ext-eddevaff1.xml">EDDEVAFF1</a>
+          </entry>
+          <entry>External Debug Device Affinity register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB0</entry>
+          <entry>
+            <a href="ext-edlar.xml">EDLAR</a>
+          </entry>
+          <entry>External Debug Lock Access Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB4</entry>
+          <entry>
+            <a href="ext-edlsr.xml">EDLSR</a>
+          </entry>
+          <entry>External Debug Lock Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB8</entry>
+          <entry>
+            <a href="ext-dbgauthstatus_el1.xml">DBGAUTHSTATUS_EL1</a>
+          </entry>
+          <entry>Debug Authentication Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFBC</entry>
+          <entry>
+            <a href="ext-eddevarch.xml">EDDEVARCH</a>
+          </entry>
+          <entry>External Debug Device Architecture register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC0</entry>
+          <entry>
+            <a href="ext-eddevid2.xml">EDDEVID2</a>
+          </entry>
+          <entry>External Debug Device ID register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC4</entry>
+          <entry>
+            <a href="ext-eddevid1.xml">EDDEVID1</a>
+          </entry>
+          <entry>External Debug Device ID register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC8</entry>
+          <entry>
+            <a href="ext-eddevid.xml">EDDEVID</a>
+          </entry>
+          <entry>External Debug Device ID register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFCC</entry>
+          <entry>
+            <a href="ext-eddevtype.xml">EDDEVTYPE</a>
+          </entry>
+          <entry>External Debug Device Type register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFD0</entry>
+          <entry>
+            <a href="ext-edpidr4.xml">EDPIDR4</a>
+          </entry>
+          <entry>External Debug Peripheral Identification Register 4</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE0</entry>
+          <entry>
+            <a href="ext-edpidr0.xml">EDPIDR0</a>
+          </entry>
+          <entry>External Debug Peripheral Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE4</entry>
+          <entry>
+            <a href="ext-edpidr1.xml">EDPIDR1</a>
+          </entry>
+          <entry>External Debug Peripheral Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE8</entry>
+          <entry>
+            <a href="ext-edpidr2.xml">EDPIDR2</a>
+          </entry>
+          <entry>External Debug Peripheral Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFEC</entry>
+          <entry>
+            <a href="ext-edpidr3.xml">EDPIDR3</a>
+          </entry>
+          <entry>External Debug Peripheral Identification Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF0</entry>
+          <entry>
+            <a href="ext-edcidr0.xml">EDCIDR0</a>
+          </entry>
+          <entry>External Debug Component Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF4</entry>
+          <entry>
+            <a href="ext-edcidr1.xml">EDCIDR1</a>
+          </entry>
+          <entry>External Debug Component Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF8</entry>
+          <entry>
+            <a href="ext-edcidr2.xml">EDCIDR2</a>
+          </entry>
+          <entry>External Debug Component Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFFC</entry>
+          <entry>
+            <a href="ext-edcidr3.xml">EDCIDR3</a>
+          </entry>
+          <entry>External Debug Component Identification Register 3</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC CPU interface" type="GIC CPU interface">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gicc_ctlr.xml">GICC_CTLR</a>
+          </entry>
+          <entry>CPU Interface Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gicc_pmr.xml">GICC_PMR</a>
+          </entry>
+          <entry>CPU Interface Priority Mask Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gicc_bpr.xml">GICC_BPR</a>
+          </entry>
+          <entry>CPU Interface Binary Point Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x000C</entry>
+          <entry>
+            <a href="ext-gicc_iar.xml">GICC_IAR</a>
+          </entry>
+          <entry>CPU Interface Interrupt Acknowledge Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicc_eoir.xml">GICC_EOIR</a>
+          </entry>
+          <entry>CPU Interface End Of Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0014</entry>
+          <entry>
+            <a href="ext-gicc_rpr.xml">GICC_RPR</a>
+          </entry>
+          <entry>CPU Interface Running Priority Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-gicc_hppir.xml">GICC_HPPIR</a>
+          </entry>
+          <entry>CPU Interface Highest Priority Pending Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x001C</entry>
+          <entry>
+            <a href="ext-gicc_abpr.xml">GICC_ABPR</a>
+          </entry>
+          <entry>CPU Interface Aliased Binary Point Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0020</entry>
+          <entry>
+            <a href="ext-gicc_aiar.xml">GICC_AIAR</a>
+          </entry>
+          <entry>CPU Interface Aliased Interrupt Acknowledge Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0024</entry>
+          <entry>
+            <a href="ext-gicc_aeoir.xml">GICC_AEOIR</a>
+          </entry>
+          <entry>CPU Interface Aliased End Of Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0028</entry>
+          <entry>
+            <a href="ext-gicc_ahppir.xml">GICC_AHPPIR</a>
+          </entry>
+          <entry>CPU Interface Aliased Highest Priority Pending Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x002C</entry>
+          <entry>
+            <a href="ext-gicc_statusr.xml">GICC_STATUSR</a>
+          </entry>
+          <entry>CPU Interface Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x002C</entry>
+          <entry>
+            <a href="ext-gicc_statusr.xml">GICC_STATUSR</a>
+          </entry>
+          <entry>CPU Interface Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00D0 + 4n</entry>
+          <entry>
+            <a href="ext-gicc_aprn.xml">GICC_APR&lt;n&gt;</a>
+          </entry>
+          <entry>CPU Interface Active Priorities Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00E0 + 4n</entry>
+          <entry>
+            <a href="ext-gicc_nsaprn.xml">GICC_NSAPR&lt;n&gt;</a>
+          </entry>
+          <entry>CPU Interface Non-secure Active Priorities Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00FC</entry>
+          <entry>
+            <a href="ext-gicc_iidr.xml">GICC_IIDR</a>
+          </entry>
+          <entry>CPU Interface Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1000</entry>
+          <entry>
+            <a href="ext-gicc_dir.xml">GICC_DIR</a>
+          </entry>
+          <entry>CPU Interface Deactivate Interrupt Register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC Distributor" type="GIC Distributor">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gicd_ctlr.xml">GICD_CTLR</a>
+          </entry>
+          <entry>Distributor Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gicd_typer.xml">GICD_TYPER</a>
+          </entry>
+          <entry>Interrupt Controller Type Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gicd_iidr.xml">GICD_IIDR</a>
+          </entry>
+          <entry>Distributor Implementer Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x000C</entry>
+          <entry>
+            <a href="ext-gicd_typer2.xml">GICD_TYPER2</a>
+          </entry>
+          <entry>Interrupt Controller Type Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicd_statusr.xml">GICD_STATUSR</a>
+          </entry>
+          <entry>Error Reporting Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicd_statusr.xml">GICD_STATUSR</a>
+          </entry>
+          <entry>Error Reporting Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0040</entry>
+          <entry>
+            <a href="ext-gicd_setspi_nsr.xml">GICD_SETSPI_NSR</a>
+          </entry>
+          <entry>Set Non-secure SPI Pending Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0048</entry>
+          <entry>
+            <a href="ext-gicd_clrspi_nsr.xml">GICD_CLRSPI_NSR</a>
+          </entry>
+          <entry>Clear Non-secure SPI Pending Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0050</entry>
+          <entry>
+            <a href="ext-gicd_setspi_sr.xml">GICD_SETSPI_SR</a>
+          </entry>
+          <entry>Set Secure SPI Pending Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0058</entry>
+          <entry>
+            <a href="ext-gicd_clrspi_sr.xml">GICD_CLRSPI_SR</a>
+          </entry>
+          <entry>Clear Secure SPI Pending Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0080 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_igrouprn.xml">GICD_IGROUPR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Group Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0100 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_isenablern.xml">GICD_ISENABLER&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Set-Enable Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0180 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icenablern.xml">GICD_ICENABLER&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Clear-Enable Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0200 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_ispendrn.xml">GICD_ISPENDR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Set-Pending Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0280 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icpendrn.xml">GICD_ICPENDR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Clear-Pending Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0300 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_isactivern.xml">GICD_ISACTIVER&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Set-Active Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0380 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icactivern.xml">GICD_ICACTIVER&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Clear-Active Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0400 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_ipriorityrn.xml">GICD_IPRIORITYR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Priority Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0800 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_itargetsrn.xml">GICD_ITARGETSR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Processor Targets Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0C00 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icfgrn.xml">GICD_ICFGR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Configuration Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0D00 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_igrpmodrn.xml">GICD_IGRPMODR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Group Modifier Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0E00 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_nsacrn.xml">GICD_NSACR&lt;n&gt;</a>
+          </entry>
+          <entry>Non-secure Access Control Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0F00</entry>
+          <entry>
+            <a href="ext-gicd_sgir.xml">GICD_SGIR</a>
+          </entry>
+          <entry>Software Generated Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0F10 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_cpendsgirn.xml">GICD_CPENDSGIR&lt;n&gt;</a>
+          </entry>
+          <entry>SGI Clear-Pending Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0F20 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_spendsgirn.xml">GICD_SPENDSGIR&lt;n&gt;</a>
+          </entry>
+          <entry>SGI Set-Pending Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1000 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_igrouprne.xml">GICD_IGROUPR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Group Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1200 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_isenablerne.xml">GICD_ISENABLER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Enable Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1400 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icenablerne.xml">GICD_ICENABLER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Enable Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1600 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_ispendrne.xml">GICD_ISPENDR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Pending Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1800 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icpendrne.xml">GICD_ICPENDR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Pending Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1A00 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_isactiverne.xml">GICD_ISACTIVER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Active Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1C00 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icactiverne.xml">GICD_ICACTIVER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Active Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x2000 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_ipriorityrne.xml">GICD_IPRIORITYR&lt;n&gt;E</a>
+          </entry>
+          <entry>Holds the priority of the corresponding interrupt for each extended SPI supported by the GIC.</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x3000 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_icfgrne.xml">GICD_ICFGR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Configuration Registers (Extended SPI Range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x3400 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_igrpmodrne.xml">GICD_IGRPMODR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Group Modifier Registers (extended SPI range)</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x3600 + 4n</entry>
+          <entry>
+            <a href="ext-gicd_nsacrne.xml">GICD_NSACR&lt;n&gt;E</a>
+          </entry>
+          <entry>Non-secure Access Control Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x6000 + 8n</entry>
+          <entry>
+            <a href="ext-gicd_iroutern.xml">GICD_IROUTER&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Routing Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x8000 + 8n</entry>
+          <entry>
+            <a href="ext-gicd_irouterne.xml">GICD_IROUTER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Routing Registers (Extended SPI Range)</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC ITS control" type="GIC ITS control">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gits_ctlr.xml">GITS_CTLR</a>
+          </entry>
+          <entry>ITS Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gits_iidr.xml">GITS_IIDR</a>
+          </entry>
+          <entry>ITS Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gits_typer.xml">GITS_TYPER</a>
+          </entry>
+          <entry>ITS Type Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gits_mpamidr.xml">GITS_MPAMIDR</a>
+          </entry>
+          <entry>Report maximum PARTID and PMG Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0014</entry>
+          <entry>
+            <a href="ext-gits_partidr.xml">GITS_PARTIDR</a>
+          </entry>
+          <entry>Set PARTID and PMG Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-gits_mpidr.xml">GITS_MPIDR</a>
+          </entry>
+          <entry>Report ITS's affinity.</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0080</entry>
+          <entry>
+            <a href="ext-gits_cbaser.xml">GITS_CBASER</a>
+          </entry>
+          <entry>ITS Command Queue Descriptor</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0088</entry>
+          <entry>
+            <a href="ext-gits_cwriter.xml">GITS_CWRITER</a>
+          </entry>
+          <entry>ITS Write Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0090</entry>
+          <entry>
+            <a href="ext-gits_creadr.xml">GITS_CREADR</a>
+          </entry>
+          <entry>ITS Read Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0100 + 8n</entry>
+          <entry>
+            <a href="ext-gits_basern.xml">GITS_BASER&lt;n&gt;</a>
+          </entry>
+          <entry>ITS Translation Table Descriptors</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x20020</entry>
+          <entry>
+            <a href="ext-gits_sgir.xml">GITS_SGIR</a>
+          </entry>
+          <entry>ITS SGI Register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC ITS translation" type="GIC ITS translation">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0040</entry>
+          <entry>
+            <a href="ext-gits_translater.xml">GITS_TRANSLATER</a>
+          </entry>
+          <entry>ITS Translation Register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC Redistributor" type="GIC Redistributor">
+      <heading>
+        <row class="header1">
+          <entry>Frame</entry>
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gicr_ctlr.xml">GICR_CTLR</a>
+          </entry>
+          <entry>Redistributor Control Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gicr_iidr.xml">GICR_IIDR</a>
+          </entry>
+          <entry>Redistributor Implementer Identification Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gicr_typer.xml">GICR_TYPER</a>
+          </entry>
+          <entry>Redistributor Type Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicr_statusr.xml">GICR_STATUSR</a>
+          </entry>
+          <entry>Error Reporting Status Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicr_statusr.xml">GICR_STATUSR</a>
+          </entry>
+          <entry>Error Reporting Status Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0014</entry>
+          <entry>
+            <a href="ext-gicr_waker.xml">GICR_WAKER</a>
+          </entry>
+          <entry>Redistributor Wake Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-gicr_mpamidr.xml">GICR_MPAMIDR</a>
+          </entry>
+          <entry>Report maximum PARTID and PMG Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x001C</entry>
+          <entry>
+            <a href="ext-gicr_partidr.xml">GICR_PARTIDR</a>
+          </entry>
+          <entry>Set PARTID and PMG Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0040</entry>
+          <entry>
+            <a href="ext-gicr_setlpir.xml">GICR_SETLPIR</a>
+          </entry>
+          <entry>Set LPI Pending Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0048</entry>
+          <entry>
+            <a href="ext-gicr_clrlpir.xml">GICR_CLRLPIR</a>
+          </entry>
+          <entry>Clear LPI Pending Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0070</entry>
+          <entry>
+            <a href="ext-gicr_propbaser.xml">GICR_PROPBASER</a>
+          </entry>
+          <entry>Redistributor Properties Base Address Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x0078</entry>
+          <entry>
+            <a href="ext-gicr_pendbaser.xml">GICR_PENDBASER</a>
+          </entry>
+          <entry>Redistributor LPI Pending Table Base Address Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x00A0</entry>
+          <entry>
+            <a href="ext-gicr_invlpir.xml">GICR_INVLPIR</a>
+          </entry>
+          <entry>Redistributor Invalidate LPI Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x00B0</entry>
+          <entry>
+            <a href="ext-gicr_invallr.xml">GICR_INVALLR</a>
+          </entry>
+          <entry>Redistributor Invalidate All Register</entry>
+        </row>
+        <row>
+          <entry>RD_base</entry>
+          <entry class="bitfields">0x00C0</entry>
+          <entry>
+            <a href="ext-gicr_syncr.xml">GICR_SYNCR</a>
+          </entry>
+          <entry>Redistributor Synchronize Register</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0080</entry>
+          <entry>
+            <a href="ext-gicr_igroupr0.xml">GICR_IGROUPR0</a>
+          </entry>
+          <entry>Interrupt Group Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0080 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_igrouprne.xml">GICR_IGROUPR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Group Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0100</entry>
+          <entry>
+            <a href="ext-gicr_isenabler0.xml">GICR_ISENABLER0</a>
+          </entry>
+          <entry>Interrupt Set-Enable Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0100 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_isenablerne.xml">GICR_ISENABLER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Enable Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0180</entry>
+          <entry>
+            <a href="ext-gicr_icenabler0.xml">GICR_ICENABLER0</a>
+          </entry>
+          <entry>Interrupt Clear-Enable Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0180 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_icenablerne.xml">GICR_ICENABLER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Enable Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0200</entry>
+          <entry>
+            <a href="ext-gicr_ispendr0.xml">GICR_ISPENDR0</a>
+          </entry>
+          <entry>Interrupt Set-Pending Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0200 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_ispendrne.xml">GICR_ISPENDR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Pending Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0280</entry>
+          <entry>
+            <a href="ext-gicr_icpendr0.xml">GICR_ICPENDR0</a>
+          </entry>
+          <entry>Interrupt Clear-Pending Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0280 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_icpendrne.xml">GICR_ICPENDR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Pending Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0300</entry>
+          <entry>
+            <a href="ext-gicr_isactiver0.xml">GICR_ISACTIVER0</a>
+          </entry>
+          <entry>Interrupt Set-Active Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0300 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_isactiverne.xml">GICR_ISACTIVER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Set-Active Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0380</entry>
+          <entry>
+            <a href="ext-gicr_icactiver0.xml">GICR_ICACTIVER0</a>
+          </entry>
+          <entry>Interrupt Clear-Active Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0380 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_icactiverne.xml">GICR_ICACTIVER&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Clear-Active Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0400 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_ipriorityrn.xml">GICR_IPRIORITYR&lt;n&gt;</a>
+          </entry>
+          <entry>Interrupt Priority Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0400 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_ipriorityrne.xml">GICR_IPRIORITYR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Priority Registers (extended PPI range)</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0C00</entry>
+          <entry>
+            <a href="ext-gicr_icfgr0.xml">GICR_ICFGR0</a>
+          </entry>
+          <entry>Interrupt Configuration Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0C00 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_icfgrne.xml">GICR_ICFGR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt configuration registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0C04</entry>
+          <entry>
+            <a href="ext-gicr_icfgr1.xml">GICR_ICFGR1</a>
+          </entry>
+          <entry>Interrupt Configuration Register 1</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0D00</entry>
+          <entry>
+            <a href="ext-gicr_igrpmodr0.xml">GICR_IGRPMODR0</a>
+          </entry>
+          <entry>Interrupt Group Modifier Register 0</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0D00 + 4n</entry>
+          <entry>
+            <a href="ext-gicr_igrpmodrne.xml">GICR_IGRPMODR&lt;n&gt;E</a>
+          </entry>
+          <entry>Interrupt Group Modifier Registers</entry>
+        </row>
+        <row>
+          <entry>SGI_base</entry>
+          <entry class="bitfields">0x0E00</entry>
+          <entry>
+            <a href="ext-gicr_nsacr.xml">GICR_NSACR</a>
+          </entry>
+          <entry>Non-secure Access Control Register</entry>
+        </row>
+        <row>
+          <entry>VLPI_base</entry>
+          <entry class="bitfields">0x0070</entry>
+          <entry>
+            <a href="ext-gicr_vpropbaser.xml">GICR_VPROPBASER</a>
+          </entry>
+          <entry>Virtual Redistributor Properties Base Address Register</entry>
+        </row>
+        <row>
+          <entry>VLPI_base</entry>
+          <entry class="bitfields">0x0078</entry>
+          <entry>
+            <a href="ext-gicr_vpendbaser.xml">GICR_VPENDBASER</a>
+          </entry>
+          <entry>Virtual Redistributor LPI Pending Table Base Address Register</entry>
+        </row>
+        <row>
+          <entry>VLPI_base</entry>
+          <entry class="bitfields">0x0080</entry>
+          <entry>
+            <a href="ext-gicr_vsgir.xml">GICR_VSGIR</a>
+          </entry>
+          <entry>Redistributor virtual SGI pending state request register</entry>
+        </row>
+        <row>
+          <entry>VLPI_base</entry>
+          <entry class="bitfields">0x0088</entry>
+          <entry>
+            <a href="ext-gicr_vsgipendr.xml">GICR_VSGIPENDR</a>
+          </entry>
+          <entry>Redistributor virtual SGI pending state register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC Virtual CPU interface" type="GIC Virtual CPU interface">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gicv_ctlr.xml">GICV_CTLR</a>
+          </entry>
+          <entry>Virtual Machine Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gicv_pmr.xml">GICV_PMR</a>
+          </entry>
+          <entry>Virtual Machine Priority Mask Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gicv_bpr.xml">GICV_BPR</a>
+          </entry>
+          <entry>Virtual Machine Binary Point Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x000C</entry>
+          <entry>
+            <a href="ext-gicv_iar.xml">GICV_IAR</a>
+          </entry>
+          <entry>Virtual Machine Interrupt Acknowledge Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gicv_eoir.xml">GICV_EOIR</a>
+          </entry>
+          <entry>Virtual Machine End Of Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0014</entry>
+          <entry>
+            <a href="ext-gicv_rpr.xml">GICV_RPR</a>
+          </entry>
+          <entry>Virtual Machine Running Priority Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-gicv_hppir.xml">GICV_HPPIR</a>
+          </entry>
+          <entry>Virtual Machine Highest Priority Pending Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x001C</entry>
+          <entry>
+            <a href="ext-gicv_abpr.xml">GICV_ABPR</a>
+          </entry>
+          <entry>Virtual Machine Aliased Binary Point Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0020</entry>
+          <entry>
+            <a href="ext-gicv_aiar.xml">GICV_AIAR</a>
+          </entry>
+          <entry>Virtual Machine Aliased Interrupt Acknowledge Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0024</entry>
+          <entry>
+            <a href="ext-gicv_aeoir.xml">GICV_AEOIR</a>
+          </entry>
+          <entry>Virtual Machine Aliased End Of Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0028</entry>
+          <entry>
+            <a href="ext-gicv_ahppir.xml">GICV_AHPPIR</a>
+          </entry>
+          <entry>Virtual Machine Aliased Highest Priority Pending Interrupt Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x002C</entry>
+          <entry>
+            <a href="ext-gicv_statusr.xml">GICV_STATUSR</a>
+          </entry>
+          <entry>Virtual Machine Error Reporting Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00D0 + 4n</entry>
+          <entry>
+            <a href="ext-gicv_aprn.xml">GICV_APR&lt;n&gt;</a>
+          </entry>
+          <entry>Virtual Machine Active Priorities Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00FC</entry>
+          <entry>
+            <a href="ext-gicv_iidr.xml">GICV_IIDR</a>
+          </entry>
+          <entry>Virtual Machine CPU Interface Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x1000</entry>
+          <entry>
+            <a href="ext-gicv_dir.xml">GICV_DIR</a>
+          </entry>
+          <entry>Virtual Machine Deactivate Interrupt Register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="GIC Virtual interface control" type="GIC Virtual interface control">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-gich_hcr.xml">GICH_HCR</a>
+          </entry>
+          <entry>Hypervisor Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0004</entry>
+          <entry>
+            <a href="ext-gich_vtr.xml">GICH_VTR</a>
+          </entry>
+          <entry>Virtual Type Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-gich_vmcr.xml">GICH_VMCR</a>
+          </entry>
+          <entry>Virtual Machine Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0010</entry>
+          <entry>
+            <a href="ext-gich_misr.xml">GICH_MISR</a>
+          </entry>
+          <entry>Maintenance Interrupt Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0020</entry>
+          <entry>
+            <a href="ext-gich_eisr.xml">GICH_EISR</a>
+          </entry>
+          <entry>End Interrupt Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0030</entry>
+          <entry>
+            <a href="ext-gich_elrsr.xml">GICH_ELRSR</a>
+          </entry>
+          <entry>Empty List Register Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x00F0 + 4n</entry>
+          <entry>
+            <a href="ext-gich_aprn.xml">GICH_APR&lt;n&gt;</a>
+          </entry>
+          <entry>Active Priorities Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0100 + 4n</entry>
+          <entry>
+            <a href="ext-gich_lrn.xml">GICH_LR&lt;n&gt;</a>
+          </entry>
+          <entry>List Registers</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="MPAM" type="MPAM">
+      <heading>
+        <row class="header1">
+          <entry>Frame</entry>
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-mpamf_idr.xml">MPAMF_IDR</a>
+          </entry>
+          <entry>MPAM Features Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-mpamf_iidr.xml">MPAMF_IIDR</a>
+          </entry>
+          <entry>MPAM Implementation Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0020</entry>
+          <entry>
+            <a href="ext-mpamf_aidr.xml">MPAMF_AIDR</a>
+          </entry>
+          <entry>MPAM Architecture Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0028</entry>
+          <entry>
+            <a href="ext-mpamf_impl_idr.xml">MPAMF_IMPL_IDR</a>
+          </entry>
+          <entry>MPAM Implementation-Specific Partitioning Feature Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0030</entry>
+          <entry>
+            <a href="ext-mpamf_cpor_idr.xml">MPAMF_CPOR_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Portion Partitioning ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0038</entry>
+          <entry>
+            <a href="ext-mpamf_ccap_idr.xml">MPAMF_CCAP_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Capacity Partitioning ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0040</entry>
+          <entry>
+            <a href="ext-mpamf_mbw_idr.xml">MPAMF_MBW_IDR</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Partitioning Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0048</entry>
+          <entry>
+            <a href="ext-mpamf_pri_idr.xml">MPAMF_PRI_IDR</a>
+          </entry>
+          <entry>MPAM Priority Partitioning Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0050</entry>
+          <entry>
+            <a href="ext-mpamf_partid_nrw_idr.xml">MPAMF_PARTID_NRW_IDR</a>
+          </entry>
+          <entry>MPAM PARTID Narrowing ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0080</entry>
+          <entry>
+            <a href="ext-mpamf_msmon_idr.xml">MPAMF_MSMON_IDR</a>
+          </entry>
+          <entry>MPAM Resource Monitoring Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0088</entry>
+          <entry>
+            <a href="ext-mpamf_csumon_idr.xml">MPAMF_CSUMON_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Storage Usage Monitoring ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0090</entry>
+          <entry>
+            <a href="ext-mpamf_mbwumon_idr.xml">MPAMF_MBWUMON_IDR</a>
+          </entry>
+          <entry>MPAM Features Memory Bandwidth Usage Monitoring ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x00F0</entry>
+          <entry>
+            <a href="ext-mpamf_ecr.xml">MPAMF_ECR</a>
+          </entry>
+          <entry>MPAM Error Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x00F8</entry>
+          <entry>
+            <a href="ext-mpamf_esr.xml">MPAMF_ESR</a>
+          </entry>
+          <entry>MPAM Error Status Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0100</entry>
+          <entry>
+            <a href="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</a>
+          </entry>
+          <entry>MPAM Partition Configuration Selection Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0108</entry>
+          <entry>
+            <a href="ext-mpamcfg_cmax.xml">MPAMCFG_CMAX</a>
+          </entry>
+          <entry>MPAM Cache Maximum Capacity Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0200</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_min.xml">MPAMCFG_MBW_MIN</a>
+          </entry>
+          <entry>MPAM Cache Maximum Capacity Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0208</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_max.xml">MPAMCFG_MBW_MAX</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Maximum Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0220</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_winwd.xml">MPAMCFG_MBW_WINWD</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Partitioning Window Width Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0400</entry>
+          <entry>
+            <a href="ext-mpamcfg_pri.xml">MPAMCFG_PRI</a>
+          </entry>
+          <entry>MPAM Priority Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0500</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_prop.xml">MPAMCFG_MBW_PROP</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Proportional Stride Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0600</entry>
+          <entry>
+            <a href="ext-mpamcfg_intpartid.xml">MPAMCFG_INTPARTID</a>
+          </entry>
+          <entry>MPAM Internal PARTID Narrowing Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0800</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mon_sel.xml">MSMON_CFG_MON_SEL</a>
+          </entry>
+          <entry>MPAM Monitor Instance Selection Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0808</entry>
+          <entry>
+            <a href="ext-msmon_capt_evnt.xml">MSMON_CAPT_EVNT</a>
+          </entry>
+          <entry>MPAM Capture Event Generation Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0810</entry>
+          <entry>
+            <a href="ext-msmon_cfg_csu_flt.xml">MSMON_CFG_CSU_FLT</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Cache Storage Usage Monitor Filter Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0818</entry>
+          <entry>
+            <a href="ext-msmon_cfg_csu_ctl.xml">MSMON_CFG_CSU_CTL</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Cache Storage Usage Monitor Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0820</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mbwu_flt.xml">MSMON_CFG_MBWU_FLT</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Memory Bandwidth Usage Monitor Filter Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0828</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mbwu_ctl.xml">MSMON_CFG_MBWU_CTL</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Memory Bandwidth Usage Monitor Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0840</entry>
+          <entry>
+            <a href="ext-msmon_csu.xml">MSMON_CSU</a>
+          </entry>
+          <entry>MPAM Cache Storage Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0848</entry>
+          <entry>
+            <a href="ext-msmon_csu_capture.xml">MSMON_CSU_CAPTURE</a>
+          </entry>
+          <entry>MPAM Cache Storage Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0860</entry>
+          <entry>
+            <a href="ext-msmon_mbwu.xml">MSMON_MBWU</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0868</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_capture.xml">MSMON_MBWU_CAPTURE</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0880</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_l.xml">MSMON_MBWU_L</a>
+          </entry>
+          <entry>MPAM Long Memory Bandwidth Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x0890</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_l_capture.xml">MSMON_MBWU_L_CAPTURE</a>
+          </entry>
+          <entry>MPAM Long Memory Bandwidth Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x1000</entry>
+          <entry>
+            <a href="ext-mpamcfg_cpbm.xml">MPAMCFG_CPBM</a>
+          </entry>
+          <entry>MPAM Cache Portion Bitmap Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_ns</entry>
+          <entry class="bitfields">0x2000</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_pbm.xml">MPAMCFG_MBW_PBM</a>
+          </entry>
+          <entry>MPAM Bandwidth Portion Bitmap Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0000</entry>
+          <entry>
+            <a href="ext-mpamf_idr.xml">MPAMF_IDR</a>
+          </entry>
+          <entry>MPAM Features Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0008</entry>
+          <entry>
+            <a href="ext-mpamf_sidr.xml">MPAMF_SIDR</a>
+          </entry>
+          <entry>MPAM Features Secure Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0018</entry>
+          <entry>
+            <a href="ext-mpamf_iidr.xml">MPAMF_IIDR</a>
+          </entry>
+          <entry>MPAM Implementation Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0020</entry>
+          <entry>
+            <a href="ext-mpamf_aidr.xml">MPAMF_AIDR</a>
+          </entry>
+          <entry>MPAM Architecture Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0028</entry>
+          <entry>
+            <a href="ext-mpamf_impl_idr.xml">MPAMF_IMPL_IDR</a>
+          </entry>
+          <entry>MPAM Implementation-Specific Partitioning Feature Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0030</entry>
+          <entry>
+            <a href="ext-mpamf_cpor_idr.xml">MPAMF_CPOR_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Portion Partitioning ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0038</entry>
+          <entry>
+            <a href="ext-mpamf_ccap_idr.xml">MPAMF_CCAP_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Capacity Partitioning ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0040</entry>
+          <entry>
+            <a href="ext-mpamf_mbw_idr.xml">MPAMF_MBW_IDR</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Partitioning Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0048</entry>
+          <entry>
+            <a href="ext-mpamf_pri_idr.xml">MPAMF_PRI_IDR</a>
+          </entry>
+          <entry>MPAM Priority Partitioning Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0050</entry>
+          <entry>
+            <a href="ext-mpamf_partid_nrw_idr.xml">MPAMF_PARTID_NRW_IDR</a>
+          </entry>
+          <entry>MPAM PARTID Narrowing ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0080</entry>
+          <entry>
+            <a href="ext-mpamf_msmon_idr.xml">MPAMF_MSMON_IDR</a>
+          </entry>
+          <entry>MPAM Resource Monitoring Identification Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0088</entry>
+          <entry>
+            <a href="ext-mpamf_csumon_idr.xml">MPAMF_CSUMON_IDR</a>
+          </entry>
+          <entry>MPAM Features Cache Storage Usage Monitoring ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0090</entry>
+          <entry>
+            <a href="ext-mpamf_mbwumon_idr.xml">MPAMF_MBWUMON_IDR</a>
+          </entry>
+          <entry>MPAM Features Memory Bandwidth Usage Monitoring ID register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x00F0</entry>
+          <entry>
+            <a href="ext-mpamf_ecr.xml">MPAMF_ECR</a>
+          </entry>
+          <entry>MPAM Error Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x00F8</entry>
+          <entry>
+            <a href="ext-mpamf_esr.xml">MPAMF_ESR</a>
+          </entry>
+          <entry>MPAM Error Status Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0100</entry>
+          <entry>
+            <a href="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</a>
+          </entry>
+          <entry>MPAM Partition Configuration Selection Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0108</entry>
+          <entry>
+            <a href="ext-mpamcfg_cmax.xml">MPAMCFG_CMAX</a>
+          </entry>
+          <entry>MPAM Cache Maximum Capacity Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0200</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_min.xml">MPAMCFG_MBW_MIN</a>
+          </entry>
+          <entry>MPAM Cache Maximum Capacity Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0208</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_max.xml">MPAMCFG_MBW_MAX</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Maximum Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0220</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_winwd.xml">MPAMCFG_MBW_WINWD</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Partitioning Window Width Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0400</entry>
+          <entry>
+            <a href="ext-mpamcfg_pri.xml">MPAMCFG_PRI</a>
+          </entry>
+          <entry>MPAM Priority Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0500</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_prop.xml">MPAMCFG_MBW_PROP</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Proportional Stride Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0600</entry>
+          <entry>
+            <a href="ext-mpamcfg_intpartid.xml">MPAMCFG_INTPARTID</a>
+          </entry>
+          <entry>MPAM Internal PARTID Narrowing Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0800</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mon_sel.xml">MSMON_CFG_MON_SEL</a>
+          </entry>
+          <entry>MPAM Monitor Instance Selection Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0808</entry>
+          <entry>
+            <a href="ext-msmon_capt_evnt.xml">MSMON_CAPT_EVNT</a>
+          </entry>
+          <entry>MPAM Capture Event Generation Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0810</entry>
+          <entry>
+            <a href="ext-msmon_cfg_csu_flt.xml">MSMON_CFG_CSU_FLT</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Cache Storage Usage Monitor Filter Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0818</entry>
+          <entry>
+            <a href="ext-msmon_cfg_csu_ctl.xml">MSMON_CFG_CSU_CTL</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Cache Storage Usage Monitor Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0820</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mbwu_flt.xml">MSMON_CFG_MBWU_FLT</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Memory Bandwidth Usage Monitor Filter Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0828</entry>
+          <entry>
+            <a href="ext-msmon_cfg_mbwu_ctl.xml">MSMON_CFG_MBWU_CTL</a>
+          </entry>
+          <entry>MPAM Memory System Monitor Configure Memory Bandwidth Usage Monitor Control Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0840</entry>
+          <entry>
+            <a href="ext-msmon_csu.xml">MSMON_CSU</a>
+          </entry>
+          <entry>MPAM Cache Storage Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0848</entry>
+          <entry>
+            <a href="ext-msmon_csu_capture.xml">MSMON_CSU_CAPTURE</a>
+          </entry>
+          <entry>MPAM Cache Storage Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0860</entry>
+          <entry>
+            <a href="ext-msmon_mbwu.xml">MSMON_MBWU</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0868</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_capture.xml">MSMON_MBWU_CAPTURE</a>
+          </entry>
+          <entry>MPAM Memory Bandwidth Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0880</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_l.xml">MSMON_MBWU_L</a>
+          </entry>
+          <entry>MPAM Long Memory Bandwidth Usage Monitor Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x0890</entry>
+          <entry>
+            <a href="ext-msmon_mbwu_l_capture.xml">MSMON_MBWU_L_CAPTURE</a>
+          </entry>
+          <entry>MPAM Long Memory Bandwidth Usage Monitor Capture Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x1000</entry>
+          <entry>
+            <a href="ext-mpamcfg_cpbm.xml">MPAMCFG_CPBM</a>
+          </entry>
+          <entry>MPAM Cache Portion Bitmap Partition Configuration Register</entry>
+        </row>
+        <row>
+          <entry>MPAMF_BASE_s</entry>
+          <entry class="bitfields">0x2000</entry>
+          <entry>
+            <a href="ext-mpamcfg_mbw_pbm.xml">MPAMCFG_MBW_PBM</a>
+          </entry>
+          <entry>MPAM Bandwidth Portion Bitmap Partition Configuration Register</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="PMU" type="PMU">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x000 + 8n</entry>
+          <entry>
+            <a href="ext-pmevcntrn_el0.xml">PMEVCNTR&lt;n&gt;_EL0</a>
+          </entry>
+          <entry>Performance Monitors Event Count Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0F8</entry>
+          <entry>
+            <a href="ext-pmccntr_el0.xml">PMCCNTR_EL0[31:0]</a>
+          </entry>
+          <entry>Performance Monitors Cycle Counter</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x0FC</entry>
+          <entry>
+            <a href="ext-pmccntr_el0.xml">PMCCNTR_EL0[63:32]</a>
+          </entry>
+          <entry>Performance Monitors Cycle Counter</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x200</entry>
+          <entry>
+            <a href="ext-pmpcsr.xml">PMPCSR[31:0]</a>
+          </entry>
+          <entry>Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x204</entry>
+          <entry>
+            <a href="ext-pmpcsr.xml">PMPCSR[63:32]</a>
+          </entry>
+          <entry>Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x208</entry>
+          <entry>
+            <a href="ext-pmcid1sr.xml">PMCID1SR</a>
+          </entry>
+          <entry>CONTEXTIDR_EL1 Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x20C</entry>
+          <entry>
+            <a href="ext-pmvidsr.xml">PMVIDSR</a>
+          </entry>
+          <entry>VMID Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x220</entry>
+          <entry>
+            <a href="ext-pmpcsr.xml">PMPCSR[31:0]</a>
+          </entry>
+          <entry>Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x224</entry>
+          <entry>
+            <a href="ext-pmpcsr.xml">PMPCSR[63:32]</a>
+          </entry>
+          <entry>Program Counter Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x228</entry>
+          <entry>
+            <a href="ext-pmcid1sr.xml">PMCID1SR</a>
+          </entry>
+          <entry>CONTEXTIDR_EL1 Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x22C</entry>
+          <entry>
+            <a href="ext-pmcid2sr.xml">PMCID2SR</a>
+          </entry>
+          <entry>CONTEXTIDR_EL2 Sample Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x400 + 4n</entry>
+          <entry>
+            <a href="ext-pmevtypern_el0.xml">PMEVTYPER&lt;n&gt;_EL0</a>
+          </entry>
+          <entry>Performance Monitors Event Type Registers</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x47C</entry>
+          <entry>
+            <a href="ext-pmccfiltr_el0.xml">PMCCFILTR_EL0</a>
+          </entry>
+          <entry>Performance Monitors Cycle Counter Filter Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC00</entry>
+          <entry>
+            <a href="ext-pmcntenset_el0.xml">PMCNTENSET_EL0</a>
+          </entry>
+          <entry>Performance Monitors Count Enable Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC20</entry>
+          <entry>
+            <a href="ext-pmcntenclr_el0.xml">PMCNTENCLR_EL0</a>
+          </entry>
+          <entry>Performance Monitors Count Enable Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC40</entry>
+          <entry>
+            <a href="ext-pmintenset_el1.xml">PMINTENSET_EL1</a>
+          </entry>
+          <entry>Performance Monitors Interrupt Enable Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC60</entry>
+          <entry>
+            <a href="ext-pmintenclr_el1.xml">PMINTENCLR_EL1</a>
+          </entry>
+          <entry>Performance Monitors Interrupt Enable Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xC80</entry>
+          <entry>
+            <a href="ext-pmovsclr_el0.xml">PMOVSCLR_EL0</a>
+          </entry>
+          <entry>Performance Monitors Overflow Flag Status Clear register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xCA0</entry>
+          <entry>
+            <a href="ext-pmswinc_el0.xml">PMSWINC_EL0</a>
+          </entry>
+          <entry>Performance Monitors Software Increment register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xCC0</entry>
+          <entry>
+            <a href="ext-pmovsset_el0.xml">PMOVSSET_EL0</a>
+          </entry>
+          <entry>Performance Monitors Overflow Flag Status Set register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE00</entry>
+          <entry>
+            <a href="ext-pmcfgr.xml">PMCFGR</a>
+          </entry>
+          <entry>Performance Monitors Configuration Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE04</entry>
+          <entry>
+            <a href="ext-pmcr_el0.xml">PMCR_EL0</a>
+          </entry>
+          <entry>Performance Monitors Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE20</entry>
+          <entry>
+            <a href="ext-pmceid0.xml">PMCEID0</a>
+          </entry>
+          <entry>Performance Monitors Common Event Identification register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE24</entry>
+          <entry>
+            <a href="ext-pmceid1.xml">PMCEID1</a>
+          </entry>
+          <entry>Performance Monitors Common Event Identification register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE28</entry>
+          <entry>
+            <a href="ext-pmceid2.xml">PMCEID2</a>
+          </entry>
+          <entry>Performance Monitors Common Event Identification register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE2C</entry>
+          <entry>
+            <a href="ext-pmceid3.xml">PMCEID3</a>
+          </entry>
+          <entry>Performance Monitors Common Event Identification register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE40</entry>
+          <entry>
+            <a href="ext-pmmir.xml">PMMIR</a>
+          </entry>
+          <entry>Performance Monitors Machine Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xF00</entry>
+          <entry>
+            <a href="ext-pmitctrl.xml">PMITCTRL</a>
+          </entry>
+          <entry>Performance Monitors Integration mode Control register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA8</entry>
+          <entry>
+            <a href="ext-pmdevaff0.xml">PMDEVAFF0</a>
+          </entry>
+          <entry>Performance Monitors Device Affinity register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFAC</entry>
+          <entry>
+            <a href="ext-pmdevaff1.xml">PMDEVAFF1</a>
+          </entry>
+          <entry>Performance Monitors Device Affinity register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB0</entry>
+          <entry>
+            <a href="ext-pmlar.xml">PMLAR</a>
+          </entry>
+          <entry>Performance Monitors Lock Access Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB4</entry>
+          <entry>
+            <a href="ext-pmlsr.xml">PMLSR</a>
+          </entry>
+          <entry>Performance Monitors Lock Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFB8</entry>
+          <entry>
+            <a href="ext-pmauthstatus.xml">PMAUTHSTATUS</a>
+          </entry>
+          <entry>Performance Monitors Authentication Status register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFBC</entry>
+          <entry>
+            <a href="ext-pmdevarch.xml">PMDEVARCH</a>
+          </entry>
+          <entry>Performance Monitors Device Architecture register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC8</entry>
+          <entry>
+            <a href="ext-pmdevid.xml">PMDEVID</a>
+          </entry>
+          <entry>Performance Monitors Device ID register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFCC</entry>
+          <entry>
+            <a href="ext-pmdevtype.xml">PMDEVTYPE</a>
+          </entry>
+          <entry>Performance Monitors Device Type register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFD0</entry>
+          <entry>
+            <a href="ext-pmpidr4.xml">PMPIDR4</a>
+          </entry>
+          <entry>Performance Monitors Peripheral Identification Register 4</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE0</entry>
+          <entry>
+            <a href="ext-pmpidr0.xml">PMPIDR0</a>
+          </entry>
+          <entry>Performance Monitors Peripheral Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE4</entry>
+          <entry>
+            <a href="ext-pmpidr1.xml">PMPIDR1</a>
+          </entry>
+          <entry>Performance Monitors Peripheral Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE8</entry>
+          <entry>
+            <a href="ext-pmpidr2.xml">PMPIDR2</a>
+          </entry>
+          <entry>Performance Monitors Peripheral Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFEC</entry>
+          <entry>
+            <a href="ext-pmpidr3.xml">PMPIDR3</a>
+          </entry>
+          <entry>Performance Monitors Peripheral Identification Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF0</entry>
+          <entry>
+            <a href="ext-pmcidr0.xml">PMCIDR0</a>
+          </entry>
+          <entry>Performance Monitors Component Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF4</entry>
+          <entry>
+            <a href="ext-pmcidr1.xml">PMCIDR1</a>
+          </entry>
+          <entry>Performance Monitors Component Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF8</entry>
+          <entry>
+            <a href="ext-pmcidr2.xml">PMCIDR2</a>
+          </entry>
+          <entry>Performance Monitors Component Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFFC</entry>
+          <entry>
+            <a href="ext-pmcidr3.xml">PMCIDR3</a>
+          </entry>
+          <entry>Performance Monitors Component Identification Register 3</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="RAS" type="RAS">
+      <heading>
+        <row class="header1">
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry class="bitfields">0x000 + 64n</entry>
+          <entry>
+            <a href="ext-errnfr.xml">ERR&lt;n&gt;FR</a>
+          </entry>
+          <entry>Error Record Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x008 + 64n</entry>
+          <entry>
+            <a href="ext-errnctlr.xml">ERR&lt;n&gt;CTLR</a>
+          </entry>
+          <entry>Error Record Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x010 + 64n</entry>
+          <entry>
+            <a href="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</a>
+          </entry>
+          <entry>Error Record Primary Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x018 + 64n</entry>
+          <entry>
+            <a href="ext-errnaddr.xml">ERR&lt;n&gt;ADDR</a>
+          </entry>
+          <entry>Error Record Address Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x020 + 64n</entry>
+          <entry>
+            <a href="ext-errnmisc0.xml">ERR&lt;n&gt;MISC0</a>
+          </entry>
+          <entry>Error Record Miscellaneous Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x028 + 64n</entry>
+          <entry>
+            <a href="ext-errnmisc1.xml">ERR&lt;n&gt;MISC1</a>
+          </entry>
+          <entry>Error Record Miscellaneous Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x030 + 64n</entry>
+          <entry>
+            <a href="ext-errnmisc2.xml">ERR&lt;n&gt;MISC2</a>
+          </entry>
+          <entry>Error Record Miscellaneous Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x038 + 64n</entry>
+          <entry>
+            <a href="ext-errnmisc3.xml">ERR&lt;n&gt;MISC3</a>
+          </entry>
+          <entry>Error Record Miscellaneous Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x800 + 64n</entry>
+          <entry>
+            <a href="ext-errnpfgf.xml">ERR&lt;n&gt;PFGF</a>
+          </entry>
+          <entry>Pseudo-fault Generation Feature Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x808 + 64n</entry>
+          <entry>
+            <a href="ext-errnpfgctl.xml">ERR&lt;n&gt;PFGCTL</a>
+          </entry>
+          <entry>Pseudo-fault Generation Control Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0x810 + 64n</entry>
+          <entry>
+            <a href="ext-errnpfgcdn.xml">ERR&lt;n&gt;PFGCDN</a>
+          </entry>
+          <entry>Pseudo-fault Generation Countdown Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE00</entry>
+          <entry>
+            <a href="ext-errgsr.xml">ERRGSR</a>
+          </entry>
+          <entry>Error Group Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE10</entry>
+          <entry>
+            <a href="ext-erriidr.xml">ERRIIDR</a>
+          </entry>
+          <entry>Implementation Identification Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE80</entry>
+          <entry>
+            <a href="ext-errfhicr0.xml">ERRFHICR0</a>
+          </entry>
+          <entry>Fault-Handling Interrupt Configuration Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE80 + 8n</entry>
+          <entry>
+            <a href="ext-errirqcrn.xml">ERRIRQCR&lt;n&gt;</a>
+          </entry>
+          <entry>Generic Error Interrupt Configuration Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE88</entry>
+          <entry>
+            <a href="ext-errfhicr1.xml">ERRFHICR1</a>
+          </entry>
+          <entry>Fault-Handling Interrupt Configuration Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE8C</entry>
+          <entry>
+            <a href="ext-errfhicr2.xml">ERRFHICR2</a>
+          </entry>
+          <entry>Fault-Handling Interrupt Configuration Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE90</entry>
+          <entry>
+            <a href="ext-errericr0.xml">ERRERICR0</a>
+          </entry>
+          <entry>Error Recovery Interrupt Configuration Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE98</entry>
+          <entry>
+            <a href="ext-errericr1.xml">ERRERICR1</a>
+          </entry>
+          <entry>Error Recovery Interrupt Configuration Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xE9C</entry>
+          <entry>
+            <a href="ext-errericr2.xml">ERRERICR2</a>
+          </entry>
+          <entry>Error Recovery Interrupt Configuration Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xEA0</entry>
+          <entry>
+            <a href="ext-errcricr0.xml">ERRCRICR0</a>
+          </entry>
+          <entry>Critical Error Interrupt Configuration Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xEA8</entry>
+          <entry>
+            <a href="ext-errcricr1.xml">ERRCRICR1</a>
+          </entry>
+          <entry>Critical Error Interrupt Configuration Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xEAC</entry>
+          <entry>
+            <a href="ext-errcricr2.xml">ERRCRICR2</a>
+          </entry>
+          <entry>Critical Error Interrupt Configuration Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xEF8</entry>
+          <entry>
+            <a href="ext-errirqsr.xml">ERRIRQSR</a>
+          </entry>
+          <entry>Error Interrupt Status Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFA8</entry>
+          <entry>
+            <a href="ext-errdevaff.xml">ERRDEVAFF</a>
+          </entry>
+          <entry>Device Affinity Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFBC</entry>
+          <entry>
+            <a href="ext-errdevarch.xml">ERRDEVARCH</a>
+          </entry>
+          <entry>Device Architecture Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFC8</entry>
+          <entry>
+            <a href="ext-errdevid.xml">ERRDEVID</a>
+          </entry>
+          <entry>Device Configuration Register</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFD0</entry>
+          <entry>
+            <a href="ext-errpidr4.xml">ERRPIDR4</a>
+          </entry>
+          <entry>Peripheral Identification Register 4</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE0</entry>
+          <entry>
+            <a href="ext-errpidr0.xml">ERRPIDR0</a>
+          </entry>
+          <entry>Peripheral Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE4</entry>
+          <entry>
+            <a href="ext-errpidr1.xml">ERRPIDR1</a>
+          </entry>
+          <entry>Peripheral Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFE8</entry>
+          <entry>
+            <a href="ext-errpidr2.xml">ERRPIDR2</a>
+          </entry>
+          <entry>Peripheral Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFEC</entry>
+          <entry>
+            <a href="ext-errpidr3.xml">ERRPIDR3</a>
+          </entry>
+          <entry>Peripheral Identification Register 3</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF0</entry>
+          <entry>
+            <a href="ext-errcidr0.xml">ERRCIDR0</a>
+          </entry>
+          <entry>Component Identification Register 0</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF4</entry>
+          <entry>
+            <a href="ext-errcidr1.xml">ERRCIDR1</a>
+          </entry>
+          <entry>Component Identification Register 1</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFF8</entry>
+          <entry>
+            <a href="ext-errcidr2.xml">ERRCIDR2</a>
+          </entry>
+          <entry>Component Identification Register 2</entry>
+        </row>
+        <row>
+          <entry class="bitfields">0xFFC</entry>
+          <entry>
+            <a href="ext-errcidr3.xml">ERRCIDR3</a>
+          </entry>
+          <entry>Component Identification Register 3</entry>
+        </row>
+      </tbody>
+    </section>
+    <section anchor="Timer" type="Timer">
+      <heading>
+        <row class="header1">
+          <entry>Frame</entry>
+          <entry>Offset</entry>
+          <entry>Name</entry>
+          <entry>Description</entry>
+        </row>
+      </heading>
+      <tbody>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cntpct.xml">CNTPCT[31:0]</a>
+          </entry>
+          <entry>Counter-timer Physical Count</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x004</entry>
+          <entry>
+            <a href="ext-cntpct.xml">CNTPCT[63:32]</a>
+          </entry>
+          <entry>Counter-timer Physical Count</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x008</entry>
+          <entry>
+            <a href="ext-cntvct.xml">CNTVCT[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Count</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x00C</entry>
+          <entry>
+            <a href="ext-cntvct.xml">CNTVCT[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Count</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x010</entry>
+          <entry>
+            <a href="ext-cntfrq.xml">CNTFRQ</a>
+          </entry>
+          <entry>Counter-timer Frequency</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x014</entry>
+          <entry>
+            <a href="ext-cntel0acr.xml">CNTEL0ACR</a>
+          </entry>
+          <entry>Counter-timer EL0 Access Control Register</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x018</entry>
+          <entry>
+            <a href="ext-cntvoff.xml">CNTVOFF[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Offset</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x01C</entry>
+          <entry>
+            <a href="ext-cntvoff.xml">CNTVOFF[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Offset</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x020</entry>
+          <entry>
+            <a href="ext-cntp_cval.xml">CNTP_CVAL[31:0]</a>
+          </entry>
+          <entry>Counter-timer Physical Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x024</entry>
+          <entry>
+            <a href="ext-cntp_cval.xml">CNTP_CVAL[63:32]</a>
+          </entry>
+          <entry>Counter-timer Physical Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x028</entry>
+          <entry>
+            <a href="ext-cntp_tval.xml">CNTP_TVAL</a>
+          </entry>
+          <entry>Counter-timer Physical Timer TimerValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x02C</entry>
+          <entry>
+            <a href="ext-cntp_ctl.xml">CNTP_CTL</a>
+          </entry>
+          <entry>Counter-timer Physical Timer Control</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x030</entry>
+          <entry>
+            <a href="ext-cntv_cval.xml">CNTV_CVAL[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x034</entry>
+          <entry>
+            <a href="ext-cntv_cval.xml">CNTV_CVAL[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x038</entry>
+          <entry>
+            <a href="ext-cntv_tval.xml">CNTV_TVAL</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer TimerValue</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0x03C</entry>
+          <entry>
+            <a href="ext-cntv_ctl.xml">CNTV_CTL</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer Control</entry>
+        </row>
+        <row>
+          <entry>CNTBaseN</entry>
+          <entry class="bitfields">0xFD0 + 4n</entry>
+          <entry>
+            <a href="ext-counteridn.xml">CounterID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter ID registers</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cntfrq.xml">CNTFRQ</a>
+          </entry>
+          <entry>Counter-timer Frequency</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x004</entry>
+          <entry>
+            <a href="ext-cntnsar.xml">CNTNSAR</a>
+          </entry>
+          <entry>Counter-timer Non-secure Access Register</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x008</entry>
+          <entry>
+            <a href="ext-cnttidr.xml">CNTTIDR</a>
+          </entry>
+          <entry>Counter-timer Timer ID Register</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x040 + 4n</entry>
+          <entry>
+            <a href="ext-cntacrn.xml">CNTACR&lt;n&gt;</a>
+          </entry>
+          <entry>Counter-timer Access Control Registers</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x080 + 8n</entry>
+          <entry>
+            <a href="ext-cntvoffn.xml">CNTVOFF&lt;n&gt;[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Offsets</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0x084 + 8n</entry>
+          <entry>
+            <a href="ext-cntvoffn.xml">CNTVOFF&lt;n&gt;[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Offsets</entry>
+        </row>
+        <row>
+          <entry>CNTCTLBase</entry>
+          <entry class="bitfields">0xFD0 + 4n</entry>
+          <entry>
+            <a href="ext-counteridn.xml">CounterID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter ID registers</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cntcr.xml">CNTCR</a>
+          </entry>
+          <entry>Counter Control Register</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x004</entry>
+          <entry>
+            <a href="ext-cntsr.xml">CNTSR</a>
+          </entry>
+          <entry>Counter Status Register</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x008</entry>
+          <entry>
+            <a href="ext-cntcv.xml">CNTCV[63:0]</a>
+          </entry>
+          <entry>Counter Count Value register</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x020</entry>
+          <entry>
+            <a href="ext-cntfid0.xml">CNTFID0</a>
+          </entry>
+          <entry>Counter Frequency ID</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x020 + 4n</entry>
+          <entry>
+            <a href="ext-cntfidn.xml">CNTFID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter Frequency IDs, n &gt; 0</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x10</entry>
+          <entry>
+            <a href="ext-cntscr.xml">CNTSCR</a>
+          </entry>
+          <entry>Counter Scale Register</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0x1C</entry>
+          <entry>
+            <a href="ext-cntid.xml">CNTID</a>
+          </entry>
+          <entry>Counter Identification Register</entry>
+        </row>
+        <row>
+          <entry>CNTControlBase</entry>
+          <entry class="bitfields">0xFD0 + 4n</entry>
+          <entry>
+            <a href="ext-counteridn.xml">CounterID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter ID registers</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cntpct.xml">CNTPCT[31:0]</a>
+          </entry>
+          <entry>Counter-timer Physical Count</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x004</entry>
+          <entry>
+            <a href="ext-cntpct.xml">CNTPCT[63:32]</a>
+          </entry>
+          <entry>Counter-timer Physical Count</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x008</entry>
+          <entry>
+            <a href="ext-cntvct.xml">CNTVCT[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Count</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x00C</entry>
+          <entry>
+            <a href="ext-cntvct.xml">CNTVCT[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Count</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x010</entry>
+          <entry>
+            <a href="ext-cntfrq.xml">CNTFRQ</a>
+          </entry>
+          <entry>Counter-timer Frequency</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x020</entry>
+          <entry>
+            <a href="ext-cntp_cval.xml">CNTP_CVAL[31:0]</a>
+          </entry>
+          <entry>Counter-timer Physical Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x024</entry>
+          <entry>
+            <a href="ext-cntp_cval.xml">CNTP_CVAL[63:32]</a>
+          </entry>
+          <entry>Counter-timer Physical Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x028</entry>
+          <entry>
+            <a href="ext-cntp_tval.xml">CNTP_TVAL</a>
+          </entry>
+          <entry>Counter-timer Physical Timer TimerValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x02C</entry>
+          <entry>
+            <a href="ext-cntp_ctl.xml">CNTP_CTL</a>
+          </entry>
+          <entry>Counter-timer Physical Timer Control</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x030</entry>
+          <entry>
+            <a href="ext-cntv_cval.xml">CNTV_CVAL[31:0]</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x034</entry>
+          <entry>
+            <a href="ext-cntv_cval.xml">CNTV_CVAL[63:32]</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer CompareValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x038</entry>
+          <entry>
+            <a href="ext-cntv_tval.xml">CNTV_TVAL</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer TimerValue</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0x03C</entry>
+          <entry>
+            <a href="ext-cntv_ctl.xml">CNTV_CTL</a>
+          </entry>
+          <entry>Counter-timer Virtual Timer Control</entry>
+        </row>
+        <row>
+          <entry>CNTEL0BaseN</entry>
+          <entry class="bitfields">0xFD0 + 4n</entry>
+          <entry>
+            <a href="ext-counteridn.xml">CounterID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter ID registers</entry>
+        </row>
+        <row>
+          <entry>CNTReadBase</entry>
+          <entry class="bitfields">0x000</entry>
+          <entry>
+            <a href="ext-cntcv.xml">CNTCV[63:0]</a>
+          </entry>
+          <entry>Counter Count Value register</entry>
+        </row>
+        <row>
+          <entry>CNTReadBase</entry>
+          <entry class="bitfields">0xFD0 + 4n</entry>
+          <entry>
+            <a href="ext-counteridn.xml">CounterID&lt;n&gt;</a>
+          </entry>
+          <entry>Counter ID registers</entry>
+        </row>
+      </tbody>
+    </section>
+  </sectiongroup>
+  <timestamp>13/12/2019 15:13</timestamp>
+</sysregindex>

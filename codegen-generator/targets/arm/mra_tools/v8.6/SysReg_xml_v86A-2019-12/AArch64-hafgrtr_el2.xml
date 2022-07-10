@@ -1,0 +1,2116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>HAFGRTR_EL2</reg_short_name>
+      <reg_long_name>Hypervisor Activity Monitors Fine-Grained Read Trap Register</reg_long_name>
+        <reg_condition otherwise="UNDEFINED">when AMUv1 is implemented and ARMv8.6-FGT is implemented</reg_condition>
+      
+
+          <reg_reset_value>
+            <reg_reset_limited_to_el>EL2</reg_reset_limited_to_el>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides controls for traps of <instruction>MRS</instruction> reads of Activity Monitors System registers.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>A group mapping that does not have a known primary</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>HAFGRTR_EL2 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_instance>HAFGRTR_EL2</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_50"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>50</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="AMEVTYPER115_EL0_49_49"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER115_EL0</field_name>
+          <field_msb>49</field_msb>
+          <field_lsb>49</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER115_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER115 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER115_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER115 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER115_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER115 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR115_EL0_48_48"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR115_EL0</field_name>
+          <field_msb>48</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR115_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR115 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR115_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR115 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR115_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR115 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER114_EL0_47_47"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER114_EL0</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>47</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER114_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER114 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER114_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER114 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER114_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER114 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR114_EL0_46_46"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR114_EL0</field_name>
+          <field_msb>46</field_msb>
+          <field_lsb>46</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR114_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR114 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR114_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR114 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR114_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR114 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER113_EL0_45_45"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER113_EL0</field_name>
+          <field_msb>45</field_msb>
+          <field_lsb>45</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER113_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER113 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER113_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER113 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER113_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER113 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR113_EL0_44_44"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR113_EL0</field_name>
+          <field_msb>44</field_msb>
+          <field_lsb>44</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR113_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR113 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR113_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR113 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR113_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR113 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER112_EL0_43_43"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER112_EL0</field_name>
+          <field_msb>43</field_msb>
+          <field_lsb>43</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER112_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER112 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER112_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER112 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER112_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER112 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR112_EL0_42_42"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR112_EL0</field_name>
+          <field_msb>42</field_msb>
+          <field_lsb>42</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR112_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR112 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR112_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR112 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR112_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR112 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER111_EL0_41_41"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER111_EL0</field_name>
+          <field_msb>41</field_msb>
+          <field_lsb>41</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER111_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER111 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER111_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER111 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER111_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER111 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR111_EL0_40_40"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR111_EL0</field_name>
+          <field_msb>40</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR111_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR111 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR111_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR111 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR111_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR111 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER110_EL0_39_39"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER110_EL0</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>39</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER110_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER110 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER110_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER110 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER110_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER110 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR110_EL0_38_38"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR110_EL0</field_name>
+          <field_msb>38</field_msb>
+          <field_lsb>38</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR110_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR110 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR110_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR110 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR110_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR110 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER19_EL0_37_37"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER19_EL0</field_name>
+          <field_msb>37</field_msb>
+          <field_lsb>37</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER19_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER19 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER19_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER19 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER19_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER19 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR19_EL0_36_36"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR19_EL0</field_name>
+          <field_msb>36</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR19_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR19 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR19_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR19 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR19_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR19 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER18_EL0_35_35"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER18_EL0</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>35</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER18_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER18 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER18_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER18 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER18_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER18 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR18_EL0_34_34"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR18_EL0</field_name>
+          <field_msb>34</field_msb>
+          <field_lsb>34</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR18_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR18 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR18_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR18 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR18_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR18 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER17_EL0_33_33"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER17_EL0</field_name>
+          <field_msb>33</field_msb>
+          <field_lsb>33</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER17_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER17 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER17_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER17 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER17_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER17 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR17_EL0_32_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR17_EL0</field_name>
+          <field_msb>32</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR17_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR17 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR17_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR17 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR17_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR17 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER16_EL0_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER16_EL0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER16_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER16 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER16_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER16 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER16_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER16 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR16_EL0_30_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR16_EL0</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR16_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR16 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR16_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR16 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR16_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR16 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER15_EL0_29_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER15_EL0</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER15_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER15 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER15_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER15 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER15_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER15 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR15_EL0_28_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR15_EL0</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR15_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR15 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR15_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR15 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR15_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR15 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER14_EL0_27_27"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER14_EL0</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER14_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER14 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER14_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER14 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER14_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER14 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR14_EL0_26_26"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR14_EL0</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR14_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR14 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR14_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR14 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR14_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR14 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER13_EL0_25_25"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER13_EL0</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER13_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER13 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER13_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER13 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER13_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER13 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR13_EL0_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR13_EL0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR13_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR13 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR13_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR13 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR13_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR13 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER12_EL0_23_23"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER12_EL0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER12_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER12 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER12_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER12 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER12_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER12 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR12_EL0_22_22"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR12_EL0</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR12_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR12 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR12_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR12 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR12_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR12 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER11_EL0_21_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER11_EL0</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER11_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER11 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER11_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER11 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER11_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER11 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR11_EL0_20_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR11_EL0</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR11_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR11 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR11_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR11 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR11_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR11 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVTYPER10_EL0_19_19"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVTYPER10_EL0</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>19</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVTYPER10_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER10 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVTYPER10_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVTYPER10 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVTYPER10_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVTYPER10 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMEVCNTR10_EL0_18_18"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR10_EL0</field_name>
+          <field_msb>18</field_msb>
+          <field_lsb>18</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR10_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR10 at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR10_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR10 at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR10_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR10 at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMCNTEN1_17_17"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMCNTEN1</field_name>
+          <field_msb>17</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads and <instruction>MRC</instruction> reads of multiple System registers.</para>
+<para>Enables a trap to EL2 the following operations:</para>
+<list type="unordered">
+<listitem><content>
+<para>At EL1 and EL0 using AArch64: <instruction>MRS</instruction> reads of <register_link state="AArch64" id="AArch64-amcntenclr1_el0.xml">AMCNTENCLR1_EL0</register_link> and <register_link state="AArch64" id="AArch64-amcntenset1_el0.xml">AMCNTENSET1_EL0</register_link>.</para>
+</content>
+</listitem><listitem><content>
+<para>At EL0 using Arch32 when EL1 is using AArch64: <instruction>MRC</instruction> reads of <register_link state="AArch32" id="AArch32-amcntenclr1.xml">AMCNTENCLR1</register_link> and <register_link state="AArch32" id="AArch32-amcntenset1.xml">AMCNTENSET1</register_link>.</para>
+</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The operations listed above are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads at EL1 and EL0 using AArch64 of <register_link state="AArch64" id="AArch64-amcntenclr1_el0.xml">AMCNTENCLR1_EL0</register_link> and <register_link state="AArch64" id="AArch64-amcntenset1_el0.xml">AMCNTENSET1_EL0</register_link> are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads at EL0 using AArch32 of <register_link state="AArch32" id="AArch32-amcntenclr1.xml">AMCNTENCLR1</register_link> and <register_link state="AArch32" id="AArch32-amcntenset1.xml">AMCNTENSET1</register_link> are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>, unless the read generates a higher priority exception.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_16_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="AMEVCNTR0&lt;x&gt;_EL0_4_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMEVCNTR0&lt;x&gt;_EL0</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_array>
+            <field_array_start>3</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>x+1</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads of AMEVCNTR0&lt;x&gt;_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR0&lt;x&gt; at EL0 using AArch32 when EL1 is using AArch64 to EL2.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><instruction>MRS</instruction> reads of AMEVCNTR0&lt;x&gt;_EL0 at EL1 and EL0 using AArch64 and <instruction>MRC</instruction> reads of AMEVCNTR0&lt;x&gt; at EL0 using AArch32 are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads of AMEVCNTR0&lt;x&gt;_EL0 at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads of AMEVCNTR0&lt;x&gt; at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AMCNTEN0_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMCNTEN0</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Trap <instruction>MRS</instruction> reads and <instruction>MRC</instruction> reads of multiple System registers.</para>
+<para>Enables a trap to EL2 the following operations:</para>
+<list type="unordered">
+<listitem><content>
+<para>At EL1 and EL0 using AArch64: <instruction>MRS</instruction> reads of <register_link state="AArch64" id="AArch64-amcntenclr0_el0.xml">AMCNTENCLR0_EL0</register_link> and <register_link state="AArch64" id="AArch64-amcntenset0_el0.xml">AMCNTENSET0_EL0</register_link>.</para>
+</content>
+</listitem><listitem><content>
+<para>At EL0 using Arch32 when EL1 is using AArch64: <instruction>MRC</instruction> reads of <register_link state="AArch32" id="AArch32-amcntenclr0.xml">AMCNTENCLR0</register_link> and <register_link state="AArch32" id="AArch32-amcntenset0.xml">AMCNTENSET0</register_link>.</para>
+</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The operations listed above are not affected by this bit.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If EL2 is implemented and enabled in the current Security state, <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FGTEn == 1, then, unless the read generates a higher priority exception:</para>
+<list type="unordered">
+<listitem><content><instruction>MRS</instruction> reads at EL1 and EL0 using AArch64 of <register_link state="AArch64" id="AArch64-amcntenclr0_el0.xml">AMCNTENCLR0_EL0</register_link> and <register_link state="AArch64" id="AArch64-amcntenset0_el0.xml">AMCNTENSET0_EL0</register_link> are trapped to EL2 and reported with EC syndrome value <hexnumber>0x18</hexnumber>.</content>
+</listitem><listitem><content><instruction>MRC</instruction> reads at EL0 using AArch32 of <register_link state="AArch32" id="AArch32-amcntenclr0.xml">AMCNTENCLR0</register_link> and <register_link state="AArch32" id="AArch32-amcntenset0.xml">AMCNTENSET0</register_link> are trapped to EL2 and reported with EC syndrome value <hexnumber>0x03</hexnumber>, unless the read generates a higher priority exception.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_50" msb="63" lsb="50"/>
+        <fieldat id="AMEVTYPER115_EL0_49_49" msb="49" lsb="49"/>
+        <fieldat id="AMEVCNTR115_EL0_48_48" msb="48" lsb="48"/>
+        <fieldat id="AMEVTYPER114_EL0_47_47" msb="47" lsb="47"/>
+        <fieldat id="AMEVCNTR114_EL0_46_46" msb="46" lsb="46"/>
+        <fieldat id="AMEVTYPER113_EL0_45_45" msb="45" lsb="45"/>
+        <fieldat id="AMEVCNTR113_EL0_44_44" msb="44" lsb="44"/>
+        <fieldat id="AMEVTYPER112_EL0_43_43" msb="43" lsb="43"/>
+        <fieldat id="AMEVCNTR112_EL0_42_42" msb="42" lsb="42"/>
+        <fieldat id="AMEVTYPER111_EL0_41_41" msb="41" lsb="41"/>
+        <fieldat id="AMEVCNTR111_EL0_40_40" msb="40" lsb="40"/>
+        <fieldat id="AMEVTYPER110_EL0_39_39" msb="39" lsb="39"/>
+        <fieldat id="AMEVCNTR110_EL0_38_38" msb="38" lsb="38"/>
+        <fieldat id="AMEVTYPER19_EL0_37_37" msb="37" lsb="37"/>
+        <fieldat id="AMEVCNTR19_EL0_36_36" msb="36" lsb="36"/>
+        <fieldat id="AMEVTYPER18_EL0_35_35" msb="35" lsb="35"/>
+        <fieldat id="AMEVCNTR18_EL0_34_34" msb="34" lsb="34"/>
+        <fieldat id="AMEVTYPER17_EL0_33_33" msb="33" lsb="33"/>
+        <fieldat id="AMEVCNTR17_EL0_32_32" msb="32" lsb="32"/>
+        <fieldat id="AMEVTYPER16_EL0_31_31" msb="31" lsb="31"/>
+        <fieldat id="AMEVCNTR16_EL0_30_30" msb="30" lsb="30"/>
+        <fieldat id="AMEVTYPER15_EL0_29_29" msb="29" lsb="29"/>
+        <fieldat id="AMEVCNTR15_EL0_28_28" msb="28" lsb="28"/>
+        <fieldat id="AMEVTYPER14_EL0_27_27" msb="27" lsb="27"/>
+        <fieldat id="AMEVCNTR14_EL0_26_26" msb="26" lsb="26"/>
+        <fieldat id="AMEVTYPER13_EL0_25_25" msb="25" lsb="25"/>
+        <fieldat id="AMEVCNTR13_EL0_24_24" msb="24" lsb="24"/>
+        <fieldat id="AMEVTYPER12_EL0_23_23" msb="23" lsb="23"/>
+        <fieldat id="AMEVCNTR12_EL0_22_22" msb="22" lsb="22"/>
+        <fieldat id="AMEVTYPER11_EL0_21_21" msb="21" lsb="21"/>
+        <fieldat id="AMEVCNTR11_EL0_20_20" msb="20" lsb="20"/>
+        <fieldat id="AMEVTYPER10_EL0_19_19" msb="19" lsb="19"/>
+        <fieldat id="AMEVCNTR10_EL0_18_18" msb="18" lsb="18"/>
+        <fieldat id="AMCNTEN1_17_17" msb="17" lsb="17"/>
+        <fieldat id="0_16_5" msb="16" lsb="5"/>
+        <fieldat id="AMEVCNTR0&lt;x&gt;_EL0_4_1" msb="4" lsb="1"/>
+        <fieldat id="AMCNTEN0_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS HAFGRTR_EL2">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, HAFGRTR_EL2</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0011"/>
+            
+            <enc n="CRm" v="0b0001"/>
+            
+            <enc n="op2" v="0b110"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        return NVMem[0x1E8];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return HAFGRTR_EL2;
+elsif PSTATE.EL == EL3 then
+    return HAFGRTR_EL2;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister HAFGRTR_EL2">
+        <encoding>
+          
+          <access_instruction>MSR HAFGRTR_EL2, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0011"/>
+            
+            <enc n="CRm" v="0b0001"/>
+            
+            <enc n="op2" v="0b110"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        NVMem[0x1E8] = X[t];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        HAFGRTR_EL2 = X[t];
+elsif PSTATE.EL == EL3 then
+    HAFGRTR_EL2 = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

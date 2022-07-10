@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MSMON_MBWU_CAPTURE</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MSMON_MBWU_CAPTURE, MPAM Memory Bandwidth Usage Monitor Capture Register</h1><p>The MSMON_MBWU_CAPTURE characteristics are:</p><h2>Purpose</h2>
+        <p>Accesses the captured MSMON_MBWU monitor instance selected by <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_MBWU_CAPTURE_s is the Secure memory bandwidth usage monitor capture instance selected by the Secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_MBWU_CAPTURE_ns is the Non-secure memory bandwidth usage monitor capture instance selected by the Non-secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>.</p>
+      <h2>Configuration</h2><p>
+          The power domain of MSMON_MBWU_CAPTURE is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+        </p><p>This register is present only
+    when MPAMF_IDR.HAS_MSMON == 1, MPAMF_MSMON_IDR.MSMON_MBWU == 1 and MPAMF_MBWUMON_IDR.HAS_CAPTURE == 1.
+      
+    Otherwise, direct accesses to MSMON_MBWU_CAPTURE are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>MSMON_MBWU_CAPTURE is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The MSMON_MBWU_CAPTURE bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#NRDY_31">NRDY</a></td><td class="lr" colspan="31"><a href="#VALUE_30">VALUE</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="NRDY_31">NRDY, bit [31]
+              </h4>
+          
+  <p>Not Ready. The captured NRDY bit from the corresponding instance of MSMON_MBWU. This bit indicates whether the captured monitor value has possibly inaccurate data.</p>
+
+          <table class="valuetable"><tr><th>NRDY</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The captured monitor was not ready and the contents of the VALUE field might be inaccurate or otherwise not represent the actual memory bandwidth usage.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The captured monitor was ready and the VALUE fields is accurate.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="VALUE_30">VALUE, bits [30:0]
+                  </h4>
+          
+  <p>Captured memory bandwidth usage counter value if NRDY == 0. Invalid if NRDY == 1.</p>
+<p>VALUE is the captured VALUE field from the corresponding instance of MSMON_MBWU, the count of bytes transferred since the monitor was last reset that meet the criteria set in <a href="ext-msmon_cfg_mbwu_flt.html">MSMON_CFG_MBWU_FLT</a> and <a href="ext-msmon_cfg_mbwu_ctl.html">MSMON_CFG_MBWU_CTL</a> for the monitor instance selected by <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>.</p>
+<p>VALUE captures the <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE and preserves any scaling that had been performed on the VALUE field in that register.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the MSMON_MBWU_CAPTURE</h2>
+        <p>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</p>
+
+      
+        <p>MSMON_MBWU_CAPTURE_s must be accessible from the Secure MPAM feature page. MSMON_MBWU_CAPTURE_ns must be accessible from the Non-secure MPAM feature page.</p>
+
+      
+        <p>MSMON_MBWU_CAPTURE_s and MSMON_MBWU_CAPTURE_ns must be separate registers. The Secure instance (MSMON_MBWU_CAPTURE_s) accesses the captured memory bandwidth usage monitor used for Secure PARTIDs, and the Non-secure instance (MSMON_MBWU_CAPTURE_ns) accesses the captured memory bandwidth usage monitor used for Non-secure PARTIDs.</p>
+      <h4>MSMON_MBWU_CAPTURE can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_s</td><td><span class="hexnumber">0x0868</span></td><td>MSMON_MBWU_CAPTURE_s</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_ns</td><td><span class="hexnumber">0x0868</span></td><td>MSMON_MBWU_CAPTURE_ns</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

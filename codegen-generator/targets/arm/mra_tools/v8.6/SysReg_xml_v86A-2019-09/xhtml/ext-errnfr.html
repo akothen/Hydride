@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ERR&lt;n&gt;FR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ERR&lt;n&gt;FR, Error Record Feature Register, n =
+      0 - 65534</h1><p>The ERR&lt;n&gt;FR characteristics are:</p><h2>Purpose</h2>
+        <p>Defines whether &lt;n&gt; is the first record owned by a node. If &lt;n&gt; is the first record owned by the node, also defines which of the common architecturally-defined features are implemented by the node and, of the implemented features, which are software programmable.</p>
+      <h2>Configuration</h2><p></p><p>This register is present only
+    when RAS is implemented.
+      
+    Otherwise, direct accesses to ERR&lt;n&gt;FR are <span class="arm-defined-word">RES0</span>.</p>
+        <p>Present only if error record &lt;n&gt; is implemented. Otherwise, this register is <span class="arm-defined-word">RES0</span>.</p>
+
+      
+        <p>The number of error records that are implemented is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+      
+        <p>If &lt;n&gt; is the first error record owned by a node, then ERR&lt;n&gt;FR.ED != <span class="binarynumber">0b00</span>.</p>
+
+      
+        <p>If &lt;n&gt; is not the first error record owned by a node, then ERR&lt;n&gt;FR.ED == <span class="binarynumber">0b00</span>.</p>
+      <h2>Attributes</h2>
+            <p>ERR&lt;n&gt;FR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ERR&lt;n&gt;FR bit assignments are:</p><h3>When ERR&lt;n&gt;FR.ED != 0b00:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_IMPLEMENTATIONDEFINED_63">IMPLEMENTATION DEFINED</a></td></tr><tr class="firstrow"><td class="lr" colspan="6"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_0_31">RES0</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_TS_25">TS</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_CI_23">CI</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_INJ_21">INJ</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_CEO_19">CEO</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_DUI_17">DUI</a></td><td class="lr" colspan="1"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_RP_15">RP</a></td><td class="lr" colspan="3"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_CEC_14">CEC</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_CFI_11">CFI</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_UE_9">UE</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_FI_7">FI</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_UI_5">UI</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED!0b00_ED_1">ED</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenERR&lt;n&gt;FR.ED!0b00_IMPLEMENTATIONDEFINED_63">IMPLEMENTATION DEFINED, bits [63:32]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  <p>Reserved for identifying <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> controls.</p>
+<p>This field reads as an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> value.</p>
+
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_31">
+                Bits [31:26]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_TS_25">TS, bits [25:24]
+                  <div style="font-size:smaller;"><br />When ARMv8.4-RAS is implemented:
+                </div></h4>
+          
+  <p>Timestamp Extension.</p>
+<p>Indicates whether, for each error record &lt;m&gt; owned by this node, <a href="ext-errnmisc3.html">ERR&lt;m&gt;MISC3</a> is used as the timestamp register, and, if it is, the timebase used by the timestamp.</p>
+
+        <table class="valuetable"><tr><th>TS</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>The node does not support a timestamp register.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>The node implements a timestamp register. The timestamp uses the same timebase as the system Generic Timer.</p>
+<div class="note"><span class="note-header">Note</span><p>For an error record which has an affinity to a PE, this is the same timer that is visible through <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> at the highest Exception level on that PE.</p></div>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>The node implements a timestamp register. The timebase for the timestamp is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_25"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_CI_23">CI, bits [23:22]
+                  </h4>
+          
+  <p>Critical error interrupt.</p>
+<p>Indicates whether the critical error interrupt and associated controls are implemented.</p>
+
+        <table class="valuetable"><tr><th>CI</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support critical error interrupt.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Critical error interrupt is supported and is always enabled.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Critical error interrupt is supported and it can be enabled using associated controls.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_INJ_21">INJ, bits [21:20]
+                  <div style="font-size:smaller;"><br />When ARMv8.4-RAS is implemented:
+                </div></h4>
+          
+  <p>Fault Injection Extension.</p>
+<p>Indicates whether the RAS Common Fault Injection Model Extension is implemented.</p>
+
+        <table class="valuetable"><tr><th>INJ</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>The node does not support the RAS Common Fault Injection Model Extension.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>The node implements the RAS Common Fault Injection Model Extension. See <a href="ext-errnpfgf.html">ERR&lt;n&gt;PFGF</a> for more information.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_21"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_CEO_19">CEO, bits [19:18]
+                  <div style="font-size:smaller;"><br />When ERR&lt;n&gt;FR.CEC != 0b00:
+                </div></h4>
+          
+  <p>Corrected Error overwrite.</p>
+<p>Indicates the behavior when a second Corrected error is detected after a first Corrected error has been recorded by an error record &lt;m&gt; owned by the node.</p>
+
+        <table class="valuetable"><tr><th>CEO</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Counts Corrected errors if a counter is implemented. Keeps the previous error syndrome. If the counter overflows, or no counter is implemented, then <a href="ext-errnstatus.html">ERR&lt;m&gt;STATUS</a>.OF is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Counts Corrected errors. If <a href="ext-errnstatus.html">ERR&lt;m&gt;STATUS</a>.OF == 1 before the Corrected error is counted, then keeps the previous syndrome. Otherwise, the previous syndrome is overwritten. If the counter overflows, then <a href="ext-errnstatus.html">ERR&lt;m&gt;STATUS</a>.OF is set to 1.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_19"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_DUI_17">DUI, bits [17:16]
+                  <div style="font-size:smaller;"><br />When ERR&lt;n&gt;FR.UI != 0b00:
+                </div></h4>
+          
+  <p>Error recovery interrupt for deferred errors.</p>
+<p>Indicates whether the node implements a control for enabling error recovery interrupts on deferred errors.</p>
+
+        <table class="valuetable"><tr><th>DUI</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support feature. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.DUI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.DUI.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.WDUI for writes and <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.RDUI for reads.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_17"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_RP_15">RP, bit [15]
+              <div style="font-size:smaller;"><br />When ERR&lt;n&gt;FR.CEC != 0b00:
+                </div></h4>
+          
+  <p>Repeat counter.</p>
+<p>Indicates whether the node implements a repeat Corrected error counter in <a href="ext-errnmisc0.html">ERR&lt;m&gt;MISC0</a> for each error record &lt;m&gt; owned by the node that implements a standard Corrected error counter.</p>
+
+        <table class="valuetable"><tr><th>RP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>A single CE counter is implemented.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>A first (repeat) counter and a second (other) counter are implemented. The repeat counter is the same size as the primary error counter.</p>
+</td></tr></table><h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_CEC_14">CEC, bits [14:12]
+                  </h4>
+          
+  <p>Corrected Error Counter.</p>
+<p>Indicates whether the node implements standard Corrected error counter (CE counter) mechanisms in <a href="ext-errnmisc0.html">ERR&lt;m&gt;MISC0</a> for each error record &lt;m&gt; owned by the node that can record countable errors.</p>
+
+        <table class="valuetable"><tr><th>CEC</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>Does not implement the standard Corrected error counter model.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>Implements an 8-bit Corrected error counter in <a href="ext-errnmisc0.html">ERR&lt;m&gt;MISC0</a>[39:32].</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>Implements a 16-bit Corrected error counter in <a href="ext-errnmisc0.html">ERR&lt;m&gt;MISC0</a>[47:32].</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+<div class="note"><span class="note-header">Note</span><p>Implementations might include other error counter models, or might include the standard model and not indicate this in <a href="ext-errnfr.html">ERR&lt;n&gt;FR</a>.</p></div>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_CFI_11">CFI, bits [11:10]
+                  <div style="font-size:smaller;"><br />When ERR&lt;n&gt;FR.FI != 0b00:
+                </div></h4>
+          
+  <p>Fault handling interrupt for corrected errors.</p>
+<p>Indicates whether the node implements a control for enabling fault handling interrupts on corrected errors.</p>
+
+        <table class="valuetable"><tr><th>CFI</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support feature. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.CFI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.CFI.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.WCFI for writes and <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.RCFI for reads.</p>
+</td></tr></table>
+              
+  <p>All other values are reserved.</p>
+
+            <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_0_11"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_UE_9">UE, bits [9:8]
+                  </h4>
+          
+  <p>In-band uncorrected error reporting.</p>
+<p>Indicates whether the node implements in-band uncorrected error reporting (External aborts), and, if so, whether the node implements controls for enabling and disabling the reporting.</p>
+
+        <table class="valuetable"><tr><th>UE</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support feature. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UE is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Feature always enabled. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UE is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UE.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.WUE for writes and <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.RUE for reads.</p>
+</td></tr></table><h4 id="WhenERR&lt;n&gt;FR.ED!0b00_FI_7">FI, bits [7:6]
+                  </h4>
+          
+  <p>Fault handling interrupt.</p>
+<p>Indicates whether the node implements a fault handling interrupt, and, if so, whether the node implements controls for enabling and disabling the interrupt.</p>
+
+        <table class="valuetable"><tr><th>FI</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support feature. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.FI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Feature always enabled. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.FI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.FI.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.WFI for writes and <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.RFI for reads.</p>
+</td></tr></table><h4 id="WhenERR&lt;n&gt;FR.ED!0b00_UI_5">UI, bits [5:4]
+                  </h4>
+          
+  <p>Error recovery interrupt for uncorrected errors.</p>
+<p>Indicates whether the node implements an error recovery interrupt, and, if so, whether the node implements controls for enabling and disabling the interrupt.</p>
+
+        <table class="valuetable"><tr><th>UI</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Does not support feature. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Feature always enabled. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UI is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.UI.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.WUI for writes and <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.RUI for reads.</p>
+</td></tr></table><h4 id="WhenERR&lt;n&gt;FR.ED!0b00_IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED, bits [3:2]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  <p>This field reads as an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> value.</p>
+
+        <h4 id="WhenERR&lt;n&gt;FR.ED!0b00_ED_1">ED, bits [1:0]
+                  </h4>
+          
+  <p>Error reporting and logging.</p>
+<p>Indicates whether &lt;n&gt; is the first record owned by the node, and, if it is, whether the node implements controls for enabling and disabling error reporting and logging.</p>
+
+        <table class="valuetable"><tr><th>ED</th><th>Meaning</th></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Feature always enabled. <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.ED is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Feature is controllable using <a href="ext-errnctlr.html">ERR&lt;n&gt;CTLR</a>.ED.</p>
+</td></tr></table>
+              
+  <p>The value <span class="binarynumber">0b11</span> is reserved.</p>
+
+            <div class="text_after_fields">
+    
+  
+
+    </div><h3>When ERR&lt;n&gt;FR.ED == 0b00:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenERR&lt;n&gt;FR.ED0b00_0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="30"><a href="#WhenERR&lt;n&gt;FR.ED0b00_0_63">RES0</a></td><td class="lr" colspan="2"><a href="#WhenERR&lt;n&gt;FR.ED0b00_ED_1">ED</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenERR&lt;n&gt;FR.ED0b00_0_63">
+                Bits [63:2]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenERR&lt;n&gt;FR.ED0b00_ED_1">ED, bits [1:0]
+                  </h4>
+          
+  <p>Error reporting and logging.</p>
+<p>Indicates whether &lt;n&gt; is the first record owned by the node, and, if it is, whether the node implements controls for enabling and disabling error reporting and logging.</p>
+
+        <table class="valuetable"><tr><th>ED</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Error record &lt;n&gt; is not the first record owned by the node.</p>
+</td></tr></table><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the ERR&lt;n&gt;FR</h2><h4>ERR&lt;n&gt;FR can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>RAS</td><td><span class="hexnumber">0x000</span> + 64n</td><td>ERR&lt;n&gt;FR</td></tr></table><p>Accesses on this interface are <span class="access_level">RO</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

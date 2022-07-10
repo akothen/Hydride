@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>GICD_IROUTER&lt;n&gt;E</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">GICD_IROUTER&lt;n&gt;E, Interrupt Routing Registers (Extended SPI Range), n =
+      0 - 1023</h1><p>The GICD_IROUTER&lt;n&gt;E characteristics are:</p><h2>Purpose</h2>
+        <p>When affinity routing is enabled, provides routing information for the corresponding SPI in the extended SPI range.</p>
+      <h2>Configuration</h2><p></p><p>This register is present only
+    when GICv3.1 is implemented.
+      
+    Otherwise, direct accesses to GICD_IROUTER&lt;n&gt;E are <span class="arm-defined-word">RES0</span>.</p>
+        <p>RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.</p>
+
+      
+        <p>When <a href="ext-gicd_typer.html">GICD_TYPER</a>.ESPI==0, these registers are <span class="arm-defined-word">RES0</span>.</p>
+
+      
+        <p>When <a href="ext-gicd_typer.html">GICD_TYPER</a>.ESPI==1, the number of implemented GICD_IROUTER&lt;n&gt;E registers is (((<a href="ext-gicd_typer.html">GICD_TYPER</a>.ESPI_range+1)*32)-1). Registers are numbered from 0.</p>
+      <h2>Attributes</h2>
+        <p>GICD_IROUTER&lt;n&gt;E is a 32-bit register.</p>
+      <h2>Field descriptions</h2><p>The GICD_IROUTER&lt;n&gt;E bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="24"><a href="#0_63">RES0</a></td><td class="lr" colspan="8"><a href="#Aff3_39">Aff3</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#Interrupt_Routing_Mode_31">Interrupt_Routing_Mode</a></td><td class="lr" colspan="7"><a href="#0_30">RES0</a></td><td class="lr" colspan="8"><a href="#Aff2_23">Aff2</a></td><td class="lr" colspan="8"><a href="#Aff1_15">Aff1</a></td><td class="lr" colspan="8"><a href="#Aff0_7">Aff0</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:40]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="Aff3_39">Aff3, bits [39:32]
+                  </h4>
+          
+  <p>Affinity level 3, the least significant affinity level field.</p>
+
+          
+            
+  
+
+          <h4 id="Interrupt_Routing_Mode_31">Interrupt_Routing_Mode, bit [31]
+              </h4>
+          
+  <p>Interrupt Routing Mode. Defines how SPIs are routed in an affinity hierarchy:</p>
+
+          <table class="valuetable"><tr><th>Interrupt_Routing_Mode</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Interrupts routed to the PE specified by a.b.c.d. In this routing, a, b, c, and d are the values of fields Aff3, Aff2, Aff1, and Aff0 respectively.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Interrupts routed to any PE defined as a participating node.</p>
+</td></tr></table>
+            
+  <p>If GICD_IROUTER&lt;n&gt;E.IRM == 0 and the affinity path does not correspond to an implemented PE, then if the corresponding interrupt becomes pending it will not be forwarded to any PE and will remain pending.</p>
+<p>In implementations that do not require 1 of N distribution of SPIs, this bit might be RAZ/WI.</p>
+<p>When this bit is set to 1, GICD_IROUTER&lt;n&gt;E.{Aff3, Aff2, Aff1, Aff0} are <span class="arm-defined-word">UNKNOWN</span>.</p>
+<div class="note"><span class="note-header">Note</span><p>An implementation might choose to make the Aff&lt;n&gt; fields RO when this field is 1.</p></div>
+
+          <h4 id="0_30">
+                Bits [30:24]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="Aff2_23">Aff2, bits [23:16]
+                  </h4>
+          
+  <p>Affinity level 2, an intermediate affinity level field.</p>
+
+          
+            
+  
+
+          <h4 id="Aff1_15">Aff1, bits [15:8]
+                  </h4>
+          
+  <p>Affinity level 1, an intermediate affinity level field.</p>
+
+          
+            
+  
+
+          <h4 id="Aff0_7">Aff0, bits [7:0]
+                  </h4>
+          
+  <p>Affinity level 0, the most significant affinity level field.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  <p>For an SPI with INTID m:</p>
+<ul>
+<li>The corresponding GICD_IROUTER&lt;n&gt;E register number, n, is given by n = m.
+</li><li>The offset of the GICD_IROUTER&lt;n&gt;E register is <span class="hexnumber">0x6000</span> + 8n.
+</li></ul>
+
+    </div><h2>Accessing the GICD_IROUTER&lt;n&gt;E</h2>
+        <p>When affinity routing is not enabled for the Security state of an interrupt in GICD_IROUTER&lt;n&gt;E, the register is <span class="arm-defined-word">RES0</span>.</p>
+
+      
+        <p>When <a href="ext-gicd_ctlr.html">GICD_CTLR</a>.DS==0, a register that corresponds to a Group 0 or Secure Group 1 interrupt is RAZ/WI to Non-secure accesses.</p>
+
+      
+        <p>Bits corresponding to unimplemented interrupts are RAZ/WI.</p>
+      <h4>GICD_IROUTER&lt;n&gt;E can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>GIC Distributor</td><td><span class="hexnumber">0x8000</span> + 8n</td><td>GICD_IROUTER&lt;n&gt;E</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When GICD_CTLR.DS == 0b0
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>When IsAccessSecure()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>When !IsAccessSecure()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

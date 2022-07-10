@@ -1,0 +1,889 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>EDPFR</reg_short_name>
+      <reg_long_name>External Debug Processor Feature Register</reg_long_name>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="IMP DEF"
+      register_startbit="31"
+      register_endbit="0"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0xD20</hexnumber></reg_offset>
+    <reg_instance>EDPFR</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered() and !DoubleLockStatus()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>IMPDEF</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="IMP DEF"
+      register_startbit="63"
+      register_endbit="32"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0xD24</hexnumber></reg_offset>
+    <reg_instance>EDPFR</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered() and !DoubleLockStatus()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>IMPDEF</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides information about implemented PE features.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For general information about the interpretation of the ID registers, see <xref browsertext="'Principles of the ID scheme for fields in ID registers' in the Arm&#174; Architecture Reference Manual, Armv8, for Armv8-A architecture profile" filename="D_aarch64_system_register_descriptions.fm" linkend="BABFAFHI"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>EDPFR is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="UNKNOWN_63_60_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="UNKNOWN"
+           reserved_type="RES0"
+        >
+          <field_name>UNKNOWN</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>60</field_lsb>
+           <field_range>63:60</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>U</field_value_name>
+            </field_values>
+              <arch_variants>
+                <arch_variant name="ARMv8.5"/>
+              </arch_variants>
+            <fields_condition>From ARMv8.5</fields_condition>
+      </field>
+        <field
+           id="0_63_60_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>60</field_lsb>
+           <field_range>63:60</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="UNKNOWN_59_56_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="UNKNOWN"
+           reserved_type="RES0"
+        >
+          <field_name>UNKNOWN</field_name>
+          <field_msb>59</field_msb>
+          <field_lsb>56</field_lsb>
+           <field_range>59:56</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>U</field_value_name>
+            </field_values>
+              <arch_variants>
+                <arch_variant name="ARMv8.5"/>
+              </arch_variants>
+            <fields_condition>From ARMv8.5</fields_condition>
+      </field>
+        <field
+           id="0_59_56_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>59</field_msb>
+          <field_lsb>56</field_lsb>
+           <field_range>59:56</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="0_55_52"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>55</field_msb>
+          <field_lsb>52</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="UNKNOWN_51_48_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="UNKNOWN"
+           reserved_type="RES0"
+        >
+          <field_name>UNKNOWN</field_name>
+          <field_msb>51</field_msb>
+          <field_lsb>48</field_lsb>
+           <field_range>51:48</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>U</field_value_name>
+            </field_values>
+              <arch_variants>
+                <arch_variant name="ARMv8.4"/>
+              </arch_variants>
+            <fields_condition>From ARMv8.4</fields_condition>
+      </field>
+        <field
+           id="0_51_48_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>51</field_msb>
+          <field_lsb>48</field_lsb>
+           <field_range>51:48</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="AMU_47_44"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMU</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>44</field_lsb>
+          <field_description order="before">
+          
+  <para>Activity Monitors Extension. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Activity Monitors Extension is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Activity Monitors Extension version 1 is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="AMUv1" filename="A_armv8_architecture_extensions.fm" linkend="AMU"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>In Armv8.0, Armv8.1, Armv8.2, and Armv8.3, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+<para>From Armv8.4, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UNKNOWN_43_40_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="UNKNOWN"
+           reserved_type="RES0"
+        >
+          <field_name>UNKNOWN</field_name>
+          <field_msb>43</field_msb>
+          <field_lsb>40</field_lsb>
+           <field_range>43:40</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>U</field_value_name>
+            </field_values>
+              <arch_variants>
+                <arch_variant name="ARMv8.2"/>
+              </arch_variants>
+            <fields_condition>From ARMv8.2</fields_condition>
+      </field>
+        <field
+           id="0_43_40_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>43</field_msb>
+          <field_lsb>40</field_lsb>
+           <field_range>43:40</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SEL2_39_36"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SEL2</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>36</field_lsb>
+          <field_description order="before">
+          
+  <para>Secure EL2. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Secure EL2 is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Secure EL2 is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SVE_35_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SVE</field_name>
+          <field_msb>35</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Scalable Vector Extension. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>SVE is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>SVE is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="UNKNOWN_31_28_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="UNKNOWN"
+           reserved_type="RES0"
+        >
+          <field_name>UNKNOWN</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>28</field_lsb>
+           <field_range>31:28</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>U</field_value_name>
+            </field_values>
+              <arch_variants>
+                <arch_variant name="ARMv8.2"/>
+              </arch_variants>
+            <fields_condition>From ARMv8.2</fields_condition>
+      </field>
+        <field
+           id="0_31_28_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>28</field_lsb>
+           <field_range>31:28</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="GIC_27_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GIC</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>System register GIC interface support. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>GIC CPU interface system registers not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>System register interface to versions 3.0 and 4.0 of the GIC CPU interface is supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0011</field_value>
+        <field_value_description>
+  <para>System register interface to version 4.1 of the GIC CPU interface is supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.GIC.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="AdvSIMD_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AdvSIMD</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Advanced SIMD. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Advanced SIMD is implemented, including support for the following SISD and SIMD operations:</para>
+<list type="unordered">
+<listitem><content>Integer byte, halfword, word and doubleword element operations.</content>
+</listitem><listitem><content>Single-precision and double-precision floating-point arithmetic.</content>
+</listitem><listitem><content>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>As for <binarynumber>0b0000</binarynumber>, and also includes support for half-precision floating-point arithmetic.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1111</field_value>
+        <field_value_description>
+  <para>Advanced SIMD is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>This field must have the same value as the FP field.</para>
+<para>The permitted values are:</para>
+<list type="unordered">
+<listitem><content><binarynumber>0b0000</binarynumber> in an implementation with Advanced SIMD support, that does not include the <xref browsertext="ARMv8.2-FP16" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.FP16"></xref> extension.</content>
+</listitem><listitem><content><binarynumber>0b0001</binarynumber> in an implementation with Advanced SIMD support, that includes the <xref browsertext="ARMv8.2-FP16" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.FP16"></xref> extension.</content>
+</listitem><listitem><content><binarynumber>0b1111</binarynumber> in an implementation without Advanced SIMD support.</content>
+</listitem></list>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.AdvSIMD.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="FP_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>FP</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Floating-point. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Floating-point is implemented, and includes support for:</para>
+<list type="unordered">
+<listitem><content>Single-precision and double-precision floating-point types.</content>
+</listitem><listitem><content>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>As for <binarynumber>0b0000</binarynumber>, and also includes support for half-precision floating-point arithmetic.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1111</field_value>
+        <field_value_description>
+  <para>Floating-point is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>This field must have the same value as the AdvSIMD field.</para>
+<para>The permitted values are:</para>
+<list type="unordered">
+<listitem><content><binarynumber>0b0000</binarynumber> in an implementation with floating-point support, that does not include the <xref browsertext="ARMv8.2-FP16" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.FP16"></xref> extension.</content>
+</listitem><listitem><content><binarynumber>0b0001</binarynumber> in an implementation with floating-point support, that includes the <xref browsertext="ARMv8.2-FP16" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.FP16"></xref> extension.</content>
+</listitem><listitem><content><binarynumber>0b1111</binarynumber> in an implementation without floating-point support.</content>
+</listitem></list>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.FP.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="EL3_15_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EL3</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch64 EL3 Exception level handling. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>EL3 is not implemented or cannot be executed in AArch64 state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>EL3 can be executed in AArch64 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>EL3 can be executed in both Execution states.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When the value of <register_link state="ext" id="ext-edaa32pfr.xml">EDAA32PFR</register_link>.EL3 is non-zero, this field must be <binarynumber>0b0000</binarynumber>.</para>
+<para>All other values are reserved.</para>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.EL3.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="EL2_11_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EL2</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch64 EL2 Exception level handling. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>EL2 is not implemented or cannot be executed in AArch64 state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>EL2 can be executed in AArch64 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>EL2 can be executed in both Execution states.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When the value of <register_link state="ext" id="ext-edaa32pfr.xml">EDAA32PFR</register_link>.EL2 is non-zero, this field must be <binarynumber>0b0000</binarynumber>.</para>
+<para>All other values are reserved.</para>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.EL2.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="EL1_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EL1</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch64 EL1 Exception level handling. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>EL1 cannot be executed in AArch64 state.</para>
+<para>EL1 can be executed in AArch32 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>EL1 can be executed in AArch64 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>EL1 can be executed in both Execution states.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.EL1.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="EL0_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EL0</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch64 EL0 Exception level handling. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>EL0 cannot be executed in AArch64 state.</para>
+<para>EL0 can be executed in AArch32 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>EL0 can be executed in AArch64 state only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>EL0 can be executed in both Execution states.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.EL0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="UNKNOWN_63_60_1" msb="63" lsb="60"/>
+        <fieldat id="UNKNOWN_59_56_1" msb="59" lsb="56"/>
+        <fieldat id="0_55_52" msb="55" lsb="52"/>
+        <fieldat id="UNKNOWN_51_48_1" msb="51" lsb="48"/>
+        <fieldat id="AMU_47_44" msb="47" lsb="44"/>
+        <fieldat id="UNKNOWN_43_40_1" msb="43" lsb="40"/>
+        <fieldat id="SEL2_39_36" msb="39" lsb="36"/>
+        <fieldat id="SVE_35_32" msb="35" lsb="32"/>
+        <fieldat id="UNKNOWN_31_28_1" msb="31" lsb="28"/>
+        <fieldat id="GIC_27_24" msb="27" lsb="24"/>
+        <fieldat id="AdvSIMD_23_20" msb="23" lsb="20"/>
+        <fieldat id="FP_19_16" msb="19" lsb="16"/>
+        <fieldat id="EL3_15_12" msb="15" lsb="12"/>
+        <fieldat id="EL2_11_8" msb="11" lsb="8"/>
+        <fieldat id="EL1_7_4" msb="7" lsb="4"/>
+        <fieldat id="EL0_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

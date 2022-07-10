@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>EDDEVID1</reg_short_name>
+      <reg_long_name>External Debug Device ID register 1</reg_long_name>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0xFC4</hexnumber></reg_offset>
+    <reg_instance>EDDEVID1</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When ARMv8.3-DoPD is not implemented or IsCorePowered()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>ERROR</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides extra information for external debuggers about features of the debug implementation.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If ARMv8.3-DoPD is implemented, this register is in the Core power domain. If ARMv8.3-DoPD is not implemented, this register is in the Debug power domain.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>EDDEVID1 is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="PCSROffset_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PCSROffset</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>This field indicates the offset applied to PC samples returned by reads of <register_link state="ext" id="ext-edpcsr.xml">EDPCSR</register_link>. Permitted values of this field in Armv8 are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para><register_link state="ext" id="ext-edpcsr.xml">EDPCSR</register_link> not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para><register_link state="ext" id="ext-edpcsr.xml">EDPCSR</register_link> implemented, and samples have no offset applied and do not sample the instruction set state in AArch32 state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When <xref browsertext="ARMv8.2-PCSample" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.PCSample"></xref> is implemented, the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+<note><para><xref browsertext="ARMv8.2-PCSample" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.PCSample"></xref> implements the PC Sample-based Profiling Extension in the Performance Monitors register space, as indicated by the value of <register_link state="ext" id="ext-pmdevid.xml">PMDEVID</register_link>.PCSample.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="0_31_4" msb="31" lsb="4"/>
+        <fieldat id="PCSROffset_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

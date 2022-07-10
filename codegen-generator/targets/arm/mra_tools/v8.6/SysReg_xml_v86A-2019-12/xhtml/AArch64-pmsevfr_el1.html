@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMSEVFR_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMSEVFR_EL1, Sampling Event Filter Register</h1><p>The PMSEVFR_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Controls sample filtering by events. The overall filter is the logical AND of these filters. For example, if E[3] and E[5] are both set to 1, only samples that have both event 3 (Level 1 unified or data cache refill) and event 5 set (TLB walk) are recorded</p>
+      <h2>Configuration</h2><p>This register is present only
+    when SPE is implemented.
+      
+    Otherwise, direct accesses to PMSEVFR_EL1 are <span class="arm-defined-word">UNDEFINED</span>.</p><h2>Attributes</h2>
+            <p>PMSEVFR_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMSEVFR_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#E63_63">E[63]</a></td><td class="lr" colspan="1"><a href="#E62_62">E[62]</a></td><td class="lr" colspan="1"><a href="#E61_61">E[61]</a></td><td class="lr" colspan="1"><a href="#E60_60">E[60]</a></td><td class="lr" colspan="1"><a href="#E59_59">E[59]</a></td><td class="lr" colspan="1"><a href="#E58_58">E[58]</a></td><td class="lr" colspan="1"><a href="#E57_57">E[57]</a></td><td class="lr" colspan="1"><a href="#E56_56">E[56]</a></td><td class="lr" colspan="1"><a href="#E55_55">E[55]</a></td><td class="lr" colspan="1"><a href="#E54_54">E[54]</a></td><td class="lr" colspan="1"><a href="#E53_53">E[53]</a></td><td class="lr" colspan="1"><a href="#E52_52">E[52]</a></td><td class="lr" colspan="1"><a href="#E51_51">E[51]</a></td><td class="lr" colspan="1"><a href="#E50_50">E[50]</a></td><td class="lr" colspan="1"><a href="#E49_49">E[49]</a></td><td class="lr" colspan="1"><a href="#E48_48">E[48]</a></td><td class="lr" colspan="16"><a href="#0_47">RAZ/WI</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#E31_31">E[31]</a></td><td class="lr" colspan="1"><a href="#E30_30">E[30]</a></td><td class="lr" colspan="1"><a href="#E29_29">E[29]</a></td><td class="lr" colspan="1"><a href="#E28_28">E[28]</a></td><td class="lr" colspan="1"><a href="#E27_27">E[27]</a></td><td class="lr" colspan="1"><a href="#E26_26">E[26]</a></td><td class="lr" colspan="1"><a href="#E25_25">E[25]</a></td><td class="lr" colspan="1"><a href="#E24_24">E[24]</a></td><td class="lr" colspan="5"><a href="#0_23">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E18_18">E[18]</a></td><td class="lr" colspan="1"><a href="#E17_17">E[17]</a></td><td class="lr" colspan="1"><a href="#0_16">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E15_15">E[15]</a></td><td class="lr" colspan="1"><a href="#E14_14">E[14]</a></td><td class="lr" colspan="1"><a href="#E13_13">E[13]</a></td><td class="lr" colspan="1"><a href="#E12_12">E[12]</a></td><td class="lr" colspan="1"><a href="#E11_11">E[11]</a></td><td class="lr" colspan="3"><a href="#0_10">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E7_7">E[7]</a></td><td class="lr" colspan="1"><a href="#0_6">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E5_5">E[5]</a></td><td class="lr" colspan="1"><a href="#0_4">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E3_3">E[3]</a></td><td class="lr" colspan="1"><a href="#0_2">RAZ/WI</a></td><td class="lr" colspan="1"><a href="#E1_1">E[1]</a></td><td class="lr" colspan="1"><a href="#0_0">RAZ/WI</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="E63_63">E[63], bit [63]
+              </h4>
+          
+  <p>E[63] is the event filter for event 63. If event 63 is not implemented, or filtering on event 63 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[63]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 63 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 63 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E62_62">E[62], bit [62]
+              </h4>
+          
+  <p>E[62] is the event filter for event 62. If event 62 is not implemented, or filtering on event 62 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[62]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 62 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 62 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E61_61">E[61], bit [61]
+              </h4>
+          
+  <p>E[61] is the event filter for event 61. If event 61 is not implemented, or filtering on event 61 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[61]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 61 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 61 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E60_60">E[60], bit [60]
+              </h4>
+          
+  <p>E[60] is the event filter for event 60. If event 60 is not implemented, or filtering on event 60 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[60]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 60 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 60 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E59_59">E[59], bit [59]
+              </h4>
+          
+  <p>E[59] is the event filter for event 59. If event 59 is not implemented, or filtering on event 59 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[59]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 59 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 59 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E58_58">E[58], bit [58]
+              </h4>
+          
+  <p>E[58] is the event filter for event 58. If event 58 is not implemented, or filtering on event 58 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[58]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 58 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 58 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E57_57">E[57], bit [57]
+              </h4>
+          
+  <p>E[57] is the event filter for event 57. If event 57 is not implemented, or filtering on event 57 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[57]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 57 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 57 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E56_56">E[56], bit [56]
+              </h4>
+          
+  <p>E[56] is the event filter for event 56. If event 56 is not implemented, or filtering on event 56 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[56]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 56 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 56 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E55_55">E[55], bit [55]
+              </h4>
+          
+  <p>E[55] is the event filter for event 55. If event 55 is not implemented, or filtering on event 55 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[55]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 55 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 55 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E54_54">E[54], bit [54]
+              </h4>
+          
+  <p>E[54] is the event filter for event 54. If event 54 is not implemented, or filtering on event 54 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[54]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 54 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 54 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E53_53">E[53], bit [53]
+              </h4>
+          
+  <p>E[53] is the event filter for event 53. If event 53 is not implemented, or filtering on event 53 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[53]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 53 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 53 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E52_52">E[52], bit [52]
+              </h4>
+          
+  <p>E[52] is the event filter for event 52. If event 52 is not implemented, or filtering on event 52 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[52]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 52 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 52 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E51_51">E[51], bit [51]
+              </h4>
+          
+  <p>E[51] is the event filter for event 51. If event 51 is not implemented, or filtering on event 51 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[51]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 51 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 51 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E50_50">E[50], bit [50]
+              </h4>
+          
+  <p>E[50] is the event filter for event 50. If event 50 is not implemented, or filtering on event 50 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[50]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 50 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 50 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E49_49">E[49], bit [49]
+              </h4>
+          
+  <p>E[49] is the event filter for event 49. If event 49 is not implemented, or filtering on event 49 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[49]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 49 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 49 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E48_48">E[48], bit [48]
+              </h4>
+          
+  <p>E[48] is the event filter for event 48. If event 48 is not implemented, or filtering on event 48 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[48]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 48 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 48 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_47">
+                Bits [47:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E31_31">E[31], bit [31]
+              </h4>
+          
+  <p>E[31] is the event filter for event 31. If event 31 is not implemented, or filtering on event 31 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[31]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 31 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 31 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E30_30">E[30], bit [30]
+              </h4>
+          
+  <p>E[30] is the event filter for event 30. If event 30 is not implemented, or filtering on event 30 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[30]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 30 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 30 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E29_29">E[29], bit [29]
+              </h4>
+          
+  <p>E[29] is the event filter for event 29. If event 29 is not implemented, or filtering on event 29 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[29]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 29 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 29 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E28_28">E[28], bit [28]
+              </h4>
+          
+  <p>E[28] is the event filter for event 28. If event 28 is not implemented, or filtering on event 28 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[28]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 28 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 28 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E27_27">E[27], bit [27]
+              </h4>
+          
+  <p>E[27] is the event filter for event 27. If event 27 is not implemented, or filtering on event 27 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[27]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 27 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 27 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E26_26">E[26], bit [26]
+              </h4>
+          
+  <p>E[26] is the event filter for event 26. If event 26 is not implemented, or filtering on event 26 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[26]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 26 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 26 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E25_25">E[25], bit [25]
+              </h4>
+          
+  <p>E[25] is the event filter for event 25. If event 25 is not implemented, or filtering on event 25 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[25]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 25 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 25 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E24_24">E[24], bit [24]
+              </h4>
+          
+  <p>E[24] is the event filter for event 24. If event 24 is not implemented, or filtering on event 24 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[24]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 24 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 24 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_23">
+                Bits [23:19]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E18_18">E[18], bit [18]
+              <div style="font-size:smaller;"><br />When ARMv8.3-SPE is implemented and SVE is implemented:
+                </div></h4>
+          
+  <p>Empty predicate.</p>
+
+          <table class="valuetable"><tr><th>E[18]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Empty predicate event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Empty predicate event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_18"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E17_17">E[17], bit [17]
+              <div style="font-size:smaller;"><br />When ARMv8.3-SPE is implemented and SVE is implemented:
+                </div></h4>
+          
+  <p>Partial predicate.</p>
+
+          <table class="valuetable"><tr><th>E[17]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Partial predicate event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Partial predicate event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_17"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="0_16">
+                Bit [16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E15_15">E[15], bit [15]
+              </h4>
+          
+  <p>E[15] is the event filter for event 15. If event 15 is not implemented, or filtering on event 15 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[15]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 15 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 15 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E14_14">E[14], bit [14]
+              </h4>
+          
+  <p>E[14] is the event filter for event 14. If event 14 is not implemented, or filtering on event 14 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[14]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 14 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 14 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E13_13">E[13], bit [13]
+              </h4>
+          
+  <p>E[13] is the event filter for event 13. If event 13 is not implemented, or filtering on event 13 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[13]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 13 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 13 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E12_12">E[12], bit [12]
+              </h4>
+          
+  <p>E[12] is the event filter for event 12. If event 12 is not implemented, or filtering on event 12 is not supported, the corresponding bit is RAZ/WI.</p>
+
+          <table class="valuetable"><tr><th>E[12]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Event 12 is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have event 12 == 0.</p>
+</td></tr></table>
+            
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> event might be recorded as a multi-bit field. In this case, if the corresponding bits of PMSEVFR_EL1 define an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> filter for the event.</p>
+<p>This field is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="E11_11">E[11], bit [11]
+              <div style="font-size:smaller;"><br />When ARMv8.3-SPE is implemented:
+                </div></h4>
+          
+  <p>Alignment.</p>
+
+          <table class="valuetable"><tr><th>E[11]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Alignment event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Alignment event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_11"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="0_10">
+                Bits [10:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E7_7">E[7], bit [7]
+              </h4>
+          
+  <p>Mispredicted.</p>
+
+          <table class="valuetable"><tr><th>E[7]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Mispredicted event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Mispredicted event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_6">
+                Bit [6]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E5_5">E[5], bit [5]
+              </h4>
+          
+  <p>TLB walk.</p>
+
+          <table class="valuetable"><tr><th>E[5]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>TLB walk event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the TLB walk event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_4">
+                Bit [4]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E3_3">E[3], bit [3]
+              </h4>
+          
+  <p>Level 1 data or unified cache refill.</p>
+
+          <table class="valuetable"><tr><th>E[3]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Level 1 data or unified cache refill event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Level 1 data or unified cache refill event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_2">
+                Bit [2]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <h4 id="E1_1">E[1], bit [1]
+              <div style="font-size:smaller;"><br />When the PE supports sampling of speculative instructions:
+                </div></h4>
+          
+  <p>Architecturally retired.</p>
+<p>When the PE supports sampling of speculative instructions:</p>
+
+          <table class="valuetable"><tr><th>E[1]</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Architecturally retired event is ignored.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Do not record samples that have the Architecturally retired event == 0.</p>
+</td></tr></table>
+            
+  <p>This bit is ignored by the PE when <a href="AArch64-pmsfcr_el1.html">PMSFCR_EL1</a>.FE == 0.</p>
+<p>If the PE does not support the sampling of speculative instructions, or always discards the sample record for speculative instructions, this bit reads as an <span class="arm-defined-word">UNKNOWN</span> value and the PE ignores its value.</p>
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="UNKNOWN_1"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_0">
+                Bit [0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RAZ/WI</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the PMSEVFR_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, PMSEVFR_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b1001</td><td>0b1001</td><td>0b101</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGRTR_EL2.PMSEVFR_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.TPMS == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '0' &amp;&amp; MDCR_EL3.NSPB != '01' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '1' &amp;&amp; MDCR_EL3.NSPB != '11' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;NV2,NV1,NV&gt; == '1x1' then
+        return NVMem[0x830];
+    else
+        return PMSEVFR_EL1;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '0' &amp;&amp; MDCR_EL3.NSPB != '01' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '1' &amp;&amp; MDCR_EL3.NSPB != '11' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return PMSEVFR_EL1;
+elsif PSTATE.EL == EL3 then
+    return PMSEVFR_EL1;
+              </p><h4 class="assembler">MSR PMSEVFR_EL1, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b1001</td><td>0b1001</td><td>0b101</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGWTR_EL2.PMSEVFR_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.TPMS == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '0' &amp;&amp; MDCR_EL3.NSPB != '01' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '1' &amp;&amp; MDCR_EL3.NSPB != '11' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;NV2,NV1,NV&gt; == '1x1' then
+        NVMem[0x830] = X[t];
+    else
+        PMSEVFR_EL1 = X[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '0' &amp;&amp; MDCR_EL3.NSPB != '01' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.NS == '1' &amp;&amp; MDCR_EL3.NSPB != '11' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        PMSEVFR_EL1 = X[t];
+elsif PSTATE.EL == EL3 then
+    PMSEVFR_EL1 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

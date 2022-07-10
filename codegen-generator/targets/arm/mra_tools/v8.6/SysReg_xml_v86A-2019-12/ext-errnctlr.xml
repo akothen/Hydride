@@ -1,0 +1,1535 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ERR&lt;n&gt;CTLR</reg_short_name>
+      <reg_long_name>Error Record Control Register</reg_long_name>
+        <reg_condition otherwise="RES0">when error record &lt;n&gt; is implemented and error record &lt;n&gt; is the first error record owned by a node</reg_condition>
+          <reg_array>
+              <reg_array_start>0</reg_array_start>
+              <reg_array_end>65534</reg_array_end>
+         </reg_array>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>RAS</reg_component>
+    <reg_offset><hexnumber>0x008</hexnumber> + 64n</reg_offset>
+    <reg_instance>ERR&lt;n&gt;CTLR</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>The error control register contains enable bits for the node that writes to this record:</para>
+
+      </purpose_text>
+      <purpose_text>
+        <list type="unordered">
+<listitem><content>Enabling error detection and correction.</content>
+</listitem><listitem><content>Enabling the critical error, error recovery, and fault handling interrupts.</content>
+</listitem><listitem><content>Enabling in-band error response for Uncorrected errors.</content>
+</listitem></list>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For each bit, if the selected node does not support the feature, then the bit is <arm-defined-word>RES0</arm-defined-word>. The definition of each record is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>RAS registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para><register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link> describes the features implemented by the node.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ERR&lt;n&gt;CTLR is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_instance>ERR&lt;n&gt;CTLR</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="IMPLEMENTATION DEFINED_63_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IMPLEMENTATION DEFINED</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Reserved for <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> controls. Must permit SBZP write policy for software.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_31_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="CI_13_13_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>CI</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+          
+  <para>Critical error interrupt enable. When enabled, the critical error interrupt is generated for a critical error condition.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Critical error interrupt not generated for critical errors. Critical errors are treated as Uncontained errors.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Critical error interrupt generated for critical errors.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.CI == 0b10</fields_condition>
+      </field>
+        <field
+           id="0_13_13_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="0_12_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WDUI_11_11_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>WDUI</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+          
+  <para>Error recovery interrupt for deferred errors on writes enable.</para>
+<para>When enabled, the error recovery interrupt is generated for detected Deferred errors on writes.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt not generated for deferred errors on writes.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt generated for deferred errors on writes.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.DUI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_11_11_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="DUI_10_10_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DUI</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Error recovery interrupt for deferred errors enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.DUI == <binarynumber>0b10</binarynumber>, this control applies to errors arising from both reads and writes.</para>
+<para>When enabled, the error recovery interrupt is generated for all detected Deferred errors.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt not generated for deferred errors.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt generated for deferred errors.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.DUI == 0b10</fields_condition>
+      </field>
+        <field
+           id="RDUI_10_10_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RDUI</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Error recovery interrupt for deferred errors on reads enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.DUI == <binarynumber>0b11</binarynumber>, this bit is named RDUI.</para>
+<para>When enabled, the error recovery interrupt is generated for detected Deferred errors on reads.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt not generated for deferred errors on reads.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt generated for deferred errors on reads.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.DUI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_10_10_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WCFI_9_9_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>WCFI</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt for Corrected errors on writes enable.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>If the node implements Corrected error counters for writes, then the fault handling interrupt is generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>. For more information, see <register_link state="ext" id="ext-errnmisc0.xml">ERR&lt;n&gt;MISC0</register_link>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for detected Corrected errors onwrites.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt not generated for Corrected errors on writes.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt generated for Corrected errors on writes.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.CFI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_9_9_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="CFI_8_8_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>CFI</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt for Corrected errors enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.CFI == <binarynumber>0b10</binarynumber>, this control applies to errors arising from both reads and writes.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>If the node implements Corrected error counters, then the fault handling interrupt is generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>. For more information, see <register_link state="ext" id="ext-errnmisc0.xml">ERR&lt;n&gt;MISC0</register_link>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for all detected Corrected errors.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt not generated for Corrected errors.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt generated for Corrected errors.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.CFI == 0b10</fields_condition>
+      </field>
+        <field
+           id="RCFI_8_8_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RCFI</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt for Corrected errors on reads enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.CFI == <binarynumber>0b11</binarynumber>, this bit is named RCFI.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>If the node implements Corrected error counters for reads, then the fault handling interrupt is generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>. For more information, see <register_link state="ext" id="ext-errnmisc0.xml">ERR&lt;n&gt;MISC0</register_link>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for detected Corrected errors onreads.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt not generated for Corrected errors on reads.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt generated for Corrected errors on reads.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.CFI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_8_8_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WUE_7_7_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>WUE</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>In-band Uncorrected error reporting on writes enable.</para>
+<para>When enabled, responses to writes that detect an Uncorrected error that cannot be deferred are signaled in-band as a detected Uncorrected error (External Abort).</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors on writes disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors on writes enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UE == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_7_7_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WFI_6_6_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>WFI</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt on writes enable.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>The fault handling interrupt is generated for detected Deferred errors and Uncorrected errors.</content>
+</listitem><listitem><content>If the corresponding fault handling interrupt for Corrected errors control is not implemented:<list type="unordered">
+<listitem><content>If the node implements Corrected error counters for writes, then the fault handling interrupt is also generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for detected Corrected errors on writes.</content>
+</listitem></list>
+</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt on writes disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt on writes enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.FI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_6_6_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WUI_5_5_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>WUI</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>Uncorrected error recovery interrupt on writes enable.</para>
+<para>When enabled, the error recovery interrupt is generated for detected Uncorrected errors on writes that are not deferred.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt on writes disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt on writes enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_5_5_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="UE_4_4_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>UE</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>In-band Uncorrected error reporting enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.UE == <binarynumber>0b10</binarynumber>, this control applies to errors arising from both reads and writes.</para>
+<para>When enabled, responses to transactions that detect an Uncorrected error that cannot be deferred are signaled in-band as a detected Uncorrected error (External Abort).</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UE == 0b10</fields_condition>
+      </field>
+        <field
+           id="RUE_4_4_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RUE</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>In-band Uncorrected error reporting on reads enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.UE == <binarynumber>0b11</binarynumber>, this bit is named RUE.</para>
+<para>When enabled, responses to reads that detect an Uncorrected error that cannot be deferred are signaled in-band as a detected Uncorrected error (External Abort).</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors on reads disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Abort response for Uncorrected errors on reads enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UE == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_4_4_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="FI_3_3_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>FI</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.FI == <binarynumber>0b10</binarynumber>, this control applies to errors arising from both reads and writes.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>The fault handling interrupt is generated for all detected Deferred errors and Uncorrected errors.</content>
+</listitem><listitem><content>If the fault handling interrupt for Corrected errors control is not implemented:<list type="unordered">
+<listitem><content>If the node implements Corrected error counters, then the fault handling interrupt is also generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for all detected Corrected errors.</content>
+</listitem></list>
+</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.FI == 0b10</fields_condition>
+      </field>
+        <field
+           id="RFI_3_3_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RFI</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Fault handling interrupt on reads enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.FI == <binarynumber>0b11</binarynumber>, this bit is named RFI.</para>
+<para>When enabled:</para>
+<list type="unordered">
+<listitem><content>The fault handling interrupt is generated for detected Deferred errors and Uncorrected errors.</content>
+</listitem><listitem><content>If the corresponding fault handling interrupt for Corrected errors control is not implemented:<list type="unordered">
+<listitem><content>If the node implements Corrected error counters for reads, then the fault handling interrupt is also generated when a counter overflows and the overflow bit for the counter is set to <binarynumber>0b1</binarynumber>.</content>
+</listitem><listitem><content>Otherwise, the fault handling interrupt is also generated for detected Corrected errors on reads.</content>
+</listitem></list>
+</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt on reads disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault handling interrupt on reads enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.FI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_3_3_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="UI_2_2_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>UI</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Uncorrected error recovery interrupt enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.UI == <binarynumber>0b10</binarynumber>, this control applies to errors arising from both reads and writes.</para>
+<para>When enabled, the error recovery interrupt is generated for all detected Uncorrected errors that are not deferred.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UI == 0b10</fields_condition>
+      </field>
+        <field
+           id="RUI_2_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RUI</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Uncorrected error recovery interrupt on reads enable.</para>
+<para>When <register_link state="ext" id="ext-errnfr.xml">ERR&lt;n&gt;FR</register_link>.UI == <binarynumber>0b11</binarynumber>, this bit is named RUI.</para>
+<para>When enabled, the error recovery interrupt is generated for detected Uncorrected errors on reads that are not deferred.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt on reads disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error recovery interrupt on reads enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The interrupt is generated even if the error syndrome is discarded because the error record already records a higher priority error.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.UI == 0b11</fields_condition>
+      </field>
+        <field
+           id="0_2_2_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="IMPLEMENTATION DEFINED_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IMPLEMENTATION DEFINED</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Reserved for <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> controls. Must permit SBZP write policy for software.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="ED_0_0_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>ED</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Error reporting and logging enable. When disabled, the node behaves as if error detection and correction are disabled, and no errors are recorded or signaled by the node. Arm recommends that, when disabled, correct error detection and correction codes are written for writes, unless disabled by an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> control for error injection.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Error reporting disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Error reporting enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the node fully disables error detection and correction when reporting is disabled. That is, even with error reporting disabled, the node might continue to silently correct errors. Uncorrectable errors might result in corrupt data being silently propagated by the node.</para>
+<note><para>If this node requires initialization after Cold reset to prevent signaling false errors, then Arm recommends this bit is set to <binarynumber>0b0</binarynumber> on Cold reset, meaning errors are not reported from Cold reset. This allows boot software to initialize a node without signaling errors. Software can enable error reporting after the node is initialized. Otherwise, the Cold reset value is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>. If the Cold reset value is <binarynumber>0b1</binarynumber>, the reset values of other controls in this register are also <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> and should not be <arm-defined-word>UNKNOWN</arm-defined-word>.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Error recovery">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>ID</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ERR&lt;n&gt;FR.ED == 0b10</fields_condition>
+      </field>
+        <field
+           id="0_0_0_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="IMPLEMENTATION DEFINED_63_32" msb="63" lsb="32"/>
+        <fieldat id="0_31_14" msb="31" lsb="14"/>
+        <fieldat id="CI_13_13_1" msb="13" lsb="13"/>
+        <fieldat id="0_12_12" msb="12" lsb="12"/>
+        <fieldat id="WDUI_11_11_1" msb="11" lsb="11"/>
+        <fieldat id="DUI_10_10_1" msb="10" lsb="10"/>
+        <fieldat id="WCFI_9_9_1" msb="9" lsb="9"/>
+        <fieldat id="CFI_8_8_1" msb="8" lsb="8"/>
+        <fieldat id="WUE_7_7_1" msb="7" lsb="7"/>
+        <fieldat id="WFI_6_6_1" msb="6" lsb="6"/>
+        <fieldat id="WUI_5_5_1" msb="5" lsb="5"/>
+        <fieldat id="UE_4_4_1" msb="4" lsb="4"/>
+        <fieldat id="FI_3_3_1" msb="3" lsb="3"/>
+        <fieldat id="UI_2_2_1" msb="2" lsb="2"/>
+        <fieldat id="IMPLEMENTATION DEFINED_1_1" msb="1" lsb="1"/>
+        <fieldat id="ED_0_0_1" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" max="65534"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

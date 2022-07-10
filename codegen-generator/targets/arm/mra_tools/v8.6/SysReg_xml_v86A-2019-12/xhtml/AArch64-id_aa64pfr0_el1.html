@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ID_AA64PFR0_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ID_AA64PFR0_EL1, AArch64 Processor Feature Register 0</h1><p>The ID_AA64PFR0_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides additional information about implemented PE features in AArch64 state.</p>
+
+      
+        <p>For general information about the interpretation of the ID registers, see <span class="xref">Principles of the ID scheme for fields in ID registers</span>.</p>
+      <h2>Configuration</h2>
+        <p>The external register <a href="ext-edpfr.html">EDPFR</a> gives information from this register.</p>
+      <h2>Attributes</h2>
+            <p>ID_AA64PFR0_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ID_AA64PFR0_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="4"><a href="#CSV3_63">CSV3</a></td><td class="lr" colspan="4"><a href="#CSV2_59">CSV2</a></td><td class="lr" colspan="4"><a href="#0_55">RES0</a></td><td class="lr" colspan="4"><a href="#DIT_51">DIT</a></td><td class="lr" colspan="4"><a href="#AMU_47">AMU</a></td><td class="lr" colspan="4"><a href="#MPAM_43">MPAM</a></td><td class="lr" colspan="4"><a href="#SEL2_39">SEL2</a></td><td class="lr" colspan="4"><a href="#SVE_35">SVE</a></td></tr><tr class="firstrow"><td class="lr" colspan="4"><a href="#RAS_31">RAS</a></td><td class="lr" colspan="4"><a href="#GIC_27">GIC</a></td><td class="lr" colspan="4"><a href="#AdvSIMD_23">AdvSIMD</a></td><td class="lr" colspan="4"><a href="#FP_19">FP</a></td><td class="lr" colspan="4"><a href="#EL3_15">EL3</a></td><td class="lr" colspan="4"><a href="#EL2_11">EL2</a></td><td class="lr" colspan="4"><a href="#EL1_7">EL1</a></td><td class="lr" colspan="4"><a href="#EL0_3">EL0</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="CSV3_63">CSV3, bits [63:60]
+                  </h4>
+          
+  <p>Speculative use of faulting data. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>CSV3</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>This Device does not disclose whether data loaded under speculation with a permission or domain fault can be used to form an address or generate condition codes or SVE predicate values to be used by instructions newer than the load in the speculative sequence</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Data loaded under speculation with a permission or domain fault cannot be used to form an address or generate condition codes or SVE predicate values to be used by instructions newer than the load in the speculative sequence</p>
+</td></tr></table>
+            
+  <p>From Armv8.5, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+<p>All other values are reserved.</p>
+
+          <h4 id="CSV2_59">CSV2, bits [59:56]
+                  </h4>
+          
+  <p>Speculative use of out of context branch targets. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>CSV2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>This Device does not disclose whether branch targets trained in one hardware described context can affect speculative execution in a different hardware described context.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Branch targets trained in one hardware described context can only affect speculative execution in a different hardware described context in a hard-to-determine way. Contexts do not include the SCXTNUM_ELx register contexts, and these registers are not supported.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>Branch targets trained in one hardware described context can only affect speculative execution in a different hardware described context in a hard-to-determine way. Contexts include the SCXTNUM_ELx register contexts, and these registers are supported.</p>
+</td></tr></table>
+            
+  <p>From Armv8.5 the only permitted values are <span class="binarynumber">0b0001</span> or <span class="binarynumber">0b0010</span>.</p>
+<p>All other values are reserved.</p>
+
+          <h4 id="0_55">
+                Bits [55:52]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="DIT_51">DIT, bits [51:48]
+                  </h4>
+          
+  <p>Data Independent Timing. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>DIT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>AArch64 does not guarantee constant execution time of any instructions.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>AArch64 provides the <span class="xref">PSTATE</span>.DIT mechanism to guarantee constant execution time of certain instructions.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.4-DIT</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.4, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+
+          <h4 id="AMU_47">AMU, bits [47:44]
+                  </h4>
+          
+  <p>Indicates support for Activity Monitors Extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>AMU</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Activity Monitors Extension is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>AMUv1 for Armv8.4 is implemented.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>AMUv1 for Armv8.6 is implemented. As <span class="binarynumber">0b0001</span> and adds support for virtualization of the activity monitor event counters.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">AMUv1</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p><span class="xref">ARMv8.6-AMU</span> implements the functionality identified by the value <span class="binarynumber">0b0010</span>.</p>
+
+          <h4 id="MPAM_43">MPAM, bits [43:40]
+                  </h4>
+          
+  <p>Indicates support for MPAM Extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>MPAM</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>MPAM is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>MPAM is implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">MPAM</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+
+          <h4 id="SEL2_39">SEL2, bits [39:36]
+                  </h4>
+          
+  <p>Secure EL2. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>SEL2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Secure EL2 is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Secure EL2 is implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.4-SecEL2</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+
+          <h4 id="SVE_35">SVE, bits [35:32]
+                  </h4>
+          
+  <p>Scalable Vector Extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>SVE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>SVE architectural state and programmers' model are not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>SVE architectural state and programmers' model are implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>If implemented, refer to <a href="AArch64-id_aa64zfr0_el1.html">ID_AA64ZFR0_EL1</a> for information about which SVE instructions are available.</p>
+
+          <h4 id="RAS_31">RAS, bits [31:28]
+                  </h4>
+          
+  <p>RAS Extension version. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>RAS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>No RAS Extension.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>RAS Extension present.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>ARMv8.4-RAS present. As <span class="binarynumber">0b0001</span>, and adds support for:</p>
+<ul>
+<li>If EL3 is implemented, <span class="xref">ARMv8.4-DFE</span>.
+</li><li>Additional ERXMISC&lt;m&gt;_EL1 System registers.
+</li><li>Additional System registers <a href="AArch64-erxpfgcdn_el1.html">ERXPFGCDN_EL1</a>, <a href="AArch64-erxpfgctl_el1.html">ERXPFGCTL_EL1</a>, and <a href="AArch64-erxpfgf_el1.html">ERXPFGF_EL1</a>, and the <a href="AArch64-scr_el3.html">SCR_EL3</a>.FIEN and <a href="AArch64-hcr_el2.html">HCR_EL2</a>.FIEN trap controls, to support the optional RAS Common Fault Injection Model Extension.
+</li></ul>
+<p>Error records accessed through System registers conform to RAS System Architecture v1.1, which includes simplifications to <a href="ext-errnstatus.html">ERR&lt;n&gt;STATUS</a> and support for the optional RAS Timestamp and RAS Common Fault Injection Model Extensions.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.4-RAS</span> implements the functionality identified by the value <span class="binarynumber">0b0010</span>.</p>
+<p>In Armv8.0 and Armv8.1, the permitted values are <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0001</span>.</p>
+<p>In Armv8.2, the only permitted value is <span class="binarynumber">0b0001</span>.</p>
+<p>From Armv8.4, when ARMv8.4-DFE is not implemented, and <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a>.NUM is zero, the permitted values are <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> <span class="binarynumber">0b0001</span> or <span class="binarynumber">0b0010</span>. Otherwise from Armv8.4, the only permitted value is <span class="binarynumber">0b0010</span>.</p>
+
+          <h4 id="GIC_27">GIC, bits [27:24]
+                  </h4>
+          
+  <p>System register GIC CPU interface. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>GIC</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>GIC CPU interface system registers not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>System register interface to versions 3.0 and 4.0 of the GIC CPU interface is supported.</p>
+</td></tr><tr><td class="bitfield">0b0011</td><td>
+  <p>System register interface to version 4.1 of the GIC CPU interface is supported.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="AdvSIMD_23">AdvSIMD, bits [23:20]
+                  </h4>
+          
+  <p>Advanced SIMD. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>AdvSIMD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Advanced SIMD is implemented, including support for the following SISD and SIMD operations:</p>
+<ul>
+<li>
+<p>Integer byte, halfword, word and doubleword element operations.</p>
+
+</li><li>
+<p>Single-precision and double-precision floating-point arithmetic.</p>
+
+</li><li>
+<p>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.</p>
+
+</li></ul>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>As for <span class="binarynumber">0b0000</span>, and also includes support for half-precision floating-point arithmetic.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>Advanced SIMD is not implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field must have the same value as the FP field.</p>
+<p>The permitted values are:</p>
+<ul>
+<li><span class="binarynumber">0b0000</span> in an implementation with Advanced SIMD support that does not include the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b0001</span> in an implementation with Advanced SIMD support that includes the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b1111</span> in an implementation without Advanced SIMD support.
+</li></ul>
+
+          <h4 id="FP_19">FP, bits [19:16]
+                  </h4>
+          
+  <p>Floating-point. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>FP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Floating-point is implemented, and includes support for:</p>
+<ul>
+<li>
+<p>Single-precision and double-precision floating-point types.</p>
+
+</li><li>
+<p>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.</p>
+
+</li></ul>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>As for <span class="binarynumber">0b0000</span>, and also includes support for half-precision floating-point arithmetic.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>Floating-point is not implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field must have the same value as the AdvSIMD field.</p>
+<p>The permitted values are:</p>
+<ul>
+<li><span class="binarynumber">0b0000</span> in an implementation with floating-point support that does not include the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b0001</span> in an implementation with floating-point support that includes the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b1111</span> in an implementation without floating-point support.
+</li></ul>
+
+          <h4 id="EL3_15">EL3, bits [15:12]
+                  </h4>
+          
+  <p>EL3 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL3</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL3 is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL3 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL3 can be executed in either AArch64 or AArch32 state.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="EL2_11">EL2, bits [11:8]
+                  </h4>
+          
+  <p>EL2 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL2 is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL2 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL2 can be executed in either AArch64 or AArch32 state.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="EL1_7">EL1, bits [7:4]
+                  </h4>
+          
+  <p>EL1 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL1 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL1 can be executed in either AArch64 or AArch32 state.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="EL0_3">EL0, bits [3:0]
+                  </h4>
+          
+  <p>EL0 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL0 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL0 can be executed in either AArch64 or AArch32 state.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the ID_AA64PFR0_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, ID_AA64PFR0_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b0000</td><td>0b0100</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64PFR0_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64PFR0_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64PFR0_EL1;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

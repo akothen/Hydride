@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>DBGVCR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">DBGVCR, Debug Vector Catch Register</h1><p>The DBGVCR characteristics are:</p><h2>Purpose</h2>
+        <p>Controls Vector Catch debug events.</p>
+      <h2>Configuration</h2><p>AArch32 System register DBGVCR bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-dbgvcr32_el2.html">DBGVCR32_EL2[31:0]
+            </a>.
+          </p><p>This register is present only
+    when AArch32 is supported at any Exception level.
+      
+    Otherwise, direct accesses to DBGVCR are <span class="arm-defined-word">UNKNOWN</span>.</p>
+        <p>This register is required in all implementations.</p>
+      <h2>Attributes</h2>
+            <p>DBGVCR is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The DBGVCR bit assignments are:</p><h3>When EL3 is implemented and EL3 is using AArch32:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSF_31">NSF</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSI_30">NSI</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_29">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSD_28">NSD</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSP_27">NSP</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSS_26">NSS</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_NSU_25">NSU</a></td><td class="lr" colspan="9"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_24">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_MF_15">MF</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_MI_14">MI</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_13">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_MD_12">MD</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_MP_11">MP</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_MS_10">MS</a></td><td class="lr" colspan="2"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_9">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SF_7">SF</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SI_6">SI</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_5">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SD_4">SD</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SP_3">SP</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SS_2">SS</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_SU_1">SU</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch32_0_0">RES0</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSF_31">NSF, bit [31]
+              </h4>
+          
+  <p>FIQ vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSI_30">NSI, bit [30]
+              </h4>
+          
+  <p>IRQ vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_29">
+                Bit [29]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSD_28">NSD, bit [28]
+              </h4>
+          
+  <p>Data Abort vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSP_27">NSP, bit [27]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSS_26">NSS, bit [26]
+              </h4>
+          
+  <p>Supervisor Call (SVC) vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_NSU_25">NSU, bit [25]
+              </h4>
+          
+  <p>Undefined Instruction vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x04</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_24">
+                Bits [24:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch32_MF_15">MF, bit [15]
+              </h4>
+          
+  <p>FIQ vector catch enable in Monitor mode.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_MI_14">MI, bit [14]
+              </h4>
+          
+  <p>IRQ vector catch enable in Monitor mode.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_13">
+                Bit [13]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch32_MD_12">MD, bit [12]
+              </h4>
+          
+  <p>Data Abort vector catch enable in Monitor mode.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_MP_11">MP, bit [11]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable in Monitor mode.</p>
+<p>The exception vector offset is <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_MS_10">MS, bit [10]
+              </h4>
+          
+  <p>Secure Monitor Call (SMC) vector catch enable in Monitor mode.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_9">
+                Bits [9:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch32_SF_7">SF, bit [7]
+              </h4>
+          
+  <p>FIQ vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_SI_6">SI, bit [6]
+              </h4>
+          
+  <p>IRQ vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_5">
+                Bit [5]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch32_SD_4">SD, bit [4]
+              </h4>
+          
+  <p>Data Abort vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_SP_3">SP, bit [3]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_SS_2">SS, bit [2]
+              </h4>
+          
+  <p>Supervisor Call (SVC) vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_SU_1">SU, bit [1]
+              </h4>
+          
+  <p>Undefined Instruction vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x04</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch32_0_0">
+                Bit [0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><h3>When EL3 is implemented and EL3 is using AArch64:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSF_31">NSF</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSI_30">NSI</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_0_29">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSD_28">NSD</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSP_27">NSP</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSS_26">NSS</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_NSU_25">NSU</a></td><td class="lr" colspan="17"><a href="#WhenEL3isimplementedandEL3isusingAArch64_0_24">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SF_7">SF</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SI_6">SI</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_0_5">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SD_4">SD</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SP_3">SP</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SS_2">SS</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_SU_1">SU</a></td><td class="lr" colspan="1"><a href="#WhenEL3isimplementedandEL3isusingAArch64_0_0">RES0</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSF_31">NSF, bit [31]
+              </h4>
+          
+  <p>FIQ vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSI_30">NSI, bit [30]
+              </h4>
+          
+  <p>IRQ vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_0_29">
+                Bit [29]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSD_28">NSD, bit [28]
+              </h4>
+          
+  <p>Data Abort vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSP_27">NSP, bit [27]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSS_26">NSS, bit [26]
+              </h4>
+          
+  <p>Supervisor Call (SVC) vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_NSU_25">NSU, bit [25]
+              </h4>
+          
+  <p>Undefined Instruction vector catch enable in Non-secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x04</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_0_24">
+                Bits [24:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch64_SF_7">SF, bit [7]
+              </h4>
+          
+  <p>FIQ vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_SI_6">SI, bit [6]
+              </h4>
+          
+  <p>IRQ vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_0_5">
+                Bit [5]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isimplementedandEL3isusingAArch64_SD_4">SD, bit [4]
+              </h4>
+          
+  <p>Data Abort vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_SP_3">SP, bit [3]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_SS_2">SS, bit [2]
+              </h4>
+          
+  <p>Supervisor Call (SVC) vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_SU_1">SU, bit [1]
+              </h4>
+          
+  <p>Undefined Instruction vector catch enable in Secure state.</p>
+<p>The exception vector offset is <span class="hexnumber">0x04</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isimplementedandEL3isusingAArch64_0_0">
+                Bit [0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><h3>When EL3 is not implemented:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="24"><a href="#WhenEL3isnotimplemented_0_31">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_F_7">F</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_I_6">I</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_0_5">RES0</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_D_4">D</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_P_3">P</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_S_2">S</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_U_1">U</a></td><td class="lr" colspan="1"><a href="#WhenEL3isnotimplemented_0_0">RES0</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenEL3isnotimplemented_0_31">
+                Bits [31:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isnotimplemented_F_7">F, bit [7]
+              </h4>
+          
+  <p>FIQ vector catch enable.</p>
+<p>The exception vector offset is <span class="hexnumber">0x1C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_I_6">I, bit [6]
+              </h4>
+          
+  <p>IRQ vector catch enable.</p>
+<p>The exception vector offset is <span class="hexnumber">0x18</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_0_5">
+                Bit [5]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenEL3isnotimplemented_D_4">D, bit [4]
+              </h4>
+          
+  <p>Data Abort vector catch enable.</p>
+<p>The exception vector offset is <span class="hexnumber">0x10</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_P_3">P, bit [3]
+              </h4>
+          
+  <p>Prefetch Abort vector catch enable.</p>
+<p>The exception vector offset <span class="hexnumber">0x0C</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_S_2">S, bit [2]
+              </h4>
+          
+  <p>Supervisor Call (SVC) vector catch enable.</p>
+<p>The exception vector offset is <span class="hexnumber">0x08</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_U_1">U, bit [1]
+              </h4>
+          
+  <p>Undefined Instruction vector catch enable.</p>
+<p>The exception vector offset is <span class="hexnumber">0x04</span>.</p>
+
+          
+            
+  
+
+          <p>On a Warm reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenEL3isnotimplemented_0_0">
+                Bit [0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the DBGVCR</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1110</td><td>0b000</td><td>0b0000</td><td>0b0111</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x05);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HDCR.&lt;TDE,TDA&gt; != '00' then
+        AArch32.TakeHypTrapException(0x05);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.AArch32SystemAccessTrap(EL3, 0x05);
+    else
+        return DBGVCR;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.AArch32SystemAccessTrap(EL3, 0x05);
+    else
+        return DBGVCR;
+elsif PSTATE.EL == EL3 then
+    return DBGVCR;
+              </p><h4 class="assembler">MCR{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1110</td><td>0b000</td><td>0b0000</td><td>0b0111</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x05);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HDCR.&lt;TDE,TDA&gt; != '00' then
+        AArch32.TakeHypTrapException(0x05);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.AArch32SystemAccessTrap(EL3, 0x05);
+    else
+        DBGVCR = R[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.AArch32SystemAccessTrap(EL3, 0x05);
+    else
+        DBGVCR = R[t];
+elsif PSTATE.EL == EL3 then
+    DBGVCR = R[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

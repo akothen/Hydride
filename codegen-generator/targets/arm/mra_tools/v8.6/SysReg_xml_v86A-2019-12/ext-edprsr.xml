@@ -1,0 +1,1356 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>EDPRSR</reg_short_name>
+      <reg_long_name>External Debug Processor Status Register</reg_long_name>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="Mixed"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0x314</hexnumber></reg_offset>
+    <reg_instance>EDPRSR</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When ARMv8.3-DoPD is not implemented or IsCorePowered()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>ERROR</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+
+          <reg_reset_special_text>
+              <para>Some of the fields in the Core power domain are in the Cold reset domain and others are in the Warm reset domain. See the field descriptions for more information. However:</para>
+<list type="unordered">
+<listitem><content>
+<para>Fields that are in the Cold reset domain are not affected by a warm reset and are not affected by an External debug reset.</para>
+</content>
+</listitem><listitem><content>
+<para>Fields in the Warm reset domain are also reset by a Cold reset but are not affected by an External debug reset.</para>
+</content>
+</listitem><listitem><content>
+<para>Fields in the Debug power domain are not affected by a Warm reset and are not affected by a Cold reset.</para>
+</content>
+</listitem></list>
+          </reg_reset_special_text>
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Holds information about the reset and powerdown state of the PE.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If ARMv8.3-DoPD is implemented then all fields in this register are in the Core power domain.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>EDPRSR is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SDR_11_11"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SDR</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky Debug Restart. Set to 1 when the PE exits Debug state.</para>
+<para>Permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The PE has not restarted since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The PE has restarted since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <note><para>If a reset occurs when the PE is in Debug state, the PE exits Debug state. SDR is <arm-defined-word>UNKNOWN</arm-defined-word> on Warm reset, meaning a debugger must also use the SR bit to determine whether the PE has left Debug state.</para></note><para>If The Core power domain is powered up, then following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This field is in the Core power domain and the Warm reset domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+                  <field_access_level>When SoftwareLockStatus()</field_access_level>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RC</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="SPMAD_10_10_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SPMAD</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky EPMAD error. Set to 1 if an external debug interface access to a Performance Monitors register returns an error because <function>AllowExternalPMUAccess()</function> == FALSE.</para>
+<para>Permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>No Non-secure external debug interface accesses to the external Performance Monitors registers have failed because <function>AllowExternalPMUAccess()</function> == FALSE for the access since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>At least one Non-secure external debug interface access to the external Performance Monitors register has failed and returned an error because <function>AllowExternalPMUAccess()</function> == FALSE for the access since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the Core power domain is powered up, then, following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE, this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_number>0</field_reset_number>
+  
+      </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+                  <field_access_level>When SoftwareLockStatus()</field_access_level>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RC</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.4-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="SPMAD_10_10_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SPMAD</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky EPMAD error.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>No external debug interface accesses to the Performance Monitors registers have failed because <function>AllowExternalPMUAccess()</function> == FALSE since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>At least one external debug interface access to the Performance Monitors registers has failed and returned an error because <function>AllowExternalPMUAccess()</function> == FALSE since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the Core power domain is powered up, then, following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE, this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_number>0</field_reset_number>
+  
+      </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or OSLockStatus(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+                  <field_access_level>When SoftwareLockStatus()</field_access_level>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RC</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="EPMAD_9_9_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>EPMAD</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>External Performance Monitors Access Disable status.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Non-secure Performance Monitors access enabled. <function>AllowExternalPMUAccess()</function> == TRUE for a Non-secure access.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Non-secure Performance Monitors access disabled. <function>AllowExternalPMUAccess()</function> == FALSE for a Non-secure access.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.4-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="EPMAD_9_9_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>EPMAD</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>External Performance Monitors access disable status.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Performance Monitors access enabled. <function>AllowExternalPMUAccess()</function> == TRUE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Performance Monitors access disabled. <function>AllowExternalPMUAccess()</function> == FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or OSLockStatus(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="SDAD_8_8_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SDAD</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky EDAD error. Set to 1 if an external debug interface access to a debug register returns an error because <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>No Non-secure external debug interface accesses to the debug registers have failed because <function>AllowExternalDebugAccess()</function> == FALSE for the access since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>At least one Non-secure external debug interface access to the debug registers has failed and returned an error because <function>AllowExternalDebugAccess()</function> == FALSE for the access since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the Core power domain is powered up, then, following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_number>0</field_reset_number>
+  
+      </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.4-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="SDAD_8_8_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SDAD</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky EDAD error. Set to 1 if an external debug interface access to a debug register returns an error because <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>No external debug interface accesses to the debug registers have failed because <function>AllowExternalDebugAccess()</function> == FALSE since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>At least one external debug interface access to the debug registers has failed and returned an error because <function>AllowExternalDebugAccess()</function> == FALSE since EDPRSR was last read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the Core power domain is powered up, then, following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This bit is <arm-defined-word>UNKNOWN</arm-defined-word> on reads if <function>OSLockStatus()</function> == TRUE and external debug writes to <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> do not return an error when <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_number>0</field_reset_number>
+  
+      </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="EDAD_7_7_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>EDAD</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>External Debug Access Disable status.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External Non-secure access to breakpoint registers, watchpoint registers, and <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> enabled. <function>AllowExternalDebugAccess()</function> == TRUE for a Non-secure access.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External Non-secure access to breakpoint registers, watchpoint registers, and <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> disabled. <function>AllowExternalDebugAccess()</function> == FALSE for a Non-secure access.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.4-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="EDAD_7_7_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>EDAD</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>External Debug Access Disable status.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External access to breakpoint registers, watchpoint registers, and <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> enabled. <function>AllowExternalDebugAccess()</function> == TRUE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External access to breakpoint registers, watchpoint registers, and <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> disabled. <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit is not valid and reads <arm-defined-word>UNKNOWN</arm-defined-word> if <function>OSLockStatus()</function> == TRUE and external debug writes to <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> do not return an error when <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.2-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="EDAD_7_7_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>EDAD</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>External Debug Access Disable status.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>External access to breakpoint registers, watchpoint registers, and <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> enabled. <function>AllowExternalDebugAccess()</function> == TRUE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>External access to breakpoint registers, watchpoint registers disabled. It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether accesses to <register_link state="ext" id="ext-oslar_el1.xml">OSLAR_EL1</register_link> are enabled or disabled. <function>AllowExternalDebugAccess()</function> == FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), or DoubleLockStatus() or EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="DLK_6_6_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DLK</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>This field is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="DLK_6_6_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DLK</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Double Lock.</para>
+<para>From Armv8.2, this field is deprecated.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When IsCorePowered() and !DoubleLockStatus()</field_access_level>
+               <field_access_type>RAZ</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.2-Debug is implemented and ARMv8.0-DoubleLock is implemented</fields_condition>
+      </field>
+        <field
+           id="DLK_6_6_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DLK</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Double Lock.</para>
+<para>This field returns the result of the pseudocode function <function>DoubleLockStatus()</function>.</para>
+<para>If the Core power domain is powered up and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>EDPRSR.PU reads as 1, EDPRSR.DLK reads as 1, and EDPRSR.SPD is <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+</listitem><listitem><content>EDPRSR.PU reads as 0, EDPRSR.DLK is <arm-defined-word>UNKNOWN</arm-defined-word>, and EDPRSR.SPD reads as 0.</content>
+</listitem></list>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><function>DoubleLockStatus()</function> returns FALSE.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para><function>DoubleLockStatus()</function> returns TRUE and the Core power domain is powered up.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered()</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.0-DoubleLock is implemented</fields_condition>
+      </field>
+        <field
+           id="0_6_6_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="OSLK_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>OSLK</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>OS Lock status bit.</para>
+<para>A read of this bit returns the value of <register_link state="AArch64" id="AArch64-oslsr_el1.xml">OSLSR_EL1</register_link>.OSLK.</para>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered(), DoubleLockStatus() and EDPRSR.R == 1</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="HALTED_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HALTED</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Halted status bit.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>PE is in Non-debug state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>PE is in Debug state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered()</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="SR_3_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SR</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky core Reset status bit.</para>
+<para>Permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The non-debug logic of the PE is not in reset state and has not been reset since the last time EDPRSR was read.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The non-debug logic of the PE is in reset state or has been reset since the last time EDPRSR was read.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If EDPRSR.PU reads as 1 and EDPRSR.R reads as 0, which means that the Core power domain is in a powerup state and that the non-debug logic of the PE is not in reset state, then following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>This field is in the Core power domain and the Warm reset domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>1</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered() or DoubleLockStatus()</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+                  <field_access_level>When SoftwareLockStatus()</field_access_level>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RC</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="R_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>R</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>PE Reset status bit.</para>
+<para>Permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The non-debug logic of the PE is not in reset state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The non-debug logic of the PE is in reset state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, the PE is in reset state, and the PE entered reset state with the OS Double Lock locked this bit has a <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> value. For more information see <xref linkend="BABEBAFB" browsertext="'EDPRSR.{DLK, R} and reset state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/></para>
+<para>This field is in the Core power domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered() or DoubleLockStatus()</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="SPD_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SPD</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Sticky core Powerdown status bit.</para>
+<para>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, then:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.2-Debug" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.Debug"></xref> is implemented, this bit reads as 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.2-Debug" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.Debug"></xref> is not implemented, this bit might read as 0 or 1.</content>
+</listitem></list>
+<para>For more information, see <xref browsertext="EDPRSR.{DLK, SPD, PU} and the Core power domain" filename="H_debug_reset_and_powerdown_support.fm" linkend="BABFCFCG"></xref>.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>If EDPRSR.PU is 0, it is not known whether the state of the debug registers in the Core power domain is lost.</para>
+<para>If EDPRSR.PU is 1, the state of the debug registers in the Core power domain has not been lost.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The state of the debug registers in the Core power domain has been lost.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the Core power domain is powered up, then, following a read of EDPRSR:</para>
+<list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE this bit clears to 0.</content>
+</listitem><listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether this bit clears to 0 or is unchanged.</content>
+</listitem></list>
+<para>When the Core power domain is in either retention or powerdown state, the value of EDPRSR.SPD is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>. For more information, see <xref linkend="BABIGDHJ" browsertext="'EDPRSR.SPD when the Core domain is in either retention or powerdown state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/>.</para>
+<para>EDPRSR.{DLK, SPD, PU} describe whether registers in the Core power domain can be accessed, and whether their state has been lost since the last time the register was read. For more information, see <xref linkend="BABFCFCG" browsertext="'EDPRSR.{DLK, SPD, PU} bits record accessibility and lost of state in Core power domain' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/>.</para>
+<para>This field is in the Core power domain and the Cold reset domain.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_number>1</field_reset_number>
+  
+      </field_reset>
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+                  <field_access_level>When !IsCorePowered()</field_access_level>
+               <field_access_type>RAZ</field_access_type>
+              </field_access_state>
+              <field_access_state>
+                  <field_access_level>When IsCorePowered() and DoubleLockStatus()</field_access_level>
+               <field_access_type>UNKNOWN</field_access_type>
+              </field_access_state>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+        <field
+           id="PU_0_0_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>PU</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Core powerup status bit.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+               <field_access_type>RAO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.3-DoPD is implemented</fields_condition>
+      </field>
+        <field
+           id="PU_0_0_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>PU</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Core Powerup status bit. Indicates whether the debug registers in the Core power domain can be accessed.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Either the Core power domain is in a low-power or powerdown state, or <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented and <function>DoubleLockStatus()</function> == TRUE, meaning the debug registers in the Core power domain cannot be accessed.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The Core power domain is in a powerup state, and either <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is not implemented or <function>DoubleLockStatus()</function> == FALSE, meaning the debug registers in the Core power domain can be accessed.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, the PE is in reset state, and the PE entered reset state with the OS Double Lock locked this bit has a <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> value. For more information see <xref linkend="BABEBAFB" browsertext="'EDPRSR.{DLK, R} and reset state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/></para>
+<para>EDPRSR.{DLK, SPD, PU} describe whether registers in the Core power domain can be accessed, and whether their state has been lost since the last time the register was read. For more information, see <xref linkend="BABFCFCG" browsertext="'EDPRSR.{DLK, SPD, PU} bits record accessibility and lost of state in Core power domain' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/></para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+            <fields_condition>When ARMv8.2-Debug is implemented</fields_condition>
+      </field>
+        <field
+           id="PU_0_0_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>PU</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Core Powerup status bit. Indicates whether the debug registers in the Core power domain can be accessed.</para>
+<para>When the Core power domain is powered-up and <function>DoubleLockStatus()</function> == TRUE, then the value of EDPRSR.PU is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>. See the description of the DLK bit for more information.</para>
+<para>Otherwise, permitted values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Core power domain is in a low-power or powerdown state where the debug registers in the Core power domain cannot be accessed.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Core power domain is in a powerup state where the debug registers in the Core power domain can be accessed.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, the Core power domain is powered up, and <function>DoubleLockStatus()</function> == TRUE, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether this bit reads as 0 or 1.</para>
+<para>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"></xref> is implemented, the PE is in reset state, and the PE entered reset state with the OS Double Lock locked this bit has a <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> value. For more information see <xref linkend="BABEBAFB" browsertext="'EDPRSR.{DLK, R} and reset state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/></para>
+<para>EDPRSR.{DLK, SPD, PU} describe whether registers in the Core power domain can be accessed, and whether their state has been lost since the last time the register was read. For more information, see <xref linkend="BABFCFCG" browsertext="'EDPRSR.{DLK, SPD, PU} bits record accessibility and lost of state in Core power domain' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H6 (Debug Reset and Powerdown Support)" filename="H_debug_reset_and_powerdown_support.fm"/></para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+          <field_access>
+              <field_access_state>
+               <field_access_type>RO</field_access_type>
+              </field_access_state>
+          </field_access>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="0_31_12" msb="31" lsb="12"/>
+        <fieldat id="SDR_11_11" msb="11" lsb="11"/>
+        <fieldat id="SPMAD_10_10_1" msb="10" lsb="10"/>
+        <fieldat id="EPMAD_9_9_1" msb="9" lsb="9"/>
+        <fieldat id="SDAD_8_8_1" msb="8" lsb="8"/>
+        <fieldat id="EDAD_7_7_1" msb="7" lsb="7"/>
+        <fieldat id="DLK_6_6_1" msb="6" lsb="6"/>
+        <fieldat id="OSLK_5_5" msb="5" lsb="5"/>
+        <fieldat id="HALTED_4_4" msb="4" lsb="4"/>
+        <fieldat id="SR_3_3" msb="3" lsb="3"/>
+        <fieldat id="R_2_2" msb="2" lsb="2"/>
+        <fieldat id="SPD_1_1" msb="1" lsb="1"/>
+        <fieldat id="PU_0_0_1" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>On permitted accesses to the register, other access controls affect the behavior of some fields. See the field descriptions for more information.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>If the Core power domain is powered up (EDPRSR.PU == 1), then following a read of EDPRSR:</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <list type="unordered">
+<listitem><content>If <xref browsertext="ARMv8.0-DoubleLock" filename="A_armv8_architecture_extensions.fm" linkend="v8.0.DoubleLock"/> is not implemented or <function>DoubleLockStatus()</function> == FALSE, then:<list type="unordered">
+<listitem><content>EDPRSR.{SDR, SPMAD, SDAD, SPD} are cleared to 0.</content>
+</listitem><listitem><content>EDPRSR.SR is cleared to 0 if the non-debug logic of the PE is not in reset state (EDPRSR.R == 0).</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>Otherwise it is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> whether or not this clearing occurs.</content>
+</listitem></list>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>If the Core power domain is powered down (EDPRSR.PU == 0), then:</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <list type="unordered">
+<listitem><content>EDPRSR.{SDR, SPMAD, SDAD, SR} are all <arm-defined-word>UNKNOWN</arm-defined-word>, and are either reset or restored on being powered up.</content>
+</listitem><listitem><content>EDPRSR.SPD is not cleared following a read of EDPRSR. See the SPD bit description for more information.</content>
+</listitem></list>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>The clearing of bits is an indirect write to EDPRSR.</para>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

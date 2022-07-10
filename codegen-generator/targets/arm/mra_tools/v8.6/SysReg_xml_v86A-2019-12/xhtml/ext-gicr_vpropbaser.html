@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>GICR_VPROPBASER</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">GICR_VPROPBASER, Virtual Redistributor Properties Base Address Register</h1><p>The GICR_VPROPBASER characteristics are:</p><h2>Purpose</h2>
+        <p>Specifies the base address of the memory that holds the virtual LPI Configuration table for the currently scheduled virtual machine.</p>
+      <h2>Configuration</h2><p></p>
+        <p>This register is provided in GICv4 implementations only.</p>
+      <h2>Attributes</h2>
+            <p>GICR_VPROPBASER is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The GICR_VPROPBASER bit assignments are:</p><h3>When GICv4 is implemented:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="5"><a href="#WhenGICv4isimplemented_0_63">RES0</a></td><td class="lr" colspan="3"><a href="#WhenGICv4isimplemented_OuterCache_58">OuterCache</a></td><td class="lr" colspan="4"><a href="#WhenGICv4isimplemented_0_55">RES0</a></td><td class="lr" colspan="20"><a href="#WhenGICv4isimplemented_Physical_Address_51">Physical_Address</a></td></tr><tr class="firstrow"><td class="lr" colspan="20"><a href="#WhenGICv4isimplemented_Physical_Address_51">Physical_Address</a></td><td class="lr" colspan="2"><a href="#WhenGICv4isimplemented_Shareability_11">Shareability</a></td><td class="lr" colspan="3"><a href="#WhenGICv4isimplemented_InnerCache_9">InnerCache</a></td><td class="lr" colspan="2"><a href="#WhenGICv4isimplemented_0_6">RES0</a></td><td class="lr" colspan="5"><a href="#WhenGICv4isimplemented_IDbits_4">IDbits</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenGICv4isimplemented_0_63">
+                Bits [63:59]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenGICv4isimplemented_OuterCache_58">OuterCache, bits [58:56]
+                  </h4>
+          
+  <p>Indicates the Outer Cacheability attributes of accesses to the LPI Configuration table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>OuterCache</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>Memory type defined in InnerCache field. For Normal memory, Outer Cacheability is the same as Inner Cacheability.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>Normal Outer Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>Normal Outer Cacheable Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>Normal Outer Cacheable Write-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-allocate, Write-back.</p>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this field has a fixed value or can be programmed by software. Implementing this field with a fixed value is deprecated.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4isimplemented_0_55">
+                Bits [55:52]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenGICv4isimplemented_Physical_Address_51">Physical_Address, bits [51:12]
+                  </h4>
+          
+  <p>Bits [51:12] of the physical address containing the virtual LPI Configuration table.</p>
+<p>In implementations supporting fewer than 52 bits of physical address, unimplemented upper bits are <span class="arm-defined-word">RES0</span>.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4isimplemented_Shareability_11">Shareability, bits [11:10]
+                  </h4>
+          
+  <p>Indicates the Shareability attributes of accesses to the LPI Configuration table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>Shareability</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Non-shareable.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Inner Shareable.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Outer Shareable.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Reserved. Treated as <span class="binarynumber">0b00</span>.</p>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this field has a fixed value or can be programmed by software. Implementing this field with a fixed value is deprecated.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4isimplemented_InnerCache_9">InnerCache, bits [9:7]
+                  </h4>
+          
+  <p>Indicates the Inner Cacheability attributes of accesses to the LPI Configuration table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>InnerCache</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>Device-nGnRnE.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>Normal Inner Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>Normal Inner Cacheable Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>Normal Inner Cacheable Write-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-allocate, Write-back.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4isimplemented_0_6">
+                Bits [6:5]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenGICv4isimplemented_IDbits_4">IDbits, bits [4:0]
+                  </h4>
+          
+  <p>The number of bits of virtual LPI INTID supported, minus one.</p>
+<p>If the value of this field is less than <span class="binarynumber">0b1101</span>, indicating that the largest INTID is less than 8192 (the smallest LPI interrupt ID), the GIC will behave as if all virtual LPIs are out of range.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><h3>When GICv4.1 is implemented:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenGICv4.1isimplemented_Valid_63">Valid</a></td><td class="lr" colspan="1"><a href="#WhenGICv4.1isimplemented_0_62">RES0</a></td><td class="lr" colspan="3"><a href="#WhenGICv4.1isimplemented_Entry_Size_61">Entry_Size</a></td><td class="lr" colspan="3"><a href="#WhenGICv4.1isimplemented_OuterCache_58">OuterCache</a></td><td class="lr" colspan="1"><a href="#WhenGICv4.1isimplemented_Indirect_55">Indirect</a></td><td class="lr" colspan="2"><a href="#WhenGICv4.1isimplemented_Page_Size_54">Page_Size</a></td><td class="lr" colspan="1"><a href="#WhenGICv4.1isimplemented_Z_52">Z</a></td><td class="lr" colspan="20"><a href="#WhenGICv4.1isimplemented_Physical_Address_51">Physical_Address</a></td></tr><tr class="firstrow"><td class="lr" colspan="20"><a href="#WhenGICv4.1isimplemented_Physical_Address_51">Physical_Address</a></td><td class="lr" colspan="2"><a href="#WhenGICv4.1isimplemented_Shareability_11">Shareability</a></td><td class="lr" colspan="3"><a href="#WhenGICv4.1isimplemented_InnerCache_9">InnerCache</a></td><td class="lr" colspan="7"><a href="#WhenGICv4.1isimplemented_Size_6">Size</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenGICv4.1isimplemented_Valid_63">Valid, bit [63]
+              </h4>
+          
+  <p>This bit controls whether the vPE Configuration Table is valid:</p>
+
+          <table class="valuetable"><tr><th>Valid</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The vPE Configuration table is not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The vPE Configuration table is valid.</p>
+</td></tr></table>
+            
+  <p>TBC</p>
+
+          <p>This field resets to <span class="binarynumber">0</span>.
+</p><h4 id="WhenGICv4.1isimplemented_0_62">
+                Bit [62]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenGICv4.1isimplemented_Entry_Size_61">Entry_Size, bits [61:59]
+                  </h4>
+          
+  <p>Specifies the number of bytes per table entry, minus one.</p>
+<p>This bit is read-only.</p>
+
+          
+            
+  
+
+          <h4 id="WhenGICv4.1isimplemented_OuterCache_58">OuterCache, bits [58:56]
+                  </h4>
+          
+  <p>Indicates the Outer Cacheability attributes of accesses to the table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>OuterCache</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>Memory type defined in InnerCache field. For Normal memory, Outer Cacheability is the same as Inner Cacheability.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>Normal Outer Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>Normal Outer Cacheable Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>Normal Outer Cacheable Write-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Normal Outer Cacheable Read-allocate, Write-allocate, Write-back.</p>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this field has a fixed value or can be programmed by software. Implementing this field with a fixed value is deprecated.</p>
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_Indirect_55">Indirect, bit [55]
+              </h4>
+          
+  <p>This field indicates whether GICR_VPROPBASER specifies a single, flat table or a two-level table where the first level contains a list of descriptors.</p>
+
+          <table class="valuetable"><tr><th>Indirect</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Single Level. The Size field indicates the number of pages used to store data associated with each table entry.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Two Level. The Size field indicates the number of pages that contain an array of 64-bit descriptors to pages that are used to store the data associated with each table entry. A little endian memory order model is used.</p>
+</td></tr></table>
+            
+  <p>This field is <span class="arm-defined-word">RES0</span> for GIC implementations that only support flat tables.</p>
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_Page_Size_54">Page_Size, bits [54:53]
+                  </h4>
+          
+  <p>The following values indicate the size of page that the translation table uses:</p>
+
+          <table class="valuetable"><tr><th>Page_Size</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>4KB.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>16KB.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>64KB.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Reserved. Treated as <span class="binarynumber">0b10</span>.</p>
+</td></tr></table>
+            
+  <div class="note"><span class="note-header">Note</span><p>If the GIC implementation supports only a single, fixed page size, this field might be RO.</p></div>
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_Z_52">Z, bit [52]
+              </h4>
+          
+  <p>When GICR_VPROPBASER.Valid is written from 0 to 1, GICR_VPROPBASER.Z indicates whether the vPE Configuration table is known to contain all zeros.</p>
+
+          <table class="valuetable"><tr><th>Z</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The vPE Configutation table is not zero, and contains live data.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The vPE Configuration table is zero.</p>
+</td></tr></table>
+            
+  <p>Setting GICR_VPROPBASER.Z to 0 causes the IRI to reload configuration from memory</p>
+<p>When GICR_VPROPBASER.Valid is written from 0 to 1, if GICR_VPROPBASER.Z==1 behavior is <span class="arm-defined-word">UNPREDICTABLE</span> if the allocated memory does not contain all zeros.</p>
+<p>This field is WO, and reads as 0.</p>
+
+          <h4 id="WhenGICv4.1isimplemented_Physical_Address_51">Physical_Address, bits [51:12]
+                  </h4>
+          
+  <p>Bits [51:12] of the physical address containing the LPI Configuration table.</p>
+<p>In implementations supporting fewer than 52 bits of physical address, unimplemented upper bits are <span class="arm-defined-word">RES0</span>.</p>
+
+          
+            
+  
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_Shareability_11">Shareability, bits [11:10]
+                  </h4>
+          
+  <p>Indicates the Shareability attributes of accesses to the LPI Configuration table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>Shareability</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Non-shareable.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Inner Shareable.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Outer Shareable.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Reserved. Treated as <span class="binarynumber">0b00</span>.</p>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this field has a fixed value or can be programmed by software. Implementing this field with a fixed value is deprecated.</p>
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_InnerCache_9">InnerCache, bits [9:7]
+                  </h4>
+          
+  <p>Indicates the Inner Cacheability attributes of accesses to the LPI Configuration table. The possible values of this field are:</p>
+
+          <table class="valuetable"><tr><th>InnerCache</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>Device-nGnRnE.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>Normal Inner Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>Normal Inner Cacheable Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>Normal Inner Cacheable Write-allocate, Write-back.</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-allocate, Write-through.</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Normal Inner Cacheable Read-allocate, Write-allocate, Write-back.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenGICv4.1isimplemented_Size_6">Size, bits [6:0]
+                  </h4>
+          
+  <p>The number of pages of physical memory allocated to the table, minus one.</p>
+<p><a href="ext-gicr_vpropbaser.html">GICR_VPROPBASER</a>.Page_Size specifies the size of each page.</p>
+
+          
+            
+  
+
+          <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the GICR_VPROPBASER</h2><h4>GICR_VPROPBASER can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>GIC Redistributor</td><td>VLPI_base</td><td><span class="hexnumber">0x0070</span></td><td>GICR_VPROPBASER</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When GICD_CTLR.DS == 0b0
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>When IsAccessSecure()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li><li>When !IsAccessSecure()
+            accesses to this register are <span class="access_level">RW</span>.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

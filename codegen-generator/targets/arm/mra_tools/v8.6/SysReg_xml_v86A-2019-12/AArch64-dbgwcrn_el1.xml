@@ -1,0 +1,741 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>DBGWCR&lt;n&gt;_EL1</reg_short_name>
+      <reg_long_name>Debug Watchpoint Control Registers</reg_long_name>
+          <reg_array>
+              <reg_array_start>0</reg_array_start>
+              <reg_array_end>15</reg_array_end>
+         </reg_array>
+      
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-dbgwcrn.xml">DBGWCR&lt;n&gt;</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+          <reg_mapping>
+              
+            <mapped_name filename="ext-dbgwcrn_el1.xml">DBGWCR&lt;n&gt;_EL1</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>External</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Holds control information for a watchpoint. Forms watchpoint n together with value register <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If watchpoint n is not implemented then accesses to this register are <arm-defined-word>UNDEFINED</arm-defined-word>.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>DBGWCR&lt;n&gt;_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="MASK_28_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>MASK</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Address mask. Only objects up to 2GB can be watched using a single mask.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00000</field_value>
+        <field_value_description>
+  <para>No mask.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b00001</field_value>
+        <field_value_description>
+  <para>Reserved.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b00010</field_value>
+        <field_value_description>
+  <para>Reserved.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If programmed with a reserved value, a watchpoint must behave as if either:</para>
+<list type="unordered">
+<listitem><content>MASK has been programmed with a defined value, which might be 0 (no mask), other than for a direct read of DBGWCRn_EL1.</content>
+</listitem><listitem><content>The watchpoint is disabled.</content>
+</listitem></list>
+<para>Software must not rely on this property because the behavior of reserved values might change in a future revision of the architecture.</para>
+<para>Other values mask the corresponding number of address bits, from <binarynumber>0b00011</binarynumber> masking 3 address bits (<hexnumber>0x00000007</hexnumber> mask for address) to <binarynumber>0b11111</binarynumber> masking 31 address bits (<hexnumber>0x7FFFFFFF</hexnumber> mask for address).</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_23_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="WT_20_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>WT</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Watchpoint type. Possible values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Unlinked data address match.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Linked data address match.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="LBN_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LBN</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Linked breakpoint number. For Linked data address watchpoints, this specifies the index of the Context-matching breakpoint linked to.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="SSC_15_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SSC</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+          
+  <para>Security state control. Determines the Security states under which a Watchpoint debug event for watchpoint n is generated. This field must be interpreted along with the HMC and PAC fields.</para>
+<para>For more information, see <xref linkend="BCGCFEJJ" browsertext="'Execution conditions for which a breakpoint generates Breakpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)" filename="D_aarch64_self_hosted_debug.fm"/>, and <xref linkend="CJAGFIAA" browsertext="'Reserved DBGBCR&lt;n&gt;_EL1.{SSC, HMC, PMC} values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)" filename="D_aarch64_self_hosted_debug.fm"/>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="HMC_13_13"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HMC</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+          
+  <para>Higher mode control. Determines the debug perspective for deciding when a Watchpoint debug event for watchpoint n is generated. This field must be interpreted along with the SSC and PAC fields.</para>
+<para>For more information on the operation of the SSC, HMC, and PAC fields, see <xref linkend="BCGGCHFB" browsertext="'Execution conditions for which a watchpoint generates Watchpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)" filename="D_aarch64_self_hosted_debug.fm"/>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="BAS_12_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>BAS</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>Byte address select. Each bit of this field selects whether a byte from within the word or double-word addressed by <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> is being watched.</para>
+<table><tgroup cols="2"><thead><row><entry>BAS</entry><entry>Description</entry></row></thead><tbody><row><entry>xxxxxxx1</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link></entry></row><row><entry>xxxxxx1x</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 1</entry></row><row><entry>xxxxx1xx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 2</entry></row><row><entry>xxxx1xxx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 3</entry></row></tbody></tgroup></table>
+<para>In cases where <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> addresses a double-word:</para>
+<table><tgroup cols="2"><thead><row><entry>BAS</entry><entry>Description, if <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link>[2] == 0</entry></row></thead><tbody><row><entry>xxx1xxxx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 4</entry></row><row><entry>xx1xxxxx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 5</entry></row><row><entry>x1xxxxxx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 6</entry></row><row><entry>1xxxxxxx</entry><entry>Match byte at <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link> + 7</entry></row></tbody></tgroup></table>
+<para>If <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link>[2] == 1, only BAS[3:0] are used and BAS[7:4] are ignored. Arm deprecates setting <register_link state="AArch64" id="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link>[2] == 1.</para>
+<para>The valid values for BAS are non-zero binary numbers all of whose set bits are contiguous. All other values are reserved and must not be used by software. See <xref linkend="BABHCHFJ" browsertext="'Reserved DBGWCR&lt;n&gt;_EL1.BAS values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)" filename="D_aarch64_self_hosted_debug.fm"/>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="LSC_4_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LSC</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+          
+  <para>Load/store control. This field enables watchpoint matching on the type of access being made. Possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>Match instructions that load from a watchpointed address.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b10</field_value>
+        <field_value_description>
+  <para>Match instructions that store to a watchpointed address.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>Match instructions that load from or store to a watchpointed address.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved, but must behave as if the watchpoint is disabled. Software must not rely on this property as the behavior of reserved values might change in a future revision of the architecture.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="PAC_2_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PAC</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Privilege of access control. Determines the Exception level or levels at which a Watchpoint debug event for watchpoint n is generated. This field must be interpreted along with the SSC and HMC fields.</para>
+<para>For more information on the operation of the SSC, HMC, and PAC fields, see <xref linkend="BCGGCHFB" browsertext="'Execution conditions for which a watchpoint generates Watchpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)" filename="D_aarch64_self_hosted_debug.fm"/>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="E_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>E</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Enable watchpoint n. Possible values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Watchpoint disabled.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Watchpoint enabled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>UC</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_29" msb="63" lsb="29"/>
+        <fieldat id="MASK_28_24" msb="28" lsb="24"/>
+        <fieldat id="0_23_21" msb="23" lsb="21"/>
+        <fieldat id="WT_20_20" msb="20" lsb="20"/>
+        <fieldat id="LBN_19_16" msb="19" lsb="16"/>
+        <fieldat id="SSC_15_14" msb="15" lsb="14"/>
+        <fieldat id="HMC_13_13" msb="13" lsb="13"/>
+        <fieldat id="BAS_12_5" msb="12" lsb="5"/>
+        <fieldat id="LSC_4_3" msb="4" lsb="3"/>
+        <fieldat id="PAC_2_1" msb="2" lsb="1"/>
+        <fieldat id="E_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" max="15"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS DBGWCR&lt;n&gt;_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, DBGWCR&lt;n&gt;_EL1</access_instruction>
+            
+            <enc n="op0" v="0b10"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="n[3:0]"/>
+            
+            <enc n="op2" v="0b111"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGRTR_EL2.DBGWCRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister DBGWCR&lt;n&gt;_EL1">
+        <encoding>
+          
+          <access_instruction>MSR DBGWCR&lt;n&gt;_EL1, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b10"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="n[3:0]"/>
+            
+            <enc n="op2" v="0b111"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGWTR_EL2.DBGWCRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

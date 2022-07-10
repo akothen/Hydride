@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MPAMCFG_MBW_PBM</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MPAMCFG_MBW_PBM, MPAM Bandwidth Portion Bitmap Partition Configuration Register</h1><p>The MPAMCFG_MBW_PBM characteristics are:</p><h2>Purpose</h2>
+        <p>The MPAMCFG_MBW_PBM register is a read-write register that configures the cache portions that a PARTID is allowed to allocate. MPAMCFG_MBW_PBM_s controls the bandwidth portion bitmap for the Secure PARTID selected by the Secure instance of <a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a>. MPAMCFG_MBW_PBM_ns controls the bandwidth portion bitmap for the Non-secure PARTID selected by the Non-secure instance of <a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a>.</p>
+
+      
+        <p>After setting <a href="ext-mpamcfg_part_sel.html">MPAMCFG_PART_SEL</a> with a PARTID, software writes to the MPAMCFG_CPBM register to configure which cache portions the PARTID is allowed to allocate.</p>
+      <h2>Configuration</h2><p>
+          The power domain of MPAMCFG_MBW_PBM is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+        </p><p>This register is present only
+    when MPAMF_IDR.HAS_MBW_PART == 1 and MPAMF_MBW_IDR.HAS_PBM == 1.
+      
+    Otherwise, direct accesses to MPAMCFG_MBW_PBM are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>MPAMCFG_MBW_PBM is a 4096-bit register.</p>
+          <h2>Field descriptions</h2><p>The MPAMCFG_MBW_PBM bit assignments are:</p><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="BWPBM&lt;n&gt;_4095">BWPBM&lt;n&gt;, bit [n], for n = 0 to 4095</h4>
+          
+  <p>Each bit BWPBM&lt;n&gt; grants permission to the PARTID to allocate bandwidth within bandwidth portion n.</p>
+
+          <table class="valuetable"><tr><th>BWPBM&lt;n&gt;</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The PARTID is not permitted to allocate into bandwidth portion n.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The PARTID is permitted to allocate within bandwidth portion n.</p>
+</td></tr></table>
+            
+  <p>The number of bits in the bandwidth portion partitioning bit map of this component is given in <a href="ext-mpamf_mbw_idr.html">MPAMF_MBW_IDR</a>.BWPBM_WD. BWPBM_WD contains a value from 1 to 2<sup>12</sup>, inclusive. Values of BWPBM_WD greater than 32 require a group of 32-bit registers to access the BWPBM, up to 128 32-bit registers.</p>
+<p>Bits BWPBM&lt;n&gt;, where n is greater than or equal to BWPBM_WD, are not required to be implemented.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the MPAMCFG_MBW_PBM</h2>
+        <p>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</p>
+
+      
+        <p>MPAMCFG_MBW_PBM_s must be accessible from the Secure MPAM feature page. MPAMCFG_MBW_PBM_ns must be accessible from the Non-secure MPAM feature page.</p>
+
+      
+        <p>MPAMCFG_MBW_PBM_s and MPAMCFG_MBW_PBM_ns must be separate registers. The Secure instance (MPAMCFG_MBW_PBM_s) accesses the memory bandwidth portion bitmaps used for Secure PARTIDs, and the Non-secure instance (MPAMCFG_MBW_PBM_ns) accesses the memory bandwidth portion bitmaps used for Non-secure PARTIDs.</p>
+      <h4>MPAMCFG_MBW_PBM can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_s</td><td><span class="hexnumber">0x2000</span></td><td>MPAMCFG_MBW_PBM_s</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_ns</td><td><span class="hexnumber">0x2000</span></td><td>MPAMCFG_MBW_PBM_ns</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

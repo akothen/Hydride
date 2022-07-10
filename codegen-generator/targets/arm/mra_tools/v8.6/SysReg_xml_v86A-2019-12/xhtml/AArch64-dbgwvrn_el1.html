@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>DBGWVR&lt;n&gt;_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">DBGWVR&lt;n&gt;_EL1, Debug Watchpoint Value Registers, n =
+      0 - 15</h1><p>The DBGWVR&lt;n&gt;_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Holds a data address value for use in watchpoint matching. Forms watchpoint n together with control register <a href="AArch64-dbgwcrn_el1.html">DBGWCR&lt;n&gt;_EL1</a>.</p>
+      <h2>Configuration</h2><p>AArch64 System register DBGWVR&lt;n&gt;_EL1 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-dbgwvrn.html">DBGWVR&lt;n&gt;[31:0]
+            </a>.
+          </p><p>AArch64 System register DBGWVR&lt;n&gt;_EL1 bits [63:0]
+            
+                are architecturally mapped to
+              External register <a href="ext-dbgwvrn_el1.html">DBGWVR&lt;n&gt;_EL1[63:0]
+            </a>.
+          </p>
+        <p>If watchpoint n is not implemented then accesses to this register are <span class="arm-defined-word">UNDEFINED</span>.</p>
+      <h2>Attributes</h2>
+            <p>DBGWVR&lt;n&gt;_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The DBGWVR&lt;n&gt;_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="11"><a href="#RESS14:4_63">RESS[14:4]</a></td><td class="lr" colspan="4"><a href="#VA52:49_52">VA[52:49]</a></td><td class="lr" colspan="17"><a href="#VA48:2_48">VA[48:2]</a></td></tr><tr class="firstrow"><td class="lr" colspan="30"><a href="#VA48:2_48">VA[48:2]</a></td><td class="lr" colspan="2"><a href="#0_1">RES0</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="RESS14:4_63">RESS[14:4], bits [63:53]
+                  </h4>
+          
+  <p>Reserved, Sign extended. Hardware and software must treat this field as <span class="arm-defined-word">RES0</span> if the most significant bit of VA is 0 or <span class="arm-defined-word">RES0</span>, and as <span class="arm-defined-word">RES1</span> if the most significant bit of VA is 1.</p>
+<p>Hardware always ignores the value of these bits and it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether:</p>
+<ul>
+<li>The bits are hardwired to a copy of the most significant bit of VA, meaning writes to these bits are ignored, and reads to the bits always return the hardwired value.
+</li><li>The value in those bits can be written, and reads will return the last value written. The value held in those bits is ignored by hardware.
+</li></ul>
+
+          
+            
+  
+
+          <h4 id="VA52:49_52">VA[52:49], bits [52:49]
+                  <div style="font-size:smaller;"><br />When ARMv8.2-LVA is implemented:
+                </div></h4>
+          
+  <p>Extension to VA[48:2]. See VA[48:2] for more details.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="RESS3:0_52"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+          
+  <p>Extension to RESS[14:4]. See RESS[14:4] for more details.</p>
+
+          
+            
+  
+
+          <h4 id="VA48:2_48">VA[48:2], bits [48:2]
+                  </h4>
+          
+  <p>Bits[48:2] of the address value for comparison.</p>
+<p>When <span class="xref">ARMv8.2-LVA</span> is implemented, VA[52:49] forms the upper part of the address value. Otherwise, VA[52:49] are RESS.</p>
+<p>Arm deprecates setting <a href="AArch64-dbgwvrn_el1.html">DBGWVR&lt;n&gt;_EL1</a>[2] == 1.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="0_1">
+                Bits [1:0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the DBGWVR&lt;n&gt;_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, DBGWVR&lt;n&gt;_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b10</td><td>0b000</td><td>0b0000</td><td>n[3:0]</td><td>0b110</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGRTR_EL2.DBGWVRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)];
+              </p><h4 class="assembler">MSR DBGWVR&lt;n&gt;_EL1, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b10</td><td>0b000</td><td>0b0000</td><td>n[3:0]</td><td>0b110</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGWTR_EL2.DBGWVRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGWVR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

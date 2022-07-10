@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>PMCNTENCLR_EL0</reg_short_name>
+      <reg_long_name>Performance Monitors Count Enable Clear register</reg_long_name>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="Core"
+  >
+    <reg_component>PMU</reg_component>
+    <reg_offset><hexnumber>0xC20</hexnumber></reg_offset>
+    <reg_instance>PMCNTENCLR_EL0</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and SoftwareLockStatus()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalPMUAccess() and !SoftwareLockStatus()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>ERROR</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch64-pmcntenclr_el0.xml">PMCNTENCLR_EL0</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch64</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-pmcntenclr.xml">PMCNTENCLR</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Disables the Cycle Count Register, <register_link state="ext" id="ext-pmccntr_el0.xml">PMCCNTR_EL0</register_link>, and any implemented event counters <register_link state="AArch32" id="AArch32-pmevcntrn.xml">PMEVCNTR&lt;n&gt;</register_link>. Reading this register shows which counters are enabled.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Performance Monitors registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>PMCNTENCLR_EL0 is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="C_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>C</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+          
+  <para><register_link state="ext" id="ext-pmccntr_el0.xml">PMCCNTR_EL0</register_link> disable bit. Disables the cycle counter register. Possible values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When read, means the cycle counter is disabled. When written, has no effect.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When read, means the cycle counter is enabled. When written, disables the cycle counter.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="P&lt;n&gt;_30_0"
+           is_variable_length="True"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>P&lt;n&gt;</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>30</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>n</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Event counter disable bit for <register_link state="ext" id="ext-pmevcntrn_el0.xml">PMEVCNTR&lt;n&gt;_EL0</register_link>.</para>
+<para>If <register_link state="ext" id="ext-pmcfgr.xml">PMCFGR</register_link>.N is less than 31, bits [30:<register_link state="ext" id="ext-pmcfgr.xml">PMCFGR</register_link>.N] are RAZ/WI.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>When read, means that  <register_link state="ext" id="ext-pmevcntrn_el0.xml">PMEVCNTR&lt;n&gt;_EL0</register_link> is disabled. When written, has no effect.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>When read, means that <register_link state="ext" id="ext-pmevcntrn_el0.xml">PMEVCNTR&lt;n&gt;_EL0</register_link> is enabled. When written, disables <register_link state="ext" id="ext-pmevcntrn_el0.xml">PMEVCNTR&lt;n&gt;_EL0</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Warm">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="C_31_31" msb="31" lsb="31"/>
+        <fieldat id="P&lt;n&gt;_30_0" msb="30" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <note><para>SoftwareLockStatus() depends on the type of access attempted and AllowExternalPMUAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</para></note>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>GICR_WAKER</reg_short_name>
+      <reg_long_name>Redistributor Wake Register</reg_long_name>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="Unknown"
+  >
+    <reg_component>GIC Redistributor</reg_component>
+    <reg_frame>RD_base</reg_frame>
+    <reg_offset><hexnumber>0x0014</hexnumber></reg_offset>
+    <reg_instance>GICR_WAKER</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When GICD_CTLR.DS == 0b0</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When IsAccessSecure()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Permits software to control the behavior of the <signal>WakeRequest</signal> power management signal corresponding to the Redistributor. Power management operations follow the rules in <xref linkend="CACCFEBE" browsertext="Power management" filename="AS_power_management_and_preserving_gic_state"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>GIC Redistributor registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>A copy of this register is provided for each Redistributor.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>GICR_WAKER is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="IMPLEMENTATION DEFINED_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IMPLEMENTATION DEFINED</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_30_3"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>3</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="ChildrenAsleep_2_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ChildrenAsleep</field_name>
+          <field_msb>2</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Read-only. Indicates whether the connected PE is quiescent:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>An interface to the connected PE might be active.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>All interfaces to the connected PE are quiescent.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>1</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ProcessorSleep_1_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ProcessorSleep</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether the Redistributor can assert the <signal>WakeRequest</signal> signal:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>This PE is not in, and is not entering, a low power state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The PE is either in, or is in the process of entering, a low power state.</para>
+<para>All interrupts that arrive at the Redistributor:</para>
+<list type="unordered">
+<listitem><content>Assert a <signal>WakeRequest</signal> signal.</content>
+</listitem><listitem><content>Are held in the pending state at the Redistributor, and are not communicated to the CPU interface.</content>
+</listitem></list>
+<note><para>When ProcessorSleep == 1, the Redistributor must ensure that any interrupts that are pending on the CPU interface are released.</para></note><para>For an implementation that is using the GIC Stream Protocol Interface:</para>
+<list type="unordered">
+<listitem><content>A <xref linkend="CACIFJEB" browsertext="Quiesce"/> command can put the interface between the Redistributor and the CPU interface in a quiescent state.</content>
+</listitem><listitem><content>A <xref linkend="CHDBHAGC" browsertext="Release"/> command can release any interrupts that are pending on the CPU interface.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <note><para>Before powering down a PE, software must set this bit to 1 and wait until ChildrenAsleep == 1. After powering up a PE, or following a failed powerdown, software must set this bit to 0 and wait until ChildrenAsleep == 0.</para></note><para>Changing ProcessorSleep from 1 to 0 when ChildrenAsleep is not 1 results in <arm-defined-word>UNPREDICTABLE</arm-defined-word> behavior.</para>
+<para>Changing ProcessorSleep from 0 to 1 when the Enable for each interrupt group in the associated CPU interface is not 0 results in <arm-defined-word>UNPREDICTABLE</arm-defined-word> behavior.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>1</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IMPLEMENTATION DEFINED_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IMPLEMENTATION DEFINED</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="IMPLEMENTATION DEFINED_31_31" msb="31" lsb="31"/>
+        <fieldat id="0_30_3" msb="30" lsb="3"/>
+        <fieldat id="ChildrenAsleep_2_2" msb="2" lsb="2"/>
+        <fieldat id="ProcessorSleep_1_1" msb="1" lsb="1"/>
+        <fieldat id="IMPLEMENTATION DEFINED_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>When <register_link state="ext" id="ext-gicd_ctlr.xml">GICD_CTLR</register_link>.DS==1, this register is always accessible.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>When <register_link state="ext" id="ext-gicd_ctlr.xml">GICD_CTLR</register_link>.DS==0, this is a Secure register. This register is RAZ/WI to Non-secure accesses.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>To ensure a Redistributor is quiescent, software must write to GICR_WAKER with ProcessorSleep == 1, then poll the register until ChildrenAsleep == 1.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>Resetting the connected PE when GICR_WAKER.ProcessorSleep==0 or GICR_WAKER.ChildresAsleep==0, can lead to <arm-defined-word>UNPREDICTABLE</arm-defined-word> behaviour in the IRI.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>Resetting the IRI when GICR_WAKER.ProcessorSleep==0 or GICR_WAKER.ChildresAsleep==0 can lead to <arm-defined-word>UNPREDICTABLE</arm-defined-word> behaviour in the connected PE.</para>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

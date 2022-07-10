@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>GICR_ISACTIVER&lt;n&gt;E</reg_short_name>
+      <reg_long_name>Interrupt Set-Active Registers</reg_long_name>
+        <reg_condition otherwise="RES0">when GICv3.1 is implemented</reg_condition>
+          <reg_array>
+              <reg_array_start>1</reg_array_start>
+              <reg_array_end>2</reg_array_end>
+         </reg_array>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="Unknown"
+  >
+    <reg_component>GIC Redistributor</reg_component>
+    <reg_frame>SGI_base</reg_frame>
+    <reg_offset><hexnumber>0x0300</hexnumber> + 4n</reg_offset>
+    <reg_instance>GICR_ISACTIVER&lt;n&gt;E</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When GICD_CTLR.DS == 0b0</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When IsAccessSecure()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When !IsAccessSecure()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Adds the active state to the corresponding PPI.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>GIC Redistributor registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>A copy of this register is provided for each Redistributor.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          
+    
+      <attributes_text>
+        <para>GICR_ISACTIVER&lt;n&gt;E is a 32-bit register.</para>
+      </attributes_text>
+
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="Set_active_bit&lt;x&gt;_31_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Set_active_bit&lt;x&gt;</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>31</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>x</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>For the extended PPIs, adds the active state to interrupt number x. Reads and writes have the following behavior:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>If read, indicates that the corresponding interrupt is not active, and is not active and pending.</para>
+<para>If written, has no effect.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>If read, indicates that the corresponding interrupt is active, or active and pending on this PE.</para>
+<para>If written, activates the corresponding interrupt, if the interrupt is not already active. If the interrupt is already active, the write has no effect.</para>
+<para>After a write of 1 to this bit, a subsequent read of this bit returns 1.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>For INTID m, when DIV and MOD are the integer division and modulo operations:</para>
+<list type="unordered">
+<listitem><content>The corresponding GICR_ISACTIVER&lt;n&gt;E number, n, is given by n = (m-1024) DIV 32.</content>
+</listitem><listitem><content>The offset of the required GICR_ISACTIVER&lt;n&gt;E is (<hexnumber>0x200</hexnumber> + (4*n)).</content>
+</listitem><listitem><content>The bit number of the required group modifier bit in this register is (m-1024) MOD 32.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="Set_active_bit&lt;x&gt;_31_0" msb="31" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" min="1" max="2"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>When affinity routing is not enabled for the Security state of an interrupt in GICR_ISACTIVER&lt;n&gt;E, the corresponding bit is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>When <register_link state="ext" id="ext-gicd_ctlr.xml">GICD_CTLR</register_link>.DS==0, bits corresponding to Secure PPIs are RAZ/WI to Non-secure accesses.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>Bits corresponding to unimplemented interrupts are RAZ/WI.</para>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

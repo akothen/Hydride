@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>CNTHCTL_EL2</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">CNTHCTL_EL2, Counter-timer Hypervisor Control register</h1><p>The CNTHCTL_EL2 characteristics are:</p><h2>Purpose</h2>
+        <p>Controls the generation of an event stream from the physical counter, and access from EL1 to the physical counter and the EL1 physical timer.</p>
+      <h2>Configuration</h2><p>AArch64 System register CNTHCTL_EL2 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-cnthctl.html">CNTHCTL[31:0]
+            </a>.
+          </p>
+        <p>If EL2 is not implemented, this register is <span class="arm-defined-word">RES0</span> from EL3.</p>
+
+      
+        <p>This register has no effect if EL2 is not enabled in the current Security state.</p>
+      <p>
+                Some or all RW fields of this register have defined reset values.
+                
+        These apply
+      
+                only if the PE resets into an Exception level that is using AArch64.
+                Otherwise,
+                
+                RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.
+              </p><h2>Attributes</h2>
+            <p>CNTHCTL_EL2 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The CNTHCTL_EL2 bit assignments are:</p><h3>When ARMv8.1-VHE is implemented and HCR_EL2.E2H == 1:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="14"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_63">RES0</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTIS_17">EVNTIS</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1NVVCT_16">EL1NVVCT</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1NVPCT_15">EL1NVPCT</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1TVCT_14">EL1TVCT</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1TVT_13">EL1TVT</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_ECV_12">ECV</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1PTEN_11">EL1PTEN</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1PCTEN_10">EL1PCTEN</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0PTEN_9">EL0PTEN</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0VTEN_8">EL0VTEN</a></td><td class="lr" colspan="4"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTI_7">EVNTI</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTDIR_3">EVNTDIR</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTEN_2">EVNTEN</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0VCTEN_1">EL0VCTEN</a></td><td class="lr" colspan="1"><a href="#WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0PCTEN_0">EL0PCTEN</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_63">
+                Bits [63:18]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTIS_17">EVNTIS, bit [17]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Controls the scale of the generation of the event stream.</p>
+
+        <table class="valuetable"><tr><th>EVNTIS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The CNTHCTL_EL2.EVNTI field applies to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>[15:0].</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The CNTHCTL_EL2.EVNTI field applies to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>[23:8].</p>
+</td></tr></table>
+              
+  <p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_17"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1NVVCT_16">EL1NVVCT, bit [16]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL1 accesses to the specified EL1 virtual timer registers using the EL02 descriptors to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1NVVCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==1) || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==1 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==0), this control does not cause any instructions to be trapped.</p>
+<p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==0) &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==0 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==1), then EL1 accesses to CNTV_CTL_EL02 and CNTV_CVAL_EL02 are trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_16"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1NVPCT_15">EL1NVPCT, bit [15]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL1 accesses to the specified EL1 physical timer registers using the EL02 descriptors to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1NVPCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==1) || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==1 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==0), this control does not cause any instructions to be trapped.</p>
+<p>If (<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==0) &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==0 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==1, then EL1 accesses to CNTP_CTL_EL02 and CNTP_CVAL_EL02, are trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1TVCT_14">EL1TVCT, bit [14]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 virtual counter registers to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1TVCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this control does not cause any instructions to be trapped.</p>
+<p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 0 or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, then:</p>
+<ul>
+<li>In AArch64 state, traps EL0 and EL1 accesses to <a href="AArch64-cntvct_el0.html">CNTVCT_EL0</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VCTEN.
+</li><li>In AArch32 state, traps EL0 and EL1 accesses to <a href="AArch32-cntvct.html">CNTVCT</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VCTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0VCTEN.
+</li></ul>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_14"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1TVT_13">EL1TVT, bit [13]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 virtual timer registers to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1TVT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this control does not cause any instructions to be trapped.</p>
+<p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 0 or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, then:</p>
+<ul>
+<li>In AArch64 state, traps EL0 and EL1 accesses to <a href="AArch64-cntv_ctl_el0.html">CNTV_CTL_EL0</a>, <a href="AArch64-cntv_cval_el0.html">CNTV_CVAL_EL0</a>, and <a href="AArch64-cntv_tval_el0.html">CNTV_TVAL_EL0</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VTEN.
+</li><li>In AArch32 state, traps EL0 and EL1 accesses to <a href="AArch32-cntv_ctl.html">CNTV_CTL</a>, <a href="AArch32-cntv_cval.html">CNTV_CVAL</a>, and <a href="AArch32-cntv_tval.html">CNTV_TVAL</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0VTEN.
+</li></ul>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_13"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_ECV_12">ECV, bit [12]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Enables the Enhanced Counter Virtualization functionality registers.</p>
+
+        <table class="valuetable"><tr><th>ECV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Enhanced Counter Virtualization functionality is disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} == {1, 1} or <a href="AArch64-scr_el3.html">SCR_EL3</a>.{NS, EEL2} == {0, 0}, then Enhanced Counter Virtualization functionality is disabled.</p>
+<p>When <a href="AArch64-scr_el3.html">SCR_EL3</a>.NS or <a href="AArch64-scr_el3.html">SCR_EL3</a>.EEL2 are 1, and <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE are 0, then Enhanced Counter Virtualziation functionality is enabled when EL2 is enabled for the current Security state. This means that:</p>
+<ul>
+<li>An MRS to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> from either EL0 or EL1 that is not trapped will return the value (PCount&lt;63:0&gt; - <a href="AArch64-cntpoff_el2.html">CNTPOFF_EL2</a>&lt;63:0&gt;).
+</li><li>The EL1 physical timer interrupt is triggered when ((PCount&lt;63:0&gt; - <a href="AArch64-cntpoff_el2.html">CNTPOFF_EL2</a>&lt;63:0&gt;) - PCVal&lt;63:0&gt;) is greater than or equal to 0.
+PCount&lt;63:0&gt; is the physical count returned when <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> is read from EL2 or EL3.
+PCVal&lt;63:0&gt; is the EL1 physical timer compare value for this timer.
+</li></ul>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_0_12"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1PTEN_11">EL1PTEN, bit [11]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, traps EL0 and EL1 accesses to the E1 physical timer registers to EL2 when EL2 is enabled in the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1PTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>From AArch64 state: EL0 and EL1 accesses to the <a href="AArch64-cntp_ctl_el0.html">CNTP_CTL_EL0</a>, <a href="AArch64-cntp_cval_el0.html">CNTP_CVAL_EL0</a>, and <a href="AArch64-cntp_tval_el0.html">CNTP_TVAL_EL0</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PTEN.</p>
+<p>From AArch32 state: EL0 and EL1 accesses to the <a href="AArch32-cntp_ctl.html">CNTP_CTL</a>, <a href="AArch32-cntp_cval.html">CNTP_CVAL</a>, and <a href="AArch32-cntp_tval.html">CNTP_TVAL</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0PTEN.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table>
+              
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, this control does not cause any instructions to be trapped.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL1PCTEN_10">EL1PCTEN, bit [10]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, traps EL0 and EL1 accesses to the EL1 physical counter register to EL2 when EL2 is enabled in the current Security state, as follows:</p>
+<ul>
+<li>In AArch64 state, accesses to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li>In AArch32 state, MRRC or MCRR accesses to <a href="AArch32-cntpct.html">CNTPCT</a> are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x04</span>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>EL1PCTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>From AArch64 state: EL0 and EL1 accesses to the <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PCTEN.</p>
+<p>From AArch32 state: EL0 and EL1 accesses to the <a href="AArch32-cntpct.html">CNTPCT</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PCTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0PCTEN.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table>
+              
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, this control does not cause any instructions to be trapped.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0PTEN_9">EL0PTEN, bit [9]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, this control does not cause any instructions to be trapped.</p>
+<p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, traps EL0 accesses to the physical timer registers to EL2.</p>
+
+        <table class="valuetable"><tr><th>EL0PTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntp_ctl_el0.html">CNTP_CTL_EL0</a>, <a href="AArch64-cntp_cval_el0.html">CNTP_CVAL_EL0</a>, and <a href="AArch64-cntp_tval_el0.html">CNTP_TVAL_EL0</a> registers are trapped to EL2.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntp_ctl.html">CNTP_CTL</a>, <a href="AArch32-cntp_cval.html">CNTP_CVAL</a> and <a href="AArch32-cntp_tval.html">CNTP_TVAL</a> registers are trapped to EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0VTEN_8">EL0VTEN, bit [8]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, this control does not cause any instructions to be trapped.</p>
+<p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, traps EL0 accesses to the virtual timer registers to EL2.</p>
+
+        <table class="valuetable"><tr><th>EL0VTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntv_ctl_el0.html">CNTV_CTL_EL0</a>, <a href="AArch64-cntv_cval_el0.html">CNTV_CVAL_EL0</a>, and <a href="AArch64-cntv_tval_el0.html">CNTV_TVAL_EL0</a> registers are trapped to EL2.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntv_ctl.html">CNTV_CTL</a>, <a href="AArch32-cntv_cval.html">CNTV_CVAL</a>, and <a href="AArch32-cntv_tval.html">CNTV_TVAL</a> registers are trapped to EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTI_7">EVNTI, bits [7:4]
+                  </h4>
+          
+  <p>Selects which bit (0 to 15) of the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> is the trigger for the event stream generated from that counter, when that stream is enabled.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTDIR_3">EVNTDIR, bit [3]
+              </h4>
+          
+  <p>Controls which transition of the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> trigger bit, defined by EVNTI, generates an event when the event stream is enabled:</p>
+
+        <table class="valuetable"><tr><th>EVNTDIR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>A 0 to 1 transition of the trigger bit triggers an event.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>A 1 to 0 transition of the trigger bit triggers an event.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EVNTEN_2">EVNTEN, bit [2]
+              </h4>
+          
+  <p>Enables the generation of an event stream from the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>:</p>
+
+        <table class="valuetable"><tr><th>EVNTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Disables the event stream.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Enables the event stream.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0VCTEN_1">EL0VCTEN, bit [1]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, this control does not cause any instructions to be trapped.</p>
+<p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, traps EL0 accesses to the frequency register and virtual counter register to EL2.</p>
+
+        <table class="valuetable"><tr><th>EL0VCTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntvct_el0.html">CNTVCT_EL0</a> are trapped to EL2.</p>
+<p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntfrq_el0.html">CNTFRQ_EL0</a> register are trapped to EL2, if <a href="AArch64-cnthctl_el2.html">CNTHCTL_EL2</a>.EL0PCTEN is also 0.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntvct.html">CNTVCT</a> are trapped to EL2.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntfrq.html">CNTFRQ</a> register are trapped to EL2, if <a href="AArch32-cnthctl.html">CNTHCTL</a>.EL0PCTEN is also 0.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenARMv8.1-VHEisimplementedandHCR_EL2.E2H1_EL0PCTEN_0">EL0PCTEN, bit [0]
+              </h4>
+          
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, this control does not cause any instructions to be trapped.</p>
+<p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 1, traps EL0 accesses to the frequency register and physical counter register to EL2.</p>
+
+        <table class="valuetable"><tr><th>EL0PCTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> are trapped to EL2.</p>
+<p>EL0 using AArch64: EL0 accesses to the <a href="AArch64-cntfrq_el0.html">CNTFRQ_EL0</a> register are trapped to EL2, if <a href="AArch64-cnthctl_el2.html">CNTHCTL_EL2</a>.EL0VCTEN is also 0.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntpct.html">CNTPCT</a> are trapped to EL2.</p>
+<p>EL0 using AArch32: EL0 accesses to the <a href="AArch32-cntfrq.html">CNTFRQ</a> and register are trapped to EL2, if <a href="AArch64-cnthctl_el2.html">CNTHCTL_EL2</a>.EL0VCTEN is also 0.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><h3>Otherwise:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#Otherwise_0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="14"><a href="#Otherwise_0_63">RES0</a></td><td class="lr" colspan="1"><a href="#Otherwise_EVNTIS_17">EVNTIS</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1NVVCT_16">EL1NVVCT</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1NVPCT_15">EL1NVPCT</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1TVCT_14">EL1TVCT</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1TVT_13">EL1TVT</a></td><td class="lr" colspan="1"><a href="#Otherwise_ECV_12">ECV</a></td><td class="lr" colspan="4"><a href="#Otherwise_0_11">RES0</a></td><td class="lr" colspan="4"><a href="#Otherwise_EVNTI_7">EVNTI</a></td><td class="lr" colspan="1"><a href="#Otherwise_EVNTDIR_3">EVNTDIR</a></td><td class="lr" colspan="1"><a href="#Otherwise_EVNTEN_2">EVNTEN</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1PCEN_1">EL1PCEN</a></td><td class="lr" colspan="1"><a href="#Otherwise_EL1PCTEN_0">EL1PCTEN</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  <p>This format applies in all Armv8.0 implementations, and it also contains a description of the behavior when EL3 is implemented and EL2 is not implemented.</p>
+
+    </div><h4 id="Otherwise_0_63">
+                Bits [63:18]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EVNTIS_17">EVNTIS, bit [17]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Controls the scale of the generation of the event stream.</p>
+
+        <table class="valuetable"><tr><th>EVNTIS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The CNTHCTL_EL2.EVNTI field applies to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>[15:0].</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The CNTHCTL_EL2.EVNTI field applies to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>[23:8].</p>
+</td></tr></table>
+              
+  <p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_17"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EL1NVVCT_16">EL1NVVCT, bit [16]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL1 accesses to the specified EL1 virtual timer registers using the EL02 descriptors to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1NVVCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==1) || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==1 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==0), this control does not cause any instructions to be trapped.</p>
+<p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==0) &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==0 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==1), then EL1 accesses to CNTV_CTL_EL02 and CNTV_CVAL_EL02 are trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_16"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EL1NVPCT_15">EL1NVPCT, bit [15]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL1 accesses to the specified EL1 physical timer registers using the EL02 descriptors to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1NVPCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If ((<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==1) || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==1 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==0), this control does not cause any instructions to be trapped.</p>
+<p>If (<a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H==0 || <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE==0) &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV2==1 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV1==0 &amp;&amp; <a href="AArch64-hcr_el2.html">HCR_EL2</a>.NV==1, then EL1 accesses to CNTP_CTL_EL02 and CNTP_CVAL_EL02, are trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EL1TVCT_14">EL1TVCT, bit [14]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 virtual counter registers to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1TVCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this control does not cause any instructions to be trapped.</p>
+<p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 0 or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, then:</p>
+<p>In AArch64 state, traps EL0 and EL1 accesses to <a href="AArch64-cntvct_el0.html">CNTVCT_EL0</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VCTEN.
+In AArch32 state, traps EL0 and EL1 accesses to <a href="AArch32-cntvct.html">CNTVCT</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VCTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0VCTEN.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_14"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EL1TVT_13">EL1TVT, bit [13]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 virtual timer registers to EL2, when EL2 is enabled for the current Security state.</p>
+
+        <table class="valuetable"><tr><th>EL1TVT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this control does not cause any instructions to be trapped.</p>
+<p>If <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 0 or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE is 0, then:</p>
+<ul>
+<li>In AArch64 state, traps EL0 and EL1 accesses to <a href="AArch64-cntv_ctl_el0.html">CNTV_CTL_EL0</a>, <a href="AArch64-cntv_cval_el0.html">CNTV_CVAL_EL0</a>, and <a href="AArch64-cntv_tval_el0.html">CNTV_TVAL_EL0</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VTEN.
+</li><li>In AArch32 state, traps EL0 and EL1 accesses to <a href="AArch32-cntv_ctl.html">CNTV_CTL</a>, <a href="AArch32-cntv_cval.html">CNTV_CVAL</a>, and <a href="AArch32-cntv_tval.html">CNTV_TVAL</a> to EL2, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0VTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0VTEN.
+</li></ul>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 0 other than for the purpose of a direct read.</p>
+<p>This control applies regardless of the value of the CNTHCTL_EL2.ECV bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_13"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_ECV_12">ECV, bit [12]
+              <div style="font-size:smaller;"><br />When ARMv8.6-ECV is implemented:
+                </div></h4>
+          
+  <p>Enables the Enhanced Counter Virtualization functionality registers.</p>
+
+        <table class="valuetable"><tr><th>ECV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Enhanced Counter Virtualization functionality is disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} == {1, 1} or <a href="AArch64-scr_el3.html">SCR_EL3</a>.{NS, EEL2} == {0, 0}, then Enhanced Counter Virtualization functionality is disabled.</p>
+<p>When <a href="AArch64-scr_el3.html">SCR_EL3</a>.NS or <a href="AArch64-scr_el3.html">SCR_EL3</a>.EEL2 are 1, and <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H or <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE are 0, then Enhanced Counter Virtualziation functionality is enabled when EL2 is enabled for the current Security state. This means that:</p>
+<ul>
+<li>An MRS to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> from either EL0 or EL1 that is not trapped will return the value (PCount&lt;63:0&gt; - <a href="AArch64-cntpoff_el2.html">CNTPOFF_EL2</a>&lt;63:0&gt;).
+</li><li>The EL1 physical timer interrupt is triggered when ((PCount&lt;63:0&gt; - <a href="AArch64-cntpoff_el2.html">CNTPOFF_EL2</a>&lt;63:0&gt;) - PCVal&lt;63:0&gt;) is greater than or equal to 0.
+PCount is the physical count returned when <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> is read from EL2 or EL3.
+PCVal&lt;63:0&gt; is the EL1 physical timer compare value for this timer.
+</li></ul>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_0_12"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_0_11">
+                Bits [11:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Otherwise_EVNTI_7">EVNTI, bits [7:4]
+                  </h4>
+          
+  <p>Selects which bit (0 to 15) of the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> is the trigger for the event stream generated from that counter, when that stream is enabled.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_EVNTDIR_3">EVNTDIR, bit [3]
+              </h4>
+          
+  <p>Controls which transition of the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> trigger bit, defined by EVNTI, generates an event when the event stream is enabled:</p>
+
+        <table class="valuetable"><tr><th>EVNTDIR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>A 0 to 1 transition of the trigger bit triggers an event.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>A 1 to 0 transition of the trigger bit triggers an event.</p>
+</td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_EVNTEN_2">EVNTEN, bit [2]
+              </h4>
+          
+  <p>Enables the generation of an event stream from the counter register <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>:</p>
+
+        <table class="valuetable"><tr><th>EVNTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Disables the event stream.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Enables the event stream.</p>
+</td></tr></table><p>This field resets to <span class="binarynumber">0</span>.
+</p><h4 id="Otherwise_EL1PCEN_1">EL1PCEN, bit [1]
+              </h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 physical timer registers to EL2 when EL2 is enabled in the current Security state, as follows:</p>
+<ul>
+<li>In AArch64 state, accesses to <a href="AArch64-cntp_ctl_el0.html">CNTP_CTL_EL0</a>, <a href="AArch64-cntp_cval_el0.html">CNTP_CVAL_EL0</a>, <a href="AArch64-cntp_tval_el0.html">CNTP_TVAL_EL0</a> are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li>In AArch32 state, MRC or MCR accesses to the following registers are trapped to EL2 reported using EC syndrome value <span class="hexnumber">0x3</span> and MRRC and MCRR accesses are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x04</span>:<ul>
+<li><a href="AArch32-cntp_ctl.html">CNTP_CTL</a>, <a href="AArch32-cntp_cval.html">CNTP_CVAL</a>, <a href="AArch32-cntp_tval.html">CNTP_TVAL</a>.
+</li></ul>
+
+</li></ul>
+
+        <table class="valuetable"><tr><th>EL1PCEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>From AArch64 state: EL0 and EL1 accesses to the <a href="AArch64-cntp_ctl_el0.html">CNTP_CTL_EL0</a>, <a href="AArch64-cntp_cval_el0.html">CNTP_CVAL_EL0</a>, and <a href="AArch64-cntp_tval_el0.html">CNTP_TVAL_EL0</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PTEN.</p>
+<p>From AArch32 state: EL0 and EL1 accesses to the <a href="AArch32-cntp_ctl.html">CNTP_CTL</a>, <a href="AArch32-cntp_cval.html">CNTP_CVAL</a>, and <a href="AArch32-cntp_tval.html">CNTP_TVAL</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0PTEN.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 1 other than for the purpose of a direct read.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Otherwise_EL1PCTEN_0">EL1PCTEN, bit [0]
+              </h4>
+          
+  <p>Traps EL0 and EL1 accesses to the EL1 physical counter register to EL2 when EL2 is enabled in the current Security state, as follows:</p>
+<ul>
+<li>In AArch64 state, accesses to <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li>In AArch32 state, MRRC or MCRR accesses to <a href="AArch32-cntpct.html">CNTPCT</a> are trapped to EL2, reported using EC syndrome value <span class="hexnumber">0x04</span>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>EL1PCTEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>From AArch64 state: EL0 and EL1 accesses to the <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PCTEN.</p>
+<p>From AArch32 state: EL0 and EL1 accesses to the <a href="AArch32-cntpct.html">CNTPCT</a> are trapped to EL2 when EL2 is enabled in the current Security state, unless they are trapped by <a href="AArch64-cntkctl_el1.html">CNTKCTL_EL1</a>.EL0PCTEN or <a href="AArch32-cntkctl.html">CNTKCTL</a>.PL0PCTEN.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr></table>
+              
+  <p>If EL3 is implemented and EL2 is not implemented, behavior is as if this bit is 1 other than for the purpose of a direct read.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the CNTHCTL_EL2</h2>
+        <p>When <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 1, without explicit synchronization, access from EL2 using the mnemonic CNTHCTL_EL2 or CNTKCTL_EL1 are not guaranteed to be ordered with respect to accesses using the other mnemonic.</p>
+      <p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, CNTHCTL_EL2</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b100</td><td>0b1110</td><td>0b0001</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    return CNTHCTL_EL2;
+elsif PSTATE.EL == EL3 then
+    return CNTHCTL_EL2;
+              </p><h4 class="assembler">MSR CNTHCTL_EL2, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b100</td><td>0b1110</td><td>0b0001</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    CNTHCTL_EL2 = X[t];
+elsif PSTATE.EL == EL3 then
+    CNTHCTL_EL2 = X[t];
+              </p><h4 class="assembler">MRS &lt;Xt&gt;, CNTKCTL_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b1110</td><td>0b0001</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    return CNTKCTL_EL1;
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '1' then
+        return CNTHCTL_EL2;
+    else
+        return CNTKCTL_EL1;
+elsif PSTATE.EL == EL3 then
+    return CNTKCTL_EL1;
+              </p><h4 class="assembler">MSR CNTKCTL_EL1, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b1110</td><td>0b0001</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    CNTKCTL_EL1 = X[t];
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '1' then
+        CNTHCTL_EL2 = X[t];
+    else
+        CNTKCTL_EL1 = X[t];
+elsif PSTATE.EL == EL3 then
+    CNTKCTL_EL1 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

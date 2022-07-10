@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ERR&lt;n&gt;MISC2</reg_short_name>
+      <reg_long_name>Error Record Miscellaneous Register 2</reg_long_name>
+        <reg_condition otherwise="RES0">when error record &lt;n&gt; is implemented</reg_condition>
+          <reg_array>
+              <reg_array_start>0</reg_array_start>
+              <reg_array_end>65534</reg_array_end>
+         </reg_array>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>RAS</reg_component>
+    <reg_offset><hexnumber>0x030</hexnumber> + 64n</reg_offset>
+    <reg_instance>ERR&lt;n&gt;MISC2</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> error syndrome register. The miscellaneous syndrome registers might contain:</para>
+
+      </purpose_text>
+      <purpose_text>
+        <list type="unordered">
+<listitem><content>Information to identify the FRU in which the error was detected, and might contain enough information to locate the error within that FRU.</content>
+</listitem><listitem><content>A Corrected error counter or counters.</content>
+</listitem><listitem><content>Other state information not present in the corresponding status and address registers.</content>
+</listitem></list>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>RAS registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para><register_link id="ext-errnfr.xml" state="ext">ERR&lt;q&gt;FR</register_link> describes the features implemented by the node that owns error record &lt;n&gt;. &lt;q&gt; is the index of the first error record owned by the same node as error record &lt;n&gt;. If the node owns a single record, then q = n.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>For <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> fields in ERR&lt;n&gt;MISC2, writing zero must always be supported to return the error record to an initial quiescent state.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>In particular, if any <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> syndrome fields might generate a Fault Handling or Error Recovery Interrupt request, writing zero is sufficient to deactivate the Interrupt request.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>Fields that are read-only, non-zero, and ignore writes are compliant with this requirement.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <para>If RAS System Architecture v1.1 is not implemented, Arm recommendeds that ERR&lt;n&gt;MISC2 does not require zeroing to return the record to a quiescent state.</para>
+
+      </configuration_text>
+      <configuration_text>
+        <note><para>Arm recommends that any <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> syndrome fields that can generate a Fault Handling, Error Recovery, Critical, or <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>, interrupt request are disabled at Cold reset and are enabled by software writing an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> non-zero value to an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> field in ERR&lt;q&gt;CTRL.</para></note>
+      </configuration_text>
+      <configuration_text>
+        <para>It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether ERR&lt;n&gt;MISC2 is present if RAS System Architecture v1.1 is not implemented. ERR&lt;n&gt;MISC2 is <arm-defined-word>RES0</arm-defined-word> if not present.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ERR&lt;n&gt;MISC2 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_instance>ERR&lt;n&gt;MISC2</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="IMPLEMENTATION DEFINED_63_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IMPLEMENTATION DEFINED</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> syndrome.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="IMPLEMENTATION DEFINED_63_0" msb="63" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" max="65534"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>Reads from ERR&lt;n&gt;MISC2 return an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> value and writes have <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> behavior.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>Arm recommends that miscellaneous syndrome for multiple errors, such as a corrected error counter, is read/write.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>When <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>.MV == <binarynumber>0b1</binarynumber>, the miscellaneous syndrome specific to the most recently recorded error should ignore writes.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <note><para>These recommendations allow a counter to be reset in the presence of a persistent error, while preventing specific information, such as that identifying a FRU, from being lost if an error is detected while the previous error is being logged.</para></note>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

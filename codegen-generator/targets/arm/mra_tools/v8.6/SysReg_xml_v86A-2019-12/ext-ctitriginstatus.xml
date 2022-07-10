@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>CTITRIGINSTATUS</reg_short_name>
+      <reg_long_name>CTI Trigger In Status register</reg_long_name>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="Debug"
+  >
+    <reg_component>CTI</reg_component>
+    <reg_offset><hexnumber>0x130</hexnumber></reg_offset>
+    <reg_instance>CTITRIGINSTATUS</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides the status of the trigger inputs.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Cross-Trigger Interface registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>CTITRIGINSTATUS is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="TRIN&lt;n&gt;_31_0"
+           is_variable_length="True"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TRIN&lt;n&gt;</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>31</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>n</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Trigger input &lt;n&gt; status.</para>
+<para>Bits [31:N] are RAZ. N is the number of CTI triggers implemented as defined by the <register_link state="ext" id="ext-ctidevid.xml">CTIDEVID</register_link>.NUMTRIG field.</para>
+<para>Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Input trigger n is inactive.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Input trigger n is active.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>Not implemented and not-connected input triggers are always inactive.</para>
+<para>It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether an input trigger that does not support multicycle events can be observed as active.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="TRIN&lt;n&gt;_31_0" msb="31" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

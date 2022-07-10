@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ID_AA64DFR0_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ID_AA64DFR0_EL1, AArch64 Debug Feature Register 0</h1><p>The ID_AA64DFR0_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides top level information about the debug system in AArch64 state.</p>
+
+      
+        <p>For general information about the interpretation of the ID registers, see <span class="xref">Principles of the ID scheme for fields in ID registers</span>.</p>
+      <h2>Configuration</h2>
+        <p>The external register <a href="ext-eddfr.html">EDDFR</a> gives information from this register.</p>
+      <h2>Attributes</h2>
+            <p>ID_AA64DFR0_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ID_AA64DFR0_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="12"><a href="#0_63">RES0</a></td><td class="lr" colspan="4"><a href="#MTPMU_51">MTPMU</a></td><td class="lr" colspan="4"><a href="#0_47">RES0</a></td><td class="lr" colspan="4"><a href="#TraceFilt_43">TraceFilt</a></td><td class="lr" colspan="4"><a href="#DoubleLock_39">DoubleLock</a></td><td class="lr" colspan="4"><a href="#PMSVer_35">PMSVer</a></td></tr><tr class="firstrow"><td class="lr" colspan="4"><a href="#CTX_CMPs_31">CTX_CMPs</a></td><td class="lr" colspan="4"><a href="#0_27">RES0</a></td><td class="lr" colspan="4"><a href="#WRPs_23">WRPs</a></td><td class="lr" colspan="4"><a href="#0_19">RES0</a></td><td class="lr" colspan="4"><a href="#BRPs_15">BRPs</a></td><td class="lr" colspan="4"><a href="#PMUVer_11">PMUVer</a></td><td class="lr" colspan="4"><a href="#TraceVer_7">TraceVer</a></td><td class="lr" colspan="4"><a href="#DebugVer_3">DebugVer</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:52]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="MTPMU_51">MTPMU, bits [51:48]
+                  </h4>
+          
+  <p>Multi-threaded PMU extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>MTPMU</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>ARMv8.6-MTPMU not implemented. If PMUv3 is implemented, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0</a>.MT are read/write or <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>ARMv8.6-MTPMU implemented and <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0</a>.MT are read/write. When <span class="xref">ARMv8.6-MTPMU</span> is disabled, the Effective values of <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0</a>.MT are 0.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>ARMv8.6-MTPMU not implemented. If PMUv3 is implemented, <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0</a>.MT are <span class="arm-defined-word">RES0</span>.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.6-MTPMU</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>In an Armv8.6-compliant implementation that includes PMUv3, the value <span class="binarynumber">0b0000</span> is not permitted.</p>
+<p>In an implementation that does not include PMUv3, the value <span class="binarynumber">0b0001</span> is not permitted.</p>
+
+          <h4 id="0_47">
+                Bits [47:44]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="TraceFilt_43">TraceFilt, bits [43:40]
+                  </h4>
+          
+  <p>Armv8.4 Self-hosted Trace Extension version. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>TraceFilt</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Armv8.4 Self-hosted Trace Extension not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Armv8.4 Self-hosted Trace Extension implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.4-Trace</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+
+          <h4 id="DoubleLock_39">DoubleLock, bits [39:36]
+                  </h4>
+          
+  <p>OS Double Lock implemented. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>DoubleLock</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>OS Double Lock implemented. <a href="AArch64-osdlr_el1.html">OSDLR_EL1</a> is RW.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>OS Double Lock not implemented. <a href="AArch64-osdlr_el1.html">OSDLR_EL1</a> is RAZ/WI.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.0-DoubleLock</span> implements the functionality identified by the value <span class="binarynumber">0b0000</span>.</p>
+
+          <h4 id="PMSVer_35">PMSVer, bits [35:32]
+                  </h4>
+          
+  <p>Statistical Profiling Extension version. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>PMSVer</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Statistical Profiling Extension not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Statistical Profiling Extension implemented.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>As <span class="binarynumber">0b0001</span> and also includes support for:</p>
+<ul>
+<li>The Event packet Alignment flag.
+</li><li>If <span class="xref">SVE</span> is implemented, the Scalable Vector extensions to Statistical Profiling.
+</li></ul>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">SPE</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p><span class="xref">ARMv8.3-SPE</span> implements the functionality added by the value <span class="binarynumber">0b0010</span>.</p>
+<p>If <span class="xref">ARMv8.3-SPE</span> is implemented, the values <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0001</span> are not permitted.</p>
+
+          <h4 id="CTX_CMPs_31">CTX_CMPs, bits [31:28]
+                  </h4>
+          
+  <p>Number of breakpoints that are context-aware, minus 1. These are the highest numbered breakpoints.</p>
+
+          
+            
+  
+
+          <h4 id="0_27">
+                Bits [27:24]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WRPs_23">WRPs, bits [23:20]
+                  </h4>
+          
+  <p>Number of watchpoints, minus 1. The value of <span class="binarynumber">0b0000</span> is reserved.</p>
+
+          
+            
+  
+
+          <h4 id="0_19">
+                Bits [19:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="BRPs_15">BRPs, bits [15:12]
+                  </h4>
+          
+  <p>Number of breakpoints, minus 1. The value of <span class="binarynumber">0b0000</span> is reserved.</p>
+
+          
+            
+  
+
+          <h4 id="PMUVer_11">PMUVer, bits [11:8]
+                  </h4>
+          
+  <p>Performance Monitors Extension version.</p>
+<p>This field does not follow the standard ID scheme, but uses the Alternative ID scheme described in <span class="xref">'Alternative ID scheme used for the Performance Monitors Extension version' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile</span>.</p>
+<p>Defined values are:</p>
+
+          <table class="valuetable"><tr><th>PMUVer</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Performance Monitors Extension not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Performance Monitors Extension implemented, PMUv3.</p>
+</td></tr><tr><td class="bitfield">0b0100</td><td>
+  <p>PMUv3 for Armv8.1. As <span class="binarynumber">0b0001</span>, and also includes support for:</p>
+<ul>
+<li>Extended 16-bit <a href="AArch64-pmevtypern_el0.html">PMEVTYPER&lt;n&gt;_EL0</a>.evtCount field.
+</li><li>If EL2 is implemented, the <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HPMD control bit.
+</li></ul>
+</td></tr><tr><td class="bitfield">0b0101</td><td>
+  <p>PMUv3 for Armv8.4. As <span class="binarynumber">0b0100</span> and also includes support for the <a href="AArch64-pmmir_el1.html">PMMIR_EL1</a> register.</p>
+</td></tr><tr><td class="bitfield">0b0110</td><td>
+  <p>PMUv3 for Armv8.5. As <span class="binarynumber">0b0101</span> and also includes support for:</p>
+<ul>
+<li>64-bit event counters.
+</li><li>If EL2 is implemented, the <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.HCCD control bit.
+</li><li>If EL3 is implemented, the <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.SCCD control bit.
+</li></ul>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> form of performance monitors supported, PMUv3 not supported. Arm does not recommend this value in new implementations.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.1-PMU</span> implements the functionality identified by the value <span class="binarynumber">0b0100</span>.</p>
+<p><span class="xref">ARMv8.4-PMU</span> implements the functionality identified by the value <span class="binarynumber">0b0101</span>.</p>
+<p><span class="xref">ARMv8.5-PMU</span> implements the functionality identified by the value <span class="binarynumber">0b0110</span>.</p>
+<p>In an Armv8.1-compliant implementation that includes PMUv3, the value <span class="binarynumber">0b0001</span> is not permitted.</p>
+<p>In an Armv8.4-compliant implementation that includes PMUv3, the value <span class="binarynumber">0b0100</span> is not permitted.</p>
+<p>In an Armv8.5-compliant implementation that includes PMUv3, the value <span class="binarynumber">0b0101</span> is not permitted.</p>
+
+          <h4 id="TraceVer_7">TraceVer, bits [7:4]
+                  </h4>
+          
+  <p>Trace support. Indicates whether System register interface to a PE trace unit is implemented. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>TraceVer</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>PE trace unit System registers not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>PE trace unit System registers implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>See the ETM Architecture Specification for more information.</p>
+<p>A value of <span class="binarynumber">0b0000</span> only indicates that no System register interface to a PE trace unit is implemented. A PE trace unit might nevertheless be implemented without a System register interface.</p>
+
+          <h4 id="DebugVer_3">DebugVer, bits [3:0]
+                  </h4>
+          
+  <p>Debug architecture version. Indicates presence of Armv8 debug architecture. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>DebugVer</th><th>Meaning</th></tr><tr><td class="bitfield">0b0110</td><td>
+  <p>Armv8 debug architecture.</p>
+</td></tr><tr><td class="bitfield">0b0111</td><td>
+  <p>Armv8 debug architecture with Virtualization Host Extensions.</p>
+</td></tr><tr><td class="bitfield">0b1000</td><td>
+  <p>Armv8.2 debug architecture.</p>
+</td></tr><tr><td class="bitfield">0b1001</td><td>
+  <p>Armv8.4 debug architecture.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">ARMv8.2-Debug</span> adds the functionality identified by the value <span class="binarynumber">0b1000</span>.</p>
+<ul>
+<li>If <span class="xref">ARMv8.1-VHE</span> is not implemented the only permitted value is <span class="binarynumber">0b0110</span>.
+</li><li>In an Armv8.0 implementation the value <span class="binarynumber">0b1000</span> is not permitted.
+</li></ul>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the ID_AA64DFR0_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, ID_AA64DFR0_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b0000</td><td>0b0101</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64DFR0_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64DFR0_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64DFR0_EL1;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

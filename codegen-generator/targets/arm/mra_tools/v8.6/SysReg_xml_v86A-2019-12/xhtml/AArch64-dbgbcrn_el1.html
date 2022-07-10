@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>DBGBCR&lt;n&gt;_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">DBGBCR&lt;n&gt;_EL1, Debug Breakpoint Control Registers, n =
+      0 - 15</h1><p>The DBGBCR&lt;n&gt;_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Holds control information for a breakpoint. Forms breakpoint n together with value register <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.</p>
+      <h2>Configuration</h2><p>AArch64 System register DBGBCR&lt;n&gt;_EL1 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-dbgbcrn.html">DBGBCR&lt;n&gt;[31:0]
+            </a>.
+          </p><p>AArch64 System register DBGBCR&lt;n&gt;_EL1 bits [31:0]
+            
+                are architecturally mapped to
+              External register <a href="ext-dbgbcrn_el1.html">DBGBCR&lt;n&gt;_EL1[31:0]
+            </a>.
+          </p>
+        <p>If breakpoint n is not implemented then accesses to this register are <span class="arm-defined-word">UNDEFINED</span>.</p>
+      <h2>Attributes</h2>
+            <p>DBGBCR&lt;n&gt;_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The DBGBCR&lt;n&gt;_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="8"><a href="#0_63">RES0</a></td><td class="lr" colspan="4"><a href="#BT_23">BT</a></td><td class="lr" colspan="4"><a href="#LBN_19">LBN</a></td><td class="lr" colspan="2"><a href="#SSC_15">SSC</a></td><td class="lr" colspan="1"><a href="#HMC_13">HMC</a></td><td class="lr" colspan="4"><a href="#0_12">RES0</a></td><td class="lr" colspan="4"><a href="#BAS_8">BAS</a></td><td class="lr" colspan="2"><a href="#0_4">RES0</a></td><td class="lr" colspan="2"><a href="#PMC_2">PMC</a></td><td class="lr" colspan="1"><a href="#E_0">E</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:24]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="BT_23">BT, bits [23:20]
+                  </h4>
+          
+  <p>Breakpoint Type. Possible values are:</p>
+
+          <table class="valuetable"><tr><th>BT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Unlinked instruction address match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a> is the address of an instruction.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>As <span class="binarynumber">0b0000</span>, but linked to a Context matching breakpoint.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>Unlinked Context ID match. When <span class="xref">ARMv8.1-VHE</span> is implemented, EL2 is using AArch64, and the Effective value of <a href="AArch64-hcr_el2.html">HCR_EL2</a>.E2H is 1, if either the PE is executing at EL0 with <a href="AArch64-hcr_el2.html">HCR_EL2</a>.TGE set to 1 or the PE is executing at EL2, then <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID must match the <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a> value. Otherwise, <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID must match the <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a> value</p>
+</td></tr><tr><td class="bitfield">0b0011</td><td>
+  <p>As <span class="binarynumber">0b0010</span>, with linking enabled.</p>
+</td></tr><tr><td class="bitfield">0b0110</td><td>
+  <p>Unlinked <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a> match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID is a Context ID compared against <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a>.</p>
+</td></tr><tr><td class="bitfield">0b0111</td><td>
+  <p>As <span class="binarynumber">0b0110</span>, with linking enabled.</p>
+</td></tr><tr><td class="bitfield">0b1000</td><td>
+  <p>Unlinked VMID match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.VMID is a VMID compared against <a href="AArch64-vttbr_el2.html">VTTBR_EL2</a>.VMID.</p>
+</td></tr><tr><td class="bitfield">0b1001</td><td>
+  <p>As <span class="binarynumber">0b1000</span>, with linking enabled.</p>
+</td></tr><tr><td class="bitfield">0b1010</td><td>
+  <p>Unlinked VMID and Context ID match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID is a Context ID compared against <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a>, and <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.VMID is a VMID compared against <a href="AArch64-vttbr_el2.html">VTTBR_EL2</a>.VMID.</p>
+</td></tr><tr><td class="bitfield">0b1011</td><td>
+  <p>As <span class="binarynumber">0b1010</span>, with linking enabled.</p>
+</td></tr><tr><td class="bitfield">0b1100</td><td>
+  <p>Unlinked <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a> match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID2 is a Context ID compared against <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a>.</p>
+</td></tr><tr><td class="bitfield">0b1101</td><td>
+  <p>As <span class="binarynumber">0b1100</span>, with linking enabled.</p>
+</td></tr><tr><td class="bitfield">0b1110</td><td>
+  <p>Unlinked Full Context ID match. <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID is compared against <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a>, and <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>.ContextID2 is compared against <a href="AArch64-contextidr_el2.html">CONTEXTIDR_EL2</a>.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>As <span class="binarynumber">0b1110</span>, with linking enabled.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved. Constraints on breakpoint programming mean other values are reserved under some conditions.</p>
+<p>For more information on the operation of the SSC, HMC, and PMC fields, and on the effect of programming this field to a reserved value, see <span class="xref">'Execution conditions for which a breakpoint generates Breakpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span> and <span class="xref">'Reserved DBGBCR&lt;n&gt;_EL1.BT values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span>.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="LBN_19">LBN, bits [19:16]
+                  </h4>
+          
+  <p>Linked breakpoint number. For Linked address matching breakpoints, this specifies the index of the Context-matching breakpoint linked to.</p>
+<p>For all other breakpoint types this field is ignored and reads of the register return an <span class="arm-defined-word">UNKNOWN</span> value.</p>
+<p>This field is ignored when the value of DBGBCR&lt;n&gt;_EL1.E is 0.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="SSC_15">SSC, bits [15:14]
+                  </h4>
+          
+  <p>Security state control. Determines the Security states under which a Breakpoint debug event for breakpoint n is generated. This field must be interpreted along with the HMC and PMC fields, and there are constraints on the permitted values of the {HMC, SSC, PMC} fields.</p>
+<p>For more information on the operation of the SSC, HMC, and PMC fields, and the effect of programming the fields to a reserved set of values, see <span class="xref">'Execution conditions for which a breakpoint generates Breakpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span> and <span class="xref">'Reserved DBGBCR&lt;n&gt;_EL1.{SSC, HMC, PMC} values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span>.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="HMC_13">HMC, bit [13]
+              </h4>
+          
+  <p>Higher mode control. Determines the debug perspective for deciding when a Breakpoint debug event for breakpoint n is generated. This field must be interpreted along with the SSC and PMC fields, and there are constraints on the permitted values of the {HMC, SSC, PMC} fields. For more information see the SSC, bits [15:14] description.</p>
+<p>For more information on the operation of the SSC, HMC, and PMC fields, see <span class="xref">'Execution conditions for which a breakpoint generates Breakpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span>.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="0_12">
+                Bits [12:9]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="BAS_8">BAS, bits [8:5]
+                  <div style="font-size:smaller;"><br />When AArch32 is supported at any Exception level:
+                </div></h4>
+          
+  <p>Byte address select. Defines which half-words an address-matching breakpoint matches, regardless of the instruction set and Execution state.</p>
+<p>The permitted values depend on the breakpoint type.</p>
+<p>For Address match breakpoints, the permitted values are:</p>
+<table class="valuetable"><thead><tr><th>BAS</th><th>Match instruction at</th><th>Constraint for debuggers</th></tr></thead><tbody><tr><td><span class="binarynumber">0b0011</span></td><td><a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a></td><td>Use for T32 instructions</td></tr><tr><td><span class="binarynumber">0b1100</span></td><td><a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a> + 2</td><td>Use for T32 instructions</td></tr><tr><td><span class="binarynumber">0b1111</span></td><td><a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a></td><td>Use for A64 and A32 instructions</td></tr></tbody></table>
+<p>All other values are reserved. For more information, see <span class="xref">'Reserved DBGBCR&lt;n&gt;_EL1.BAS values' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span>.</p>
+<p>For more information on using the BAS field in address match breakpoints, see <span class="xref">'Using the BAS field in Address Match breakpoints' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G2 (AArch32 Self-hosted Debug)</span>.</p>
+<p>For Context matching breakpoints, this field is <span class="arm-defined-word">RES1</span> and ignored.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="1_8"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES1</span>.</p>
+          <h4 id="0_4">
+                Bits [4:3]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="PMC_2">PMC, bits [2:1]
+                  </h4>
+          
+  <p>Privilege mode control. Determines the Exception level or levels at which a Breakpoint debug event for breakpoint n is generated. This field must be interpreted along with the SSC and HMC fields, and there are constraints on the permitted values of the {HMC, SSC, PMC} fields. For more information see the DBGBCR&lt;n&gt;_EL1.SSC description.</p>
+<p>For more information on the operation of the SSC, HMC, and PMC fields, see <span class="xref">'Execution conditions for which a breakpoint generates Breakpoint exceptions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section D2 (AArch64 Self-hosted Debug)</span>.</p>
+
+          
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><h4 id="E_0">E, bit [0]
+              </h4>
+          
+  <p>Enable breakpoint <a href="AArch64-dbgbvrn_el1.html">DBGBVR&lt;n&gt;_EL1</a>. Possible values are:</p>
+
+          <table class="valuetable"><tr><th>E</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Breakpoint disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Breakpoint enabled.</p>
+</td></tr></table>
+            
+  
+
+          <p>The following resets apply:</p><ul><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li><li><p>On a Warm reset, the value of this field is unchanged.</p></li></ul><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the DBGBCR&lt;n&gt;_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, DBGBCR&lt;n&gt;_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b10</td><td>0b000</td><td>0b0000</td><td>n[3:0]</td><td>0b101</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGRTR_EL2.DBGBCRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        return DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)];
+              </p><h4 class="assembler">MSR DBGBCR&lt;n&gt;_EL1, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b10</td><td>0b000</td><td>0b0000</td><td>n[3:0]</td><td>0b101</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HDFGWTR_EL2.DBGBCRn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+elsif PSTATE.EL == EL3 then
+    if !ELUsingAArch32(EL1) &amp;&amp; OSLSR_EL1.OSLK == '0' &amp;&amp; HaltingAllowed() &amp;&amp; EDSCR.TDA == '1' then
+        Halt(DebugHalt_SoftwareAccess);
+    else
+        DBGBCR_EL1[UInt(CRm&lt;3:0&gt;)] = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

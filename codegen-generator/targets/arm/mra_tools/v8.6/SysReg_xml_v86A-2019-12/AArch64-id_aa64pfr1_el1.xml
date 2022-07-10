@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ID_AA64PFR1_EL1</reg_short_name>
+      <reg_long_name>AArch64 Processor Feature Register 1</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Reserved for future expansion of information about implemented PE features in AArch64 state.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For general information about the interpretation of the ID registers, see <xref browsertext="Principles of the ID scheme for fields in ID registers" filename="D_aarch64_system_register_descriptions.fm" linkend="BABFAFHI"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ID_AA64PFR1_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="MPAM_frac_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>MPAM_frac</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>MPAM Extension fractional field. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.MPAM == <binarynumber>0b0000</binarynumber>, MPAM Extension not implemented.</para>
+<para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.MPAM == <binarynumber>0b0001</binarynumber>, MPAM Extension version 1.0 is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.MPAM == <binarynumber>0b0000</binarynumber>, implements MPAM version 0.1 which is like version 1.1 but reduces support for Secure PARTIDs.</para>
+<para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.MPAM == <binarynumber>0b0001</binarynumber>, implements MPAM extension version 1.1 and adds support for TIDR bit in MPAM2_EL2 to provide trapping of <register_link state="AArch64" id="AArch64-mpamidr_el1.xml">MPAMIDR_EL1</register_link> when <register_link state="AArch64" id="AArch64-mpamhcr_el2.xml">MPAMHCR_EL2</register_link> is not present.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="RAS_frac_15_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>RAS_frac</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>RAS Extension fractional field. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.RAS == <binarynumber>0b0001</binarynumber>, RAS Extension implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>If <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.RAS == <binarynumber>0b0001</binarynumber>, as <binarynumber>0b0000</binarynumber> and adds support for:</para>
+<list type="unordered">
+<listitem><content>Additional ERXMISC&lt;m&gt;_EL1 System registers.</content>
+</listitem><listitem><content>Additional System registers <register_link state="AArch64" id="AArch64-erxpfgcdn_el1.xml">ERXPFGCDN_EL1</register_link>, <register_link state="AArch64" id="AArch64-erxpfgctl_el1.xml">ERXPFGCTL_EL1</register_link>, and <register_link state="AArch64" id="AArch64-erxpfgf_el1.xml">ERXPFGF_EL1</register_link>, and the <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.FIEN and <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.FIEN trap controls, to support the optional RAS Common Fault Injection Model Extension.</content>
+</listitem></list>
+<para>Error records accessed through System registers conform to RAS System Architecture v1.1, which includes simplifications to <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link>, and support for the optional RAS Timestamp and RAS Common Fault Injection Model Extensions.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>This field is valid only if <register_link state="AArch64" id="AArch64-id_aa64pfr0_el1.xml">ID_AA64PFR0_EL1</register_link>.RAS == <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="MTE_11_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>MTE</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Support for the Memory Tagging Extension. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Memory Tagging Extension is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Memory Tagging Extension instructions accessible at EL0 are implemented. Instructions and System Registers defined by the extension not configurably accessible at EL0 are Unallocated and other System Register fields defined by the extension are <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>Memory Tagging Extension is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.5-MemTag" filename="A_armv8_architecture_extensions.fm" linkend="v8.5.MemTag"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>When ID_AA64PFR1_EL1.MTE != <binarynumber>0b0010</binarynumber>:</para>
+<list type="unordered">
+<listitem><content>
+<para>All register fields added to existing System registers and Special-purpose registers as part of the extension are <arm-defined-word>RES0</arm-defined-word>, and treated as 0.</para>
+</content>
+</listitem><listitem><content>
+<para>The following System registers are <arm-defined-word>UNDEFINED</arm-defined-word>:</para>
+<list type="unordered">
+<listitem><content><register_link state="AArch64" id="AArch64-gmid_el1.xml">GMID_EL1</register_link>, <register_link state="AArch64" id="AArch64-gcr_el1.xml">GCR_EL1</register_link>, <register_link state="AArch64" id="AArch64-rgsr_el1.xml">RGSR_EL1</register_link>, <register_link state="AArch64" id="AArch64-tfsre0_el1.xml">TFSRE0_EL1</register_link>, and TFSR_ELx.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>
+<para>The following System instructions are <arm-defined-word>UNDEFINED</arm-defined-word>:</para>
+<list type="unordered">
+<listitem><content><register_link id="AArch64-dc-cgsw.xml" state="AArch64">DC CGSW</register_link>, <register_link id="AArch64-dc-cigsw.xml" state="AArch64">DC CIGSW</register_link>, <register_link id="AArch64-dc-igsw.xml" state="AArch64">DC IGSW</register_link>, <register_link id="AArch64-dc-cgdsw.xml" state="AArch64">DC CGDSW</register_link>, <register_link id="AArch64-dc-cigsw.xml" state="AArch64">DC CIGDSW</register_link>, <register_link id="AArch64-dc-igdsw.xml" state="AArch64">DC IGDSW</register_link>, <register_link id="AArch64-dc-igvac.xml" state="AArch64">DC IGVAC</register_link>, and <register_link id="AArch64-dc-igdvac.xml" state="AArch64">DC IGDVAC</register_link>.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>
+<para>The following instructions are <arm-defined-word>UNDEFINED</arm-defined-word>:</para>
+<list type="unordered">
+<listitem><content><instruction>LDGM</instruction>, <instruction>STGM</instruction>, and <instruction>STZGM</instruction>.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>
+<para>The Tagged memory type encoding in MAIR_ELx is <arm-defined-word>UNPREDICTABLE</arm-defined-word>.</para>
+</content>
+</listitem></list>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="SSBS_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SSBS</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Speculative Store Bypassing controls in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>AArch64 provides no mechanism to control the use of Speculative Store Bypassing.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>AArch64 provides the PSTATE.SSBS mechanism to mark regions that are Speculative Store Bypass Safe.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>AArch64 provides the PSTATE.SSBS mechanism to mark regions that are Speculative Store Bypassing Safe, and the MSR and MRS instructions to directly read and write the PSTATE.SSBS field</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="BT_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>BT</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Branch Target Identification mechanism support in AArch64 state. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>The Branch Target Identification mechanism is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>The Branch Target Identification mechanism is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.5-BTI" filename="A_armv8_architecture_extensions.fm" linkend="v8.5.BTI"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_20" msb="63" lsb="20"/>
+        <fieldat id="MPAM_frac_19_16" msb="19" lsb="16"/>
+        <fieldat id="RAS_frac_15_12" msb="15" lsb="12"/>
+        <fieldat id="MTE_11_8" msb="11" lsb="8"/>
+        <fieldat id="SSBS_7_4" msb="7" lsb="4"/>
+        <fieldat id="BT_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS ID_AA64PFR1_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, ID_AA64PFR1_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="0b0100"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_AA64PFR1_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_AA64PFR1_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_AA64PFR1_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

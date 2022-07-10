@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>GITS_TYPER</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">GITS_TYPER, ITS Type Register</h1><p>The GITS_TYPER characteristics are:</p><h2>Purpose</h2>
+        <p>Specifies the features that an ITS supports.</p>
+      <h2>Configuration</h2><p></p><h2>Attributes</h2>
+            <p>GITS_TYPER is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The GITS_TYPER bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="20"><a href="#0_63">RES0</a></td><td class="lr" colspan="1"><a href="#nID_43">nID</a></td><td class="lr" colspan="2"><a href="#SVPET_42">SVPET</a></td><td class="lr" colspan="1"><a href="#VMAPP_40">VMAPP</a></td><td class="lr" colspan="1"><a href="#VSGI_39">VSGI</a></td><td class="lr" colspan="1"><a href="#MPAM_38">MPAM</a></td><td class="lr" colspan="1"><a href="#VMOVP_37">VMOVP</a></td><td class="lr" colspan="1"><a href="#CIL_36">CIL</a></td><td class="lr" colspan="4"><a href="#CIDbits_35">CIDbits</a></td></tr><tr class="firstrow"><td class="lr" colspan="8"><a href="#HCC_31">HCC</a></td><td class="lr" colspan="4"><a href="#0_23">RES0</a></td><td class="lr" colspan="1"><a href="#PTA_19">PTA</a></td><td class="lr" colspan="1"><a href="#SEIS_18">SEIS</a></td><td class="lr" colspan="5"><a href="#Devbits_17">Devbits</a></td><td class="lr" colspan="5"><a href="#ID_bits_12">ID_bits</a></td><td class="lr" colspan="4"><a href="#ITT_entry_size_7">ITT_entry_size</a></td><td class="lr" colspan="1"><a href="#IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED</a></td><td class="lr" colspan="1"><a href="#CCT_2">CCT</a></td><td class="lr" colspan="1"><a href="#Virtual_1">Virtual</a></td><td class="lr" colspan="1"><a href="#Physical_0">Physical</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:44]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="nID_43">nID, bit [43]
+              <div style="font-size:smaller;"><br />When GICv4.1 is implemented:
+                </div></h4>
+          
+  <p>nID</p>
+
+          <table class="valuetable"><tr><th>nID</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Individual doorbell interrupt supported.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Individual doorbell interrupt not supported.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_43"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="SVPET_42">SVPET, bits [42:41]
+                  <div style="font-size:smaller;"><br />When GICv4.1 is implemented:
+                </div></h4>
+          
+  <p>SVPET</p>
+
+          <table class="valuetable"><tr><th>SVPET</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>vPE Table is not shared with Redistributors.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>vPE Table is shared with the groups of Redistributors indicated by GITS_MPIDR.Aff3.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>vPE Table is shared with the groups of Redistributors indicated by GITS_MPIDR fields Aff3 and Aff2.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>vPE Table is shared with the groups of Redistributors indicated by GITS_MPIDR fields Aff3, Aff2 and Aff1.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_42"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="VMAPP_40">VMAPP, bit [40]
+              <div style="font-size:smaller;"><br />When GICv4.1 is implemented:
+                </div></h4>
+          
+  <p>VMAPP</p>
+
+          <table class="valuetable"><tr><th>VMAPP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>GICv4.0 VMAPP command layout.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>GICv4.1 VMAPP command layout.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_40"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="VSGI_39">VSGI, bit [39]
+              <div style="font-size:smaller;"><br />When GICv4.1 is implemented:
+                </div></h4>
+          
+  <p>VSGI</p>
+
+          <table class="valuetable"><tr><th>VSGI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Direct injection of SGIs is not supported.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Direct injection of SGIs is supported.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_39"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="MPAM_38">MPAM, bit [38]
+              <div style="font-size:smaller;"><br />When GIC, &gt;=3.1 is implemented:
+                </div></h4>
+          
+  <p>MPAM</p>
+
+          <table class="valuetable"><tr><th>MPAM</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>MPAM is not supported.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>MPAM is supported.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_38"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="VMOVP_37">VMOVP, bit [37]
+              </h4>
+          
+  <p>Indicates the form of the VMOVP command.</p>
+
+          <table class="valuetable"><tr><th>VMOVP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>When moving a vPE, software must issue a VMOVP on all ITSs that have mappings for that vPE. The ITSList and Sequence Number fields in the VMOVP command must ensure synchronization, otherwise behavior is <span class="arm-defined-word">UNPREDICTABLE</span>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>When moving a vPE, software must only issue a VMOVP on one of the ITSs that has a mapping for that vPE. The ITSList and Sequence Number fields in the VMOVP command are <span class="arm-defined-word">RES0</span>.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="CIL_36">CIL, bit [36]
+              </h4>
+          
+  <p>Collection ID Limit.</p>
+
+          <table class="valuetable"><tr><th>CIL</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>ITS supports 16-bit Collection ID, <a href="ext-gits_typer.html">GITS_TYPER</a>.CIDbits is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-gits_typer.html">GITS_TYPER</a>.CIDbits indicates supported Collection ID size</p>
+</td></tr></table>
+            
+  <p>In implementations that do not support Collections in external memory, this bit is <span class="arm-defined-word">RES0</span> and the number of Collections supported is reported by <a href="ext-gits_typer.html">GITS_TYPER</a>.HCC.</p>
+
+          <h4 id="CIDbits_35">CIDbits, bits [35:32]
+                  </h4>
+          
+  <p>Number of Collection ID bits.</p>
+<ul>
+<li>The number of bits of Collection ID minus one.
+</li><li>When <a href="ext-gits_typer.html">GITS_TYPER</a>.CIL == 0, this field is <span class="arm-defined-word">RES0</span>.
+</li></ul>
+
+          
+            
+  
+
+          <h4 id="HCC_31">HCC, bits [31:24]
+                  </h4>
+          
+  <p>Hardware Collection Count. The number of interrupt collections supported by the ITS without provisioning of external memory.</p>
+<div class="note"><span class="note-header">Note</span><p>Collections held in hardware are unmapped at reset.</p></div>
+
+          
+            
+  
+
+          <h4 id="0_23">
+                Bits [23:20]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="PTA_19">PTA, bit [19]
+              </h4>
+          
+  <p>Physical Target Addresses. Indicates the format of the target address:</p>
+
+          <table class="valuetable"><tr><th>PTA</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The target address corresponds to the PE number specified by <a href="ext-gicr_typer.html">GICR_TYPER</a>.Processor_Number.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The target address corresponds to the base physical address of the required Redistributor.</p>
+</td></tr></table>
+            
+  <p>See <span class="xref">Target addresses</span> for more information.</p>
+
+          <h4 id="SEIS_18">SEIS, bit [18]
+              </h4>
+          
+  <p>SEI support. Indicates whether the virtual CPU interface supports generation of SEIs:</p>
+
+          <table class="valuetable"><tr><th>SEIS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The ITS does not support local generation of SEIs.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The ITS supports local generation of SEIs.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="Devbits_17">Devbits, bits [17:13]
+                  </h4>
+          
+  <p>The number of DeviceID bits implemented, minus one.</p>
+
+          
+            
+  
+
+          <h4 id="ID_bits_12">ID_bits, bits [12:8]
+                  </h4>
+          
+  <p>The number of EventID bits implemented, minus one.</p>
+
+          
+            
+  
+
+          <h4 id="ITT_entry_size_7">ITT_entry_size, bits [7:4]
+                  </h4>
+          
+  <p>Read-only. Indicates the number of bytes per translation table entry, minus one.</p>
+<p>See <span class="xref">the ITS command 'MAPD'</span> for more information.</p>
+
+          
+            
+  
+
+          <h4 id="IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED, bit [3]
+              </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  
+
+          
+            
+  
+
+          <h4 id="CCT_2">CCT, bit [2]
+              </h4>
+          
+  <p>Cumulative Collection Tables.</p>
+
+          <table class="valuetable"><tr><th>CCT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The total number of supported collections is determined by the number of collections held in memory only.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The total number of supported collections is determined by number of collections that are held in memory and the number indicated by GITS_TYPER.HCC.</p>
+</td></tr></table>
+            
+  <p>If GITS_TYPER.HCC == 0, or if memory backed collections are not supported (all <a href="ext-gits_basern.html">GITS_BASER&lt;n&gt;</a>.Type != 100), this bit is <span class="arm-defined-word">RES0</span>.</p>
+
+          <h4 id="Virtual_1">Virtual, bit [1]
+              </h4>
+          
+  <p>Indicates whether the ITS supports virtual LPIs and direct injection of virtual LPIs:</p>
+
+          <table class="valuetable"><tr><th>Virtual</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The ITS does not support virtual LPIs or direct injection of virtual LPIs.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The ITS supports virtual LPIs and direct injection of virtual LPIs.</p>
+</td></tr></table>
+            
+  <p>This field is <span class="arm-defined-word">RES0</span> in GICv3 implementations.</p>
+
+          <h4 id="Physical_0">Physical, bit [0]
+              </h4>
+          
+  <p>Indicates whether the ITS supports physical LPIs:</p>
+
+          <table class="valuetable"><tr><th>Physical</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The ITS does not support physical LPIs.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The ITS supports physical LPIs.</p>
+</td></tr></table>
+            
+  <p>This field is <span class="arm-defined-word">RES1</span>, indicating that the ITS supports physical LPIs.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the GITS_TYPER</h2><h4>GITS_TYPER can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>GIC ITS control</td><td><span class="hexnumber">0x0008</span></td><td>GITS_TYPER</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When GICD_CTLR.DS == 0b0
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>When IsAccessSecure()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>When !IsAccessSecure()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

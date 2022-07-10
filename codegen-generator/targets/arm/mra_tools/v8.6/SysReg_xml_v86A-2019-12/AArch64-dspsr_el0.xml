@@ -1,0 +1,2038 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>DSPSR_EL0</reg_short_name>
+      <reg_long_name>Debug Saved Program Status Register</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-dspsr.xml">DSPSR</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Holds the saved process state for Debug state. On entering Debug state, PSTATE information is written to this register. On exiting Debug state, values are copied from this register to PSTATE.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>DSPSR_EL0 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+      <fields_condition>When AArch32 is supported at any Exception level and exiting Debug state to AArch32 state</fields_condition>
+      <fields_instance>exiting Debug state to AArch32 state</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="N_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>N</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+          
+  <para>Negative Condition flag. Copied to PSTATE.N on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Z_30_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Z</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Zero Condition flag. Copied to PSTATE.Z on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="C_29_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>C</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+          
+  <para>Carry Condition flag. Copied to PSTATE.C on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="V_28_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>V</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Overflow Condition flag. Copied to PSTATE.V on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Q_27_27"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Q</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+          
+  <para>Overflow or saturation flag. Copied to PSTATE.Q on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IT[1:0]_26_25"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IT[1:0]</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+          
+  <para>If-Then. Copied to PSTATE.IT[1:0] on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  <para>On exiting Debug state DSPSR_EL0.IT must contain a value that is valid for the instruction being returned to.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DIT_24_24_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DIT</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Data Independent Timing. Copied to PSTATE.DIT on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-DIT is implemented</fields_condition>
+      </field>
+        <field
+           id="0_24_24_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SSBS_23_23_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SSBS</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+          
+  <para>Speculative Store Bypass. Copied to PSTATE.SSBS on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.0-SSBS is implemented</fields_condition>
+      </field>
+        <field
+           id="0_23_23_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="PAN_22_22_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>PAN</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+          
+  <para>Privileged Access Never. Copied to PSTATE.PAN on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.1-PAN is implemented</fields_condition>
+      </field>
+        <field
+           id="0_22_22_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SS_21_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SS</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Software Step. Copied to PSTATE.SS on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IL_20_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IL</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Illegal Execution state. Copied to PSTATE.IL on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="GE_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GE</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Greater than or Equal flags. Copied to PSTATE.GE on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IT[7:2]_15_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IT[7:2]</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>If-Then. Copied to PSTATE.IT[7:2] on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  <para>DSPSR_EL0.IT must contain a value that is valid for the instruction being returned to.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="E_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>E</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>Endianness. Copied to PSTATE.E on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the implementation does not support big-endian operation, DSPSR_EL0.E is <arm-defined-word>RES0</arm-defined-word>. If the implementation does not support little-endian operation, DSPSR_EL0.E is <arm-defined-word>RES1</arm-defined-word>. On exiting Debug state, if the implementation does not support big-endian operation at the Exception level being returned to, DSPSR_EL0.E is <arm-defined-word>RES0</arm-defined-word>, and if the implementation does not support little-endian operation at the Exception level being returned to, DSPSR_EL0.E is <arm-defined-word>RES1</arm-defined-word>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="A_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>A</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>SError interrupt mask. Copied to PSTATE.A on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="I_7_7"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>I</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>IRQ interrupt mask. Copied to PSTATE.I on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="F_6_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>F</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>FIQ interrupt mask. Copied to PSTATE.F on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="T_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>T</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>T32 Instruction set state. Copied to PSTATE.T on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="M[4]_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>M[4]</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Execution state. Copied to PSTATE.nRW on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>AArch32 execution state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="M[3:0]_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>M[3:0]</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch32 Mode. Copied to PSTATE.M[3:0] on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>User.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>FIQ.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>IRQ.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0011</field_value>
+        <field_value_description>
+  <para>Supervisor.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0110</field_value>
+        <field_value_description>
+  <para>Monitor.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0111</field_value>
+        <field_value_description>
+  <para>Abort.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1010</field_value>
+        <field_value_description>
+  <para>Hyp.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1011</field_value>
+        <field_value_description>
+  <para>Undefined.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1111</field_value>
+        <field_value_description>
+  <para>System.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>Other values are reserved. If DSPSR_EL0.M[3:0] has a Reserved value, or a value for an unimplemented Exception level, exiting Debug state is an illegal return event, as described in <xref browsertext="'Illegal return events from AArch64 state' in the Arm®Architecture Reference Manual, Armv8, for Armv8-A architecture profile" filename="D_the_aarch64_system_level_programmers_model.fm" linkend="BEIEGDFD"></xref>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <fields length="64">
+      <fields_condition>When AArch64 is supported at any Exception level and entering Debug state from AArch64 state and exiting Debug state to AArch64 state</fields_condition>
+      <fields_instance>entering Debug state from AArch64 state and exiting Debug state to AArch64 state</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="N_31_31"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>N</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>31</field_lsb>
+          <field_description order="before">
+          
+  <para>Negative Condition flag. Set to the value of PSTATE.N on entering Debug state, and copied to PSTATE.N on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Z_30_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Z</field_name>
+          <field_msb>30</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Zero Condition flag. Set to the value of PSTATE.Z on entering Debug state, and copied to PSTATE.Z on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="C_29_29"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>C</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>29</field_lsb>
+          <field_description order="before">
+          
+  <para>Carry Condition flag. Set to the value of PSTATE.C on entering Debug state, and copied to PSTATE.C on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="V_28_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>V</field_name>
+          <field_msb>28</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>Overflow Condition flag. Set to the value of PSTATE.V on entering Debug state, and copied to PSTATE.V on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_27_26"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TCO_25_25_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>TCO</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+          
+  <para>Tag Check Override. Set to the value of PSTATE.TCO on entering Debug state, and copied to PSTATE.TCO on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.5-MemTag is implemented</fields_condition>
+      </field>
+        <field
+           id="0_25_25_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="DIT_24_24_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>DIT</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Data Independent Timing. Set to the value of PSTATE.DIT on entering Debug state, and copied to PSTATE.DIT on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.4-DIT is implemented</fields_condition>
+      </field>
+        <field
+           id="0_24_24_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="UAO_23_23_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>UAO</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+          
+  <para>User Access Override. Set to the value of PSTATE.UAO on entering Debug state, and copied to PSTATE.UAO on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-UAO is implemented</fields_condition>
+      </field>
+        <field
+           id="0_23_23_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>23</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="PAN_22_22_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>PAN</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+          
+  <para>Privileged Access Never. Set to the value of PSTATE.PAN on entering Debug state, and copied to PSTATE.PAN on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.1-PAN is implemented</fields_condition>
+      </field>
+        <field
+           id="0_22_22_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>22</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SS_21_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SS</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Software Step. Set to the value of PSTATE.SS on entering Debug state, and conditionally copied to PSTATE.SS on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IL_20_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IL</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Illegal Execution state. Set to the value of PSTATE.IL on entering Debug state, and copied to PSTATE.IL on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_19_13"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>13</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SSBS_12_12_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>SSBS</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>Speculative Store Bypass. Set to the value of PSTATE.SSBS on entering Debug state, and copied to PSTATE.SSBS on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.0-SSBS is implemented</fields_condition>
+      </field>
+        <field
+           id="0_12_12_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>12</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="BTYPE_11_10_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="True"
+           reserved_type="RES0"
+        >
+          <field_name>BTYPE</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>10</field_lsb>
+           <field_range>10</field_range>
+          <field_description order="before">
+          
+  <para>Branch Type Indicator. Set to the value of PSTATE.BTYPE on entering Debug state, and copied to PSTATE.BTYPE on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.5-BTI is implemented</fields_condition>
+      </field>
+        <field
+           id="0_11_10_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>10</field_lsb>
+           <field_range>11:10</field_range>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="D_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>D</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>Debug exception mask. Set to the value of PSTATE.D on entering Debug state, and copied to PSTATE.D on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="A_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>A</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>SError interrupt mask. Set to the value of PSTATE.A on entering Debug state, and copied to PSTATE.A on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="I_7_7"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>I</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>IRQ interrupt mask. Set to the value of PSTATE.I on entering Debug state, and copied to PSTATE.I on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="F_6_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>F</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>FIQ interrupt mask. Set to the value of PSTATE.F on entering Debug state, and copied to PSTATE.F on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="M[4]_4_4_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>M[4]</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Execution state. Set to <binarynumber>0b0</binarynumber>, the value of PSTATE.nRW, on entering Debug state from AArch64 state, and copied to PSTATE.nRW on exiting Debug state.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>AArch64 execution state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When AArch32 is supported at any Exception level</fields_condition>
+      </field>
+        <field
+           id="0_4_4_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="M[3:0]_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>M[3:0]</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>AArch64 Exception level and selected Stack Pointer.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>EL0t.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0100</field_value>
+        <field_value_description>
+  <para>EL1t.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0101</field_value>
+        <field_value_description>
+  <para>EL1h.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1000</field_value>
+        <field_value_description>
+  <para>EL2t.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1001</field_value>
+        <field_value_description>
+  <para>EL2h.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1100</field_value>
+        <field_value_description>
+  <para>EL3t.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1101</field_value>
+        <field_value_description>
+  <para>EL3h.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>Other values are reserved. If DSPSR_EL0.M[3:0] has a Reserved value, or a value for an unimplemented Exception level, exiting Debug state is an illegal return event, as described in <xref browsertext="'Illegal return events from AArch64 state' in the Arm®Architecture Reference Manual, Armv8, for Armv8-A architecture profile" filename="D_the_aarch64_system_level_programmers_model.fm" linkend="BEIEGDFD"></xref>.</para>
+<para>The bits in this field are interpreted as follows:</para>
+<list type="unordered">
+<listitem><content>M[3:2] is set to the value of PSTATE.EL on entering Debug state and copied to PSTATE.EL on exiting Debug state.</content>
+</listitem><listitem><content>M[1] is unused and is 0 for all non-reserved values.</content>
+</listitem><listitem><content>M[0] is set to the value of PSTATE.SP on entering Debug state and copied to PSTATE.SP on exiting Debug state</content>
+</listitem></list>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+        <fields_condition>When AArch32 is supported at any Exception level and exiting Debug state to AArch32 state</fields_condition>
+      
+        <fieldat id="0_63_32" msb="63" lsb="32"/>
+        <fieldat id="N_31_31" msb="31" lsb="31"/>
+        <fieldat id="Z_30_30" msb="30" lsb="30"/>
+        <fieldat id="C_29_29" msb="29" lsb="29"/>
+        <fieldat id="V_28_28" msb="28" lsb="28"/>
+        <fieldat id="Q_27_27" msb="27" lsb="27"/>
+        <fieldat id="IT[1:0]_26_25" msb="26" lsb="25"/>
+        <fieldat id="DIT_24_24_1" msb="24" lsb="24"/>
+        <fieldat id="SSBS_23_23_1" msb="23" lsb="23"/>
+        <fieldat id="PAN_22_22_1" msb="22" lsb="22"/>
+        <fieldat id="SS_21_21" msb="21" lsb="21"/>
+        <fieldat id="IL_20_20" msb="20" lsb="20"/>
+        <fieldat id="GE_19_16" msb="19" lsb="16"/>
+        <fieldat id="IT[7:2]_15_10" msb="15" lsb="10"/>
+        <fieldat id="E_9_9" msb="9" lsb="9"/>
+        <fieldat id="A_8_8" msb="8" lsb="8"/>
+        <fieldat id="I_7_7" msb="7" lsb="7"/>
+        <fieldat id="F_6_6" msb="6" lsb="6"/>
+        <fieldat id="T_5_5" msb="5" lsb="5"/>
+        <fieldat id="M[4]_4_4" msb="4" lsb="4"/>
+        <fieldat id="M[3:0]_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+  <reg_fieldset length="64">
+        <fields_condition>When AArch64 is supported at any Exception level and entering Debug state from AArch64 state and exiting Debug state to AArch64 state</fields_condition>
+      
+        <fieldat id="0_63_32" msb="63" lsb="32"/>
+        <fieldat id="N_31_31" msb="31" lsb="31"/>
+        <fieldat id="Z_30_30" msb="30" lsb="30"/>
+        <fieldat id="C_29_29" msb="29" lsb="29"/>
+        <fieldat id="V_28_28" msb="28" lsb="28"/>
+        <fieldat id="0_27_26" msb="27" lsb="26"/>
+        <fieldat id="TCO_25_25_1" msb="25" lsb="25"/>
+        <fieldat id="DIT_24_24_1" msb="24" lsb="24"/>
+        <fieldat id="UAO_23_23_1" msb="23" lsb="23"/>
+        <fieldat id="PAN_22_22_1" msb="22" lsb="22"/>
+        <fieldat id="SS_21_21" msb="21" lsb="21"/>
+        <fieldat id="IL_20_20" msb="20" lsb="20"/>
+        <fieldat id="0_19_13" msb="19" lsb="13"/>
+        <fieldat id="SSBS_12_12_1" msb="12" lsb="12"/>
+        <fieldat id="BTYPE_11_10_1" msb="11" lsb="10"/>
+        <fieldat id="D_9_9" msb="9" lsb="9"/>
+        <fieldat id="A_8_8" msb="8" lsb="8"/>
+        <fieldat id="I_7_7" msb="7" lsb="7"/>
+        <fieldat id="F_6_6" msb="6" lsb="6"/>
+        <fieldat id="0_5_5" msb="5" lsb="5"/>
+        <fieldat id="M[4]_4_4_1" msb="4" lsb="4"/>
+        <fieldat id="M[3:0]_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS DSPSR_EL0">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, DSPSR_EL0</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b011"/>
+            
+            <enc n="CRn" v="0b0100"/>
+            
+            <enc n="CRm" v="0b0101"/>
+            
+            <enc n="op2" v="0b000"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if !Halted() then
+    UNDEFINED;
+else
+    return DSPSR_EL0;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MSRregister DSPSR_EL0">
+        <encoding>
+          
+          <access_instruction>MSR DSPSR_EL0, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b011"/>
+            
+            <enc n="CRn" v="0b0100"/>
+            
+            <enc n="CRm" v="0b0101"/>
+            
+            <enc n="op2" v="0b000"/>
+        </encoding>
+          <access_permission>
+            <ps name="MSRregister" sections="1" secttype="access_permission">
+              <pstext>
+if !Halted() then
+    UNDEFINED;
+else
+    DSPSR_EL0 = X[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

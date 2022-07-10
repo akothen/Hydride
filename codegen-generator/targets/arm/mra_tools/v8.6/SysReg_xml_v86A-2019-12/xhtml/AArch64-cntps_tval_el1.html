@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>CNTPS_TVAL_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">CNTPS_TVAL_EL1, Counter-timer Physical Secure Timer TimerValue register</h1><p>The CNTPS_TVAL_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Holds the timer value for the secure physical timer, usually accessible at EL3 but configurably accessible at EL1 in Secure state.</p>
+      <h2>Configuration</h2><p>There are no configuration notes.</p><h2>Attributes</h2>
+            <p>CNTPS_TVAL_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The CNTPS_TVAL_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="32"><a href="#TimerValue_31">TimerValue</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="TimerValue_31">TimerValue, bits [31:0]
+                  </h4>
+          
+  <p>The TimerValue view of the secure physical timer.</p>
+<p>On a read of this register:</p>
+<ul>
+<li>If <a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.ENABLE is 0, the value returned is <span class="arm-defined-word">UNKNOWN</span>.
+</li><li>If <a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.ENABLE is 1, the value returned is (<a href="AArch64-cntps_cval_el1.html">CNTPS_CVAL_EL1</a> - <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a>).
+</li></ul>
+<p>On a write of this register, <a href="AArch64-cntps_cval_el1.html">CNTPS_CVAL_EL1</a> is set to (<a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> + TimerValue), where TimerValue is treated as a signed 32-bit integer.</p>
+<p>When <a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.ENABLE is 1, the timer condition is met when (<a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> - <a href="AArch64-cntps_cval_el1.html">CNTPS_CVAL_EL1</a>) is greater than or equal to zero. This means that TimerValue acts like a 32-bit downcounter timer. When the timer condition is met:</p>
+<ul>
+<li><a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.ISTATUS is set to 1.
+</li><li>If <a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.IMASK is 0, an interrupt is generated.
+</li></ul>
+<p>When <a href="AArch64-cntps_ctl_el1.html">CNTPS_CTL_EL1</a>.ENABLE is 0, the timer condition is not met, but <a href="AArch64-cntpct_el0.html">CNTPCT_EL0</a> continues to count, so the TimerValue view appears to continue to count down.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the CNTPS_TVAL_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, CNTPS_TVAL_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b111</td><td>0b1110</td><td>0b0010</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if HaveEL(EL3) &amp;&amp; SCR_EL3.NS == '0' then
+        if SCR_EL3.EEL2 == '1' then
+            UNDEFINED;
+        elsif SCR_EL3.ST == '0' then
+            AArch64.SystemAccessTrap(EL3, 0x18);
+        else
+            return CNTPS_TVAL_EL1;
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    return CNTPS_TVAL_EL1;
+              </p><h4 class="assembler">MSR CNTPS_TVAL_EL1, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b111</td><td>0b1110</td><td>0b0010</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if HaveEL(EL3) &amp;&amp; SCR_EL3.NS == '0' then
+        if SCR_EL3.EEL2 == '1' then
+            UNDEFINED;
+        elsif SCR_EL3.ST == '0' then
+            AArch64.SystemAccessTrap(EL3, 0x18);
+        else
+            CNTPS_TVAL_EL1 = X[t];
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    CNTPS_TVAL_EL1 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

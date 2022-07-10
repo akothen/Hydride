@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ID_AFR0</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ID_AFR0, Auxiliary Feature Register 0</h1><p>The ID_AFR0 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides information about the <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> features of the PE in AArch32 state.</p>
+
+      
+        <p>Must be interpreted with the Main ID Register, <a href="AArch32-midr.html">MIDR</a>.</p>
+
+      
+        <p>For general information about the interpretation of the ID registers see <span class="xref">'Principles of the ID scheme for fields in ID registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G7.1.3</span>.</p>
+      <h2>Configuration</h2><p>AArch32 System register ID_AFR0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-id_afr0_el1.html">ID_AFR0_EL1[31:0]
+            </a>.
+          </p><h2>Attributes</h2>
+            <p>ID_AFR0 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The ID_AFR0 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="16"><a href="#0_31">RES0</a></td><td class="lr" colspan="4"><a href="#IMPLEMENTATIONDEFINED_15">IMPLEMENTATION DEFINED</a></td><td class="lr" colspan="4"><a href="#IMPLEMENTATIONDEFINED_11">IMPLEMENTATION DEFINED</a></td><td class="lr" colspan="4"><a href="#IMPLEMENTATIONDEFINED_7">IMPLEMENTATION DEFINED</a></td><td class="lr" colspan="4"><a href="#IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_31">
+                Bits [31:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="IMPLEMENTATIONDEFINED_15">IMPLEMENTATION DEFINED, bits [15:12]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  
+
+        <h4 id="IMPLEMENTATIONDEFINED_11">IMPLEMENTATION DEFINED, bits [11:8]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  
+
+        <h4 id="IMPLEMENTATIONDEFINED_7">IMPLEMENTATION DEFINED, bits [7:4]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  
+
+        <h4 id="IMPLEMENTATIONDEFINED_3">IMPLEMENTATION DEFINED, bits [3:0]
+                  </h4>
+            <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+          
+  
+
+        <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the ID_AFR0</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b0000</td><td>0b0001</td><td>0b011</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T0 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T0 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TID3 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        return ID_AFR0;
+elsif PSTATE.EL == EL2 then
+    return ID_AFR0;
+elsif PSTATE.EL == EL3 then
+    return ID_AFR0;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

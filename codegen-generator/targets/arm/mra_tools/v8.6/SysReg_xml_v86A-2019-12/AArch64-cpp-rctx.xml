@@ -1,0 +1,465 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="False" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>CPP RCTX</reg_short_name>
+      <reg_long_name>Cache Prefetch Prediction Restriction by Context</reg_long_name>
+        <reg_condition otherwise="UNDEFINED">when ARMv8.0-PredInv is implemented</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Cache Prefetch Prediction Restriction by Context applies to all Cache Allocation Resources that predict cache allocations based on information gathered within the target execution context or contexts.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>When this instruction is complete and synchronized, cache prefetch prediction does not permit later speculative execution within the target execution context to be observable through side channels.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>This instruction applies to all:</para>
+
+      </purpose_text>
+      <purpose_text>
+        <list type="unordered">
+<listitem><content>Instruction caches.</content>
+</listitem><listitem><content>Data caches.</content>
+</listitem><listitem><content>TLB prefetching hardware used by the executing PE that applies to the supplied context or contexts.</content>
+</listitem></list>
+
+      </purpose_text>
+      <purpose_text>
+        <para>This instruction is guaranteed to be complete following a DSB that covers both read and write behavior on the same PE as executed the original restriction instruction, and a subsequent context synchronization event is required to ensure that the effect of the completion of the instructions is synchronized to the current execution.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <note><para>This instruction does not require the invalidation of Cache Allocation Resources so long as the behavior described for completion of this instruction is met by the implementation.</para><para>On some implementations the instruction is likely to take a significant number of cycles to execute. This instruction is expected to be used very rarely, such as on the roll-over of an ASID or VMID, but should not be used on every context switch.</para></note>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>Predictor maintenance instructions</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          
+    
+      <attributes_text>
+        <para>CPP RCTX is a 64-bit System instruction.</para>
+      </attributes_text>
+
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_49"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>49</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="GVMID_48_48"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GVMID</field_name>
+          <field_msb>48</field_msb>
+          <field_lsb>48</field_lsb>
+          <field_description order="before">
+          
+  <para>Execution of this instruction applies to all VMIDs or a specified VMID.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Applies to specified VMID for an EL0 or EL1 context. For all other contexts this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Applies to all VMIDs for an EL0 or EL1 context. For all other contexts this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the instruction is executed at EL0 or EL1, then this field has an Effective value of 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="VMID_47_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>VMID</field_name>
+          <field_msb>47</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>Only applies when bit[48] is 0 and one of:</para>
+<list type="unordered">
+<listitem><content>an EL1 context.</content>
+</listitem><listitem><content>an EL0 context when (<register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H==0 or <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.TGE==0).</content>
+</listitem></list>
+<para>Otherwise this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+<para>When the instruction is executed at EL1 then this field is treated as the current VMID.</para>
+<para>When the instruction is executed at EL0 and (<register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H==0 or <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.TGE==0) then this field is treated as the current VMID.</para>
+<para>When the instruction is executed at EL0 and (<register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.E2H==1 and <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.TGE==1) then this field is ignored.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_31_27"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="NS_26_26"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>NS</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+          
+  <para>Security State.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Secure state.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Non-secure state.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the instruction is executed in Non-secure state, this field has an Effective value of 1.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="EL_25_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EL</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Exception Level.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00</field_value>
+        <field_value_description>
+  <para>EL0.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>EL1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b10</field_value>
+        <field_value_description>
+  <para>EL2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>EL3.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the instruction is executed at an exception level lower than the specified level, this instruction is treated as a NOP.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_23_17"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="GASID_16_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>GASID</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Execution of this instruction applies to all ASIDs or a specified ASID.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Applies to specified ASID for an EL0 context. For all other contexts this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Applies to all ASID for an EL0 context. For all other contexts this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>If the instruction is executed at EL0, then this field has an Effective value of 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="ASID_15_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ASID</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Only applies for an EL0 context and when bit[16] is 0.</para>
+<para>Otherwise this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+<para>When the instruction is executed at EL0 then this field is treated as the current ASID.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_49" msb="63" lsb="49"/>
+        <fieldat id="GVMID_48_48" msb="48" lsb="48"/>
+        <fieldat id="VMID_47_32" msb="47" lsb="32"/>
+        <fieldat id="0_31_27" msb="31" lsb="27"/>
+        <fieldat id="NS_26_26" msb="26" lsb="26"/>
+        <fieldat id="EL_25_24" msb="25" lsb="24"/>
+        <fieldat id="0_23_17" msb="23" lsb="17"/>
+        <fieldat id="GASID_16_16" msb="16" lsb="16"/>
+        <fieldat id="ASID_15_0" msb="15" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="CPP_SYS RCTX">
+        <encoding>
+          
+          <access_instruction>CPP RCTX, &lt;Xt&gt;</access_instruction>
+            
+            <enc n="op0" v="0b01"/>
+            
+            <enc n="op1" v="0b011"/>
+            
+            <enc n="CRn" v="0b0111"/>
+            
+            <enc n="CRm" v="0b0011"/>
+            
+            <enc n="op2" v="0b111"/>
+        </encoding>
+          <access_permission>
+            <ps name="CPP_SYS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if !ELUsingAArch32(EL1) &amp;&amp; !(EL2Enabled() &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11') &amp;&amp; SCTLR_EL1.EnRCTX == '0' then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL1) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; != '11' &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGITR_EL2.CPPRCTX == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11' &amp;&amp; SCTLR_EL2.EnRCTX == '0' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        CPP_RCTX(X[t]);
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGITR_EL2.CPPRCTX == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        CPP_RCTX(X[t]);
+elsif PSTATE.EL == EL2 then
+    CPP_RCTX(X[t]);
+elsif PSTATE.EL == EL3 then
+    CPP_RCTX(X[t]);
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MDRAR_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MDRAR_EL1, Monitor Debug ROM Address Register</h1><p>The MDRAR_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Defines the base physical address of a 4KB-aligned memory-mapped debug component, usually a ROM table that locates and describes the memory-mapped debug components in the system. Armv8 deprecates any use of this register.</p>
+      <h2>Configuration</h2><p>AArch64 System register MDRAR_EL1 bits [63:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-dbgdrar.html">DBGDRAR[63:0]
+            </a>.
+          </p><h2>Attributes</h2>
+            <p>MDRAR_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The MDRAR_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="12"><a href="#0_63">RES0</a></td><td class="lr" colspan="4"><a href="#ROMADDR51:48_51">ROMADDR[51:48]</a></td><td class="lr" colspan="16"><a href="#ROMADDR47:12_47">ROMADDR[47:12]</a></td></tr><tr class="firstrow"><td class="lr" colspan="20"><a href="#ROMADDR47:12_47">ROMADDR[47:12]</a></td><td class="lr" colspan="10"><a href="#0_11">RES0</a></td><td class="lr" colspan="2"><a href="#Valid_1">Valid</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:52]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ROMADDR51:48_51">ROMADDR[51:48], bits [51:48]
+                  <div style="font-size:smaller;"><br />When ARMv8.2-LPA is implemented:
+                </div></h4>
+          
+  <p>Extension to ROMADDR[47:12]. See ROMADDR[47:12] for more details.</p>
+
+        <h4 id="0_51"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ROMADDR47:12_47">ROMADDR[47:12], bits [47:12]
+                  </h4>
+          
+  <p>Bits[47:12] of the ROM table physical address.</p>
+<p>When <span class="xref">ARMv8.2-LPA</span> is implemented, ROMADDR[51:48] forms the upper part of the address value. Otherwise, ROMADDR[51:48] is <span class="arm-defined-word">RES0</span>.</p>
+<p>If the physical address size in bits (PAsize) is less than 52, then the register bits corresponding to ROMADDR [51:PAsize] are <span class="arm-defined-word">RES0</span>.</p>
+<p>Bits [11:0] of the ROM table physical address are zero.</p>
+<p>Arm strongly recommends that bits ROMADDR[(PAsize-1):32] are zero in any system that supports AArch32 at the highest implemented Exception level.</p>
+<p>In an implementation that includes EL3, ROMADDR is an address in Non-secure memory. It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the ROM table is also accessible in Secure memory.</p>
+
+        <h4 id="0_11">
+                Bits [11:2]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Valid_1">Valid, bits [1:0]
+                  </h4>
+          
+  <p>This field indicates whether the ROM Table address is valid. The permitted values of this field are:</p>
+
+        <table class="valuetable"><tr><th>Valid</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>ROM Table address is not valid. Software must ignore ROMADDR.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>ROM Table address is valid.</p>
+</td></tr></table>
+              
+  <p>Other values are reserved.</p>
+
+            <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the MDRAR_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, MDRAR_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b10</td><td>0b000</td><td>0b0001</td><td>0b0000</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MDCR_EL2.&lt;TDE,TDRA&gt; != '00' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return MDRAR_EL1;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MDCR_EL3.TDA == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return MDRAR_EL1;
+elsif PSTATE.EL == EL3 then
+    return MDRAR_EL1;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

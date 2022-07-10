@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="True" is_stub_entry="False">
+      <reg_short_name>ERRPIDR3</reg_short_name>
+      <reg_long_name>Peripheral Identification Register 3</reg_long_name>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="None"
+  >
+    <reg_component>RAS</reg_component>
+    <reg_offset><hexnumber>0xFEC</hexnumber></reg_offset>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Provides discovery information about the component.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For more information, see <xref browsertext="'About the Peripheral identification scheme'" filename="appx_recommended_external_debug_interface.fm" linkend="BABDFHAH"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>RAS registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ERRPIDR3 is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+      <fields_condition>When the component uses a 12-bit part number</fields_condition>
+      <fields_instance>the component uses a 12-bit part number</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="REVAND_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>REVAND</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Component minor revision. <register_link state="ext" id="ext-errpidr2.xml">ERRPIDR2</register_link>.REVISION and ERRPIDR3.REVAND together form the revision number of the component, with <register_link state="ext" id="ext-errpidr2.xml">ERRPIDR2</register_link>.REVISION being the most significant part and ERRPIDR3.REVAND the least significant part. When a component is changed, <register_link state="ext" id="ext-errpidr2.xml">ERRPIDR2</register_link>.REVISION or ERRPIDR3.REVAND must be increased to ensure that software can differentiate the different revisions of the component. If <register_link state="ext" id="ext-errpidr2.xml">ERRPIDR2</register_link>.REVISION is increased then ERRPIDR3.REVAND should be set to <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>R</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="CMOD_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CMOD</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Customer Modified.</para>
+<para>Indicates the component has been modified.</para>
+<para>A value of <binarynumber>0b0000</binarynumber> means the component is not modified from the original design.</para>
+<para>Any other value means the component has been modified in an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> way.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>C</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For any two components with the same Unique Component Identifier:</para>
+<list type="unordered">
+<listitem><content>If the value of the CMOD fields of both components equals zero, the components are identical.</content>
+</listitem><listitem><content>If the CMOD fields of both components have the same non-zero value, it does not necessarily mean that they have the same modifications.</content>
+</listitem><listitem><content>If the value of the CMOD field of either of the two components is non-zero, they might not be identical, even though they have the same Unique Component Identifier.</content>
+</listitem></list>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <fields length="32">
+      <fields_condition>When the component uses a 16-bit part number</fields_condition>
+      <fields_instance>the component uses a 16-bit part number</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="REVISION_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>REVISION</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Component revision. When a component is changed, ERRPIDR3.REVISION must be increased to ensure that software can differentiate the different revisions of the component.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>R</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="CMOD_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CMOD</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+          
+  <para>Customer Modified.</para>
+<para>Indicates the component has been modified.</para>
+<para>A value of <binarynumber>0b0000</binarynumber> means the component is not modified from the original design.</para>
+<para>Any other value means the component has been modified in an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> way.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>C</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For any two components with the same Unique Component Identifier:</para>
+<list type="unordered">
+<listitem><content>If the value of the CMOD fields of both components equals zero, the components are identical.</content>
+</listitem><listitem><content>If the CMOD fields of both components have the same non-zero value, it does not necessarily mean that they have the same modifications.</content>
+</listitem><listitem><content>If the value of the CMOD field of either of the two components is non-zero, they might not be identical, even though they have the same Unique Component Identifier.</content>
+</listitem></list>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+        <fields_condition>When the component uses a 12-bit part number</fields_condition>
+      
+        <fieldat id="0_31_8" msb="31" lsb="8"/>
+        <fieldat id="REVAND_7_4" msb="7" lsb="4"/>
+        <fieldat id="CMOD_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+  <reg_fieldset length="32">
+        <fields_condition>When the component uses a 16-bit part number</fields_condition>
+      
+        <fieldat id="0_31_8" msb="31" lsb="8"/>
+        <fieldat id="REVISION_7_4" msb="7" lsb="4"/>
+        <fieldat id="CMOD_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

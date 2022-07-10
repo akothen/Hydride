@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ERR&lt;n&gt;ADDR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ERR&lt;n&gt;ADDR, Error Record Address Register, n =
+      0 - 65534</h1><p>The ERR&lt;n&gt;ADDR characteristics are:</p><h2>Purpose</h2>
+        <p>If an error has an associated address, then this must be written to the address register when the error is recorded. It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> how the recorded addresses map to the software-visible physical addresses.</p>
+
+      
+        <p>Software might have to reconstruct the actual physical addresses using the identity of the node and knowledge of the system.</p>
+      <h2>Configuration</h2><p>Some or all RW fields of this register have defined reset values.</p><p>This register is present only
+    when RAS is implemented.
+      
+    Otherwise, direct accesses to ERR&lt;n&gt;ADDR are <span class="arm-defined-word">UNDEFINED</span>.</p>
+        <p>The number of error records that are implemented is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+      
+        <p>If error record &lt;n&gt; is not implemented, ERR&lt;n&gt;ADDR is <span class="arm-defined-word">RES0</span>.</p>
+
+      
+        <p><a href="ext-errnfr.html">ERR&lt;q&gt;FR</a> describes the features implemented by the node that owns error record &lt;n&gt;. &lt;q&gt; is the index of the first error record owned by the same node as error record &lt;n&gt;. If the node owns a single record, then q = n.</p>
+
+      
+        <p>If the error record does not record the fault address, this register is <span class="arm-defined-word">RES0</span>.</p>
+      <h2>Attributes</h2>
+            <p>ERR&lt;n&gt;ADDR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ERR&lt;n&gt;ADDR bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#NS_63">NS</a></td><td class="lr" colspan="1"><a href="#SI_62">SI</a></td><td class="lr" colspan="1"><a href="#AI_61">AI</a></td><td class="lr" colspan="1"><a href="#VA_60">VA</a></td><td class="lr" colspan="4"><a href="#0_59">RES0</a></td><td class="lr" colspan="24"><a href="#PADDR_55">PADDR</a></td></tr><tr class="firstrow"><td class="lr" colspan="32"><a href="#PADDR_55">PADDR</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="NS_63">NS, bit [63]
+              </h4>
+          
+  <p>Non-secure attribute.</p>
+
+        <table class="valuetable"><tr><th>NS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The address is Secure.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The address is Non-secure.</p>
+</td></tr></table><p>The following resets apply:</p><ul><li>
+  <p>This bit is preserved on an Error Recovery reset.</p>
+</li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="SI_62">SI, bit [62]
+              </h4>
+          
+  <p>Secure Incorrect.</p>
+<p>Indicates whether the NS bit is valid.</p>
+
+        <table class="valuetable"><tr><th>SI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The NS bit is correct. That is, it matches the programmers' view of the Non-secure attribute for this recorded location.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The NS bit might not be correct, and might not match the programmers' view of the Non-secure attribute for the recorded location.</p>
+</td></tr></table>
+              
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is read-only or read/write.</p>
+
+            <p>The following resets apply:</p><ul><li>
+  <p>This bit is preserved on an Error Recovery reset.</p>
+</li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="AI_61">AI, bit [61]
+              </h4>
+          
+  <p>Address Incorrect.</p>
+<p>Indicates whether the PADDR field is a valid physical address that is known to match the programmers' view of the physical address for the recorded location.</p>
+
+        <table class="valuetable"><tr><th>AI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The PADDR field is a valid physical address. That is, it matches the programmers' view of the physical address for the recorded location.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The PADDR field might not be a valid physical address, and might not match the programmers' view of the physical address for the recorded location.</p>
+</td></tr></table>
+              
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is read-only or read/write.</p>
+
+            <p>The following resets apply:</p><ul><li>
+  <p>This bit is preserved on an Error Recovery reset.</p>
+</li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="VA_60">VA, bit [60]
+              </h4>
+          
+  <p>Virtual Address.</p>
+<p>Indicates whether the PADDR field is a virtual address.</p>
+
+        <table class="valuetable"><tr><th>VA</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The PADDR field is not a virtual address.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The PADDR field is a virtual address.</p>
+</td></tr></table>
+              
+  <p>No context information is provided for the virtual address. When this bit is set to 1, ERR&lt;n&gt;ADDR.{NS,SI,AI} must read as {0,1,1}.</p>
+<p>Support for this bit is optional. If this bit is not implemented and the PADDR field is a virtual address, then ERR&lt;n&gt;ADDR.{NS,SI,AI} must read as {0,1,1}.</p>
+<p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is read-only or read/write.</p>
+
+            <p>The following resets apply:</p><ul><li>
+  <p>This bit is preserved on an Error Recovery reset.</p>
+</li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="0_59">
+                Bits [59:56]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="PADDR_55">PADDR, bits [55:0]
+                  </h4>
+          
+  <p>Physical Address. Address of the recorded location.</p>
+<p>If the physical address size implemented by this component is smaller than the size of this field, then high-order bits are unimplemented and either <span class="arm-defined-word">RES0</span> or have a fixed read-only <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> value.</p>
+<p>Low-order address bits might also be unimplemented and <span class="arm-defined-word">RES0</span>, for example, if the physical address is always aligned to the size of a protection granule.</p>
+
+        <p>The following resets apply:</p><ul><li>
+  <p>This field is preserved on an Error Recovery reset.</p>
+</li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the ERR&lt;n&gt;ADDR</h2>
+        <p>ERR&lt;n&gt;ADDR ignores writes if ERR&lt;n&gt;STATUS.AV is set to 1.</p>
+      <h4>ERR&lt;n&gt;ADDR can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>RAS</td><td><span class="hexnumber">0x018</span> + 64n</td><td>ERR&lt;n&gt;ADDR</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

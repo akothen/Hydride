@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HCR2</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">HCR2, Hyp Configuration Register 2</h1><p>The HCR2 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides additional configuration controls for virtualization.</p>
+      <h2>Configuration</h2><p>AArch32 System register HCR2 bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-hcr_el2.html">HCR_EL2[63:32]
+            </a>.
+          </p>
+        <p>If EL2 is not implemented, this register is <span class="arm-defined-word">RES0</span> from EL3.</p>
+      <p>
+                Some or all RW fields of this register have defined reset values.
+                
+        These apply
+      
+                only if the PE resets into EL2
+                
+                  with EL2 using AArch32,
+                
+                or into
+                
+                    EL3 with EL3 using AArch32.
+                  
+                Otherwise,
+                
+                RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.
+              </p><h2>Attributes</h2>
+            <p>HCR2 is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The HCR2 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="9"><a href="#0_31">RES0</a></td><td class="lr" colspan="1"><a href="#TTLBIS_22">TTLBIS</a></td><td class="lr" colspan="1"><a href="#0_21">RES0</a></td><td class="lr" colspan="1"><a href="#TOCU_20">TOCU</a></td><td class="lr" colspan="1"><a href="#0_19">RES0</a></td><td class="lr" colspan="1"><a href="#TICAB_18">TICAB</a></td><td class="lr" colspan="1"><a href="#TID4_17">TID4</a></td><td class="lr" colspan="10"><a href="#0_16">RES0</a></td><td class="lr" colspan="1"><a href="#MIOCNCE_6">MIOCNCE</a></td><td class="lr" colspan="1"><a href="#TEA_5">TEA</a></td><td class="lr" colspan="1"><a href="#TERR_4">TERR</a></td><td class="lr" colspan="2"><a href="#0_3">RES0</a></td><td class="lr" colspan="1"><a href="#ID_1">ID</a></td><td class="lr" colspan="1"><a href="#CD_0">CD</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_31">
+                Bits [31:23]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TTLBIS_22">TTLBIS, bit [22]
+              <div style="font-size:smaller;"><br />When ARMv8.2-EVT is implemented:
+                </div></h4>
+          
+  <p>Trap TLB maintenance instructions that operate on the Inner Shareable domain. Traps execution of the following TLB  maintenance instructions at EL1  to EL2:</p>
+<p><a href="AArch32-tlbiallis.html">TLBIALLIS</a>, <a href="AArch32-tlbimvais.html">TLBIMVAIS</a>, <a href="AArch32-tlbiasidis.html">TLBIASIDIS</a>, <a href="AArch32-tlbimvaais.html">TLBIMVAAIS</a>, <a href="AArch32-tlbimvalis.html">TLBIMVALIS</a>, <a href="AArch32-tlbimvaalis.html">TLBIMVAALIS</a></p>
+
+        <table class="valuetable"><tr><th>TTLBIS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Non-secure EL1 execution of the specified TLB maintenance instructions is trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If <span class="xref">ARMv8.2-EVT</span> is not implemented, this field is <span class="arm-defined-word">RES0</span>.</p>
+<p>When <span class="xref">ARMv8.1-VHE</span> and the value of <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this field behaves as 0 for all purposes other than a direct read of the value of this bit.</p>
+
+            <h4 id="0_22"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_21">
+                Bit [21]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TOCU_20">TOCU, bit [20]
+              <div style="font-size:smaller;"><br />When ARMv8.2-EVT is implemented:
+                </div></h4>
+          
+  <p>Trap cache maintenance instructions that operate to the Point of Unification. Traps execution of those cache maintenance instructions at EL1 or EL0 using AArch64, and at EL1 using AArch32, to EL2.</p>
+<p>This applies to the following instructions:</p>
+<ul>
+<li>When Non-secure EL0 is using AArch64, <a href="AArch64-ic-ivau.html">IC IVAU</a>, <a href="AArch64-dc-cvau.html">DC CVAU</a>. However, if the value of <a href="AArch64-sctlr_el1.html">SCTLR_EL1</a>.UCI is 0 these instructions are <span class="arm-defined-word">UNDEFINED</span> at EL0 and any resulting exception is higher priority than this trap to EL2.
+</li><li>When EL1 is using AArch64, <a href="AArch64-ic-ivau.html">IC IVAU</a>, <a href="AArch64-ic-iallu.html">IC IALLU</a>, <a href="AArch64-dc-cvau.html">DC CVAU</a>.
+</li><li>When Non-secure EL1 is using AArch32, <a href="AArch32-icimvau.html">ICIMVAU</a>, <a href="AArch32-iciallu.html">ICIALLU</a>, <a href="AArch32-dccmvau.html">DCCMVAU</a>.
+</li></ul>
+<div class="note"><span class="note-header">Note</span><p>An exception generated because an instruction is <span class="arm-defined-word">UNDEFINED</span> at EL0 is higher priority than this trap to EL2. In addition:</p><ul><li><a href="AArch64-ic-ialluis.html">IC IALLUIS</a> and <a href="AArch64-ic-iallu.html">IC IALLU</a> are always <span class="arm-defined-word">UNDEFINED</span> at EL0 using AArch64.</li><li><a href="AArch32-icimvau.html">ICIMVAU</a>, <a href="AArch32-iciallu.html">ICIALLU</a>, <a href="AArch32-icialluis.html">ICIALLUIS</a>, and <a href="AArch32-dccmvau.html">DCCMVAU</a> are always <span class="arm-defined-word">UNDEFINED</span> at EL0 using AArch32.</li></ul></div>
+
+        <table class="valuetable"><tr><th>TOCU</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Non-secure execution of the specified cache maintenance instructions is trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If <span class="xref">ARMv8.2-EVT</span> is not implemented, this field is <span class="arm-defined-word">RES0</span>.</p>
+<p>If the Point of Unification is before any level of data cache, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the execution of any data or unified cache clean by VA to the Point of Unification instruction can be trapped when the value of this control is 1.</p>
+<p>If the Point of Unification is before any level of instruction cache, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the execution of any instruction cache invalidate to the Point of Unification instruction can be trapped when the value of this control is 1.</p>
+<p>When <span class="xref">ARMv8.1-VHE</span> is implemented, and the value of <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this field behaves as 0 for all purposes other than a direct read of the value of this bit.</p>
+
+            <h4 id="0_20"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_19">
+                Bit [19]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TICAB_18">TICAB, bit [18]
+              <div style="font-size:smaller;"><br />When ARMv8.2-EVT is implemented:
+                </div></h4>
+          
+  <p>Trap ICIALLUIS cache maintenance instructions. Traps execution of those cache maintenance instructions at EL1 to EL2.</p>
+<p>This applies to the following instructions:</p>
+<p><a href="AArch32-icialluis.html">ICIALLUIS</a>.</p>
+
+        <table class="valuetable"><tr><th>TICAB</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Non-secure EL1 execution of the specified cache maintenance instructions is trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If <span class="xref">ARMv8.2-EVT</span> is not implemented, this field is <span class="arm-defined-word">RES0</span>.</p>
+<p>If the Point of Unification is before any level of instruction cache, it is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the execution of any instruction cache invalidate to the Point of Unification instruction can be trapped when the value of this control is 1.</p>
+<p>When <span class="xref">ARMv8.1-VHE</span> and the value of <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this field behaves as 0 for all purposes other than a direct read of the value of this bit.</p>
+
+            <h4 id="0_18"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TID4_17">TID4, bit [17]
+              <div style="font-size:smaller;"><br />When ARMv8.2-EVT is implemented:
+                </div></h4>
+          
+  <p>Trap ID group 4. Traps the following register accesses to EL2:</p>
+<ul>
+<li>EL1 reads of <a href="AArch32-ccsidr.html">CCSIDR</a>, <a href="AArch32-ccsidr2.html">CCSIDR2</a>, <a href="AArch32-clidr.html">CLIDR</a>, and <a href="AArch32-csselr.html">CSSELR</a>.
+</li><li>EL1 writes to <a href="AArch32-csselr.html">CSSELR</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>TID4</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The specified Non-secure EL1 and EL0 accesses to ID group 4 registers are trapped to EL2.</p>
+</td></tr></table>
+              
+  <p>If <span class="xref">ARMv8.2-EVT</span> is not implemented, this field is <span class="arm-defined-word">RES0</span>.</p>
+<p>When <span class="xref">ARMv8.1-VHE</span> is implemented and the value of <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H, TGE} is {1, 1}, this field behaves as 0 for all purposes other than a direct read of the value of this bit.</p>
+
+            <h4 id="0_17"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_16">
+                Bits [16:7]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="MIOCNCE_6">MIOCNCE, bit [6]
+              </h4>
+          
+  <p>Mismatched Inner/Outer Cacheable Non-Coherency Enable, for the Non-secure PL1&amp;0 translation regime.</p>
+
+        <table class="valuetable"><tr><th>MIOCNCE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>For the Non-secure PL1&amp;0 translation regime, for permitted accesses to a memory location that use a common definition of the Shareability and Cacheability of the location, there must be no loss of coherency if the Inner Cacheability attribute for those accesses differs from the Outer Cacheability attribute.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>For the Non-secure PL1&amp;0 translation regime, for permitted accesses to a memory location that use a common definition of the Shareability and Cacheability of the location, there might be a loss of coherency if the Inner Cacheability attribute for those accesses differs from the Outer Cacheability attribute.</p>
+</td></tr></table>
+              
+  <p>For more information see <span class="xref">'Mismatched memory attributes' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section E2 (The AArch32 Application Level Memory Model)</span>.</p>
+<p>This field can be implemented as RAZ/WI.</p>
+
+            <p>In a system where the PE resets into EL2 or EL3, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="TEA_5">TEA, bit [5]
+              </h4>
+          
+  <p>Route synchronous External abort exceptions from EL0 and EL1 to EL2. If the RAS Extension is implemented, the possible values of this bit are:</p>
+
+        <table class="valuetable"><tr><th>TEA</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Does not route synchronous External abort exceptions from Non-secure EL0 and EL1 to EL2.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Route synchronous External abort exceptions from Non-secure EL0 and EL1 to EL2, if not routed to EL3.</p>
+</td></tr></table>
+              
+  <p>When the RAS Extension is not implemented, this field is <span class="arm-defined-word">RES0</span>.</p>
+
+            <p>In a system where the PE resets into EL2 or EL3, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TERR_4">TERR, bit [4]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap Error record accesses from EL1 to EL2. Trap accesses to the following registers from EL1 to EL2:</p>
+<p><a href="AArch32-erridr.html">ERRIDR</a>, <a href="AArch32-errselr.html">ERRSELR</a>, <a href="AArch32-erxaddr.html">ERXADDR</a>, <a href="AArch32-erxaddr2.html">ERXADDR2</a>, <a href="AArch32-erxctlr.html">ERXCTLR</a>, <a href="AArch32-erxctlr2.html">ERXCTLR2</a>, <a href="AArch32-erxfr.html">ERXFR</a>, <a href="AArch32-erxfr2.html">ERXFR2</a>, <a href="AArch32-erxmisc0.html">ERXMISC0</a>, <a href="AArch32-erxmisc1.html">ERXMISC1</a>, <a href="AArch32-erxmisc2.html">ERXMISC2</a>, <a href="AArch32-erxmisc3.html">ERXMISC3</a>, and <a href="AArch32-erxstatus.html">ERXSTATUS</a>. When ARMv8.4-RAS is implemented, <a href="AArch32-erxmisc4.html">ERXMISC4</a>, <a href="AArch32-erxmisc5.html">ERXMISC5</a>, <a href="AArch32-erxmisc6.html">ERXMISC6</a>, and <a href="AArch32-erxmisc7.html">ERXMISC7</a>.</p>
+
+        <table class="valuetable"><tr><th>TERR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control does not cause any instructions to be trapped.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Accesses to the specified registers from EL1 generate a Trap exception to EL2.</p>
+</td></tr></table><p>In a system where the PE resets into EL2 or EL3, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_4"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_3">
+                Bits [3:2]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ID_1">ID, bit [1]
+              </h4>
+          
+  <p>Stage 2 Instruction access cacheability disable. For the Non-secure PL1&amp;0 translation regime, when <a href="AArch32-hcr.html">HCR</a>.VM==1, this control forces all stage 2 translations for instruction accesses to Normal memory to be Non-cacheable.</p>
+
+        <table class="valuetable"><tr><th>ID</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control has no effect on stage 2 of the Non-secure PL1&amp;0 translation regime.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>For the Non-secure PL1&amp;0 translation regime, forces all stage 2 translations for instruction accesses to Normal memory to be Non-cacheable.</p>
+</td></tr></table>
+              
+  <p>This bit has no effect on the EL2 translation regime.</p>
+
+            <p>On a Warm reset, in a system where the PE resets into EL2 or EL3, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CD_0">CD, bit [0]
+              </h4>
+          
+  <p>Stage 2 Data access cacheability disable. When <a href="AArch32-hcr.html">HCR</a>.VM==1, this forces all stage 2 translations for data accesses and translation table walks to Normal memory to be Non-cacheable for the Non-secure PL1&amp;0 translation regime.</p>
+
+        <table class="valuetable"><tr><th>CD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control has no effect on stage 2 of the Non-secure PL1&amp;0 translation regime for data accesses and translation table walks.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>For the Non-secure PL1&amp;0 translation regime, forces all stage 2 translations for data accesses and translation table walks to Normal memory to be Non-cacheable.</p>
+</td></tr></table>
+              
+  <p>This bit has no effect on the EL2 translation regime.</p>
+
+            <p>In a system where the PE resets into EL2 or EL3, this field resets to <span class="binarynumber">0</span>.
+</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the HCR2</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b100</td><td>0b0001</td><td>0b0001</td><td>0b100</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T1 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T1 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    return HCR2;
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        return HCR2;
+              </p><h4 class="assembler">MCR{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b100</td><td>0b0001</td><td>0b0001</td><td>0b100</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T1 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T1 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    HCR2 = R[t];
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        HCR2 = R[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

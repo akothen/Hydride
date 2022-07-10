@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HFGRTR_EL2</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">HFGRTR_EL2, Hypervisor Fine-Grained Read Trap Register</h1><p>The HFGRTR_EL2 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides controls for traps of <span class="instruction">MRS</span> and <span class="instruction">MRC</span> reads of System registers.</p>
+      <h2>Configuration</h2><p>This register is present only
+    when ARMv8.6-FGT is implemented.
+      
+    Otherwise, direct accesses to HFGRTR_EL2 are <span class="arm-defined-word">UNDEFINED</span>.</p><p>
+                Some or all RW fields of this register have defined reset values.
+                
+        These apply
+      
+                only if the PE resets into EL2 using AArch64.
+                Otherwise,
+                
+                RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.
+              </p><h2>Attributes</h2>
+            <p>HFGRTR_EL2 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The HFGRTR_EL2 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="14"><a href="#0_63">RES0</a></td><td class="lr" colspan="1"><a href="#ERXADDR_EL1_49">ERXADDR_EL1</a></td><td class="lr" colspan="1"><a href="#ERXPFGCDN_EL1_48">ERXPFGCDN_EL1</a></td><td class="lr" colspan="1"><a href="#ERXPFGCTL_EL1_47">ERXPFGCTL_EL1</a></td><td class="lr" colspan="1"><a href="#ERXPFGF_EL1_46">ERXPFGF_EL1</a></td><td class="lr" colspan="1"><a href="#ERXMISCn_EL1_45">ERXMISCn_EL1</a></td><td class="lr" colspan="1"><a href="#ERXSTATUS_EL1_44">ERXSTATUS_EL1</a></td><td class="lr" colspan="1"><a href="#ERXCTLR_EL1_43">ERXCTLR_EL1</a></td><td class="lr" colspan="1"><a href="#ERXFR_EL1_42">ERXFR_EL1</a></td><td class="lr" colspan="1"><a href="#ERRSELR_EL1_41">ERRSELR_EL1</a></td><td class="lr" colspan="1"><a href="#ERRIDR_EL1_40">ERRIDR_EL1</a></td><td class="lr" colspan="1"><a href="#ICC_IGRPENn_EL1_39">ICC_IGRPENn_EL1</a></td><td class="lr" colspan="1"><a href="#VBAR_EL1_38">VBAR_EL1</a></td><td class="lr" colspan="1"><a href="#TTBR1_EL1_37">TTBR1_EL1</a></td><td class="lr" colspan="1"><a href="#TTBR0_EL1_36">TTBR0_EL1</a></td><td class="lr" colspan="1"><a href="#TPIDR_EL0_35">TPIDR_EL0</a></td><td class="lr" colspan="1"><a href="#TPIDRRO_EL0_34">TPIDRRO_EL0</a></td><td class="lr" colspan="1"><a href="#TPIDR_EL1_33">TPIDR_EL1</a></td><td class="lr" colspan="1"><a href="#TCR_EL1_32">TCR_EL1</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#SCXTNUM_EL0_31">SCXTNUM_EL0</a></td><td class="lr" colspan="1"><a href="#SCXTNUM_EL1_30">SCXTNUM_EL1</a></td><td class="lr" colspan="1"><a href="#SCTLR_EL1_29">SCTLR_EL1</a></td><td class="lr" colspan="1"><a href="#REVIDR_EL1_28">REVIDR_EL1</a></td><td class="lr" colspan="1"><a href="#PAR_EL1_27">PAR_EL1</a></td><td class="lr" colspan="1"><a href="#MPIDR_EL1_26">MPIDR_EL1</a></td><td class="lr" colspan="1"><a href="#MIDR_EL1_25">MIDR_EL1</a></td><td class="lr" colspan="1"><a href="#MAIR_EL1_24">MAIR_EL1</a></td><td class="lr" colspan="1"><a href="#LORSA_EL1_23">LORSA_EL1</a></td><td class="lr" colspan="1"><a href="#LORN_EL1_22">LORN_EL1</a></td><td class="lr" colspan="1"><a href="#LORID_EL1_21">LORID_EL1</a></td><td class="lr" colspan="1"><a href="#LOREA_EL1_20">LOREA_EL1</a></td><td class="lr" colspan="1"><a href="#LORC_EL1_19">LORC_EL1</a></td><td class="lr" colspan="1"><a href="#ISR_EL1_18">ISR_EL1</a></td><td class="lr" colspan="1"><a href="#FAR_EL1_17">FAR_EL1</a></td><td class="lr" colspan="1"><a href="#ESR_EL1_16">ESR_EL1</a></td><td class="lr" colspan="1"><a href="#DCZID_EL0_15">DCZID_EL0</a></td><td class="lr" colspan="1"><a href="#CTR_EL0_14">CTR_EL0</a></td><td class="lr" colspan="1"><a href="#CSSELR_EL1_13">CSSELR_EL1</a></td><td class="lr" colspan="1"><a href="#CPACR_EL1_12">CPACR_EL1</a></td><td class="lr" colspan="1"><a href="#CONTEXTIDR_EL1_11">CONTEXTIDR_EL1</a></td><td class="lr" colspan="1"><a href="#CLIDR_EL1_10">CLIDR_EL1</a></td><td class="lr" colspan="1"><a href="#CCSIDR_EL1_9">CCSIDR_EL1</a></td><td class="lr" colspan="1"><a href="#APIBKey_8">APIBKey</a></td><td class="lr" colspan="1"><a href="#APIAKey_7">APIAKey</a></td><td class="lr" colspan="1"><a href="#APGAKey_6">APGAKey</a></td><td class="lr" colspan="1"><a href="#APDBKey_5">APDBKey</a></td><td class="lr" colspan="1"><a href="#APDAKey_4">APDAKey</a></td><td class="lr" colspan="1"><a href="#AMAIR_EL1_3">AMAIR_EL1</a></td><td class="lr" colspan="1"><a href="#AIDR_EL1_2">AIDR_EL1</a></td><td class="lr" colspan="1"><a href="#AFSR1_EL1_1">AFSR1_EL1</a></td><td class="lr" colspan="1"><a href="#AFSR0_EL1_0">AFSR0_EL1</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:50]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXADDR_EL1_49">ERXADDR_EL1, bit [49]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxaddr_el1.html">ERXADDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXADDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxaddr_el1.html">ERXADDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxaddr_el1.html">ERXADDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_49"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXPFGCDN_EL1_48">ERXPFGCDN_EL1, bit [48]
+              <div style="font-size:smaller;"><br />When ARMv8.4-RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgcdn_el1.html">ERXPFGCDN_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXPFGCDN_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgcdn_el1.html">ERXPFGCDN_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgcdn_el1.html">ERXPFGCDN_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_48"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXPFGCTL_EL1_47">ERXPFGCTL_EL1, bit [47]
+              <div style="font-size:smaller;"><br />When ARMv8.4-RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgctl_el1.html">ERXPFGCTL_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXPFGCTL_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgctl_el1.html">ERXPFGCTL_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgctl_el1.html">ERXPFGCTL_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_47"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXPFGF_EL1_46">ERXPFGF_EL1, bit [46]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgf_el1.html">ERXPFGF_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXPFGF_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgf_el1.html">ERXPFGF_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxpfgf_el1.html">ERXPFGF_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_46"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXMISCn_EL1_45">ERXMISCn_EL1, bit [45]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of ERXMISC&lt;n&gt;_EL1 at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXMISCn_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of ERXMISC&lt;n&gt;_EL1 are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of ERXMISC&lt;n&gt;_EL1 at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_45"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXSTATUS_EL1_44">ERXSTATUS_EL1, bit [44]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxstatus_el1.html">ERXSTATUS_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXSTATUS_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxstatus_el1.html">ERXSTATUS_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxstatus_el1.html">ERXSTATUS_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_44"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXCTLR_EL1_43">ERXCTLR_EL1, bit [43]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxctlr_el1.html">ERXCTLR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXCTLR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxctlr_el1.html">ERXCTLR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxctlr_el1.html">ERXCTLR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_43"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERXFR_EL1_42">ERXFR_EL1, bit [42]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erxfr_el1.html">ERXFR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERXFR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erxfr_el1.html">ERXFR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erxfr_el1.html">ERXFR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_42"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERRSELR_EL1_41">ERRSELR_EL1, bit [41]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-errselr_el1.html">ERRSELR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERRSELR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-errselr_el1.html">ERRSELR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-errselr_el1.html">ERRSELR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_41"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ERRIDR_EL1_40">ERRIDR_EL1, bit [40]
+              <div style="font-size:smaller;"><br />When RAS is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ERRIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_40"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ICC_IGRPENn_EL1_39">ICC_IGRPENn_EL1, bit [39]
+              <div style="font-size:smaller;"><br />When GICv3 is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of ICC_IGRPEN&lt;n&gt;_EL1 at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ICC_IGRPENn_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of ICC_IGRPEN&lt;n&gt;_EL1 are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of ICC_IGRPEN&lt;n&gt;_EL1 at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_39"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="VBAR_EL1_38">VBAR_EL1, bit [38]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-vbar_el1.html">VBAR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>VBAR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-vbar_el1.html">VBAR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-vbar_el1.html">VBAR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TTBR1_EL1_37">TTBR1_EL1, bit [37]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-ttbr1_el1.html">TTBR1_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TTBR1_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-ttbr1_el1.html">TTBR1_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-ttbr1_el1.html">TTBR1_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TTBR0_EL1_36">TTBR0_EL1, bit [36]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-ttbr0_el1.html">TTBR0_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TTBR0_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-ttbr0_el1.html">TTBR0_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-ttbr0_el1.html">TTBR0_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TPIDR_EL0_35">TPIDR_EL0, bit [35]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el0.html">TPIDR_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-tpidrurw.html">TPIDRURW</a> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TPIDR_EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el0.html">TPIDR_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-tpidrurw.html">TPIDRURW</a> at EL0 using AArch32 are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state, <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, then, unless the read generates a higher priority exception:</p>
+<ul>
+<li><span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el0.html">TPIDR_EL0</a> at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li><span class="instruction">MRC</span> reads of <a href="AArch32-tpidrurw.html">TPIDRURW</a> at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x03</span>.
+</li></ul>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TPIDRRO_EL0_34">TPIDRRO_EL0, bit [34]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-tpidrro_el0.html">TPIDRRO_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-tpidruro.html">TPIDRURO</a> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TPIDRRO_EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-tpidrro_el0.html">TPIDRRO_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-tpidruro.html">TPIDRURO</a> at EL0 using AArch32 are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state, <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, then, unless the read generates a higher priority exception:</p>
+<ul>
+<li><span class="instruction">MRS</span> reads of <a href="AArch64-tpidrro_el0.html">TPIDRRO_EL0</a> at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li><span class="instruction">MRC</span> reads of <a href="AArch32-tpidruro.html">TPIDRURO</a> at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x03</span>.
+</li></ul>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TPIDR_EL1_33">TPIDR_EL1, bit [33]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el1.html">TPIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TPIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el1.html">TPIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-tpidr_el1.html">TPIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TCR_EL1_32">TCR_EL1, bit [32]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-tcr_el1.html">TCR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>TCR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-tcr_el1.html">TCR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-tcr_el1.html">TCR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="SCXTNUM_EL0_31">SCXTNUM_EL0, bit [31]
+              <div style="font-size:smaller;"><br />When ARMv8.0-CSV2 is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el0.html">SCXTNUM_EL0</a> at EL1 and EL0 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>SCXTNUM_EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el0.html">SCXTNUM_EL0</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state, <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el0.html">SCXTNUM_EL0</a> at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_31"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SCXTNUM_EL1_30">SCXTNUM_EL1, bit [30]
+              <div style="font-size:smaller;"><br />When ARMv8.0-CSV2 is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el1.html">SCXTNUM_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>SCXTNUM_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el1.html">SCXTNUM_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-scxtnum_el1.html">SCXTNUM_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_30"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="SCTLR_EL1_29">SCTLR_EL1, bit [29]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-sctlr_el1.html">SCTLR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>SCTLR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-sctlr_el1.html">SCTLR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-sctlr_el1.html">SCTLR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="REVIDR_EL1_28">REVIDR_EL1, bit [28]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-revidr_el1.html">REVIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>REVIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-revidr_el1.html">REVIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-revidr_el1.html">REVIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="PAR_EL1_27">PAR_EL1, bit [27]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-par_el1.html">PAR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>PAR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-par_el1.html">PAR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-par_el1.html">PAR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="MPIDR_EL1_26">MPIDR_EL1, bit [26]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-mpidr_el1.html">MPIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>MPIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-mpidr_el1.html">MPIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-mpidr_el1.html">MPIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="MIDR_EL1_25">MIDR_EL1, bit [25]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-midr_el1.html">MIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>MIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-midr_el1.html">MIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-midr_el1.html">MIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="MAIR_EL1_24">MAIR_EL1, bit [24]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-mair_el1.html">MAIR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>MAIR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-mair_el1.html">MAIR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-mair_el1.html">MAIR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="LORSA_EL1_23">LORSA_EL1, bit [23]
+              <div style="font-size:smaller;"><br />When ARMv8.1-LOR is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-lorsa_el1.html">LORSA_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>LORSA_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-lorsa_el1.html">LORSA_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-lorsa_el1.html">LORSA_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_23"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LORN_EL1_22">LORN_EL1, bit [22]
+              <div style="font-size:smaller;"><br />When ARMv8.1-LOR is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-lorn_el1.html">LORN_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>LORN_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-lorn_el1.html">LORN_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-lorn_el1.html">LORN_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_22"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LORID_EL1_21">LORID_EL1, bit [21]
+              <div style="font-size:smaller;"><br />When ARMv8.1-LOR is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-lorid_el1.html">LORID_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>LORID_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-lorid_el1.html">LORID_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-lorid_el1.html">LORID_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_21"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LOREA_EL1_20">LOREA_EL1, bit [20]
+              <div style="font-size:smaller;"><br />When ARMv8.1-LOR is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-lorea_el1.html">LOREA_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>LOREA_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-lorea_el1.html">LOREA_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-lorea_el1.html">LOREA_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_20"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="LORC_EL1_19">LORC_EL1, bit [19]
+              <div style="font-size:smaller;"><br />When ARMv8.1-LOR is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-lorc_el1.html">LORC_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>LORC_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-lorc_el1.html">LORC_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-lorc_el1.html">LORC_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_19"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="ISR_EL1_18">ISR_EL1, bit [18]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-isr_el1.html">ISR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ISR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-isr_el1.html">ISR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-isr_el1.html">ISR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="FAR_EL1_17">FAR_EL1, bit [17]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-far_el1.html">FAR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>FAR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-far_el1.html">FAR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-far_el1.html">FAR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="ESR_EL1_16">ESR_EL1, bit [16]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-esr_el1.html">ESR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>ESR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-esr_el1.html">ESR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-esr_el1.html">ESR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="DCZID_EL0_15">DCZID_EL0, bit [15]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-dczid_el0.html">DCZID_EL0</a> at EL1 and EL0 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>DCZID_EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-dczid_el0.html">DCZID_EL0</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state, <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H,TGE} != {1,1}, and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-dczid_el0.html">DCZID_EL0</a> at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CTR_EL0_14">CTR_EL0, bit [14]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-ctr_el0.html">CTR_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-ctr.html">CTR</a> at EL0 using AArch32 when EL1 is using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CTR_EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-ctr_el0.html">CTR_EL0</a> at EL1 and EL0 using AArch64 and <span class="instruction">MRC</span> reads of <a href="AArch32-ctr.html">CTR</a> at EL0 using AArch32 are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state, <a href="AArch64-hcr_el2.html">HCR_EL2</a>.{E2H,TGE} != {1,1}, EL1 is using AArch64, and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, then, unless the read generates a higher priority exception:</p>
+<ul>
+<li><span class="instruction">MRS</span> reads of <a href="AArch64-ctr_el0.html">CTR_EL0</a> at EL1 and EL0 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>.
+</li><li><span class="instruction">MRC</span> reads of <a href="AArch32-ctr.html">CTR</a> at EL0 using AArch32 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x03</span>.
+</li></ul>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CSSELR_EL1_13">CSSELR_EL1, bit [13]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-csselr_el1.html">CSSELR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CSSELR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-csselr_el1.html">CSSELR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-csselr_el1.html">CSSELR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CPACR_EL1_12">CPACR_EL1, bit [12]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-cpacr_el1.html">CPACR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CPACR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-cpacr_el1.html">CPACR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-cpacr_el1.html">CPACR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CONTEXTIDR_EL1_11">CONTEXTIDR_EL1, bit [11]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CONTEXTIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-contextidr_el1.html">CONTEXTIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CLIDR_EL1_10">CLIDR_EL1, bit [10]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-clidr_el1.html">CLIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CLIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-clidr_el1.html">CLIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-clidr_el1.html">CLIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="CCSIDR_EL1_9">CCSIDR_EL1, bit [9]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-ccsidr_el1.html">CCSIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>CCSIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-ccsidr_el1.html">CCSIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-ccsidr_el1.html">CCSIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="APIBKey_8">APIBKey, bit [8]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of multiple System registers. Enables a trap on <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the following AArch64 System registers to EL2:</p>
+<ul>
+<li><a href="AArch64-apibkeyhi_el1.html">APIBKeyHi_EL1</a>.
+</li><li><a href="AArch64-apibkeylo_el1.html">APIBKeyLo_EL1</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>APIBKey</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of the System registers listed above are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the System registers listed above are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_8"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="APIAKey_7">APIAKey, bit [7]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of multiple System registers. Enables a trap on <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the following AArch64 System registers to EL2:</p>
+<ul>
+<li><a href="AArch64-apiakeyhi_el1.html">APIAKeyHi_EL1</a>.
+</li><li><a href="AArch64-apiakeylo_el1.html">APIAKeyLo_EL1</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>APIAKey</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of the System registers listed above are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the System registers listed above are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_7"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="APGAKey_6">APGAKey, bit [6]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of multiple System registers. Enables a trap on <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the following AArch64 System registers to EL2:</p>
+<ul>
+<li><a href="AArch64-apgakeyhi_el1.html">APGAKeyHi_EL1</a>.
+</li><li><a href="AArch64-apgakeylo_el1.html">APGAKeyLo_EL1</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>APGAKey</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of the System registers listed above are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the System registers listed above are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_6"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="APDBKey_5">APDBKey, bit [5]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of multiple System registers. Enables a trap on <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the following AArch64 System registers to EL2:</p>
+<ul>
+<li><a href="AArch64-apdbkeyhi_el1.html">APDBKeyHi_EL1</a>.
+</li><li><a href="AArch64-apdbkeylo_el1.html">APDBKeyLo_EL1</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>APDBKey</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of the System registers listed above are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the System registers listed above are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_5"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="APDAKey_4">APDAKey, bit [4]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of multiple System registers. Enables a trap on <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the following AArch64 System registers to EL2:</p>
+<ul>
+<li><a href="AArch64-apdakeyhi_el1.html">APDAKeyHi_EL1</a>.
+</li><li><a href="AArch64-apdakeylo_el1.html">APDAKeyLo_EL1</a>.
+</li></ul>
+
+        <table class="valuetable"><tr><th>APDAKey</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of the System registers listed above are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads at EL1 using AArch64 of any of the System registers listed above are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="0_4"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="AMAIR_EL1_3">AMAIR_EL1, bit [3]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-amair_el1.html">AMAIR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>AMAIR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-amair_el1.html">AMAIR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-amair_el1.html">AMAIR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="AIDR_EL1_2">AIDR_EL1, bit [2]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-aidr_el1.html">AIDR_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>AIDR_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-aidr_el1.html">AIDR_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-aidr_el1.html">AIDR_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="AFSR1_EL1_1">AFSR1_EL1, bit [1]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-afsr1_el1.html">AFSR1_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>AFSR1_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-afsr1_el1.html">AFSR1_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-afsr1_el1.html">AFSR1_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><h4 id="AFSR0_EL1_0">AFSR0_EL1, bit [0]
+              </h4>
+          
+  <p>Trap <span class="instruction">MRS</span> reads of <a href="AArch64-afsr0_el1.html">AFSR0_EL1</a> at EL1 using AArch64 to EL2.</p>
+
+        <table class="valuetable"><tr><th>AFSR0_EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><span class="instruction">MRS</span> reads of <a href="AArch64-afsr0_el1.html">AFSR0_EL1</a> are not affected by this bit.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>If EL2 is implemented and enabled in the current Security state and either EL3 is not implemented or <a href="AArch64-scr_el3.html">SCR_EL3</a>.FGTEn == 1, <span class="instruction">MRS</span> reads of <a href="AArch64-afsr0_el1.html">AFSR0_EL1</a> at EL1 using AArch64 are trapped to EL2 and reported with EC syndrome value <span class="hexnumber">0x18</span>, unless the read generates a higher priority exception.</p>
+</td></tr></table><p>In a system where the PE resets into EL2, this field resets to <span class="binarynumber">0</span>.
+</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the HFGRTR_EL2</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, HFGRTR_EL2</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b100</td><td>0b0001</td><td>0b0001</td><td>0b100</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        return NVMem[0x1B8];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return HFGRTR_EL2;
+elsif PSTATE.EL == EL3 then
+    return HFGRTR_EL2;
+              </p><h4 class="assembler">MSR HFGRTR_EL2, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b100</td><td>0b0001</td><td>0b0001</td><td>0b100</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.&lt;NV2,NV&gt; == '11' then
+        NVMem[0x1B8] = X[t];
+    elsif EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.FGTEn == '0' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        HFGRTR_EL2 = X[t];
+elsif PSTATE.EL == EL3 then
+    HFGRTR_EL2 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

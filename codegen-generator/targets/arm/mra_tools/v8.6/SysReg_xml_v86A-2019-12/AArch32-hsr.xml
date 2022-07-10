@@ -1,0 +1,3810 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch32" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>HSR</reg_short_name>
+      <reg_long_name>Hyp Syndrome Register</reg_long_name>
+        <reg_condition otherwise="UNKNOWN">when AArch32 is supported at any Exception level</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch64-esr_el2.xml">ESR_EL2</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch64</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Holds syndrome information for an exception taken to Hyp mode.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>Virtualization registers</reg_group>
+            <reg_group>Exception and fault handling registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If EL2 is not implemented, this register is <arm-defined-word>RES0</arm-defined-word> from EL3.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>HSR is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  <para>Execution in any Non-secure PE mode other than Hyp mode makes this register <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+<para>When an <arm-defined-word>UNPREDICTABLE</arm-defined-word> instruction is treated as <arm-defined-word>UNDEFINED</arm-defined-word>, and the exception is taken to EL2, the value of HSR is <arm-defined-word>UNKNOWN</arm-defined-word>. The value written to HSR must be consistent with a value that could be created as a result of an exception from the same Exception level that generated the exception as a result of a situation that is not <arm-defined-word>UNPREDICTABLE</arm-defined-word> at that Exception level, in order to avoid the possibility of a privilege violation.</para>
+
+    </text_before_fields>
+    
+        <field
+           id="EC_31_26"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="True"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EC</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>26</field_lsb>
+          <field_description order="before">
+          
+  <para>Exception Class. Indicates the reason for the exception that this register holds information about. Possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000000</field_value>
+        <field_value_description>
+  <para>Unknown reason.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="exceptions with an unknown reason"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000001</field_value>
+        <field_value_description>
+  <para>Trapped WFI or WFE instruction execution.</para>
+<para>Conditional WFE and WFI instructions that fail their condition code check do not cause an exception.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from a WFI or WFE instruction"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000011</field_value>
+        <field_value_description>
+  <para>Trapped MCR or MRC access with (coproc==<binarynumber>0b1111</binarynumber>) that is not reported using EC <binarynumber>0b000000</binarynumber>.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an MCR or MRC access"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000100</field_value>
+        <field_value_description>
+  <para>Trapped MCRR or MRRC access with (coproc==<binarynumber>0b1111</binarynumber>) that is not reported using EC <binarynumber>0b000000</binarynumber>.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an MCRR or MRRC access"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000101</field_value>
+        <field_value_description>
+  <para>Trapped MCR or MRC access with (coproc==<binarynumber>0b1110</binarynumber>).</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an MCR or MRC access"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000110</field_value>
+        <field_value_description>
+  <para>Trapped LDC or STC access.</para>
+<para>The only architected uses of these instructions are:</para>
+<list type="unordered">
+<listitem><content>
+<para>An STC to write data to memory from <register_link state="AArch32" id="AArch32-dbgdtrrxint.xml">DBGDTRRXint</register_link>.</para>
+</content>
+</listitem><listitem><content>
+<para>An LDC to read data from memory to <register_link state="AArch32" id="AArch32-dbgdtrtxint.xml">DBGDTRTXint</register_link>.</para>
+</content>
+</listitem></list>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an LDC or STC instruction"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000111</field_value>
+        <field_value_description>
+  <para>Access to Advanced SIMD or floating-point functionality trapped by a <register_link state="AArch32" id="AArch32-hcptr.xml">HCPTR</register_link>.{TASE, TCP10} control.</para>
+<para>Excludes exceptions generated because Advanced SIMD and floating-point are not implemented. These are reported with EC value <binarynumber>0b000000</binarynumber>.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an access to SIMD or floating-point functionality, resulting from HCPTR"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001000</field_value>
+        <field_value_description>
+  <para>Trapped VMRS access, from ID group trap, that is not reported using EC <binarynumber>0b000111</binarynumber>.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an MCR or MRC access"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001100</field_value>
+        <field_value_description>
+  <para>Trapped MRRC access with (coproc==<binarynumber>0b1110</binarynumber>).</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an MCRR or MRRC access"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001110</field_value>
+        <field_value_description>
+  <para>Illegal exception return to AArch32 state.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an Illegal state or PC alignment fault"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010001</field_value>
+        <field_value_description>
+  <para>Exception on SVC instruction execution in AArch32 state routed to EL2.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from HVC or SVC instruction execution"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010010</field_value>
+        <field_value_description>
+  <para>HVC instruction execution in AArch32 state, when HVC is not disabled.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from HVC or SVC instruction execution"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010011</field_value>
+        <field_value_description>
+  <para>Trapped execution of SMC instruction in AArch32 state.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from SMC instruction execution"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100000</field_value>
+        <field_value_description>
+  <para>Prefetch Abort from a lower Exception level.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from a Prefetch Abort"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100001</field_value>
+        <field_value_description>
+  <para>Prefetch Abort taken without a change in Exception level.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from a Prefetch Abort"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100010</field_value>
+        <field_value_description>
+  <para>PC alignment fault exception.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from an Illegal state or PC alignment fault"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100100</field_value>
+        <field_value_description>
+  <para>Data Abort from a lower Exception level.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from a Data Abort"/>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100101</field_value>
+        <field_value_description>
+  <para>Data Abort taken without a change in Exception level.</para>
+</field_value_description>
+                <field_value_links_to linked_field_name="ISS" linked_field_condition="Exception from a Data Abort"/>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other EC values are reserved by Arm, and:</para>
+<list type="unordered">
+<listitem><content>Unused values in the range <binarynumber>0b000000</binarynumber> - <binarynumber>0b101100</binarynumber> (<hexnumber>0x00</hexnumber> - <hexnumber>0x2C</hexnumber>) are reserved for future use for synchronous exceptions.</content>
+</listitem><listitem><content>Unused values in the range <binarynumber>0b101101</binarynumber> - <binarynumber>0b111111</binarynumber> (<hexnumber>0x2D</hexnumber> - <hexnumber>0x3F</hexnumber>) are reserved for future use, and might be used for synchronous or asynchronous exceptions.</content>
+</listitem></list>
+<para>The effect of programming this field to a reserved value is that behavior is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word>, as described in <xref linkend="CEGFJDFD" browsertext="'Reserved values in System and memory-mapped registers and translation table entries' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section K1.2.2"/>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="IL_25_25"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IL</field_name>
+          <field_msb>25</field_msb>
+          <field_lsb>25</field_lsb>
+          <field_description order="before">
+          
+  <para>Instruction length bit. Indicates the size of the instruction that has been trapped to Hyp mode. When this bit is valid, possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>16-bit instruction trapped.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>32-bit instruction trapped.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is <arm-defined-word>RES1</arm-defined-word> and not valid for the following cases:</para>
+<list type="unordered">
+<listitem><content>When the EC field is <binarynumber>0b000000</binarynumber>, indicating an exception with an unknown reason.</content>
+</listitem><listitem><content>Prefetch Aborts.</content>
+</listitem><listitem><content>Data Aborts for which the HSR.ISS.ISV field is 0.</content>
+</listitem><listitem><content>When the EC value is <binarynumber>0b001110</binarynumber>, indicating an Illegal state exception.</content>
+</listitem></list>
+<note><para>This is a change from the behavior in Armv7, where the IL field is UNK/SBZP for the corresponding cases.</para></note><para>The IL field is not valid and is <arm-defined-word>UNKNOWN</arm-defined-word> on an exception from a PC alignment fault.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="ISS_24_0"
+           is_variable_length="False"
+           has_partial_fieldset="True"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ISS</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Instruction Specific Syndrome. Architecturally, this field can be defined independently for each defined Exception class. However, in practice, some ISS encodings are used for more than one Exception class.</para>
+
+          </field_description>
+            <field_values>
+               
+                 <field_value_name>I</field_value_name>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When exceptions with an unknown reason</fields_condition>
+      <fields_instance>exceptions with an unknown reason</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_24_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  <para>This EC code is used for all exceptions that are not covered by any other EC value. This includes exceptions that are generated in the following situations:</para>
+<list type="unordered">
+<listitem><content>The attempted execution of an instruction bit pattern that has no allocated instruction or is not accessible in the current PE mode in the current Security state, including:<list type="unordered">
+<listitem><content>A read access using a System register encoding pattern that is not allocated for reads or that does not permit reads in the current PE mode and Security state.</content>
+</listitem><listitem><content>A write access using a System register encoding pattern that is not allocated for writes or that does not permit writes in the current PE mode and Security state.</content>
+</listitem><listitem><content>Instruction encodings that are unallocated.</content>
+</listitem><listitem><content>Instruction encodings for instructions not implemented in the implementation.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>In Debug state, the attempted execution of an instruction bit pattern that not accessible in Debug state.</content>
+</listitem><listitem><content>In Non-debug state, the attempted execution of an instruction bit pattern that not accessible in Non-debug state.</content>
+</listitem><listitem><content>The attempted execution of a short vector floating-point instruction.</content>
+</listitem><listitem><content>In an implementation that does not include Advanced SIMD and floating-point functionality, an attempted access to Advanced SIMD or floating-point functionality under conditions where that access would be permitted if that functionality was present. This includes the attempted execution of an Advanced SIMD or floating-point instruction, and attempted accesses to Advanced SIMD and floating-point System registers.</content>
+</listitem><listitem><content>An exception generated because of the value of one of the <register_link state="AArch32" id="AArch32-sctlr.xml">SCTLR</register_link>.{ITD, SED, CP15BEN} control bits.</content>
+</listitem><listitem><content>Attempted execution of:<list type="unordered">
+<listitem><content>An HVC instruction when disabled by <register_link state="AArch32" id="AArch32-hcr.xml">HCR</register_link>.HCD, <register_link state="AArch32" id="AArch32-scr.xml">SCR</register_link>.HCE, or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.HCE.</content>
+</listitem><listitem><content>An SMC instruction when disabled by <register_link state="AArch32" id="AArch32-scr.xml">SCR</register_link>.SCD or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.SMD.</content>
+</listitem><listitem><content>An HLT instruction when disabled by <register_link state="ext" id="ext-edscr.xml">EDSCR</register_link>.HDE.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>An HVC instruction when disabled by <register_link state="AArch32" id="AArch32-hcr.xml">HCR</register_link>.HCD, <register_link state="AArch32" id="AArch32-scr.xml">SCR</register_link>.HCE, or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.HCE.An SMC instruction when disabled by <register_link state="AArch32" id="AArch32-scr.xml">SCR</register_link>.SCD or <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.SMD.An HLT instruction when disabled by <register_link state="ext" id="ext-edscr.xml">EDSCR</register_link>.HDE.</content>
+</listitem><listitem><content>An exception generated because of the attempted execution of an MSR (Banked register) or MRS (Banked register) instruction that would access a Banked register that is not accessible from the Security state and PE mode at which the instruction was executed.</content>
+</listitem></list>
+<para>An exception is generated only if the <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> behavior of the instruction is that it is <arm-defined-word>UNDEFINED</arm-defined-word>, see <xref linkend="CEGFJHCD" browsertext="'MSR/MRS Banked registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section K1.1.29 (CONSTRAINED UNPREDICTABLE behavior of EL2 features)" filename="appx_architectural_constraints_on_unpredictable__"/>.</para>
+<list type="unordered">
+<listitem><content>Attempted execution, in Debug state, of:<list type="unordered">
+<listitem><content>A DCPS1 instruction in Non-secure state from EL0 when EL2 is using AArch32 and the value of <register_link state="AArch32" id="AArch32-hcr.xml">HCR</register_link>.TGE is 1.</content>
+</listitem><listitem><content>A DCPS2 instruction at EL1 or EL0 when EL2 is not implemented, or when EL3 is using AArch32 and the value of <register_link state="AArch32" id="AArch32-scr.xml">SCR</register_link>.NS is 0, or when EL3 is using AArch64 and the value of <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.NS is 0.</content>
+</listitem><listitem><content>A DCPS3 instruction when EL3 is not implemented, or when the value of <register_link state="ext" id="ext-edscr.xml">EDSCR</register_link>.SDD is 1.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>In Debug state when the value of <register_link state="ext" id="ext-edscr.xml">EDSCR</register_link>.SDD is 1, the attempted execution at EL2, EL1, or EL0 of an instruction that is configured to trap to EL3.</content>
+</listitem></list>
+<para><xref linkend="BEIDIJHJ" browsertext="'Undefined Instruction exception, when HCR.TGE is set to 1' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)," filename="G_the_aarch32_system_level_programmers_model"/> describes the configuration settings for a trap that returns an HSR.EC value of <binarynumber>0b000000</binarynumber>.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When exceptions with an unknown reason</fields_condition>
+      
+        <fieldat id="0_24_0" msb="24" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from a WFI or WFE instruction</fields_condition>
+      <fields_instance>Exception from a WFI or WFE instruction</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_19_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TI_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TI</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Trapped instruction. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>WFI trapped.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>WFE trapped.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para><xref linkend="BEIBHJCJ" browsertext="'Trapping use of the WFI and WFE instructions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)," filename="G_the_aarch32_system_level_programmers_model"/> describes the configuration settings for this trap.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from a WFI or WFE instruction</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="0_19_1" msb="19" lsb="1"/>
+        <fieldat id="TI_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from an MCR or MRC access</fields_condition>
+      <fields_instance>Exception from an MCR or MRC access</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Opc2_19_17"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Opc2</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+          
+  <para>The Opc2 value from the issued instruction.</para>
+<para>For a trapped VMRS access, holds the value <binarynumber>0b000</binarynumber>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Opc1_16_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Opc1</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+          
+  <para>The Opc1 value from the issued instruction.</para>
+<para>For a trapped VMRS access, holds the value <binarynumber>0b111</binarynumber>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CRn_13_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CRn</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>The CRn value from the issued instruction.</para>
+<para>For a trapped VMRS access, holds the reg field from the VMRS instruction encoding.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Rt_8_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Rt</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>The Rt value from the issued instruction, the general-purpose register used for the transfer.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CRm_4_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CRm</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>The CRm value from the issued instruction.</para>
+<para>For a trapped VMRS access, holds the value <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Direction_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Direction</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates the direction of the trapped instruction. The possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Write to System register space. MCR instruction.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Read from System register space. MRC or VMRS instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The following sections describe configuration settings for traps that are reported using EC value <binarynumber>0b000011</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIEEJIA" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to the ID registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="CHDIGJCH" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to lockdown, DMA, and TCM operations' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEICHIHA" browsertext="'Traps to Hyp mode of Non-secure EL1 execution of cache maintenance instructions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEICAEBH" browsertext="'Traps to Hyp mode of Non-secure EL1 execution of TLB maintenance instructions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIFCHFF" browsertext="'Traps to Hyp mode of Non-secure EL1 accesses to the Auxiliary Control Register' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEICIHGI" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to Performance Monitors registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIECDAD" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to Activity Monitors registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIFFJII" browsertext="'Traps to Hyp mode of Non-secure EL1 accesses to the CPACR' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIGHBDF" browsertext="'Traps to Hyp mode of Non-secure EL1 accesses to virtual memory control registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIDJJAH" browsertext="'General trapping to Hyp mode of Non-secure EL0 and EL1 accesses to System registers in the (coproc == 1111) encoding space' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+<para>The following sections describe configuration settings for traps that are reported using EC value <binarynumber>0b000101</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="CHDFGEDI" browsertext="'ID group 0, Primary device identification registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIIHJHA" browsertext="'Traps to Hyp mode of Non-secure System register accesses to trace registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIHBBIC" browsertext="'Trapping Non-secure System register accesses to Debug ROM registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIECEGJ" browsertext="'Trapping Non-secure System register accesses to powerdown debug registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEICAABI" browsertext="'Trapping general Non-secure System register accesses to debug registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+<para>The following sections describes configuration settings for traps that are reported using EC value <binarynumber>0b001000</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="CHDFGEDI" browsertext="'ID group 0, Primary device identification registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIDDGCF" browsertext="'ID group 3, Detailed feature identification registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from an MCR or MRC access</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="Opc2_19_17" msb="19" lsb="17"/>
+        <fieldat id="Opc1_16_14" msb="16" lsb="14"/>
+        <fieldat id="CRn_13_10" msb="13" lsb="10"/>
+        <fieldat id="0_9_9" msb="9" lsb="9"/>
+        <fieldat id="Rt_8_5" msb="8" lsb="5"/>
+        <fieldat id="CRm_4_1" msb="4" lsb="1"/>
+        <fieldat id="Direction_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from an MCRR or MRRC access</fields_condition>
+      <fields_instance>Exception from an MCRR or MRRC access</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Opc1_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Opc1</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>The Opc1 value from the issued instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_15_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Rt2_13_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Rt2</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>The Rt2 value from the issued instruction, the second general-purpose register used for the transfer.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Rt_8_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Rt</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>The Rt value from the issued instruction, the first general-purpose register used for the transfer.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CRm_4_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CRm</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>The CRm value from the issued instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Direction_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Direction</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates the direction of the trapped instruction. The possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Write to System register space. MCRR instruction.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Read from System register space. MRRC instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The following sections describe configuration settings for traps that are reported using EC value <binarynumber>0b000100</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIGHBDF" browsertext="'Traps to Hyp mode of Non-secure EL1 accesses to virtual memory control registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEICIHGI" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to Performance Monitors registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIECDAD" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to Activity Monitors registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="CHDCJFAE" browsertext="'Traps to Hyp mode of Non-secure EL0 and EL1 accesses to the Generic Timer registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIDJJAH" browsertext="'General trapping to Hyp mode of Non-secure EL0 and EL1 accesses to System registers in the (coproc == 1111) encoding space' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+<para>The following sections describe configuration settings for traps that are reported using EC value <binarynumber>0b001100</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIIHJHA" browsertext="'Traps to Hyp mode of Non-secure System register accesses to trace registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIHBBIC" browsertext="'Trapping Non-secure System register accesses to Debug ROM registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="D_the_aarch64_system_level_programmers_model"/>.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from an MCRR or MRRC access</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="Opc1_19_16" msb="19" lsb="16"/>
+        <fieldat id="0_15_14" msb="15" lsb="14"/>
+        <fieldat id="Rt2_13_10" msb="13" lsb="10"/>
+        <fieldat id="0_9_9" msb="9" lsb="9"/>
+        <fieldat id="Rt_8_5" msb="8" lsb="5"/>
+        <fieldat id="CRm_4_1" msb="4" lsb="1"/>
+        <fieldat id="Direction_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from an LDC or STC instruction</fields_condition>
+      <fields_instance>Exception from an LDC or STC instruction</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="imm8_19_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>imm8</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>The immediate value from the issued instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_11_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Rn_8_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Rn</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>The Rn value from the issued instruction. Valid only when AM[2] is 0, indicating an immediate form of the LDC or STC instruction.</para>
+<para>When AM[2] is 1, indicating a literal form of the LDC or STC instruction, this field is <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Offset_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Offset</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether the offset is added or subtracted:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Subtract offset.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Add offset.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit corresponds to the U bit in the instruction encoding.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="AM_3_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AM</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>1</field_lsb>
+          <field_description order="before">
+          
+  <para>Addressing mode. The permitted values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000</field_value>
+        <field_value_description>
+  <para>Immediate unindexed.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001</field_value>
+        <field_value_description>
+  <para>Immediate post-indexed.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010</field_value>
+        <field_value_description>
+  <para>Immediate offset.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b011</field_value>
+        <field_value_description>
+  <para>Immediate pre-indexed.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100</field_value>
+        <field_value_description>
+  <para>Literal unindexed.</para>
+<para>LDC instruction in A32 instruction set only.</para>
+<para>For a trapped STC instruction or a trapped T32 LDC instruction this encoding is reserved.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110</field_value>
+        <field_value_description>
+  <para>Literal offset.</para>
+<para>LDC instruction only.</para>
+<para>For a trapped STC instruction, this encoding is reserved.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The values <binarynumber>0b101</binarynumber> and <binarynumber>0b111</binarynumber> are reserved. The effect of programming this field to a reserved value is that behavior is <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word>, as described in <xref linkend="CEGHGHJI" browsertext="'Unallocated values in fields of AArch32 System registers and translation table entries' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section K1.1.11"/>.</para>
+<para>Bit [2] in this subfield indicates the instruction form, immediate or literal.</para>
+<para>Bits [1:0] in this subfield correspond to the bits {P, W} in the instruction encoding.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="Direction_0_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Direction</field_name>
+          <field_msb>0</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates the direction of the trapped instruction. The possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Write to memory. STC instruction.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Read from memory. LDC instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para><xref linkend="BEICAABI" browsertext="'Trapping general Non-secure System register accesses to debug registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/> describes the configuration settings for the trap that is reported using EC value <binarynumber>0b000110</binarynumber>.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from an LDC or STC instruction</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="imm8_19_12" msb="19" lsb="12"/>
+        <fieldat id="0_11_9" msb="11" lsb="9"/>
+        <fieldat id="Rn_8_5" msb="8" lsb="5"/>
+        <fieldat id="Offset_4_4" msb="4" lsb="4"/>
+        <fieldat id="AM_3_1" msb="3" lsb="1"/>
+        <fieldat id="Direction_0_0" msb="0" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from an access to SIMD or floating-point functionality, resulting from HCPTR</fields_condition>
+      <fields_instance>Exception from an access to SIMD or floating-point functionality, resulting from HCPTR</fields_instance>
+    <text_before_fields>
+      
+  <para>Excludes exceptions that occur because Advanced SIMD and floating-point functionality is not implemented, or because the value of <register_link state="AArch32" id="AArch32-hcr.xml">HCR</register_link>.TGE or <register_link state="AArch64" id="AArch64-hcr_el2.xml">HCR_EL2</register_link>.TGE is 1. These are reported with EC value <binarynumber>0b000000</binarynumber>.</para>
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_19_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="TA_5_5"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>TA</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>5</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates trapped use of Advanced SIMD functionality. The possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Exception was not caused by trapped use of Advanced SIMD functionality.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Exception was caused by trapped use of Advanced SIMD functionality.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>Any use of an Advanced SIMD instruction that is not also a floating-point instruction that is trapped to Hyp mode because of a trap configured in the <register_link state="AArch32" id="AArch32-hcptr.xml">HCPTR</register_link> sets this bit to 1.</para>
+<para>For a list of these instructions, see <xref linkend="CJAHFFIE" browsertext="'Controls of Advanced SIMD operation that do not apply to floating-point operation' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section E1"/>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_4_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>4</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="coproc_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>coproc</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>When the TA field returns the value 1, this field returns the value <binarynumber>1010</binarynumber>, otherwise this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The following sections describe the configuration settings for the traps that are reported using EC value <binarynumber>0b000111</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIBCFGC" browsertext="'General trapping to Hyp mode of Non-secure accesses to the SIMD and floating-point registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIBBEIG" browsertext="'Traps to Hyp mode of Non-secure accesses to Advanced SIMD functionality' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from an access to SIMD or floating-point functionality, resulting from HCPTR</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="0_19_6" msb="19" lsb="6"/>
+        <fieldat id="TA_5_5" msb="5" lsb="5"/>
+        <fieldat id="0_4_4" msb="4" lsb="4"/>
+        <fieldat id="coproc_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from HVC or SVC instruction execution</fields_condition>
+      <fields_instance>Exception from HVC or SVC instruction execution</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_24_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="imm16_15_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>imm16</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>The value of the immediate field from the HVC or SVC instruction.</para>
+<para>For an HVC instruction, this is the value of the imm16 field of the issued instruction.</para>
+<para>For an SVC instruction:</para>
+<list type="unordered">
+<listitem><content>If the instruction is unconditional, then:<list type="unordered">
+<listitem><content>For the T32 instruction, this field is zero-extended from the imm8 field of the instruction.</content>
+</listitem><listitem><content>For the A32 instruction, this field is the bottom 16 bits of the imm24 field of the instruction.</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>For the T32 instruction, this field is zero-extended from the imm8 field of the instruction.For the A32 instruction, this field is the bottom 16 bits of the imm24 field of the instruction.</content>
+</listitem><listitem><content>If the instruction is conditional, this field is <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The HVC instruction is unconditional, and a conditional SVC instruction generates an exception only if it passes its condition code check. Therefore, the syndrome information for these exceptions does not require conditionality information.</para>
+<para><xref linkend="BEIJJBDG" browsertext="'Supervisor Call exception, when HCR.TGE is set to 1' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)," filename="G_the_aarch32_system_level_programmers_model"/> describes the configuration settings for the trap reported with EC value <binarynumber>0b010001</binarynumber>.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from HVC or SVC instruction execution</fields_condition>
+      
+        <fieldat id="0_24_16" msb="24" lsb="16"/>
+        <fieldat id="imm16_15_0" msb="15" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from SMC instruction execution</fields_condition>
+      <fields_instance>Exception from SMC instruction execution</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="CV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Condition code valid. Possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The COND field is not valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The COND field is valid.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When an A32 instruction is trapped, CV is set to 1.</para>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether CV is set to 1 or set to 0. See the description of the COND field for more information.</para>
+<para>This field is only valid if CCKNOWNPASS is 1, otherwise it is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="COND_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>COND</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>The condition code for the trapped instruction.</para>
+<para>When an A32 instruction is trapped, CV is set to 1 and:</para>
+<list type="unordered">
+<listitem><content>If the instruction is conditional, COND is set to the condition code field value from the instruction.</content>
+</listitem><listitem><content>If the instruction is unconditional, COND is set to <binarynumber>0b1110</binarynumber>.</content>
+</listitem></list>
+<para>A conditional A32 instruction that is known to pass its condition code check can be presented either:</para>
+<list type="unordered">
+<listitem><content>With COND set to <binarynumber>0b1110</binarynumber>, the value for unconditional.</content>
+</listitem><listitem><content>With the COND value held in the instruction.</content>
+</listitem></list>
+<para>When a T32 instruction is trapped, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>CV is set to 0 and COND is set to an <arm-defined-word>UNKNOWN</arm-defined-word> value. Software must examine the SPSR.IT field to determine the condition, if any, of the T32 instruction.</content>
+</listitem><listitem><content>CV is set to 1 and COND is set to the condition code for the condition that applied to the instruction.</content>
+</listitem></list>
+<para>For an implementation that, for both A32 and T32 instructions, takes an exception on a trapped conditional instruction only if the instruction passes its condition code check, these definitions mean that when CV is set to 1 it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether the COND field is set to <binarynumber>0b1110</binarynumber>, or to the value of any condition that applied to the instruction.</para>
+<para>This field is only valid if CCKNOWNPASS is 1, otherwise it is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CCKNOWNPASS_19_19"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CCKNOWNPASS</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>19</field_lsb>
+          <field_description order="before">
+          
+  <para>Indicates whether the instruction might have failed its condition code check.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The instruction was unconditional, or was conditional and passed its condition code check.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The instruction was conditional, and might have failed its condition code check.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_18_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>18</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  <para><xref linkend="CHDBHAEI" browsertext="'Traps to Hyp mode of Non-secure EL1 execution of SMC instructions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)," filename="G_the_aarch32_system_level_programmers_model"/> describes the configuration settings for this trap, for instructions executed in Non-secure EL1.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from SMC instruction execution</fields_condition>
+      
+        <fieldat id="CV_24_24" msb="24" lsb="24"/>
+        <fieldat id="COND_23_20" msb="23" lsb="20"/>
+        <fieldat id="CCKNOWNPASS_19_19" msb="19" lsb="19"/>
+        <fieldat id="0_18_0" msb="18" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from a Prefetch Abort</fields_condition>
+      <fields_instance>Exception from a Prefetch Abort</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_24_11"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>11</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="FnV_10_10"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>FnV</field_name>
+          <field_msb>10</field_msb>
+          <field_lsb>10</field_lsb>
+          <field_description order="before">
+          
+  <para>FAR not Valid, for a synchronous External abort other than a synchronous External abort on a translation table walk.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><register_link state="AArch32" id="AArch32-hifar.xml">HIFAR</register_link> is valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para><register_link state="AArch32" id="AArch32-hifar.xml">HIFAR</register_link> is not valid, and holds an <arm-defined-word>UNKNOWN</arm-defined-word> value.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is only valid if the IFSC code is <binarynumber>0b010000</binarynumber>. It is <arm-defined-word>RES0</arm-defined-word> for all other aborts.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="EA_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EA</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>External abort type. This bit can provide an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> classification of External aborts.</para>
+<para>For any abort other than an External abort this bit returns a value of 0.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="S1PTW_7_7"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>S1PTW</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>For a stage 2 fault, indicates whether the fault was a stage 2 fault on an access made for a stage 1 translation table walk:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault not on a stage 2 translation for a stage 1 translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault on the stage 2 translation of an access for a stage 1 translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For any abort other than a stage 2 fault this bit is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_6_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="IFSC_5_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>IFSC</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Instruction Fault Status Code. Possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000000</field_value>
+        <field_value_description>
+  <para>Address size fault in translation table base register.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000001</field_value>
+        <field_value_description>
+  <para>Address size fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000010</field_value>
+        <field_value_description>
+  <para>Address size fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000011</field_value>
+        <field_value_description>
+  <para>Address size fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000101</field_value>
+        <field_value_description>
+  <para>Translation fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000110</field_value>
+        <field_value_description>
+  <para>Translation fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000111</field_value>
+        <field_value_description>
+  <para>Translation fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001001</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001010</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001011</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001101</field_value>
+        <field_value_description>
+  <para>Permission fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001110</field_value>
+        <field_value_description>
+  <para>Permission fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001111</field_value>
+        <field_value_description>
+  <para>Permission fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010000</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, not on translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010101</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010110</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010111</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011000</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access, not on translation table walk.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011101</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 1.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011110</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 2.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011111</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 3.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100010</field_value>
+        <field_value_description>
+  <para>Debug exception.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110000</field_value>
+        <field_value_description>
+  <para>TLB conflict abort.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>For more information about the lookup level associated with a fault, see <xref linkend="BEIEGEFF" browsertext="'The level associated with MMU faults on a Long-descriptor translation table lookup' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile"/>.</para>
+<para>If the S1PTW bit is set, then the level refers the level of the stage2 translation that is translating a stage 1 translation walk.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The following sections describe cases where Prefetch Abort exceptions can be routed to Hyp mode, generating exceptions that are reported in the HSR with EC value <binarynumber>0b100000</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIBEBFJ" browsertext="'Abort exceptions, when HCR.TGE is set to 1' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIJCCII" browsertext="'Routing Debug exceptions to Hyp mode' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from a Prefetch Abort</fields_condition>
+      
+        <fieldat id="0_24_11" msb="24" lsb="11"/>
+        <fieldat id="FnV_10_10" msb="10" lsb="10"/>
+        <fieldat id="EA_9_9" msb="9" lsb="9"/>
+        <fieldat id="0_8_8" msb="8" lsb="8"/>
+        <fieldat id="S1PTW_7_7" msb="7" lsb="7"/>
+        <fieldat id="0_6_6" msb="6" lsb="6"/>
+        <fieldat id="IFSC_5_0" msb="5" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from an Illegal state or PC alignment fault</fields_condition>
+      <fields_instance>Exception from an Illegal state or PC alignment fault</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_24_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  <para>For more information about the Illegal state exception, see:</para>
+<list type="unordered">
+<listitem><content><xref linkend="CHDDFIGE" browsertext="'Illegal changes to PSTATE.M' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1  (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="CHDDDJDB" browsertext="'Illegal return events from AArch32 state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="CHDDAEDF" browsertext="'Legal exception returns that set PSTATE.IL to 1' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="CHDFFBAC" browsertext="'The Illegal Execution state exception' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+<para>For more information about the PC alignment fault exception, see <xref linkend="CEGGJFID" browsertext="'Branching to an unaligned PC' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, appendix A" filename="appx_architectural_constraints_on_unpredictable__"/>.</para>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from an Illegal state or PC alignment fault</fields_condition>
+      
+        <fieldat id="0_24_0" msb="24" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+            <partial_fieldset>
+              <fields length="25">
+      <fields_condition>When Exception from a Data Abort</fields_condition>
+      <fields_instance>Exception from a Data Abort</fields_instance>
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="ISV_24_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ISV</field_name>
+          <field_msb>24</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Instruction syndrome valid. Indicates whether the syndrome information in ISS[23:14] is valid.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>No valid instruction syndrome. ISS[23:14] are <arm-defined-word>RES0</arm-defined-word>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>ISS[23:14] hold a valid instruction syndrome.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This bit is 0 for all faults except Data Aborts generated by stage 2 address translations for which all the following apply to the instruction that generated the Data Abort exception:</para>
+<list type="unordered">
+<listitem><content>The instruction is an LDR, LDA, LDRT, LDRSH, LDRSHT, LDRH, LDAH, LDRHT, LDRSB, LDRSBT, LDRB, LDAB, LDRBT, STR, STL, STRT, STRH, STLH, STRHT, STRB, STLB, or STRBT instruction.</content>
+</listitem><listitem><content>The instruction is not performing register writeback.</content>
+</listitem><listitem><content>The instruction is not using the PC as a source or destination register.</content>
+</listitem></list>
+<para>For these cases, ISV is <arm-defined-word>UNKNOWN</arm-defined-word> if the exception was generated in Debug state in memory access mode, as described in <xref linkend="BABDAGHI" browsertext="'Data Aborts in Memory access mode' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section H4.3.2 (Memory access mode)" filename="H_the_debug_communication_channel__"/>, and otherwise indicates whether ISS[23:14] hold a valid syndrome.</para>
+<note><para>In the A32 instruction set, LDR*T and STR*T instructions always perform register writeback and therefore never return a valid instruction syndrome.</para></note><para>When the RAS Extension is implemented, ISV is 0 for any synchronous External abort.</para>
+<para>ISV is set to 0 on a stage 2 abort on a stage 1 translation table walk.</para>
+<para>When the RAS Extension is not implemented, it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether ISV is set to 1 or 0 on a synchronous External abort on a stage 2 translation table walk.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="SAS_23_22"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SAS</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>22</field_lsb>
+          <field_description order="before">
+          
+  <para>Syndrome Access Size. When ISV is 1, indicates the size of the access attempted by the faulting operation.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00</field_value>
+        <field_value_description>
+  <para>Byte</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>Halfword</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b10</field_value>
+        <field_value_description>
+  <para>Word</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>Doubleword</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is <arm-defined-word>UNKNOWN</arm-defined-word> when the value of ISV is <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+<para>This field is <arm-defined-word>RES0</arm-defined-word> when the value of ISV is 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="SSE_21_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SSE</field_name>
+          <field_msb>21</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Syndrome Sign Extend. When ISV is 1, for a byte, halfword, or word load operation, indicates whether the data item must be sign extended. For these cases, the possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Sign-extension not required.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Data item must be sign-extended.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For all other operations this bit is 0.</para>
+<para>This field is <arm-defined-word>UNKNOWN</arm-defined-word> when the value of ISV is <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+<para>This field is <arm-defined-word>RES0</arm-defined-word> when the value of ISV is 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_20_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="SRT_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>SRT</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Syndrome Register transfer. When ISV is 1, the register number of the Rt operand of the faulting instruction.</para>
+<para>This field is <arm-defined-word>UNKNOWN</arm-defined-word> when the value of ISV is <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+<para>This field is <arm-defined-word>RES0</arm-defined-word> when the value of ISV is 0.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_15_15"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>15</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="AR_14_14"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AR</field_name>
+          <field_msb>14</field_msb>
+          <field_lsb>14</field_lsb>
+          <field_description order="before">
+          
+  <para>Acquire/Release. When ISV is 1, the possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Instruction did not have acquire/release semantics.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Instruction did have acquire/release semantics.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>This field is <arm-defined-word>UNKNOWN</arm-defined-word> when the value of ISV is <arm-defined-word>UNKNOWN</arm-defined-word>.</para>
+<para>This field is <arm-defined-word>RES0</arm-defined-word> when the value of ISV is 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_13_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>13</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="AET_11_10_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>AET</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>10</field_lsb>
+           <field_range>11:10</field_range>
+          <field_description order="before">
+          
+  <para>Asynchronous Error Type.</para>
+<para>When the RAS Extension is implemented and the value returned in the DFSC field is <binarynumber>0b010001</binarynumber>, describes the state of the PE after taking the SError interrupt exception. The possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00</field_value>
+        <field_value_description>
+  <para>Uncontainable error (UC) or uncategorized.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>Unrecoverable error (UEU).</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b10</field_value>
+        <field_value_description>
+  <para>Restartable error (UEO) or Corrected error (CE).</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>Recoverable error (UER).</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>On a synchronous Data Abort, this field is <arm-defined-word>RES0</arm-defined-word>.</para>
+<para>If multiple errors are taken as a single SError interrupt exception, the overall state of the PE is reported. For example, if both a Recoverable and Unrecoverable error occurred, the state is Unrecoverable.</para>
+<note><para>Software can use this information to determine what recovery might be possible. The recovery software must also examine any implemented fault records to determine the location and extent of the error.</para></note><para>When the RAS Extension is not implemented, or when DFSC is not <binarynumber>0b010001</binarynumber>:</para>
+<list type="unordered">
+<listitem><content>Bit[11] is <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content>Bit[10] forms the FnV field.</content>
+</listitem></list>
+<note><para>Armv8.2 requires the implementation of the RAS Extension.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+            <fields_condition>When RAS is implemented</fields_condition>
+      </field>
+        <field
+           id="FnV_11_10_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="True"
+           reserved_type="RES0"
+        >
+          <field_name>FnV</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>10</field_lsb>
+           <field_range>10</field_range>
+          <field_description order="before">
+          
+  <para>FAR not Valid, for a synchronous External abort other than a synchronous External abort on a translation table walk.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para><register_link state="AArch32" id="AArch32-hdfar.xml">HDFAR</register_link> is valid.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para><register_link state="AArch32" id="AArch32-hdfar.xml">HDFAR</register_link> is not valid, and holds an <arm-defined-word>UNKNOWN</arm-defined-word> value.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When the RAS Extension is not implemented, this field is valid only if DFSC is <binarynumber>0b010000</binarynumber>. It is <arm-defined-word>RES0</arm-defined-word> for all other aborts.</para>
+<para>When the RAS Extension is implemented:</para>
+<list type="unordered">
+<listitem><content>If DFSC is <binarynumber>0b010000</binarynumber>, this field is valid.</content>
+</listitem><listitem><content>If DFSC is <binarynumber>0b010001</binarynumber>, this bit forms part of the AET field, becoming AET[0].</content>
+</listitem><listitem><content>This field is <arm-defined-word>RES0</arm-defined-word> for all other aborts.</content>
+</listitem></list>
+<note><para>Armv8.2 requires the implementation of the RAS Extension.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="EA_9_9"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>EA</field_name>
+          <field_msb>9</field_msb>
+          <field_lsb>9</field_lsb>
+          <field_description order="before">
+          
+  <para>External abort type. This bit can provide an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> classification of External aborts.</para>
+<para>For any abort other than an External abort this bit returns a value of 0.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="CM_8_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CM</field_name>
+          <field_msb>8</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Cache maintenance. For a synchronous fault, identifies fault that comes from a cache maintenance or address translation instruction. For synchronous faults, the possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault not generated by a cache maintenance or address translation instruction.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault generated by a cache maintenance or address translation instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For an asynchronous Data Abort exception, this bit is 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="S1PTW_7_7"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>S1PTW</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>7</field_lsb>
+          <field_description order="before">
+          
+  <para>For a stage 2 fault, indicates whether the fault was a stage 2 fault on an access made for a stage 1 translation table walk:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Fault not on a stage 2 translation for a stage 1 translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Fault on the stage 2 translation of an access for a stage 1 translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For any abort other than a stage 2 fault this bit is <arm-defined-word>RES0</arm-defined-word>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="WnR_6_6"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>WnR</field_name>
+          <field_msb>6</field_msb>
+          <field_lsb>6</field_lsb>
+          <field_description order="before">
+          
+  <para>Write not Read. Indicates whether a synchronous abort was caused by a write instruction or a read instruction. The possible values of this bit are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>Abort caused by a read instruction.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>Abort caused by a write instruction.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For faults on cache maintenance and address translation instructions, this bit always returns a value of 1.</para>
+<para>On an asynchronous Data Abort:</para>
+<list type="unordered">
+<listitem><content>When the RAS Extension is not implemented, this bit is <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+</listitem><listitem><content>When the RAS Extension is implemented, this bit is <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem></list>
+<note><para>Armv8.2 requires the implementation of the RAS Extension.</para></note>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="DFSC_5_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DFSC</field_name>
+          <field_msb>5</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>Data Fault Status Code. Possible values of this field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000000</field_value>
+        <field_value_description>
+  <para>Address size fault in translation table base register.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000001</field_value>
+        <field_value_description>
+  <para>Address size fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000010</field_value>
+        <field_value_description>
+  <para>Address size fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000011</field_value>
+        <field_value_description>
+  <para>Address size fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000101</field_value>
+        <field_value_description>
+  <para>Translation fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000110</field_value>
+        <field_value_description>
+  <para>Translation fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b000111</field_value>
+        <field_value_description>
+  <para>Translation fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001001</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001010</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001011</field_value>
+        <field_value_description>
+  <para>Access flag fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001101</field_value>
+        <field_value_description>
+  <para>Permission fault, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001110</field_value>
+        <field_value_description>
+  <para>Permission fault, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001111</field_value>
+        <field_value_description>
+  <para>Permission fault, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010000</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, not on translation table walk.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010001</field_value>
+        <field_value_description>
+  <para>Asynchronous SError interrupt.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010101</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 1.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010110</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 2.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010111</field_value>
+        <field_value_description>
+  <para>Synchronous External abort, on translation table walk, level 3.</para>
+</field_value_description>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011000</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access, not on translation table walk.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011001</field_value>
+        <field_value_description>
+  <para>Asynchronous SError interrupt, from a parity or ECC error on memory access.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011101</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 1.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011110</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 2.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                    <field_value_instance>
+        <field_value>0b011111</field_value>
+        <field_value_description>
+  <para>Synchronous parity or ECC error on memory access on translation table walk, level 3.</para>
+</field_value_description>
+            <field_value_condition>When RAS is not implemented</field_value_condition>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100001</field_value>
+        <field_value_description>
+  <para>Alignment fault.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100010</field_value>
+        <field_value_description>
+  <para>Debug exception.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110000</field_value>
+        <field_value_description>
+  <para>TLB conflict abort.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110100</field_value>
+        <field_value_description>
+  <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> fault (Lockdown).</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110101</field_value>
+        <field_value_description>
+  <para><arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> fault (Unsupported Exclusive access).</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>For more information about the lookup level associated with a fault, see <xref linkend="BEIEGEFF" browsertext="'The level associated with MMU faults on a Long-descriptor translation table lookup' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile"/>.</para>
+<para>If the S1PTW bit is set, then the level refers the level of the stage2 translation that is translating a stage 1 translation walk.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  <para>The following describe cases where Data Abort exceptions can be routed to Hyp mode, generating exceptions that are reported in the HSR with EC value <binarynumber>0b100100</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEIBEBFJ" browsertext="'Abort exceptions, when HCR.TGE is set to 1' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIJCCII" browsertext="'Routing Debug exceptions to EL2' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+<para>The following describe cases that can cause a Data Abort exception that is taken to Hyp mode, and reported in the HSR with EC value of <binarynumber>0b100000</binarynumber> or <binarynumber>0b100100</binarynumber>:</para>
+<list type="unordered">
+<listitem><content><xref linkend="BEICEHAG" browsertext="'Hyp mode control of Non-secure access permissions' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1 (The AArch32 System Level Programmers' Model)" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem><listitem><content><xref linkend="BEIGBCEG" browsertext="'Memory fault reporting in Hyp mode' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section G1" filename="G_the_aarch32_system_level_programmers_model"/>.</content>
+</listitem></list>
+
+    </text_after_fields>
+  </fields>
+              <reg_fieldset length="25">
+        <fields_condition>When Exception from a Data Abort</fields_condition>
+      
+        <fieldat id="ISV_24_24" msb="24" lsb="24"/>
+        <fieldat id="SAS_23_22" msb="23" lsb="22"/>
+        <fieldat id="SSE_21_21" msb="21" lsb="21"/>
+        <fieldat id="0_20_20" msb="20" lsb="20"/>
+        <fieldat id="SRT_19_16" msb="19" lsb="16"/>
+        <fieldat id="0_15_15" msb="15" lsb="15"/>
+        <fieldat id="AR_14_14" msb="14" lsb="14"/>
+        <fieldat id="0_13_12" msb="13" lsb="12"/>
+        <fieldat id="AET_11_10_1" msb="11" lsb="10"/>
+        <fieldat id="EA_9_9" msb="9" lsb="9"/>
+        <fieldat id="CM_8_8" msb="8" lsb="8"/>
+        <fieldat id="S1PTW_7_7" msb="7" lsb="7"/>
+        <fieldat id="WnR_6_6" msb="6" lsb="6"/>
+        <fieldat id="DFSC_5_0" msb="5" lsb="0"/>
+    </reg_fieldset>
+            </partial_fieldset>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="EC_31_26" msb="31" lsb="26"/>
+        <fieldat id="IL_25_25" msb="25" lsb="25"/>
+        <fieldat id="ISS_24_0" msb="24" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRC HSR">
+        <encoding>
+          
+          <access_instruction>MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</access_instruction>
+            
+            <enc n="coproc" v="0b1111"/>
+            
+            <enc n="opc1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0101"/>
+            
+            <enc n="CRm" v="0b0010"/>
+            
+            <enc n="opc2" v="0b000"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRC" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T5 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T5 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    return HSR;
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        return HSR;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+      <access_mechanism accessor="MCR HSR">
+        <encoding>
+          
+          <access_instruction>MCR{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</access_instruction>
+            
+            <enc n="coproc" v="0b1111"/>
+            
+            <enc n="opc1" v="0b100"/>
+            
+            <enc n="CRn" v="0b0101"/>
+            
+            <enc n="CRm" v="0b0010"/>
+            
+            <enc n="opc2" v="0b000"/>
+        </encoding>
+          <access_permission>
+            <ps name="MCR" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T5 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T5 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    HSR = R[t];
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        UNDEFINED;
+    else
+        HSR = R[t];
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

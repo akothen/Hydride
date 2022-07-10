@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>System Register XML for Armv8.6 (2019-12)</title>
+    <style type="text/css">
+      body {
+        font-size: small;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center;">
+      <h1 style="text-decoration: underline;">
+        System Register XML<br/>
+        for Armv8.6<br/>
+        (2019-12)
+      </h1>
+      <h1 style="text-decoration: underline;">13th December 2019</h1>
+    </div>
+
+    <br/>
+
+    <h2>1. Introduction</h2>
+
+    <p>
+      This is the <span style="font-style: italic;">2019-12</span> release
+      of the System Register XML for Armv8.6, describing:
+    </p>
+    <ul>
+      <li>
+        The AArch64 and AArch32 views of the System registers
+        (including Debug, PMU, Generic Timer, and GIC).
+      </li>
+      <li>
+        The AArch32 and AArch32 system control operations.
+      </li>
+      <li>
+        The memory-mapped Debug, CTI, PMU, GIC, and Generic Timer registers.
+      </li>
+    </ul>
+
+    <p>
+      The <a href="SysReg_xml_v86A-2019-12/xhtml/notice.html">Proprietary Notice</a>
+      gives details of the terms and conditions under which this package
+      is provided.
+    </p>
+
+    <p>
+      If you have comments on the content of this package, please send
+      them by e-mail to
+      <a href="mailto:support-aarchv8@arm.com">support-aarchv8@arm.com</a>.
+      Give:
+      <ul>
+        <li>The title, "System Register XML for Armv8.6".</li>
+        <li>The version, "2019-12".</li>
+        <li>A concise explanation of your comments.</li>
+      </ul>
+    </p>
+
+    <p>
+      Please see the <a href="#documentation">Documentation</a> for
+      more information on the general structure of these descriptions.
+    </p>
+
+    <br/>
+
+    <h2>2. Contents</h2>
+
+    <table style="width: 814px; height: 70px;" border="1" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td style="background-color: rgb(216, 213, 218);">This Version</td>
+          <td style="background-color: rgb(216, 213, 218);">2019-12</td>
+          <td style="background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-12/xhtml/AArch64-regindex.html">[HTML]</a></td>
+          <td style="background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-12.pdf">[PDF]</a></td>
+          <td style="background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-12/AArch64-regindex.xml">[XML]</a></td>
+        </tr>
+        <tr>
+          <td colspan="1" rowspan="1" style="vertical-align: top; background-color: rgb(216, 213, 218);">Change Markups<br></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);">2019-12 from 2019-09<br></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-12/diff-from-SysReg_xml_v86A-2019-09/AArch64-regindex.html">[HTML]</a></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-12-diff-from-SysReg_xml_v86A-2019-09.pdf">[PDF]</a></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><br></td>
+        </tr>
+        <tr>
+          <td colspan="1" rowspan="1" style="vertical-align: top; background-color: rgb(216, 213, 218);">Previous Versions<br></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);">2019-09<br></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><a href="SysReg_xml_v86A-2019-09/xhtml/AArch64-regindex.html">[HTML]</a></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><br></td>
+          <td style="vertical-align: top; background-color: rgb(216, 213, 218);"><br></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br/>
+
+    <h2>3. Release notes</h2>
+
+    <h3>Change history</h3>
+
+    <ul>
+        <li>
+        <!-- 14644 -->
+        The behavior of GCR_EL1.RRND has been relaxed.
+        </li>
+        <li>
+        <!-- 15050 -->
+        The accessibility pseudocode of the following registers have been updated:
+            <ul>
+                <li>AArch64 registers: AMUSERENR_EL0, CNTV_CTL_EL0, CNTV_CVAL_EL0, CNTV_TVAL_EL0, PMUSERENR_EL0, RMR_EL2, RVBAR_EL2, VMPIDR_EL2, VPIDR_EL2</li>
+                <li>AArch32 registers: AMEVCNTR1&lt;n&gt;, DBGDRAR, DBGDSAR, DBGDAUTHSTATUS, ICC_AP0RN, ICC_AP1RN, ICC_ASGI1R, ICC_BPR0, MVBAR, PMUSERENR, RVBAR</li>
+                <li>AArch32 System instructions: DTLBIALL, DTLBIASID, DTLBIMVA, DCCIMVAC, DCCMVAC, DCIMVAC, DCCISW, DCCSW, DCISW, DCCMVAU, ICIALLU, ICIALLUIS, ICIMVAU</li>
+            </ul>
+        </li>
+        <li>
+        <!-- 15276 -->
+        The RAS System Architecture v1.0 has been updated to permit the implementation of ERR&lt;n&gt;MISC2 and ERR&lt;n&gt;MISC3.
+        </li>
+        <li>
+        <!-- 15408 -->
+        Some registers incorrectly had a statement about the register not having any effect if EL2 is not enabled. The text is hence deleted in the following registers:
+            <ul><li>DBGBVCR32_EL2, FPEXC32_EL2, IFSR32_EL2.</li></ul>
+        </li>
+        <li>
+        <!-- 15469 -->
+        The description of the DC CGVAP has been updated to have the correct reference to DC CGDVAP.
+	    </li>
+        <li>
+        <!-- 15545 -->
+        The description of the VMID fields in the following registers have been corrected to clarify the VMID size:
+            <ul>
+            <li>AArch64 registers: DBGBVR_EL0</li>
+            <li>AArch32 registers: DBGBXVR</li>
+            </ul>
+	    </li>
+        <li>
+        <!-- 15586 -->
+        The RNDR and RNDRRS register descriptions incorrectly state that if a random number is not returned in a
+        reasonable time, the value returned is UNKNOWN. This has been corrected to return 0.
+        </li>
+        <li>
+        <!-- 15592 -->
+        The following registers were missing the check for the CNTHCTL_EL2.EL1TCT trap in their accessibility pseudocode:<br>
+        AArch64: CNTHV_CTL_EL2,CNTHV_CVAL_EL2, CNTHV_TVAL_EL2, CNTHVS_CTL_EL2, CNTHVS_CVAL_EL2, CNTHVS_TVAL_EL2. <br>
+        AArch32: CNTHV_CTL, CNTHV_CVAL, CNTHV_TVAL, CNTHVS_CTL, CNTHVS_CVAL, CNTHVS_TVAL.
+        </li>
+        <li>
+        <!-- 15640 -->
+        The behavior of the MPAM1_EL1.FORCED_NS field has been tightened to be read-only.
+        </li>
+        <li>
+        Many simple clarifications and corrections are also present,
+        but are too small to be listed here. These can be seen in the
+        Change Markup PDF provided.
+        </li>
+    </ul>
+
+    <h3>Known issues</h3>
+
+    <ul>
+        <li>
+          MPAMVPM7_EL2, MPAM Virtual PARTID Mapping Register 7<br>
+          The Configuration states that:<br>
+          "This register is present only when MPAM is implemented, MPAMIDR_EL1.HAS_HCR == 1 and MPAMIDR_EL1.VPMR_MAX == 111."<br>
+          All values given here are in binary. The previous release used decimal representation, MPAMIDR_EL1.VPMR_MAX == 7.
+        </li>
+        <li>
+        The memory-mapped Generic Timer register descriptions have
+        incorrect information, and so must not be relied upon.
+        This will be corrected in a future release. The definitive
+        source for these registers is the Arm Architecture Reference
+        Manual Armv8, for Armv8-A architecture profile.
+        </li>
+        <li>
+        There are differences in the GIC registers in this XML package
+        when compared to the GIC register descriptions in the Generic
+        Interrupt Controller Architecture Specification document. The
+        definitive source for these registers is the document, and
+        there will be corrections to these registers in the next
+        release.
+        </li>
+        <li>
+        The reset information in the 'Configuration' section of some
+        register descriptions have incorrect information, and must
+        not be relied upon. Please refer to the field descriptions
+        for the correct reset information.
+        </li>
+        <li>
+        <!-- 14844 -->
+        Tightening of the UNPREDICTABLE behavior of the uninmplemented AMU counter, event type, and set/clear registers.
+        </li>
+        <li>
+        <!-- 15604 -->
+        HCDR.TDA traps missing in the AArch32 debug registers
+        </li>
+    </ul>
+
+    <h3>Potential upcoming changes</h3>
+
+    <p>
+      We are looking in improvements to the information that is
+      provided in the XML. In some cases these changes may impact
+      users. Here is a list of areas where we may make changes in a
+      future release:
+    </p>
+    <ul>
+      <li>
+        The instruction encoding tables currently present values as
+        binary values, with the prefix "0b". We are considering
+        whether these values are better represented in a syntax
+        compatible with pseudocode.
+      </li>
+      <li>
+        How the read/write behaviors in register fields are identified
+        is being investigated.
+      </li>
+     <li>
+        The reset information in the 'Configuration' section of some
+        register descriptions have incorrect information, and must
+        not be relied upon. Please refer to the field descriptions
+        for the correct reset information. The information in the
+        'Configuration' section will be removed in a future release.
+    </li>
+    </ul>
+
+    <br/>
+
+    <h2><a name="documentation"/>4. Documentation</h2>
+
+    <h3>General</h3>
+
+    <p>
+      A description within the XML contains the following sections:
+    </p>
+    <dl>
+      <dt>Purpose</dt>
+      <dd>
+        A short description of the purpose of the register in the
+        Armv8 Architecture.
+      </dd>
+
+      <dt>Configuration</dt>
+      <dd>
+        How the register is architecturally mapped onto another System
+        register or a memory-mapped register.  If the configuration of
+        the PE affects the implementation of the register, then
+        information about this is also included here.
+      </dd>
+
+      <dt>Attributes</dt>
+      <dd>
+        The size of the register. For registers where the layouts of
+        the fields differ based on configuration, or other state
+        within the PE, this section also summarizes the different
+        layouts.
+      </dd>
+
+      <dt>Field descriptions</dt>
+      <dd>
+        The register diagram, and a description of the behavior of
+        each field within the register.
+      </dd>
+
+    </dl>
+
+    <h3>Memory-mapped registers</h3>
+
+    <p>
+      A memory-mapped register description also contains the following
+      sections:
+    </p>
+    <dl>
+      <dt>Accessing the ...</dt>
+      <dd>
+        The address or offset of the register in the memory map, and
+        the accessibility.
+      </dd>
+
+    </dl>
+
+    <h3>System registers</h3>
+
+    <p>
+      A System register description also contains an "Accessing the
+      ..." section, that includes:
+      <ul>
+        <li>
+          The assembler syntax for the instructions used to access the
+          register, and how the instruction is encoded.
+        </li>
+        <li>
+          Pseudocode that describes the execution of all instructions
+          used to access the register, including information about
+          traps and enables that apply upon that access.
+        </li>
+        <li>
+          For some System registers, additional text is provided which
+          gives extra information regarding the access to the
+          register.
+        </li>
+        <li>
+          The accessibility pseudocode for a register assumes that
+          that register is implemented and that all features which
+          affects its accesses are implemented. In most cases, the
+          behavior upon access to a register is determined in part or
+          in whole by the Exception level at which it is accessed.
+      </ul>
+    </p>
+
+    <br>
+
+  </body>
+</html>

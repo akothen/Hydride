@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>FPCR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">FPCR, Floating-point Control Register</h1><p>The FPCR characteristics are:</p><h2>Purpose</h2>
+        <p>Controls floating-point behavior.</p>
+      <h2>Configuration</h2>
+        <p>The named fields in this register map to the equivalent fields in the AArch32 <a href="AArch32-fpscr.html">FPSCR</a>.</p>
+
+      
+        <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the Len and Stride fields can be programmed to non-zero values, which will cause some AArch32 floating-point instruction encodings to be <span class="arm-defined-word">UNDEFINED</span>, or whether these fields are RAZ.</p>
+      <p>
+                RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.
+              </p><h2>Attributes</h2>
+            <p>FPCR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The FPCR bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="5"><a href="#0_63">RES0</a></td><td class="lr" colspan="1"><a href="#AHP_26">AHP</a></td><td class="lr" colspan="1"><a href="#DN_25">DN</a></td><td class="lr" colspan="1"><a href="#FZ_24">FZ</a></td><td class="lr" colspan="2"><a href="#RMode_23">RMode</a></td><td class="lr" colspan="2"><a href="#Stride_21">Stride</a></td><td class="lr" colspan="1"><a href="#FZ16_19">FZ16</a></td><td class="lr" colspan="3"><a href="#Len_18">Len</a></td><td class="lr" colspan="1"><a href="#IDE_15">IDE</a></td><td class="lr" colspan="2"><a href="#0_14">RES0</a></td><td class="lr" colspan="1"><a href="#IXE_12">IXE</a></td><td class="lr" colspan="1"><a href="#UFE_11">UFE</a></td><td class="lr" colspan="1"><a href="#OFE_10">OFE</a></td><td class="lr" colspan="1"><a href="#DZE_9">DZE</a></td><td class="lr" colspan="1"><a href="#IOE_8">IOE</a></td><td class="lr" colspan="8"><a href="#0_7">RES0</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:27]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="AHP_26">AHP, bit [26]
+              </h4>
+          
+  <p>Alternative half-precision control bit:</p>
+
+        <table class="valuetable"><tr><th>AHP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>IEEE half-precision format selected.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Alternative half-precision format selected.</p>
+</td></tr></table>
+              
+  <p>This bit is only used for conversions between half-precision floating-point and other floating-point formats.</p>
+<p>The data-processing instructions added as part of the <span class="xref">ARMv8.2-FP16</span> extension always use the IEEE half-precision format, and ignore the value of this bit.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="DN_25">DN, bit [25]
+              </h4>
+          
+  <p>Default NaN mode control bit:</p>
+
+        <table class="valuetable"><tr><th>DN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>NaN operands propagate through to the output of a floating-point operation.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Any operation involving one or more NaNs returns the Default NaN.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="FZ_24">FZ, bit [24]
+              </h4>
+          
+  <p>Flush-to-zero mode control bit:</p>
+
+        <table class="valuetable"><tr><th>FZ</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Flush-to-zero mode disabled. Behavior of the floating-point system is fully compliant with the IEEE 754 standard.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Flush-to-zero mode enabled.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>This bit has no effect on half-precision calculations.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="RMode_23">RMode, bits [23:22]
+                  </h4>
+          
+  <p>Rounding Mode control field. The encoding of this field is:</p>
+
+        <table class="valuetable"><tr><th>RMode</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Round to Nearest (RN) mode.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Round towards Plus Infinity (RP) mode.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Round towards Minus Infinity (RM) mode.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Round towards Zero (RZ) mode.</p>
+</td></tr></table>
+              
+  <p>The specified rounding mode is used by both scalar and Advanced SIMD floating-point instructions.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Stride_21">Stride, bits [21:20]
+                  </h4>
+          
+  <p>This field has no function in AArch64 state, and non-zero values are ignored during execution in AArch64  state. It is included only for context saving and restoration of the AArch32 <a href="AArch32-fpscr.html">FPSCR</a>.Stride field.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="FZ16_19">FZ16, bit [19]
+              <div style="font-size:smaller;"><br />When ARMv8.2-FP16 is implemented:
+                </div></h4>
+          
+  <p>Flush-to-zero mode control bit on half-precision data-processing instructions:</p>
+
+        <table class="valuetable"><tr><th>FZ16</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Flush-to-zero mode disabled. Behavior of the floating-point system is fully compliant with the IEEE 754 standard.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Flush-to-zero mode enabled.</p>
+</td></tr></table>
+              
+  <p>The value of this bit applies to both scalar and Advanced SIMD floating-point half-precision calculations. A half-precision floating-point number that is flushed to zero as a result of the value of the FZ16 bit does not generate an Input Denormal exception.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_19"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="Len_18">Len, bits [18:16]
+                  </h4>
+          
+  <p>This field has no function in AArch64 state, and non-zero values are ignored during execution in AArch64  state. It is included only for context saving and restoration of the AArch32 <a href="AArch32-fpscr.html">FPSCR</a>.Len field.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="IDE_15">IDE, bit [15]
+              </h4>
+          
+  <p>Input Denormal floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>IDE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.IDC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.IDC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.IDC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_14">
+                Bits [14:13]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="IXE_12">IXE, bit [12]
+              </h4>
+          
+  <p>Inexact floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>IXE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.IXC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.IXC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.IXC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="UFE_11">UFE, bit [11]
+              </h4>
+          
+  <p>Underflow floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>UFE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.UFC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.UFC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.UFC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="OFE_10">OFE, bit [10]
+              </h4>
+          
+  <p>Overflow floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>OFE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.OFC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.OFC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.OFC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="DZE_9">DZE, bit [9]
+              </h4>
+          
+  <p>Divide by Zero floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>DZE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.DZC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.DZC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.DZC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="IOE_8">IOE, bit [8]
+              </h4>
+          
+  <p>Invalid Operation floating-point exception trap enable. Possible values are:</p>
+
+        <table class="valuetable"><tr><th>IOE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Untrapped exception handling selected. If the floating-point exception occurs then the <a href="AArch64-fpsr.html">FPSR</a>.IOC bit is set to 1.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Trapped exception handling selected. If the floating-point exception occurs, the PE does not update the <a href="AArch64-fpsr.html">FPSR</a>.IOC bit. The trap handling software can decide whether to set the <a href="AArch64-fpsr.html">FPSR</a>.IOC bit to 1.</p>
+</td></tr></table>
+              
+  <p>The value of this bit controls both scalar and Advanced SIMD floating-point arithmetic.</p>
+<p>If the implementation does not support this exception, this bit is RAZ/WI.</p>
+
+            <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_7">
+                Bits [7:0]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the FPCR</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, FPCR</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b011</td><td>0b0100</td><td>0b0100</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if !ELUsingAArch32(EL1) &amp;&amp; !(EL2Enabled() &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11') &amp;&amp; CPACR_EL1.FPEN != '11' then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x00);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11' &amp;&amp; CPTR_EL2.FPEN != '11' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPCR;
+elsif PSTATE.EL == EL1 then
+    if CPACR_EL1.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPCR;
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPCR;
+elsif PSTATE.EL == EL3 then
+    if CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPCR;
+              </p><h4 class="assembler">MSR FPCR, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b011</td><td>0b0100</td><td>0b0100</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if !ELUsingAArch32(EL1) &amp;&amp; !(EL2Enabled() &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11') &amp;&amp; CPACR_EL1.FPEN != '11' then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x00);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11' &amp;&amp; CPTR_EL2.FPEN != '11' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPCR = X[t];
+elsif PSTATE.EL == EL1 then
+    if CPACR_EL1.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPCR = X[t];
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPCR = X[t];
+elsif PSTATE.EL == EL3 then
+    if CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPCR = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

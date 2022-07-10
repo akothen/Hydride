@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMCFGR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMCFGR, Performance Monitors Configuration Register</h1><p>The PMCFGR characteristics are:</p><h2>Purpose</h2>
+        <p>Contains PMU-specific configuration data.</p>
+      <h2>Configuration</h2><p>PMCFGR is in the Core power domain.
+        </p><h2>Attributes</h2>
+            <p>PMCFGR is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMCFGR bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="4"><a href="#NCG_31">NCG</a></td><td class="lr" colspan="8"><a href="#0_27">RES0</a></td><td class="lr" colspan="1"><a href="#UEN_19">UEN</a></td><td class="lr" colspan="1"><a href="#WT_18">WT</a></td><td class="lr" colspan="1"><a href="#NA_17">NA</a></td><td class="lr" colspan="1"><a href="#EX_16">EX</a></td><td class="lr" colspan="1"><a href="#CCD_15">CCD</a></td><td class="lr" colspan="1"><a href="#CC_14">CC</a></td><td class="lr" colspan="6"><a href="#SIZE_13">SIZE</a></td><td class="lr" colspan="8"><a href="#N_7">N</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="NCG_31">NCG, bits [31:28]
+                  </h4>
+          
+  <p>This feature is not supported, so this field is RAZ.</p>
+
+          
+            
+  
+
+          <h4 id="0_27">
+                Bits [27:20]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="UEN_19">UEN, bit [19]
+              </h4>
+          
+  <p>User-mode Enable Register supported. <a href="AArch64-pmuserenr_el0.html">PMUSERENR_EL0</a> is not visible in the external debug interface, so this bit is RAZ.</p>
+
+          
+            
+  
+
+          <h4 id="WT_18">WT, bit [18]
+              </h4>
+          
+  <p>This feature is not supported, so this bit is RAZ.</p>
+
+          
+            
+  
+
+          <h4 id="NA_17">NA, bit [17]
+              </h4>
+          
+  <p>This feature is not supported, so this bit is RAZ.</p>
+
+          
+            
+  
+
+          <h4 id="EX_16">EX, bit [16]
+              </h4>
+          
+  <p>Export supported. Value is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+          <table class="valuetable"><tr><th>EX</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-pmcr_el0.html">PMCR_EL0</a>.X is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-pmcr_el0.html">PMCR_EL0</a>.X is read/write.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="CCD_15">CCD, bit [15]
+              </h4>
+          
+  <p>Cycle counter has prescale.</p>
+<p>This is <span class="arm-defined-word">RES1</span> if AArch32 is supported at any Exception level, and RAZ otherwise.</p>
+
+          <table class="valuetable"><tr><th>CCD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-pmcr_el0.html">PMCR_EL0</a>.D is <span class="arm-defined-word">RES0</span>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-pmcr_el0.html">PMCR_EL0</a>.D is read/write.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="CC_14">CC, bit [14]
+              </h4>
+          
+  <p>Dedicated cycle counter (counter 31) supported. This bit is RAO.</p>
+
+          
+            
+  
+
+          <h4 id="SIZE_13">SIZE, bits [13:8]
+                  </h4>
+          
+  <p>Size of counters, minus one. This field defines the size of the largest counter implemented by the Performance Monitors Unit.</p>
+<p>From Armv8, the largest counter is 64-bits, so the value of this field is <span class="binarynumber">0b111111</span>.</p>
+<p>This field is used by software to determine the spacing of the counters in the memory-map. From Armv8, the counters are a doubleword-aligned addresses.</p>
+
+          
+            
+  
+
+          <h4 id="N_7">N, bits [7:0]
+                  </h4>
+          
+  <p>Number of counters implemented in addition to the cycle counter, <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a>. The maximum number of event counters is 31.</p>
+
+          <table class="valuetable"><tr><th>N</th><th>Meaning</th></tr><tr><td class="bitfield">0x00</td><td>
+  <p>Only <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> implemented.</p>
+</td></tr><tr><td class="bitfield">0x01</td><td>
+  <p><a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> plus one event counter implemented.</p>
+</td></tr></table>
+            
+  <p>and so on up to <span class="binarynumber">0b00011111</span>, which indicates <a href="ext-pmccntr_el0.html">PMCCNTR_EL0</a> and 31 event counters implemented.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the PMCFGR</h2>
+        <div class="note"><span class="note-header">Note</span><p>AllowExternalPMUAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</p></div>
+      <h4>PMCFGR can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>PMU</td><td><span class="hexnumber">0xE00</span></td><td>PMCFGR</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus() and AllowExternalPMUAccess()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>Otherwise 
+            accesses to this register generate an error response.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

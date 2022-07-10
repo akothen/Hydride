@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch32" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ICH_EISR</reg_short_name>
+      <reg_long_name>Interrupt Controller End of Interrupt Status Register</reg_long_name>
+        <reg_condition otherwise="UNKNOWN">when AArch32 is supported at any Exception level</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch64-ich_eisr_el2.xml">ICH_EISR_EL2</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch64</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Indicates which List registers have outstanding EOI maintenance interrupts.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>GIC system registers</reg_group>
+            <reg_group>GIC host interface control registers</reg_group>
+            <reg_group>Virtualization registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If EL2 is not implemented, this register is <arm-defined-word>RES0</arm-defined-word> from EL3.</para>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ICH_EISR is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Status&lt;n&gt;_15_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Status&lt;n&gt;</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>15</field_array_start>
+            <field_array_end>0</field_array_end>
+            <field_array_description>n</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>EOI maintenance interrupt status bit for List register &lt;n&gt;:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>List register &lt;n&gt;, <register_link state="AArch32" id="AArch32-ich_lrn.xml">ICH_LR&lt;n&gt;</register_link>, does not have an EOI maintenance interrupt.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>List register &lt;n&gt;, <register_link state="AArch32" id="AArch32-ich_lrn.xml">ICH_LR&lt;n&gt;</register_link>, has an EOI maintenance interrupt that has not been handled.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>For any ICH_LR&lt;n&gt;, the corresponding status bit is set to 1 if all of the following are true:</para>
+<list type="unordered">
+<listitem><content><register_link state="AArch32" id="AArch32-ich_lrcn.xml">ICH_LRC&lt;n&gt;</register_link>.State is <binarynumber>0b00</binarynumber>.</content>
+</listitem><listitem><content><register_link state="AArch32" id="AArch32-ich_lrcn.xml">ICH_LRC&lt;n&gt;</register_link>.HW is 0.</content>
+</listitem><listitem><content><register_link state="AArch32" id="AArch32-ich_lrcn.xml">ICH_LRC&lt;n&gt;</register_link>.EOI (bit [9]) is 1, indicating that when the interrupt corresponding to that List register is deactivated, a maintenance interrupt is asserted.</content>
+</listitem></list>
+
+          </field_description>
+          <field_resets>
+  
+  
+    
+    
+        <field_reset>
+          
+      <field_reset_number>0</field_reset_number>
+  
+        </field_reset>
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="0_31_16" msb="31" lsb="16"/>
+        <fieldat id="Status&lt;n&gt;_15_0" msb="15" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRC ICH_EISR">
+        <encoding>
+          
+          <access_instruction>MRC{&lt;c&gt;}{&lt;q&gt;} &lt;coproc&gt;, {#}&lt;opc1&gt;, &lt;Rt&gt;, &lt;CRn&gt;, &lt;CRm&gt;{, {#}&lt;opc2&gt;}</access_instruction>
+            
+            <enc n="coproc" v="0b1111"/>
+            
+            <enc n="opc1" v="0b100"/>
+            
+            <enc n="CRn" v="0b1100"/>
+            
+            <enc n="CRm" v="0b1011"/>
+            
+            <enc n="opc2" v="0b011"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRC" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T12 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T12 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    if ICC_HSRE.SRE == '0' then
+        UNDEFINED;
+    else
+        return ICH_EISR;
+elsif PSTATE.EL == EL3 then
+    if ICC_MSRE.SRE == '0' then
+        UNDEFINED;
+    else
+        return ICH_EISR;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

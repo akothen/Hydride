@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>FPSID</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">FPSID, Floating-Point System ID register</h1><p>The FPSID characteristics are:</p><h2>Purpose</h2>
+        <p>Provides top-level information about the floating-point implementation.</p>
+
+      
+        <p>This register largely duplicates information held in the <a href="AArch32-midr.html">MIDR</a>. Arm deprecates use of it.</p>
+      <h2>Configuration</h2><p>This register is present only
+    when AArch32 is supported at any Exception level.
+      
+    Otherwise, direct accesses to FPSID are <span class="arm-defined-word">UNKNOWN</span>.</p>
+        <p>Implemented only if the implementation includes the Advanced SIMD and floating-point functionality.</p>
+      <h2>Attributes</h2>
+            <p>FPSID is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The FPSID bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="8"><a href="#Implementer_31">Implementer</a></td><td class="lr" colspan="1"><a href="#SW_23">SW</a></td><td class="lr" colspan="7"><a href="#Subarchitecture_22">Subarchitecture</a></td><td class="lr" colspan="8"><a href="#PartNum_15">PartNum</a></td><td class="lr" colspan="4"><a href="#Variant_7">Variant</a></td><td class="lr" colspan="4"><a href="#Revision_3">Revision</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="Implementer_31">Implementer, bits [31:24]
+                  </h4>
+          
+  <p>Implementer codes are the same as those used for the <a href="AArch32-midr.html">MIDR</a>.</p>
+<p>For an implementation by Arm this field is <span class="hexnumber">0x41</span>, the ASCII code for A.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="SW_23">SW, bit [23]
+              </h4>
+          
+  <p>Software bit. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>SW</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The implementation provides a hardware implementation of the floating-point instructions.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The implementation supports only software emulation of the floating-point instructions.</p>
+</td></tr></table>
+            
+  <p>In Armv8-A the only permitted value is <span class="binarynumber">0b0</span>.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Subarchitecture_22">Subarchitecture, bits [22:16]
+                  </h4>
+          
+  <p>Subarchitecture version number. For an implementation by Arm, defined values are:</p>
+
+          <table class="valuetable"><tr><th>Subarchitecture</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000000</td><td>
+  <p>VFPv1 architecture with an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> subarchitecture.</p>
+</td></tr><tr><td class="bitfield">0b0000001</td><td>
+  <p>VFPv2 architecture with Common VFP subarchitecture v1.</p>
+</td></tr><tr><td class="bitfield">0b0000010</td><td>
+  <p>VFPv3 architecture, or later, with Common VFP subarchitecture v2. The VFP architecture version is indicated by the <a href="AArch32-mvfr0.html">MVFR0</a> and <a href="AArch32-mvfr1.html">MVFR1</a> registers.</p>
+</td></tr><tr><td class="bitfield">0b0000011</td><td>
+  <p>VFPv3 architecture, or later, with Null subarchitecture. The entire floating-point implementation is in hardware, and no software support code is required. The VFP architecture version is indicated by the <a href="AArch32-mvfr0.html">MVFR0</a> and <a href="AArch32-mvfr1.html">MVFR1</a> registers. This value can be used only by an implementation that does not support the trap enable bits in the <a href="AArch32-fpscr.html">FPSCR</a>.</p>
+</td></tr><tr><td class="bitfield">0b0000100</td><td>
+  <p>VFPv3 architecture, or later, with Common VFP subarchitecture v3, and support for trap enable bits in <a href="AArch32-fpscr.html">FPSCR</a>. The VFP architecture version is indicated by the <a href="AArch32-mvfr0.html">MVFR0</a> and <a href="AArch32-mvfr1.html">MVFR1</a> registers.</p>
+</td></tr></table>
+            
+  <p>For a subarchitecture designed by Arm the most significant bit of this field, register bit[22], is 0. Values with a most significant bit of 0 that are not listed here are reserved.</p>
+<p>When the subarchitecture designer is not Arm, the most significant bit of this field, register bit[22], must be 1. Each implementer must maintain its own list of subarchitectures it has designed, starting at subarchitecture version number <span class="hexnumber">0x40</span>.</p>
+<p>In Armv8-A the permitted values are <span class="binarynumber">0b0000011</span> and <span class="binarynumber">0b0000100</span>.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="PartNum_15">PartNum, bits [15:8]
+                  </h4>
+          
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> part number for the floating-point implementation, assigned by the implementer.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Variant_7">Variant, bits [7:4]
+                  </h4>
+          
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> variant number. Typically, this field distinguishes between different production variants of a single product.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Revision_3">Revision, bits [3:0]
+                  </h4>
+          
+  <p>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> revision number for the floating-point implementation.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the FPSID</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">VMRS{&lt;c&gt;}{&lt;q&gt;} &lt;Rt&gt;, &lt;spec_reg&gt;</h4><table class="access_instructions"><tr><th>reg</th></tr><tr><td>0b0000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if ELUsingAArch32(EL1) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || CPACR.cp10 == '00') then
+        UNDEFINED;
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || HCPTR.TCP10 == '1') then
+        AArch32.TakeHypTrapException(0x08);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x08);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TID3 == '1' then
+        AArch32.TakeHypTrapException(0x08);
+    else
+        return FPSID;
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || HCPTR.TCP10 == '1') then
+        AArch32.TakeHypTrapException(0x00);
+    else
+        return FPSID;
+elsif PSTATE.EL == EL3 then
+    if CPACR.cp10 == '00' then
+        UNDEFINED;
+    else
+        return FPSID;
+              </p><h4 class="assembler">VMSR{&lt;c&gt;}{&lt;q&gt;} &lt;spec_reg&gt;, &lt;Rt&gt;</h4><table class="access_instructions"><tr><th>reg</th></tr><tr><td>0b0000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if ELUsingAArch32(EL1) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || CPACR.cp10 == '00') then
+        UNDEFINED;
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || HCPTR.TCP10 == '1') then
+        AArch32.TakeHypTrapException(0x08);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x08);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TID3 == '1' then
+        AArch32.TakeHypTrapException(0x08);
+    else
+        //no operation
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; ((ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '1' &amp;&amp; NSACR.cp10 == '0') || HCPTR.TCP10 == '1') then
+        AArch32.TakeHypTrapException(0x00);
+    else
+        //no operation
+elsif PSTATE.EL == EL3 then
+    if CPACR.cp10 == '00' then
+        UNDEFINED;
+    else
+        //no operation
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

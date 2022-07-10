@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2019 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="trn1_z_zz" title="TRN1, TRN2 (vectors)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+  </docvars>
+  <heading>TRN1, TRN2 (vectors)</heading>
+  <desc>
+    <brief>Interleave even or odd elements from two vectors</brief>
+    <description>
+      <para>Interleave alternating even or odd-numbered elements from the first and second source vectors and place in elements of the destination vector. This instruction is unpredicated. The 128-bit element variant of this instruction requires that the current vector length is at least 256 bits, and if the current vector length is not an integer multiple of 256 bits then the trailing bits are set to zero.</para>
+      <para>ID_AA64ZFR0_EL1.F64MM indicates whether the 128-bit element variant of the instruction is implemented.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <takes_movprfx>False</takes_movprfx>
+    <takes_pred_movprfx>False</takes_pred_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="4">
+      <txt>It has encodings from 4 classes:</txt>
+      <a href="#trn1_z_zz_">Even</a>
+      <txt>, </txt>
+      <a href="#trn1_z_zz_q">Even (quadwords)</a>
+      <txt>, </txt>
+      <a href="#trn2_z_zz_">Odd</a>
+      <txt> and </txt>
+      <a href="#trn2_z_zz_q">Odd (quadwords)</a>
+    </classesintro>
+    <iclass name="Even" oneof="4" id="trn1_z_zz_" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="TRN1" />
+        <docvar key="sve-odd-even" value="sve-even" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="TRN1-Z.ZZ-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="H" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="trn1_z_zz_" oneofinclass="1" oneof="4" label="Even">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="TRN1" />
+          <docvar key="sve-odd-even" value="sve-even" />
+        </docvars>
+        <asmtemplate><text>TRN1    </text><a link="zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="TRN1-Z.ZZ-_" mylink="TRN1-Z.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !HaveSVE() then UNDEFINED;
+integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+integer part = 0;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Even (quadwords)" oneof="4" id="trn1_z_zz_q" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="TRN1" />
+        <docvar key="sve-odd-even" value="sve-even-quad" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="TRN1-Z.ZZ-Q">
+        <box hibit="31" width="9" settings="9">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" name="H" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="trn1_z_zz_q" oneofinclass="1" oneof="4" label="Even (quadwords)">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="TRN1" />
+          <docvar key="sve-odd-even" value="sve-even-quad" />
+        </docvars>
+        <asmtemplate><text>TRN1    </text><a link="zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.Q, </text><a link="zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.Q, </text><a link="zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.Q</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="TRN1-Z.ZZ-Q" mylink="TRN1-Z.ZZ-Q" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !HaveSVEFP64MatMulExt() then UNDEFINED;
+integer esize = 128;
+integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+integer part = 0;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Odd" oneof="4" id="trn2_z_zz_" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="TRN2" />
+        <docvar key="sve-odd-even" value="sve-odd" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="TRN2-Z.ZZ-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="H" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="trn2_z_zz_" oneofinclass="1" oneof="4" label="Odd">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="TRN2" />
+          <docvar key="sve-odd-even" value="sve-odd" />
+        </docvars>
+        <asmtemplate><text>TRN2    </text><a link="zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="TRN2-Z.ZZ-_" mylink="TRN2-Z.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !HaveSVE() then UNDEFINED;
+integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+integer part = 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Odd (quadwords)" oneof="4" id="trn2_z_zz_q" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="TRN2" />
+        <docvar key="sve-odd-even" value="sve-odd-quad" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="TRN2-Z.ZZ-Q">
+        <box hibit="31" width="9" settings="9">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" name="H" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="trn2_z_zz_q" oneofinclass="1" oneof="4" label="Odd (quadwords)">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="TRN2" />
+          <docvar key="sve-odd-even" value="sve-odd-quad" />
+        </docvars>
+        <asmtemplate><text>TRN2    </text><a link="zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.Q, </text><a link="zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.Q, </text><a link="zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.Q</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="TRN2-Z.ZZ-Q" mylink="TRN2-Z.ZZ-Q" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !HaveSVEFP64MatMulExt() then UNDEFINED;
+integer esize = 128;
+integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+integer part = 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="trn2_z_zz_, trn2_z_zz_q, trn1_z_zz_, trn1_z_zz_q" symboldefcount="1">
+      <symbol link="zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="trn2_z_zz_, trn1_z_zz_" symboldefcount="1">
+      <symbol link="t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="trn2_z_zz_, trn2_z_zz_q, trn1_z_zz_, trn1_z_zz_q" symboldefcount="1">
+      <symbol link="zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="trn2_z_zz_, trn2_z_zz_q, trn1_z_zz_, trn1_z_zz_q" symboldefcount="1">
+      <symbol link="zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="TRN1-Z.ZZ-_" mylink="commonps" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">CheckSVEEnabled();
+if VL &lt; esize * 2 then UNDEFINED;
+integer pairs = VL DIV (esize * 2);
+bits(VL) operand1 = Z[n];
+bits(VL) operand2 = Z[m];
+bits(VL) result = <a link="impl-shared.Zeros.0" file="shared_pseudocode.xml" hover="function: bits(N) Zeros()">Zeros</a>();
+
+for p = 0 to pairs-1
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, 2*p+0, esize] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 2*p+part, esize];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, 2*p+1, esize] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, 2*p+part, esize];
+
+Z[d] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

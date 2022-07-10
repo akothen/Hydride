@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>FPSR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">FPSR, Floating-point Status Register</h1><p>The FPSR characteristics are:</p><h2>Purpose</h2>
+        <p>Provides floating-point system status information.</p>
+      <h2>Configuration</h2>
+        <p>The named fields in this register map to the equivalent fields in the AArch32 <a href="AArch32-fpscr.html">FPSCR</a>.</p>
+      <h2>Attributes</h2>
+            <p>FPSR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The FPSR bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#N_31">N</a></td><td class="lr" colspan="1"><a href="#Z_30">Z</a></td><td class="lr" colspan="1"><a href="#C_29">C</a></td><td class="lr" colspan="1"><a href="#V_28">V</a></td><td class="lr" colspan="1"><a href="#QC_27">QC</a></td><td class="lr" colspan="19"><a href="#0_26">RES0</a></td><td class="lr" colspan="1"><a href="#IDC_7">IDC</a></td><td class="lr" colspan="2"><a href="#0_6">RES0</a></td><td class="lr" colspan="1"><a href="#IXC_4">IXC</a></td><td class="lr" colspan="1"><a href="#UFC_3">UFC</a></td><td class="lr" colspan="1"><a href="#OFC_2">OFC</a></td><td class="lr" colspan="1"><a href="#DZC_1">DZC</a></td><td class="lr" colspan="1"><a href="#IOC_0">IOC</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="N_31">N, bit [31]
+              </h4>
+          
+  <p>Negative condition flag for AArch32 floating-point comparison operations. AArch64 floating-point comparisons set the PSTATE.N flag instead.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="Z_30">Z, bit [30]
+              </h4>
+          
+  <p>Zero condition flag for AArch32 floating-point comparison operations. AArch64 floating-point comparisons set the PSTATE.Z flag instead.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="C_29">C, bit [29]
+              </h4>
+          
+  <p>Carry condition flag for AArch32 floating-point comparison operations. AArch64 floating-point comparisons set the PSTATE.C flag instead.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="V_28">V, bit [28]
+              </h4>
+          
+  <p>Overflow condition flag for AArch32 floating-point comparison operations. AArch64 floating-point comparisons set the PSTATE.V flag instead.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="QC_27">QC, bit [27]
+              </h4>
+          
+  <p>Cumulative saturation bit, Advanced SIMD only. This bit is set to 1 to indicate that an Advanced SIMD integer operation has saturated since 0 was last written to this bit.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_26">
+                Bits [26:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="IDC_7">IDC, bit [7]
+              </h4>
+          
+  <p>Input Denormal cumulative floating-point exception bit. This bit is set to 1 to indicate that the Input Denormal floating-point exception has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.IDE bit. This bit is only set to 1 to indicate a floating-point exception if <a href="AArch64-fpcr.html">FPCR</a>.IDE is 0, or if trapping software sets it.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_6">
+                Bits [6:5]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="IXC_4">IXC, bit [4]
+              </h4>
+          
+  <p>Inexact cumulative floating-point exception bit. This bit is set to 1 to indicate that the Inexact exception floating-point has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.IXE bit. This bit is only set to 1 to indicate a floating-point  exception if <a href="AArch64-fpcr.html">FPCR</a>.IXE is 0, or if trapping software sets it.</p>
+<p>The criteria for the Inexact floating-point exception to occur are different in Flush-to-zero mode. For details, see <span class="xref">'Flush-to-zero'</span>.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="UFC_3">UFC, bit [3]
+              </h4>
+          
+  <p>Underflow cumulative floating-point exception bit. This bit is set to 1 to indicate that the Underflow floating-point exception has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.UFE bit. This bit is only set to 1 to indicate a floating-point  exception if <a href="AArch64-fpcr.html">FPCR</a>.UFE is 0, or if trapping software sets it.</p>
+<p>The criteria for the Underflow floating-point exception to occur are different in Flush-to-zero mode. For details, see <span class="xref">'Flush-to-zero'</span>.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="OFC_2">OFC, bit [2]
+              </h4>
+          
+  <p>Overflow cumulative floating-point exception bit. This bit is set to 1 to indicate that the Overflow floating-point exception has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.OFE bit. This bit is only set to 1 to indicate a floating-point exception if <a href="AArch64-fpcr.html">FPCR</a>.OFE is 0, or if trapping software sets it.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="DZC_1">DZC, bit [1]
+              </h4>
+          
+  <p>Divide by Zero cumulative floating-point exception bit. This bit is set to 1 to indicate that the Divide by Zero floating-point exception has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.DZE bit. This bit is only set to 1 to indicate a floating-point exception if <a href="AArch64-fpcr.html">FPCR</a>.DZE is 0, or if trapping software sets it.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="IOC_0">IOC, bit [0]
+              </h4>
+          
+  <p>Invalid Operation cumulative floating-point exception bit. This bit is set to 1 to indicate that the Invalid Operation floating-point exception has occurred since 0 was last written to this bit.</p>
+<p>How scalar and Advanced SIMD floating-point instructions update this bit depends on the value of the <a href="AArch64-fpcr.html">FPCR</a>.IOE bit. This bit is only set to 1 to indicate a floating-point exception if <a href="AArch64-fpcr.html">FPCR</a>.IOE is 0, or if trapping software sets it.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the FPSR</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, FPSR</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b011</td><td>0b0100</td><td>0b0100</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if !ELUsingAArch32(EL1) &amp;&amp; !(EL2Enabled() &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11') &amp;&amp; CPACR_EL1.FPEN != '11' then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x00);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11' &amp;&amp; CPTR_EL2.FPEN != '11' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPSR;
+elsif PSTATE.EL == EL1 then
+    if CPACR_EL1.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPSR;
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPSR;
+elsif PSTATE.EL == EL3 then
+    if CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        return FPSR;
+              </p><h4 class="assembler">MSR FPSR, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b011</td><td>0b0100</td><td>0b0100</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    if !ELUsingAArch32(EL1) &amp;&amp; !(EL2Enabled() &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11') &amp;&amp; CPACR_EL1.FPEN != '11' then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x00);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.&lt;E2H,TGE&gt; == '11' &amp;&amp; CPTR_EL2.FPEN != '11' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPSR = X[t];
+elsif PSTATE.EL == EL1 then
+    if CPACR_EL1.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL1, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H != '1' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPSR = X[t];
+elsif PSTATE.EL == EL2 then
+    if HCR_EL2.E2H == '0' &amp;&amp; CPTR_EL2.TFP == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HCR_EL2.E2H == '1' &amp;&amp; CPTR_EL2.FPEN == 'x0' then
+        AArch64.SystemAccessTrap(EL2, 0x07);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPSR = X[t];
+elsif PSTATE.EL == EL3 then
+    if CPTR_EL3.TFP == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x07);
+    else
+        FPSR = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

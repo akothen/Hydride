@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>MPAMCFG_INTPARTID</reg_short_name>
+      <reg_long_name>MPAM Internal PARTID Narrowing Configuration Register</reg_long_name>
+        <reg_condition otherwise="RES0">when MPAMF_IDR.HAS_PARTID_NRW == 1</reg_condition>
+      
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="Any"
+  >
+    <reg_component>MPAM</reg_component>
+    <reg_frame>MPAMF_BASE_s</reg_frame>
+    <reg_offset><hexnumber>0x0600</hexnumber></reg_offset>
+    <reg_instance>MPAMCFG_INTPARTID_s</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+  <reg_address
+      external_access="False"
+    mem_map_access="True"
+      power_domain="Any"
+  >
+    <reg_component>MPAM</reg_component>
+    <reg_frame>MPAMF_BASE_ns</reg_frame>
+    <reg_offset><hexnumber>0x0600</hexnumber></reg_offset>
+    <reg_instance>MPAMCFG_INTPARTID_ns</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value>
+
+      </reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>MPAMCFG_INTPARTID is a 32-bit read-write register that controls the mapping of the PARTID selected by <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link> into a narrower internal PARTID (intPARTID).</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>MPAMCFG_INTPARTID_s controls the mapping for the Secure PARTID selected by the Secure instance of <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link>. MPAMCFG_INTPARTID_ns controls the mapping for the Non-secure PARTID selected by the Non-secure instance of <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link>.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>The MPAMCFG_INTPARTID register associates the request PARTID (reqPARTID) in the <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link> register with an internal PARTID (intPARTID) in this register. To set that association, store reqPARTID into the <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link> register and then store the intPARTID into the MPAMCFG_INTPARTID register. To read the association, store reqPARTID into the MPAMCFG_PART_SEL register and then read MPAMCFG_INTPARTID.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>If the intPARTID stored into MPAMCFG_INTPARTID is out-of-range or does not have the INTERNAL bit set, the association of reqPARTID to intPARTID is not written and <register_link state="ext" id="ext-mpamf_esr.xml">MPAMF_ESR</register_link> is set to indicate an intPARTID_Range error.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>If MPAMCFG_PART_SEL.INTERNAL is 1 when MPAMCFG_INTPARTID is read or written, <register_link state="ext" id="ext-mpamf_esr.xml">MPAMF_ESR</register_link> is set to indicate an Unexpected_INTERNAL error.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Memory Partitioning and Monitoring registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>MPAMCFG_INTPARTID is a 32-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="32">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_31_17"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="INTERNAL_16_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>INTERNAL</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Internal PARTID flag.</para>
+<para>This bit must be 1 when written to the register. If written as 0, the write will not update the reqPARTID to intPARTID association.</para>
+<para>On a read of this register, the bit will always read the value last written.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="INTPARTID_15_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>INTPARTID</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>This field contains the intPARTID mapped to the reqPARTID in <register_link state="ext" id="ext-mpamcfg_part_sel.xml">MPAMCFG_PART_SEL</register_link>.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  <para>The maximum intPARTID supported is <register_link state="ext" id="ext-mpamf_partid_nrw_idr.xml">MPAMF_PARTID_NRW_IDR</register_link>.INTPARTID_MAX.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="32">
+      
+        <fieldat id="0_31_17" msb="31" lsb="17"/>
+        <fieldat id="INTERNAL_16_16" msb="16" lsb="16"/>
+        <fieldat id="INTPARTID_15_0" msb="15" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <para>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>MPAMCFG_INTPARTID_s must be accessible from the Secure MPAM feature page. MPAMCFG_INTPARTID_ns must be accessible from the Non-secure MPAM feature page.</para>
+
+      </access_permission_text>
+      <access_permission_text>
+        <para>MPAMCFG_INTPARTID_s and MPAMCFG_INTPARTID_ns must be separate registers. The Secure instance (MPAMCFG_INTPARTID_s) accesses the PARTID narrowing used for Secure PARTIDs, and the Non-secure instance (MPAMCFG_INTPARTID_ns) accesses the PARTID narrowing used for Non-secure PARTIDs.</para>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

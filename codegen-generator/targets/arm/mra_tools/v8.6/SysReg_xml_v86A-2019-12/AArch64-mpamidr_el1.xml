@@ -1,0 +1,481 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>MPAMIDR_EL1</reg_short_name>
+      <reg_long_name>MPAM ID Register (EL1)</reg_long_name>
+        <reg_condition otherwise="UNDEFINED">when MPAM is implemented</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Indicates the presence and maximum PARTID and PMG values supported in the implementation. It also indicates whether the implementation supports MPAM virtualization.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>MPAMIDR_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  <para>MPAMIDR_EL1 indicates the MPAM implementation parameters of the PE.</para>
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_62"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>62</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="HAS_SDEFLT_61_61"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HAS_SDEFLT</field_name>
+          <field_msb>61</field_msb>
+          <field_lsb>61</field_lsb>
+          <field_description order="before">
+          
+  <para>HAS_SDEFLT indicates support for <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.SDEFLT bit. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The SDEFLT bit is not implemented in <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The SDEFLT bit is implemented in <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.SDEFLT == 1, accesses from the Secure execution state use the default PARTID, PARTID == 0.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="HAS_FORCE_NS_60_60"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HAS_FORCE_NS</field_name>
+          <field_msb>60</field_msb>
+          <field_lsb>60</field_lsb>
+          <field_description order="before">
+          
+  <para>HAS_FORCE_NS indicates support for <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.FORCE_NS bit. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The FORCE_NS bit is not implemented in <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The FORCE_NS bit is implemented in <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>When <register_link state="AArch64" id="AArch64-mpam3_el3.xml">MPAM3_EL3</register_link>.FORCE_NS == 1, accesses from the Secure execution state have MPAM_NS == 1.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_59_59"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>59</field_msb>
+          <field_lsb>59</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="HAS_TIDR_58_58"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HAS_TIDR</field_name>
+          <field_msb>58</field_msb>
+          <field_lsb>58</field_lsb>
+          <field_description order="before">
+          
+  <para>HAS_TIDR indicates support for <register_link state="AArch64" id="AArch64-mpam2_el2.xml">MPAM2_EL2</register_link>.TIDR bit. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>The TIDR bit is not implemented in <register_link state="AArch64" id="AArch64-mpam2_el2.xml">MPAM2_EL2</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>The TIDR bit is implemented in <register_link state="AArch64" id="AArch64-mpam2_el2.xml">MPAM2_EL2</register_link>.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_57_40"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>57</field_msb>
+          <field_lsb>40</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="PMG_MAX_39_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PMG_MAX</field_name>
+          <field_msb>39</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+          
+  <para>The largest value of PMG that the implementation can generate. The PMG_I and PMG_D fields of every MPAMn_ELx must implement at least enough bits to represent PMG_MAX.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_31_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="VPMR_MAX_20_18"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>VPMR_MAX</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>18</field_lsb>
+          <field_description order="before">
+          
+  <para>If HAS_HCR == 0, VPMR_MAX must be <binarynumber>0b000</binarynumber>. Otherwise, it indicates the maximum register index n for the MPAMVPM&lt;n&gt;_EL2 registers.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="HAS_HCR_17_17"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>HAS_HCR</field_name>
+          <field_msb>17</field_msb>
+          <field_lsb>17</field_lsb>
+          <field_description order="before">
+          
+  <para>HAS_HCR indicates that the PE implementation supports MPAM virtualization, including <register_link state="AArch64" id="AArch64-mpamhcr_el2.xml">MPAMHCR_EL2</register_link>, <register_link state="AArch64" id="AArch64-mpamvpmv_el2.xml">MPAMVPMV_EL2</register_link> and MPAMVPM&lt;n&gt;_EL2 with n in the range 0 to VPMR_MAX. Must be 0 if EL2 is not implemented in either security state.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0</field_value>
+        <field_value_description>
+  <para>MPAM virtualization is not supported.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b1</field_value>
+        <field_value_description>
+  <para>MPAM virtualization is supported.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="0_16_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>16</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="PARTID_MAX_15_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>PARTID_MAX</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>The largest value of PARTID that the implementation can generate. The PARTID_I and PARTID_D fields of every MPAMn_ELx must implement at least enough bits to represent PARTID_MAX.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_62" msb="63" lsb="62"/>
+        <fieldat id="HAS_SDEFLT_61_61" msb="61" lsb="61"/>
+        <fieldat id="HAS_FORCE_NS_60_60" msb="60" lsb="60"/>
+        <fieldat id="0_59_59" msb="59" lsb="59"/>
+        <fieldat id="HAS_TIDR_58_58" msb="58" lsb="58"/>
+        <fieldat id="0_57_40" msb="57" lsb="40"/>
+        <fieldat id="PMG_MAX_39_32" msb="39" lsb="32"/>
+        <fieldat id="0_31_21" msb="31" lsb="21"/>
+        <fieldat id="VPMR_MAX_20_18" msb="20" lsb="18"/>
+        <fieldat id="HAS_HCR_17_17" msb="17" lsb="17"/>
+        <fieldat id="0_16_16" msb="16" lsb="16"/>
+        <fieldat id="PARTID_MAX_15_0" msb="15" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS MPAMIDR_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, MPAMIDR_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b1010"/>
+            
+            <enc n="CRm" v="0b0100"/>
+            
+            <enc n="op2" v="0b100"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; MPAM3_EL3.TRAPLOWER == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MPAMIDR_EL1.HAS_HCR == '1' &amp;&amp; MPAMHCR_EL2.TRAP_MPAMIDR_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; MPAMIDR_EL1.HAS_TIDR == '1' &amp;&amp; MPAM2_EL2.TIDR == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return MPAMIDR_EL1;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; MPAM3_EL3.TRAPLOWER == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return MPAMIDR_EL1;
+elsif PSTATE.EL == EL3 then
+    return MPAMIDR_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

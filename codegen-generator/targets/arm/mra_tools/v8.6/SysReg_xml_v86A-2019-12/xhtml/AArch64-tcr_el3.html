@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>TCR_EL3</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">TCR_EL3, Translation Control Register (EL3)</h1><p>The TCR_EL3 characteristics are:</p><h2>Purpose</h2>
+        <p>The control register for stage 1 of the EL3 translation regime.</p>
+      <h2>Configuration</h2><p>This register is present only
+    when EL3 is implemented.
+      
+    Otherwise, direct accesses to TCR_EL3 are <span class="arm-defined-word">UNDEFINED</span>.</p><h2>Attributes</h2>
+            <p>TCR_EL3 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The TCR_EL3 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#1_31">RES1</a></td><td class="lr" colspan="1"><a href="#TCMA_30">TCMA</a></td><td class="lr" colspan="1"><a href="#TBID_29">TBID</a></td><td class="lr" colspan="1"><a href="#HWU62_28">HWU62</a></td><td class="lr" colspan="1"><a href="#HWU61_27">HWU61</a></td><td class="lr" colspan="1"><a href="#HWU60_26">HWU60</a></td><td class="lr" colspan="1"><a href="#HWU59_25">HWU59</a></td><td class="lr" colspan="1"><a href="#HPD_24">HPD</a></td><td class="lr" colspan="1"><a href="#1_23">RES1</a></td><td class="lr" colspan="1"><a href="#HD_22">HD</a></td><td class="lr" colspan="1"><a href="#HA_21">HA</a></td><td class="lr" colspan="1"><a href="#TBI_20">TBI</a></td><td class="lr" colspan="1"><a href="#0_19">RES0</a></td><td class="lr" colspan="3"><a href="#PS_18">PS</a></td><td class="lr" colspan="2"><a href="#TG0_15">TG0</a></td><td class="lr" colspan="2"><a href="#SH0_13">SH0</a></td><td class="lr" colspan="2"><a href="#ORGN0_11">ORGN0</a></td><td class="lr" colspan="2"><a href="#IRGN0_9">IRGN0</a></td><td class="lr" colspan="2"><a href="#0_7">RES0</a></td><td class="lr" colspan="6"><a href="#T0SZ_5">T0SZ</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  <p>Any of the bits in TCR_EL3 are permitted to be cached in a TLB.</p>
+
+    </div><h4 id="0_63">
+                Bits [63:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="1_31">
+                Bit [31]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES1</span>.</p>
+          <h4 id="TCMA_30">TCMA, bit [30]
+              <div style="font-size:smaller;"><br />When ARMv8.5-MemTag is implemented:
+                </div></h4>
+          
+  <p>Controls the generation of Unchecked accesses at EL3 when address [59:56] = <span class="binarynumber">0b0000</span>.</p>
+
+          <table class="valuetable"><tr><th>TCMA</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>This control has no effect on the generation of Unchecked accesses.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>All accesses are Unchecked.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_30"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="TBID_29">TBID, bit [29]
+              <div style="font-size:smaller;"><br />When ARMv8.3-PAuth is implemented:
+                </div></h4>
+          
+  <p>Controls the use of the top byte of instruction addresses for address matching.</p>
+
+          <table class="valuetable"><tr><th>TBID</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>TCR_EL3.TBI applies to Instruction and Data accesses.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>TCR_EL3.TBI applies to Data accesses only.</p>
+</td></tr></table>
+            
+  <p>This affects addresses where the address would be translated by tables pointed to by <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+<p>For the purpose of this field, all cache maintenance and address translation instructions that perform address translation are treated as data accesses.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_29"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HWU62_28">HWU62, bit [28]
+              <div style="font-size:smaller;"><br />When ARMv8.2-TTPBHA is implemented:
+                </div></h4>
+          
+  <p>Hardware Use. Indicates <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> hardware use of bit[62] of the stage 1 translation table Block or Page entry.</p>
+
+          <table class="valuetable"><tr><th>HWU62</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Bit[62] of each stage 1 translation table Block or Page entry cannot be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Bit[62] of each stage 1 translation table Block or Page entry can be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose if the value of TCR_EL3.HPD is 1.</p>
+</td></tr></table>
+            
+  <p>The Effective value of this field is 0 if the value of TCR_EL3.HPD is 0.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_28"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HWU61_27">HWU61, bit [27]
+              <div style="font-size:smaller;"><br />When ARMv8.2-TTPBHA is implemented:
+                </div></h4>
+          
+  <p>Hardware Use. Indicates <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> hardware use of bit[61] of the stage 1 translation table Block or Page entry.</p>
+
+          <table class="valuetable"><tr><th>HWU61</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Bit[61] of each stage 1 translation table Block or Page entry cannot be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Bit[61] of each stage 1 translation table Block or Page entry can be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose if the value of TCR_EL3.HPD is 1.</p>
+</td></tr></table>
+            
+  <p>The Effective value of this field is 0 if the value of TCR_EL3.HPD is 0.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_27"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HWU60_26">HWU60, bit [26]
+              <div style="font-size:smaller;"><br />When ARMv8.2-TTPBHA is implemented:
+                </div></h4>
+          
+  <p>Hardware Use. Indicates <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> hardware use of bit[60] of the stage 1 translation table Block or Page entry.</p>
+
+          <table class="valuetable"><tr><th>HWU60</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Bit[60] of each stage 1 translation table Block or Page entry cannot be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Bit[60] of each stage 1 translation table Block or Page entry can be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose if the value of TCR_EL3.HPD is 1.</p>
+</td></tr></table>
+            
+  <p>The Effective value of this field is 0 if the value of TCR_EL3.HPD is 0.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_26"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HWU59_25">HWU59, bit [25]
+              <div style="font-size:smaller;"><br />When ARMv8.2-TTPBHA is implemented:
+                </div></h4>
+          
+  <p>Hardware Use. Indicates <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> hardware use of bit[59] of the stage 1 translation table Block or Page entry.</p>
+
+          <table class="valuetable"><tr><th>HWU59</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Bit[59] of each stage 1 translation table Block or Page entry cannot be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Bit[59] of each stage 1 translation table Block or Page entry can be used by hardware for an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> purpose if the value of TCR_EL3.HPD is 1.</p>
+</td></tr></table>
+            
+  <p>The Effective value of this field is 0 if the value of TCR_EL3.HPD is 0.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_25"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HPD_24">HPD, bit [24]
+              <div style="font-size:smaller;"><br />When ARMv8.1-HPD is implemented:
+                </div></h4>
+          
+  <p>Hierarchical Permission Disables. This affects the hierarchical control bits, APTable, PXNTable, and UXNTable, except NSTable, in the translation tables pointed to by <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+
+          <table class="valuetable"><tr><th>HPD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Hierarchical permissions are enabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Hierarchical permissions are disabled.</p>
+<div class="note"><span class="note-header">Note</span><p>In this case bit[61] (APTable[0]) and bit[59] (PXNTable) of the next level descriptor attributes are required to be ignored by the PE, and are no longer reserved, allowing them to be used by software.</p></div>
+</td></tr></table>
+            
+  <p>When disabled, the permissions are treated as if the bits are zero.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_24"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="1_23">
+                Bit [23]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES1</span>.</p>
+          <h4 id="HD_22">HD, bit [22]
+              <div style="font-size:smaller;"><br />When ARMv8.1-TTHM is implemented:
+                </div></h4>
+          
+  <p>Hardware management of dirty state in stage 1 translations from EL3.</p>
+
+          <table class="valuetable"><tr><th>HD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Stage 1 hardware management of dirty state disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Stage 1 hardware management of dirty state enabled, only if the HA bit is also set to 1.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_22"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="HA_21">HA, bit [21]
+              <div style="font-size:smaller;"><br />When ARMv8.1-TTHM is implemented:
+                </div></h4>
+          
+  <p>Hardware Access flag update in stage 1 translations from EL3.</p>
+
+          <table class="valuetable"><tr><th>HA</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Stage 1 Access flag update disabled.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Stage 1 Access flag update enabled.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_21"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="TBI_20">TBI, bit [20]
+              </h4>
+          
+  <p>Top Byte Ignored. Indicates whether the top byte of an address is used for address match for the <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a> region, or ignored and used for tagged addresses.</p>
+
+          <table class="valuetable"><tr><th>TBI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Top Byte used in the address calculation.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Top Byte ignored in the address calculation.</p>
+</td></tr></table>
+            
+  <p>This affects addresses generated in EL3 using AArch64 where the address would be translated by tables pointed to by <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>. It has an effect whether the EL3 translation regime is enabled or not.</p>
+<p>If <span class="xref">ARMv8.3-PAuth</span> is implemented and TCR_EL3.TBID is 1, then this field only applies to Data accesses.</p>
+<p>Otherwise, if the value of TBI is 1, then bits[63:56] of that target address are also set to 0 before the address is stored in the PC, in the following cases:</p>
+<ul>
+<li>A branch or procedure return within EL3.
+</li><li>A exception taken to EL3.
+</li><li>An exception return to EL3.
+</li></ul>
+<p>For more information, see <span class="xref">'Address tagging in AArch64 state' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile</span>.</p>
+<div class="note"><span class="note-header">Note</span><p>This control detrmines the scope of address tagging. It never causes an exception to be generated.</p></div>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_19">
+                Bit [19]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="PS_18">PS, bits [18:16]
+                  </h4>
+          
+  <p>Physical Address Size.</p>
+
+          <table class="valuetable"><tr><th>PS</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>32 bits, 4GB.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>36 bits, 64GB.</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>40 bits, 1TB.</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>42 bits, 4TB.</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>44 bits, 16TB.</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>48 bits, 256TB.</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>52 bits, 4PB.</p>
+</td></tr></table>
+            
+  <p>Other values are reserved.</p>
+<p>The reserved values behave in the same way as the <span class="binarynumber">0b101</span> or <span class="binarynumber">0b110</span> encoding, but software must not rely on this property as the behavior of the reserved values might change in a future revision of the architecture.</p>
+<p>The value <span class="binarynumber">0b110</span> is permitted only if  <span class="xref">ARMv8.2-LPA</span> is implemented and the translation granule size is 64KB.</p>
+<p>In an implementation that supports 52-bit PAs, if the value of this field is not <span class="binarynumber">0b110</span> or a value treated as <span class="binarynumber">0b110</span>, then bits[51:48] of every translation table base address for the stage of translation controlled by TCR_EL3 are <span class="binarynumber">0b0000</span>.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="TG0_15">TG0, bits [15:14]
+                  </h4>
+          
+  <p>Granule size for the <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+
+          <table class="valuetable"><tr><th>TG0</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>4KB.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>64KB.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>16KB.</p>
+</td></tr></table>
+            
+  <p>Other values are reserved.</p>
+<p>If the value is programmed to either a reserved value, or a size that has not been implemented, then the hardware will treat the field as if it has been programmed to an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> choice of the sizes that has been implemented for all purposes other than the value read back from this register.</p>
+<p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether the value read back is the value programmed or the value that corresponds to the size chosen.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="SH0_13">SH0, bits [13:12]
+                  </h4>
+          
+  <p>Shareability attribute for memory associated with translation table walks using <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+
+          <table class="valuetable"><tr><th>SH0</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Non-shareable.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Outer Shareable.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Inner Shareable.</p>
+</td></tr></table>
+            
+  <p>Other values are reserved. The effect of programming this field to a Reserved value is that behavior is <span class="arm-defined-word">CONSTRAINED UNPREDICTABLE</span>, as described in <span class="xref">'Reserved values in AArch64 System registers and translation table entries' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section K1.2.2</span>.</p>
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="ORGN0_11">ORGN0, bits [11:10]
+                  </h4>
+          
+  <p>Outer cacheability attribute for memory associated with translation table walks using <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+
+          <table class="valuetable"><tr><th>ORGN0</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Normal memory, Outer Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Normal memory, Outer Write-Back Read-Allocate Write-Allocate Cacheable.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Normal memory, Outer Write-Through Read-Allocate No Write-Allocate Cacheable.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Normal memory, Outer Write-Back Read-Allocate No Write-Allocate Cacheable.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="IRGN0_9">IRGN0, bits [9:8]
+                  </h4>
+          
+  <p>Inner cacheability attribute for memory associated with translation table walks using <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>.</p>
+
+          <table class="valuetable"><tr><th>IRGN0</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Normal memory, Inner Non-cacheable.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Normal memory, Inner Write-Back Read-Allocate Write-Allocate Cacheable.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Normal memory, Inner Write-Through Read-Allocate No Write-Allocate Cacheable.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Normal memory, Inner Write-Back Read-Allocate No Write-Allocate Cacheable.</p>
+</td></tr></table>
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_7">
+                Bits [7:6]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="T0SZ_5">T0SZ, bits [5:0]
+                  </h4>
+          
+  <p>The size offset of the memory region addressed by <a href="AArch64-ttbr0_el3.html">TTBR0_EL3</a>. The region size is 2<sup>(64-T0SZ)</sup> bytes.</p>
+<p>The maximum and minimum possible values for T0SZ depend on the level of translation table and the memory translation granule size, as described in the AArch64 Virtual Memory System Architecture chapter.</p>
+
+          
+            
+  
+
+          <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the TCR_EL3</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, TCR_EL3</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b110</td><td>0b0010</td><td>0b0000</td><td>0b010</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    return TCR_EL3;
+              </p><h4 class="assembler">MSR TCR_EL3, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b110</td><td>0b0010</td><td>0b0000</td><td>0b010</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    TCR_EL3 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

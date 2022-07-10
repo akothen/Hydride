@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ERR&lt;n&gt;STATUS</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">ERR&lt;n&gt;STATUS, Error Record Primary Status Register, n =
+      0 - 65534</h1><p>The ERR&lt;n&gt;STATUS characteristics are:</p><h2>Purpose</h2>
+        <p>Contains status information for the error record, including:</p>
+
+      
+        <ul>
+<li>Whether any error has been detected (valid).
+</li><li>Whether any detected error was not corrected, and returned to a master.
+</li><li>Whether any detected error was not corrected and deferred.
+</li><li>Whether an error record has been discarded because additional errors have been detected before the first error was handled by software (overflow).
+</li><li>Whether any error has been reported.
+</li><li>Whether the other error record registers contain valid information.
+</li><li>Whether the error was reported because poison data was detected or because a corrupt value was detected by an error detection code.
+</li><li>A primary error code.
+</li><li>An <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> extended error code.
+</li></ul>
+
+      
+        <p>Within this register:</p>
+
+      
+        <ul>
+<li>The {AV, V, MV} bits are valid bits that define whether the error record registers are valid.
+</li><li>The {UE, OF, CE, DE, UET} bits encode the types of error or errors recorded.
+</li><li>The {CI, ER, PN, IERR, SERR} fields are syndrome fields.
+</li></ul>
+      <h2>Configuration</h2><p>This register is present only
+    when error record &lt;n&gt; is implemented.
+      
+    Otherwise, direct accesses to ERR&lt;n&gt;STATUS are <span class="arm-defined-word">RES0</span>.</p>
+        <p><a href="ext-errnfr.html">ERR&lt;q&gt;FR</a> describes the features implemented by the node that owns error record &lt;n&gt;. &lt;q&gt; is the index of the first error record owned by the same node as error record &lt;n&gt;. If the node owns a single record, then q = n.</p>
+
+      
+        <p>For <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> fields in ERR&lt;n&gt;STATUS, writing zero must always be supported to return the error record to an initial quiescent state.</p>
+
+      
+        <p>In particular, if any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> syndrome fields might generate a Fault Handling or Error Recovery Interrupt request, writing zero is sufficient to deactivate the Interrupt request.</p>
+
+      
+        <p>Fields that are read-only, non-zero, and ignore writes are compliant with this requirement.</p>
+
+      
+        <div class="note"><span class="note-header">Note</span><p>Arm recommends that any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> syndrome fields that can generate a Fault Handling, Error Recovery, Critical, or <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>, interrupt request are disabled at Cold reset and are enabled by software writing an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> non-zero value to an <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> field in ERR&lt;q&gt;CTRL.</p></div>
+      <h2>Attributes</h2>
+            <p>ERR&lt;n&gt;STATUS is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The ERR&lt;n&gt;STATUS bit assignments are:</p><h3>When RAS System Architecture v1.1 is implemented:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenRASSystemArchitecturev1.1isimplemented_0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_AV_31">AV</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_V_30">V</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_UE_29">UE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_ER_28">ER</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_OF_27">OF</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_MV_26">MV</a></td><td class="lr" colspan="2"><a href="#WhenRASSystemArchitecturev1.1isimplemented_CE_25">CE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_DE_23">DE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_PN_22">PN</a></td><td class="lr" colspan="2"><a href="#WhenRASSystemArchitecturev1.1isimplemented_UET_21">UET</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.1isimplemented_CI_19">CI</a></td><td class="lr" colspan="3"><a href="#WhenRASSystemArchitecturev1.1isimplemented_0_18">RES0</a></td><td class="lr" colspan="8"><a href="#WhenRASSystemArchitecturev1.1isimplemented_IERR_15">IERR</a></td><td class="lr" colspan="8"><a href="#WhenRASSystemArchitecturev1.1isimplemented_SERR_7">SERR</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenRASSystemArchitecturev1.1isimplemented_0_63">
+                Bits [63:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.1isimplemented_AV_31">AV, bit [31]
+              <div style="font-size:smaller;"><br />When the error record includes an address associated with an error:
+                </div></h4>
+          
+  <p>Address Valid.</p>
+
+          <table class="valuetable"><tr><th>AV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-errnaddr.html">ERR&lt;n&gt;ADDR</a> not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-errnaddr.html">ERR&lt;n&gt;ADDR</a> contains an address associated with the highest priority error recorded by this record.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_0_31"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.1isimplemented_V_30">V, bit [30]
+              </h4>
+          
+  <p>Status Register Valid.</p>
+
+          <table class="valuetable"><tr><th>V</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>ERR&lt;n&gt;STATUS not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>ERR&lt;n&gt;STATUS valid. At least one error has been recorded.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_UE_29">UE, bit [29]
+              </h4>
+          
+  <p>Uncorrected Error.</p>
+
+          <table class="valuetable"><tr><th>UE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No errors have been detected, or all detected errors have been either corrected or deferred.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one detected error was not corrected and not deferred.</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_ER_28">ER, bit [28]
+              </h4>
+          
+  <p>Error Reported.</p>
+
+          <table class="valuetable"><tr><th>ER</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No in-band error (External Abort) reported.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>An External Abort was signaled by the node to the master making the access or other transaction. This can be because any of the following are true:</p>
+<ul>
+<li>The applicable one of the <a href="ext-errnctlr.html">ERR&lt;q&gt;CTLR</a>.{WUE,RUE,UE} bits is implemented and was set to <span class="binarynumber">0b1</span> when an Uncorrected error was detected.
+</li><li>The applicable one of the <a href="ext-errnctlr.html">ERR&lt;q&gt;CTLR</a>.{WUE,RUE,UE} bits is not implemented and the node always reports errors.
+</li></ul>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit can be set to <span class="binarynumber">0b1</span> by a Deferred error.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span> and this bit is never set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li><li>ERR&lt;n&gt;STATUS.{UE,DE} == {0,0} and this bit can be set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li></ul>
+<p>This bit is read/write-one-to-clear.</p>
+<div class="note"><span class="note-header">Note</span><p>An External Abort signaled by the node might be masked and not generate any exception.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_OF_27">OF, bit [27]
+              </h4>
+          
+  <p>Overflow.</p>
+<p>Indicates that multiple errors have been detected. This bit is set to <span class="binarynumber">0b1</span> when one of the following occurs:</p>
+<ul>
+<li>A Corrected error counter is implemented, an error is counted, and the counter overflows.
+</li><li>ERR&lt;n&gt;STATUS.V was previously set to <span class="binarynumber">0b1</span>, a Corrected error counter is not implemented, and a Corrected error is recorded.
+</li><li>ERR&lt;n&gt;STATUS.V was previously set to <span class="binarynumber">0b1</span>, and a type of error other than a Corrected error is recorded.
+</li></ul>
+<p>Otherwise, this bit is unchanged when an error is recorded.</p>
+<p>If a Corrected error counter is implemented:</p>
+<ul>
+<li>A direct write that modifies the counter overflow flag indirectly might set this bit to an <span class="arm-defined-word">UNKNOWN</span> value.
+</li><li>A direct write to this bit that clears this bit to zero might indirectly set the counter overflow flag to an <span class="arm-defined-word">UNKNOWN</span> value.
+</li></ul>
+
+          <table class="valuetable"><tr><th>OF</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Since this bit was last cleared to zero, no error syndrome has been discarded and, if a Corrected error counter is implemented, it has not overflowed.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Since this bit was last cleared to zero, at least one error syndrome has been discarded or, if a Corrected error counter is implemented, it might have overflowed.</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_MV_26">MV, bit [26]
+              <div style="font-size:smaller;"><br />When the error record includes an additional information for an error:
+                </div></h4>
+          
+  <p>Miscellaneous Registers Valid.</p>
+
+          <table class="valuetable"><tr><th>MV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>ERR&lt;n&gt;MISC&lt;m&gt; not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> contents of the ERR&lt;n&gt;MISC&lt;m&gt; registers contains additional information for an error recorded by this record.</p>
+</td></tr></table>
+            
+  <p>This bit is read/write-one-to-clear.</p>
+<div class="note"><span class="note-header">Note</span><p>If the ERR&lt;n&gt;MISC&lt;m&gt; registers can contain additional information for a previously recorded error, then the contents must be self-describing to software or a user. For example, certain fields might relate only to Corrected errors, and other fields only to the most recent error that was not discarded.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_0_26"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.1isimplemented_CE_25">CE, bits [25:24]
+                  </h4>
+          
+  <p>Corrected Error.</p>
+
+          <table class="valuetable"><tr><th>CE</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>No errors were corrected.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>At least one transient error was corrected.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>At least one error was corrected.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>At least one persistent error was corrected.</p>
+</td></tr></table>
+            
+  <p>The mechanism by which a node detects whether a correctable error is transient or persistent is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>. If no such mechanism is implemented, then the node sets this field to <span class="binarynumber">0b10</span> when an error is corrected.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this field is nonzero, then software must write ones to this field to clear this field to zero.</p>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This field is read/write-ones-to-clear. Writing a value other than all-zeros or all-ones sets this field to an <span class="arm-defined-word">UNKNOWN</span> value.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_DE_23">DE, bit [23]
+              </h4>
+          
+  <p>Deferred Error.</p>
+
+          <table class="valuetable"><tr><th>DE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No errors were deferred.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one error was not corrected and deferred.</p>
+</td></tr></table>
+            
+  <p>Support for deferring errors is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_PN_22">PN, bit [22]
+              </h4>
+          
+  <p>Poison.</p>
+
+          <table class="valuetable"><tr><th>PN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Uncorrected error or Deferred error recorded because a corrupt value was detected, for example, by an error detection code (EDC).</p>
+<div class="note"><span class="note-header">Note</span><p>If a producer node detects a corrupt value and defers the error by producing a poison value, then this bit is set to <span class="binarynumber">0b0</span> at the producer node.</p></div>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Uncorrected error or Deferred error recorded because a poison value was detected.</p>
+<div class="note"><span class="note-header">Note</span><p>This might only be an indication of poison, because, in some EDC schemes, a poison value is encoded as an unlikely form of corrupt data, meaning it is possible to mistake a corrupt value as a poison value.</p></div>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether a node can distinguish a poison value from a corrupt value.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.{DE,UE} == {0,0}.
+</li></ul>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_UET_21">UET, bits [21:20]
+                  </h4>
+          
+  <p>Uncorrected Error Type. Describes the state of the component after detecting or consuming an Uncorrected error.</p>
+
+          <table class="valuetable"><tr><th>UET</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Uncorrected error, Uncontainable error (UC).</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Uncorrected error, Unrecoverable error (UEU).</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Uncorrected error, Latent or Restartable error (UEO).</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Uncorrected error, Signaled or Recoverable error (UER).</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this field is nonzero, then software must write ones to this field to clear this field to zero.</p>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>.
+</li></ul>
+<p>This field is read/write-ones-to-clear. Writing a value other than all-zeros or all-ones sets this field to an <span class="arm-defined-word">UNKNOWN</span> value.</p>
+<div class="note"><span class="note-header">Note</span><p>Software might use the information in the error record registers to determine what recovery is necessary.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_CI_19">CI, bit [19]
+              </h4>
+          
+  <p>Critical Error. Indicates whether a critical error condition has been recorded.</p>
+
+          <table class="valuetable"><tr><th>CI</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No critical error condition.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Critical error condition.</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_0_18">
+                Bits [18:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.1isimplemented_IERR_15">IERR, bits [15:8]
+                  </h4>
+          
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> error code. Used with any primary error code SERR value. Further <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> information can be placed in the MISC registers.</p>
+
+          
+            
+  <p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.1isimplemented_SERR_7">SERR, bits [7:0]
+                  </h4>
+          
+  <p>Architecturally-defined primary error code. The primary error code might be used by a fault handling agent to triage an error without requiring device-specific code. For example, to count and threshold corrected errors in software, or generate a short log entry.</p>
+
+          <table class="valuetable"><tr><th>SERR</th><th>Meaning</th></tr><tr><td class="bitfield">0x00</td><td>
+  <p>No error.</p>
+</td></tr><tr><td class="bitfield">0x01</td><td>
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> error.</p>
+</td></tr><tr><td class="bitfield">0x02</td><td>
+  <p>Data value from (non-associative) internal memory. For example, ECC from on-chip SRAM or buffer.</p>
+</td></tr><tr><td class="bitfield">0x03</td><td>
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> pin. For example, <span class="signal">nSEI</span> pin.</p>
+</td></tr><tr><td class="bitfield">0x04</td><td>
+  <p>Assertion failure. For example, consistency failure.</p>
+</td></tr><tr><td class="bitfield">0x05</td><td>
+  <p>Error detected on internal data path. For example, parity on ALU result.</p>
+</td></tr><tr><td class="bitfield">0x06</td><td>
+  <p>Data value from associative memory. For example, ECC error on cache data.</p>
+</td></tr><tr><td class="bitfield">0x07</td><td>
+  <p>Address/control value from associative memory. For example, ECC error on cache tag.</p>
+</td></tr><tr><td class="bitfield">0x08</td><td>
+  <p>Data value from a TLB. For example, ECC error on TLB data.</p>
+</td></tr><tr><td class="bitfield">0x09</td><td>
+  <p>Address/control value from a TLB. For example, ECC error on TLB tag.</p>
+</td></tr><tr><td class="bitfield">0x0A</td><td>
+  <p>Data value from producer. For example, parity error on write data bus.</p>
+</td></tr><tr><td class="bitfield">0x0B</td><td>
+  <p>Address/control value from producer. For example, parity error on address bus.</p>
+</td></tr><tr><td class="bitfield">0x0C</td><td>
+  <p>Data value from (non-associative) external memory. For example, ECC error in SDRAM.</p>
+</td></tr><tr><td class="bitfield">0x0D</td><td>
+  <p>Illegal address (software fault). For example, access to unpopulated memory.</p>
+</td></tr><tr><td class="bitfield">0x0E</td><td>
+  <p>Illegal access (software fault). For example, byte write to word register.</p>
+</td></tr><tr><td class="bitfield">0x0F</td><td>
+  <p>Illegal state (software fault). For example, device not ready.</p>
+</td></tr><tr><td class="bitfield">0x10</td><td>
+  <p>Internal data register. For example, parity on a SIMD&amp;FP register. For a PE, all general-purpose, stack pointer, SIMD&amp;FP, and SVE registers are data registers.</p>
+</td></tr><tr><td class="bitfield">0x11</td><td>
+  <p>Internal control register. For example, Parity on a System register. For a PE, all registers other than general-purpose, stack pointer, SIMD&amp;FP, and SVE registers are control registers.</p>
+</td></tr><tr><td class="bitfield">0x12</td><td>
+  <p>Error response from slave. For example, error response from cache write-back.</p>
+</td></tr><tr><td class="bitfield">0x13</td><td>
+  <p>External timeout. For example, timeout on interaction with another node.</p>
+</td></tr><tr><td class="bitfield">0x14</td><td>
+  <p>Internal timeout. For example, timeout on interface within the node.</p>
+</td></tr><tr><td class="bitfield">0x15</td><td>
+  <p>Deferred error from slave not supported at master. For example, poisoned data received from a slave by a master that cannot defer the error further.</p>
+</td></tr><tr><td class="bitfield">0x16</td><td>
+  <p>Deferred error from master not supported at slave. For example, poisoned data received from a master by a slave that cannot defer the error further.</p>
+</td></tr><tr><td class="bitfield">0x17</td><td>
+  <p>Deferred error from slave passed through. For example, poisoned data received from a slave and returned to a master.</p>
+</td></tr><tr><td class="bitfield">0x18</td><td>
+  <p>Deferred error from master passed through. For example, poisoned data received from a master and deferred to a slave.</p>
+</td></tr><tr><td class="bitfield">0x19</td><td>
+  <p>Error recorded by PCIe error logs. Indicates that the node has recorded an error in a PCIe error log. This might be the PCIe device status register, AER, DVSEC, or other mechanisms defined by PCIe.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><div class="text_after_fields">
+    
+  
+
+    </div><h3>When RAS System Architecture v1.0 is implemented:</h3><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#WhenRASSystemArchitecturev1.0isimplemented_0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_AV_31">AV</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_V_30">V</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_UE_29">UE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_ER_28">ER</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_OF_27">OF</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_MV_26">MV</a></td><td class="lr" colspan="2"><a href="#WhenRASSystemArchitecturev1.0isimplemented_CE_25">CE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_DE_23">DE</a></td><td class="lr" colspan="1"><a href="#WhenRASSystemArchitecturev1.0isimplemented_PN_22">PN</a></td><td class="lr" colspan="2"><a href="#WhenRASSystemArchitecturev1.0isimplemented_UET_21">UET</a></td><td class="lr" colspan="4"><a href="#WhenRASSystemArchitecturev1.0isimplemented_0_19">RES0</a></td><td class="lr" colspan="8"><a href="#WhenRASSystemArchitecturev1.0isimplemented_IERR_15">IERR</a></td><td class="lr" colspan="8"><a href="#WhenRASSystemArchitecturev1.0isimplemented_SERR_7">SERR</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="WhenRASSystemArchitecturev1.0isimplemented_0_63">
+                Bits [63:32]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.0isimplemented_AV_31">AV, bit [31]
+              <div style="font-size:smaller;"><br />When the error record includes an address associated with an error:
+                </div></h4>
+          
+  <p>Address Valid.</p>
+
+          <table class="valuetable"><tr><th>AV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-errnaddr.html">ERR&lt;n&gt;ADDR</a> not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-errnaddr.html">ERR&lt;n&gt;ADDR</a> contains an address associated with the highest priority error recorded by this record.</p>
+</td></tr></table>
+            
+  <p>This bit ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_0_31"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.0isimplemented_V_30">V, bit [30]
+              </h4>
+          
+  <p>Status Register Valid.</p>
+
+          <table class="valuetable"><tr><th>V</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>ERR&lt;n&gt;STATUS not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>ERR&lt;n&gt;STATUS valid. At least one error has been recorded.</p>
+</td></tr></table>
+            
+  <p>This bit ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and is not being cleared to <span class="binarynumber">0b0</span> in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_UE_29">UE, bit [29]
+              </h4>
+          
+  <p>Uncorrected Error.</p>
+
+          <table class="valuetable"><tr><th>UE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No errors have been detected, or all detected errors have been either corrected or deferred.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one detected error was not corrected and not deferred.</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>. This bit ignores writes if ERR&lt;n&gt;STATUS.OF == <span class="binarynumber">0b1</span> and is not being cleared to <span class="binarynumber">0b0</span> in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_ER_28">ER, bit [28]
+              </h4>
+          
+  <p>Error Reported.</p>
+
+          <table class="valuetable"><tr><th>ER</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No in-band error (External Abort) reported.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>An External Abort was signaled by the node to the master making the access or other transaction. This can be because any of the following are true:</p>
+<ul>
+<li>The applicable one of the <a href="ext-errnctlr.html">ERR&lt;q&gt;CTLR</a>.{WUE,RUE,UE} bits is implemented and was set to <span class="binarynumber">0b1</span> when an Uncorrected error was detected.
+</li><li>The applicable one of the <a href="ext-errnctlr.html">ERR&lt;q&gt;CTLR</a>.{WUE,RUE,UE} bits is not implemented and the node always reports errors.
+</li></ul>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit can be set to <span class="binarynumber">0b1</span> by a Deferred error.</p>
+<p>If this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero, when any of:</p>
+<ul>
+<li>Clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>.
+</li><li>Clearing ERR&lt;n&gt;STATUS.UE to <span class="binarynumber">0b0</span>, if this bit is never set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li><li>Clearing ERR&lt;n&gt;STATUS.{UE,DE} to {0,0}, if this bit can be set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li></ul>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span> and this bit is never set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li><li>ERR&lt;n&gt;STATUS.{UE,DE} == {0,0} and this bit can be set to <span class="binarynumber">0b1</span> by a Deferred error.
+</li></ul>
+<p>This bit ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+<div class="note"><span class="note-header">Note</span><p>An External Abort signaled by the node might be masked and not generate any exception.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_OF_27">OF, bit [27]
+              </h4>
+          
+  <p>Overflow.</p>
+<p>Indicates that multiple errors have been detected. This bit is set to <span class="binarynumber">0b1</span> when one of the following occurs:</p>
+<ul>
+<li>An Uncorrected error is detected and ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b1</span>.
+</li><li>A Deferred error is detected, ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span> and ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b1</span>.
+</li><li>A Corrected error is detected, no Corrected error counter is implemented, ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span>, and ERR&lt;n&gt;STATUS.CE != <span class="binarynumber">0b00</span>. ERR&lt;n&gt;STATUS.CE might be updated for the new Corrected error.
+</li><li>A Corrected error counter is implemented, ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span>, and the counter overflows.
+</li></ul>
+<p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is set to <span class="binarynumber">0b1</span> when one of the following occurs:</p>
+<ul>
+<li>A Deferred error is detected and ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b1</span>.
+</li><li>A Corrected error is detected, no Corrected error counter is implemented, and either or both the ERR&lt;n&gt;STATUS.UE or ERR&lt;n&gt;STATUS.DE bits are set to <span class="binarynumber">0b1</span>.
+</li><li>A Corrected error counter is implemented, either or both the ERR&lt;n&gt;STATUS.UE or ERR&lt;n&gt;STATUS.DE bits are set to <span class="binarynumber">0b1</span>, and the counter overflows.
+</li></ul>
+<p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether this bit is cleared to <span class="binarynumber">0b0</span> when one of the following occurs:</p>
+<ul>
+<li>An Uncorrected error is detected and ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>.
+</li><li>A Deferred error is detected, ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span> and ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span>.
+</li><li>A Corrected error is detected, ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span> and ERR&lt;n&gt;STATUS.CE == <span class="binarynumber">0b00</span>.
+</li></ul>
+<p>The <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> clearing of this bit might also depend on the value of the other error status bits.</p>
+<p>If a Corrected error counter is implemented:</p>
+<ul>
+<li>A direct write that modifies the counter overflow flag indirectly might set this bit to an <span class="arm-defined-word">UNKNOWN</span> value.
+</li><li>A direct write to this bit that clears this bit to <span class="binarynumber">0b0</span> might indirectly set the counter overflow flag to an <span class="arm-defined-word">UNKNOWN</span> value.
+</li></ul>
+
+          <table class="valuetable"><tr><th>OF</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>If ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b1</span>, then no error syndrome for an Uncorrected error has been discarded.</p>
+<p>If ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span> and ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b1</span>, then no error syndrome for a Deferred error has been discarded.</p>
+<p>If ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span>, and a Corrected error counter is implemented, then the counter has not overflowed.</p>
+<p>If ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.DE == <span class="binarynumber">0b0</span>, ERR&lt;n&gt;STATUS.CE != <span class="binarynumber">0b00</span>, and no Corrected error counter is implemented, then no error syndrome for a Corrected error has been discarded.</p>
+<div class="note"><span class="note-header">Note</span><p>This bit might have been set to <span class="binarynumber">0b1</span> when an error syndrome was discarded and later cleared to <span class="binarynumber">0b0</span> when a higher priority syndrome was recorded.</p></div>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one error syndrome has been discarded or, if a Corrected error counter is implemented, it might have overflowed.</p>
+</td></tr></table>
+            
+  <p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_MV_26">MV, bit [26]
+              <div style="font-size:smaller;"><br />When the error record includes an additional information for an error:
+                </div></h4>
+          
+  <p>Miscellaneous Registers Valid.</p>
+
+          <table class="valuetable"><tr><th>MV</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>ERR&lt;n&gt;MISC&lt;m&gt; not valid.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> contents of the ERR&lt;n&gt;MISC&lt;m&gt; registers contains additional information for an error recorded by this record.</p>
+</td></tr></table>
+            
+  <p>This bit ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+<div class="note"><span class="note-header">Note</span><p>If the ERR&lt;n&gt;MISC&lt;m&gt; registers can contain additional information for a previously recorded error, then the contents must be self-describing to software or a user. For example, certain fields might relate only to Corrected errors, and other fields only to the most recent error that was not discarded.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to <span class="binarynumber">0</span>.
+</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_0_26"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.0isimplemented_CE_25">CE, bits [25:24]
+                  </h4>
+          
+  <p>Corrected Error.</p>
+
+          <table class="valuetable"><tr><th>CE</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>No errors were corrected.</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>At least one transient error was corrected.</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>At least one error was corrected.</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>At least one persistent error was corrected.</p>
+</td></tr></table>
+            
+  <p>The mechanism by which a node detects whether a correctable error is transient or persistent is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>. If no such mechanism is implemented, then the node sets this field to <span class="binarynumber">0b10</span> when an error is corrected.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this field is nonzero, then software must write ones to this field to clear this field to zero.</p>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>. This field ignores writes if ERR&lt;n&gt;STATUS.OF == <span class="binarynumber">0b1</span> and is not being cleared to <span class="binarynumber">0b0</span> in the same write.</p>
+<p>This field is read/write-ones-to-clear. Writing a value other than all-zeros or all-ones sets this field to an <span class="arm-defined-word">UNKNOWN</span> value.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_DE_23">DE, bit [23]
+              </h4>
+          
+  <p>Deferred Error.</p>
+
+          <table class="valuetable"><tr><th>DE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No errors were deferred.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one error was not corrected and deferred.</p>
+</td></tr></table>
+            
+  <p>Support for deferring errors is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+<p>When clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>, if this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero.</p>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>. This bit ignores writes if ERR&lt;n&gt;STATUS.OF == <span class="binarynumber">0b1</span> and is not being cleared to <span class="binarynumber">0b0</span> in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_PN_22">PN, bit [22]
+              </h4>
+          
+  <p>Poison.</p>
+
+          <table class="valuetable"><tr><th>PN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Uncorrected error or Deferred error recorded because a corrupt value was detected, for example, by an error detection code (EDC).</p>
+<div class="note"><span class="note-header">Note</span><p>If a producer node detects a corrupt value and defers the error by producing a poison value, then this bit is set to <span class="binarynumber">0b0</span> at the producer node.</p></div>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Uncorrected error or Deferred error recorded because a poison value was detected.</p>
+<div class="note"><span class="note-header">Note</span><p>This might only be an indication of poison, because, in some EDC schemes, a poison value is encoded as an unlikely form of corrupt data, meaning it is possible to mistake a corrupt value as a poison value.</p></div>
+</td></tr></table>
+            
+  <p>It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether a node can distinguish a poison value from a corrupt value.</p>
+<p>If this bit is nonzero, then software must write <span class="binarynumber">0b1</span> to this bit to clear this bit to zero, when any of:</p>
+<ul>
+<li>Clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>.
+</li><li>Clearing both ERR&lt;n&gt;STATUS.{DE, UE} to <span class="binarynumber">0b0</span>.
+</li></ul>
+<p>This bit is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.{DE,UE} == {0,0}.
+</li></ul>
+<p>This bit ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+<p>This bit is read/write-one-to-clear.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_UET_21">UET, bits [21:20]
+                  </h4>
+          
+  <p>Uncorrected Error Type. Describes the state of the component after detecting or consuming an Uncorrected error.</p>
+
+          <table class="valuetable"><tr><th>UET</th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td>
+  <p>Uncorrected error, Uncontainable error (UC).</p>
+</td></tr><tr><td class="bitfield">0b01</td><td>
+  <p>Uncorrected error, Unrecoverable error (UEU).</p>
+</td></tr><tr><td class="bitfield">0b10</td><td>
+  <p>Uncorrected error, Latent or Restartable error (UEO).</p>
+</td></tr><tr><td class="bitfield">0b11</td><td>
+  <p>Uncorrected error, Signaled or Recoverable error (UER).</p>
+</td></tr></table>
+            
+  <p>If this field is nonzero, then software must write ones to this field to clear this field to zero, when any of:</p>
+<ul>
+<li>Clearing ERR&lt;n&gt;STATUS.V to <span class="binarynumber">0b0</span>.
+</li><li>Clearing ERR&lt;n&gt;STATUS.UE to <span class="binarynumber">0b0</span>.
+</li></ul>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if any of the following are true:</p>
+<ul>
+<li>ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>.
+</li><li>ERR&lt;n&gt;STATUS.UE == <span class="binarynumber">0b0</span>.
+</li></ul>
+<p>This field ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+<p>This field is read/write-ones-to-clear. Writing a value other than all-zeros or all-ones sets this field to an <span class="arm-defined-word">UNKNOWN</span> value.</p>
+<div class="note"><span class="note-header">Note</span><p>Software might use the information in the error record registers to determine what recovery is necessary.</p></div>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_0_19">
+                Bits [19:16]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="WhenRASSystemArchitecturev1.0isimplemented_IERR_15">IERR, bits [15:8]
+                  </h4>
+          
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> error code. Used with any primary error code SERR value. Further <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> information can be placed in the MISC registers.</p>
+
+          
+            
+  <p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>. This field ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><h4 id="WhenRASSystemArchitecturev1.0isimplemented_SERR_7">SERR, bits [7:0]
+                  </h4>
+          
+  <p>Architecturally-defined primary error code. The primary error code might be used by a fault handling agent to triage an error without requiring device-specific code. For example, to count and threshold corrected errors in software, or generate a short log entry.</p>
+
+          <table class="valuetable"><tr><th>SERR</th><th>Meaning</th></tr><tr><td class="bitfield">0x00</td><td>
+  <p>No error.</p>
+</td></tr><tr><td class="bitfield">0x01</td><td>
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> error.</p>
+</td></tr><tr><td class="bitfield">0x02</td><td>
+  <p>Data value from (non-associative) internal memory. For example, ECC from on-chip SRAM or buffer.</p>
+</td></tr><tr><td class="bitfield">0x03</td><td>
+  <p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span> pin. For example, <span class="signal">nSEI</span> pin.</p>
+</td></tr><tr><td class="bitfield">0x04</td><td>
+  <p>Assertion failure. For example, consistency failure.</p>
+</td></tr><tr><td class="bitfield">0x05</td><td>
+  <p>Error detected on internal data path. For example, parity on ALU result.</p>
+</td></tr><tr><td class="bitfield">0x06</td><td>
+  <p>Data value from associative memory. For example, ECC error on cache data.</p>
+</td></tr><tr><td class="bitfield">0x07</td><td>
+  <p>Address/control value from associative memory. For example, ECC error on cache tag.</p>
+</td></tr><tr><td class="bitfield">0x08</td><td>
+  <p>Data value from a TLB. For example, ECC error on TLB data.</p>
+</td></tr><tr><td class="bitfield">0x09</td><td>
+  <p>Address/control value from a TLB. For example, ECC error on TLB tag.</p>
+</td></tr><tr><td class="bitfield">0x0A</td><td>
+  <p>Data value from producer. For example, parity error on write data bus.</p>
+</td></tr><tr><td class="bitfield">0x0B</td><td>
+  <p>Address/control value from producer. For example, parity error on address bus.</p>
+</td></tr><tr><td class="bitfield">0x0C</td><td>
+  <p>Data value from (non-associative) external memory. For example, ECC error in SDRAM.</p>
+</td></tr><tr><td class="bitfield">0x0D</td><td>
+  <p>Illegal address (software fault). For example, access to unpopulated memory.</p>
+</td></tr><tr><td class="bitfield">0x0E</td><td>
+  <p>Illegal access (software fault). For example, byte write to word register.</p>
+</td></tr><tr><td class="bitfield">0x0F</td><td>
+  <p>Illegal state (software fault). For example, device not ready.</p>
+</td></tr><tr><td class="bitfield">0x10</td><td>
+  <p>Internal data register. For example, parity on a SIMD&amp;FP register. For a PE, all general-purpose, stack pointer, SIMD&amp;FP, and SVE registers are data registers.</p>
+</td></tr><tr><td class="bitfield">0x11</td><td>
+  <p>Internal control register. For example, Parity on a System register. For a PE, all registers other than general-purpose, stack pointer, SIMD&amp;FP, and SVE registers are control registers.</p>
+</td></tr><tr><td class="bitfield">0x12</td><td>
+  <p>Error response from slave. For example, error response from cache write-back.</p>
+</td></tr><tr><td class="bitfield">0x13</td><td>
+  <p>External timeout. For example, timeout on interaction with another node.</p>
+</td></tr><tr><td class="bitfield">0x14</td><td>
+  <p>Internal timeout. For example, timeout on interface within the node.</p>
+</td></tr><tr><td class="bitfield">0x15</td><td>
+  <p>Deferred error from slave not supported at master. For example, poisoned data received from a slave by a master that cannot defer the error further.</p>
+</td></tr><tr><td class="bitfield">0x16</td><td>
+  <p>Deferred error from master not supported at slave. For example, poisoned data received from a master by a slave that cannot defer the error further.</p>
+</td></tr><tr><td class="bitfield">0x17</td><td>
+  <p>Deferred error from slave passed through. For example, poisoned data received from a slave and returned to a master.</p>
+</td></tr><tr><td class="bitfield">0x18</td><td>
+  <p>Deferred error from master passed through. For example, poisoned data received from a master and deferred to a slave.</p>
+</td></tr><tr><td class="bitfield">0x19</td><td>
+  <p>Error recorded by PCIe error logs. Indicates that the node has recorded an error in a PCIe error log. This might be the PCIe device status register, AER, DVSEC, or other mechanisms defined by PCIe.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field is not valid and reads <span class="arm-defined-word">UNKNOWN</span> if ERR&lt;n&gt;STATUS.V == <span class="binarynumber">0b0</span>. This field ignores writes if ERR&lt;n&gt;STATUS.{CE,DE,UE} != {<span class="binarynumber">0b00</span>,0,0}, and the highest priority of these is not being cleared to zero in the same write.</p>
+
+          <p>The following resets apply:</p><ul><li><p>On an Error recovery reset, the value of this field is unchanged.</p></li><li><p>On a Cold reset, this field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p></li></ul><div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the ERR&lt;n&gt;STATUS</h2>
+        <p>The {AV, V, UE, ER, OF, MV, CE, DE, PN, UET, CI} fields are write-one-to-clear, meaning writes of zero are ignored, and a write of one or all-ones to the field clears the field to zero. The {IERR, SERR} fields are read/write fields, although the set of permitted values that can be written to the fields is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+      
+        <p>After reading ERR&lt;n&gt;STATUS, software must clear the valid bits in the register to allow new errors to be recorded. However, between reading the register and clearing the valid bits, a new error might have overwritten the register. To prevent this error being lost by software, the register prevents updates to fields that might have been updated by a new error.</p>
+
+      
+        <p>When RAS System Architecture v1.0 is implemented:</p>
+
+      
+        <ul>
+<li>Writes to the {UE, DE, CE} fields are ignored if the OF bit is set and is not being cleared.
+</li><li>Writes to the V bit are ignored if any of the {UE, DE, CE} fields are nonzero and are not being cleared.
+</li><li>Writes to the {AV, MV} bits and {ER, PN, UET, IERR, SERR} syndrome fields are ignored if the highest priority error status field is nonzero and not being cleared. The error status fields in priority order from highest to lowest, are UE, DE, and CE.
+</li></ul>
+
+      
+        <p>When RAS System Architecture v1.1 is implemented, a write to the register is ignored if all of:</p>
+
+      
+        <ul>
+<li>Any of {V, UE, OF, CE, DE} fields are nonzero before the write.
+</li><li>The write does not clear the nonzero {V, UE, OF, CE, DE} fields to zero by writing ones to the applicable field or fields.
+</li></ul>
+
+      
+        <p>To ensure correct and portable operation, when software is clearing the valid bits in the register to allow new errors to be recorded, software must:</p>
+
+      
+        <ul>
+<li>Determine which fields must be cleared to zero by reading ERR&lt;n&gt;STATUS.
+</li><li>Write ones to all the write-one-to-clear fields that are nonzero.
+</li><li>Write zero to all the read/write fields.
+</li><li>Write zero to all the write-one-to-clear fields that are zero.
+</li></ul>
+      <h4>ERR&lt;n&gt;STATUS can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>RAS</td><td><span class="hexnumber">0x010</span> + 64n</td><td>ERR&lt;n&gt;STATUS</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

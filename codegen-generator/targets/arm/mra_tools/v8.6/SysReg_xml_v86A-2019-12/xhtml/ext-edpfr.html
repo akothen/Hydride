@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>EDPFR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">EDPFR, External Debug Processor Feature Register</h1><p>The EDPFR characteristics are:</p><h2>Purpose</h2>
+        <p>Provides information about implemented PE features.</p>
+
+      
+        <p>For general information about the interpretation of the ID registers, see <span class="xref">'Principles of the ID scheme for fields in ID registers' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile</span>.</p>
+      <h2>Configuration</h2><p>
+          It is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> whether EDPFR is implemented in the Core power domain or in the Debug power domain.
+        </p><h2>Attributes</h2>
+            <p>EDPFR is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The EDPFR bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="4"><a href="#UNKNOWN_63">UNKNOWN</a></td><td class="lr" colspan="4"><a href="#UNKNOWN_59">UNKNOWN</a></td><td class="lr" colspan="4"><a href="#0_55">RES0</a></td><td class="lr" colspan="4"><a href="#UNKNOWN_51">UNKNOWN</a></td><td class="lr" colspan="4"><a href="#AMU_47">AMU</a></td><td class="lr" colspan="4"><a href="#UNKNOWN_43">UNKNOWN</a></td><td class="lr" colspan="4"><a href="#SEL2_39">SEL2</a></td><td class="lr" colspan="4"><a href="#SVE_35">SVE</a></td></tr><tr class="firstrow"><td class="lr" colspan="4"><a href="#UNKNOWN_31">UNKNOWN</a></td><td class="lr" colspan="4"><a href="#GIC_27">GIC</a></td><td class="lr" colspan="4"><a href="#AdvSIMD_23">AdvSIMD</a></td><td class="lr" colspan="4"><a href="#FP_19">FP</a></td><td class="lr" colspan="4"><a href="#EL3_15">EL3</a></td><td class="lr" colspan="4"><a href="#EL2_11">EL2</a></td><td class="lr" colspan="4"><a href="#EL1_7">EL1</a></td><td class="lr" colspan="4"><a href="#EL0_3">EL0</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="UNKNOWN_63">
+                Bits [63:60]
+              <div style="font-size:smaller;"><br />From Armv8.5:
+                </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_63"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="UNKNOWN_59">
+                Bits [59:56]
+              <div style="font-size:smaller;"><br />From Armv8.5:
+                </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_59"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="0_55">
+                Bits [55:52]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="UNKNOWN_51">
+                Bits [51:48]
+              <div style="font-size:smaller;"><br />From Armv8.4:
+                </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_51"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="AMU_47">AMU, bits [47:44]
+                  </h4>
+          
+  <p>Activity Monitors Extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>AMU</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Activity Monitors Extension is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Activity Monitors Extension version 1 is implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p><span class="xref">AMUv1</span> implements the functionality identified by the value <span class="binarynumber">0b0001</span>.</p>
+<p>In Armv8.0, Armv8.1, Armv8.2, and Armv8.3, the only permitted value is <span class="binarynumber">0b0000</span>.</p>
+<p>From Armv8.4, the permitted values are <span class="binarynumber">0b0000</span> and <span class="binarynumber">0b0001</span>.</p>
+
+          <h4 id="UNKNOWN_43">
+                Bits [43:40]
+              <div style="font-size:smaller;"><br />From Armv8.2:
+                </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_43"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="SEL2_39">SEL2, bits [39:36]
+                  </h4>
+          
+  <p>Secure EL2. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>SEL2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Secure EL2 is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Secure EL2 is implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="SVE_35">SVE, bits [35:32]
+                  </h4>
+          
+  <p>Scalable Vector Extension. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>SVE</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>SVE is not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>SVE is implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+
+          <h4 id="UNKNOWN_31">
+                Bits [31:28]
+              <div style="font-size:smaller;"><br />From Armv8.2:
+                </div></h4>
+            <p>Reserved, <span class="arm-defined-word">UNKNOWN</span>.</p>
+          <h4 id="0_31"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="GIC_27">GIC, bits [27:24]
+                  </h4>
+          
+  <p>System register GIC interface support. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>GIC</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>GIC CPU interface system registers not implemented.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>System register interface to versions 3.0 and 4.0 of the GIC CPU interface is supported.</p>
+</td></tr><tr><td class="bitfield">0b0011</td><td>
+  <p>System register interface to version 4.1 of the GIC CPU interface is supported.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.GIC.</p>
+
+          <h4 id="AdvSIMD_23">AdvSIMD, bits [23:20]
+                  </h4>
+          
+  <p>Advanced SIMD. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>AdvSIMD</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Advanced SIMD is implemented, including support for the following SISD and SIMD operations:</p>
+<ul>
+<li>Integer byte, halfword, word and doubleword element operations.
+</li><li>Single-precision and double-precision floating-point arithmetic.
+</li><li>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.
+</li></ul>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>As for <span class="binarynumber">0b0000</span>, and also includes support for half-precision floating-point arithmetic.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>Advanced SIMD is not implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field must have the same value as the FP field.</p>
+<p>The permitted values are:</p>
+<ul>
+<li><span class="binarynumber">0b0000</span> in an implementation with Advanced SIMD support, that does not include the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b0001</span> in an implementation with Advanced SIMD support, that includes the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b1111</span> in an implementation without Advanced SIMD support.
+</li></ul>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.AdvSIMD.</p>
+
+          <h4 id="FP_19">FP, bits [19:16]
+                  </h4>
+          
+  <p>Floating-point. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>FP</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Floating-point is implemented, and includes support for:</p>
+<ul>
+<li>Single-precision and double-precision floating-point types.
+</li><li>Conversions between single-precision and half-precision data types, and double-precision and half-precision data types.
+</li></ul>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>As for <span class="binarynumber">0b0000</span>, and also includes support for half-precision floating-point arithmetic.</p>
+</td></tr><tr><td class="bitfield">0b1111</td><td>
+  <p>Floating-point is not implemented.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>This field must have the same value as the AdvSIMD field.</p>
+<p>The permitted values are:</p>
+<ul>
+<li><span class="binarynumber">0b0000</span> in an implementation with floating-point support, that does not include the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b0001</span> in an implementation with floating-point support, that includes the <span class="xref">ARMv8.2-FP16</span> extension.
+</li><li><span class="binarynumber">0b1111</span> in an implementation without floating-point support.
+</li></ul>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.FP.</p>
+
+          <h4 id="EL3_15">EL3, bits [15:12]
+                  </h4>
+          
+  <p>AArch64 EL3 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL3</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL3 is not implemented or cannot be executed in AArch64 state.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL3 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL3 can be executed in both Execution states.</p>
+</td></tr></table>
+            
+  <p>When the value of <a href="ext-edaa32pfr.html">EDAA32PFR</a>.EL3 is non-zero, this field must be <span class="binarynumber">0b0000</span>.</p>
+<p>All other values are reserved.</p>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.EL3.</p>
+
+          <h4 id="EL2_11">EL2, bits [11:8]
+                  </h4>
+          
+  <p>AArch64 EL2 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL2</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL2 is not implemented or cannot be executed in AArch64 state.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL2 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL2 can be executed in both Execution states.</p>
+</td></tr></table>
+            
+  <p>When the value of <a href="ext-edaa32pfr.html">EDAA32PFR</a>.EL2 is non-zero, this field must be <span class="binarynumber">0b0000</span>.</p>
+<p>All other values are reserved.</p>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.EL2.</p>
+
+          <h4 id="EL1_7">EL1, bits [7:4]
+                  </h4>
+          
+  <p>AArch64 EL1 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL1 cannot be executed in AArch64 state.</p>
+<p>EL1 can be executed in AArch32 state only.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL1 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL1 can be executed in both Execution states.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.EL1.</p>
+
+          <h4 id="EL0_3">EL0, bits [3:0]
+                  </h4>
+          
+  <p>AArch64 EL0 Exception level handling. Defined values are:</p>
+
+          <table class="valuetable"><tr><th>EL0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>EL0 cannot be executed in AArch64 state.</p>
+<p>EL0 can be executed in AArch32 state only.</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>EL0 can be executed in AArch64 state only.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>EL0 can be executed in both Execution states.</p>
+</td></tr></table>
+            
+  <p>All other values are reserved.</p>
+<p>In an Armv8-A implementation that supports AArch64 state in at least one Exception level, this field returns the value of <a href="AArch64-id_aa64pfr0_el1.html">ID_AA64PFR0_EL1</a>.EL0.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the EDPFR</h2><h4>EDPFR can be accessed through the external debug interface:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th><th>Range</th></tr><tr><td>Debug</td><td><span class="hexnumber">0xD20</span></td><td>EDPFR</td><td>31:0</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered() and !DoubleLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>Otherwise 
+            accesses to this register are <span class="access_level">IMPDEF</span>.
+          </li></ul><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th><th>Range</th></tr><tr><td>Debug</td><td><span class="hexnumber">0xD24</span></td><td>EDPFR</td><td>63:32</td></tr></table><p>This interface is accessible as follows:</p><ul><li>When IsCorePowered() and !DoubleLockStatus()
+            accesses to this register are <span class="access_level">RO</span>.
+          </li><li>Otherwise 
+            accesses to this register are <span class="access_level">IMPDEF</span>.
+          </li></ul><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

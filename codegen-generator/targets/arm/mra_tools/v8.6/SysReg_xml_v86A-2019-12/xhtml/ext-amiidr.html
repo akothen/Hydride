@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>AMIIDR</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">AMIIDR, Activity Monitors Implementation Identification Register</h1><p>The AMIIDR characteristics are:</p><h2>Purpose</h2>
+        <p>Defines the implementer and revisions of the AMU.</p>
+      <h2>Configuration</h2><p>
+          The power domain of AMIIDR is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+        </p><p>This register is present only
+    when AMUv1 is implemented.
+      
+    Otherwise, direct accesses to AMIIDR are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>AMIIDR is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The AMIIDR bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="12"><a href="#ProductID_31">ProductID</a></td><td class="lr" colspan="4"><a href="#Variant_19">Variant</a></td><td class="lr" colspan="4"><a href="#Revision_15">Revision</a></td><td class="lr" colspan="12"><a href="#Implementer_11">Implementer</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="ProductID_31">ProductID, bits [31:20]
+                  </h4>
+          
+  <p>This field is an AMU part identifier.</p>
+<p>The value of this field is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+          
+            
+  <p>If <a href="ext-ampidr0.html">AMPIDR0</a> is implemented, <a href="ext-ampidr0.html">AMPIDR0</a>.PART_0 matches bits [27:20] of this field.</p>
+<p>If <a href="ext-ampidr1.html">AMPIDR1</a> is implemented, <a href="ext-ampidr1.html">AMPIDR1</a>.PART_1 matches bits [31:28] of this field.</p>
+
+          <h4 id="Variant_19">Variant, bits [19:16]
+                  </h4>
+          
+  <p>This field distinguishes product variants or major revisions of the product.</p>
+<p>The value of this field is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+          
+            
+  <p>If <a href="ext-ampidr2.html">AMPIDR2</a> is implemented, <a href="ext-ampidr2.html">AMPIDR2</a>.REVISION matches AMIIDR.Variant.</p>
+
+          <h4 id="Revision_15">Revision, bits [15:12]
+                  </h4>
+          
+  <p>This field distinguishes minor revisions of the product.</p>
+<p>The value of this field is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p>
+
+          
+            
+  <p>If <a href="ext-ampidr3.html">AMPIDR3</a> is implemented, <a href="ext-ampidr3.html">AMPIDR3</a>.REVAND matches AMIIDR.Revision.</p>
+
+          <h4 id="Implementer_11">Implementer, bits [11:0]
+                  </h4>
+          
+  <p>Contains the JEP106 code of the company that implemented the AMU.</p>
+<p>For an Arm implementation, this field reads as <span class="hexnumber">0x43B</span>.</p>
+
+          
+            
+  <p>Bits [11:8] contain the JEP106 continuation code of the implementer.</p>
+<p>Bit 7 is <span class="arm-defined-word">RES0</span></p>
+<p>Bits [6:0] contain the JEP106 identity code of the implementer.</p>
+<p>If <a href="ext-ampidr4.html">AMPIDR4</a> is implemented, <a href="ext-ampidr4.html">AMPIDR4</a>.DES_2 matches bits [11:8] of this field.</p>
+<p>If <a href="ext-ampidr2.html">AMPIDR2</a> is implemented, <a href="ext-ampidr2.html">AMPIDR2</a>.DES_1 matches bits [6:4] of this field.</p>
+<p>If <a href="ext-ampidr1.html">AMPIDR1</a> is implemented, <a href="ext-ampidr1.html">AMPIDR1</a>.DES_0 matches bits [3:0] of this field.</p>
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the AMIIDR</h2><h4>AMIIDR can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Offset</th><th>Instance</th></tr><tr><td>AMU</td><td><span class="hexnumber">0xE08</span></td><td>AMIIDR</td></tr></table><p>Accesses on this interface are <span class="access_level">RO</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

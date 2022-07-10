@@ -1,0 +1,322 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register is_register="True" is_internal="False" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>DBGWVR&lt;n&gt;_EL1</reg_short_name>
+      <reg_long_name>Debug Watchpoint Value Registers</reg_long_name>
+          <reg_array>
+              <reg_array_start>0</reg_array_start>
+              <reg_array_end>15</reg_array_end>
+         </reg_array>
+      
+  <reg_address
+      external_access="True"
+    mem_map_access="True"
+      power_domain="Core"
+      register_startbit="63"
+      register_endbit="0"
+  >
+    <reg_component>Debug</reg_component>
+    <reg_offset><hexnumber>0x800</hexnumber> + 16n</reg_offset>
+    <reg_instance>DBGWVR&lt;n&gt;_EL1</reg_instance>
+    <reg_access>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalDebugAccess() and SoftwareLockStatus()</reg_access_level>
+            <reg_access_type>RO</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_level>When IsCorePowered(), !DoubleLockStatus(), !OSLockStatus(), AllowExternalDebugAccess() and !SoftwareLockStatus()</reg_access_level>
+            <reg_access_type>RW</reg_access_type>
+        </reg_access_state>
+        
+        <reg_access_state>
+            <reg_access_type>ERROR</reg_access_type>
+        </reg_access_state>
+    </reg_access>
+</reg_address>
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch64-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch64</mapped_execution_state>
+              <mapped_from_startbit>63</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>63</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-dbgwvrn.xml">DBGWVR&lt;n&gt;</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Holds a data address value for use in watchpoint matching. Forms watchpoint n together with control register <register_link state="ext" id="ext-dbgwcrn_el1.xml">DBGWCR&lt;n&gt;_EL1</register_link>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Debug registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+    
+      <configuration_text>
+        <para>If watchpoint n is not implemented then accesses to this register are:</para>
+
+      </configuration_text>
+      <configuration_text>
+        <list type="unordered">
+<listitem><content>When IsCorePowered() &amp;&amp; !DoubleLockStatus() &amp;&amp; !OSLockStatus() &amp;&amp; AllowExternalDebugAccess(), <arm-defined-word>RES0</arm-defined-word>.</content>
+</listitem><listitem><content>Otherwise, a <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> choice of <arm-defined-word>RES0</arm-defined-word> or ERROR.</content>
+</listitem></list>
+      </configuration_text>
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>DBGWVR&lt;n&gt;_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="RESS[14:4]_63_53"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>RESS[14:4]</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>53</field_lsb>
+          <field_description order="before">
+          
+  <para>Reserved, Sign extended. Hardware and software must treat this field as <arm-defined-word>RES0</arm-defined-word> if the most significant bit of VA is 0 or <arm-defined-word>RES0</arm-defined-word>, and as <arm-defined-word>RES1</arm-defined-word> if the most significant bit of VA is 1.</para>
+<para>Hardware always ignores the value of these bits and it is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> whether:</para>
+<list type="unordered">
+<listitem><content>The bits are hardwired to a copy of the most significant bit of VA, meaning writes to these bits are ignored, and reads to the bits always return the hardwired value.</content>
+</listitem><listitem><content>The value in those bits can be written, and reads will return the last value written. The value held in those bits is ignored by hardware.</content>
+</listitem></list>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="VA[52:49]_52_49_1"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>VA[52:49]</field_name>
+          <field_msb>52</field_msb>
+          <field_lsb>49</field_lsb>
+           <field_range>52:49</field_range>
+          <field_description order="before">
+          
+  <para>Extension to VA[48:2]. See VA[48:2] for more details.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+            <fields_condition>When ARMv8.2-LVA is implemented</fields_condition>
+      </field>
+        <field
+           id="RESS[3:0]_52_49_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           reserved_type="RES0"
+        >
+          <field_name>RESS[3:0]</field_name>
+          <field_msb>52</field_msb>
+          <field_lsb>49</field_lsb>
+           <field_range>52:49</field_range>
+          <field_description order="before">
+          
+  <para>Extension to RESS[14:4]. See RESS[14:4] for more details.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="VA[48:2]_48_2"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>VA[48:2]</field_name>
+          <field_msb>48</field_msb>
+          <field_lsb>2</field_lsb>
+          <field_description order="before">
+          
+  <para>Bits[48:2] of the address value for comparison.</para>
+<para>When <xref browsertext="ARMv8.2-LVA" filename="A_armv8_architecture_extensions.fm" linkend="v8.2.LVA"></xref> is implemented, VA[52:49] forms the upper part of the address value. Otherwise, VA[52:49] are RESS.</para>
+<para>Arm deprecates setting <register_link state="ext" id="ext-dbgwvrn_el1.xml">DBGWVR&lt;n&gt;_EL1</register_link>[2] == 1.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+        
+    
+      <field_reset reset_type="Cold">
+        
+      <field_reset_standard_text>AU</field_reset_standard_text>
+  
+      </field_reset>
+  
+</field_resets>
+      </field>
+        <field
+           id="0_1_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>1</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="RESS[14:4]_63_53" msb="63" lsb="53"/>
+        <fieldat id="VA[52:49]_52_49_1" msb="52" lsb="49"/>
+        <fieldat id="VA[48:2]_48_2" msb="48" lsb="2"/>
+        <fieldat id="0_1_0" msb="1" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+        <reg_variables>
+              <reg_variable variable="n" max="15"/>
+        </reg_variables>
+      
+
+
+<access_mechanisms>
+  
+    
+      <access_permission_text>
+        <note><para>SoftwareLockStatus() depends on the type of access attempted and AllowExternalDebugAccess() has a new definition from Armv8.4. Refer to the Pseudocode definitions for more information.</para></note>
+      </access_permission_text>
+
+
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

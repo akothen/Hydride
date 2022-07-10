@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MSMON_CFG_CSU_CTL</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MSMON_CFG_CSU_CTL, MPAM Memory System Monitor Configure Cache Storage Usage Monitor Control Register</h1><p>The MSMON_CFG_CSU_CTL characteristics are:</p><h2>Purpose</h2>
+        <p>Controls the CSU monitor selected by <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_CFG_CSU_CTL_s controls the Secure cache storage usage monitor instance selected by the Secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_CFG_CSU_CTL_ns controls Non-secure cache storage usage monitor instance selected by the Non-secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>.</p>
+      <h2>Configuration</h2><p>
+          The power domain of MSMON_CFG_CSU_CTL is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+        </p><p>This register is present only
+    when MPAMF_IDR.HAS_MSMON == 1 and MPAMF_MSMON_IDR.MSMON_CSU == 1.
+      
+    Otherwise, direct accesses to MSMON_CFG_CSU_CTL are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>MSMON_CFG_CSU_CTL is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The MSMON_CFG_CSU_CTL bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#EN_31">EN</a></td><td class="lr" colspan="3"><a href="#CAPT_EVNT_30">CAPT_EVNT</a></td><td class="lr" colspan="1"><a href="#CAPT_RESET_27">CAPT_RESET</a></td><td class="lr" colspan="1"><a href="#OFLOW_STATUS_26">OFLOW_STATUS</a></td><td class="lr" colspan="1"><a href="#OFLOW_INTR_25">OFLOW_INTR</a></td><td class="lr" colspan="1"><a href="#OFLOW_FRZ_24">OFLOW_FRZ</a></td><td class="lr" colspan="4"><a href="#SUBTYPE_23">SUBTYPE</a></td><td class="lr" colspan="2"><a href="#0_19">RES0</a></td><td class="lr" colspan="1"><a href="#MATCH_PMG_17">MATCH_PMG</a></td><td class="lr" colspan="1"><a href="#MATCH_PARTID_16">MATCH_PARTID</a></td><td class="lr" colspan="8"><a href="#0_15">RES0</a></td><td class="lr" colspan="8"><a href="#TYPE_7">TYPE</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="EN_31">EN, bit [31]
+              </h4>
+          
+  <p>Enabled.</p>
+
+          <table class="valuetable"><tr><th>EN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor instance is disabled and must not collect any information.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor instance is enabled to collect information according to the configuration of the instance.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="CAPT_EVNT_30">CAPT_EVNT, bits [30:28]
+                  </h4>
+          
+  <p>Capture event selector.</p>
+<p>Select the event that triggers capture from the following:</p>
+
+          <table class="valuetable"><tr><th>CAPT_EVNT</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>No capture event is triggered.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>External capture event 1 (optional but recommended)</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>External capture event 2 (optional)</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>External capture event 3 (optional)</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>External capture event 4 (optional)</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>External capture event 5 (optional)</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>External capture event 6 (optional)</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Capture occurs when a MSMON_CAPT_EVNT register in this MSC is written and causes a capture event for the security state of this monitor. (optional)</p>
+</td></tr></table>
+            
+  <p>The values marked as optional indicate capture event sources that can be omitted in an implementation. Those values representing non-implemented event sources must not trigger a capture event.</p>
+<p>If capture is not implemented for the CSU monitor type as indicated by <a href="ext-mpamf_csumon_idr.html">MPAMF_CSUMON_IDR</a>.HAS_CAPTURE = 0, this field is RAZ/WI.</p>
+
+          <h4 id="CAPT_RESET_27">CAPT_RESET, bit [27]
+              </h4>
+          
+  <p>Reset after capture.</p>
+<p>Controls whether the value of <a href="ext-msmon_csu.html">MSMON_CSU</a> is reset to zero immediately after being copied to <a href="ext-msmon_csu_capture.html">MSMON_CSU_CAPTURE</a>.</p>
+
+          <table class="valuetable"><tr><th>CAPT_RESET</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Monitor is not reset on capture.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Monitor is reset on capture.</p>
+</td></tr></table>
+            
+  <p>If capture is not implemented for the CSU monitor type as indicated by <a href="ext-mpamf_csumon_idr.html">MPAMF_CSUMON_IDR</a>.HAS_CAPTURE = 0, this field is RAZ/WI.</p>
+<p>Because the CSU monitor type produces a measurement rather than a count, it might not make sense to ever reset the value after a capture. If there is no reason to ever reset a CSU monitor, this field is RAZ/WI.</p>
+
+          <h4 id="OFLOW_STATUS_26">OFLOW_STATUS, bit [26]
+              </h4>
+          
+  <p>Overflow status.</p>
+<p>Indicates whether the value of <a href="ext-msmon_csu.html">MSMON_CSU</a> has overflowed.</p>
+
+          <table class="valuetable"><tr><th>OFLOW_STATUS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No overflow has occurred.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>At least one overflow has occurred since this bit was last written to zero.</p>
+</td></tr></table>
+            
+  <p>If overflow is not possible for a CSU monitor in the implementation, this field is RAZ/WI.</p>
+
+          <h4 id="OFLOW_INTR_25">OFLOW_INTR, bit [25]
+              </h4>
+          
+  <p>Overflow Interrupt.</p>
+<p>Controls whether an overflow interrupt is generated when the value of <a href="ext-msmon_csu.html">MSMON_CSU</a> has overflowed.</p>
+
+          <table class="valuetable"><tr><th>OFLOW_INTR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No interrupt is signaled on an overflow of <a href="ext-msmon_csu.html">MSMON_CSU</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>On overflow, an implementation-specific interrupt is signaled.</p>
+</td></tr></table>
+            
+  <p>If OFLOW_INTR is not supported by the implementation, this field is RAZ/WI.</p>
+
+          <h4 id="OFLOW_FRZ_24">OFLOW_FRZ, bit [24]
+              </h4>
+          
+  <p>Freeze Monitor on Overflow.</p>
+<p>Controls whether the value of <a href="ext-msmon_csu.html">MSMON_CSU</a> freezes on an overflow.</p>
+
+          <table class="valuetable"><tr><th>OFLOW_FRZ</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Monitor count wraps on overflow.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Monitor count freezes on overflow. The frozen value might be 0 or another value if the monitor overflowed with an increment larger than 1.</p>
+</td></tr></table>
+            
+  <p>If overflow is not possible for a CSU monitor in the implementation, this field is RAZ/WI.</p>
+
+          <h4 id="SUBTYPE_23">SUBTYPE, bits [23:20]
+                  </h4>
+          
+  <p>Subtype.</p>
+<p>A monitor can have other event matching criteria.</p>
+<p>This field is not currently used for CSU monitors, but reserved for future use.</p>
+<p>This field is RAZ/WI.</p>
+
+          
+            
+  
+
+          <h4 id="0_19">
+                Bits [19:18]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="MATCH_PMG_17">MATCH_PMG, bit [17]
+              </h4>
+          
+  <p>Match PMG.</p>
+<p>Controls whether the monitor measures only storage used with PMG matching <a href="ext-msmon_cfg_csu_flt.html">MSMON_CFG_CSU_FLT</a>.PMG.</p>
+
+          <table class="valuetable"><tr><th>MATCH_PMG</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor measures storage used with any PMG value.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor only measures storage used with the PMG value matching <a href="ext-msmon_cfg_csu_flt.html">MSMON_CFG_CSU_FLT</a>.PMG.</p>
+</td></tr></table>
+            
+  <p>If MATCH_PMG == 1 and MATCH_PARTID == 0, it is <span class="arm-defined-word">CONSTRAINED UNPREDICTABLE</span> whether the monitor instance:</p>
+<ul>
+<li>Measures the storage used with matching PMG and with any PARTID.
+</li><li>Measures no storage usage, that is, <a href="ext-msmon_csu.html">MSMON_CSU</a>.VALUE is zero.
+</li><li>Measures the storage used with matching PMG and PARTID, that is, treats MATCH_PARTID as == 1.
+</li></ul>
+
+          <h4 id="MATCH_PARTID_16">MATCH_PARTID, bit [16]
+              </h4>
+          
+  <p>Match PARTID.</p>
+<p>Controls whether the monitor measures only storage used with PARTID matching <a href="ext-msmon_cfg_csu_flt.html">MSMON_CFG_CSU_FLT</a>.PARTID.</p>
+
+          <table class="valuetable"><tr><th>MATCH_PARTID</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor measures storage used with any PARTID value.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor only measures storage used with the PARTID value matching <a href="ext-msmon_cfg_csu_flt.html">MSMON_CFG_CSU_FLT</a>.PARTID.</p>
+</td></tr></table>
+            
+  
+
+          <h4 id="0_15">
+                Bits [15:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+          <h4 id="TYPE_7">TYPE, bits [7:0]
+                  </h4>
+          
+  <p>Monitor Type Code.</p>
+<p>Constant type indicating the type of the monitor.</p>
+<p>Read-only.</p>
+<p>CSU monitor is TYPE = <span class="hexnumber">0x43</span>.</p>
+
+          
+            
+  
+
+          <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the MSMON_CFG_CSU_CTL</h2>
+        <p>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</p>
+
+      
+        <p>MSMON_CFG_CSU_CTL_s must be accessible from the Secure MPAM feature page. MSMON_CFG_CSU_CTL_ns must be accessible from the Non-secure MPAM feature page.</p>
+
+      
+        <p>MSMON_CFG_CSU_CTL_s and MSMON_CFG_CSU_CTL_ns must be separate registers. The Secure instance (MSMON_CFG_CSU_CTL_s) accesses the cache storage usage monitor controls used for Secure PARTIDs, and the Non-secure instance (MSMON_CFG_CSU_CTL_ns) accesses the cache storage usage monitor controls used for Non-secure PARTIDs.</p>
+      <h4>MSMON_CFG_CSU_CTL can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_s</td><td><span class="hexnumber">0x0818</span></td><td>MSMON_CFG_CSU_CTL_s</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_ns</td><td><span class="hexnumber">0x0818</span></td><td>MSMON_CFG_CSU_CTL_ns</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

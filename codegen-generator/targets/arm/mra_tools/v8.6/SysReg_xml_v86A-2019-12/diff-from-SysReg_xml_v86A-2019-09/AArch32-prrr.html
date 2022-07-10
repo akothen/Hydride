@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><title>PRRR</title><link href="insn.css" rel="stylesheet" type="text/css"/></head><body><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr/><h1 class="register-section">PRRR, Primary Region Remap Register</h1><p>The PRRR characteristics are:</p><h2>Purpose</h2><p>Controls the top level mapping of the TEX[0], C, and B memory region attributes.</p><h2>Configuration</h2><p>AArch32 System register PRRR bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-mair_el1.html">MAIR_EL1[31:0]
+            </a> when TTBCR.EAE == 0.
+          </p><p><ins>This register is present only
+    when AArch32 is supported at any Exception level.
+      
+    Otherwise, direct accesses to PRRR are </ins><span class="arm-defined-word"><ins>UNKNOWN</ins></span><ins>.</ins></p><p><a href="AArch32-mair0.html">MAIR0</a> and PRRR are the same register, with a different view depending on the value of <a href="AArch32-ttbcr.html">TTBCR</a>.EAE:</p><ul><li>When it is set to 0, the register is as described in PRRR.
+</li><li>When it is set to 1, the register is as described in <a href="AArch32-mair0.html">MAIR0</a>.
+</li></ul><p><del class="nocount">
+                RW fields in this register reset to architecturally </del><span class="arm-defined-word"><del class="nocount">UNKNOWN</del></span><del class="nocount"> values.
+              </del></p><h2>Attributes</h2><p>PRRR is a 32-bit register.</p><h2>Field descriptions</h2><p>The PRRR bit assignments are:</p><h3>When TTBCR.EAE == 0:</h3><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS7</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS6</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS5</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS4</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS3</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS2</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS1</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NOS&lt;n>_31">NOS0</a></td><td class="lr" colspan="4"><a href="#WhenTTBCR.EAE0_0_23">RES0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NS1_19">NS1</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_NS0_18">NS0</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_DS1_17">DS1</a></td><td class="lr" colspan="1"><a href="#WhenTTBCR.EAE0_DS0_16">DS0</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR7</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR6</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR5</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR4</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR3</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR2</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR1</a></td><td class="lr" colspan="2"><a href="#WhenTTBCR.EAE0_TR&lt;n>_15">TR0</a></td></tr></tbody></table><div class="text_before_fields"></div><h4 id="WhenTTBCR.EAE0_NOS&lt;n>_31">NOS&lt;n>, bit [n+24], for n = 0 to 7</h4><p>Not Outer Shareable. NOS&lt;n> is the Outer Shareable property for memory attributes n, if the region is mapped as Normal memory that is not Inner Non-cacheable, Outer Non-cacheable, and the appropriate PRRR.{NS0, NS1} field identifies the region as shareable. n is the value of the concatenation of the {TEX[0], C, B} bits from the translation table descriptor. The possible values of each NOS&lt;n> field other than NOS6 are:</p><table class="valuetable"><tr><th>NOS&lt;n></th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td><p>Memory region is Outer Shareable.</p></td></tr><tr><td class="bitfield">0b1</td><td><p>Memory region is Inner Shareable.</p></td></tr></table><p>The value of this bit is ignored if the region is:</p><ul><li>Device memory
+</li><li>Normal memory that is at least one of:<ul><li>Inner Non-cacheable, Outer Non-cacheable.
+</li><li>Identified by the appropriate PRRR.{NS0, NS1} field as Non-shareable.
+</li></ul></li></ul><p>The meaning of the NOS6 field is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_0_23">
+                Bits [23:20]
+              </h4><p>Reserved, <span class="arm-defined-word">RES0</span>.</p><h4 id="WhenTTBCR.EAE0_NS1_19">NS1, bit [19]
+              </h4><p>Mapping of S = 1 attribute for Normal memory regions. This field is used in determining the Shareability of a memory region that is mapped to Normal memory and both:</p><ul><li>Is not Inner Non-cacheable, Outer Non-cacheable.
+</li><li>Has the S bit in the translation table descriptor set to 1.
+</li></ul><p>The possible values of this bit are:</p><table class="valuetable"><tr><th>NS1</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td><p>Region is Non-shareable.</p></td></tr><tr><td class="bitfield">0b1</td><td><p>Region is shareable. The value of the appropriate PRRR.NOS&lt;n> field determines whether the region is Inner Shareable or Outer Shareable.</p></td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_NS0_18">NS0, bit [18]
+              </h4><p>Mapping of S = 0 attribute for Normal memory regions. This field is used in determining the Shareability of a memory region that is mapped to Normal memory and both:</p><ul><li>Is not Inner Non-cacheable, Outer Non-cacheable.
+</li><li>Has the S bit in the translation table descriptor set to 0.
+</li></ul><p>The possible values of this bit are:</p><table class="valuetable"><tr><th>NS0</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td><p>Region is Non-shareable.</p></td></tr><tr><td class="bitfield">0b1</td><td><p>Region is shareable. The value of the appropriate PRRR.NOS&lt;n> field determines whether the region is Inner Shareable or Outer Shareable.</p></td></tr></table><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_DS1_17">DS1, bit [17]
+              </h4><p>Mapping of S = 1 attribute for Device memory. From Armv8, all types of Device memory are Outer Shareable, and therefore this bit is <span class="arm-defined-word">RES1</span>.</p><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_DS0_16">DS0, bit [16]
+              </h4><p>Mapping of S = 0 attribute for Device memory. From Armv8, all types of Device memory are Outer Shareable, and therefore this bit is <span class="arm-defined-word">RES1</span>.</p><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="WhenTTBCR.EAE0_TR&lt;n>_15">TR&lt;n>, bits [2n+1:2n], for n = 0 to 7</h4><p>TR&lt;n> is the primary TEX mapping for memory attributes n, and defines the mapped memory type for a region with attributes n. n is the value of the concatenation of the {TEX[0], C, B} bits from the translation table descriptor. The possible values for each field other than TR6 are:</p><table class="valuetable"><tr><th>TR&lt;n></th><th>Meaning</th></tr><tr><td class="bitfield">0b00</td><td><p>Device-nGnRnE memory</p></td></tr><tr><td class="bitfield">0b01</td><td><p>Device-nGnRE memory</p></td></tr><tr><td class="bitfield">0b10</td><td><p>Normal memory</p></td></tr></table><p>The value <span class="binarynumber">0b11</span> is reserved. The effect of programming a field to <span class="binarynumber">0b11</span> is <span class="arm-defined-word">CONSTRAINED UNPREDICTABLE</span>, see <span class="xref">'Unallocated values in fields of AArch32 System registers and translation table entries' in the Arm® Architecture Reference Manual, Armv8, for Armv8-A architecture profile, section K1.1.11</span>.</p><p>The meaning of the TR6 field is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields"></div><div class="access_mechanisms"><h2>Accessing the PRRR</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c>}{&lt;q>} &lt;coproc>, {#}&lt;opc1>, &lt;Rt>, &lt;CRn>, &lt;CRm>{, {#}&lt;opc2>}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1010</td><td>0b0010</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T10 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T10 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TRVM == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TRVM == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        <del>if SCR.NS == '0' then
+            return PRRR_S;
+        else
+            </del>return PRRR_NS;
+    else
+        return PRRR;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        return PRRR_NS;
+    else
+        return PRRR;
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        return PRRR_S;
+    else
+        return PRRR_NS;
+              </p><h4 class="assembler">MCR{&lt;c>}{&lt;q>} &lt;coproc>, {#}&lt;opc1>, &lt;Rt>, &lt;CRn>, &lt;CRm>{, {#}&lt;opc2>}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1010</td><td>0b0010</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T10 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T10 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif <del>HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '0' &amp;&amp; CP15SDISABLE == HIGH then
+        UNDEFINED;
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '0' &amp;&amp; CP15SDISABLE2 == HIGH then
+        UNDEFINED;
+    elsif </del>EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TVM == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TVM == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        <del>if SCR.NS == '0' then
+            PRRR_S = R[t];
+        else
+            </del>PRRR_NS = R[t];
+    else
+        PRRR = R[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        PRRR_NS = R[t];
+    else
+        PRRR = R[t];
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' &amp;&amp; CP15SDISABLE == HIGH then
+        UNDEFINED;
+    elsif SCR.NS == '0' &amp;&amp; CP15SDISABLE2 == HIGH then
+        UNDEFINED;
+    else
+        if SCR.NS == '0' then
+            PRRR_S = R[t];
+        else
+            PRRR_NS = R[t];
+              </p></div><br/><br/><hr/><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions"><ins>13</ins><del>27</del>/<ins>12</ins><del>09</del>/2019 <ins>15</ins><del>18</del>:<ins>13</ins><del>48</del>; <ins>391b5248b29fb2f001ef74792eaacbd6fc72f211</ins><del>6134483bd14dc8c12a99c984cbfe3431cc1c9707</del></p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div></body></html>

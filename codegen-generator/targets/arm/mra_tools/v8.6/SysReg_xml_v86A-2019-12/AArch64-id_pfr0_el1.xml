@@ -1,0 +1,542 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>ID_PFR0_EL1</reg_short_name>
+      <reg_long_name>AArch32 Processor Feature Register 0</reg_long_name>
+        <reg_condition otherwise="UNKNOWN">when AArch32 is supported at any Exception level</reg_condition>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-id_pfr0.xml">ID_PFR0</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Gives top-level information about the instruction sets supported by the PE in AArch32 state.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>Must be interpreted with <register_link state="AArch64" id="AArch64-id_pfr1_el1.xml">ID_PFR1_EL1</register_link>.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <para>For general information about the interpretation of the ID registers see <xref browsertext="Principles of the ID scheme for fields in ID registers" filename="D_aarch64_system_register_descriptions.fm" linkend="BABFAFHI"/>.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>ID_PFR0_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_32"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>32</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="RAS_31_28"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>RAS</field_name>
+          <field_msb>31</field_msb>
+          <field_lsb>28</field_lsb>
+          <field_description order="before">
+          
+  <para>RAS Extension version. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>No RAS Extension.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>RAS Extension present.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>ARMv8.4-RAS present. As <binarynumber>0b0001</binarynumber>, and adds support for additional ERXMISC&lt;m&gt; System registers.</para>
+<para>Error records accessed through System registers conform to RAS System Architecture v1.1, which includes simplifications to <register_link state="ext" id="ext-errnstatus.xml">ERR&lt;n&gt;STATUS</register_link> and support for the optional RAS Timestamp Extension.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.4-RAS" filename="A_armv8_architecture_extensions.fm" linkend="v8.4.RAS"></xref> implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+<para>In Armv8.0 and Armv8.1, the permitted values are <binarynumber>0b0000</binarynumber> and <binarynumber>0b0001</binarynumber>.</para>
+<para>In Armv8.2, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.4, when ARMv8.4-DFE is not implemented, and <register_link state="AArch32" id="AArch32-erridr.xml">ERRIDR</register_link>.NUM is zero, the permitted values are <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> <binarynumber>0b0001</binarynumber> or <binarynumber>0b0010</binarynumber>. Otherwise from Armv8.4 the only permitted value is <binarynumber>0b0010</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="DIT_27_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>DIT</field_name>
+          <field_msb>27</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Data Independent Timing. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>AArch32 does not guarantee constant execution time of any instructions.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>AArch32 provides the CPSR.DIT mechanism to guarantee constant execution time of certain instructions.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.4-DIT" filename="A_armv8_architecture_extensions.fm" linkend="v8.4.DIT"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.4, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="AMU_23_20"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>AMU</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>20</field_lsb>
+          <field_description order="before">
+          
+  <para>Activity Monitors Extension. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Activity Monitors Extension is not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>AMUv1 for Armv8.4 is implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>AMUv1 for Armv8.6 is implemented. As <binarynumber>0b0001</binarynumber> and adds support for virtualization of the activity monitor event counters.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="AMUv1" filename="A_armv8_architecture_extensions.fm" linkend="AMUv1"></xref> implements the functionality identified by the value <binarynumber>0b0001</binarynumber>.</para>
+<para><xref browsertext="ARMv8.6-AMU" filename="A_armv8_architecture_extensions.fm" linkend="v8.6.AMU"></xref> implements the functionality identified by the value <binarynumber>0b0010</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="CSV2_19_16"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>CSV2</field_name>
+          <field_msb>19</field_msb>
+          <field_lsb>16</field_lsb>
+          <field_description order="before">
+          
+  <para>Speculative use of out of context branch targets. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>This Device does not disclose whether branch targets trained in one hardware described context can affect speculative execution in a different hardware described context.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Branch targets trained in one hardware described context can only affect speculative execution in a different hardware described context in a hard-to-determine way.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para><xref browsertext="ARMv8.0-CSV2" filename="A_armv8_architecture_extensions.fm" linkend="ARMv8.0.CSV2"></xref> implements the functionality identified by <binarynumber>0b0001</binarynumber>.</para>
+<para>From Armv8.5, the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="State3_15_12"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>State3</field_name>
+          <field_msb>15</field_msb>
+          <field_lsb>12</field_lsb>
+          <field_description order="before">
+          
+  <para>T32EE instruction set support. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>T32EE instruction set implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In Armv8-A the only permitted value is <binarynumber>0b0000</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="State2_11_8"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>State2</field_name>
+          <field_msb>11</field_msb>
+          <field_lsb>8</field_lsb>
+          <field_description order="before">
+          
+  <para>Jazelle extension support. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>Not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>Jazelle extension implemented, without clearing of <register_link state="AArch32" id="AArch32-joscr.xml">JOSCR</register_link>.CV on exception entry.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0010</field_value>
+        <field_value_description>
+  <para>Jazelle extension implemented, with clearing of <register_link state="AArch32" id="AArch32-joscr.xml">JOSCR</register_link>.CV on exception entry.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In Armv8-A the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="State1_7_4"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>State1</field_name>
+          <field_msb>7</field_msb>
+          <field_lsb>4</field_lsb>
+          <field_description order="before">
+          
+  <para>T32 instruction set support. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>T32 instruction set not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>T32 encodings before the introduction of Thumb-2 technology implemented:</para>
+<list type="unordered">
+<listitem><content>All instructions are 16-bit.</content>
+</listitem><listitem><content>A BL or BLX is a pair of 16-bit instructions.</content>
+</listitem><listitem><content>32-bit instructions other than BL and BLX cannot be encoded.</content>
+</listitem></list>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0011</field_value>
+        <field_value_description>
+  <para>T32 encodings after the introduction of Thumb-2 technology implemented, for all 16-bit and 32-bit T32 basic instructions.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In Armv8-A the only permitted value is <binarynumber>0b0011</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="State0_3_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>State0</field_name>
+          <field_msb>3</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_description order="before">
+          
+  <para>A32 instruction set support. Defined values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b0000</field_value>
+        <field_value_description>
+  <para>A32 instruction set not implemented.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b0001</field_value>
+        <field_value_description>
+  <para>A32 instruction set implemented.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>In Armv8-A the only permitted value is <binarynumber>0b0001</binarynumber>.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_32" msb="63" lsb="32"/>
+        <fieldat id="RAS_31_28" msb="31" lsb="28"/>
+        <fieldat id="DIT_27_24" msb="27" lsb="24"/>
+        <fieldat id="AMU_23_20" msb="23" lsb="20"/>
+        <fieldat id="CSV2_19_16" msb="19" lsb="16"/>
+        <fieldat id="State3_15_12" msb="15" lsb="12"/>
+        <fieldat id="State2_11_8" msb="11" lsb="8"/>
+        <fieldat id="State1_7_4" msb="7" lsb="4"/>
+        <fieldat id="State0_3_0" msb="3" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS ID_PFR0_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, ID_PFR0_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b000"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="0b0001"/>
+            
+            <enc n="op2" v="0b000"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID3 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return ID_PFR0_EL1;
+elsif PSTATE.EL == EL2 then
+    return ID_PFR0_EL1;
+elsif PSTATE.EL == EL3 then
+    return ID_PFR0_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

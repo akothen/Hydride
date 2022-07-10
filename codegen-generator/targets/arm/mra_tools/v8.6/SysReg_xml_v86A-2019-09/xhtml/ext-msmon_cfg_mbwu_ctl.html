@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MSMON_CFG_MBWU_CTL</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MSMON_CFG_MBWU_CTL, MPAM Memory System Monitor Configure Memory Bandwidth Usage Monitor Control Register</h1><p>The MSMON_CFG_MBWU_CTL characteristics are:</p><h2>Purpose</h2>
+        <p>Controls the MBWU monitor selected by <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_CFG_MBWU_CTL_s controls the Secure memory bandwidth usage monitor instance selected by the Secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>. MSMON_CFG_MBWU_CTL_ns controls Non-secure memory bandwidth usage monitor instance selected by the Non-secure instance of <a href="ext-msmon_cfg_mon_sel.html">MSMON_CFG_MON_SEL</a>.</p>
+      <h2>Configuration</h2><p>
+        The power domain of MSMON_CFG_MBWU_CTL is <span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.
+      </p><p>This register is present only
+    when MPAMF_IDR.HAS_MSMON == 1 and MPAMF_MSMON_IDR.MSMON_MBWU == 1.
+      
+    Otherwise, direct accesses to MSMON_CFG_MBWU_CTL are <span class="arm-defined-word">RES0</span>.</p><h2>Attributes</h2>
+            <p>MSMON_CFG_MBWU_CTL is a 32-bit register.</p>
+          <h2>Field descriptions</h2><p>The MSMON_CFG_MBWU_CTL bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#EN_31">EN</a></td><td class="lr" colspan="3"><a href="#CAPT_EVNT_30">CAPT_EVNT</a></td><td class="lr" colspan="1"><a href="#CAPT_RESET_27">CAPT_RESET</a></td><td class="lr" colspan="1"><a href="#OFLOW_STATUS_26">OFLOW_STATUS</a></td><td class="lr" colspan="1"><a href="#OFLOW_INTR_25">OFLOW_INTR</a></td><td class="lr" colspan="1"><a href="#OFLOW_FRZ_24">OFLOW_FRZ</a></td><td class="lr" colspan="4"><a href="#SUBTYPE_23">SUBTYPE</a></td><td class="lr" colspan="1"><a href="#SCLEN_19">SCLEN</a></td><td class="lr" colspan="1"><a href="#0_18">RES0</a></td><td class="lr" colspan="1"><a href="#MATCH_PMG_17">MATCH_PMG</a></td><td class="lr" colspan="1"><a href="#MATCH_PARTID_16">MATCH_PARTID</a></td><td class="lr" colspan="1"><a href="#OFLOW_STATUS_L_15">OFLOW_STATUS_L</a></td><td class="lr" colspan="1"><a href="#OFLOW_INTR_L_14">OFLOW_INTR_L</a></td><td class="lr" colspan="6"><a href="#0_13">RES0</a></td><td class="lr" colspan="8"><a href="#TYPE_7">TYPE</a></td></tr></tbody></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="EN_31">EN, bit [31]
+              </h4>
+          
+  <p>Enabled.</p>
+
+        <table class="valuetable"><tr><th>EN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor instance is disabled and must not collect any information.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor instance is enabled to collect information according to the configuration of the instance.</p>
+</td></tr></table><h4 id="CAPT_EVNT_30">CAPT_EVNT, bits [30:28]
+                  </h4>
+          
+  <p>Capture event selector.</p>
+<p>When the selected capture event occurs, <a href="ext-msmon_mbwu.html">MSMON_MBWU</a> of the monitor instance is copied to <a href="ext-msmon_mbwu_capture.html">MSMON_MBWU_CAPTURE</a> of the same instance. If the long counter is also implemented, <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> is also copied to <a href="ext-msmon_mbwu_l_capture.html">MSMON_MBWU_L_CAPTURE</a>.</p>
+<p>Select the event that triggers capture from the following:</p>
+
+        <table class="valuetable"><tr><th>CAPT_EVNT</th><th>Meaning</th></tr><tr><td class="bitfield">0b000</td><td>
+  <p>No capture event is triggered.</p>
+</td></tr><tr><td class="bitfield">0b001</td><td>
+  <p>External capture event 1 (optional but recommended)</p>
+</td></tr><tr><td class="bitfield">0b010</td><td>
+  <p>External capture event 2 (optional)</p>
+</td></tr><tr><td class="bitfield">0b011</td><td>
+  <p>External capture event 3 (optional)</p>
+</td></tr><tr><td class="bitfield">0b100</td><td>
+  <p>External capture event 4 (optional)</p>
+</td></tr><tr><td class="bitfield">0b101</td><td>
+  <p>External capture event 5 (optional)</p>
+</td></tr><tr><td class="bitfield">0b110</td><td>
+  <p>External capture event 6 (optional)</p>
+</td></tr><tr><td class="bitfield">0b111</td><td>
+  <p>Capture occurs when a <a href="ext-msmon_capt_evnt.html">MSMON_CAPT_EVNT</a> register in this MSC is written and causes a capture event for the security state of this monitor. (optional)</p>
+</td></tr></table>
+              
+  <p>The values marked as optional indicate capture event sources that can be omitted in an implementation. Those values representing non-implemented event sources should not trigger a capture event.</p>
+<p>If capture is not implemented for the MBWU monitor type as indicated by <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.HAS_CAPTURE = 0, this field is RAZ/WI.</p>
+
+            <h4 id="CAPT_RESET_27">CAPT_RESET, bit [27]
+              </h4>
+          
+  <p>Reset <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE after capture.</p>
+<p>Controls whether the VALUE field of the monitor instance is reset to zero immediately after being copied to the corresponding capture register.</p>
+
+        <table class="valuetable"><tr><th>CAPT_RESET</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE field of the monitor instance is not reset on capture.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE field of the monitor instance is reset on capture.</p>
+</td></tr></table>
+              
+  <p>If capture is not implemented for the MBWU monitor type as indicated by <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.HAS_CAPTURE = 0, this field is RAZ/WI.</p>
+<p>This control bit affects both <a href="ext-msmon_mbwu.html">MSMON_MBWU</a> and <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> in implementations that include <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a>.</p>
+
+            <h4 id="OFLOW_STATUS_26">OFLOW_STATUS, bit [26]
+              </h4>
+          
+  <p>Overflow status.</p>
+<p>Indicates whether the value of <a href="ext-msmon_mbwu.html">MSMON_MBWU</a> has overflowed.</p>
+
+        <table class="valuetable"><tr><th>OFLOW_STATUS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a> has not overflowed.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-msmon_mbuw.html">MSMON_MBUW</a> has overflowed at least once since this bit was last written to zero.</p>
+</td></tr></table>
+              
+  <p>If overflow is not possible for a MBWU monitor in the implementation, this field is RAZ/WI.</p>
+
+            <h4 id="OFLOW_INTR_25">OFLOW_INTR, bit [25]
+              </h4>
+          
+  <p>Overflow status of the MSMON_MBWU_L instance.</p>
+<p>Indicates that the value of <a href="ext-msmon_mbwu.html">MSMON_MBWU</a> overflow has overflowed.</p>
+
+        <table class="valuetable"><tr><th>OFLOW_INTR</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No interrupt is signaled on an overflow of <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>An implementation-specific interrupt is signaled on an overflow of <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.</p>
+</td></tr></table><h4 id="OFLOW_FRZ_24">OFLOW_FRZ, bit [24]
+              </h4>
+          
+  <p>Freeze monitor instance on overflow.</p>
+<p>Controls whether <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE field of the monitor instance freezes on an overflow.</p>
+
+        <table class="valuetable"><tr><th>OFLOW_FRZ</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE field of the monitor instance wraps on overflow.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE field of the monitor instance freezes on overflow. If the increment that caused the overflow was 1, the frozen value is the post-increment value of 0. If the increment that caused the overflow was larger than 1, the frozen value of the monitor might be 0 or a larger value less than the final increment.</p>
+</td></tr></table>
+              
+  <p>If overflow is not possible for the instance of the MBWU monitor in the implementation, this field is RAZ/WI.</p>
+<p>This control bit affects both <a href="ext-msmon_mbwu.html">MSMON_MBWU</a> and <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> in implementations that include <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a>.</p>
+
+            <h4 id="SUBTYPE_23">SUBTYPE, bits [23:20]
+                  </h4>
+          
+  <p>Subtype.</p>
+<p>A monitor can have other event matching criteria.</p>
+<p>This field is not currently used for MBWU monitors, but reserved for future use.</p>
+<p>This field is RAZ/WI.</p>
+
+        <h4 id="SCLEN_19">SCLEN, bit [19]
+              </h4>
+          
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE Scaling Enable.</p>
+<p>Enables scaling of <a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE by <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.SCALE.</p>
+
+        <table class="valuetable"><tr><th>SCLEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE has bytes counted by the monitor instance.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-msmon_mbwu.html">MSMON_MBWU</a>.VALUE has bytes counted by the monitor instance, shifted right by <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.SCALE.</p>
+</td></tr></table><h4 id="0_18">
+                Bit [18]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="MATCH_PMG_17">MATCH_PMG, bit [17]
+              </h4>
+          
+  <p>Match PMG.</p>
+<p>Controls whether the monitor instance only counts data transferred with PMG matching <a href="ext-msmon_cfg_mbwu_flt.html">MSMON_CFG_MBWU_FLT</a>.PMG.</p>
+
+        <table class="valuetable"><tr><th>MATCH_PMG</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor instance counts data transferred with any PMG value.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor instance only counts data transferred with the PMG value matching <a href="ext-msmon_cfg_mbwu_flt.html">MSMON_CFG_MBWU_FLT</a>.PMG.</p>
+</td></tr></table><h4 id="MATCH_PARTID_16">MATCH_PARTID, bit [16]
+              </h4>
+          
+  <p>Match PARTID.</p>
+<p>Controls whether the monitor instance counts only data transferred with PARTID matching <a href="ext-msmon_cfg_mbwu_flt.html">MSMON_CFG_MBWU_FLT</a>.PARTID.</p>
+
+        <table class="valuetable"><tr><th>MATCH_PARTID</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The monitor instance counts data transferred with any PARTID value.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The monitor instance only counts data transferred with the PARTID value matching <a href="ext-msmon_cfg_mbwu_flt.html">MSMON_CFG_MBWU_FLT</a>.PARTID.</p>
+</td></tr></table><h4 id="OFLOW_STATUS_L_15">OFLOW_STATUS_L, bit [15]
+              <div style="font-size:smaller;"><br />When ARMv8.6-MPAM is implemented:
+                </div></h4>
+          
+  <p>Overflow Status  of the MSMON_MBWU_L instance.</p>
+<p>Indicates whether an MPAM overflow interrupt is generated when the value of <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> has overflowed.</p>
+
+        <table class="valuetable"><tr><th>OFLOW_STATUS_L</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p><a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> has not overflowed.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p><a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> has overflowed at least once since this bit was last written to zero.</p>
+</td></tr></table>
+              
+  <p>If <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.HAS_LONG == 0, this bit is <span class="arm-defined-word">RES0</span>.</p>
+
+            <h4 id="0_15"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="OFLOW_INTR_L_14">OFLOW_INTR_L, bit [14]
+              <div style="font-size:smaller;"><br />When ARMv8.6-MPAM is implemented:
+                </div></h4>
+          
+  <p>Overflow Interrupt for <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a>.</p>
+<p>Controls whether an MPAM overflow interrupt is generated when the value of <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a> overflows.</p>
+
+        <table class="valuetable"><tr><th>OFLOW_INTR_L</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>No interrupt is signaled on an overflow of <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a>.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>An implementation-specific interrupt is signalled on overflow of <a href="ext-msmon_mbwu_l.html">MSMON_MBWU_L</a>.</p>
+</td></tr></table>
+              
+  <p>If OFLOW_INTR is not supported by the implementation, this field is RAZ/WI.</p>
+<p>If <a href="ext-mpamf_mbwumon_idr.html">MPAMF_MBWUMON_IDR</a>.HAS_LONG == 0, this bit is <span class="arm-defined-word">RES0</span>.</p>
+
+            <h4 id="0_14"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_13">
+                Bits [13:8]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="TYPE_7">TYPE, bits [7:0]
+                  </h4>
+          
+  <p>Monitor Type Code.</p>
+<p>Constant type indicating the type of the monitor.</p>
+<p>Read-only.</p>
+<p>MBWU monitor is TYPE = <span class="hexnumber">0x42</span>.</p>
+
+        <div class="text_after_fields">
+    
+  
+
+    </div><h2>Accessing the MSMON_CFG_MBWU_CTL</h2>
+        <p>This register is within the MPAM feature page memory frames. In a system that supports Secure and Non-secure memory maps, there must be both Secure and Non-secure MPAM feature pages.</p>
+
+      
+        <p>MSMON_CFG_MBWU_CTL_s must be accessible from the Secure MPAM feature page. MSMON_CFG_MBWU_CTL_ns must be accessible from the Non-secure MPAM feature page.</p>
+
+      
+        <p>MSMON_CFG_MBWU_CTL_s and MSMON_CFG_MBWU_CTL_ns must be separate registers. The Secure instance (MSMON_CFG_MBWU_CTL_s) accesses the memory bandwidth usage monitor controls used for Secure PARTIDs, and the Non-secure instance (MSMON_CFG_MBWU_CTL_ns) accesses the memory bandwidth usage monitor controls used for Non-secure PARTIDs.</p>
+      <h4>MSMON_CFG_MBWU_CTL can be accessed through the memory-mapped interfaces:</h4><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_s</td><td><span class="hexnumber">0x0828</span></td><td>MSMON_CFG_MBWU_CTL_s</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><table class="info"><tr><th>Component</th><th>Frame</th><th>Offset</th><th>Instance</th></tr><tr><td>MPAM</td><td>MPAMF_BASE_ns</td><td><span class="hexnumber">0x0828</span></td><td>MSMON_CFG_MBWU_CTL_ns</td></tr></table><p>Accesses on this interface are <span class="access_level">RW</span>.</p><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

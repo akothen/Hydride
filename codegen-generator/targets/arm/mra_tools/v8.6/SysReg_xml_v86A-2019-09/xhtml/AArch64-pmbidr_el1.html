@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PMBIDR_EL1</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">PMBIDR_EL1, Profiling Buffer ID Register</h1><p>The PMBIDR_EL1 characteristics are:</p><h2>Purpose</h2>
+        <p>Provides information to software as to whether the buffer can be programmed at the current Exception level.</p>
+      <h2>Configuration</h2><p>This register is present only
+    when SPE is implemented.
+      
+    Otherwise, direct accesses to PMBIDR_EL1 are <span class="arm-defined-word">UNDEFINED</span>.</p><h2>Attributes</h2>
+            <p>PMBIDR_EL1 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The PMBIDR_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#0_63">RES0</a></td></tr><tr class="firstrow"><td class="lr" colspan="26"><a href="#0_63">RES0</a></td><td class="lr" colspan="1"><a href="#F_5">F</a></td><td class="lr" colspan="1"><a href="#P_4">P</a></td><td class="lr" colspan="4"><a href="#Align_3">Align</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="0_63">
+                Bits [63:6]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="F_5">F, bit [5]
+              </h4>
+          
+  <p>Flag updates. Defines whether the address translation performed by the Profiling Buffer manages the Access Flag and dirty state.</p>
+
+        <table class="valuetable"><tr><th>F</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Hardware management of the Access Flag and dirty state for accesses made by the Statistical Profiling Extension is always disabled for all translation stages.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Hardware management for the Access Flag and dirty state for accesses made by the Statistical Profiling Extension is controlled in the same way as explicit memory accesses in the owning translation regime.</p>
+</td></tr></table>
+              
+  <p>If hardware management of the Access Flag is disabled for a stage of translation, an access to Page or Block with the Access flag bit not set in the descriptor will generate an Access Flag fault.</p>
+<p>If hardware management of the dirty state is disabled for a stage of translation, an access to a Page or Block will ignore the Dirty Bit Modifier in the descriptor might generate a Permission fault, depending on the values of the access permission bits in the descriptor.</p>
+
+            <h4 id="P_4">P, bit [4]
+              </h4>
+          
+  <p>Programming not allowed. The Profiling Buffer is owned by a higher Exception level or the other Security state.</p>
+
+        <table class="valuetable"><tr><th>P</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Profiling Buffer is owned by the current or a lower Exception level in the current Security state.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Profiling Buffer is owned by a higher Exception level or the other Security state.</p>
+</td></tr></table>
+              
+  <p>The value read from this field depends on the current Exception level and the Effective values of <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.NSPB and <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.E2PB:</p>
+<ul>
+<li>If EL3 is implemented, and either <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.NSPB == <span class="binarynumber">0b00</span> or <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.NSPB == <span class="binarynumber">0b01</span>, this bit reads as one from:<ul>
+<li>Non-secure EL1.
+</li><li>Non-secure EL2.
+</li><li>If Secure EL2 is implemented and enabled, and <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.E2PB == <span class="binarynumber">0b00</span>, Secure EL1.
+</li></ul>
+
+</li><li>If EL3 is implemented, and either <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.NSPB == <span class="binarynumber">0b10</span> or <a href="AArch64-mdcr_el3.html">MDCR_EL3</a>.NSPB == <span class="binarynumber">0b11</span>, this bit reads as one from:<ul>
+<li>Secure EL1.
+</li><li>If Secure EL2 is implemented, Secure EL2.
+</li><li>If EL2 is implemented and <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.E2PB == <span class="binarynumber">0b00</span>, Non-secure EL1.
+</li></ul>
+
+</li><li>If EL3 is not implemented, EL2 is implemented, and <a href="AArch64-mdcr_el2.html">MDCR_EL2</a>.E2PB == <span class="binarynumber">0b00</span>, this bit reads as one from EL1.
+</li><li>Otherwise, this bit reads as zero.
+</li></ul>
+
+            <h4 id="Align_3">Align, bits [3:0]
+                  </h4>
+          
+  <p>Defines the minimum alignment constraint for <a href="AArch64-pmbptr_el1.html">PMBPTR_EL1</a>. If this field is non-zero, then the PE must pad every record up to a multiple of this size.</p>
+
+        <table class="valuetable"><tr><th>Align</th><th>Meaning</th></tr><tr><td class="bitfield">0b0000</td><td>
+  <p>Byte</p>
+</td></tr><tr><td class="bitfield">0b0001</td><td>
+  <p>Halfword.</p>
+</td></tr><tr><td class="bitfield">0b0010</td><td>
+  <p>Word.</p>
+</td></tr><tr><td class="bitfield">0b0011</td><td>
+  <p>Doubleword.</p>
+</td></tr><tr><td class="bitfield">0b0100</td><td>
+  <p>16 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b0101</td><td>
+  <p>32 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b0110</td><td>
+  <p>64 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b0111</td><td>
+  <p>128 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b1000</td><td>
+  <p>256 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b1001</td><td>
+  <p>512 Bytes.</p>
+</td></tr><tr><td class="bitfield">0b1010</td><td>
+  <p>1KB.</p>
+</td></tr><tr><td class="bitfield">0b1011</td><td>
+  <p>2KB.</p>
+</td></tr></table>
+              
+  <p>For more information, see <span class="xref">Restrictions on the current write pointer</span>.</p>
+
+            <div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the PMBIDR_EL1</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, PMBIDR_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b1001</td><td>0b1010</td><td>0b111</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    return PMBIDR_EL1;
+elsif PSTATE.EL == EL2 then
+    return PMBIDR_EL1;
+elsif PSTATE.EL == EL3 then
+    return PMBIDR_EL1;
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>

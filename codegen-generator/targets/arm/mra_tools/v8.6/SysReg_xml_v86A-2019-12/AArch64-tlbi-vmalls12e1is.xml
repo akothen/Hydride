@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="False" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>TLBI VMALLS12E1IS</reg_short_name>
+      <reg_long_name>TLB Invalidate by VMID, All at Stage 1 and 2, EL1, Inner Shareable</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Invalidates cached copies of translation table entries from TLBs that meet all the following requirements:</para>
+
+      </purpose_text>
+      <purpose_text>
+        <list type="unordered">
+<listitem><content>
+<para>The entry is a stage 1 or stage 2 translation table entry, from any level of the translation table walk.</para>
+</content>
+</listitem><listitem><content>
+<para>If <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.NS is 0, then </para>
+<list type="unordered">
+<listitem><content>
+<para>The entry would be required to translate an address using the Secure EL1&amp;0 translation regime.</para>
+</content>
+</listitem><listitem><content>
+<para>If <xref browsertext="ARMv8.4-SecEL2" filename="A_armv8_architecture_extensions.fm" linkend="v8.4.SecEL2"/> is implemented and enabled, the entry would be used with the current VMID.</para>
+</content>
+</listitem></list>
+</content>
+</listitem><listitem><content>
+<para>If <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.NS is 1, then:</para>
+<list type="unordered">
+<listitem><content>
+<para>The entry would be required to translate an address using the Non-secure EL1&amp;0 translation regime.</para>
+</content>
+</listitem><listitem><content>
+<para>If Non-secure EL2 is implemented, the entry would be used with the current VMID.</para>
+</content>
+</listitem></list>
+</content>
+</listitem></list>
+
+      </purpose_text>
+      <purpose_text>
+        <para>The invalidation applies to all PEs in the same Inner Shareable shareability domain as the PE that executes this System instruction.</para>
+
+      </purpose_text>
+      <purpose_text>
+        <note><para>From Armv8.4, when a TLB maintenance instruction is generated to the Secure EL1&amp;0 translation regime and is defined to pass a VMID argument, or would be defined to pass a VMID argument if SCR_EL3.EEL2==1, then:</para><list type="unordered"><listitem><content>A PE with <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.EEL2==1 is not architecturally required to invalidate any entries in the Secure EL1&amp;0 translation of a PE in the same required shareability domain with SCR_EL3.EEL2==0.</content></listitem><listitem><content>A PE with <register_link state="AArch64" id="AArch64-scr_el3.xml">SCR_EL3</register_link>.EEL2==0 is not architecturally required to invalidate any entries in the Secure EL1&amp;0 translation of a PE in the same required shareability domain with SCR_EL3.EEL2==1.</content></listitem><listitem><content>A PE is architecturally required to invalidate all relevant entries in the Secure EL1&amp;0 translation of a System MMU in the same required shareability domain with a VMID of 0.</content></listitem></list><para>For the EL1&amp;0 translation regimes, the invalidation applies to both global entries, and non-global entries with any ASID.</para></note>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+            <reg_group>TLB maintenance instructions</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          
+    
+      <attributes_text>
+        <para>TLBI VMALLS12E1IS is a 64-bit System instruction.</para>
+      </attributes_text>
+
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="TLBI_SYS VMALLS12E1IS">
+        <encoding>
+          
+          <access_instruction>TLBI VMALLS12E1IS{, &lt;Xt&gt;}</access_instruction>
+            
+            <enc n="op0" v="0b01"/>
+            
+            <enc n="op1" v="0b100"/>
+            
+            <enc n="CRn" v="0b1000"/>
+            
+            <enc n="CRm" v="0b0011"/>
+            
+            <enc n="op2" v="0b110"/>
+            
+            <enc n="Rt" v="0b11111"/>
+        </encoding>
+          <access_permission>
+            <ps name="TLBI_SYS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; HCR_EL2.NV == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    TLBI_VMALLS12E1IS();
+elsif PSTATE.EL == EL3 then
+    if !EL2Enabled() then
+        TLBI_VMALLE1IS();
+    else
+        TLBI_VMALLS12E1IS();
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

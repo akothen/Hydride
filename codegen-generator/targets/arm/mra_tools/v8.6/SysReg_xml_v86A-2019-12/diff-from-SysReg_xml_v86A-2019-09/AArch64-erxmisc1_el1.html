@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><title>ERXMISC1_EL1</title><link href="insn.css" rel="stylesheet" type="text/css"/></head><body><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr/><h1 class="register-section">ERXMISC1_EL1, Selected Error Record Miscellaneous Register 1</h1><p>The ERXMISC1_EL1 characteristics are:</p><h2>Purpose</h2><p>Accesses <a href="ext-errnmisc1.html">ERR&lt;n>MISC1</a> for the error record <ins>&lt;n> </ins>selected by <a href="AArch64-errselr_el1.html">ERRSELR_EL1</a>.SEL.</p><h2>Configuration</h2><p>AArch64 System register ERXMISC1_EL1 bits [31:0]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-erxmisc2.html">ERXMISC2[31:0]
+            </a>.
+          </p><p>AArch64 System register ERXMISC1_EL1 bits [63:32]
+            
+                are architecturally mapped to
+              AArch32 System register <a href="AArch32-erxmisc3.html">ERXMISC3[31:0]
+            </a>.
+          </p><p>This register is present only
+    when RAS is implemented.
+      
+    Otherwise, direct accesses to ERXMISC1_EL1 are <span class="arm-defined-word">UNDEFINED</span>.</p><p><del class="nocount">For </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount"> fields in this register, writing zero must always be supported to return the error record to an initial state.</del></p><p><del class="nocount">In particular, if any </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount"> syndrome fields might generate a Fault Handling or Error Recovery Interrupt request, writing zero is sufficient to deactivate the Interrupt request.</del></p><p><del class="nocount">Fields that are read-only, non-zero and ignore writes are compliant with this requirement.</del></p><div class="note"><span class="note-header"><del class="nocount">Note</del></span><p><del class="nocount">Arm recommends that any </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount"> syndrome fields that can generate a Fault Handling, Error Recovery, Critical, or </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount">, interrupt request are disabled at Cold reset and are enabled by software writing an </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount"> non-zero value to an </del><span class="arm-defined-word"><del class="nocount">IMPLEMENTATION DEFINED</del></span><del class="nocount"> field in ERR&lt;q>CTRL, where q is the index of the first error record owned by the same node as error record n. If the node owns a single record then q = n.</del></p></div><h2>Attributes</h2><p>ERXMISC1_EL1 is a 64-bit register.</p><h2>Field descriptions</h2><p>The ERXMISC1_EL1 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#ERR&lt;n>MISC1_63">ERR&lt;n>MISC1</a></td></tr><tr class="firstrow"><td class="lr" colspan="32"><a href="#ERR&lt;n>MISC1_63">ERR&lt;n>MISC1</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields"></div><h4 id="ERR&lt;n>MISC1_63">
+                Bits [63:0]
+              </h4><p>ERXMISC1_EL1 accesses <a href="ext-errnmisc1.html">ERR&lt;n>MISC1</a>, where <ins>&lt;</ins>n<ins>></ins> is the value in <a href="AArch64-errselr_el1.html">ERRSELR_EL1</a>.SEL.</p><div class="text_after_fields"></div><div class="access_mechanisms"><h2>Accessing the ERXMISC1_EL1</h2><p>If <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a>.NUM ==<del> 0 or</del> <span class="hexnumber"><ins>0x0000</ins></span><ins> or </ins><a href="AArch64-errselr_el1.html">ERRSELR_EL1</a>.SEL is set to a value greater than or equal to <a href="AArch64-erridr_el1.html">ERRIDR_EL1</a>.NUM, then one of the following occurs:</p><ul><li><ins>An </ins><span class="arm-defined-word"><ins>UNKNOWN</ins></span><ins> error record is selected.
+</ins></li><li><p><del>An </del><span class="arm-defined-word"><del>UNKNOWN</del></span><del> record is selected.</del></p></li><li><p><del>ERXMISC1_EL1 is RAZ/WI.</del></p><ins>ERXMISC1_EL1 is RAZ/WI.
+</ins></li><li><p><del>Direct reads and writes of ERXMISC1_EL1 are NOPs.</del></p><ins>Direct reads and writes of ERXMISC1_EL1 are NOPs.
+</ins></li><li><ins>Direct reads and writes of ERXMISC1_EL1 are </ins><span class="arm-defined-word"><ins>UNDEFINED</ins></span><ins>.
+</ins></li><li><p><del>Direct reads and writes of ERXMISC1_EL1 are </del><span class="arm-defined-word"><del>UNDEFINED</del></span><del>.</del></p></li></ul><p><a href="ext-errnmisc1.html"><ins>ERR&lt;n>MISC1</ins></a><ins> describes additional constraints that also apply when </ins><a href="ext-errnmisc1.html"><ins>ERR&lt;n>MISC1</ins></a><ins> is accessed through ERXMISC1_EL1.</ins></p><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt>, ERXMISC1_EL1</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b0101</td><td>0b0101</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TERR == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGRTR_EL2.ERXMISCn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.TERR == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return ERXMISC1_EL1;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.TERR == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        return ERXMISC1_EL1;
+elsif PSTATE.EL == EL3 then
+    return ERXMISC1_EL1;
+              </p><h4 class="assembler">MSR ERXMISC1_EL1, &lt;Xt></h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b000</td><td>0b0101</td><td>0b0101</td><td>0b001</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TERR == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGWTR_EL2.ERXMISCn_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.TERR == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        ERXMISC1_EL1 = X[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; !ELUsingAArch32(EL3) &amp;&amp; SCR_EL3.TERR == '1' then
+        AArch64.SystemAccessTrap(EL3, 0x18);
+    else
+        ERXMISC1_EL1 = X[t];
+elsif PSTATE.EL == EL3 then
+    ERXMISC1_EL1 = X[t];
+              </p></div><br/><br/><hr/><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions"><ins>13</ins><del>27</del>/<ins>12</ins><del>09</del>/2019 <ins>15</ins><del>18</del>:<ins>13</ins><del>48</del>; <ins>391b5248b29fb2f001ef74792eaacbd6fc72f211</ins><del>6134483bd14dc8c12a99c984cbfe3431cc1c9707</del></p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div></body></html>

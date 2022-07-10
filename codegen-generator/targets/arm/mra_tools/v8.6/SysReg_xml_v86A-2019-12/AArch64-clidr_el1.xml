@@ -1,0 +1,451 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE register_page SYSTEM "registers.dtd">
+<!-- Copyright (c) 2010-2018 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<?xml-stylesheet href="one_register.xsl" type="text/xsl" ?>
+
+
+
+
+
+
+<register_page>
+  <registers>
+    <register execution_state="AArch64" is_register="True" is_internal="True" is_banked="False" is_optional="False" is_stub_entry="False">
+      <reg_short_name>CLIDR_EL1</reg_short_name>
+      <reg_long_name>Cache Level ID Register</reg_long_name>
+      
+
+          <reg_reset_value></reg_reset_value>
+      <reg_mappings>
+          <reg_mapping>
+              
+            <mapped_name filename="AArch32-clidr.xml">CLIDR</mapped_name>
+            <mapped_type>Architectural</mapped_type>
+              <mapped_execution_state>AArch32</mapped_execution_state>
+              <mapped_from_startbit>31</mapped_from_startbit>
+              <mapped_from_endbit>0</mapped_from_endbit>
+
+              <mapped_to_startbit>31</mapped_to_startbit>
+              <mapped_to_endbit>0</mapped_to_endbit>
+
+          </reg_mapping>
+      </reg_mappings>
+      <reg_purpose>
+        
+    
+      <purpose_text>
+        <para>Identifies the type of cache, or caches, that are implemented at each level and can be managed using the architected cache maintenance instructions that operate by set/way, up to a maximum of seven levels. Also identifies the Level of Coherence (LoC) and Level of Unification (LoU) for the cache hierarchy.</para>
+      </purpose_text>
+
+      </reg_purpose>
+      <reg_groups>
+          <reg_group>Identification registers</reg_group>
+      </reg_groups>
+      <reg_configuration>
+        
+
+      </reg_configuration>
+      <reg_attributes>
+          <attributes_text>
+            <para>CLIDR_EL1 is a 64-bit register.</para>
+          </attributes_text>
+      </reg_attributes>
+      <reg_fieldsets>
+        
+
+
+
+
+
+  <fields length="64">
+    <text_before_fields>
+      
+  
+
+    </text_before_fields>
+    
+        <field
+           id="0_63_47"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+           rwtype="RES0"
+        >
+          <field_name>0</field_name>
+          <field_msb>63</field_msb>
+          <field_lsb>47</field_lsb>
+          <field_description order="before">
+            <para>Reserved, <arm-defined-word>RES0</arm-defined-word>.</para>
+          </field_description>
+            <field_values>
+            </field_values>
+      </field>
+        <field
+           id="Ttype&lt;n&gt;_46_33"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Ttype&lt;n&gt;</field_name>
+          <field_msb>46</field_msb>
+          <field_lsb>33</field_lsb>
+          <field_array>
+            <field_array_start>7</field_array_start>
+            <field_array_end>1</field_array_end>
+            <field_array_description>2(n-1)+34:2(n-1)+33</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Tag cache type. Indicate the type of cache that is implemented and can be managed using the architected cache maintenance instructions that operate by set/way at each level, from Level 1 up to a maximum of seven levels of cache hierarchy.</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b00</field_value>
+        <field_value_description>
+  <para>No Tag Cache.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b01</field_value>
+        <field_value_description>
+  <para>Separate Allocation Tag Cache.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b10</field_value>
+        <field_value_description>
+  <para>Unified Allocation Tag and Data cache, Allocation Tags and Data in unified lines.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b11</field_value>
+        <field_value_description>
+  <para>Unified Allocation Tag and Data cache, Allocation Tags and Data in separate lines.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="ICB_32_30"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>ICB</field_name>
+          <field_msb>32</field_msb>
+          <field_lsb>30</field_lsb>
+          <field_description order="before">
+          
+  <para>Inner cache boundary. This field indicates the boundary for caching Inner Cacheable memory regions.</para>
+<para>The possible values are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000</field_value>
+        <field_value_description>
+  <para>Not disclosed by this mechanism.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001</field_value>
+        <field_value_description>
+  <para>L1 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010</field_value>
+        <field_value_description>
+  <para>L2 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b011</field_value>
+        <field_value_description>
+  <para>L3 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100</field_value>
+        <field_value_description>
+  <para>L4 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b101</field_value>
+        <field_value_description>
+  <para>L5 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b110</field_value>
+        <field_value_description>
+  <para>L6 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b111</field_value>
+        <field_value_description>
+  <para>L7 cache is the highest Inner Cacheable level.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="LoUU_29_27"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LoUU</field_name>
+          <field_msb>29</field_msb>
+          <field_lsb>27</field_lsb>
+          <field_description order="before">
+          
+  <para>Level of Unification Uniprocessor for the cache hierarchy.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="LoC_26_24"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LoC</field_name>
+          <field_msb>26</field_msb>
+          <field_lsb>24</field_lsb>
+          <field_description order="before">
+          
+  <para>Level of Coherence for the cache hierarchy.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="LoUIS_23_21"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>LoUIS</field_name>
+          <field_msb>23</field_msb>
+          <field_lsb>21</field_lsb>
+          <field_description order="before">
+          
+  <para>Level of Unification Inner Shareable for the cache hierarchy.</para>
+
+          </field_description>
+            <field_values>
+            </field_values>
+          <field_description order="after">
+            
+  
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+        <field
+           id="Ctype&lt;n&gt;_20_0"
+           is_variable_length="False"
+           has_partial_fieldset="False"
+           is_linked_to_partial_fieldset="False"
+           is_access_restriction_possible="False"
+           is_constant_value="False"
+           is_partial_field="False"
+        >
+          <field_name>Ctype&lt;n&gt;</field_name>
+          <field_msb>20</field_msb>
+          <field_lsb>0</field_lsb>
+          <field_array>
+            <field_array_start>7</field_array_start>
+            <field_array_end>1</field_array_end>
+            <field_array_description>3(n-1)+2:3(n-1)</field_array_description>
+          </field_array>
+          <field_description order="before">
+          
+  <para>Cache Type fields. Indicate the type of cache that is implemented and can be managed using the architected cache maintenance instructions that operate by set/way at each level, from Level 1 up to a maximum of seven levels of cache hierarchy. Possible values of each field are:</para>
+
+          </field_description>
+            <field_values>
+                  <field_value_instance>
+        <field_value>0b000</field_value>
+        <field_value_description>
+  <para>No cache.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b001</field_value>
+        <field_value_description>
+  <para>Instruction cache only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b010</field_value>
+        <field_value_description>
+  <para>Data cache only.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b011</field_value>
+        <field_value_description>
+  <para>Separate instruction and data caches.</para>
+</field_value_description>
+    </field_value_instance>
+                  <field_value_instance>
+        <field_value>0b100</field_value>
+        <field_value_description>
+  <para>Unified cache.</para>
+</field_value_description>
+    </field_value_instance>
+            </field_values>
+          <field_description order="after">
+            
+  <para>All other values are reserved.</para>
+<para>If software reads the Cache Type fields from Ctype1 upwards, once it has seen a value of 000, no caches that can be managed using the architected cache maintenance instructions that operate by set/way exist at further-out levels of the hierarchy. So, for example, if Ctype3 is the first Cache Type field with a value of 000, the values of Ctype4 to Ctype7 must be ignored.</para>
+
+          </field_description>
+          <field_resets>
+  
+  
+</field_resets>
+      </field>
+    <text_after_fields>
+    
+  
+
+    </text_after_fields>
+  </fields>
+  <reg_fieldset length="64">
+      
+        <fieldat id="0_63_47" msb="63" lsb="47"/>
+        <fieldat id="Ttype&lt;n&gt;_46_33" msb="46" lsb="33"/>
+        <fieldat id="ICB_32_30" msb="32" lsb="30"/>
+        <fieldat id="LoUU_29_27" msb="29" lsb="27"/>
+        <fieldat id="LoC_26_24" msb="26" lsb="24"/>
+        <fieldat id="LoUIS_23_21" msb="23" lsb="21"/>
+        <fieldat id="Ctype&lt;n&gt;_20_0" msb="20" lsb="0"/>
+    </reg_fieldset>
+
+      </reg_fieldsets>
+      
+
+
+<access_mechanisms>
+  
+
+
+      <access_mechanism accessor="MRS CLIDR_EL1">
+        <encoding>
+          
+          <access_instruction>MRS &lt;Xt&gt;, CLIDR_EL1</access_instruction>
+            
+            <enc n="op0" v="0b11"/>
+            
+            <enc n="op1" v="0b001"/>
+            
+            <enc n="CRn" v="0b0000"/>
+            
+            <enc n="CRm" v="0b0000"/>
+            
+            <enc n="op2" v="0b001"/>
+        </encoding>
+          <access_permission>
+            <ps name="MRS" sections="1" secttype="access_permission">
+              <pstext>
+if PSTATE.EL == EL0 then
+    if IsFeatureImplemented("ARMv8.4-IDST") then
+        if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TGE == '1' then
+            AArch64.SystemAccessTrap(EL2, 0x18);
+        else
+            AArch64.SystemAccessTrap(EL1, 0x18);
+    else
+        UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID2 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TID4 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; (!HaveEL(EL3) || SCR_EL3.FGTEn == '1') &amp;&amp; HFGRTR_EL2.CLIDR_EL1 == '1' then
+        AArch64.SystemAccessTrap(EL2, 0x18);
+    else
+        return CLIDR_EL1;
+elsif PSTATE.EL == EL2 then
+    return CLIDR_EL1;
+elsif PSTATE.EL == EL3 then
+    return CLIDR_EL1;
+              </pstext>
+            </ps>
+          </access_permission>
+      </access_mechanism>
+</access_mechanisms>
+
+      <arch_variants>
+      </arch_variants>
+  </register>
+</registers>
+
+    <timestamp>13/12/2019 15:13; 391b5248b29fb2f001ef74792eaacbd6fc72f211</timestamp>
+</register_page>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><title>AMAIR0</title><link href="insn.css" rel="stylesheet" type="text/css"/></head><body><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr/><h1 class="register-section">AMAIR0, Auxiliary Memory Attribute Indirection Register 0</h1><p>The AMAIR0 characteristics are:</p><h2>Purpose</h2><p>When using the Long-descriptor format translation tables for stage 1 translations, provides <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> memory attributes for the memory regions specified by <a href="AArch32-mair0.html">MAIR0</a>.</p><h2>Configuration</h2><p>AArch32 System register AMAIR0 bits [31:0]
+            
+                are architecturally mapped to
+              AArch64 System register <a href="AArch64-amair_el1.html">AMAIR_EL1[31:0]
+            </a>.
+          </p><p><ins>This</ins><del>RW</del> <ins>register</ins><del>fields</del> <ins>is</ins><del>in</del> <ins>present</ins><del>this</del> <ins>only
+    when</ins><del>register</del> <ins>AArch32</ins><del>reset</del> <ins>is supported at any Exception level.
+      
+    Otherwise, direct accesses </ins>to <ins>AMAIR0 are</ins><del>architecturally</del> <span class="arm-defined-word">UNKNOWN</span><ins>.</ins><del>values.</del></p><h2>Attributes</h2><p>AMAIR0 is a 32-bit register.</p><h2>Field descriptions</h2><p>The AMAIR0 bit assignments are:</p><table class="regdiagram"><thead><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="32"><a href="#IMPLEMENTATIONDEFINED_31">IMPLEMENTATION DEFINED</a></td></tr></tbody></table><div class="text_before_fields"><p>This register is <span class="arm-defined-word">RES0</span> in the following cases:</p><ul><li>When an implementation does not provide any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> memory attributes.
+</li><li>When the Long-descriptor translation table format is not used.
+</li></ul><p>If EL3 is implemented and is using AArch32:</p><ul><li>AMAIR0(S) gives the value for memory accesses from Secure state.
+</li><li>AMAIR0(NS) gives the value for memory accesses from Non-secure states other than Hyp mode.
+</li></ul><p>Any <span class="arm-defined-word">IMPLEMENTATION DEFINED</span> memory attributes are additional qualifiers for the memory locations and must not change the architected behavior specified by <a href="AArch32-mair0.html">MAIR0</a> and <a href="AArch32-mair1.html">MAIR1</a>.</p><p>In a typical implementation, AMAIR0 and <a href="AArch32-amair1.html">AMAIR1</a> split into eight one-byte fields, corresponding to the MAIRn.Attr&lt;n> fields, but the architecture does not require them to do so.</p></div><h4 id="IMPLEMENTATIONDEFINED_31">IMPLEMENTATION DEFINED, bits [31:0]
+                  </h4><p><span class="arm-defined-word">IMPLEMENTATION DEFINED</span>.</p><p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields"></div><div class="access_mechanisms"><h2>Accessing the AMAIR0</h2><p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRC{&lt;c>}{&lt;q>} &lt;coproc>, {#}&lt;opc1>, &lt;Rt>, &lt;CRn>, &lt;CRm>{, {#}&lt;opc2>}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1010</td><td>0b0011</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T10 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T10 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TRVM == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TRVM == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        <del>if SCR.NS == '0' then
+            return AMAIR0_S;
+        else
+            </del>return AMAIR0_NS;
+    else
+        return AMAIR0;
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        return AMAIR0_NS;
+    else
+        return AMAIR0;
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' then
+        return AMAIR0_S;
+    else
+        return AMAIR0_NS;
+              </p><h4 class="assembler">MCR{&lt;c>}{&lt;q>} &lt;coproc>, {#}&lt;opc1>, &lt;Rt>, &lt;CRn>, &lt;CRm>{, {#}&lt;opc2>}</h4><table class="access_instructions"><tr><th>coproc</th><th>opc1</th><th>CRn</th><th>CRm</th><th>opc2</th></tr><tr><td>0b1111</td><td>0b000</td><td>0b1010</td><td>0b0011</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    if EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HSTR_EL2.T10 == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HSTR.T10 == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif <del>HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '0' &amp;&amp; CP15SDISABLE == HIGH then
+        UNDEFINED;
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) &amp;&amp; SCR.NS == '0' &amp;&amp; CP15SDISABLE2 == HIGH then
+        UNDEFINED;
+    elsif </del>EL2Enabled() &amp;&amp; !ELUsingAArch32(EL2) &amp;&amp; HCR_EL2.TVM == '1' then
+        AArch64.AArch32SystemAccessTrap(EL2, 0x03);
+    elsif EL2Enabled() &amp;&amp; ELUsingAArch32(EL2) &amp;&amp; HCR.TVM == '1' then
+        AArch32.TakeHypTrapException(0x03);
+    elsif HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        <del>if SCR.NS == '0' then
+            AMAIR0_S = R[t];
+        else
+            </del>AMAIR0_NS = R[t];
+    else
+        AMAIR0 = R[t];
+elsif PSTATE.EL == EL2 then
+    if HaveEL(EL3) &amp;&amp; ELUsingAArch32(EL3) then
+        AMAIR0_NS = R[t];
+    else
+        AMAIR0 = R[t];
+elsif PSTATE.EL == EL3 then
+    if SCR.NS == '0' &amp;&amp; CP15SDISABLE == HIGH then
+        UNDEFINED;
+    elsif SCR.NS == '0' &amp;&amp; CP15SDISABLE2 == HIGH then
+        UNDEFINED;
+    else
+        if SCR.NS == '0' then
+            AMAIR0_S = R[t];
+        else
+            AMAIR0_NS = R[t];
+              </p></div><br/><br/><hr/><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions"><ins>13</ins><del>27</del>/<ins>12</ins><del>09</del>/2019 <ins>15</ins><del>18</del>:<ins>13</ins><del>48</del>; <ins>391b5248b29fb2f001ef74792eaacbd6fc72f211</ins><del>6134483bd14dc8c12a99c984cbfe3431cc1c9707</del></p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p><div align="center" class="htmldiff_header"><table><tbody><tr><td class="old">(old) </td><td class="explain">htmldiff from-</td><td class="new">(new) </td></tr></tbody></table></div></body></html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MPAM3_EL3</title>
+    <link href="insn.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><hr /><h1 class="register-section">MPAM3_EL3, MPAM3 Register (EL3)</h1><p>The MPAM3_EL3 characteristics are:</p><h2>Purpose</h2>
+        <p>Holds information to generate MPAM labels for memory requests when executing at EL3.</p>
+      <h2>Configuration</h2><p>AArch64 System register MPAM3_EL3 bit [63]
+            
+                is architecturally mapped to
+              AArch64 System register <a href="AArch64-mpam2_el2.html">MPAM2_EL2[63]
+            </a> when HaveEL(EL2).
+          </p><p>AArch64 System register MPAM3_EL3 bit [63]
+            
+                is architecturally mapped to
+              AArch64 System register <a href="AArch64-mpam1_el1.html">MPAM1_EL1[63]
+            </a>.
+          </p><p>This register is present only
+    when MPAM is implemented.
+      
+    Otherwise, direct accesses to MPAM3_EL3 are <span class="arm-defined-word">UNDEFINED</span>.</p><p>
+                Some or all RW fields of this register have defined reset values.
+                
+        These apply
+      
+                only if the PE resets into an Exception level that is using AArch64.
+                Otherwise,
+                
+                RW fields in this register reset to architecturally <span class="arm-defined-word">UNKNOWN</span> values.
+              </p><h2>Attributes</h2>
+            <p>MPAM3_EL3 is a 64-bit register.</p>
+          <h2>Field descriptions</h2><p>The MPAM3_EL3 bit assignments are:</p><table class="regdiagram"><thead><tr><td>63</td><td>62</td><td>61</td><td>60</td><td>59</td><td>58</td><td>57</td><td>56</td><td>55</td><td>54</td><td>53</td><td>52</td><td>51</td><td>50</td><td>49</td><td>48</td><td>47</td><td>46</td><td>45</td><td>44</td><td>43</td><td>42</td><td>41</td><td>40</td><td>39</td><td>38</td><td>37</td><td>36</td><td>35</td><td>34</td><td>33</td><td>32</td></tr></thead><tbody><tr class="firstrow"><td class="lr" colspan="1"><a href="#MPAMEN_63">MPAMEN</a></td><td class="lr" colspan="1"><a href="#TRAPLOWER_62">TRAPLOWER</a></td><td class="lr" colspan="1"><a href="#SDEFLT_61">SDEFLT</a></td><td class="lr" colspan="1"><a href="#FORCE_NS_60">FORCE_NS</a></td><td class="lr" colspan="12"><a href="#0_59">RES0</a></td><td class="lr" colspan="8"><a href="#PMG_D_47">PMG_D</a></td><td class="lr" colspan="8"><a href="#PMG_I_39">PMG_I</a></td></tr><tr class="firstrow"><td class="lr" colspan="16"><a href="#PARTID_D_31">PARTID_D</a></td><td class="lr" colspan="16"><a href="#PARTID_I_15">PARTID_I</a></td></tr></tbody><tfoot><tr><td>31</td><td>30</td><td>29</td><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>21</td><td>20</td><td>19</td><td>18</td><td>17</td><td>16</td><td>15</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr></tfoot></table><div class="text_before_fields">
+      
+  
+
+    </div><h4 id="MPAMEN_63">MPAMEN, bit [63]
+              </h4>
+          
+  <p>MPAM Enable. MPAM is enabled when MPAMEN == 1. When disabled, all PARTIDs and PMGs are output as their default value in the corresponding ID space.</p>
+<p>Values of this field are:</p>
+
+        <table class="valuetable"><tr><th>MPAMEN</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The default PARTID and default PMG are output in MPAM information when executing at any ELn.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>MPAM information is output based on the MPAMn_ELx register for ELn according the MPAM configuration.</p>
+</td></tr></table>
+              
+  <p>This field is always read/write in MPAM3_EL3.</p>
+
+            <p>This field resets to <span class="binarynumber">0</span>.
+</p><h4 id="TRAPLOWER_62">TRAPLOWER, bit [62]
+              </h4>
+          
+  <p>Trap direct accesses to any MPAM system registers that are not <span class="arm-defined-word">UNDEFINED</span> from all ELn lower than EL3.</p>
+
+        <table class="valuetable"><tr><th>TRAPLOWER</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>Do not force trapping of direct accesses of MPAM system registers to EL3.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>Force all direct accesses of MPAM system registers to trap to EL3.</p>
+</td></tr></table><p>On a Cold reset, this field resets to <span class="binarynumber">1</span>.
+</p><h4 id="SDEFLT_61">SDEFLT, bit [61]
+              <div style="font-size:smaller;"><br />When ARMv8.6-MPAM is implemented and MPAMIDR_EL1.HAS_SDEFLT == 1:
+                </div></h4>
+          
+  <p>SDEFLT overrides the PARTID with the default PARTID when executing in the Secure state.</p>
+
+        <table class="valuetable"><tr><th>SDEFLT</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>The PARTID is determined normally in the Secure state.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>The PARTID is always PARTID 0 when executing in the Secure state.</p>
+</td></tr></table><p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_61"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="FORCE_NS_60">FORCE_NS, bit [60]
+              <div style="font-size:smaller;"><br />When ARMv8.6-MPAM is implemented and MPAMIDR_EL1.HAS_FORCE_NS == 1:
+                </div></h4>
+          
+  <p>FORCE_NS forces MPAM_NS to always be 1 in the Secure state.</p>
+
+        <table class="valuetable"><tr><th>FORCE_NS</th><th>Meaning</th></tr><tr><td class="bitfield">0b0</td><td>
+  <p>MPAM_NS is 0 when executing in the Secure state.</p>
+</td></tr><tr><td class="bitfield">0b1</td><td>
+  <p>MPAM_NS is 1 when executing in the Secure state.</p>
+</td></tr></table><p>This field resets to an <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="0_60"><div style="font-size:smaller;"><br />
+              Otherwise:
+            </div></h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="0_59">
+                Bits [59:48]
+              </h4>
+            <p>Reserved, <span class="arm-defined-word">RES0</span>.</p>
+        <h4 id="PMG_D_47">PMG_D, bits [47:40]
+                  </h4>
+          
+  <p>Performance monitoring group for data accesses.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="PMG_I_39">PMG_I, bits [39:32]
+                  </h4>
+          
+  <p>Performance monitoring group for instruction accesses.</p>
+
+        <h4 id="PARTID_D_31">PARTID_D, bits [31:16]
+                  </h4>
+          
+  <p>Partition ID for data accesses, including load and store accesses, made from EL3.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><h4 id="PARTID_I_15">PARTID_I, bits [15:0]
+                  </h4>
+          
+  <p>Partition ID for instruction accesses made from EL3.</p>
+
+        <p>This field resets to an architecturally <span class="arm-defined-word">UNKNOWN</span> value.</p><div class="text_after_fields">
+    
+  
+
+    </div><div class="access_mechanisms"><h2>Accessing the MPAM3_EL3</h2>
+        <p>None of the fields in this register are permitted to be cached in a TLB.</p>
+      <p>Accesses to this register use the following encodings:</p><h4 class="assembler">MRS &lt;Xt&gt;, MPAM3_EL3</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b110</td><td>0b1010</td><td>0b0101</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    return MPAM3_EL3;
+              </p><h4 class="assembler">MSR MPAM3_EL3, &lt;Xt&gt;</h4><table class="access_instructions"><tr><th>op0</th><th>op1</th><th>CRn</th><th>CRm</th><th>op2</th></tr><tr><td>0b11</td><td>0b110</td><td>0b1010</td><td>0b0101</td><td>0b000</td></tr></table><p class="pseudocode">
+if PSTATE.EL == EL0 then
+    UNDEFINED;
+elsif PSTATE.EL == EL1 then
+    UNDEFINED;
+elsif PSTATE.EL == EL2 then
+    UNDEFINED;
+elsif PSTATE.EL == EL3 then
+    MPAM3_EL3 = X[t];
+              </p></div><br /><br /><hr /><table align="center"><tr><td><div class="topbar"><a href="AArch32-regindex.html">AArch32 Registers</a></div></td><td><div class="topbar"><a href="AArch64-regindex.html">AArch64 Registers</a></div></td><td><div class="topbar"><a href="AArch32-sysindex.html">AArch32 Instructions</a></div></td><td><div class="topbar"><a href="AArch64-sysindex.html">AArch64 Instructions</a></div></td><td><div class="topbar"><a href="enc_index.html">Index by Encoding</a></div></td><td><div class="topbar"><a href="ext_alpha_index.html">External Registers</a></div></td><td><div class="topbar"><a href="ext_enc_index.html">External Registers by Offset</a></div></td><td><div class="topbar"><a href="func_index.html">Registers by Functional Group</a></div></td><td><div class="topbar"><a href="notice.html">Proprietary Notice</a></div></td></tr></table><p class="versions">27/09/2019 18:48; 6134483bd14dc8c12a99c984cbfe3431cc1c9707</p><p class="copyconf">Copyright © 2010-2019 Arm Limited or its affiliates. All rights reserved. This document is Non-Confidential.</p></body>
+</html>
