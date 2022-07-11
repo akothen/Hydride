@@ -31,6 +31,7 @@ namespace Halide {
             std::map<std::string, const Variable*> RegToVariableMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Variable*, std::string> VariableToRegMap; // Map racket register expressions to Halide Load Instructions
 
+
             // Takes the input Halide IR and converts it to Rosette syntax
             class ExprPrinter : public VariadicVisitor<ExprPrinter, std::string, std::string> {
 
@@ -203,6 +204,8 @@ namespace Halide {
                     }
 
                     std::string visit(const IntImm *op) {
+
+
                         if (mode.top() == VarEncoding::Bitvector)
                             return tabs() + " (bv " +
                                 std::to_string(op->value) + " " + std::to_string(op->type.bits()) + ")";
@@ -211,6 +214,8 @@ namespace Halide {
                     }
 
                     std::string visit(const UIntImm *op) {
+
+
                         if (mode.top() == VarEncoding::Bitvector)
                             return tabs() + " (bv " +
                                 std::to_string(op->value) + " " + std::to_string(op->type.bits()) + ")";
@@ -307,6 +312,7 @@ namespace Halide {
                         indent.push(0);
                         std::string rkt_type = std::to_string(op->lanes);
                         std::string rkt_val = dispatch(op->value);
+                        std::cout << "Broadcast "<<rkt_val << "to x"<<rkt_type <<"\n";
                         indent.pop();
                         return tabs() + "(x" + rkt_type + " " + rkt_val + ")";
                     }
@@ -319,6 +325,7 @@ namespace Halide {
 
                     std::string visit(const Cast *op) {
                         const std::string type_string = get_type_string(op->type);
+                        std::cout << "Cast operation into: "<<type_string <<"\n";
 
                         if (op->type.is_scalar() && mode.top() == Integer) {
                             return tabs() + dispatch(op->value);
@@ -960,10 +967,10 @@ namespace Halide {
 
                             switch(arch){
                                 case IROptimizer::X86:
-                                    std::cout << "Using X86 Optimizer" <<"\n";
+                                    // std::cout << "Using X86 Optimizer" <<"\n";
                                     break;
                                 case IROptimizer::HVX:
-                                    std::cout << "Using Hexagon Optimizer" <<"\n";
+                                    // std::cout << "Using Hexagon Optimizer" <<"\n";
                                     break;
                                 default:
                                     break;
@@ -990,7 +997,7 @@ namespace Halide {
                                 if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1))
                                     return IRMutator::mutate(expr);
                             } else if (arch == IROptimizer::X86){
-                                std::cout << "Using X86 Optimizer" << "\n";
+                                // std::cout << "Using X86 Optimizer" << "\n";
                                 if ((expr.type().bits() * expr.type().lanes() % 128 != 0) && (expr.type().bits() > 1))
                                     return IRMutator::mutate(expr);
 
@@ -1392,6 +1399,18 @@ namespace Halide {
                             (require hydride)\n ";
                     }
 
+                    std::string emit_set_current_bitwidth(size_t bw){
+                        return "(current-bitwidth "+ std::to_string(bw)+")";
+                    }
+
+                    std::string emit_set_memory_limit(size_t MB){
+                        return "(custodian-limit-memory (current-custodian) (* " +std::to_string(MB)+" 1024 1024))";
+                    }
+
+                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF){
+                        return "(synthesize-halide-expr "+expr_name+ " "+std::to_string(expr_depth) +" "+std::to_string(VF) + " )";
+                    }
+
                     std::string emit_interpret_expr(std::string expr_name){
                         return "(halide:interpret "+expr_name+")";
                     }
@@ -1414,6 +1433,8 @@ namespace Halide {
             Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
                 std::cout << "Input expression to synthesize: "<< orig_expr <<"\n";
+
+                static int expr_id = 0;
 
                 RegToLoadMap.clear();
                 LoadToRegMap.clear();
@@ -1567,26 +1588,38 @@ namespace Halide {
                 }
 
                 HydrideSynthEmitter HSE;
+                std::ofstream rkt;
+                std::string file_name = "halide_expr_"+std::to_string(expr_id)+".rkt";
+                rkt.open(file_name);
 
 
-                std::cout << "============== Racket File Contents ============\n";
-                std::cout << HSE.emit_racket_imports() << "\n";
-                std::cout << HSE.emit_symbolic_buffers() << "\n";
-                std::cout << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
-                std::cout << sym_bufs.str() << "\n";
-                std::cout << sym_vars.str() << "\n";
-                std::cout << axioms.str() << "\n";
-                std::cout << let_stmts.str() << "\n";
+                rkt << HSE.emit_racket_imports() << "\n";
+                rkt << HSE.emit_set_current_bitwidth(16) << "\n";
+                rkt << HSE.emit_set_memory_limit(20000) << "\n";
+                rkt << HSE.emit_symbolic_buffers() << "\n";
+                rkt << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
+                rkt << sym_bufs.str() << "\n";
+                rkt << sym_vars.str() << "\n";
+                rkt << axioms.str() << "\n";
+                rkt << let_stmts.str() << "\n";
 
-                std::cout << "(define halide-expr \n";
-                std::cout << expr << "\n";
-                std::cout << ")\n";
+                rkt << "(define halide-expr \n";
+                rkt << expr << "\n";
+                rkt << ")\n";
 
-                std::cout << HSE.emit_assemble_result("result", "halide-expr", orig_expr.type().lanes()) << "\n";
+                rkt << "(clear-vc!)" << "\n";
+                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 2, /* VF*/ orig_expr.type().lanes()) << ")" <<"\n";
+                rkt << "(pretty-print synth-res)"<<"\n";
+
+                rkt.close();
+
+                std::string cmd = "racket " + file_name;
+
+                int ret_code = system(cmd.c_str());
+                std::cout << "Synthesis completed with return code: "<< ret_code <<"\n";
 
 
-
-                std::cout << "================================================\n";
+                expr_id++;
 
                 return spec_expr;
 
