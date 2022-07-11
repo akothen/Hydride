@@ -31,7 +31,15 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr expr-depth)
+(define (synthesize-halide-expr halide-expr expr-depth VF)
+  (define id-map (halide:get-buffer-ids halide-expr))
+  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map))
+  synthesized-sol
+
+
+  )
+
+(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map)
 
 
 
@@ -52,7 +60,7 @@
     (destruct halide-expr
               [(buffer data elem buffsize)
                (printf "Leaf buffer: ~a\n" halide-expr)
-               (reg 0) ;; have a map to use accurate reg number
+               (reg (hash-ref! id-map halide-expr -1)) ;; have a map to use accurate reg number
                ]
               [(x32 sca)
                (displayln "synth-base case x32 scalar")
@@ -85,7 +93,7 @@
                   (define base_name (string-append "base_" (~s (random 100))))
 
 
-                  (define grammar (get-expr-grammar expr-extract leaves base_name))
+                  (define grammar (get-expr-grammar expr-extract leaves base_name VF))
                   (displayln "Grammar:")
                   (println grammar)
 
@@ -100,7 +108,7 @@
                     (define synth-buffers (halide:create-buffers leaves env))
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
 
-                    (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) 32))
+                    (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) VF))
                     _result
                     )
 
@@ -142,7 +150,7 @@
                       (list )
 
                       (for/list  ([leaf leaves])
-                                 (synthesize-halide-expr leaf expr-depth)
+                                 (synthesize-halide-expr-step leaf expr-depth VF id-map)
                                  )
                       )
                     )

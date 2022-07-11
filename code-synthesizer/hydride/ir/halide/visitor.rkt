@@ -23,6 +23,7 @@
     [(ramp base stride len) (handler (ramp (visit base handler) (visit stride handler) (visit len handler)))]
     [(load buf idxs alignment) (handler (load (visit buf handler) (visit idxs handler) (visit alignment handler)))]
     [(load-sca buf idx) (handler (load-sca (visit buf handler) (visit idx handler)))]
+    [(buffer data elemT buffsize) (handler expr)]
 
     ;; Type Casts
     [(uint8x1 sca) (handler (uint8x1 (visit sca handler)))]

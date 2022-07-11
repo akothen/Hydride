@@ -10,6 +10,7 @@
   hydride/cpp
   hydride/ir/halide/types
   hydride/ir/halide/interpreter
+  hydride/ir/halide/visitor
   )
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -1134,6 +1135,25 @@
     [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
 
 
+(define (get-buffer-ids expr)
+  (define id-map (make-hash))
+
+  (define (visitor-fn e)
+    (destruct e
+              [(buffer data elemT buffsize) 
+               (begin
+                 (define hash-id (hash-count id-map))
+                 (hash-set! id-map e hash-id)
+                 )
+               ]
+              [_ '()]
+              )
+    )
+
+  (halide:visit expr visitor-fn)
+  id-map
+  
+  )
 
 (define (elemT-size elemT) 
 (cond

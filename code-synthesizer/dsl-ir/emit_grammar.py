@@ -20,6 +20,7 @@ from Synthesizer import Synthesizer
 
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
+VF = int(sys.argv[3])
 
 dsl_list = parse_dict(cost_semantics)
 
@@ -80,8 +81,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 3,
-                  vectorization_factor = 32,
+                  contexts_per_dsl_inst = 4,
+                  vectorization_factor = VF,
                   depth = 3
                   )
     grammar_name = spec['name'] + "_grammar"

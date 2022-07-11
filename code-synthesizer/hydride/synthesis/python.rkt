@@ -25,14 +25,14 @@
 (define GEN-GRAMMAR-SCRIPT (string-append CODE-SYNTH-PATH GEN-GRAMMAR-SCRIPT-NAME))
 (define PYTHON "python3")
 
-(define (generate-grammar-file grammar-spec grammar-file-name base_name)
+(define (generate-grammar-file grammar-spec grammar-file-name base_name VF)
   (define spec-file-name (string-append base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
 
 
 
 
-  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name)))
+  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF)))
   (displayln gen-grammar-cmd)
   (system gen-grammar-cmd)
 
@@ -47,14 +47,14 @@
 
 
 
-(define (get-expr-grammar expr sub-expr-ls base_name)
+(define (get-expr-grammar expr sub-expr-ls base_name VF)
   (printf "get-expr-grammar with base_name: ~a\n" base_name)
   (define spec-contents (gen-synthesis-spec expr sub-expr-ls base_name))
   (define grammar-file-name (string-append base_name "_grammar.rkt"))
   (println grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))
   (println mod-path)
-  (generate-grammar-file spec-contents mod-path base_name)
+  (generate-grammar-file spec-contents mod-path base_name VF)
   (displayln "Generated Grammar File")
   (define (get-grammar mod name)
     (dynamic-require mod (string->symbol name))
