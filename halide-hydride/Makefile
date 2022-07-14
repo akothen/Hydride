@@ -114,7 +114,7 @@ WITH_MIPS ?= $(findstring mips, $(LLVM_COMPONENTS))
 WITH_RISCV ?= $(findstring riscv, $(LLVM_COMPONENTS))
 WITH_AARCH64 ?= $(findstring aarch64, $(LLVM_COMPONENTS))
 WITH_POWERPC ?= $(findstring powerpc, $(LLVM_COMPONENTS))
-WITH_NVPTX ?= $(findstring nvptx, $(LLVM_COMPONENTS))
+WITH_NVPTX = #$(findstring nvptx, $(LLVM_COMPONENTS))
 WITH_WEBASSEMBLY ?= $(findstring webassembly, $(LLVM_COMPONENTS))
 # AMDGPU target is WIP
 WITH_AMDGPU ?= $(findstring amdgpu, $(LLVM_COMPONENTS))
@@ -871,8 +871,8 @@ INITIAL_MODULES = $(RUNTIME_CPP_COMPONENTS:%=$(BUILD_DIR)/initmod.%_32.o) \
                   $(RUNTIME_CPP_COMPONENTS:%=$(BUILD_DIR)/initmod.%_64_debug.o) \
                   $(RUNTIME_EXPORTED_INCLUDES:$(INCLUDE_DIR)/%.h=$(BUILD_DIR)/initmod.%_h.o) \
                   $(BUILD_DIR)/initmod.inlined_c.o \
-                  $(RUNTIME_LL_COMPONENTS:%=$(BUILD_DIR)/initmod.%_ll.o) \
-                  $(PTX_DEVICE_INITIAL_MODULES:libdevice.%.bc=$(BUILD_DIR)/initmod_ptx.%_ll.o)
+                  $(RUNTIME_LL_COMPONENTS:%=$(BUILD_DIR)/initmod.%_ll.o) 
+                  #$(PTX_DEVICE_INITIAL_MODULES:libdevice.%.bc=$(BUILD_DIR)/initmod_ptx.%_ll.o)
 
 # Add the Hexagon simulator to the rpath on Linux. (Not supported elsewhere, so no else cases.)
 ifeq ($(UNAME), Linux)
