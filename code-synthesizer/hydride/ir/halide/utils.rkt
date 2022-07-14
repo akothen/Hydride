@@ -1135,15 +1135,22 @@
     [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
 
 
+(define id-map (make-hash))
 (define (get-buffer-ids expr)
-  (define id-map (make-hash))
+  (hash-clear! id-map)
 
   (define (visitor-fn e)
     (destruct e
               [(buffer data elemT buffsize) 
                (begin
-                 (define hash-id (hash-count id-map))
-                 (hash-set! id-map e hash-id)
+                 (if (hash-has-key? id-map e)
+                   (list)
+                   (begin
+                         (define hash-id (hash-count id-map))
+                         (hash-set! id-map e hash-id)
+                     )
+
+                   )
                  )
                ]
               [_ '()]
