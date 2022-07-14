@@ -1600,7 +1600,7 @@ namespace Halide {
                 rkt << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
                 rkt << sym_bufs.str() << "\n";
                 rkt << sym_vars.str() << "\n";
-                rkt << axioms.str() << "\n";
+                //rkt << axioms.str() << "\n";
                 rkt << let_stmts.str() << "\n";
 
                 rkt << "(define halide-expr \n";
@@ -1608,7 +1608,7 @@ namespace Halide {
                 rkt << ")\n";
 
                 rkt << "(clear-vc!)" << "\n";
-                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 2, /* VF*/ orig_expr.type().lanes()) << ")" <<"\n";
+                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes()) << ")" <<"\n";
                 rkt << "(pretty-print synth-res)"<<"\n";
 
                 rkt.close();
@@ -1616,7 +1616,10 @@ namespace Halide {
                 std::string cmd = "racket " + file_name;
 
                 int ret_code = system(cmd.c_str());
-                std::cout << "Synthesis completed with return code: "<< ret_code <<"\n";
+                std::cout << "Synthesis completed with return code:\t"<< ret_code <<"\n";
+                
+                std::cout << "Press [Enter] to continue:" << "\n";
+                std::cin.get();
 
 
                 expr_id++;

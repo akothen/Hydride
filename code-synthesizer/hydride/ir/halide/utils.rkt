@@ -1172,10 +1172,10 @@
 
 (define (size-to-elemT size) 
 (cond
-    [(eq? size 8) 'int8]
-    [(eq? size 16) 'int16]
-    [(eq? size 32) 'int32]
-    [(eq? size 64) 'int64]
+    [(eq? size 8) 'uint8]
+    [(eq? size 16) 'uint16]
+    [(eq? size 32) 'uint32]
+    [(eq? size 64) 'uint64]
     [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" )])
 )
 

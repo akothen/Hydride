@@ -549,7 +549,7 @@
     [(sca-le v1 v2) (append (list bvsle bvule) (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(sca-absd v1 v2) (append (list bvsge bvmul abs bvsub) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-absd v1 v2) (append (list bvsge bvuge bvmul abs bvsub bvsmax bvumax bvsmin bvumin) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-shr v1 v2) (append (list bvashr bvlshr) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
@@ -569,10 +569,10 @@
     [(vec-lt v1 v2) (append (list bvslt bvult) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-le v1 v2) (append (list bvsle bvule) (get-bv-ops v1)  (get-bv-ops v2))]
 
-    [(vec-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append (list bvashr bvlshr) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-absd v1 v2) (append (list bvsge bvmul abs bvsub) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
+    [(vec-shl v1 v2) (append (list extract bvmul) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append (list extract bvashr bvlshr bvsdiv bvudiv) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-absd v1 v2) (append (list bvsge bvuge bvmul abs bvsub bvsmax bvumax bvsmin bvumin) (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 
     [(vec-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
@@ -599,9 +599,9 @@
 
 
 (define (create-buffer data elemT)
-  (displayln "Create buffer:")
-  (println data)
-  (println elemT)
+  ;(displayln "Create buffer:")
+  ;(println data)
+  ;(println elemT)
   (define step-size
     (cond
         [(eq? elemT 'int8) 8]
@@ -729,6 +729,7 @@
             [(eq? (cpp:type-bw outT) 16) cpp:minu16]
             [(eq? (cpp:type-bw outT) 32) cpp:minu32]
             [(eq? (cpp:type-bw outT) 64) cpp:minu64]))
+
         (minF lhs rhs)])]))
 
 (define (do-max lhs rhs)
@@ -810,11 +811,35 @@
 
 (define (do-absd lhs rhs)
   (define outT (infer-out-type lhs rhs))
-  (cond
+  (define prev (cond
     [(cpp:signed-type? outT)
      (mk-cpp-expr (if (bvsle (cpp:eval lhs) (cpp:eval rhs)) (bvsub (cpp:eval rhs) (cpp:eval lhs)) (bvsub (cpp:eval lhs) (cpp:eval rhs))) (mk-cpp-type (cpp:type-bw outT) #f))]
     [else
-     (mk-cpp-expr (if (bvule (cpp:eval lhs) (cpp:eval rhs)) (bvsub (cpp:eval rhs) (cpp:eval lhs)) (bvsub (cpp:eval lhs) (cpp:eval rhs))) (mk-cpp-type (cpp:type-bw outT) #f))]))
+     (mk-cpp-expr (if (bvule (cpp:eval lhs) (cpp:eval rhs)) (bvsub (cpp:eval rhs) (cpp:eval lhs)) (bvsub (cpp:eval lhs) (cpp:eval rhs))) (mk-cpp-type (cpp:type-bw outT) #f))])
+    )
+
+  (define lhs-bv (cpp:eval lhs))
+  (define rhs-bv (cpp:eval rhs))
+  ;(displayln "\n")
+  ;(printf "lhs-bv: ~a\n" lhs-bv)
+  ;(printf "rhs-bv: ~a\n" rhs-bv)
+  (define diff (if (bvsle lhs-bv rhs-bv)
+                 (bvsub rhs-bv lhs-bv)
+                 (bvsub lhs-bv rhs-bv)
+                 )
+    )
+  ;(printf "Signed diff: ~a\n" diff)
+  (define zero (bv 0 (bvlength lhs-bv)))
+  (define neg1 (bv -1 (bvlength lhs-bv)))
+  ;(printf "absd-bv: ~a\n" diff)
+  ;(printf "ABSD of ~a and ~a is ~a\n" (bitvector->integer lhs-bv) (bitvector->integer rhs-bv) (bitvector->integer diff))
+  ;(displayln "HERE")
+
+  (define new (mk-cpp-expr diff (mk-cpp-type (cpp:type-bw outT) #f)))
+  ;(printf "New: ~a\n" new )
+  ;(printf "Old: ~a\n" prev)
+  prev 
+  )
 
 (define (do-clz lhs)
   (define outT (infer-out-type lhs lhs))

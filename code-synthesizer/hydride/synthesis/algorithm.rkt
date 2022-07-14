@@ -34,6 +34,10 @@
 (define (synthesize-halide-expr halide-expr expr-depth VF)
   (define id-map (halide:get-buffer-ids halide-expr))
   (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map))
+  (displayln "========================================")
+  (displayln "Synthesis completed:")
+  (pretty-print synthesized-sol)
+  (displayln "========================================")
   synthesized-sol
 
 
@@ -90,7 +94,7 @@
 
                   (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args expr-depth))
 
-                  (define base_name (string-append "base_" (~s (random 100))))
+                  (define base_name (string-append "base_" (~s (random 10000))))
 
 
                   (define grammar (get-expr-grammar expr-extract leaves base_name VF))
@@ -116,7 +120,7 @@
                   (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 30)
+                  (define cost-bound 40)
                   (define solver 'z3)
 
                   (clear-vc!)

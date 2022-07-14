@@ -140,7 +140,7 @@
     [(uint32_t v) #f]
     [(uint64_t v) #f]
     ;[_ (error "Cannot infer signed-ness of expr" e)]
-    [_ #t]
+    [_ #f]
     ))
 
 (define (cpp:unsigned-expr? e)
