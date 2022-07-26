@@ -1,5 +1,13 @@
 #!/bin/bash
 
+################### CHANGE THESE ###################
+HALIDE_ROOT=/home/sb54/halide-14
+####################################################
+
+HALIDE_INCLUDE=$HALIDE_ROOT/include
+HALIDE_TOOLS=$HALIDE_ROOT/tools
+HALIDE_LIB=$HALIDE_ROOT/distrib/lib
+
 if [ -z "$1" ]
 then
   echo "Provide the directory of the benchmark as argument 1"
@@ -22,10 +30,6 @@ else
   MAX_PARALLELISM=$3
 fi
 
-HALIDE_INCLUDE=/home/sb54/halide-14/include
-HALIDE_TOOLS=/home/sb54/halide-14/tools
-HALIDE_LIB=/home/sb54/halide-14/distrib/lib
-
 # Compile the generator
 g++ $BENCH_DIR/gen.cpp $HALIDE_TOOLS/GenGen.cpp -g -std=c++17 -fno-rtti -I $HALIDE_INCLUDE -L $HALIDE_LIB -lHalide -lpthread -ldl -o gen
 
@@ -41,5 +45,5 @@ g++ proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -std=c++17 -I $H
 # Run it
 ./proc
 
-# Clean
-rm gen proc
+# Remove proc. gen may be used by the caller.
+rm proc
