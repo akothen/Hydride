@@ -1,12 +1,13 @@
 #!/bin/bash
 
 ################### CHANGE THESE ###################
-HALIDE_ROOT=/home/sb54/halide-14
+HALIDE_ROOT=/home/sb54/Hydride/hexagon-benchmarks/halide_standalone_autoscheduler
 ####################################################
 
-HALIDE_INCLUDE=$HALIDE_ROOT/include
-HALIDE_TOOLS=$HALIDE_ROOT/tools
+HALIDE_INCLUDE=$HALIDE_ROOT/distrib/include
+HALIDE_TOOLS=$HALIDE_ROOT/distrib/tools
 HALIDE_LIB=$HALIDE_ROOT/distrib/lib
+HALIDE_AUTOSCHED=$HALIDE_ROOT/apps/autoscheduler
 
 if [ -z "$1" ]
 then
@@ -36,20 +37,23 @@ else
   MAX_PARALLELISM=$3
 fi
 
+CXXFLAGS="-Wall -Werror -Wno-unused-function -Wcast-qual -Wignored-qualifiers -Wno-comment -Wsign-compare -Wno-unknown-warning-option -Wno-psabi -fno-rtti -std=c++11"
+
 # Compile the generator
-g++ $BENCH_DIR/gen.cpp $HALIDE_TOOLS/GenGen.cpp -g -std=c++17 -fno-rtti -I $HALIDE_INCLUDE -L $HALIDE_LIB -lHalide -lpthread -ldl -o gen
+# Note: -rdynamic is an important flag here because the symbols of this program need to be visible to libauto_schedule.so below.
+g++ $CXXFLAGS -rdynamic $BENCH_DIR/gen.cpp $HALIDE_TOOLS/GenGen.cpp -I $HALIDE_INCLUDE $HALIDE_LIB/libHalide.a -ldl -lpthread -o gen
 
 # Run the generator to generate the header file and the static lib. Use auto-schedule.
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HALIDE_LIB
 # According to this: https://github.com/halide/Halide/discussions/5090#discussioncomment-48676
 # the Adams2019 auto-scheduler only pays attention to the parallelism for machine params.
-HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule -p $HALIDE_LIB/libautoschedule_adams2019.so -s Adams2019 target=host auto_schedule=true machine_params=$MAX_PARALLELISM,16777216,40
+HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_WEIGHTS_DIR=$HALIDE_AUTOSCHED/weights ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=true -p $HALIDE_AUTOSCHED/bin/libauto_schedule.so machine_params=$MAX_PARALLELISM,16777216,40
 
 # Compile the benchmark
-g++ proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -std=c++17 -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -lpthread -ldl -o proc
+g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -lpthread -ldl -o proc
 
 # Run it
 ./proc
 
-# Remove proc. gen may be used by the caller.
-rm proc
+# # Remove proc. gen may be used by the caller.
+# rm proc

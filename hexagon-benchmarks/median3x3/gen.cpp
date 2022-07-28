@@ -10,12 +10,9 @@ private:
 
 public:
   // Takes an 8 bit image; one channel.
-  Input<Buffer<uint8_t, 2>> input{"input"};
+  Input<Buffer<uint8_t>> input{"input", 2};
   // Outputs an 8 bit image; one channel.
-  Output<Buffer<uint8_t, 2>> output{"output"};
-
-  GeneratorParam<bool> use_parallel_sched{"use_parallel_sched", true};
-  GeneratorParam<bool> use_prefetch_sched{"use_prefetch_sched", true};
+  Output<Buffer<uint8_t>> output{"output", 2};
 
   void generate() {
     bounded_input(x, y) = BoundaryConditions::repeat_edge(input)(x, y);
@@ -43,8 +40,10 @@ public:
     output.dim(1).set_min(0);
 
     if (auto_schedule) {
-      input.set_estimates({{0, 1024}, {0, 1024}});
-      output.set_estimates({{0, 1024}, {0, 1024}});
+      input.dim(0).set_bounds_estimate(0, 1024)
+           .dim(1).set_bounds_estimate(0, 1024);
+      output.dim(0).set_bounds_estimate(0, 1024)
+            .dim(1).set_bounds_estimate(0, 1024);
     } else {
       const int vector_size = natural_vector_size<uint8_t>();
       output.vectorize(x, vector_size).parallel(y, 16);

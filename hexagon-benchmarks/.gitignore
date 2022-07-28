@@ -1,2 +1,4 @@
 */*.a
 */*.h
+*/*.schedule
+halide_standalone_autoscheduler/
