@@ -19,9 +19,9 @@ particular program, and implicitly, the machine we're auto-tuning on.
 
 ## Pre-Training
 
-Theoretically, you should have pre-trained the cost-model before running either `run.sh` or `autotune_program.sh`. We will do that to align with what the paper says. That said, [according to A. Adams](https://github.com/halide/Halide/discussions/6060#discussioncomment-788041), for few/specific apps, it makes more sense to just auto-tune instead of taking the effort to pre-train. This makes sense if you consider what pre-training actually does. As a reminder (from above), when auto-tuning a specific program, we train the model to fit this particular program and implicitly the hardware we're running on (because the schedules that behave well on this hardware are automatically favored through training). Pre-training is basically doing the same thing but for a bunch of _randomly generated_ programs. This means that the cost-model is now fit to the "average" of all these and in the hardware. But since the programs are randomly generated, this means that the cost-model has been fit just to the hardware.
+Theoretically, you should have pre-trained the cost-model before running either `run.sh` or `autotune_program.sh`. We will do that to align with what the paper says. That said, [according to A. Adams](https://github.com/halide/Halide/discussions/6060#discussioncomment-788041), for few/specific apps, it makes more sense to just auto-tune instead of taking the effort to pre-train. This makes sense if you consider what pre-training actually does. As a reminder (from above), when auto-tuning a specific program, we train the model to fit this particular program and implicitly the hardware we're running on (because the schedules that behave well on this hardware are automatically favored through training). Pre-training is basically doing the same thing but for a bunch of _randomly generated_ programs. This means that the cost-model is now fit to the "average" of all these and in the hardware. But since the programs are randomly generated, they cancel each other out and what is left is the hardware (i.e., the cost-model has been fit just to the hardware).
 
-Now, suppose that you want to auto-schedule a specific program. Pre-training is only profitable only if you're planning to not use auto-tuning or if you plan to use minimal auto-tuning. This is why it makes sense to not pre-train for a couple of apps, because you can spend all your auto-tuning time budget fitting the model to these specific apps instead of wasting time training a generally good cost-model. If, OTOH, you want to auto-schedule hundeds of programs, then it makes sense to pre-train _once_, and then auto-tune lightly for each program.
+Now, suppose that you want to auto-schedule a specific program. Pre-training is profitable probably only if you're planning to not use auto-tuning or if you plan to use minimal auto-tuning. This is why it makes sense to not pre-train for a couple of apps, because you can spend all your auto-tuning time budget fitting the model to these specific apps instead of wasting time training a generally good cost-model. If, OTOH, you want to auto-schedule hundeds of programs, then it makes sense to pre-train _once_, and then auto-tune lightly for each program.
 
 Let me now present the steps to reproduce the pre-training process. It's kind of hacky because a) it's based on a bunch of scripts that were probably made robust enought to work for the paper, and not for general usage, b) we don't have any good instructions. The best we have is [this](https://github.com/halide/Halide/discussions/6060), which doesn't help a lot.
 
@@ -65,7 +65,7 @@ and add `#!/bin/bash`.
 
 Now, you should be able to just do `./autotune_loop.sh`.
 
-### Make benchmarks 
+### Make benchmarks compatible with the 2019 infra
 
 If you just run `./autotune_loop.sh`, it will train the model as it appears in the branch `standalone_autoscheduler` from 2019. Which means then to auto-schedule the Hexagon benchmarks, you need to use this branch. The problem is that since 2019, the Halide API has changed, and thus the benchmarks in their 2022 version, when compiled (to generators), can't be hooked up with old auto-scheduler. Thankfully, they used the same hexagon benchmarks back in 2019: https://github.com/halide/Halide/tree/standalone_autoscheduler/apps/hexagon_benchmarks. We need to do minimal changes to make them ready for auto-scheduling.
 
@@ -76,19 +76,6 @@ Now, to enable auto-scheduling in the benchmarks, you do the usual `if (auto_sch
 input.dim(0).set_bounds_estimate(0, 1024).dim(1).set_bounds_estimate(0, 1024);
 ```
 
-## Notes and Concerns
-
-### Auto-Tuning
-
-- It's unclear what should be the `weights_file` we feed into `autotune_loop.sh`. I assume it is the
-`baseline.weights` file in the Adams2019 root dir. This is copied to the samples directory and is
-updated (i.e., trained) iteratively.
-
-- The model is not trained for the machine, but for the combination machine+program. In other words, we don't fit the model just to the machine but also to a specific schedule, that's why in the pre-training step which uses auto-tuning, we specify a specific benchmark/program (a generator in Halide terms). This is also why there doesn't seem to be a way to enable auto-tuning while auto-scheduling a specific benchmark; because we are supposed to have already run the pre-training, which has used auto-tuning and beam search for this particular program. See Section 4.3 in the paper.
-
-- During pre-training, a `samples` directory is created and a `.weights` file is put there (initially, `baseline.weights`). It seems that these weights are updated iteratively by running `autotune_loop.sh` iteratively. To increase auto-tuning time, I'm not sure if we should just `autotune_loop.sh` multiple times, or if we should configure some other parameter inside `autotune_loop.sh`.
-
-### Questions to Halide people
+## Questions to Halide people
 
 1) Where's `IRMutator2` (see above) ?
-2) Should we use `baseline.weights` as initial weights ?

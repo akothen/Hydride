@@ -23,3 +23,7 @@ cd $HALIDE_AUTOSCHED
 # This will create a directory `samples` in the current path. Delete it if you want to start over
 # the auto-tuning, otherwise these weights are iteratively improved.
 ./autotune_loop.sh $GEN_EXE	$GEN_NAME	host ./weights ./bin
+
+# It seems it's ok to use `./weights` (i.e., apps/autoscheduler/weights) dir as initial weights.
+# This is what they do for apps/blur, but also these are the weights that are pre-trained. We update
+# them when auto-tuning a program _locally_ (i.e., we don't touch/destroy the initial/pre-trained weights)
