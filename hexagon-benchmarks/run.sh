@@ -53,7 +53,7 @@ HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_W
 g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -lpthread -ldl -o proc
 
 # Run it
-./proc
+./proc || (exit 1 & echo "FAILED!")
 
 # # Remove proc. gen may be used by the caller.
 # rm proc
