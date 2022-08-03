@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BEAM_SIZE=16
+BEAM_SIZE=32
 
 # Including hyper-threading. Use this if you want to exclude it:
 # grep ^cpu\\scores /proc/cpuinfo | uniq |  awk '{print $4}'
