@@ -14,8 +14,11 @@ states make it into the next round of the beam search. **Default is 32** ([link]
 
 ## Auto-Scheduling with Auto-Tuning
 
-`autotune_program.sh` auto-tunes a specific program. You just specify the benchmark you want to auto-tune by setting the variables inside `autotune_program.sh`. Notice that auto-tuning simultaneously trains the cost-model to fit this
-particular program, and implicitly, the machine we're auto-tuning on.
+`autotune_program.sh` auto-tunes a specific benchmark, like so: `autotune_program.sh median3x3`. Notice that auto-tuning simultaneously trains the cost-model to fit this particular program, and implicitly, the machine we're auto-tuning on.
+
+I need to explain a little bit how the weights of the auto-scheduler are used both when auto-tuning and when auto-scheduling. When auto-scheduling (in `run.sh`), we need to provide a directory for the weights of the auto-scheduler. By default, we provide the default weights, i.e., `apps/autocheduler/weights` (these are the pre-trained weights if we have done any pre-training). Now, when auto-tuning, we copy these samples weights to `apps/autoscheduler/samples` and start auto-tuning them. The initial weights remain _intact_. So, if you want to auto-tune a different benchmark, you can start with the original (or pre-trained) weights. Also, in that way we preserve any previous samples for a benchmark. 
+
+But, what happens if you run the `autotune_loop.sh` script multiple times? The script checks if `apps/autoscheduler/samples/weights` exists. If it does, then it continues updating it. Otherwise, it copies the original weights. However, this means that if you auto-tune a program and then you want to auto-tune a different one, the dir will exist, and you will continue auto-tuning the weights of the previous program. So, what I do in `autotune_program.sh` is the following. After finishing auto-tuning, I copy the (auto-tuned/updated) samples (and weights) to `bench_dir/samples`, e.g., `median3x3/samples`. When `autotune_program.sh` starts, it checks whether this dir exists. If it does, it copies these samples to `apps/autoscheduler`, so that we can continue auto-tuning them. Otherwise, it deletes the `samples` dir to make sure we start clean.
 
 ## Pre-Training
 
@@ -75,6 +78,9 @@ Now, to enable auto-scheduling in the benchmarks, you do the usual `if (auto_sch
 ```
 input.dim(0).set_bounds_estimate(0, 1024).dim(1).set_bounds_estimate(0, 1024);
 ```
+
+## Comments on Pre-training
+- I used 100 batches in pre-training, which made it run for about 7 hours. This is quite lower than the original which is 1M.
 
 ## Questions to Halide people
 

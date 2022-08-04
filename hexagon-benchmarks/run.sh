@@ -37,6 +37,16 @@ else
   MAX_PARALLELISM=$3
 fi
 
+# Use original weights by default...
+WEIGHTS_DIR=$HALIDE_AUTOSCHED/weights
+# ... unless there's a weights directory in this benchmark's dir
+# NOTE: Something that is worrying here is that if we assign to HL_WEIGHTS_DIR
+# a dir that doesn't exist, Halide won't complain.
+if [ -d "$BENCH_DIR/samples" ] 
+then
+  WEIGHTS_DIR=$BENCH_DIR/samples/weights
+fi
+
 CXXFLAGS="-Wall -Werror -Wno-unused-function -Wcast-qual -Wignored-qualifiers -Wno-comment -Wsign-compare -Wno-unknown-warning-option -Wno-psabi -fno-rtti -std=c++11"
 
 # Compile the generator
@@ -47,7 +57,7 @@ g++ $CXXFLAGS -rdynamic $BENCH_DIR/gen.cpp $HALIDE_TOOLS/GenGen.cpp -I $HALIDE_I
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HALIDE_LIB
 # According to this: https://github.com/halide/Halide/discussions/5090#discussioncomment-48676
 # the Adams2019 auto-scheduler only pays attention to the parallelism for machine params.
-HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_WEIGHTS_DIR=$HALIDE_AUTOSCHED/weights ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=true -p $HALIDE_AUTOSCHED/bin/libauto_schedule.so machine_params=$MAX_PARALLELISM,16777216,40
+HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_WEIGHTS_DIR=$WEIGHTS_DIR ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=true -p $HALIDE_AUTOSCHED/bin/libauto_schedule.so machine_params=$MAX_PARALLELISM,16777216,40
 
 # Compile the benchmark
 g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -lpthread -ldl -o proc
