@@ -8,7 +8,6 @@
 
 void bench_pipeline(PipelineDescriptorBase *p) {
     p->init();
-    printf("Running %s...\n", p->name());
 
 #ifdef HALIDE_RUNTIME_HEXAGON
     // To avoid the cost of powering HVX on in each call of the
@@ -23,7 +22,7 @@ void bench_pipeline(PipelineDescriptorBase *p) {
         printf("pipeline failed! %d\n", result);
       }
     });
-    printf("Done, time (%s): %g s\n", p->name(), time);
+    printf("%g", time);
 
 #ifdef HALIDE_RUNTIME_HEXAGON
     // We're done with HVX, power it off, and reset the performance mode
@@ -36,6 +35,4 @@ void bench_pipeline(PipelineDescriptorBase *p) {
       abort();
     }
     p->finalize();
-
-    printf("Success!\n");
 }

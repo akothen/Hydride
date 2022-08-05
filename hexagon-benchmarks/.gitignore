@@ -1,4 +1,5 @@
 */*.a
 */*.h
 */*.schedule
+*/samples
 halide_standalone_autoscheduler/

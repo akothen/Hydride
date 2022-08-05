@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echoerr() { echo "$@" 1>&2; }
+
 ################### CHANGE THESE ###################
 HALIDE_ROOT=/home/sb54/Hydride/hexagon-benchmarks/halide_standalone_autoscheduler
 ####################################################
@@ -11,7 +13,7 @@ HALIDE_AUTOSCHED=$HALIDE_ROOT/apps/autoscheduler
 
 if [ -z "$1" ]
 then
-  echo "Provide the directory of the benchmark as argument 1"
+  echoerr "Provide the directory of the benchmark as argument 1"
   exit 1
 fi
 
@@ -25,24 +27,24 @@ WHAT_SCHEDULE="no"
 
 if [ -z "$2" ]
 then
-  echo "Using no schedule."
+  echoerr "Using no schedule."
 else
   WHAT_SCHEDULE=$2
   if [ "${WHAT_SCHEDULE}" != "no" ] && [ "${WHAT_SCHEDULE}" != "hw" ] && [ "${WHAT_SCHEDULE}" != "auto" ]; then
-    echo "Wrong option for what schedule to use"
+    echoerr "Wrong option for what schedule to use"
     exit 1
   fi
   if [ "$WHAT_SCHEDULE" = "auto" ]; then
     if [ -z "$BEAM_SIZE" ]
     then
     # BEAM_SIZE remains empty, and so Halide uses its default value.
-      echo "Using the default beam size (32)."
+      echoerr "Using the default beam size (32)."
     fi
 
     if [ -z "$NUM_PASSES" ]
     then
     # NUM_PASSES remains empty, and so Halide uses its default value.
-      echo "Using the default number of passes (5)."
+      echoerr "Using the default number of passes (5)."
     fi
   fi
 fi
@@ -52,10 +54,10 @@ WEIGHTS_DIR=$HALIDE_AUTOSCHED/weights
 # ... unless there's a weights directory in this benchmark's dir
 # NOTE: Something that is worrying here is that if we assign to HL_WEIGHTS_DIR
 # a dir that doesn't exist, Halide won't complain.
-if [ -d "$BENCH_DIR/samples" ] 
-then
-  WEIGHTS_DIR=$BENCH_DIR/samples/weights
-fi
+# if [ -d "$BENCH_DIR/samples" ] 
+# then
+#   WEIGHTS_DIR=$BENCH_DIR/samples/weights
+# fi
 
 CXXFLAGS="-Wall -Werror -Wno-unused-function -Wcast-qual -Wignored-qualifiers -Wno-comment -Wsign-compare -Wno-unknown-warning-option -Wno-psabi -fno-rtti -std=c++11"
 

@@ -6,7 +6,7 @@ GEN_NAME=$1
 ####################################################
 
 # First, use run.sh (with the fastest settings) to create the generator. It should create a generator in the current dir.
-./run.sh $GEN_NAME 1 1 > /dev/null 2>&1
+./run.sh $GEN_NAME no 1 1 > /dev/null 2>&1
 GEN_EXE=/home/sb54/Hydride/hexagon-benchmarks/gen
 
 HALIDE_INCLUDE=$HALIDE_ROOT/distrib/include

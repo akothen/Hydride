@@ -87,3 +87,5 @@ input.dim(0).set_bounds_estimate(0, 1024).dim(1).set_bounds_estimate(0, 1024);
 
 1) Where's `IRMutator2` (see above) ?
 2) Am I using the weights directory correctly ? (Mention both `HL_WEIGHTS_DIR` and how I'm moving them around)
+3) Is the runtime reported in `samples/best.txt` somehow normalized? If I look at `bench.txt` of the
+best sample (the one mentioned in `best.txt`), the time looks 1000 times smaller. My understanding is that the correct timing is the latter.
