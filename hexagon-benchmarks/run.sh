@@ -16,25 +16,35 @@ then
 fi
 
 BENCH_DIR=$1
-BEAM_SIZE=$2
-NUM_PASSES=$3
-MAX_PARALLELISM=32
+BEAM_SIZE=$3
+NUM_PASSES=$4
+# Including hyper-threading. Use this if you want to exclude it:
+# grep ^cpu\\scores /proc/cpuinfo | uniq |  awk '{print $4}'
+MAX_PARALLELISM=`grep -c ^processor /proc/cpuinfo`
+WHAT_SCHEDULE="no"
 
 if [ -z "$2" ]
 then
-  echo "Using the default beam size (32)."
-fi
-
-if [ -z "$3" ]
-then
-  echo "Using the default number of passes (5)."
-fi
-
-if [ -z "$4" ]
-then
-  echo "Using 32 as max parallelism in machine_params."
+  echo "Using no schedule."
 else
-  MAX_PARALLELISM=$3
+  WHAT_SCHEDULE=$2
+  if [ "${WHAT_SCHEDULE}" != "no" ] && [ "${WHAT_SCHEDULE}" != "hw" ] && [ "${WHAT_SCHEDULE}" != "auto" ]; then
+    echo "Wrong option for what schedule to use"
+    exit 1
+  fi
+  if [ "$WHAT_SCHEDULE" = "auto" ]; then
+    if [ -z "$BEAM_SIZE" ]
+    then
+    # BEAM_SIZE remains empty, and so Halide uses its default value.
+      echo "Using the default beam size (32)."
+    fi
+
+    if [ -z "$NUM_PASSES" ]
+    then
+    # NUM_PASSES remains empty, and so Halide uses its default value.
+      echo "Using the default number of passes (5)."
+    fi
+  fi
 fi
 
 # Use original weights by default...
@@ -57,7 +67,16 @@ g++ $CXXFLAGS -rdynamic $BENCH_DIR/gen.cpp $HALIDE_TOOLS/GenGen.cpp -I $HALIDE_I
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HALIDE_LIB
 # According to this: https://github.com/halide/Halide/discussions/5090#discussioncomment-48676
 # the Adams2019 auto-scheduler only pays attention to the parallelism for machine params.
-HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_WEIGHTS_DIR=$WEIGHTS_DIR ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=true -p $HALIDE_AUTOSCHED/bin/libauto_schedule.so machine_params=$MAX_PARALLELISM,16777216,40
+if [ "$WHAT_SCHEDULE" = "auto" ]; then
+  HL_BEAM_SIZE=$BEAM_SIZE HL_NUM_PASSES=$NUM_PASSES HL_PERMIT_FAILED_UNROLL=1 HL_WEIGHTS_DIR=$WEIGHTS_DIR ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=true -p $HALIDE_AUTOSCHED/bin/libauto_schedule.so machine_params=$MAX_PARALLELISM,16777216,40
+else
+  if [ "$WHAT_SCHEDULE" = "no" ]; then
+    NO_SCHEDULE="true"
+  else
+    NO_SCHEDULE="false"
+  fi
+  ./gen -o $BENCH_DIR -g $BENCH_DIR -f $BENCH_DIR -e static_library,h,schedule target=host auto_schedule=false machine_params=$MAX_PARALLELISM,16777216,40 no_schedule=$NO_SCHEDULE
+fi
 
 # Compile the benchmark
 g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -lpthread -ldl -o proc

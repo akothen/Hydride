@@ -9,6 +9,8 @@ public:
   // Outputs an 8 bit image; one channel.
   Output<Buffer<uint8_t>> output{"output", 2};
 
+  GeneratorParam<bool> no_schedule{"no_schedule", false};
+
   void generate() {
     bounded_input(x, y) = BoundaryConditions::repeat_edge(input)(x, y);
     max_y(x, y) = max(bounded_input(x, y - 1), bounded_input(x, y),

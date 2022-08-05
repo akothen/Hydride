@@ -14,6 +14,8 @@ public:
   // Outputs an 8 bit image; one channel.
   Output<Buffer<uint8_t>> output{"output", 2};
 
+  GeneratorParam<bool> no_schedule{"no_schedule", false};
+
   void generate() {
     bounded_input(x, y) = BoundaryConditions::repeat_edge(input)(x, y);
     max_y(x, y) = max(bounded_input(x, y - 1), bounded_input(x, y),
@@ -44,6 +46,7 @@ public:
            .dim(1).set_bounds_estimate(0, 1024);
       output.dim(0).set_bounds_estimate(0, 1024)
             .dim(1).set_bounds_estimate(0, 1024);
+    } else if (no_schedule) {
     } else {
       const int vector_size = natural_vector_size<uint8_t>();
       output.vectorize(x, vector_size).parallel(y, 16);

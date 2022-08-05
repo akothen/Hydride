@@ -4,9 +4,10 @@
 
 Use `run.sh`. It generates an automatic schedule for a benchmark (using only the cost-model, without auto-tuning), and then runs this benchmark. A benchmark is identified by its dir. For example `./run.sh median3x3`. Here's the full usage of this script:
 ```bash
-./run.sh <bench_dir> <beam_size> <num_passes> <max_parallelism>
+./run.sh <bench_dir> <what_schedule> <beam_size> <num_passes> <max_parallelism>
 ```
 - `bench_dir`: The directory that has the source for the benchmark, for example `median3x3`.
+- `what_schedule`: What schedule to use. `no` for no schedule, `hw` for the hand-written schedule provided in the upstream and `auto` for an automatic schedule using the cost-model.
 - `beam_size`: If the beam size is `k`, the top `k`
 states make it into the next round of the beam search. **Default is 32** ([link](https://github.com/halide/Halide/blob/7821212403aaa1f93ed3ece070984817de1cc6b1/src/autoschedulers/adams2019/AutoSchedule.cpp#L24)). See the paper in the current dir, which has some highlighted text regarding beam size.
 - `num_passes`: The number of passes used. **Default is 5 unless beam size is 1** (it's mentioned in the paper but also [link](https://github.com/halide/Halide/blob/7821212403aaa1f93ed3ece070984817de1cc6b1/src/autoschedulers/adams2019/AutoSchedule.cpp#L480)). See the highlighted text in the paper.
@@ -85,3 +86,4 @@ input.dim(0).set_bounds_estimate(0, 1024).dim(1).set_bounds_estimate(0, 1024);
 ## Questions to Halide people
 
 1) Where's `IRMutator2` (see above) ?
+2) Am I using the weights directory correctly ? (Mention both `HL_WEIGHTS_DIR` and how I'm moving them around)
