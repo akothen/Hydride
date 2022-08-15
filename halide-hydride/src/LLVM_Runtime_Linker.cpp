@@ -1220,6 +1220,7 @@ std::unique_ptr<llvm::Module> get_initial_module_for_target(Target t, llvm::LLVM
         modules.push_back(get_initmod_runtime_api(c, bits_64, debug));
     }
 
+
     link_modules(modules, t);
 
     if (t.os == Target::Windows &&

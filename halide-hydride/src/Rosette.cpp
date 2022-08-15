@@ -17,9 +17,14 @@
 
 using namespace std;
 
+
+
 namespace Halide {
 
+    int expr_id = 0;
+
     namespace Internal {
+
         namespace {
 
             typedef std::map<std::string, VarEncoding> Encoding;
@@ -428,6 +433,8 @@ namespace Halide {
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); // TODO
 
+                        if(elemT == "'") return "";
+
                         std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
@@ -792,7 +799,8 @@ namespace Halide {
                         case 1:
                             // bool vectors are always emitted as uint8 in the C++ backend
                             if (type.is_vector()) {
-                                oss << "uint8x" << type.lanes() << "_t";
+                                //oss << "uint8x" << type.lanes() << "_t";
+
                             } else {
                                 oss << "uint1";
                             }
@@ -1051,12 +1059,17 @@ namespace Halide {
                             // Replace abstracted abstractions
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
 
+
+
+                            Expr call_expr = ExtractIntoCall().generate_call("hydride.node.1", final_expr);
+
+
                             // Register that this node has been optimzied
-                            mutated_exprs.insert(final_expr.get());
+                            mutated_exprs.insert(call_expr.get());
 
-                            debug(0) << "\nOptimized expression: " << final_expr << "\n";
+                            debug(0) << "\nOptimized expression: " << call_expr << "\n";
 
-                            return final_expr;
+                            return call_expr;
                         }                  
 
                 private:
@@ -1218,6 +1231,33 @@ namespace Halide {
                         }
                 };
 
+
+                class ExtractIntoCall : public IRMutator {
+                    using IRMutator::visit;
+
+                    public:
+
+                    void get_call_args(const Expr &x, std::vector<Expr>& args){
+
+                        for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
+                            const Load* op = bi->first;
+
+                            args.push_back(Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment));
+                        }
+                    }
+
+                    Expr generate_call(std::string function_name, const Expr &x){
+                        std::vector<Expr> args;
+
+                        get_call_args(x, args);
+
+                        std::cout << "Generating Call with type: "<< x.type() << " and lanes "<< x.type().lanes()<<"\n";
+                        return Call::make(x.type(), function_name, args, Call::Extern);
+                    }
+
+                    ExtractIntoCall(){}
+                };
+
                 class ReplaceAbstractedNodes : public IRMutator {
                     using IRMutator::visit;
 
@@ -1340,6 +1380,8 @@ namespace Halide {
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
 
+                        if(elemT == "'") return "";
+
                         std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
@@ -1352,6 +1394,9 @@ namespace Halide {
                         size_t bitwidth = op->type.bits() * op->type.lanes();
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
+
+
+                        if(elemT == "'") return "";
 
                         std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
@@ -1434,7 +1479,6 @@ namespace Halide {
 
                 std::cout << "Input expression to synthesize: "<< orig_expr <<"\n";
 
-                static int expr_id = 0;
 
                 RegToLoadMap.clear();
                 LoadToRegMap.clear();
@@ -1598,14 +1642,14 @@ namespace Halide {
                 rkt << HSE.emit_set_memory_limit(20000) << "\n";
                 rkt << HSE.emit_symbolic_buffers() << "\n";
                 rkt << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
-                rkt << sym_bufs.str() << "\n";
-                rkt << sym_vars.str() << "\n";
+                //rkt << sym_bufs.str() << "\n";
+                //rkt << sym_vars.str() << "\n";
                 //rkt << axioms.str() << "\n";
-                rkt << let_stmts.str() << "\n";
+                //rkt << let_stmts.str() << "\n";
 
                 rkt << "(define halide-expr \n";
                 rkt << expr << "\n";
-                rkt << ")\n";
+                rkt << ")\n\n";
 
                 rkt << "(clear-vc!)" << "\n";
                 rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes()) << ")" <<"\n";
@@ -1618,8 +1662,6 @@ namespace Halide {
                 int ret_code = system(cmd.c_str());
                 std::cout << "Synthesis completed with return code:\t"<< ret_code <<"\n";
                 
-                std::cout << "Press [Enter] to continue:" << "\n";
-                std::cin.get();
 
 
                 expr_id++;

@@ -165,6 +165,10 @@ protected:
     /** Add external_code entries to llvm module. */
     void add_external_code(const Module &halide_module);
 
+
+    /** Add hydride_code entries to llvm module. */
+    void add_hydride_code(const Module &halide_module);
+
     /** Run all of llvm's optimization passes on the module. */
     void optimize_module();
 

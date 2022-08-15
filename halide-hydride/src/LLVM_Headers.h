@@ -96,6 +96,7 @@
 #include <llvm/Transforms/Utils/ModuleUtils.h>
 #include <llvm/Transforms/Utils/SymbolRewriter.h>
 
+#include <llvm/IRReader/IRReader.h>
 // IWYU pragma: end_exports
 
 // No msvc warnings from llvm headers please

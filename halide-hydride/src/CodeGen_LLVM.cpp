@@ -356,6 +356,22 @@ void CodeGen_LLVM::add_external_code(const Module &halide_module) {
     }
 }
 
+
+void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
+
+    std::cout << "Linking Hydride module!" << "\n";
+    std::string hydride_bitcode_name = "/tmp/hydride.ll";
+    llvm::StringRef sb = llvm::StringRef(hydride_bitcode_name);
+    llvm::SMDiagnostic error;
+    std::unique_ptr<llvm::Module> hydride_module = llvm::parseIRFile(sb, error, *context);
+
+    bool failed = llvm::Linker::linkModules(*module, std::move(hydride_module));
+    if (failed) {
+        internal_error << "Failure linking in additional module: " << hydride_bitcode_name<< "\n";
+    }
+
+}
+
 CodeGen_LLVM::~CodeGen_LLVM() {
     delete builder;
 }
@@ -578,6 +594,9 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::compile(const Module &input) {
             compile_func(f, names.simple_name, names.extern_name);
         });
     }
+
+
+    add_hydride_code(input);
 
     debug(2) << "llvm::Module pointer: " << module.get() << "\n";
 
@@ -1963,12 +1982,14 @@ void CodeGen_LLVM::visit(const Load *op) {
 
     // Predicated load
     if (!is_const_one(op->predicate)) {
+        std::cout << "[Hydride]: " << "Predicated Load" << "\n";
         codegen_predicated_load(op);
         return;
     }
 
     // There are several cases. Different architectures may wish to override some.
     if (op->type.is_scalar()) {
+        std::cout << "[Hydride]: " << "Scalar load" << "\n";
         // Scalar loads
         Value *ptr = codegen_buffer_pointer(op->name, op->type, op->index);
         LoadInst *load = builder->CreateAlignedLoad(llvm_type_of(op->type), ptr, llvm::Align(op->type.bytes()));
@@ -1982,6 +2003,7 @@ void CodeGen_LLVM::visit(const Load *op) {
         if (ramp && stride && stride->value == 1) {
             value = codegen_dense_vector_load(op);
         } else if (ramp && stride && 2 <= stride->value && stride->value <= 4) {
+            std::cout << "[Hydride]: " << "load with 2 <= stride < 4" << "\n";
             // Try to rewrite strided loads as shuffles of dense loads,
             // aligned to the stride. This makes adjacent strided loads
             // share the same underlying dense loads.
@@ -2052,6 +2074,9 @@ void CodeGen_LLVM::visit(const Load *op) {
             // Concat the results
             value = concat_vectors(results);
         } else if (ramp && stride && stride->value == -1) {
+
+            std::cout << "[Hydride]: " << "load with stride = -1" << "\n";
+
             // Load the vector and then flip it in-place
             Expr flipped_base = ramp->base - ramp->lanes + 1;
             Expr flipped_stride = make_one(flipped_base.type());
@@ -2070,6 +2095,7 @@ void CodeGen_LLVM::visit(const Load *op) {
 
             value = shuffle_vectors(flipped, indices);
         } else if (ramp) {
+            std::cout << "[Hydride]: " << "Just ramp case for load" << "\n";
             // Gather without generating the indices as a vector
             Value *ptr = codegen_buffer_pointer(op->name, op->type.element_of(), ramp->base);
             Value *stride = codegen(ramp->stride);
@@ -2097,6 +2123,7 @@ void CodeGen_LLVM::visit(const Load *op) {
             }
             value = vec;
         } else {
+            std::cout << "[Hydride]: " << "else case for load" << "\n";
             // General gathers
             Value *index = codegen(op->index);
             Value *vec = UndefValue::get(llvm_type_of(op->type));
@@ -3421,16 +3448,25 @@ void CodeGen_LLVM::visit(const Call *op) {
             vector<llvm::Type *> arg_types(args.size());
             for (size_t i = 0; i < args.size(); i++) {
                 arg_types[i] = args[i]->getType();
-                if (arg_types[i]->isVectorTy()) {
+                if (arg_types[i]->isVectorTy() && (name.rfind("hydride", 0) != 0)) {
                     VectorType *vt = dyn_cast<VectorType>(arg_types[i]);
                     arg_types[i] = vt->getElementType();
                 }
             }
 
             llvm::Type *scalar_result_type = result_type;
-            if (result_type->isVectorTy()) {
+            // Convert scalar return type to elem type for non-hydride functions
+            if (result_type->isVectorTy() && (name.rfind("hydride", 0) != 0)) {
                 VectorType *vt = dyn_cast<VectorType>(result_type);
                 scalar_result_type = vt->getElementType();
+            }
+
+            if((name.rfind("hydride", 0) == 0)){
+                for(auto arg_ty : arg_types){
+                    llvm::errs() << "hydride function argument type: "<< * arg_ty << "\n";
+
+                }
+
             }
 
             FunctionType *func_t = FunctionType::get(scalar_result_type, arg_types, false);
@@ -3438,6 +3474,7 @@ void CodeGen_LLVM::visit(const Call *op) {
             fn = llvm::Function::Create(func_t, llvm::Function::ExternalLinkage, name, module.get());
             fn->setCallingConv(CallingConv::C);
             debug(4) << "Did not find " << op->name << ". Declared it extern \"C\".\n";
+
         } else {
             debug(4) << "Found " << op->name << "\n";
 
@@ -3493,7 +3530,25 @@ void CodeGen_LLVM::visit(const Call *op) {
             if (vec_fn) {
                 value = call_intrin(llvm_type_of(op->type), w,
                                     get_llvm_function_name(vec_fn), args);
+            } else if(name.rfind("hydride",0) == 0) {
+
+                llvm::errs() << "Hydride Function: "<< *fn << "\n";
+
+
+                CallInst *call = builder->CreateCall(fn, args);
+                if (op->is_pure()) {
+                    call->setDoesNotAccessMemory();
+                }
+                call->setDoesNotThrow();
+                value = call;
+
+                llvm::errs() << "Generating Hydride Call: "<< *value << "\n";
+
+
+
             } else {
+
+
 
                 // No vector version found. Scalarize. Extract each simd
                 // lane in turn and do one scalar call to the function.
