@@ -117,7 +117,7 @@ def CompileNumber(Num, Context : x86RoseContext):
     #Context.getIndexNumberType())
   else:
     ConstantVal = RoseConstant.create(Num.val, Context.getNumberType())
-  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() >= 0))
+  Context.addSignednessInfoForValue(ConstantVal, IsSigned=(ConstantVal.getValue() < 0))
   return ConstantVal
 
 
@@ -794,6 +794,27 @@ def CompileUpdate(Update, Context : x86RoseContext):
     High.print()
     print("BitwidthValue:")
     BitwidthValue.print()
+    if RHSExprVal.getType().getBitwidth() < Bitwidth:
+      # Let's size-extend
+      if Context.isValueSignKnown(RHSExprVal):
+        if Context.isValueSigned(RHSExprVal) == True:
+           RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+        else:
+           RHSExprVal = RoseBVZeroExtendOp.create(Context.genName(), \
+                                                RHSExprVal, Bitwidth)
+      else:
+        RHSExprVal = RoseBVSignExtendOp.create(Context.genName(), \
+                                              RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    elif RHSExprVal.getType().getBitwidth() > Bitwidth:
+      RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
+                          RHSExprVal, Bitwidth)
+      # Add this add op to the IR and the context
+      Context.addAbstractionToIR(RHSExprVal)
+      Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
     print("BIT SLICE INSERT OP:")
     LHSOp.print()
@@ -1788,8 +1809,10 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   for Index, Stmt in enumerate(Sema.spec):
     if Index == len(Sema.spec) - 1:
       if type(Stmt) == Update:
-        if Stmt.lhs.hi.name == "MAX":
-          continue
+        if type(Stmt.lhs) == BitSlice:
+          if type(Stmt.lhs.hi) == Var:
+            if Stmt.lhs.hi.name == "MAX":
+              continue
     if type(Stmt) == Return:
       #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
       #CompileStatement(Dst, RootContext)
@@ -2036,7 +2059,7 @@ ZeroExtendsSize = [ 'ZeroExtend16', 'ZeroExtend32', 'ZeroExtend64' ]
 
 
 def HandleToNot():
-  def LamdaImplFunc(Name : str, Value : RoseValue, Context : RoseContext):
+  def LamdaImplFunc(Name : str, Value : RoseValue, Context : x86RoseContext):
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     Op = RoseBVNotOp.create(Name, Value)
     Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
@@ -2046,7 +2069,7 @@ def HandleToNot():
 
 
 def HandleToNeg():
-  def LamdaImplFunc(Name : str, Value : RoseValue, Context : RoseContext):
+  def LamdaImplFunc(Name : str, Value : RoseValue, Context : x86RoseContext):
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     Op = RoseBVNegOp.create(Name, Value)
     Context.addSignednessInfoForValue(Op, IsSigned=True)
