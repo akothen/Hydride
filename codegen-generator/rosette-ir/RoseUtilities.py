@@ -113,7 +113,10 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   # Strip any casts and size extensions away
   Low1 = StripCastsAndSizeExtensiosn(Low1)
   Low2 = StripCastsAndSizeExtensiosn(Low2)
-  
+  print("LOW1:")
+  Low1.print()
+  print("LOW2:")
+  Low2.print()
   # Handle easiest case first
   if isinstance(Low1, RoseConstant) and isinstance(Low2, RoseConstant):
     if (Low2.getValue() - Low1.getValue()) == Bitwidth:
@@ -239,25 +242,75 @@ def GetInvariantsInRegion(Abstraction, Invariants = dict()):
   return Invariants
 
 
+def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
+  assert not isinstance(Region, RoseUndefRegion)
+  assert not isinstance(Region, RoseBlock)
+  print("FuseAdjacentBlocks:")
+  print("REGION:")
+  Region.print()
+  # Now just go over the function and fuse adjacent blocks
+  if Region.getKeys() is not None:
+    for Key in Region.getKeys():
+      ChildrenList = list()
+      ChildrenList.extend(Region.getChildren(Key))
+      for Abstraction in ChildrenList:
+        if isinstance(Abstraction, RoseBlock):
+          if Region not in RegionToBlock:
+            RegionToBlock[Region] = Abstraction
+            continue
+          # Fuse this block with the currently tracked block
+          for Operation in Abstraction.getOperations():
+            RegionToBlock[Region].addOperation(Operation)
+          # Delete this block
+          Function = Abstraction.getFunction()
+          Function.eraseChild(Abstraction)
+          continue
+        # Deal with other types of subregions
+        if Region in RegionToBlock:
+          RegionToBlock.pop(Region)
+        FuseAdjacentBlocks(Abstraction, RegionToBlock)
+  else:
+    ChildrenList = list()
+    ChildrenList.extend(Region.getChildren())
+    for Abstraction in ChildrenList:
+      if isinstance(Abstraction, RoseBlock):
+        if Region not in RegionToBlock:
+          RegionToBlock[Region] = Abstraction
+          continue
+        # Fuse this block with the currently tracked block
+        for Operation in Abstraction.getOperations():
+          RegionToBlock[Region].addOperation(Operation)
+        # Delete this block
+        Function = Abstraction.getFunction()
+        Function.eraseChild(Abstraction)
+        continue
+      # Deal with other types of subregions
+      if Region in RegionToBlock:
+        RegionToBlock.pop(Region)
+      FuseAdjacentBlocks(Abstraction, RegionToBlock)
+
+
 def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperation, \
                             Context : RoseContext, OrginalValToClonedValMap : dict = dict()):
   # Both operation and insertion point must be in the same block
   assert Operation.getParent() == InsertBefore.getParent()
 
   # If the insertion point and operation are the same, there is nothing to do
-  if Operation == InsertBefore:
-    return Operation
+  #if Operation == InsertBefore:
+  #  print("HERE1")
+  #  return Operation
 
   # Get the current position of the operation in the block
   ParentBlock = Operation.getParent()
   InsertionPoint = ParentBlock.getPosOfOperation(InsertBefore)
 
   if InsertionPoint > ParentBlock.getPosOfOperation(Operation):
+    print("HERE2")
     return Operation
   
   # Deal with case: InsertionPoint < ParentBlock.getPosOfOperation(Operation)
   # We need to get operands that are defined before InsertBefore point
-  OperandList = []
+  OperandList = list()
   for Operand in Operation.getOperands():
     if not isinstance(Operand, RoseOperation):
       OperandList.append(Operand)
@@ -265,15 +318,25 @@ def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperat
     if Operand in OrginalValToClonedValMap:
       NewOperand = OrginalValToClonedValMap[Operand]
     else:
+      print("CloneAndInsertOperation:")
+      print("OEPRATION:")
+      Operation.print()
+      print("Operand:")
+      Operand.print()
       NewOperand = CloneAndInsertOperation(Operand, InsertBefore, Context)
+      print("NewOperand:")
+      NewOperand.print()
       OrginalValToClonedValMap[Operand] = NewOperand
     OperandList.append(NewOperand)
+  
   # Clone and replace the operands in the operation
   ClonedOperation = Operation.clone(Context.genName(Operation.getName() + ".clone."))
   ClonedOperation.replaceOperands(OperandList)
+
   # Insert the op to the IR
   ParentBlock.addOperationBefore(ClonedOperation, InsertBefore)
   OrginalValToClonedValMap[Operation] = ClonedOperation
+
   return ClonedOperation
 
 
