@@ -103,6 +103,10 @@ def RunDCEOnBlock(Block : RoseBlock):
   # Iterate the list of operations in reverse order
   for Op in reversed(OpList):
     # If the Op has no uses, remove it!
+    print("Op:")
+    Op.print()
+    print("Op.getNumUsers():")
+    print(Op.getNumUsers())
     if Op.getNumUsers() == 0:
       Block.eraseOperation(Op)
 
@@ -117,7 +121,7 @@ def RunDCEOnBlock(Block : RoseBlock):
 
 
 def RunDCEOnFunction(Function : RoseFunction):
-  print("RUN ON OP SIMPLIFY FUNCTION")
+  print("RUN DCE ON FUNCTION")
   print("FUNCTION:")
   Function.print()
   # Run DCE on the given function
@@ -131,7 +135,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
