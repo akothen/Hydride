@@ -19,9 +19,9 @@ from RoseUtilities import *
 def IsLoopDistrbutionLegal(InsertOps : list):
   if len(InsertOps) < 2:
     return False
-  for Index, _ in enumerate(InsertOps[:-1]):
-    if AreBitSlicesContiguous(InsertOps[Index], InsertOps[Index + 1]):
-      return False
+  #for Index, _ in enumerate(InsertOps[:-1]):
+    #if AreBitSlicesContiguous(InsertOps[Index], InsertOps[Index + 1]):
+    #  return False
   return True
 
 
@@ -47,13 +47,15 @@ def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
     Loop = RoseForLoop.create(Context.genName("%" + "iterator"), \
                       OuterLoop.getStartIndex().getValue(), \
                       OuterLoop.getEndIndex().getValue(), OuterLoop.getStep().getValue())
-    for Operation in ParentBlock:
-      NewOperation = Operation.clone()
+    OperationList = list()
+    OperationList.extend(ParentBlock.getOperations())
+    for Operation in OperationList:
       # Replace the uses of the iterator of the outerloop with the 
       # iterator of the newly generated loop.
-      if NewOperation.usesValue(OuterLoop.getIterator()):
-        NewOperation.replaceUsesWith(OuterLoop.getIterator(), Loop.getIterator())
-      Loop.addAbstraction(NewOperation)       
+      if Operation.usesValue(OuterLoop.getIterator()):
+        Operation.replaceUsesWith(OuterLoop.getIterator(), Loop.getIterator())
+      ParentBlock.removeOperation(Operation)
+      Loop.addAbstraction(Operation)
     ParentKey = OuterLoop.getKeyForChild(ParentBlock)
     Index = OuterLoop.getPosOfChild(ParentBlock, ParentKey)
     OuterLoop.addRegionBefore(Index, Loop, ParentKey)
@@ -69,9 +71,9 @@ def RunLoopDistributerOnBlock(Block : RoseBlock, Context : RoseContext):
     print("REGION:")
     Region.print()
     ParentRegion.addRegionBefore(Index, Region.clone(), ParentKey)
+  ParentRegion.eraseChild(OuterLoop, ParentKey)
   print("FUNCTION++++:")
   Function.print()
-  ParentRegion.eraseChild(OuterLoop, ParentKey)
 
 
 def RunLoopDistributerOnFunction(Function : RoseFunction, Context : RoseContext):
