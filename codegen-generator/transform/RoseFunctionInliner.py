@@ -101,7 +101,7 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
           if isinstance(TempDstUser, RoseBVInsertSliceOp):
             print("TempDstUser:")
             TempDstUser.print()
-            #ParentFunction = TempDstUser.getParent().getFunction()
+            CurrentBlock = TempDstUser.getParent()
             assert ClonedReturnValue == TempDstUser.getInputBitVector()
             PrevLowIndex = TempDstUser.getOperand(TempDstUser.getLowIndexPos())
             if isinstance(PrevLowIndex, RoseOperation):
@@ -113,8 +113,8 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
             if isinstance(PrevHighIndex, RoseOperation):
               Bitwidth = RoseConstant.create(TempDstUser.getOutputBitwidth() - 1, \
                               CallSiteUser.getOperand(CallSiteUser.getBitwidthPos()).getType())
-              HighIndex = RoseAddOp.create(Context.genName(), [LowIndex, Bitwidth])
-              CurrentBlock = TempDstUser.getParent()
+              HighIndex = RoseAddOp.create(Context.genName(), \
+                              [TempDstUser.getOperand(TempDstUser.getLowIndexPos()), Bitwidth])
               CurrentBlock.addOperationBefore(HighIndex, PrevHighIndex)   
               TempDstUser.setOperand(TempDstUser.getHighIndexPos(), HighIndex)
             TempDstUser.setOperand(1, CallSiteUser.getInputBitVector())
