@@ -29,7 +29,7 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   if Function.isTopLevelFunction():
     return
 
-  # Look for uses of this function
+  # Look for uses of this inner function
   ParentRegionOfFunction = Function.getFunction()
   Users = ParentRegionOfFunction.getUsersOf(Function)
   Suffix = "site"
@@ -154,11 +154,36 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   print("FUNCTION AFTER ERASING")
   ParentRegionOfFunction.print()
 
+  # Now fuse adjacent blocks in this function
+  FuseAdjacentBlocks(ParentRegionOfFunction)
+
+
 
 # Runs function inliner
 def Run(Function : RoseFunction, Context : RoseContext):
   print("RUN FUNCTION INLINER")
+  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
+  print("NumBlocksAtLevel0:")
+  print(NumBlocksAtLevel0)
+  print("FUNCTION:")
+  Function.print()
+  Blocks = Function.getRegionsOfType(RoseBlock, Level=0)
+  for Block in Blocks:
+    print("BLOCK IN FUNCTION:")
+    Block.print()
+  print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
   RunInlinerOnFunction(Function, Context)
   Function.print()
+  print("AFTER INLINING")
+  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
+  print("NumBlocksAtLevel0:")
+  print(NumBlocksAtLevel0)
+  print("FUNCTION:")
+  Function.print()
+  Blocks = Function.getRegionsOfType(RoseBlock, Level=0)
+  for Block in Blocks:
+    print("BLOCK IN FUNCTION:")
+    Block.print()
+  print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 
