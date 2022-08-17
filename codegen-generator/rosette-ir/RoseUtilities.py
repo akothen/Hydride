@@ -259,11 +259,14 @@ def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
             RegionToBlock[Region] = Abstraction
             continue
           # Fuse this block with the currently tracked block
-          for Operation in Abstraction.getOperations():
+          OperationList = list()
+          OperationList.extend(Abstraction.getOperations())
+          for Operation in OperationList:
+            Abstraction.removeOperation(Operation)
             RegionToBlock[Region].addOperation(Operation)
           # Delete this block
           Function = Abstraction.getFunction()
-          Function.eraseChild(Abstraction)
+          Function.eraseChild(Abstraction, Key)
           continue
         # Deal with other types of subregions
         if Region in RegionToBlock:
@@ -278,7 +281,10 @@ def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
           RegionToBlock[Region] = Abstraction
           continue
         # Fuse this block with the currently tracked block
-        for Operation in Abstraction.getOperations():
+        OperationList = list()
+        OperationList.extend(Abstraction.getOperations())
+        for Operation in OperationList:
+          Abstraction.removeOperation(Operation)
           RegionToBlock[Region].addOperation(Operation)
         # Delete this block
         Function = Abstraction.getFunction()
