@@ -265,8 +265,8 @@ def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
             Abstraction.removeOperation(Operation)
             RegionToBlock[Region].addOperation(Operation)
           # Delete this block
-          Function = Abstraction.getFunction()
-          Function.eraseChild(Abstraction, Key)
+          #ParentRegion = Abstraction.getParent()
+          Region.eraseChild(Abstraction, Key)
           continue
         # Deal with other types of subregions
         if Region in RegionToBlock:
@@ -287,8 +287,8 @@ def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
           Abstraction.removeOperation(Operation)
           RegionToBlock[Region].addOperation(Operation)
         # Delete this block
-        Function = Abstraction.getFunction()
-        Function.eraseChild(Abstraction)
+        #ParentRegion = Abstraction.getParent()
+        Region.eraseChild(Abstraction)
         continue
       # Deal with other types of subregions
       if Region in RegionToBlock:
