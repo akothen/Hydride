@@ -60,6 +60,29 @@ def x86ToC(T):
   return LookupTable[T]
 
 
+def SetterToElemType(T):
+  LookupTable = {
+    "_mm_set_pi8" : "char",
+    "_mm_set_pi16" : "short",
+    "_mm_set_pi32" : "int",
+    "_mm_set_epi8" : "char",
+    "_mm_set_epi16" : "short",
+    "_mm_set_epi32" : "int",
+    "_mm_set_epi64" : "__m64",
+    "_mm256_set_epi8" : "char",
+    "_mm256_set_epi16" : "short",
+    "_mm256_set_epi32" : "int",
+    "_mm256_set_epi64x" : "__int64",
+    "_mm512_set_epi8" : "char",
+    "_mm512_set_epi16" : "short",
+    "_mm512_set_epi32" : "int",
+    "_mm512_set_epi64" : "__int64",
+  }
+  if T not in LookupTable:
+      return T
+  return LookupTable[T]
+
+
 def GetVectorInitializer(Tuple):
   LookupTable = {
     (8, 64) : "_mm_set_pi8",
@@ -154,14 +177,44 @@ class CCodeEmitter(RoseCodeEmitter):
         ElemsList.append(Elem)
       print("ElemsList:")
       print(ElemsList)
-      print((ElemNumBytes*8, ParamBytes * 8))
+      print((ElemNumBytes * 8, ParamBytes * 8))
       Param.print()
       if Sema.params[Index].is_mask:
-         Initializer = GetMaskInitializer(ElemNumBytes*8)
+        Initializer = GetMaskInitializer(ElemNumBytes * 8)
+        InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
+                                    Initializer, ",".join(ElemsList))
       else:
-        Initializer = GetVectorInitializer((ElemNumBytes*8, ParamBytes * 8))
-      InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
-                                  Initializer, ",".join(ElemsList))
+        if ElemNumBytes == ParamBytes:
+          if ElemNumBytes == 4:
+            HexString = "0x"
+            for Byte in BinOut:
+              HexString += Byte[2:]
+            InitArg = "int {} = {};".format(Param.getName(), HexString)
+          elif ElemNumBytes == 2:
+            HexString = "0x"
+            for Byte in BinOut:
+              HexString += Byte[2:]
+            InitArg = "int16_t {} = {};".format(Param.getName(), HexString)
+          elif ElemNumBytes == 1:
+            HexString = "0x"
+            for Byte in BinOut:
+              HexString += Byte[2:]
+            InitArg = "int8_t {} = {};".format(Param.getName(), HexString)
+          else:
+            ElemsList = BinOut
+            Initializer = GetVectorInitializer((int((ParamBytes * 8) / ElemNumBytes), ParamBytes * 8))
+            #CastElemList = list()
+            #for Elem in ElemsList:
+            #  CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
+            InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
+                                        Initializer, ",".join(ElemsList))
+        else:
+          Initializer = GetVectorInitializer((ElemNumBytes * 8, ParamBytes * 8))
+          CastElemList = list()
+          for Elem in ElemsList:
+            CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
+          InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
+                                      Initializer, ",".join(CastElemList))
       Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
       Buf = Buf.replace("LBRACK", "{")
       Buf = Buf.replace("RBRACK", "}")
@@ -171,6 +224,8 @@ class CCodeEmitter(RoseCodeEmitter):
     
     Function = self.getFunctionInfo().getLatestFunction()
     Params = []
+    print("INSTRUCTIONN NAME")
+    print(self.getFunctionInfo().getLatestFunction().getName())
     for Index, Param in enumerate(Function.getArgs()):
       Params.append(Param.getName())
       Content.append(GenMainFunction(Index, Param, ConcArgs))
@@ -193,7 +248,9 @@ class CCodeEmitter(RoseCodeEmitter):
     return None, None
 
   def execute(self):
-    return self.run("./c-exec")
+    ExecName = "c-exec"
+    self.run("rm " + ExecName)
+    return self.run("./" + ExecName)
   
   def extractAndFormatOutput(self, Output):
     return "0x" + Output
@@ -205,7 +262,6 @@ if __name__ == '__main__':
   FunctionInfoList = CodeGenerator.codeGen()
   CEmitter = CCodeEmitter(FunctionInfoList[0])
   CEmitter.test()
-
 
 
 
