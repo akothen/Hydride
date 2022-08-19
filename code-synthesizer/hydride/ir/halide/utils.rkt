@@ -11,6 +11,7 @@
   hydride/ir/halide/types
   hydride/ir/halide/interpreter
   hydride/ir/halide/visitor
+  hydride/utils/debug
   )
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -36,7 +37,7 @@
 
 ;; Binds
 (define (bind-expr-args expr args depth)
-  ;(printf "Bind-expr-args with expr ~a\n args: ~a\n depth: ~a\n\n" expr args depth)
+  ;(debug-log (format "Bind-expr-args with expr ~a\n args: ~a\n depth: ~a\n\n" expr args depth))
   (define (arg i) (vector-ref args i))
   (define is-leaf-depth (eq? depth 1))
   (destruct expr
@@ -69,8 +70,8 @@
      ]
 
      [(buffer data elemT buffsize)  
-      ;(displayln "Bind Args")
-      (println args)
+      ;(debug-log "Bind Args")
+      (debug-log args)
        (if is-leaf-depth
         (values (arg 0)   1)
         (begin
@@ -934,8 +935,8 @@
 
 
 (define (create-buffers sub-expr-ls sym-bvs)
-  ;(displayln "CREATE BUFFERS")
-  ;(println sub-expr-ls)
+  ;(debug-log "CREATE BUFFERS")
+  ;(debug-log sub-expr-ls)
   (list->vector (for/list ([i (range (length sub-expr-ls))])
             (define expr (list-ref sub-expr-ls i))
             (define sym-bv (vector-ref sym-bvs i))
@@ -950,7 +951,7 @@
 
 
 (define (get-expr-precisions expr-list)
-  ;(displayln "get-expr-precisions ")
+  ;(debug-log "get-expr-precisions ")
   (for/list ([i (range (length expr-list))])
             (define expr (list-ref expr-list i))
             (vec-precision expr)
@@ -1161,6 +1162,7 @@
   id-map
   
   )
+
 
 (define (elemT-size elemT) 
 (cond

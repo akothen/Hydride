@@ -7,6 +7,7 @@
 (require rosette/solver/smt/boolector)
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
+(require hydride/utils/debug)
 (require hydride/ir/hydride/interpreter)
 
 ;; Use 16 bits as a default bitwidth for
@@ -40,11 +41,10 @@
 
 (define (print-symbols symbol-vector)
   (define vlen (vector-length symbol-vector))
-  (displayln "Printing Symbolic Bitvectors length")
+  (debug-log "Printing Symbolic Bitvectors length")
   (for/list ([i (range vlen)])
-            (display i)
-            (display ": ")
-            (displayln (bvlength (vector-ref symbol-vector i)))
+            (debug-log (format "~a :" i))
+            (debug-log (bvlength (vector-ref symbol-vector i)))
 
             )
   symbol-vector
@@ -68,7 +68,7 @@
 
   ;; Create the symbolic bitvectors to use in synthesis
   (define symbols (create-symbolic-bvs bitwidth-list))
-  (displayln "Symbols for synthesis")
+  (debug-log "Symbols for synthesis")
   (print-symbols symbols)
 
   (define start_time (current-seconds))

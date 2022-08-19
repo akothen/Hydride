@@ -5,6 +5,7 @@
 (require data/bit-vector)
 (require rosette/lib/destruct)
 (require hydride/utils/bvops)
+(require hydride/utils/debug)
 
 
 (provide (all-defined-out))
@@ -126,10 +127,10 @@
 
 
 (define (write-str-to-file str file)
-  (printf "Writing [~a] to file ~a\n" str file)
+  (debug-log (format "Writing [~a] to file ~a\n" str file))
   (system (string-append "rm " file))
   (define out (open-output-file file))
   (fprintf out str)
   (close-output-port out)
-  (displayln "Completed writing to file ...")
+  (debug-log "Completed writing to file ...")
   )

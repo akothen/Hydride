@@ -7,6 +7,7 @@
 (require rosette/solver/smt/boolector)
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
+(require hydride/utils/debug)
 (require hydride/ir/hydride/interpreter)
 (require hydride/halide)
 
@@ -27,7 +28,7 @@
                      (define expr (list-ref input-list i))
                      (define rows 1)
                      (define cols (halide:vec-len expr))
-                     (printf "Expr ~a has vec-len ~a \n" expr cols)
+                     (debug-log (format "Expr ~a has vec-len ~a \n" expr cols))
                      (define sep 
                        (if (equal? i (- num-inputs 1))
                          ""

@@ -599,9 +599,6 @@
 
 
 (define (create-buffer data elemT)
-  ;(displayln "Create buffer:")
-  ;(println data)
-  ;(println elemT)
   (define step-size
     (cond
         [(eq? elemT 'int8) 8]
@@ -820,24 +817,15 @@
 
   (define lhs-bv (cpp:eval lhs))
   (define rhs-bv (cpp:eval rhs))
-  ;(displayln "\n")
-  ;(printf "lhs-bv: ~a\n" lhs-bv)
-  ;(printf "rhs-bv: ~a\n" rhs-bv)
   (define diff (if (bvsle lhs-bv rhs-bv)
                  (bvsub rhs-bv lhs-bv)
                  (bvsub lhs-bv rhs-bv)
                  )
     )
-  ;(printf "Signed diff: ~a\n" diff)
   (define zero (bv 0 (bvlength lhs-bv)))
   (define neg1 (bv -1 (bvlength lhs-bv)))
-  ;(printf "absd-bv: ~a\n" diff)
-  ;(printf "ABSD of ~a and ~a is ~a\n" (bitvector->integer lhs-bv) (bitvector->integer rhs-bv) (bitvector->integer diff))
-  ;(displayln "HERE")
 
   (define new (mk-cpp-expr diff (mk-cpp-type (cpp:type-bw outT) #f)))
-  ;(printf "New: ~a\n" new )
-  ;(printf "Old: ~a\n" prev)
   prev 
   )
 

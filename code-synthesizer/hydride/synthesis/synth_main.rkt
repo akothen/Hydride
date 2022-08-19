@@ -7,6 +7,7 @@
 (require rosette/solver/smt/boolector)
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
+(require hydride/utils/debug)
 (require hydride/ir/hydride/interpreter)
 (require hydride/synthesis/symbolic_synthesis)
 (require hydride/synthesis/iterative_synthesis)
@@ -15,7 +16,7 @@
 (provide (all-defined-out))
 
 (define (synthesize-sol-with-depth depth depth-limit invoke_ref grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
-  (printf "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n" depth depth-limit cost-bound)
+  (debug-log (format "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n" depth depth-limit cost-bound))
 
   (if
     (<= depth depth-limit)

@@ -8,6 +8,7 @@
 (require rosette/solver/smt/boolector)
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
+(require hydride/utils/debug)
 (require hydride/ir/hydride/interpreter)
 (require hydride/synthesis/symbolic_synthesis)
 
@@ -67,7 +68,7 @@
 ;; which it failed on
 (define (verify-synth-sol sol bw-list invoke_ref solver)
   (define start (current-seconds))
-  (displayln "Attempting to verify synthesized solution")
+  (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
   (define cex 
@@ -77,7 +78,7 @@
         ))
     )
   (define end (current-seconds))
-  (printf "Verification took ~a seconds\n" (- end start))
+  (debug-log (format "Verification took ~a seconds\n" (- end start)))
   (begin
     (if
       (sat? cex) ;; If there exists some cex for which it is not equal
@@ -90,7 +91,7 @@
         (define new-bvs (build-vector num-bw helper))
         (define spec_res (invoke_ref new-bvs))
         (define synth_res (interpret sol new-bvs))
-        (printf "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res)
+        (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
         (values #f new-bvs)
 
         )
@@ -147,8 +148,8 @@
 
 (define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
   (begin
-    (printf "Boolector optimize with cost-bound ~a ...\n" cost-bound)
-    (displayln "Synthesizing...\n")
+    (debug-log (format "Boolector optimize with cost-bound ~a ...\n" cost-bound))
+    (debug-log "Synthesizing...\n")
     (current-solver (boolector))
 
     (define sol?
@@ -177,7 +178,7 @@
       )
 
     (if satisfiable?
-      (pretty-print materialize)
+      (debug-log materialize)
       '()
       )
 
@@ -231,8 +232,8 @@
       )
     )
 
-  (displayln "Concrete counter examples:")
-  (println cex-ls)
+  (debug-log "Concrete counter examples:")
+  (debug-log cex-ls)
 
 
   (define (assert-query-fn env)
@@ -249,7 +250,7 @@
 
   (define satisfiable? (sat? sol?))
 
-  (println satisfiable?)
+  (debug-log satisfiable?)
 
 
 
@@ -267,7 +268,7 @@
     (equal? solver 'boolector)
     ))
 
-  (printf "Is this boolector optimization case ~a ?\n" boolector-opt-case)
+  (debug-log (format "Is this boolector optimization case ~a ?\n" boolector-opt-case))
 
   (if 
     satisfiable?
@@ -275,17 +276,17 @@
     ;; If satisfiable, verify current solution and check
     ;; if it's true over ALL inputs
     (begin
-      (displayln "Unchecked solution:")
-      (pretty-print materialize)
+      (debug-log "Unchecked solution:")
+      (debug-log materialize)
       (define cur-out-port (current-output-port))
       (define cur-err-port (current-error-port))
       (define cur-inp-port (current-input-port))
       (define cur-solver (current-solver))
 
-      (printf "Current Output port: ~a\n" cur-out-port)
-      (printf "Current Error  port: ~a\n" cur-err-port)
-      (printf "Current Input  port: ~a\n" cur-inp-port)
-      (printf "Current Solver: ~a\n" cur-solver)
+      (debug-log (format "Current Output port: ~a\n" cur-out-port))
+      (debug-log (format "Current Error  port: ~a\n" cur-err-port))
+      (debug-log (format "Current Input  port: ~a\n" cur-inp-port))
+      (debug-log (format "Current Solver: ~a\n" cur-solver))
 
       (define-values 
         (verified? new-cex) 
@@ -316,7 +317,7 @@
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
-            (printf "Searching for better solution with cost < ~a \n" (cost-fn materialize))
+            (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn materialize)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
               (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
                                         cex-ls  
