@@ -51,15 +51,21 @@ class RoseFuzzer():
       ConcArgs.append(deepcopy(NewArg))
     return ConcArgs
 
+  def createTestDir(self, DirName : str):
+    assert isinstance(DirName, str)
+    RunCommand("mkdir " + DirName)
+
   def fuzz(self):
     File = open("FUZZ_RESULTS", "w+")
+    TestDirName = "test"
+    self.createTestDir(TestDirName)
     for FunctionInfo in self.FunctionInfoList:
       assert isinstance(FunctionInfo, RoseFunctionInfo)
-      RosetteOut, RosetteErr, COut, CErr, Result = self.fuzzInstruction(FunctionInfo)
+      RosetteOut, RosetteErr, COut, CErr, Result = self.fuzzInstruction(TestDirName, FunctionInfo)
       self.dumpResults(File, FunctionInfo, RosetteOut, RosetteErr, COut, CErr, Result)
     File.close()
 
-  def fuzzInstruction(self, FunctionInfo : RoseFunctionInfo):
+  def fuzzInstruction(self, TestDirName : str, FunctionInfo : RoseFunctionInfo):
     Sema = FunctionInfo.getRawSemantics()
     Context = FunctionInfo.getContext()
     Function = FunctionInfo.getLatestFunction()
@@ -67,8 +73,8 @@ class RoseFuzzer():
     RosetteEmitter = RosetteCodeEmitter(FunctionInfo)
     CEmitter = self.TargetAPI[self.Target].CCodeEmitter(FunctionInfo)
     ConcArgs = self.genRandomInputs(Function)
-    RosetteOut, RosetteErr = RosetteEmitter.test(ConcArgs)
-    COut, CErr = CEmitter.test(ConcArgs)
+    RosetteOut, RosetteErr = RosetteEmitter.test(TestDirName, ConcArgs)
+    COut, CErr = CEmitter.test(TestDirName, ConcArgs)
     Result = self.compareResults(RosetteOut, RosetteErr, COut, CErr)
     return RosetteOut, RosetteErr, COut, CErr, Result
 
@@ -112,6 +118,5 @@ class RoseFuzzer():
 if __name__ == '__main__':
   Fuzzer = RoseFuzzer("x86")
   Fuzzer.fuzz()
-
 
 
