@@ -15,17 +15,18 @@ class RosetteCodeEmitter(RoseCodeEmitter):
     assert isinstance(FunctionInfo, RoseFunctionInfo)
     super().__init__(FunctionInfo)
 
-  def getFileName(self):
+  def getTestName(self):
     Function = self.getFunctionInfo().getLatestFunction()
-    return "rkt_{}.rkt".format(Function.getName())
+    return "{}.rkt".format(Function.getName())
 
   def createFile(self, ConcArgs : list):
     Content = [
       "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require rosette/solver/smt/boolector)\n"
+      "(require racket/pretty)", "(require rosette/solver/smt/boolector)",
+      "(require \"RosetteOpsImpl.rkt\")\n"
     ]
 
-    def GenInputs(Index, Param, ConcArgs):
+    def GenerateInputs(Index, Param, ConcArgs):
       print("Param.getType().getBitwidth():")
       print(Param.getType().getBitwidth())
       print("ConcArgs:")
@@ -76,7 +77,7 @@ class RosetteCodeEmitter(RoseCodeEmitter):
     CodeGenerator = self.getFunctionInfo().getCodeGenerator()
     Content.append(CodeGenerator.codeGen(self.getFunctionInfo(), JustGenRosette=True))
     for Index, Param in enumerate(Function.getArgs()):
-      Input = GenInputs(Index, Param, ConcArgs)
+      Input = GenerateInputs(Index, Param, ConcArgs)
       Name = "_" + str(Index)
       InputNames.append(Name)
       Bitwidth = Function.getArg(Index).getType().getBitwidth()
@@ -85,11 +86,14 @@ class RosetteCodeEmitter(RoseCodeEmitter):
                                                     " ".join(InputNames)))
     return "\n".join(Content)
 
-  def compile(self):
+  def compile(self, DirName : str):
       return None, None
 
-  def execute(self):
-    return self.run("racket {}".format(self.getFileName()))
+  def execute(self, DirName : str):
+    return self.run("racket {}".format(self.getTestName()))
+  
+  def handleError(self, DirName : str, Err : str):
+    pass
   
   def extractAndFormatOutput(self, Output):
     Start = Output.find("#x")
@@ -105,8 +109,7 @@ if __name__ == '__main__':
   CodeGenerator = RoseCodeGenerator(Target="x86")
   FunctionInfoList = CodeGenerator.codeGen()
   RoseEmitter = RosetteCodeEmitter(FunctionInfoList[0])
-  RoseEmitter.test()
-
+  RoseEmitter.test("test")
 
 
 
