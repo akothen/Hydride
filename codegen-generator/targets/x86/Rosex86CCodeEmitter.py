@@ -72,11 +72,11 @@ def SetterToElemType(T):
     "_mm256_set_epi8" : "char",
     "_mm256_set_epi16" : "short",
     "_mm256_set_epi32" : "int",
-    "_mm256_set_epi64x" : "__int64",
+    "_mm256_set_epi64x" : "__int64_t",
     "_mm512_set_epi8" : "char",
     "_mm512_set_epi16" : "short",
     "_mm512_set_epi32" : "int",
-    "_mm512_set_epi64" : "__int64",
+    "_mm512_set_epi64" : "__int64_t",
   }
   if T not in LookupTable:
       return T
@@ -107,16 +107,16 @@ def GetVectorInitializer(Tuple):
   assert False
 
 
-def GetMaskInitializer(Bitwidth):
+def GetMaskInitializer(Type):
   LookupTable = {
-    8 : "_cvtu32_mask8",
-    16 : "_cvtu32_mask16",
-    32 : "_cvtu32_mask32",
-    64 : "_cvtu64_mask64",
+    "__mmask8" : "_cvtu32_mask8",
+    "__mmask16" : "_cvtu32_mask16",
+    "__mmask32" : "_cvtu32_mask32",
+    "__mmask64" : "_cvtu64_mask64",
   }
-  if Bitwidth in LookupTable:
-    return LookupTable[Bitwidth]
-  print(Bitwidth)
+  if Type in LookupTable:
+    return LookupTable[Type]
+  print(Type)
   assert False
 
 
@@ -125,9 +125,9 @@ class CCodeEmitter(RoseCodeEmitter):
     assert isinstance(FunctionInfo, RoseFunctionInfo)
     super().__init__(FunctionInfo)
 
-  def getFileName(self):
+  def getTestName(self):
     Function = self.getFunctionInfo().getLatestFunction()
-    return "c_{}.c".format(Function.getName())
+    return "{}.c".format(Function.getName())
 
   def createFile(self, ConcArgs : list):
     Content = ["#include <immintrin.h>", "#include <stdio.h>", \
@@ -162,29 +162,39 @@ class CCodeEmitter(RoseCodeEmitter):
         return "#define {} {}".format(Param.getName(), BinOut[0])
       
       BinOut.reverse()
-      ElemsList = list()
-      ElemNumBytes = SizeInBytes(x86Types[Sema.elem_type].getBitwidth())
-      print("ElemNumBytes:")
-      print(ElemNumBytes)
-      print("ParamBytes:")
-      print(ParamBytes)
-      print("BinOut:")
-      print(BinOut)
-      for J in range(int(ParamBytes/ElemNumBytes)):
-        Elem = "0x"
-        for I in range(ElemNumBytes):
-          Elem += BinOut[J*ElemNumBytes + I][2:]
-        ElemsList.append(Elem)
-      print("ElemsList:")
-      print(ElemsList)
-      print((ElemNumBytes * 8, ParamBytes * 8))
-      Param.print()
       if Sema.params[Index].is_mask:
-        Initializer = GetMaskInitializer(ElemNumBytes * 8)
-        InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
-                                    Initializer, ",".join(ElemsList))
+        HexString = "0x"
+        for Byte in BinOut:
+          HexString += Byte[2:]
+        Initializer = GetMaskInitializer(Sema.params[Index].type)
+        InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
+                                    Initializer, HexString)
       else:
-        if ElemNumBytes == ParamBytes:
+        print("Sema.params[Index].type:")
+        print(Sema.params[Index].type)
+        print("Sema.elem_type:")
+        print(Sema.elem_type)
+        ElemNumBytes = None
+        if Sema.elem_type != "MASK":
+          ElemNumBytes = SizeInBytes(x86Types[Sema.elem_type].getBitwidth())
+        print("ElemNumBytes:")
+        print(ElemNumBytes)
+        print("ParamBytes:")
+        print(ParamBytes)
+        print("BinOut:")
+        print(BinOut)
+        if ElemNumBytes != None:
+          ElemsList = list()
+          for J in range(int(ParamBytes/ElemNumBytes)):
+            Elem = "0x"
+            for I in range(ElemNumBytes):
+              Elem += BinOut[J * ElemNumBytes + I][2:]
+            ElemsList.append(Elem)
+          print("ElemsList:")
+          print(ElemsList)
+          print((ElemNumBytes * 8, ParamBytes * 8))
+          Param.print()
+        if ElemNumBytes == None or ElemNumBytes == ParamBytes:
           if ElemNumBytes == 4:
             HexString = "0x"
             for Byte in BinOut:
@@ -202,18 +212,21 @@ class CCodeEmitter(RoseCodeEmitter):
             InitArg = "int8_t {} = {};".format(Param.getName(), HexString)
           else:
             ElemsList = BinOut
-            Initializer = GetVectorInitializer((int((ParamBytes * 8) / ElemNumBytes), ParamBytes * 8))
+            if ElemNumBytes != None:
+              Initializer = GetVectorInitializer((int((ParamBytes * 8) / ElemNumBytes), ParamBytes * 8))
+            else:
+              Initializer = GetVectorInitializer((8, ParamBytes * 8))
             #CastElemList = list()
             #for Elem in ElemsList:
             #  CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
-            InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
+            InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
                                         Initializer, ",".join(ElemsList))
         else:
           Initializer = GetVectorInitializer((ElemNumBytes * 8, ParamBytes * 8))
           CastElemList = list()
           for Elem in ElemsList:
             CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
-          InitArg = "{} {} = {}({});".format(Sema.params[Index].type, Param.getName(), 
+          InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
                                       Initializer, ",".join(CastElemList))
       Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
       Buf = Buf.replace("LBRACK", "{")
@@ -240,18 +253,36 @@ class CCodeEmitter(RoseCodeEmitter):
     Content.append("}")
     return "\n".join(Content)
 
-  def compile(self):
-    SOut, Srr = self.run("clang -O0 -march=native {} -o c_exec".format(self.getFileName()))
-    if Srr != "":
-        print(Srr)
-        return SOut, Srr
+  def getExecutableName(self):
+    Function = self.getFunctionInfo().getLatestFunction()
+    return Function.getName()
+
+  def compile(self, TestDirName : str):
+    TestName = TestDirName + "/" + self.getTestName()
+    ExecName = TestDirName + "/" + self.getExecutableName()
+    SOut, SErr = self.run("clang -O0 -march=native -mavx512vl -mavx512ifma {} -o {}"\
+                            .format(TestName, ExecName))
+    if SErr != "":
+        print(SErr)
+        return SOut, SErr
     return None, None
 
-  def execute(self):
-    ExecName = "c-exec"
-    self.run("rm " + ExecName)
-    return self.run("./" + ExecName)
+  def execute(self, TestDirName : str):
+    return self.run(TestDirName + "/" + self.getExecutableName())
   
+  def handleError(self, TestDirName : str, CErr):
+    if isinstance(CErr, str):
+      if "error" in CErr:
+        if ("error: call to undeclared function" in CErr \
+          and "ISO C99 and later do not support implicit function declarations" in CErr):
+          #or "avx512ifma" in CErr:
+          File = open(TestDirName + "/error_log", "a")
+          File.write(CErr + "\n")
+          File.close()
+        else:
+          # Terminate the whole damn thing.
+          exit(-1)
+
   def extractAndFormatOutput(self, Output):
     return "0x" + Output
 
@@ -261,7 +292,5 @@ if __name__ == '__main__':
   CodeGenerator = RoseCodeGenerator(Target="x86")
   FunctionInfoList = CodeGenerator.codeGen()
   CEmitter = CCodeEmitter(FunctionInfoList[0])
-  CEmitter.test()
-
-
+  CEmitter.test("test")
 
