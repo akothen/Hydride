@@ -90,7 +90,7 @@ class RoseFuzzer():
       Rose_Out = FmtOut.format("Rosette", RosetteOut, "Rosette", RosetteErr)
       C_Out = FmtOut.format("C", COut, "C", CErr)
       Res = "Result: " + str(Result) + "\n"
-      File.write(Function.getName() + "\n")
+      File.write("\n\n" + Function.getName() + "\n")
       File.write(Rose_Out)
       File.write(C_Out)
       File.write(Res)
@@ -110,7 +110,7 @@ class RoseFuzzer():
         return self.ERR.C
     if Rose_Err:
         return self.ERR.ROSE
-    if COut != RosetteOut:
+    if COut.strip() != RosetteOut.strip():
         return self.ERR.NEQ
     return self.ERR.NONE
 
