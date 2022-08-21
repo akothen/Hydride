@@ -10,6 +10,7 @@ from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 from RoseBitVectorOperations import *
+from RoseContext import *
 
 
 def SimplifyOperations(Block : RoseBlock):
@@ -48,7 +49,7 @@ def SimplifyOperations(Block : RoseBlock):
   print("SIMPLIFY OPERATIONS DONE")
 
 
-def RunOpSimplifyOnBlock(Block : RoseBlock):
+def RunOpSimplifyOnBlock(Block : RoseBlock,  Context : RoseContext):
   print("RUN OP SIMPLIFY ON BLOCK")
   print("BLOCK:")
   print(Block)
@@ -59,37 +60,47 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
   # Gather all the truncate and extract ops in this block
   OpList = list()
   for Operation in Block:
-    if isinstance(Operation, RoseBVTruncateOp) \
+    if isinstance(Operation, RoseBVTruncateHighOp) \
+    or isinstance(Operation, RoseBVTruncateLowOp) \
     or isinstance(Operation, RoseBVExtractSliceOp):
       OpList.append(Operation)
   # Now deal with all the truncate ops in this block
   for Op in OpList:
-    if isinstance(Op, RoseBVTruncateOp):
+    if isinstance(Op, RoseBVTruncateHighOp):
       if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
         # Check if the only use of this extract op is the truncate op
         ExtractOp = Op.getInputBitVector()
-        if len(ExtractOp.getUsers()) == 1:
+        if ExtractOp.getNumUsers() == 1:
           # Replace this extract and truncate instruction with a new extarct op
           TotalBitwidth = ExtractOp.getOutputBitwidth()
           TruncBitwidth = Op.getOutputBitwidth()
           assert TotalBitwidth > TruncBitwidth
           High = ExtractOp.getHighIndex()
+          Low = ExtractOp.getLowIndex()
           # Compute the new low index
           if isinstance(High, RoseConstant):
             NewLow = RoseConstant.create(High.getValue() - TruncBitwidth + 1, High.getType())
+            NewHigh = High
           else:
             # Subtract the high index with the trucnate bitwidth
-            Offset = RoseConstant.create(TruncBitwidth - 1, High.getType())
-            NewLow = RoseSubOp.create("new.low.index." + ExtractOp.getName(), [High, Offset])
+            #Offset = RoseConstant.create(TruncBitwidth - 1, High.getType())
+            #NewLow = RoseSubOp.create("new.low.idx." + ExtractOp.getName(), [High, Offset])
+            Offset = RoseConstant.create(TotalBitwidth - TruncBitwidth, Low.getType())
+            NewLow = RoseAddOp.create(Context.genName(ExtractOp.getName() + ".new.low.idx"), \
+                                      [Low, Offset])
+            Bitwidth = RoseConstant.create(TruncBitwidth - 1, High.getType())
+            NewHigh = RoseAddOp.create(Context.genName(ExtractOp.getName() + ".new.high.idx"), \
+                                      [NewLow, Bitwidth])
             # Add this new low index computation to the IR
             Block.addOperationBefore(NewLow, ExtractOp)
+            Block.addOperationBefore(NewHigh, ExtractOp)
           # Generate the new operation now
           ExtractOp.getInputBitVector().print()
           ExtractOp.getInputBitVector().getType().print()
           print(type(ExtractOp.getInputBitVector()))
           TruncBitwidthVal = RoseConstant(TruncBitwidth, High.getType())
-          NewOp = RoseBVExtractSliceOp.create("new." + ExtractOp.getName(), \
-                                    ExtractOp.getInputBitVector(), NewLow, High, TruncBitwidthVal)
+          NewOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".new"), \
+                                    ExtractOp.getInputBitVector(), NewLow, NewHigh, TruncBitwidthVal)
           # Add this new operation to the block and replace the uses of older op
           Block.addOperationBefore(NewOp, ExtractOp)
           Op.replaceUsesWith(NewOp)
@@ -106,8 +117,55 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
       High = RoseConstant.create(TotalBitwidth - 1, Op.getOperand(1).getType())
       Low = RoseConstant.create(TotalBitwidth - TruncBitwidth, Op.getOperand(1).getType())
       TruncBitwidthVal = RoseConstant(TruncBitwidth, Op.getOperand(1).getType())
-      NewOp = RoseBVExtractSliceOp.create("new." + Op.getName(), Op.getInputBitVector(), \
-                                          Low, High, TruncBitwidthVal)
+      NewOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".new"), \
+                                          Op.getInputBitVector(), Low, High, TruncBitwidthVal)
+      # Add this new operation to the block and replace the uses of older op
+      Block.addOperationBefore(NewOp, Op)
+      Op.replaceUsesWith(NewOp)
+      # The truncate op must be removed
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVTruncateLowOp):
+      if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
+        # Check if the only use of this extract op is the truncate op
+        ExtractOp = Op.getInputBitVector()
+        if ExtractOp.getNumUsers() == 1:
+          # Replace this extract and truncate instruction with a new extarct op
+          TotalBitwidth = ExtractOp.getOutputBitwidth()
+          TruncBitwidth = Op.getOutputBitwidth()
+          assert TotalBitwidth > TruncBitwidth
+          Low = ExtractOp.getLowIndex()
+          # Compute the new high index
+          Offset = RoseConstant.create(TruncBitwidth - 1, Low.getType())
+          NewHigh = RoseAddOp.create(Context.genName(ExtractOp.getName() + ".new.high.idx"), \
+                                    [Low, Offset])
+          # Add this new high index computation to the IR
+          Block.addOperationBefore(NewHigh, ExtractOp)
+          # Generate the new operation now
+          ExtractOp.getInputBitVector().print()
+          ExtractOp.getInputBitVector().getType().print()
+          print(type(ExtractOp.getInputBitVector()))
+          TruncBitwidthVal = RoseConstant(TruncBitwidth, Low.getType())
+          NewOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".new"), \
+                                ExtractOp.getInputBitVector(), Low, NewHigh, TruncBitwidthVal)
+          # Add this new operation to the block and replace the uses of older op
+          Block.addOperationBefore(NewOp, ExtractOp)
+          Op.replaceUsesWith(NewOp)
+          # Remove the truncate and the replaced extract op.
+          # IMPORTANT: the truncate op must be removed before the extract op.
+          Block.eraseOperation(Op)
+          Block.eraseOperation(ExtractOp)
+          continue
+      # Nothing to be done except to replace this truncate op with 
+      # an extract op.
+      TotalBitwidth = Op.getInputBitVector().getOutputBitwidth()
+      TruncBitwidth = Op.getOutputBitwidth()
+      assert TotalBitwidth > TruncBitwidth
+      High = RoseConstant.create(TruncBitwidth - 1, Op.getOperand(1).getType())
+      Low = RoseConstant.create(0, Op.getOperand(1).getType())
+      TruncBitwidthVal = RoseConstant(TruncBitwidth, Op.getOperand(1).getType())
+      NewOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".new"), \
+                                          Op.getInputBitVector(), Low, High, TruncBitwidthVal)
       # Add this new operation to the block and replace the uses of older op
       Block.addOperationBefore(NewOp, Op)
       Op.replaceUsesWith(NewOp)
@@ -122,7 +180,7 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
       SecondExtractOp = Op
       # Check if the only use of this extract op is the only use
       FirstExtractOp = SecondExtractOp.getInputBitVector()
-      if len(FirstExtractOp.getUsers()) == 1:
+      if FirstExtractOp.getNumUsers() == 1:
         # Replace this first and second instruction with a new extarct op
         FirstExtractBitwidth = FirstExtractOp.getOutputBitwidth()
         SecondExtractBitwidth = SecondExtractOp.getOutputBitwidth()
@@ -159,38 +217,37 @@ def RunOpSimplifyOnBlock(Block : RoseBlock):
   SimplifyOperations(Block) 
 
 
-def RunOpSimplifyOnRegion(Region):
+def RunOpSimplifyOnRegion(Region, Context : RoseContext):
   # Iterate over all the contents of this function
   assert not isinstance(Region, RoseBlock)
   for Abstraction in Region:
     # Run op simplification on a nested function
     if isinstance(Abstraction, RoseFunction):
-      RunOpSimplifyOnFunction(Abstraction)
+      RunOpSimplifyOnFunction(Abstraction, Context)
       continue
     # Op simplification only happens on blocks
     if not isinstance(Abstraction, RoseBlock):
       print("REGION:")
       print(Abstraction)
       Abstraction.print()
-      RunOpSimplifyOnRegion(Abstraction)
+      RunOpSimplifyOnRegion(Abstraction, Context)
       continue
-    RunOpSimplifyOnBlock(Abstraction)
+    RunOpSimplifyOnBlock(Abstraction, Context)
 
 
-def RunOpSimplifyOnFunction(Function : RoseFunction):
+def RunOpSimplifyOnFunction(Function : RoseFunction, Context : RoseContext):
   print("RUN ON OP SIMPLIFY FUNCTION")
   print("FUNCTION:")
   Function.print()
   # Run op simplification on the given function
-  RunOpSimplifyOnRegion(Function)
+  RunOpSimplifyOnRegion(Function, Context)
 
 
 # Runs a transformation
-def Run(Function : RoseFunction):
-  RunOpSimplifyOnFunction(Function)
+def Run(Function : RoseFunction, Context : RoseContext):
+  RunOpSimplifyOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
