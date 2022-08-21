@@ -930,9 +930,13 @@ class RoseBVNEQOp(RoseBitVectorOp):
     String = Spaces + "(define " + Name + " ("
     String += "not (bveq " 
     for Index, Operand in enumerate(self.getOperands()):
+      if isinstance(Operand, RoseConstant):
+        String += " " + "(bv " + str(Operand.getValue()) + \
+                  " " + str(Operand.getType().getBitwidth()) + ")"
+      else:
         String += " " + Operand.getName()
-        if Index != len(self.getOperands()) - 1:
-          String += " "
+      if Index != len(self.getOperands()) - 1:
+        String += " "
     String += " )))\n"
     return String
 
