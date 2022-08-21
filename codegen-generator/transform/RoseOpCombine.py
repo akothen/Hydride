@@ -1008,7 +1008,8 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   OpList = list()
   for Operation in Block:
     # These instructions make good candidates for being combined
-    #if isinstance(Operation, RoseBVTruncateOp) \
+    #if isinstance(Operation, RoseBVTruncateLowOp) \
+    #or isinstance(Operation, RoseBVTruncateHighOp) \
     #or isinstance(Operation, RoseBVExtractSliceOp):
     if isinstance(Operation, RoseBVExtractSliceOp):
       OpList.append(Operation)
@@ -1033,7 +1034,7 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
 
   # Now deal with all the truncate ops in this block
   for Op in OpList:
-    if isinstance(Op, RoseBVTruncateOp):
+    if isinstance(Op, RoseBVTruncateHighOp):
       if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
         # Check if the only use of this extract op is the truncate op
         ExtractOp = Op.getInputBitVector()
@@ -1083,6 +1084,53 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
       assert TotalBitwidth > TruncBitwidth
       High = RoseConstant.create(TotalBitwidth - 1, Op.getOperand(1).getType())
       Low = RoseConstant.create(TotalBitwidth - TruncBitwidth, Op.getOperand(1).getType())
+      TruncBitwidthVal = RoseConstant(TruncBitwidth, Op.getOperand(1).getType())
+      NewOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".new"), \
+                                          Op.getInputBitVector(), Low, High, TruncBitwidthVal)
+      # Add this new operation to the block and replace the uses of older op
+      Block.addOperationBefore(NewOp, Op)
+      Op.replaceUsesWith(NewOp)
+      # The truncate op must be removed
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVTruncateLowOp):
+      if isinstance(Op.getInputBitVector(), RoseBVExtractSliceOp):
+        # Check if the only use of this extract op is the truncate op
+        ExtractOp = Op.getInputBitVector()
+        if ExtractOp.getNumUsers() == 1:
+          # Replace this extract and truncate instruction with a new extarct op
+          TotalBitwidth = ExtractOp.getOutputBitwidth()
+          TruncBitwidth = Op.getOutputBitwidth()
+          assert TotalBitwidth > TruncBitwidth
+          Low = ExtractOp.getLowIndex()
+          # Compute the new high index
+          Offset = RoseConstant.create(TruncBitwidth - 1, Low.getType())
+          NewHigh = RoseAddOp.create(Context.genName(ExtractOp.getName() + ".new.high.idx"), \
+                                    [Low, Offset])
+          # Add this new high index computation to the IR
+          Block.addOperationBefore(NewHigh, ExtractOp)
+          # Generate the new operation now
+          ExtractOp.getInputBitVector().print()
+          ExtractOp.getInputBitVector().getType().print()
+          print(type(ExtractOp.getInputBitVector()))
+          TruncBitwidthVal = RoseConstant(TruncBitwidth, Low.getType())
+          NewOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".new"), \
+                                ExtractOp.getInputBitVector(), Low, NewHigh, TruncBitwidthVal)
+          # Add this new operation to the block and replace the uses of older op
+          Block.addOperationBefore(NewOp, ExtractOp)
+          Op.replaceUsesWith(NewOp)
+          # Remove the truncate and the replaced extract op.
+          # IMPORTANT: the truncate op must be removed before the extract op.
+          Block.eraseOperation(Op)
+          Block.eraseOperation(ExtractOp)
+          continue
+      # Nothing to be done except to replace this truncate op with 
+      # an extract op.
+      TotalBitwidth = Op.getInputBitVector().getOutputBitwidth()
+      TruncBitwidth = Op.getOutputBitwidth()
+      assert TotalBitwidth > TruncBitwidth
+      High = RoseConstant.create(TruncBitwidth - 1, Op.getOperand(1).getType())
+      Low = RoseConstant.create(0, Op.getOperand(1).getType())
       TruncBitwidthVal = RoseConstant(TruncBitwidth, Op.getOperand(1).getType())
       NewOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".new"), \
                                           Op.getInputBitVector(), Low, High, TruncBitwidthVal)
