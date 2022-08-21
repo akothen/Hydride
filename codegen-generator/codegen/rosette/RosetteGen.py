@@ -102,14 +102,14 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       continue
     LastOp = Operation
     # Extracts are dealt with a little differently
-    if isinstance(Operation, RoseBVExtractSliceOp):
+    #if isinstance(Operation, RoseBVExtractSliceOp):
       # There are situations where value being extracted is defined
       # outside a loop. In Rosette, the indexing into bitvectors takes
       # place from right to left, instead of left to right. So we need
       # to reverse the order of extraction as well.
-      if Operation.getInputBitVector() in Block.getOperations():
-        RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
-        continue
+    #  if Operation.getInputBitVector() in Block.getOperations():
+    #    RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
+    #    continue
     if isinstance(Operation, RoseBVTruncateOp):
       # There are situations where value being extracted is defined
       # outside a loop. In Rosette, the indexing into bitvectors takes
@@ -187,6 +187,8 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
   assert len(ListOfPacks) == 1
   # Now concatenate the packs
   RosetteCode += "(concat"
+  # Reverse the pack list
+  Pack.reverse()
   for Op in Pack:
     RosetteCode += " " +  Op.getInsertValue().getName()
   RosetteCode += ")\n"
