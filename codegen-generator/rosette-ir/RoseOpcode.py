@@ -108,8 +108,9 @@ class RoseOpcode(Enum):
     bvneq = auto()
     notequal = auto()
 
-    # Op to represent truncation
-    bvtrunc = auto()
+    # Ops to represent truncation
+    bvtrunclow = auto()
+    bvtrunchigh = auto()
 
     # Add an op for absolute value for bitvectors
     bvabs = auto()
@@ -253,12 +254,18 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
-        if self.value == self.bvtrunc.value:
+        if self.value == self.bvtrunclow.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() < BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue()) 
+        if self.value == self.bvtrunchigh.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            assert isinstance(Inputs[1], RoseValues.RoseConstant)
+            assert Inputs[1].getValue() < BVInputs[0].getType().getBitwidth()
+            return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.add.value \
         or self.value == self.sub.value \
         or self.value == self.mul.value \
@@ -395,7 +402,17 @@ class RoseOpcode(Enum):
                 return True
             else:
                 return False
-        if self.value == self.bvtrunc.value:
+        if self.value == self.bvtrunclow.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            if not isinstance(Inputs[1], RoseValues.RoseConstant):
+                return False
+            if Inputs[1].getValue() >= BVInputs[0].getType().getBitwidth():
+                return False
+            if len(BVInputs) == 1:
+                return True
+            else:
+                return False
+        if self.value == self.bvtrunchigh.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
                 return False
@@ -606,7 +623,8 @@ class RoseOpcode(Enum):
         or self.value == self.cast.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value \
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value \
         or self.value == self.bvsignextend.value \
         or self.value == self.bvzeroextend.value \
         or self.value == self.bvsizeextend.value \
@@ -674,7 +692,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value \
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
         or self.value == self.select.value \
@@ -746,7 +765,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvzeroextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value:
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value:
             return (NumInputs == 2)
         if self.value == self.select.value \
         or self.value == self.bvsizeextend.value:
@@ -837,7 +857,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value:
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value:
             return True
         return False
 
@@ -847,7 +868,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
-        or self.value == self.bvtrunc.value:
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value:
             return True
         return False
 
@@ -943,7 +965,8 @@ class RoseOpcode(Enum):
         if self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvsizeextend.value \
-        or self.value == self.bvtrunc.value \
+        or self.value == self.bvtrunclow.value \
+        or self.value == self.bvtrunchigh.value \
         or self.value == self.bvinsert.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
