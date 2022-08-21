@@ -810,7 +810,8 @@ def CompileUpdate(Update, Context : x86RoseContext):
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     elif RHSExprVal.getType().getBitwidth() > Bitwidth:
-      RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
+      # Truncate the undesirable high bits
+      RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
                           RHSExprVal, Bitwidth)
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
@@ -1963,7 +1964,7 @@ def HandleToTruncate(Bitwidth : int):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() > Bitwidth
-    Op = RoseBVTruncateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
     Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
     return Op
 
@@ -1976,7 +1977,7 @@ def HandleToSpecialTruncate(_):
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     Bitwidth = int(Value.getType().getBitwidth() / 2)
     assert Value.getType().getBitwidth() > Bitwidth
-    Op = RoseBVTruncateOp.create(Name, Value, Bitwidth)
+    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
     Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
     return Op
 
