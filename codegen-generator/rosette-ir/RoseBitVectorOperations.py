@@ -21,11 +21,13 @@ import llvmlite
 
 
 
-class RoseBVSignExtendOp(RoseBVSizeExensionOp):
+class RoseBVSignExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType) 
-    TrueVal = RoseConstant.create(1, RoseBooleanType.create())
-    super().__init__(Name, Bitvector, TargetBitwidth, TrueVal, ParentBlock)
+    #TrueVal = RoseConstant.create(1, RoseBooleanType.create())
+    #super().__init__(Name, Bitvector, TargetBitwidth, TrueVal, ParentBlock)
+    OperandList = [Bitvector, TargetBitwidth]
+    super().__init__(RoseOpcode.bvsignextend, Name, OperandList, ParentBlock)
   
   @staticmethod
   def create(*args):
@@ -47,10 +49,16 @@ class RoseBVSignExtendOp(RoseBVSizeExensionOp):
         return RoseBVSignExtendOp(args[0], args[1], args[2], RoseUndefRegion())
     assert(False)
 
+  def getExtensionSize(self):
+    return self.getOperand(1)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
-    if not isinstance(self.getExtensionKind(), RoseConstant):
-      return super().to_rosette(NumSpace, ReverseIndexing)
+    #if not isinstance(self.getExtensionKind(), RoseConstant):
+    #  return super().to_rosette(NumSpace, ReverseIndexing)
     # Use existing Rosette function
     Spaces = ""
     for _ in range(NumSpace):
@@ -70,11 +78,13 @@ class RoseBVSignExtendOp(RoseBVSizeExensionOp):
     return IRBuilder.sext(Operand, self.getType().to_llvm_ir(), self.getName())
 
 
-class RoseBVZeroExtendOp(RoseBVSizeExensionOp):
+class RoseBVZeroExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
-    FalseVal = RoseConstant.create(0, RoseBooleanType.create())
-    super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
+    #FalseVal = RoseConstant.create(0, RoseBooleanType.create())
+    #super().__init__(Name, Bitvector, TargetBitwidth, FalseVal, ParentBlock)
+    OperandList = [Bitvector, TargetBitwidth]
+    super().__init__(RoseOpcode.bvzeroextend, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(*args):
@@ -96,10 +106,16 @@ class RoseBVZeroExtendOp(RoseBVSizeExensionOp):
         return RoseBVZeroExtendOp(args[0], args[1], args[2], RoseUndefRegion())
     assert(False)
 
+  def getExtensionSize(self):
+    return self.getOperand(1)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
-    if not isinstance(self.getExtensionKind(), RoseConstant):
-      return super().to_rosette(NumSpace, ReverseIndexing)
+    #if not isinstance(self.getExtensionKind(), RoseConstant):
+    #  return super().to_rosette(NumSpace, ReverseIndexing)
     # Use existing Rosette function
     Spaces = ""
     for _ in range(NumSpace):
@@ -203,11 +219,11 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
     return String
 
 
-class RoseBVTruncateOp(RoseBitVectorOp):
+class RoseBVTruncateLowOp(RoseBitVectorOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType)
     OperandList = [Bitvector, TargetBitwidth]
-    super().__init__(RoseOpcode.bvtrunc, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvtrunclow, Name, OperandList, ParentBlock)
 
   @staticmethod
   def create(*args):
@@ -215,18 +231,100 @@ class RoseBVTruncateOp(RoseBitVectorOp):
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
         TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
-        return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, args[3])
+        return RoseBVTruncateLowOp(args[0], args[1], TargetBitwidthVal, args[3])
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
-        return RoseBVTruncateOp(args[0], args[1], args[2], args[3])
+        return RoseBVTruncateLowOp(args[0], args[1], args[2], args[3])
     if len(args) == 3:
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], int):
         TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
-        return RoseBVTruncateOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+        return RoseBVTruncateLowOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
       if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
       and isinstance(args[2], RoseValue):
-        return RoseBVTruncateOp(args[0], args[1], args[2], RoseUndefRegion())
+        return RoseBVTruncateLowOp(args[0], args[1], args[2], RoseUndefRegion())
+    assert(False)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  # Rosette has no truncate op. So we use bitvector extract to model it.
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = self.getName()
+    InputOp = self.getInputBitVector()
+    assert isinstance(InputOp, RoseBitVectorOp)
+    LowIndexName = Name + ".low.idx"
+    HighIndexName = Name + ".high.idx"
+    BVSize = InputOp.getOutputBitwidth()
+    if isinstance(BVSize, RoseValue):
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + "(- " + str(BVSize) + " 1))\n"
+    else:
+      String = Spaces + "(define " + HighIndexName + " "  \
+              + str(BVSize - 1) + ")\n"
+    if ReverseIndexing == False:
+      String += Spaces + "(define " + LowIndexName + " "  \
+              + "(- " + HighIndexName + " " \
+              + self.getOperand(1).getName() + " -1 ))\n"
+    else:
+      InputBVSize = self.getInputBitVector().getType().getBitwidth()
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+         ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
+      # DO NOT CHANGE THIS ORDER
+      String += " " + ReverseIndexString + LowIndexName + ")"
+      String += " " + ReverseIndexString + HighIndexName + ")"
+    String += Spaces + "(define " + Name + " ("
+    String += RoseOpcode.bvextract.getRosetteOp() + " "
+    String += " " + HighIndexName
+    String += " " + LowIndexName
+    String += " " + self.getInputBitVector().getName()
+    String += "))\n"
+    return String
+
+  def to_llvm_ir(self, Context : RoseLLVMContext):
+    Operand1 = Context.getLLVMValueFor(self.getInputBitVector())
+    assert Operand1 != llvmlite.ir.Undefined()
+    Operand2 = llvmlite.ir.Constant(Operand1.type, llvmlite.ir.Undefined)
+    # Create a mask that goes from 0 to length of truncation
+    MaskList = list()
+    for Idx in range(self.getOutputBitwidth()):
+      MaskList.append(Idx)
+    MaskType = llvmlite.ir.types.VectorType(llvmlite.ir.types.IntType(32), len(MaskList))
+    Mask = llvmlite.ir.Constant(MaskType, MaskList)
+    IRBuilder = Context.getLLVMBuilder()
+    IRBuilder.lshr(Operand1, Operand2, self.getName())
+    return IRBuilder.shuffle_vector(Operand1, Operand2, Mask, self.getName())
+
+
+class RoseBVTruncateHighOp(RoseBitVectorOp):
+  def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    OperandList = [Bitvector, TargetBitwidth]
+    super().__init__(RoseOpcode.bvtrunchigh, Name, OperandList, ParentBlock)
+
+  @staticmethod
+  def create(*args):
+    if len(args) == 4:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int) and isinstance(args[3], RoseBlock):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
+        return RoseBVTruncateHighOp(args[0], args[1], TargetBitwidthVal, args[3])
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue) and isinstance(args[3], RoseBlock):
+        return RoseBVTruncateHighOp(args[0], args[1], args[2], args[3])
+    if len(args) == 3:
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], int):
+        TargetBitwidthVal = RoseConstant.create(args[2], RoseIntegerType.create(32))
+        return RoseBVTruncateHighOp(args[0], args[1], TargetBitwidthVal, RoseUndefRegion())
+      if isinstance(args[0], str) and isinstance(args[1], RoseValue) \
+      and isinstance(args[2], RoseValue):
+        return RoseBVTruncateHighOp(args[0], args[1], args[2], RoseUndefRegion())
     assert(False)
 
   def getInputBitVector(self):
