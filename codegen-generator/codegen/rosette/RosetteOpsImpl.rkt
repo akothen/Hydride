@@ -113,27 +113,36 @@
   (if (> bitwidth sat_size)
   (begin
     (cond
-    [(bvslt vect (bvsminval bitwidth)) (bvsminval sat_size)]
-    [(bvsgt vect (bvsmaxval bitwidth)) (bvsmaxval bitwidth)]
+    [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
+    [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
     [else (extract (- sat_size 1) 0 vect)])
   )
   (begin
    vect
   )
  )
- ;;(bvsmin (bvsmax vect (bvsminval bitwidth)) (bvsmaxval bitwidth))
 )
 
 (define (bvusat vect bitwidth sat_size)
-  (if (bvugt vect (bvumaxval bitwidth)) 
+  (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
     (begin
-      (bvumaxval bitwidth)
+      (bvumaxval sat_size)
     )
     (begin
       (extract (- sat_size 1) 0 vect)
     )
   )
-  ;;(bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
+)
+
+(define (pad_high_bits vect bitwidth target_bitwidth)
+  (if (equal? bitwidth target_bitwidth)
+    (begin
+      vect
+    )
+    (begin
+      (concat (bv 0 (- target_bitwidth bitwidth)) vect)
+    )
+  )
 )
 
 (define (bvaddnsw a b bitwidth)
@@ -267,6 +276,4 @@
   (pretty-print "(bvmulnuw au64 bu64 64):")
   (pretty-print (bvmulnuw au64 bu64 64))
 )
-
-
 
