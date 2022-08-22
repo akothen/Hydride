@@ -110,7 +110,7 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
     #  if Operation.getInputBitVector() in Block.getOperations():
     #    RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
     #    continue
-    if isinstance(Operation, RoseBVTruncateOp):
+    if isinstance(Operation, RoseBVTruncateHighOp):
       # There are situations where value being extracted is defined
       # outside a loop. In Rosette, the indexing into bitvectors takes
       # place from right to left, instead of left to right. So we need
@@ -343,6 +343,12 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
     + " " + Loop.getStep().getName() + "))])\n"
   print("TmpRosetteCode:")
   print(TmpRosetteCode)
+  # We also keep track of whether this loop has multiple children loops,
+  # in which case the results from the loops will need to be concatenated together.
+  NumChildrenLoops = len(Loop.getRegionsOfType(RoseForLoop, Level=0))
+  if NumChildrenLoops > 1:
+    TmpRosetteCode += Spaces + " (concat \n"
+    NumSpace += 1
   for Abstraction in Loop:
     if isinstance(Abstraction, RoseForLoop):
       TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
@@ -359,9 +365,10 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
       else:
         TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
       continue
-  
   print("+++++TmpRosetteCode:")
   print(TmpRosetteCode)
+  if NumChildrenLoops > 1:
+    TmpRosetteCode += (Spaces + " )\n")
   TmpRosetteCode += (Spaces + ")\n")
   print("RosetteCode after generating loop")
   print(TmpRosetteCode)
@@ -421,6 +428,7 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   else:
     TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
     TmpRosetteCode += (Spaces + ")\n")
+  
   RosetteCode += TmpRosetteCode
   return RosetteCode
 
