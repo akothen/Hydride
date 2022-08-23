@@ -20,6 +20,45 @@ from RoseLLVMContext import *
 import llvmlite
 
 
+class RoseBVPadHighBitsOp(RoseBitVectorOp):
+  def __init__(self, Bitvector : RoseValue, NumPadBits : RoseValue, ParentBlock):
+    assert isinstance(Bitvector.getType(), RoseBitVectorType)
+    OperandList = [Bitvector, NumPadBits]
+    super().__init__(RoseOpcode.bvpadhighbits, "", OperandList, ParentBlock)
+  
+  @staticmethod
+  def create(Bitvector : RoseValue, NumPadBits : RoseValue, 
+            ParentBlock = RoseUndefRegion()):
+    return RoseBVPadHighBitsOp(Bitvector, NumPadBits, ParentBlock)
+
+  def getNumPadBits(self):
+    return self.getOperand(1)
+
+  def getInputBitVector(self):
+    return self.getOperand(0)
+
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    assert ReverseIndexing == False
+    #if not isinstance(self.getExtensionKind(), RoseConstant):
+    #  return super().to_rosette(NumSpace, ReverseIndexing)
+    # Use existing Rosette function
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    NumPadBits = self.getNumPadBits().getValue()
+    String = Spaces + "(define " + Name + " ("
+    String += ("bvpadhighbits ")
+    String += " " + self.getInputBitVector().getName()
+    String += " " + str(self.getInputBitVector().getType().getBitwidth() - NumPadBits) 
+    String += " " + str(self.getInputBitVector().getType().getBitwidth())
+    String += ")))\n"
+    return String
+
+  def to_llvm_ir(self, Context : RoseLLVMContext):
+    NotImplemented
+
+
 
 class RoseBVSignExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
