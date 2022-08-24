@@ -118,6 +118,9 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
       if Operation.getInputBitVector() in Block.getOperations():
         RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
         continue
+    # Skip emitting rosette code for op that pads high bits
+    if isinstance(Operation, RoseBVPadHighBitsOp):
+      continue
     print("Operation:")
     Operation.print()
     RosetteCode += Operation.to_rosette(NumSpace)
@@ -468,12 +471,33 @@ def GenerateRosetteForFunction(Function : RoseFunction, RosetteCode : str, NumSp
   # Generate Rosette code for the given function
   #if Function.getReturnValue() != RoseUndefValue():
   #  RosetteCode += "(define  " + Function.getReturnValue().getName() + "\n"
-  RosetteCode = GenerateRosetteForRegion(Function, RosetteCode)
+  FunctionBody = ""
+  FunctionBody = GenerateRosetteForRegion(Function, FunctionBody)
   print("RosetteCode after region")
   print(RosetteCode)
+  print("FunctionBody:")
+  print(FunctionBody)
   #if Function.getReturnValue() != RoseUndefValue():
     #RosetteCode += ")\n"
     #RosetteCode += Function.getReturnValue().getName() + "\n"
+  # Now check if the function has any op for padding high bits in the end
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  for Block in reversed(BlockList):
+    FoundHighBitsPaddingOp = False
+    for Op in reversed(Block.getOperations()):
+      if isinstance(Op, RoseBVPadHighBitsOp):
+        # Emit rosette code
+        FunctionBody = Spaces + "(define " + Function.getReturnValue().getName() \
+                              + "\n" + FunctionBody
+        FunctionBody += Spaces + ")\n"
+        FunctionBody += Op.to_rosette(NumSpace)
+        print("FunctionBody")
+        print(FunctionBody)
+        FoundHighBitsPaddingOp = True
+        break
+    if FoundHighBitsPaddingOp == True:
+      break
+  RosetteCode += FunctionBody
   RosetteCode += (Spaces + ")\n")
   return RosetteCode
 
