@@ -63,8 +63,14 @@ class Context:
 
 
     def get_output_size(self):
-        assert (self.out_precision != None) and (self.out_vectsize != None) , "Unable to process output size for instruction"
+        assert (self.out_vectsize != None) , "Unable to process output size for instruction"+" "+self.name
         return self.out_vectsize
+
+    def has_output_size(self):
+        return self.out_vectsize != None
+
+    def has_input_size(self):
+        return self.in_vectsize != None
 
     def supports_input_precision(self, prec):
         return self.in_precision == prec
@@ -93,7 +99,7 @@ class Context:
 
 
     def supports_output_size(self, output_size):
-        return self.get_output_size == output_size
+        return self.get_output_size() == output_size
 
 
 
@@ -335,6 +341,12 @@ class DSLInstruction(InstructionType):
     def supports_output_precision(self, prec):
         return any([ctx.supports_output_precision(prec) for ctx in self.contexts])
 
+
+    def has_output_sizes_defined(self):
+        return all([ctx.has_output_size() for ctx in self.contexts])
+
+    def has_input_sizes_defined(self):
+        return all([ctx.has_input_size() for ctx in self.contexts])
 
 
 

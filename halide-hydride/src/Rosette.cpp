@@ -204,7 +204,7 @@ namespace Halide {
                         }
 
                         if(VariableToRegMap.find(op) != VariableToRegMap.end()){
-                            std::string reg_name = std::to_string(VariableToRegMap[op]);
+                            std::string reg_name = "reg_"+std::to_string(VariableToRegMap[op]);
                             return tabs() + reg_name ;
 
                         }
@@ -1626,7 +1626,7 @@ namespace Halide {
                     std::string emit_racket_debug(){
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
-                            (enable-debug)\n"; 
+                            ;(enable-debug)\n"; 
                     }
 
                     std::string emit_set_current_bitwidth(size_t bw){

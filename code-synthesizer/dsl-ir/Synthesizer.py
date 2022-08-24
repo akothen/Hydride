@@ -129,13 +129,16 @@ class Synthesizer:
         return ["(reg {})".format(i) for i in range(0, registers)]
 
 
-    def get_lit_holes(self, use_lit_holes):
+    def get_lit_holes(self, use_lit_holes, bitvector_sizes):
 
         load_factors = [1.0]
         holes = []
 
         if use_lit_holes:
             holes = [int(lf * self.VF * self.spec.input_precision) for lf in load_factors]
+            holes += bitvector_sizes
+            # remove duplicates
+            holes = list(set(holes))
 
         return holes
 
@@ -146,14 +149,15 @@ class Synthesizer:
         memory_dsl_insts = [spec_memory_loads] * len(spec_memory_loads.contexts)
         memory_dsl_args_list = [ctx.context_args for ctx in spec_memory_loads.contexts]
 
+        # List of sizes of the bitvectors which may be produced
+        # or consumed by either layers.
+        bitvector_sizes = []
+
         ## Memory Shuffle layer
         spec_memory_shuffles = self.get_memory_shuffles()
         memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list = [ctx.context_args for ctx in spec_memory_shuffles.contexts]
 
-        #TEMP:
-        #memory_shuffle_insts = []
-        #memory_shuffle_args_list = []
 
         ## Operation Layers
 
@@ -168,14 +172,41 @@ class Synthesizer:
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx.context_args for ctx in operator_contexts]
 
+                continue
+
+            ## Including bitwise operations such as bitwise 'or',  'not', 'neg' & 'and'
+            ## may enable more novel arithemetic results
+            if False and self.consider_bitwise_heuristic(dsl_inst):
+                print("BITWISE OPERATIONS INCLUDED")
+                operator_contexts = self.get_supported_bitwise_context_for_dsl(dsl_inst, limit = self.contexts_per_dsl_inst)
+                print("#bitwise contexts: ", len(operator_contexts))
+                operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
+                operation_dsl_args_list += [ctx.context_args for ctx in operator_contexts]
+
+
         top_level_grammar_args = self.get_top_level_grammar_args()
 
+        for context_args in operation_dsl_args_list:
+            for ctx_arg in context_args:
+                if isinstance(ctx_arg, BitVector):
+                    bitvector_sizes.append(ctx_arg.size)
+
+
+        for context_args in memory_shuffle_args_list:
+            for ctx_arg in context_args:
+                if isinstance(ctx_arg, BitVector):
+                    bitvector_sizes.append(ctx_arg.size)
+
+        bitvector_sizes = list(set(bitvector_sizes))
+
+
+        lit_holes = self.get_lit_holes(use_lit_holes, bitvector_sizes)
+
         print("="*50)
-        print("Number of Load DSL Instructions:\t",len(memory_dsl_args_list))
+        print("Number of Load DSL Instructions:\t",len(memory_dsl_args_list)+len(lit_holes) + len(top_level_grammar_args))
         print("Number of Shuffle DSL Instructions:\t",len(memory_shuffle_args_list))
         print("Number of DSL Compute Instructions:\t",len(operation_dsl_args_list))
 
-        lit_holes = self.get_lit_holes(use_lit_holes)
 
         return self.grammar_generator.emit_grammar(
             memory_layer_name = main_grammar_name + "_mem",
@@ -409,6 +440,13 @@ class Synthesizer:
             print("Here")
 
         for ctx in dsl_inst.contexts:
+
+            if not ctx.has_output_size():
+                continue
+
+            if not ctx.has_input_size():
+                continue
+
             supports_inputs_prec = ctx.supports_input_precision(self.spec.input_precision)
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
@@ -473,12 +511,20 @@ class Synthesizer:
     # and the DSL instruction overlap
     def does_dsl_configs_overlap(self, dsl_inst, match_all = False):
 
+
         if match_all:
             return  dsl_inst.supports_config(input_precision = self.spec.input_precision,
                                              output_precision = self.spec.output_precision,
                                              output_size = self.output_slice_length
                                              )
         else:
+
+            if not dsl_inst.has_output_sizes_defined():
+                return False
+
+            if not dsl_inst.has_input_sizes_defined():
+                return False
+
             supports_inputs_prec = dsl_inst.supports_input_precision(self.spec.input_precision)
             supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision)
 
@@ -490,12 +536,72 @@ class Synthesizer:
             return (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
 
+    def consider_bitwise_heuristic(self, dsl_inst):
+
+        dsl_ops = dsl_inst.get_semantics_ops_list()
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg"]
+
+        for op in dsl_ops:
+            if op in bitwise_logical_ops:
+                return True
+
+        return False
+
+
+    def get_supported_bitwise_context_for_dsl(self, dsl_inst, limit = None):
+        assert self.consider_bitwise_heuristic(dsl_inst), "Can not get supported contexts for dsl inst"
+
+        contexts = []
+        print("Get supported bitwise contexts for ", dsl_inst.name)
+
+        for ctx in dsl_inst.contexts:
+            if not ctx.has_output_size():
+                continue
+
+            if not ctx.has_input_size():
+                continue
+
+            supports_element_wise = any(
+                [ctx.supports_input_size(input_size) and ctx.supports_output_size(input_size)
+                 for input_size in self.input_sizes])
+
+
+
+
+            if  supports_element_wise:
+                contexts.append(ctx)
+
+        if limit != None and len(contexts) > limit:
+            return contexts[:limit]
+
+
+        return contexts
+
+
+
+
+
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name in ["_mm512_abs_epi64", "_mm_cvtepi16_epi64"] and DEBUG:
+        if dsl_inst.name in ["_mm512_min_epu64"] and DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))
+
+
+        ## Specific heuristics for supporting special cases
+
+        ## For truncation, direct vector truncation may not be available,
+        ## and may require up-casting before down-casting
+        ## If the ops are always only extract --> Add sign extension intructions
+        ## For truncation instruction only add those instructions which down-cast
+        ## to required precisions
+
+
+
+
+
+
         return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
 
 

@@ -129,8 +129,8 @@
                   (define solver 'z3)
 
                   (clear-vc!)
-                  (debug-log "Synthesizing sub-expression")
-                  (debug-log expr-extract)
+                  (displayln "Synthesizing sub-expression")
+                  (pretty-print expr-extract)
                   (debug-log "Leaves are bitvectors of sizes:")
                   (debug-log leaves-sizes)
                   (define test-start (current-seconds))
@@ -147,8 +147,8 @@
 
                   (if satisfiable? 
                     (begin
-                      (debug-log "Solution")
-                      (debug-log materialize)
+                      (displayln "Solution")
+                      (pretty-print materialize)
                       )
                     (debug-log "Unsatisfiable")
                     )
