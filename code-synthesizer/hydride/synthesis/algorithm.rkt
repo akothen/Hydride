@@ -32,8 +32,9 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr expr-depth VF)
-  (define id-map (halide:get-buffer-ids halide-expr))
+
+
+(define (synthesize-halide-expr halide-expr id-map expr-depth VF)
   (debug-log id-map)
   (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map))
   (displayln "========================================")

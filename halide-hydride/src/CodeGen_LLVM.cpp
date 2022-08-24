@@ -1982,14 +1982,14 @@ void CodeGen_LLVM::visit(const Load *op) {
 
     // Predicated load
     if (!is_const_one(op->predicate)) {
-        std::cout << "[Hydride]: " << "Predicated Load" << "\n";
+        //std::cout << "[Hydride]: " << "Predicated Load" << "\n";
         codegen_predicated_load(op);
         return;
     }
 
     // There are several cases. Different architectures may wish to override some.
     if (op->type.is_scalar()) {
-        std::cout << "[Hydride]: " << "Scalar load" << "\n";
+        //std::cout << "[Hydride]: " << "Scalar load" << "\n";
         // Scalar loads
         Value *ptr = codegen_buffer_pointer(op->name, op->type, op->index);
         LoadInst *load = builder->CreateAlignedLoad(llvm_type_of(op->type), ptr, llvm::Align(op->type.bytes()));
@@ -2003,7 +2003,7 @@ void CodeGen_LLVM::visit(const Load *op) {
         if (ramp && stride && stride->value == 1) {
             value = codegen_dense_vector_load(op);
         } else if (ramp && stride && 2 <= stride->value && stride->value <= 4) {
-            std::cout << "[Hydride]: " << "load with 2 <= stride < 4" << "\n";
+            //std::cout << "[Hydride]: " << "load with 2 <= stride < 4" << "\n";
             // Try to rewrite strided loads as shuffles of dense loads,
             // aligned to the stride. This makes adjacent strided loads
             // share the same underlying dense loads.
@@ -2075,7 +2075,7 @@ void CodeGen_LLVM::visit(const Load *op) {
             value = concat_vectors(results);
         } else if (ramp && stride && stride->value == -1) {
 
-            std::cout << "[Hydride]: " << "load with stride = -1" << "\n";
+            //std::cout << "[Hydride]: " << "load with stride = -1" << "\n";
 
             // Load the vector and then flip it in-place
             Expr flipped_base = ramp->base - ramp->lanes + 1;
@@ -2095,7 +2095,7 @@ void CodeGen_LLVM::visit(const Load *op) {
 
             value = shuffle_vectors(flipped, indices);
         } else if (ramp) {
-            std::cout << "[Hydride]: " << "Just ramp case for load" << "\n";
+            //std::cout << "[Hydride]: " << "Just ramp case for load" << "\n";
             // Gather without generating the indices as a vector
             Value *ptr = codegen_buffer_pointer(op->name, op->type.element_of(), ramp->base);
             Value *stride = codegen(ramp->stride);
@@ -2123,7 +2123,7 @@ void CodeGen_LLVM::visit(const Load *op) {
             }
             value = vec;
         } else {
-            std::cout << "[Hydride]: " << "else case for load" << "\n";
+            //std::cout << "[Hydride]: " << "else case for load" << "\n";
             // General gathers
             Value *index = codegen(op->index);
             Value *vec = UndefValue::get(llvm_type_of(op->type));

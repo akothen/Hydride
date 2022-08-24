@@ -12,7 +12,7 @@
 ;; DEBUG-MODEs:
 ;;  0 : Print no debug messages
 ;;  1 : Print all debug logs
-(define DEBUG-MODE 1)
+(define DEBUG-MODE 0)
 
 (define (enable-debug)
   (set! DEBUG-MODE 1)

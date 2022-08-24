@@ -29,12 +29,18 @@ namespace Halide {
 
             typedef std::map<std::string, VarEncoding> Encoding;
 
+            // For variables below load instruction
+            // we do not need to emit any strings
+            // as the code generator in LLVM 
+            // would handle those.
+            std::set<const IRNode*> SkipNodes;
 
-            std::map<std::string, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
-            std::map<const Load*, std::string> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
 
-            std::map<std::string, const Variable*> RegToVariableMap; // Map racket register expressions to Halide Load Instructions
-            std::map<const Variable*, std::string> VariableToRegMap; // Map racket register expressions to Halide Load Instructions
+            std::map<unsigned, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
+            std::map<const Load*, unsigned> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
+
+            std::map<unsigned, const Variable*> RegToVariableMap; // Map racket register expressions to Halide Load Instructions
+            std::map<const Variable*, unsigned> VariableToRegMap; // Map racket register expressions to Halide Load Instructions
 
 
             // Takes the input Halide IR and converts it to Rosette syntax
@@ -193,18 +199,24 @@ namespace Halide {
                     /* Constants and Variables */
 
                     std::string visit(const Variable *op) {
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            return "";
+                        }
 
                         if(VariableToRegMap.find(op) != VariableToRegMap.end()){
-                            return VariableToRegMap[op];
+                            std::string reg_name = std::to_string(VariableToRegMap[op]);
+                            return tabs() + reg_name ;
+
                         }
 
                             std::string bits = std::to_string(op->type.bits() * op->type.lanes());
                             unsigned reg_counter = (RegToLoadMap.size()+ RegToVariableMap.size());
 
                             std::string reg_name = "reg_"+std::to_string(reg_counter);
+                            std::cout << op->name << " maps to "<<reg_name << "\n";
 
-                            RegToVariableMap[reg_name] = op;
-                            VariableToRegMap[op] = reg_name;
+                            RegToVariableMap[reg_counter] = op;
+                            VariableToRegMap[op] = reg_counter;
                         return tabs() + reg_name;//op->name;
                     }
 
@@ -241,66 +253,162 @@ namespace Halide {
                     /* Halide IR Operators */
 
                     std::string visit(const Add *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("add", "+", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Sub *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("sub", "-", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Mul *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("mul", "*", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Div *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("div", "quotient", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Mod *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("mod", "modulo", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Min *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("min", "min", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Max *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("max", "max", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const EQ *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("eq", "eq?", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const NE *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("ne", "ne?", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const LT *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("lt", "<", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const LE *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("le", "<=", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const GT *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("gt", ">", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const GE *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("ge", ">", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const And *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("and", "and", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Or *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            SkipNodes.insert(op->b.get());
+                            return "";
+                        }
                         return print_binary_op("or", "or", op->a, op->b, op->type.is_vector());
                     }
 
                     std::string visit(const Not *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->a.get());
+                            return "";
+                        }
+
                         if (op->type.is_vector()) {
                             indent.push(indent.top() + 1);
                             std::string rkt_val = dispatch(op->a);
@@ -314,6 +422,12 @@ namespace Halide {
                     }
 
                     std::string visit(const Broadcast *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->value.get());
+                            return "";
+                        }
+
                         indent.push(0);
                         std::string rkt_type = std::to_string(op->lanes);
                         std::string rkt_val = dispatch(op->value);
@@ -329,6 +443,12 @@ namespace Halide {
                     }
 
                     std::string visit(const Cast *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->value.get());
+                            return "";
+                        }
+
                         const std::string type_string = get_type_string(op->type);
                         std::cout << "Cast operation into: "<<type_string <<"\n";
 
@@ -347,6 +467,13 @@ namespace Halide {
                     }
 
                     std::string visit(const Let *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->value.get());
+                            SkipNodes.insert(op->body.get());
+                            return "";
+                        }
+
                         // Set the correct encoding mode
                         mode.push(encoding[op->name]);
                         std::string rkt_val = dispatch(op->value);
@@ -428,7 +555,7 @@ namespace Halide {
                     }
 
                     std::string define_load_buffer(const Load *op){
-                        std::string reg_name = LoadToRegMap[op];
+                        std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
                         size_t bitwidth = op->type.bits() * op->type.lanes();
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); // TODO
@@ -444,6 +571,11 @@ namespace Halide {
                     std::string visit(const Load *op) {
                         indent.push(0);
 
+                        SkipNodes.insert(op->predicate.get());
+                        SkipNodes.insert(op->index.get());
+
+
+
                         // Print index
                         mode.push(VarEncoding::Integer);
                         std::string rkt_idx = dispatch(op->index);
@@ -454,7 +586,7 @@ namespace Halide {
                         indent.pop();
 
                         if(LoadToRegMap.find(op) != LoadToRegMap.end()){
-                            return LoadToRegMap[op];
+                            return "reg_" + std::to_string(LoadToRegMap[op]);
                         }
 
                         if (op->type.is_scalar() && mode.top() == VarEncoding::Integer)
@@ -465,8 +597,8 @@ namespace Halide {
                             std::string bits = std::to_string(op->type.bits() * op->type.lanes());
                             unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
                             std::string reg_name = "reg_"+std::to_string(reg_counter);
-                            RegToLoadMap[reg_name] = op;
-                            LoadToRegMap[op] = reg_name;
+                            RegToLoadMap[reg_counter] = op;
+                            LoadToRegMap[op] = reg_counter;
                             std::string load_buff = define_load_buffer(op);
                             return tabs()   + reg_name; //+ load_buff + "\n"+ "(load " + reg_name + " " + rkt_idx + " " + alignment + ")";
                         }
@@ -474,6 +606,13 @@ namespace Halide {
                     }
 
                     std::string visit(const Ramp *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->base.get());
+                            SkipNodes.insert(op->stride.get());
+                            return "";
+                        }
+                        
                         indent.push(0);
                         std::string rkt_base = dispatch(op->base);
                         std::string rkt_stride = dispatch(op->stride);
@@ -483,6 +622,14 @@ namespace Halide {
                     }
 
                     std::string visit(const Select *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->condition.get());
+                            SkipNodes.insert(op->true_value.get());
+                            SkipNodes.insert(op->false_value.get());
+                            return "";
+                        }
+
                         if (op->type.is_vector()) {
                             Expr cond = (op->condition.type().is_scalar() ?
                                     Broadcast::make(op->condition, op->true_value.type().lanes()) :
@@ -507,6 +654,8 @@ namespace Halide {
                     }
 
                     std::string visit(const Shuffle *op) {
+
+
                         if (op->is_slice()) {
                             indent.push(indent.top() + 1);
                             std::string rkt_vec = dispatch(op->vectors[0]);
@@ -632,6 +781,11 @@ namespace Halide {
                     }
 
                     std::string visit(const VectorReduce *op) {
+
+                        if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
+                            SkipNodes.insert(op->value.get());
+                            return "";
+                        }
                         std::string rkt_op = "";
                         switch (op->op) {
                             case VectorReduce::Add: rkt_op = "add"; break;
@@ -1375,7 +1529,7 @@ namespace Halide {
                     HydrideSynthEmitter() {};
 
                     std::string define_load_buffer(const Load *op){
-                        std::string reg_name = LoadToRegMap[op];
+                        std::string reg_name = "reg_"+ std::to_string(LoadToRegMap[op]);
                         size_t bitwidth = op->type.bits() * op->type.lanes();
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
@@ -1387,10 +1541,11 @@ namespace Halide {
 
                         return define_bitvector_str + "\n" + define_buffer_str;
                     }
+
 
 
                     std::string define_variable_buffer(const Variable *op){
-                        std::string reg_name = VariableToRegMap[op];
+                        std::string reg_name = "reg_"+ std::to_string(VariableToRegMap[op]);
                         size_t bitwidth = op->type.bits() * op->type.lanes();
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
@@ -1403,6 +1558,29 @@ namespace Halide {
 
                         return define_bitvector_str + "\n" + define_buffer_str;
                     }
+
+                    std::string emit_buffer_id_map(std::string map_name){
+                        std::string comment = "; Creating a map between buffers and halide call node arguments\n";
+                        std::string define_buff_map = "(define "+map_name+" (make-hash))" +"\n";
+                        std::string add_entry = "";
+
+                        for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
+                            unsigned id = bi->second;
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+ std::to_string(id) + ")"+"\n";
+
+
+                        }
+
+                        for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
+                            unsigned id = bi->second;
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+ std::to_string(id) + ")"+"\n";
+                        }
+
+                        return comment + define_buff_map + add_entry;
+
+                    }
+
+
 
                     std::string emit_symbolic_buffers(){
                         std::string buffers = "";
@@ -1425,7 +1603,7 @@ namespace Halide {
                         std::string buffers = "(define "+vector_name+" (vector ";
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             const Load* op = bi->first;
-                            buffers +=  LoadToRegMap[op] + " ";
+                            buffers +=  "reg_"+std::to_string(LoadToRegMap[op]) + " ";
                         }
 
                         buffers += "))";
@@ -1444,6 +1622,13 @@ namespace Halide {
                             (require hydride)\n ";
                     }
 
+
+                    std::string emit_racket_debug(){
+                        return "\n \
+                            ;; Uncomment the line below to enable verbose logging\n \
+                            (enable-debug)\n"; 
+                    }
+
                     std::string emit_set_current_bitwidth(size_t bw){
                         return "(current-bitwidth "+ std::to_string(bw)+")";
                     }
@@ -1452,8 +1637,8 @@ namespace Halide {
                         return "(custodian-limit-memory (current-custodian) (* " +std::to_string(MB)+" 1024 1024))";
                     }
 
-                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF){
-                        return "(synthesize-halide-expr "+expr_name+ " "+std::to_string(expr_depth) +" "+std::to_string(VF) + " )";
+                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name){
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " )";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -1489,147 +1674,13 @@ namespace Halide {
                 Encoding encoding = get_encoding(spec_expr, let_vars, linearized_let_vars);
 
                 // Infer symbolic variables
-                InferSymbolics symFinder(let_vars, linearized_let_vars, bounds, func_value_bounds, encoding);
-                spec_expr.accept(&symFinder);
+                //InferSymbolics symFinder(let_vars, linearized_let_vars, bounds, func_value_bounds, encoding);
+                //spec_expr.accept(&symFinder);
 
                 auto spec_dispatch = get_expr_racket_dispatch(spec_expr, encoding, let_vars);
                 std::string expr = spec_dispatch(spec_expr, false /* set_mode */, false /* int_mode */);
 
 
-                // Prepare spec file for Rake
-                std::stringstream axioms;
-                std::stringstream sym_bufs;
-
-                axioms << "(define axioms \n"
-                    << "  (list ";
-
-                std::set<std::string> printed_vars;
-                Encoding bounds_encodings;
-                GatherVars bounds_vars;
-
-                for (auto buf : symFinder.getSymBufs()) {
-                    debug(1) << "Symbolic buffer: " << buf.first << "\n";
-                    if (encoding[buf.first] == Integer) {
-                        sym_bufs << "(define-symbolic " << buf.first << " " << "(~> integer? integer?))\n";
-                    } else {
-                        sym_bufs << "(define-symbolic-buffer " << buf.first << " " << type_to_rake_type(buf.second, false, true) << ")\n";
-                    }
-
-                    printed_vars.insert(buf.first);
-
-                    std::pair<std::string, int> key(buf.first, 0);
-                    if (func_value_bounds.count(key)) {
-                        auto in = func_value_bounds[key];
-                        if (!in.is_everything()) {
-                            if (!in.has_lower_bound()) {
-                                in.min = in.max.type().min();
-                            }
-                            if (!in.has_upper_bound()) {
-                                in.max = in.min.type().max();
-                            }
-                            if (!(containsFloat(in.min) || containsFloat(in.max))) {
-                                debug(0) << "Bounds:\t" << buf.first << " : " << in.min << " ----- " << in.max << "\n";
-                                axioms << "\n   (values-range-from "
-                                    << buf.first
-                                    << spec_dispatch(in.min, false /* set_mode */, false /* int_mode */)
-                                    << spec_dispatch(in.max, false /* set_mode */, false /* int_mode */) << ")";
-
-                                std::map<std::string, Expr> let_vars;
-                                auto temp_encoding = get_encoding(in.min, let_vars, linearized_let_vars);
-                                insert_encodings(bounds_encodings, temp_encoding);
-                                temp_encoding = get_encoding(in.max, let_vars, linearized_let_vars);
-                                insert_encodings(bounds_encodings, temp_encoding);
-                                // Gather all referred-to variables
-                                in.min.accept(&bounds_vars);
-                                in.max.accept(&bounds_vars);
-                            }
-                        }
-                    }
-                }
-
-                std::stringstream sym_vars;
-                for (auto var : symFinder.getSymVars()) {
-                    debug(1) << "Symbolic var: " << var->name << "\n";
-                    if (var->type.is_vector() && !var->type.is_bool()) {
-                        sym_bufs << "(define-symbolic-buffer " << var->name << "-buf " << type_to_rake_type(var->type.element_of(), false, true) << ")\n";
-                        sym_vars << "(define " << var->name << " (load " << var->name
-                            << "-buf (ramp 0 1 " << var->type.lanes() << ") (aligned 0 0)))\n";
-
-
-                        auto in = bounds_of_expr_in_scope(var, bounds, func_value_bounds);
-                        if (!in.is_everything()) {
-                            if (!in.has_lower_bound()) {
-                                in.min = var->type.min();
-                            }
-                            if (!in.has_upper_bound()) {
-                                in.max = var->type.max();
-                            }
-
-                            if (in.min.node_type() == IRNodeType::Broadcast)
-                                in.min = in.min.as<Broadcast>()->value;
-
-                            if (in.max.node_type() == IRNodeType::Broadcast)
-                                in.max = in.max.as<Broadcast>()->value;
-
-                            debug(0) << "Bounds:\t" << var->name << " : " << in.min << " ----- " << in.max << "\n";
-                            axioms << "\n   (values-range-from "
-                                << var->name << "-buf"
-                                << spec_dispatch(in.min, false , false )
-                                << spec_dispatch(in.max, false , false ) << ")";
-
-                            std::map<std::string, Expr> let_vars;
-                            auto temp_encoding = get_encoding(in.min, let_vars, linearized_let_vars);
-                            insert_encodings(bounds_encodings, temp_encoding);
-                            temp_encoding = get_encoding(in.max, let_vars, linearized_let_vars);
-                            insert_encodings(bounds_encodings, temp_encoding);
-                            // Gather all referred-to variables
-                            in.min.accept(&bounds_vars);
-                            in.max.accept(&bounds_vars);
-                        }
-                    } else {
-                        if (encoding[var->name] == Bitvector) {
-                            sym_vars << "(define-symbolic-var " << var->name
-                                << " " << type_to_rake_type(var->type.element_of(), false, true) << ")\n";
-                        } else {
-                            sym_vars << "(define-symbolic " << var->name << " integer?)\n";
-                        }
-                    }
-                    printed_vars.insert(var->name);
-                }
-
-                axioms << "))\n";
-
-                // Order let-stmts so we don't use any vars before they are defined
-                std::set<std::string> live_lets = symFinder.getLiveLets();
-                std::vector<std::string> ordered_live_lets(live_lets.begin(), live_lets.end());
-                std::sort(
-                        ordered_live_lets.begin(),
-                        ordered_live_lets.end(),
-                        [this](std::string n1, std::string n2) -> int {
-                        int pos1 = std::find(let_decl_order.begin(), let_decl_order.end(), n1) - let_decl_order.begin();
-                        int pos2 = std::find(let_decl_order.begin(), let_decl_order.end(), n2) - let_decl_order.begin();
-                        return pos1 < pos2;
-                        });
-
-                std::stringstream let_stmts;
-                for (auto var_name : ordered_live_lets) {
-                    if (encoding[var_name] == Integer) {
-                        Expr val = linearized_let_vars[var_name];
-                        let_stmts << "(define " << var_name << " (var-lookup '" << var_name << spec_dispatch(val, true /* set_mode */, true /* int_mode */) << "))\n";
-                    } else {
-                        Expr val = let_vars[var_name];
-                        let_stmts << "(define " << var_name << spec_dispatch(val, true /* set_mode */, false /* int_mode */) << ")\n";
-                    }
-                    printed_vars.insert(var_name);
-                }
-
-                for (const auto &name : bounds_vars.names) {
-                    if (printed_vars.find(name) == printed_vars.end()) {
-                        internal_assert(bounds_encodings.count(name) != 0) << "Found bounds Variable with no encoding: " << name << "\n";
-                        internal_assert(bounds_encodings[name] == Bitvector) << "AJ didn't handle the bitvector case yet\n";
-                        sym_vars << "(define-symbolic " << name << " integer?)\n";
-                    }
-                }
 
                 HydrideSynthEmitter HSE;
                 std::ofstream rkt;
@@ -1638,10 +1689,12 @@ namespace Halide {
 
 
                 rkt << HSE.emit_racket_imports() << "\n";
+                rkt << HSE.emit_racket_debug() << "\n";
                 rkt << HSE.emit_set_current_bitwidth(16) << "\n";
                 rkt << HSE.emit_set_memory_limit(20000) << "\n";
                 rkt << HSE.emit_symbolic_buffers() << "\n";
-                rkt << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
+                rkt << HSE.emit_buffer_id_map("id-map") << "\n";
+                //rkt << HSE.emit_symbolic_buffers_vector("sym_env") << "\n";
                 //rkt << sym_bufs.str() << "\n";
                 //rkt << sym_vars.str() << "\n";
                 //rkt << axioms.str() << "\n";
@@ -1652,7 +1705,7 @@ namespace Halide {
                 rkt << ")\n\n";
 
                 rkt << "(clear-vc!)" << "\n";
-                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes()) << ")" <<"\n";
+                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes(), /* Hash map name */  "id-map") << ")" <<"\n";
                 rkt << "(pretty-print synth-res)"<<"\n";
 
                 rkt.close();
