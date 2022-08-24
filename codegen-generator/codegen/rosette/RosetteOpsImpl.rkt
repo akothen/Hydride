@@ -65,6 +65,7 @@
   result
 )
 
+
 (define (bvumaxval bitwidth)
   (apply 
   concat
@@ -134,7 +135,7 @@
   )
 )
 
-(define (pad_high_bits vect bitwidth target_bitwidth)
+(define (bvpadhighbits vect bitwidth target_bitwidth)
   (if (equal? bitwidth target_bitwidth)
     (begin
       vect
@@ -150,7 +151,7 @@
   (define result
   (cond
     [(and (bvsgt a zerobv) (bvsgt b zerobv) 
-          (bvsgt a (bvsub (bvsmaxval bitwidth) b))) 
+          (bvsgt a (bvsub (bvsmaxval bitwidth) b)))
           (bvsmaxval bitwidth)]
     [(and (bvslt a zerobv) (bvslt b zerobv) 
           (bvslt a (bvsub (bvsminval bitwidth) b))) 
@@ -276,4 +277,6 @@
   (pretty-print "(bvmulnuw au64 bu64 64):")
   (pretty-print (bvmulnuw au64 bu64 64))
 )
+
+
 
