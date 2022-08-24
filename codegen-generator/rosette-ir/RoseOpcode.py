@@ -122,7 +122,7 @@ class RoseOpcode(Enum):
     # Op to represent padding of high bits with
     # zeros. This is important for semantics represented
     # using Rose IR.
-    padhighbits = auto()
+    bvpadhighbits = auto()
 
 
     def __str__(self):
@@ -222,7 +222,7 @@ class RoseOpcode(Enum):
             assert isinstance(Callee, RoseValues.RoseConstant)
             assert isinstance(Callee.getType(), RoseStringType)
             return Callee.getType().getReturnType()
-        if self.value == self.padhighbits.value:
+        if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
             # The number of high bits that should be 
@@ -485,7 +485,7 @@ class RoseOpcode(Enum):
             if not isinstance(Callee.getType(), RoseStringType):
                 return False
             return True
-        if self.value == self.padhighbits.value:
+        if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) != 1:
                 return False
@@ -629,7 +629,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
-        or self.value == self.padhighbits.value \
+        or self.value == self.bvpadhighbits.value \
         or self.value == self.select.value \
         or self.value == self.rotateleft.value \
         or self.value == self.rotateright.value \
@@ -715,7 +715,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvtrunchigh.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
-        or self.value == self.padhighbits.value \
+        or self.value == self.bvpadhighbits.value \
         or self.value == self.select.value \
         or self.value == self.bvnot.value \
         or self.value == self.bvneg.value \
@@ -794,7 +794,7 @@ class RoseOpcode(Enum):
         if self.value == self.call.value \
         or self.value == self.opaquecall.value:
             return (NumInputs >= 1)
-        if self.value == self.padhighbits.value:
+        if self.value == self.bvpadhighbits.value:
             return (NumInputs == 2)
         if self.value == self.ret.value \
         or self.value == self.abs.value:
@@ -880,7 +880,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvtrunclow.value \
-        or self.value == self.bvtrunchigh.value:
+        or self.value == self.bvtrunchigh.value \
+        or self.value == self.bvpadhighbits.value:
             return True
         return False
 
@@ -992,7 +993,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvinsert.value \
         or self.value == self.call.value \
         or self.value == self.opaquecall.value \
-        or self.value == self.padhighbits.value \
+        or self.value == self.bvpadhighbits.value \
         or self.value == self.select.value \
         or self.value == self.ret.value \
         or self.value == self.cast.value \
