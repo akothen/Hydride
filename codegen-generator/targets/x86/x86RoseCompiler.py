@@ -1737,9 +1737,25 @@ def CompileStatement(Stmt, Context : x86RoseContext):
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
+def CompileUpdatePaddingHighBits(Stmt, Context : x86RoseContext):
+  assert type(Stmt) == Update and type(Stmt.lhs) == BitSlice \
+    and type(Stmt.lhs.hi) == Var and Stmt.lhs.hi.name == "MAX"
+  print("GENERATE PADDING FOR HIGH BITS")
+  # Add an opaque call instruction
+  Bitvector = CompileExpression(Stmt.lhs.bv, Context)
+  assert type(Stmt.lhs.lo) == Number
+  assert type(Stmt.rhs) == Number
+  assert Stmt.rhs.val == 0
+  NumPadBits = RoseConstant.create(Bitvector.getType().getBitwidth() - Stmt.lhs.lo.val, \
+                                  RoseIntegerType.create(32))
+  Operation = RoseBVPadHighBitsOp.create(Bitvector, NumPadBits)
+  # Add the operation to the IR
+  Context.addAbstractionToIR(Operation)
+  return Operation
+
+
 def CompileSemantics(Sema, RootContext : x86RoseContext):
   OutParams = []
-  ReturnsVoid = False
   ParamValues = []
   ParamsIDs = []
   for Index, Param in enumerate(Sema.params):
@@ -1807,20 +1823,27 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   CompiledRetVal = RoseUndefValue()
   print("Sema.spec:")
   print(Sema.spec)
+  PaddingHandled = False
   for Index, Stmt in enumerate(Sema.spec):
     if Index == len(Sema.spec) - 1:
       if type(Stmt) == Update:
         if type(Stmt.lhs) == BitSlice:
           if type(Stmt.lhs.hi) == Var:
             if Stmt.lhs.hi.name == "MAX":
+              CompileUpdatePaddingHighBits(Stmt, RootContext)
+              PaddingHandled = True
               continue
     if type(Stmt) == Return:
-      #Dst = Update(lhs=Var('dst'), rhs=Stmt.val)
-      #CompileStatement(Dst, RootContext)
       CompiledRetVal = CompileStatement(Stmt, RootContext)
       break
     CompileStatement(Stmt, RootContext)
   
+  # Add padding handling call if not already added
+  if PaddingHandled == False:
+    NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
+    Operation = RoseBVPadHighBitsOp.create(RetValue, NumPadBits)
+    RootContext.addAbstractionToIR(Operation)
+
   # Get the compiled function
   CompiledFunction = RootContext.getRootAbstraction()
 
