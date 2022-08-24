@@ -20,7 +20,7 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
   for Operation in Block:
     if isinstance(Operation, RoseBVInsertSliceOp):
       # If this op is already in the map, we rempve the entry
-      # from the map. TODO: Imoprove this, if neessary.
+      # from the map. TODO: Improve this, if neessary.
       for BVInsertOp, _ in BVInsertToExtractMap.items():
         if BVInsertOp.getInputBitVector() == Operation.getInputBitVector():
           BVInsertToExtractMap.pop(Operation)
@@ -97,7 +97,8 @@ def RunDCEOnBlock(Block : RoseBlock):
   OpList = list()
   for Operation in Block:
     if isinstance(Operation, RoseBVInsertSliceOp) \
-    or isinstance(Operation, RoseReturnOp):
+    or isinstance(Operation, RoseReturnOp) \
+    or isinstance(Operation, RoseBVPadHighBitsOp):
       continue
     OpList.append(Operation)
   # Iterate the list of operations in reverse order
@@ -135,6 +136,4 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunDCEOnFunction(Function)
   print("\n\n\n\n\n")
   Function.print()
-
-
 
