@@ -1,102 +1,76 @@
-import sys
-sys.path.insert(0, '../../rose-ir/') # temporary hack for file organization
+#############################################################
+#
+# This tool helps lift a small subset of Rosette language
+# to Rosette IR.
+#
+#############################################################
 
-import re
+
+from RosetteParser import *
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
 
-program = open("test_case.rkt", "r")
 
-eof_object = "EOF"
+class RosetteLifter:
+  def __init__(self):
+    self.ID = -1
+  
+  def genUniqueID(self):
+    self.ID += 1
+    return self.ID
 
-class Tokenizer:
-    tokenizer = r'''\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)'''
-    
-    def __init__(self, program_file):
-        self.file = program_file
-        self.line = ''
+  @staticmethod  
+  def lift(self, FuntionName, RosetteFunctionBody, ParamValues, RetType):
+    # Parse the Roseete file to get an AST
+    RosetteAST = RosetteParser.parse(RosetteFunctionBody)
+    # Generate a Rosette function
+    Function = RoseFunction.create(FuntionName, ParamValues, RetType)
+    RetValue = self.liftRosetteAST(Function, RosetteAST)
+    # Add a return op
+    RetOp = RoseReturnOp.create(RetValue)
+    Function.addAbstraction(RetOp)
+    Function.setRetValName(RetValue.getName())
+    return Function
 
-    def next_token(self):
-        while True:
-            if self.line == '': self.line = self.file.readline()
-            if self.line == '': return eof_object
-            token, self.line = re.match(Tokenizer.tokenizer, self.line).groups()
-            if token != '' and not token.startswith('; '):
-                return token
-
-def lex(f):
-    lexer = Tokenizer(f)
-    token = lexer.next_token()
-    tokens = []
-    while token != "EOF":
-        tokens.append(token)
-        token = lexer.next_token()
-    return tokens
-
-def atom(token: str):
-    "Numbers become numbers; every other token is a symbol."
-    try: return int(token)
-    except ValueError:
-        try: return float(token)
-        except ValueError:
-            return str(token)
-
-def read_from_tokens(tokens):
-    "Read an expression from a sequence of tokens."
-    if len(tokens) == 0:
-        raise SyntaxError('unexpected EOF')
-    token = tokens.pop(0)
-    if token == '(':
-        L = []
-        while tokens[0] != ')':
-            L.append(read_from_tokens(tokens))
-        tokens.pop(0) # pop off ')'
-        return L
-    elif token == ')':
-        raise SyntaxError('unexpected )')
-    else:
-        return atom(token)
-
-def parse(f):
-    return read_from_tokens(lex(f))
-
-UNIQUE_ID = 0
-def gen_unique_id():
-    global UNIQUE_ID 
-    UNIQUE_ID += 1
-    return UNIQUE_ID
-
-def convert(ast):
-    # print(ast)
-    inst_map = {
+  def liftRosetteAST(self, Function, RosetteAST):
+    print("RosetteAST:")
+    print(RosetteAST)
+    InstMap = {
         '+': RoseAddOp,
         '-': RoseSubOp,
         '*': RoseMulOp,
         '/': RoseDivOp
     }
-    print(ast)
-    if not isinstance(ast, list):
-        if isinstance(ast, int):
-            return RoseConstant.create(ast, RoseIntegerType.create(32))
-        if isinstance(ast, str):
-            if ast[0] != '#':
-                # TODO: This is not correct, I suspect we need to add some code to handle variables or values with an unknown type
-                return RoseValue.create(ast, RoseIntegerType.create(32))
-            return RoseConstant.create(ast, RoseStringType.create(len(ast)))
-    elif ast[0] == 'bv':
-        return RoseConstant.create(convert(ast[1]), RoseBitVectorType.create(ast[2]))
-    elif ast[0] in inst_map:
-        args = list(map(convert, ast[1:]))
-        return inst_map[ast[0]].create(f"RoseOp_{ast[0]}_{gen_unique_id()}", args)
+    if not isinstance(RosetteAST, list):
+      if isinstance(RosetteAST, int):
+          return RoseConstant.create(RosetteAST, RoseIntegerType.create(32))
+      if isinstance(RosetteAST, str):
+        if RosetteAST[0] != '#':
+          # TODO: This is not correct, I suspect we need to add some code to 
+          # handle variables or values with an unknown type
+          return RoseValue.create(RosetteAST, RoseIntegerType.create(32))
+        return RoseConstant.create(RosetteAST, RoseStringType.create(len(RosetteAST)))
+    elif RosetteAST[0] == 'bv':
+      return RoseConstant.create(self.liftRosetteAST(RosetteAST[1]), RoseBitVectorType.create(RosetteAST[2]))
+    elif RosetteAST[0] in InstMap:
+      Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
+      Op = InstMap[RosetteAST[0]].create(f"RoseOp_{RosetteAST[0]}_{self.genUniqueID()}", Args)
+      Function.addAbstraction(Op)
+      return Op
     else:
-        args = list(map(convert, ast[1:]))
-        return RoseOpaqueCallOp.create(ast[0], RoseConstant("TODO", RoseStringType.create(4)), args)
+      Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
+      CallOp = RoseOpaqueCallOp.create(RosetteAST[0], RoseConstant("TODO", RoseStringType.create(4)), Args)
+      Function.addAbstraction(CallOp)
+      return CallOp
     
 
-
-def convert_file(f):
-    ast = parse(program)
-    return convert(ast)
-
-print(convert_file(program).to_rosette())
+if __name__ == '__main__':
+  RosetteFileeName = "test.rkt"
+  RosetteFile = open(RosetteFileeName, "r")
+  RosetteFunctionBody = list()
+  Line = RosetteFile.readline()
+  while Line != "":
+    RosetteFunctionBody.append(Line)
+    Line = RosetteFile.readline()    
+  RosetteLifter.lift(RosetteFunctionBody)
