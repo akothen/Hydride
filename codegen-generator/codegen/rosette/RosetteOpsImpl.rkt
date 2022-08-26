@@ -66,6 +66,7 @@
 )
 
 
+
 (define (bvumaxval bitwidth)
   (apply 
   concat
@@ -74,6 +75,7 @@
     )
   )
 )
+
 
 (define (bvsmaxval bitwidth)
   (define end (- bitwidth 1))
@@ -88,6 +90,7 @@
   (concat (bv #b0 1) res)
 )
 
+
 (define (bvuminval bitwidth)
   (apply 
   concat
@@ -96,6 +99,7 @@
     )
   )
 )
+
 
 (define (bvsminval bitwidth)
   (define end (- bitwidth 1))
@@ -109,6 +113,7 @@
   )
   (concat (bv #b1 1) res)
 )
+
 
 (define (bvssat vect bitwidth sat_size)
   (if (> bitwidth sat_size)
@@ -124,6 +129,7 @@
  )
 )
 
+
 (define (bvusat vect bitwidth sat_size)
   (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
     (begin
@@ -134,6 +140,7 @@
     )
   )
 )
+
 
 (define (bvpadhighbits vect bitwidth target_bitwidth)
   (if (equal? bitwidth target_bitwidth)
@@ -146,6 +153,7 @@
   )
 )
 
+
 (define (bvaddnsw a b bitwidth)
   (define zerobv (bv 0 (bitvector bitwidth)))
   (define result
@@ -153,28 +161,27 @@
     [(and (bvsgt a zerobv) (bvsgt b zerobv) 
           (bvsgt a (bvsub (bvsmaxval bitwidth) b)))
           (bvsmaxval bitwidth)]
+    [(and (bvsgt a zerobv) (bvsgt b zerobv) 
+          (bvsgt b (bvsub (bvsmaxval bitwidth) a)))
+          (bvsmaxval bitwidth)]
     [(and (bvslt a zerobv) (bvslt b zerobv) 
-          (bvslt a (bvsub (bvsminval bitwidth) b))) 
+          (bvslt a (bvsub (bvsminval bitwidth) b)))
+          (bvsmaxval bitwidth)]
+    [(and (bvslt a zerobv) (bvslt b zerobv) 
+          (bvslt b (bvsub (bvsminval bitwidth) a)))
           (bvsmaxval bitwidth)]
     [else (bvadd a b)]
   )
   )
   result
+  ;;(bvadd a (bvsmin (- (- (bvsmaxval bitwidth) (bv 1 bitwidth)) a) b))
 )
 
+
 (define (bvaddnuw a b bitwidth)
-  (define result 
-  (if (bvugt a (bvsub (bvumaxval bitwidth) b))
-    (begin 
-      (bvumaxval bitwidth)
-    )
-    (begin
-      (bvadd a b)
-    )
-  )
-  )
-  result
+  (bvadd a (bvumin (- (- (bvumaxval bitwidth) (bv 1 bitwidth)) a) b))
 )
+
 
 (define (bvsubnsw a b bitwidth)
   (define zerobv (bv 0 (bitvector bitwidth)))
@@ -190,21 +197,14 @@
   )
   )
   result
+  ;;(bvsub a (bvsmin a b))
 )
 
+
 (define (bvsubnuw a b bitwidth)
-  (define result 
-  (if (bvugt a (bvsub (bvumaxval bitwidth) (bvneg b)))
-    (begin 
-      (bvumaxval bitwidth)
-    )
-    (begin
-      (bvsub a b)
-    )
-  )
-  )
-  result
+  (bvsub a (bvumin a b))
 )
+
 
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
@@ -223,6 +223,7 @@
   )
   result
 )
+
 
 (define (bvmulnuw a b bitwidth)
   (define result 
@@ -277,6 +278,4 @@
   (pretty-print "(bvmulnuw au64 bu64 64):")
   (pretty-print (bvmulnuw au64 bu64 64))
 )
-
-
 
