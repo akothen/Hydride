@@ -26,6 +26,7 @@
 (define (is-broadcast expr)
   (destruct expr
     [(x8 sca) #t]
+    [(x16 sca) #t]
     [(x32 sca) #t]
     [(x64 sca) #t]
     [(x128 sca) #t]
@@ -43,6 +44,7 @@
   (destruct expr
     ;; Constructors
     [(x8 sca) (values (x8 sca) 0)]
+    [(x16 sca) (values (x16 sca) 0)]
     [(x32 sca) (values (x32 sca) 0)]
     [(x64 sca) (values (x64 sca) 0)]
     [(x128 sca) (values (x128 sca) 0)]
@@ -199,6 +201,81 @@
         (begin
           (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
           (values (uint1x512 leaf-sol) args-used)
+        )
+        )
+     ]
+
+    [(uint8x8 vec) 
+       (if is-leaf-depth
+        (values (uint8x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint8x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint16x8 vec) 
+       (if is-leaf-depth
+        (values (uint16x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint16x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint32x8 vec) 
+       (if is-leaf-depth
+        (values (uint32x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint32x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint64x8 vec) 
+       (if is-leaf-depth
+        (values (uint64x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint64x8 leaf-sol) args-used)
+        )
+        )
+     ]
+
+
+    [(int8x8 vec) 
+       (if is-leaf-depth
+        (values (int8x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int8x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int16x8 vec) 
+       (if is-leaf-depth
+        (values (int16x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int16x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int32x8 vec) 
+       (if is-leaf-depth
+        (values (int32x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int32x8 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int64x8 vec) 
+       (if is-leaf-depth
+        (values (int64x8 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int64x8 leaf-sol) args-used)
         )
         )
      ]
@@ -919,6 +996,7 @@
 
 
 (define (get-expr-bv-sizes expr-list)
+
   (for/list ([i (range (length expr-list))])
             (vec-size (list-ref expr-list i))
             )
@@ -963,6 +1041,7 @@
   (define (arg i) (vector-ref sub-expr-vector i))
   (cond
     [(eq? expr-ty x8) (x8 (arg 0))]
+    [(eq? expr-ty x16) (x16 (arg 0))]
     [(eq? expr-ty x32) (x32 (arg 0))]
     [(eq? expr-ty x64) (x64 (arg 0))]
     [(eq? expr-ty x128) (x128 (arg 0))]
@@ -1020,6 +1099,7 @@
     
     ;; Constructors
     [(x8 sca) (* 8 (bvlength sca))]
+    [(x16 sca) (* 16 (bvlength sca))]
     [(x32 sca) (* 32 (bvlength sca))]
     [(x64 sca) (* 64 (bvlength sca))]
     [(x128 sca) (* 128 (bvlength sca))]
@@ -1047,6 +1127,18 @@
     [(uint1x128 vec) 128]
     [(uint1x256 vec) 256]
     [(uint1x512 vec) 512]
+
+
+    [(uint8x8 vec) (* 8 8)]
+    [(uint16x8 vec) (* 16 8)]
+    [(uint32x8 vec) (* 32 8)]
+    [(uint64x8 vec) (* 64 8)]
+
+
+    [(int8x8 vec) (* 8 8)]
+    [(int16x8 vec) (* 16 8)]
+    [(int32x8 vec) (* 32 8)]
+    [(int64x8 vec) (* 64 8)]
    
     [(uint8x32 vec) (* 8 32)]
     [(uint16x32 vec) (* 16 32)]
@@ -1133,7 +1225,7 @@
     [(vec-broadcast n vec) (* n (vec-size vec))]
     
     ;; Base case
-    [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
+    [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector size for Halide expression:" expr)]))
 
 
 (define id-map (make-hash))
@@ -1197,6 +1289,7 @@
     
     ;; Constructors
     [(x8 sca) (size-to-elemT (vec-precision expr))]
+    [(x16 sca) (size-to-elemT (vec-precision expr))]
     [(x32 sca) (size-to-elemT (vec-precision expr))]
     [(x64 sca) (size-to-elemT (vec-precision expr))]
     [(x128 sca) (size-to-elemT (vec-precision expr))]
@@ -1225,6 +1318,17 @@
     [(uint1x256 vec) 'int1]
     [(uint1x512 vec) 'int1]
    
+
+    [(uint8x8 vec) 'uint8]
+    [(uint16x8 vec) 'uint16]
+    [(uint32x8 vec) 'uint32]
+    [(uint64x8 vec) 'uint64]
+
+    [(int8x8 vec) 'int8]
+    [(int16x8 vec) 'int16]
+    [(int32x8 vec) 'int32]
+    [(int64x8 vec) 'int64]
+
     [(uint8x32 vec) 'uint8]
     [(uint16x32 vec) 'uint16]
     [(uint32x32 vec) 'uint32]
@@ -1323,6 +1427,7 @@
     
     ;; Constructors
     [(x8 sca) (bvlength sca)]
+    [(x16 sca) (bvlength sca)]
     [(x32 sca) (bvlength sca)]
     [(x64 sca) (bvlength sca)]
     [(x128 sca) (bvlength sca)]
@@ -1351,6 +1456,18 @@
     [(uint1x256 vec) 1]
     [(uint1x512 vec) 1]
    
+
+    [(uint8x8 vec) 8]
+    [(uint16x8 vec) 16]
+    [(uint32x8 vec) 32]
+    [(uint64x8 vec) 64]
+
+
+    [(int8x8 vec) 8]
+    [(int16x8 vec) 16]
+    [(int32x8 vec) 32]
+    [(int64x8 vec) 64]
+
     [(uint8x32 vec) 8]
     [(uint16x32 vec) 16]
     [(uint32x32 vec) 32]

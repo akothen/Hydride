@@ -84,6 +84,18 @@
                (lit broadcasted-val)
                ]
 
+              [(x16 sca)
+               (debug-log "synth-base case x16 scalar")
+               (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))
+               (debug-log "Synthesizing sub-expression")
+               (debug-log halide-expr)
+               (debug-log "Leaves are bitvectors of sizes:")
+               (debug-log expr-sizes)
+               ;; perform synthesis using expr sizes
+               (define broadcasted-val (apply concat (for/list ([i (range 16)]) sca)))
+               (lit broadcasted-val)
+               ]
+
               [(x8 sca)
                (debug-log "synth-base case x8 scalar")
                (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))

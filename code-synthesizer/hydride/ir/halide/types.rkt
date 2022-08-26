@@ -29,6 +29,7 @@
 ;; Constructors
 (struct x4 (sca) #:transparent)
 (struct x8 (sca) #:transparent)
+(struct x16 (sca) #:transparent)
 (struct x32 (sca) #:transparent)
 (struct x64 (sca) #:transparent)
 (struct x128 (sca) #:transparent)
@@ -58,48 +59,65 @@
 (struct uint1x256 (vec) #:transparent)
 (struct uint1x512 (vec) #:transparent)
 
+
+(struct uint8x8 (vec) #:transparent)
 (struct uint8x32 (vec) #:transparent)
 (struct uint8x64 (vec) #:transparent)
 (struct uint8x128 (vec) #:transparent)
 (struct uint8x256 (vec) #:transparent)
 (struct uint8x512 (vec) #:transparent)
 
+
+(struct uint16x8 (vec) #:transparent)
 (struct uint16x32 (vec) #:transparent)
 (struct uint16x64 (vec) #:transparent)
 (struct uint16x128 (vec) #:transparent)
 (struct uint16x256 (vec) #:transparent)
 (struct uint16x512 (vec) #:transparent)
 
+
+(struct uint32x8 (vec) #:transparent)
 (struct uint32x32 (vec) #:transparent)
 (struct uint32x64 (vec) #:transparent)
 (struct uint32x128 (vec) #:transparent)
 (struct uint32x256 (vec) #:transparent)
 (struct uint32x512 (vec) #:transparent)
 
+
+(struct uint64x8 (vec) #:transparent)
 (struct uint64x32 (vec) #:transparent)
 (struct uint64x64 (vec) #:transparent)
 (struct uint64x128 (vec) #:transparent)
 (struct uint64x256 (vec) #:transparent)
 (struct uint64x512 (vec) #:transparent)
 
+
+(struct int8x8 (vec) #:transparent)
 (struct int8x32 (vec) #:transparent)
 (struct int8x64 (vec) #:transparent)
 (struct int8x128 (vec) #:transparent)
 (struct int8x256 (vec) #:transparent)
 (struct int8x512 (vec) #:transparent)
 
+
+(struct int16x8 (vec) #:transparent)
 (struct int16x32 (vec) #:transparent)
 (struct int16x64 (vec) #:transparent)
 (struct int16x128 (vec) #:transparent)
 (struct int16x256 (vec) #:transparent)
 (struct int16x512 (vec) #:transparent)
 
+
+(struct int32x8 (vec) #:transparent)
 (struct int32x32 (vec) #:transparent)
 (struct int32x64 (vec) #:transparent)
 (struct int32x128 (vec) #:transparent)
 (struct int32x256 (vec) #:transparent)
 (struct int32x512 (vec) #:transparent)
 
+
+
+(struct int64x8 (vec) #:transparent)
 (struct int64x32 (vec) #:transparent)
 (struct int64x64 (vec) #:transparent)
 (struct int64x128 (vec) #:transparent)

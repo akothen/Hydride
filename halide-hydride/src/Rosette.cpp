@@ -36,6 +36,7 @@ namespace Halide {
             std::set<const IRNode*> SkipNodes;
 
 
+            std::map<const IRNode*, std::string> SynthLog;
             std::map<unsigned, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Load*, unsigned> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
 
@@ -254,6 +255,9 @@ namespace Halide {
 
                     std::string visit(const Add *op) {
 
+                        std::string expr_exists = check_expr_in_log(op);
+                        if(expr_exists != "") return expr_exists;
+
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
                             SkipNodes.insert(op->b.get());
@@ -273,6 +277,9 @@ namespace Halide {
                     }
 
                     std::string visit(const Mul *op) {
+
+                        std::string expr_exists = check_expr_in_log(op);
+                        if(expr_exists != "") return expr_exists;
 
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
@@ -516,6 +523,7 @@ namespace Halide {
                             return tabs() + "(" + op->name + rkt_args + ")";
                         } 
                         else if (op->is_intrinsic(Call::shift_right)) {
+
                             return print_intrinsic("shr", op->args, op->type.is_scalar());
                         } 
                         else if (op->is_intrinsic(Call::shift_left)) {
@@ -568,12 +576,29 @@ namespace Halide {
                         return define_bitvector_str + "\n" + define_buffer_str;
                     }
 
+                    std::string check_expr_in_log(const IRNode* op){
+
+                        return "";
+
+                        if(SynthLog.find(op)
+                                != SynthLog.end()){
+                            std::cout << "expression was previously defined as: " << SynthLog[op] << "\n";
+                            return SynthLog[op];
+                        }
+
+                        return "";
+
+                    }
+
                     std::string visit(const Load *op) {
                         indent.push(0);
 
+
+                        std::string expr_exists = check_expr_in_log(op);
+                        if(expr_exists != "") return expr_exists;
+
                         SkipNodes.insert(op->predicate.get());
                         SkipNodes.insert(op->index.get());
-
 
 
                         // Print index
@@ -591,8 +616,11 @@ namespace Halide {
 
                         if (op->type.is_scalar() && mode.top() == VarEncoding::Integer)
                             return tabs() + "(" + op->name + " " + rkt_idx + ")";
-                        else if (op->type.is_scalar())
-                            return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
+                        else if (op->type.is_scalar()){
+                            std::string cpp_type = type_to_rake_type(op->type, false, true);
+                            return tabs() + "(" + cpp_type + " (bv 3 (bitvector "+ std::to_string(op->type.bits())+"))"+")";
+                            //return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
+                            }
                         else{
                             std::string bits = std::to_string(op->type.bits() * op->type.lanes());
                             unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
@@ -1141,9 +1169,13 @@ namespace Halide {
 
                             /* Disqualify expressions we do not currently support */
 
+                            //std::cout << "Current expression: "<<expr << "\n";
+
                             // If the expression produces a scalar output, ignore it
-                            if (!expr.type().is_vector())
+                            if (!expr.type().is_vector()){
+                                debug(1) << "produces a scalar output so we ignore it" <<"\n";
                                 return IRMutator::mutate(expr);
+                            }
 
                             // If the expression produces an output of float type, ignore it
                             if (expr.type().element_of().is_float())
@@ -1156,22 +1188,29 @@ namespace Halide {
 
                             if (arch == IROptimizer::HVX) {
                                 // If the expression produces a vector that is not a multiple of the base vector length, ignore it
-                                if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1))
+                                if ((expr.type().bits() * expr.type().lanes() % 1024 != 0) && (expr.type().bits() > 1)){
+                                    debug(1) << "Invalid vector size for hexagon: "<< expr.type().bits() * expr.type().lanes() << "\n";
                                     return IRMutator::mutate(expr);
+                                }
                             } else if (arch == IROptimizer::X86){
                                 // std::cout << "Using X86 Optimizer" << "\n";
-                                if ((expr.type().bits() * expr.type().lanes() % 128 != 0) && (expr.type().bits() > 1))
+                                if ((expr.type().bits() * expr.type().lanes() % 128 != 0) && (expr.type().bits() > 1)){
+                                    debug(1) << "Invalid vector size for X86: "<< expr.type().bits() * expr.type().lanes() << "\n";
                                     return IRMutator::mutate(expr);
+                                }
 
                                 if((expr.type().bits() * expr.type().lanes() > 512)){
+                                    debug(1) << "Invalid vector size for X86: "<< expr.type().bits() * expr.type().lanes() << "\n";
                                     return IRMutator::mutate(expr);
                                 }
                             }
 
                             // If the expression is a dynamic shuffle, ignore it
                             const Call *c = expr.as<Call>();
-                            if (c && c->is_intrinsic(Call::dynamic_shuffle))
+                            if (c && c->is_intrinsic(Call::dynamic_shuffle)){
+                                debug(1) << "Call to dynamic shuffle" << "\n";
                                 return expr;
+                            }
 
                             /* Ignore some qualifying but trivial expressions to reduce noise in the results */
                             Expr base_e = expr;
@@ -1179,30 +1218,47 @@ namespace Halide {
                                 base_e = base_e.as<Let>()->body;
 
                             // If the expression is just a single ramp instruction, ignore it
-                            if (base_e.node_type() == IRNodeType::Ramp)
+                            if (base_e.node_type() == IRNodeType::Ramp){
+                                debug(1) << "Single Ramp case"<<"\n";
                                 return IRMutator::mutate(expr);
+                            }
 
                             // If the expression is just a single load instruction, ignore it
-                            if (base_e.node_type() == IRNodeType::Load)
+                            if (base_e.node_type() == IRNodeType::Load){
+                                debug(1) << "Single load case"<<"\n";
                                 return IRMutator::mutate(expr);
+                            }
 
                             // If the expression is just a single broadcast instruction, ignore it
-                            if (base_e.node_type() == IRNodeType::Broadcast)
+                            if (base_e.node_type() == IRNodeType::Broadcast){
+                                debug(1) << "Single Broadcast case" << "\n";
                                 return IRMutator::mutate(expr);
+                            }
 
                             // If the expression is just a variable, ignore it
-                            if (base_e.node_type() == IRNodeType::Variable)
+                            if (base_e.node_type() == IRNodeType::Variable){
+                                debug(1) << "Single Variable case" << "\n";
                                 return IRMutator::mutate(expr);
+                            }
 
                             // If the expression is a conditional, optimize the branches individually
-                            if (base_e.node_type() == IRNodeType::Select)
+                            if (base_e.node_type() == IRNodeType::Select){
+                                debug(1) << "Select case" <<"\n";
                                 return IRMutator::mutate(expr);
+                            }
 
-                            // Abstract out unsupported nodes if they appear as sub-expressions
-                            Expr spec_expr = AbstractUnsupportedNodes(IROptimizer::HVX, abstractions).mutate(expr);
+
+
+                            std::cout << "Expression before lower intrinsic: "<< expr <<"\n";
 
                             // Lower intrinsics
-                            spec_expr = LowerIntrinsics().mutate(spec_expr);
+                            Expr spec_expr = LowerIntrinsics().mutate(expr);
+
+                            std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
+
+                            // Abstract out unsupported nodes if they appear as sub-expressions
+                            spec_expr = AbstractUnsupportedNodes(IROptimizer::X86, abstractions).mutate(spec_expr);
+
 
                             // Lift cse for more readable specs
                             spec_expr = common_subexpression_elimination(spec_expr);
@@ -1256,6 +1312,7 @@ namespace Halide {
                     }
 
                     Expr visit(const Call *op) override {
+                        //std::cout << "Lower Intrinsic on call: "<< op->name << "\n";
                         Expr lowered;
                         // Generate cleaner specs. Since performance is not a concern, we can freely
                         // use widening casts etc.
@@ -1284,6 +1341,13 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::sorted_avg)) {
                             lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                        } 
+                        else if (op->is_intrinsic(Call::widening_mul)) {
+                            debug(0) << "Lowering widening mul" << "\n";
+                            lowered = (widen(op->args[0]) * widen(op->args[1]));
+                        } 
+                        else if (op->is_intrinsic(Call::widening_add)) {
+                            lowered = (widen(op->args[0]) + widen(op->args[1]));
                         } 
                         else {
                             lowered = lower_intrinsic(op);
@@ -1358,6 +1422,7 @@ namespace Halide {
                                 vec_lens.push_back(1024);
                                 break;
                             case Architecture::X86:
+                                debug(0) << "Abstraction vector sizes for X86 "<<"\n";
                                 // Push in vector register sizes in descending order
                                 vec_lens.push_back(1024);
                                 vec_lens.push_back(512);
@@ -1367,15 +1432,26 @@ namespace Halide {
 
                         };
 
+                        bool supported = false;
                         for(int vec_len : vec_lens){
+                            debug(0) << "Testing for vector length: "<<vec_len <<"\n";
                             if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
-                                std::string uname = unique_name('t');
-                                abstractions[uname] = IRMutator::visit(op);
-                                return Variable::make(op->type, uname);
+                            } else {
+                                debug(0) << "True!"<<"\n";
+                                debug(0) << "v.bits(): "<<v.type().bits() << "\n";
+                                debug(0) << "v.lanes(): "<<v.type().lanes() << "\n";
+                                supported = true;
                             }
 
                         }
+
+                        if(!supported){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        } else {
                         return IRMutator::visit(op);
+                        }
                     }
 
                     public:
@@ -1528,6 +1604,7 @@ namespace Halide {
                 public:
                     HydrideSynthEmitter() {};
 
+
                     std::string define_load_buffer(const Load *op){
                         std::string reg_name = "reg_"+ std::to_string(LoadToRegMap[op]);
                         size_t bitwidth = op->type.bits() * op->type.lanes();
@@ -1626,7 +1703,7 @@ namespace Halide {
                     std::string emit_racket_debug(){
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
-                            ;(enable-debug)\n"; 
+                            (enable-debug)\n"; 
                     }
 
                     std::string emit_set_current_bitwidth(size_t bw){
@@ -1664,6 +1741,12 @@ namespace Halide {
 
                 std::cout << "Input expression to synthesize: "<< orig_expr <<"\n";
 
+                std::cout << "Printing Synth Log"<<"\n";
+
+                for(auto bi = SynthLog.begin(); bi != SynthLog.end(); bi++){
+                    std::cout << "\t" << bi->first <<": "<<bi->second <<"\n";
+                }
+
 
                 RegToLoadMap.clear();
                 LoadToRegMap.clear();
@@ -1682,12 +1765,13 @@ namespace Halide {
 
 
 
-                HydrideSynthEmitter HSE;
                 std::ofstream rkt;
                 std::string file_name = "halide_expr_"+std::to_string(expr_id)+".rkt";
                 rkt.open(file_name);
 
 
+
+                HydrideSynthEmitter HSE;
                 rkt << HSE.emit_racket_imports() << "\n";
                 rkt << HSE.emit_racket_debug() << "\n";
                 rkt << HSE.emit_set_current_bitwidth(16) << "\n";
@@ -1699,6 +1783,9 @@ namespace Halide {
                 //rkt << sym_vars.str() << "\n";
                 //rkt << axioms.str() << "\n";
                 //rkt << let_stmts.str() << "\n";
+
+                SynthLog[orig_expr.get()] = expr;
+                SynthLog[spec_expr.get()] = expr;
 
                 rkt << "(define halide-expr \n";
                 rkt << expr << "\n";
@@ -1718,6 +1805,7 @@ namespace Halide {
 
 
                 expr_id++;
+                SkipNodes.clear();
 
                 return spec_expr;
 

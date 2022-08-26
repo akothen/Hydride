@@ -14,6 +14,7 @@
     
     ;; Constructors
     [(x8 sca) (handler (x8 (visit sca handler)))]
+    [(x16 sca) (handler (x16 (visit sca handler)))]
     [(x32 sca) (handler (x32 (visit sca handler)))]
     [(x64 sca) (handler (x64 (visit sca handler)))]
     [(x128 sca) (handler (x128 (visit sca handler)))]

@@ -500,7 +500,7 @@ class Synthesizer:
         else:
             # Match in any order
             for bv_op in dsl_ops:
-                if bv_op not in spec_ops:
+                if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract"]:
                     return False
             return True
 
@@ -552,7 +552,6 @@ class Synthesizer:
         assert self.consider_bitwise_heuristic(dsl_inst), "Can not get supported contexts for dsl inst"
 
         contexts = []
-        print("Get supported bitwise contexts for ", dsl_inst.name)
 
         for ctx in dsl_inst.contexts:
             if not ctx.has_output_size():
@@ -583,7 +582,7 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name in ["_mm512_min_epu64"] and DEBUG:
+        if dsl_inst.name in ["_mm512_mullo_epi16"] and DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))

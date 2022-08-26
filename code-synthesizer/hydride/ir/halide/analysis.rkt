@@ -264,6 +264,7 @@
   (define v (strip-casts vec))
   (match v
     [(x8 sca) (set (x8-sca v))]
+    [(x16 sca) (set (x16-sca v))]
     [(x32 sca) (set (x32-sca v))]
     [(x64 sca) (set (x64-sca v))]
     [(x128 sca) (set (x128-sca v))]
@@ -273,6 +274,18 @@
 
 (define (strip-casts expr)
   (destruct expr
+
+    [(uint8x8 vec) (strip-casts vec)]
+    [(uint16x8 vec) (strip-casts vec)]
+    [(uint32x8 vec) (strip-casts vec)]
+    [(uint64x8 vec) (strip-casts vec)]
+
+
+    [(int8x8 vec) (strip-casts vec)]
+    [(int16x8 vec) (strip-casts vec)]
+    [(int32x8 vec) (strip-casts vec)]
+    [(int64x8 vec) (strip-casts vec)]
+
     [(uint8x32 vec) (strip-casts vec)]
     [(uint16x32 vec) (strip-casts vec)]
     [(uint32x32 vec) (strip-casts vec)]
@@ -338,6 +351,19 @@
 
 (define (cast-op? expr)
   (destruct expr
+
+    [(uint8x8 vec) #t]
+    [(uint16x8 vec) #t]
+    [(uint32x8 vec) #t]
+    [(uint64x8 vec) #t]
+
+
+    [(int8x8 vec) #t]
+    [(int16x8 vec) #t]
+    [(int32x8 vec) #t]
+    [(int64x8 vec) #t]
+
+
     [(uint8x32 vec) #t]
     [(uint16x32 vec) #t]
     [(uint32x32 vec) #t]
