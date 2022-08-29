@@ -35,6 +35,8 @@
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/length)
+(require hydride/ir/hydride/prec)
+(require hydride/ir/hydride/printer)
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/binder)
 
@@ -63,6 +65,8 @@
   (all-from-out hydride/ir/hydride/definition)
   (all-from-out hydride/ir/hydride/cost_model)
   (all-from-out hydride/ir/hydride/length)
+  (all-from-out hydride/ir/hydride/prec)
+  (all-from-out hydride/ir/hydride/printer)
   (all-from-out hydride/ir/hydride/interpreter)
   (all-from-out hydride/ir/hydride/binder)
 

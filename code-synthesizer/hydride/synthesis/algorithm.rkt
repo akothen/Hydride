@@ -17,6 +17,7 @@
 (require hydride/halide)
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
+(require hydride/ir/hydride/printer)
 
 
 (provide (all-defined-out))
@@ -32,6 +33,19 @@
   )
 
 
+(define (dump-synth-res-with-typeinfo sol id-map)
+
+  (define (print-helper k v)
+   (display "; (reg ")
+   (display (~s v))
+   (display ") ")
+   (displayln (halide:print-buffer-type-info k))
+   v
+   )
+  (define printed-map (hash-map id-map print-helper))
+  (hydride-printer sol)
+  
+  )
 
 
 (define (synthesize-halide-expr halide-expr id-map expr-depth VF)

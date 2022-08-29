@@ -1020,10 +1020,36 @@
             (define sym-bv (vector-ref sym-bvs i))
             (define size (vec-size expr))
             (define expr-elemT (get-elemT expr))
+            ;(displayln "expr-elemT")
+            ;(println expr-elemT)
             (halide:create-buffer sym-bv expr-elemT)
             )
   )
 )
+
+
+(define (print-buffer-type-info buff)
+
+  (define elemT (get-elemT buff))
+  (define step-size
+    (cond
+        [(eq? elemT 'int8) 8]
+        [(eq? elemT 'int16) 16]
+        [(eq? elemT 'int32) 32]
+        [(eq? elemT 'int64) 64]
+        [(eq? elemT 'uint1) 1]
+        [(eq? elemT 'uint8) 8]
+        [(eq? elemT 'uint16) 16]
+        [(eq? elemT 'uint32) 32]
+        [(eq? elemT 'uint64) 64]
+        [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" buff)])
+    )
+  (define buffer-size (vec-size buff))
+  (define buffer-num-elem (/ buffer-size step-size))
+
+  (string-append "<" (~s buffer-num-elem) " x i" (~s step-size) ">")
+  
+  )
 
 
 

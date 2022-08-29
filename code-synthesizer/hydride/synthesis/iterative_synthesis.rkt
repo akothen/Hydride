@@ -79,6 +79,7 @@
     )
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
+  (debug-log cex)
   (begin
     (if
       (sat? cex) ;; If there exists some cex for which it is not equal
@@ -87,9 +88,13 @@
         (define (helper i)
           (eval-bv-cex symbols cex i)
           )
+        (debug-log "Verification failed :(")
 
         (define new-bvs (build-vector num-bw helper))
+        (debug-log new-bvs)
         (define spec_res (invoke_ref new-bvs))
+        (debug-log spec_res)
+
         (define synth_res (interpret sol new-bvs))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
         (values #f new-bvs)

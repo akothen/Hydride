@@ -1,0 +1,107 @@
+from Instructions import DSLInstruction
+from Types import *
+from PredefinedDSL import *
+
+class IRPrinter:
+
+    def __init__(self, printer_name = "hydride-printer"):
+
+        self.printer_name = printer_name
+
+    def emit_default_def(self, struct_definer ):
+        defaults = []
+
+        defaults.append("[(dim-x id) (string-append \"(dim-x \" (~s id) \")\\n\")]")
+        defaults.append("[(dim-y id) (string-append \"(dim-y \" (~s id) \")\\n\")]")
+        defaults.append("[(idx-i id) (string-append \"(idx-i \" (~s id) \")\\n\")]")
+        defaults.append("[(idx-j id) (string-append \"(idx-j \" (~s id) \")\\n\")]")
+        defaults.append("[(reg id) (string-append  \"(reg \" (~s id) \")\\n\")]")
+
+        defaults.append("[(lit v) (string-append  \"(lit \" (~s v) \")\\n\")]")
+
+        defaults.append("[(nop v1) (string-append \"(nop \" ({} v1) \")\\n\")]".format( self.printer_name))
+        defaults.append("[(idx-add i1 i2) (string-append \"(idx-add \" (~s i1) (~s i2) \")\\n\" )]")
+        defaults.append("[(idx-mul i1 i2) (string-append \"(idx-mul \" (~s i1) (~s i2) \")\\n\" )]")
+
+        #defaults.append(self.emit_get_len_def(dummy_vector_load_dsl, struct_definer)[1:])
+
+
+        # Special case handling for vector loads
+
+        load_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_load_dsl)
+        load_args = dummy_vector_load_dsl.get_sample_context().context_args
+        load_len_str = "(string-append \"({} \"".format(dummy_vector_load_dsl.get_dsl_name())
+        load_len_expr = "(* {} {})".format(load_args[3].name, load_args[4].name)
+
+        defaults.append(self.emit_print_clause(dummy_vector_load_dsl, struct_definer))
+
+        # Special case handling for two input swizzle
+
+        defaults.append(self.emit_print_clause(dummy_vector_swizzle_dsl, struct_definer))
+
+        return ["\t{}".format(d) for d in defaults]
+
+    def emit_print_clause(self, dsl_inst, struct_definer):
+        return "[{} \n\t(string-append \n\t{}\n\t{} \"\\n\")]".format(struct_definer.emit_dsl_struct_use(dsl_inst),
+                                                   self.emit_base_print_expr(dsl_inst),
+                                                   self.emit_output_type_str(dsl_inst, struct_definer))
+
+    def emit_base_print_expr(self, dsl_inst):
+        str_expr = "(string-append \"({} \" ".format(dsl_inst.get_dsl_name())
+        ir_args = dsl_inst.get_sample_context().context_args
+
+        for ir_arg in ir_args:
+            str_expr += "({} {}) \" \" ".format(self.printer_name, ir_arg.name)
+
+        str_expr += "\")\")"
+
+        return str_expr
+
+
+    def emit_output_type_str(self, dsl_inst, struct_definer, get_len_name = "get-length", get_prec_name = "get-prec" , prog_name = "prog"):
+        out_prec_arg = None
+
+
+
+        get_prec_expr = "({} {} (vector 0))".format(get_prec_name, prog_name )
+        num_elem_str = "(~s (/ ({} {} (vector 0)) {}) )".format(get_len_name, prog_name, get_prec_expr)
+        prec_str = "(~s {})".format(get_prec_expr)
+
+
+
+
+        return "(string-append \";\" \"<\" {} \" x \" \"i\" {} \">\")".format(num_elem_str, prec_str)
+
+
+    def emit_fallback_def(self):
+        return "\t[v (~s v)]"
+
+
+
+
+
+
+
+
+
+    def emit_dsl_printer(self, dsl_inst_list, struct_definer, prog_name = "prog"):
+        print_clauses = self.emit_default_def(struct_definer)
+
+        print_clauses += [self.emit_print_clause(dsl_inst, struct_definer) for dsl_inst in dsl_inst_list]
+
+        print_clauses += [self.emit_fallback_def()]
+
+
+
+        prefix = ";; "+"="*80 + "\n"
+        prefix += ";; "+" "*30 +" DSL Custom Printer"+'\n'
+        prefix += ";; "+"="*80 + "\n"
+
+        sufix = "\n;; "+"="*80 + "\n"
+
+
+
+        print_prog  = "(define ({}  {})\n (destruct {}\n{}\n )\n)".format(
+            self.printer_name , prog_name, prog_name, "\n".join(print_clauses))
+        return prefix + print_prog + sufix
+
