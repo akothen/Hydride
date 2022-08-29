@@ -43,6 +43,18 @@
     [(uint1x256 vec) (handler (uint1x256 (visit vec handler)))]
     [(uint1x512 vec) (handler (uint1x512 (visit vec handler)))]
    
+
+    [(uint8x8 vec) (handler (uint8x8 (visit vec handler)))]
+    [(uint16x8 vec) (handler (uint16x8 (visit vec handler)))]
+    [(uint32x8 vec) (handler (uint32x8 (visit vec handler)))]
+    [(uint64x8 vec) (handler (uint64x8 (visit vec handler)))]
+
+
+    [(int8x8 vec) (handler (int8x8 (visit vec handler)))]
+    [(int16x8 vec) (handler (int16x8 (visit vec handler)))]
+    [(int32x8 vec) (handler (int32x8 (visit vec handler)))]
+    [(int64x8 vec) (handler (int64x8 (visit vec handler)))]
+
     [(uint8x32 vec) (handler (uint8x32 (visit vec handler)))]
     [(uint16x32 vec) (handler (uint16x32 (visit vec handler)))]
     [(uint32x32 vec) (handler (uint32x32 (visit vec handler)))]

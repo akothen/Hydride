@@ -727,7 +727,10 @@
      (+ lhs rhs)]
     [else
      (define outT (infer-out-type lhs rhs))
-     (mk-cpp-expr (bvadd (cpp:eval lhs) (cpp:eval rhs)) outT)]))
+     (define res (mk-cpp-expr (bvadd (cpp:eval lhs) (cpp:eval rhs)) outT))
+       res
+       ]))
+  
 
 (define (do-sub lhs rhs)
   (cond

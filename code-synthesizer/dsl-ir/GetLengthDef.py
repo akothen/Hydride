@@ -62,7 +62,50 @@ class GetLengthDef:
                 if arg.name.startswith("size") and "_o" in arg.name:
                     return arg
 
+
         return None
+
+
+
+    def emit_ctx_len_clause(self, ctx):
+        predicate = ""
+        size_expr = ""
+
+        for idx, arg in enumerate(ctx.context_args):
+            if isinstance(arg, Integer):
+                predicate += " (equal? {} {})".format(arg.name, arg.value)
+
+            if isinstance(arg, Precision):
+                predicate += " (equal? {} {})".format(arg.name, arg.value)
+
+            if isinstance(arg, LaneSize):
+                predicate += " (equal? {} {})".format(arg.name, arg.value)
+
+        predicate = "(and " + predicate +  ")"
+
+
+
+        if size_expr == "" and ctx.out_vectsize != None:
+            size_expr = str(ctx.out_vectsize)
+
+        for idx, arg in enumerate(ctx.context_args):
+            if isinstance(arg, Integer):
+                if arg.name.startswith("size") and "_o" in arg.name and size_expr == "":
+                    size_expr = str(arg.value)
+
+
+        if size_expr == "" and ctx.out_vectsize == None:
+            print("UNKNOWN SIZE")
+            size_expr = "-1 ; Unable to reason about length\n"
+
+        if ctx.name in ["_mm256_movm_epi64", "_mm_movm_epi16", "_mm512_movm_epi64"]:
+            ctx.print_context()
+
+
+
+        return "[{} {}]".format(predicate, size_expr)
+
+
 
 
     def emit_get_len_def(self, dsl_inst, struct_definer,
@@ -73,12 +116,38 @@ class GetLengthDef:
 
         output_size_arg = self.get_output_size_operand(dsl_inst)
 
+        cond_clauses = []
+        # Iterate over contexts and condition on parameter values
+        for ctx in dsl_inst.contexts:
+            cond_clauses.append(self.emit_ctx_len_clause(ctx))
+
+        if len(cond_clauses) == 1:
+            clause.append(output_size_arg.name)
+        else:
+            cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
+            clause.append(cond_expr)
+        """
+
         if output_size_arg != None:
             assert output_size_arg != None, "DSL instruction does not define output size"
-            clause.append(output_size_arg.name)
+
+            #clause.append(output_size_arg.name)
+            cond_clauses = []
+            # Iterate over contexts and condition on parameter values
+            for ctx in dsl_inst.contexts:
+                cond_clauses.append(self.emit_ctx_len_clause(ctx))
+
+            if len(cond_clauses) == 1:
+                clause.append(output_size_arg.name)
+            else:
+                cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
+                clause.append(cond_expr)
+
+
         else:
             self.unclear_lengths.append(dsl_inst)
             clause.append("-1 ;; Unable to reason about length")
+        """
 
 
 

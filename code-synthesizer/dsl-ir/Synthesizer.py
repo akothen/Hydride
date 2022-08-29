@@ -21,7 +21,13 @@ class Synthesizer:
         self.depth = depth
         self.output_slice_length = self.VF * self.spec.output_precision
         self.contexts_per_dsl_inst = contexts_per_dsl_inst
-        self.input_sizes = [shape[0] * shape[1] * self.spec.input_precision for shape in self.spec.input_shapes]
+        self.input_sizes = []
+
+        for idx, shape in enumerate(self.spec.input_shapes):
+            self.input_sizes.append(
+                shape[0] * shape[1] * self.spec.input_precision[idx]
+
+            )
 
         self.output_size = self.spec.get_output_size()
 
@@ -61,7 +67,7 @@ class Synthesizer:
                 for of in offset_exprs:
                     num_elem = int(lf * self.VF)
                     offset =  of #create_affine_index_expr("dim-y", 1, None ) #"IDX_IJ"
-                    precision = self.spec.input_precision
+                    precision = self.spec.input_precision[0]
 
                     input_vector_sizes.append(input_size)
                     offsets.append(offset)
@@ -80,7 +86,7 @@ class Synthesizer:
         group_factors = [0.25, 0.5]#, 1.0]
         lane_offsets_factors = [0] #[0, "IDX_J"]
         dis_factors = [1]
-        rotate_factors = [0]
+        rotate_factors =  [0]
 
 
         input_vector_sizes = []
@@ -96,14 +102,14 @@ class Synthesizer:
 
 
         for lf in load_factors:
-            for input_size in self.input_sizes:
+            for idx ,input_size in enumerate(self.input_sizes):
                 for gf in group_factors:
                     for lo in lane_offsets_factors:
                         for d in dis_factors:
                             for r in rotate_factors:
-                                input_vector_sizes.append(input_size)
+                                input_vector_sizes.append(int(input_size * lf))
                                 num_elem_sizes.append(self.VF)
-                                precisions.append(self.spec.input_precision)
+                                precisions.append(self.spec.input_precision[idx])
                                 lane_offsets.append(lo)
                                 lane_sizes.append(self.VF)
                                 group_sizes.append(int(gf * self.VF))
@@ -135,7 +141,7 @@ class Synthesizer:
         holes = []
 
         if use_lit_holes:
-            holes = [int(lf * self.VF * self.spec.input_precision) for lf in load_factors]
+            #holes = [int(lf * self.VF * self.spec.input_precision) for lf in load_factors]
             holes += bitvector_sizes
             # remove duplicates
             holes = list(set(holes))
@@ -447,7 +453,7 @@ class Synthesizer:
             if not ctx.has_input_size():
                 continue
 
-            supports_inputs_prec = ctx.supports_input_precision(self.spec.input_precision)
+            supports_inputs_prec = any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
             #supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
@@ -461,7 +467,11 @@ class Synthesizer:
 
 
             #if (supports_inputs_prec or supports_outputs_prec or supports_output_length) or supports_input_length :
-            if (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length):
+            old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
+
+            # Either can process the input or can produce output shape
+            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
+            if new_condition:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -500,7 +510,7 @@ class Synthesizer:
         else:
             # Match in any order
             for bv_op in dsl_ops:
-                if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract"]:
+                if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
                     return False
             return True
 
@@ -513,10 +523,13 @@ class Synthesizer:
 
 
         if match_all:
-            return  dsl_inst.supports_config(input_precision = self.spec.input_precision,
+            def supports_ip(ip):
+                return dsl_inst.supports_config(input_precision = ip,
                                              output_precision = self.spec.output_precision,
                                              output_size = self.output_slice_length
                                              )
+
+            return any([support_ip(ip) for ip in self.spec.input_precision])
         else:
 
             if not dsl_inst.has_output_sizes_defined():
@@ -525,7 +538,7 @@ class Synthesizer:
             if not dsl_inst.has_input_sizes_defined():
                 return False
 
-            supports_inputs_prec = dsl_inst.supports_input_precision(self.spec.input_precision)
+            supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
             supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision)
 
             supports_output_length = dsl_inst.supports_output_size(self.output_slice_length)
@@ -533,7 +546,9 @@ class Synthesizer:
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
 
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
-            return (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
+            old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
+            new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
+            return new_condition
 
 
     def consider_bitwise_heuristic(self, dsl_inst):

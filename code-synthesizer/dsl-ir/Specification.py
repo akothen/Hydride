@@ -4,7 +4,7 @@ from Instructions import *
 class Specification:
 
     def __init__(self, name = None, semantics = None,
-                 output_shape = [], input_shapes = [] ,args = [], input_precision = None,
+                 output_shape = [], input_shapes = [] ,args = [], input_precision = [],
                  output_precision = None, spec_invokation = ""):
         self.name = name
         self.semantics = semantics

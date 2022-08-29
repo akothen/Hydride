@@ -137,7 +137,7 @@
                   (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 40)
+                  (define cost-bound 50)
                   (define solver 'z3)
 
                   (clear-vc!)

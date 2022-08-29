@@ -76,13 +76,37 @@
   (string-append base_name "_specification")
   )
 
+(define (get-input-precisions sub-expr-ls)
+  (define input-precisions (for/list ([i (range (length sub-expr-ls))])
+                                     (halide:vec-precision (list-ref sub-expr-ls i))
+                                     ))
+
+  (define args 
+    (apply string-append
+           (for/list ([i (range (length input-precisions))])
+                     (define prec (list-ref input-precisions i))
+                     (define prec-str (~s prec))
+                     (define sep 
+                       (if (equal? i (- (length input-precisions) 1))
+                         ""
+                         ", "
+                         )
+                       )
+
+                     (string-append  prec-str  sep)
+                     )
+           )
+    )
+   (string-append "[" args "]")
+    )
+
 (define (gen-synthesis-spec expr sub-expr-ls base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
   (define sema (string-append "[ " (get-expr-sema expr) "]"))
   (define input_shapes (get-input-shapes sub-expr-ls))
   (define output_shape (get-output-shape expr))
-  (define input_precision (~s (halide:vec-precision (list-ref sub-expr-ls 0))))
+  (define input_precision (get-input-precisions sub-expr-ls))
   (define output_precision (~s (halide:vec-precision expr)))
   (define args (get-args-str sub-expr-ls))
   (define spec_invoke "\"\"")
