@@ -21,6 +21,7 @@ if [ -d "$GEN_NAME/samples" ]
 then
   mv $GEN_NAME/samples $HALIDE_AUTOSCHED/
 fi
+# else we use the default weights which are copied from apps/random_pipeline
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HALIDE_LIB
 SAVE_CURR_DIR=$PWD
@@ -32,7 +33,7 @@ cd $HALIDE_AUTOSCHED
 # because of the above `cd`). The original weights are copied there and updated
 # during auto-tuning. You should use these weights when auto-scheduling the program.
 # Delete `samples` if you want to start over the auto-tuning.
-./autotune_loop.sh $GEN_EXE	$GEN_NAME	host ./weights ./bin
+./autotune_loop.sh $GEN_EXE $GEN_NAME host ./weights ./bin
 
 # Move the updated `weights` to the directory of the benchmark. This means that if you want
 # to continue auto-tuning for this benchmark, you should move them back to the autosched dir.

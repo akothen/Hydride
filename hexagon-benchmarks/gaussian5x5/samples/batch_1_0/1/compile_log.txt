@@ -1,0 +1,1026 @@
+Registering autoscheduler...
+Dropout seed = 101
+Node: output
+  Symbolic region required: 
+    output.x.min, output.x.max
+    output.y.min, output.y.max
+  Region computed: 
+    output.x.min, output.x.max
+    output.y.min, output.y.max
+  Stage 0:
+    x output.x.min output.x.max
+    y output.y.min output.y.max
+    Featurization for type UInt16
+     Op histogram:
+      Constant:   1
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        1
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   1
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      1 0 0 0
+      Transpose:      1 0 0 0
+      Broadcast:      1 0 0 0
+      Slice:          1 0 0 0
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   4
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 1 boundary condition: 0 wrapper: 0 input: 0 output: 1
+Node: cols
+  Symbolic region required: 
+    cols.x.min, cols.x.max
+    cols.y.min, cols.y.max
+  Region computed: 
+    cols.x.min, cols.x.max
+    cols.y.min, cols.y.max
+  Stage 0:
+    x cols.x.min cols.x.max
+    y cols.y.min cols.y.max
+    Featurization for type UInt16
+     Op histogram:
+      Constant:   3
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        4
+      Sub:        0
+      Mod:        0
+      Mul:        3
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   5
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      5 0 0 1
+      Transpose:      5 0 0 1
+      Broadcast:      5 0 0 1
+      Slice:          5 0 0 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   4
+      Cast:       0
+      Variable:   12
+      Param:      0
+      Add:        4
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 0 boundary condition: 0 wrapper: 0 input: 0 output: 0
+Node: rows
+  Symbolic region required: 
+    rows.x.min, rows.x.max
+    rows.y.min, rows.y.max
+  Region computed: 
+    rows.x.min, rows.x.max
+    rows.y.min, rows.y.max
+  Stage 0:
+    x rows.x.min rows.x.max
+    y rows.y.min rows.y.max
+    Featurization for type UInt16
+     Op histogram:
+      Constant:   3
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        4
+      Sub:        0
+      Mod:        0
+      Mul:        3
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   5
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      5 0 0 1
+      Transpose:      5 0 0 1
+      Broadcast:      5 0 0 1
+      Slice:          5 0 0 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   4
+      Cast:       0
+      Variable:   12
+      Param:      0
+      Add:        4
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 0 boundary condition: 0 wrapper: 0 input: 0 output: 0
+Node: input_16
+  Symbolic region required: 
+    input_16.x.min, input_16.x.max
+    input_16.y.min, input_16.y.max
+  Region computed: 
+    input_16.x.min, input_16.x.max
+    input_16.y.min, input_16.y.max
+  Stage 0:
+    x input_16.x.min input_16.x.max
+    y input_16.y.min input_16.y.max
+    Featurization for type UInt8
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   1
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      1 0 0 0
+      Transpose:      1 0 0 0
+      Broadcast:      1 0 0 0
+      Slice:          1 0 0 0
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   4
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 1 boundary condition: 0 wrapper: 0 input: 0 output: 0
+Node: bounded_input
+  Symbolic region required: 
+    bounded_input.x.min, bounded_input.x.max
+    bounded_input.y.min, bounded_input.y.max
+  Region computed: 
+    bounded_input.x.min, bounded_input.x.max
+    bounded_input.y.min, bounded_input.y.max
+  Stage 0:
+    x bounded_input.x.min bounded_input.x.max
+    y bounded_input.y.min bounded_input.y.max
+    Featurization for type UInt8
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   1
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      1 0 0 1
+      Transpose:      1 0 0 1
+      Broadcast:      1 0 0 1
+      Slice:          1 0 0 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   4
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 1 boundary condition: 0 wrapper: 1 input: 0 output: 0
+Node: repeat_edge
+  Symbolic region required: 
+    repeat_edge._0.min, repeat_edge._0.max
+    repeat_edge._1.min, repeat_edge._1.max
+  Region computed: 
+    repeat_edge._0.min, repeat_edge._0.max
+    repeat_edge._1.min, repeat_edge._1.max
+  Stage 0:
+    _0 repeat_edge._0.min repeat_edge._0.max
+    _1 repeat_edge._1.min repeat_edge._1.max
+    Featurization for type UInt8
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   1
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 1
+      Transpose:      0 0 0 1
+      Broadcast:      0 0 0 1
+      Slice:          0 0 0 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   2
+      Cast:       0
+      Variable:   4
+      Param:      6
+      Add:        4
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        2
+      Max:        2
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 2
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 0 boundary condition: 1 wrapper: 0 input: 0 output: 0
+Node: lambda_0
+  Symbolic region required: 
+    lambda_0._0.min, lambda_0._0.max
+    lambda_0._1.min, lambda_0._1.max
+  Region computed: 
+    lambda_0._0.min, lambda_0._0.max
+    lambda_0._1.min, lambda_0._1.max
+  Stage 0:
+    _0 lambda_0._0.min lambda_0._0.max
+    _1 lambda_0._1.min lambda_0._1.max
+    Featurization for type UInt8
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   1
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      1 0 0 1
+      Transpose:      1 0 0 1
+      Broadcast:      1 0 0 1
+      Slice:          1 0 0 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   4
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 1 boundary condition: 0 wrapper: 1 input: 0 output: 0
+Node: input_im
+  Symbolic region required: 
+    input_im._0.min, input_im._0.max
+    input_im._1.min, input_im._1.max
+  Region computed: 
+    input_im._0.min, input_im._0.max
+    input_im._1.min, input_im._1.max
+  Stage 0:
+    _0 input_im._0.min input_im._0.max
+    _1 input_im._1.min input_im._1.max
+    Featurization for type UInt8
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   0
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  1
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 1 1
+      Transpose:      0 0 1 1
+      Broadcast:      0 0 1 1
+      Slice:          0 0 1 1
+    Featurization for type UInt32
+     Op histogram:
+      Constant:   0
+      Cast:       0
+      Variable:   4
+      Param:      0
+      Add:        0
+      Sub:        0
+      Mod:        0
+      Mul:        0
+      Div:        0
+      Min:        0
+      Max:        0
+      EQ:         0
+      NE:         0
+      LT:         0
+      LE:         0
+      And:        0
+      Or:         0
+      Not:        0
+      Select:     0
+      ImageCall:  0
+      FuncCall:   0
+      SelfCall:   0
+      ExternCall: 0
+      Let:        0
+     Memory access patterns. Columns are calls to other Funcs, self-calls, input image access, and stores
+      Pointwise:      0 0 0 0
+      Transpose:      0 0 0 0
+      Broadcast:      0 0 0 0
+      Slice:          0 0 0 0
+  pointwise: 1 boundary condition: 0 wrapper: 1 input: 1 output: 0
+Edge: cols -> output
+  Footprint: 
+    Min 0: output.x.min
+    Max 0: output.x.max
+    Min 1: output.y.min
+    Max 1: output.y.max
+  Load Jacobians:
+    [ 1   0  ]
+    [ 0   1  ]
+
+Edge: rows -> cols
+  Footprint: 
+    Min 0: (cols.x.min + -2)
+    Max 0: (cols.x.max + 2)
+    Min 1: cols.y.min
+    Max 1: cols.y.max
+  Load Jacobians:
+  5 x
+    [ 1   0  ]
+    [ 0   1  ]
+
+Edge: input_16 -> rows
+  Footprint: 
+    Min 0: rows.x.min
+    Max 0: rows.x.max
+    Min 1: (rows.y.min + -2)
+    Max 1: (rows.y.max + 2)
+  Load Jacobians:
+  5 x
+    [ 1   0  ]
+    [ 0   1  ]
+
+Edge: bounded_input -> input_16
+  Footprint: 
+    Min 0: input_16.x.min
+    Max 0: input_16.x.max
+    Min 1: input_16.y.min
+    Max 1: input_16.y.max
+  Load Jacobians:
+    [ 1   0  ]
+    [ 0   1  ]
+
+Edge: repeat_edge -> bounded_input
+  Footprint: 
+    Min 0: bounded_input.x.min
+    Max 0: bounded_input.x.max
+    Min 1: bounded_input.y.min
+    Max 1: bounded_input.y.max
+  Load Jacobians:
+    [ 1   0  ]
+    [ 0   1  ]
+
+Edge: lambda_0 -> repeat_edge
+  Footprint: 
+    Min 0: max(min(repeat_edge._0.min, 1023), 0)
+    Max 0: max(min(repeat_edge._0.max, 1023), 0)
+    Min 1: max(min(repeat_edge._1.min, 1023), 0)
+    Max 1: max(min(repeat_edge._1.max, 1023), 0)
+  Load Jacobians:
+    [ _   0  ]
+    [ 0   _  ]
+
+Edge: input_im -> lambda_0
+  Footprint: 
+    Min 0: lambda_0._0.min
+    Max 0: lambda_0._0.max
+    Min 1: lambda_0._1.min
+    Max 1: lambda_0._1.max
+  Load Jacobians:
+    [ 1   0  ]
+    [ 0   1  ]
+
+
+Pass 0 result:
+State with cost 0.178077:
+
+realize: output
+output 1 32 (0, 0) t p
+ realize: repeat_edge
+ output 1 32c (0, 0)
+  realize: rows
+  repeat_edge 17 5c (0, 0) t
+   repeat_edge 64vc 1c (0, 0) *
+    inlined: lambda_0 1
+  output 4 1c (0, 0)
+   rows 9c 1c (0, 0) t
+    rows 32vc 1c (0, 0) *
+     inlined: input_16 5
+     inlined: bounded_input 5
+   output 1c 1c (0, 0) t
+    realize: cols
+    cols 8c 1c (0, 0) t
+     cols 32vc 1c (0, 0) *
+    output 4c 1c (0, 0) t
+     output 64vc 1c (0, 0) *
+Best cost: 0.178077
+AutoSchedule.cpp:3157 ... AutoSchedule.cpp:3217 : 32.800266 ms
+Cost evaluated this many times: 258
+** Optimal schedule:
+Schedule features for output
+    num_realizations:                      1.000000
+    num_productions:                       1.000000
+    points_computed_per_realization:       1048576.000000
+    points_computed_per_production:        1048576.000000
+    points_computed_total:                 1048576.000000
+    points_computed_minimum:               1048576.000000
+    innermost_loop_extent:                 4.000000
+    innermost_pure_loop_extent:            4.000000
+    unrolled_loop_extent:                  4.000000
+    inner_parallelism:                     32.000000
+    outer_parallelism:                     1.000000
+    bytes_at_realization:                  1048576.000000
+    bytes_at_production:                   1048576.000000
+    bytes_at_root:                         1048576.000000
+    innermost_bytes_at_realization:        1024.000000
+    innermost_bytes_at_production:         1024.000000
+    innermost_bytes_at_root:               1024.000000
+    inlined_calls:                         0.000000
+    unique_bytes_read_per_realization:     512.000000
+    unique_lines_read_per_realization:     1.000000
+    allocation_bytes_read_per_realization: 512.000000
+    working_set:                           6172.000000
+    vector_size:                           64.000000
+    native_vector_size:                    64.000000
+    num_vectors:                           16384.000000
+    num_scalars:                           0.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               1.000000
+    scalar_loads_per_scalar:               1.000000
+    bytes_at_task:                         32768.000000
+    innermost_bytes_at_task:               1024.000000
+    unique_bytes_read_per_vector:          128.000000
+    unique_lines_read_per_vector:          1.000000
+    unique_bytes_read_per_task:            36864.000000
+    unique_lines_read_per_task:            36.000000
+    working_set_at_task:                   6172.000000
+    working_set_at_production:             1054748.000000
+    working_set_at_realization:            1054748.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for cols
+    num_realizations:                      4096.000000
+    num_productions:                       4096.000000
+    points_computed_per_realization:       256.000000
+    points_computed_per_production:        256.000000
+    points_computed_total:                 1048576.000000
+    points_computed_minimum:               1048576.000000
+    innermost_loop_extent:                 8.000000
+    innermost_pure_loop_extent:            8.000000
+    unrolled_loop_extent:                  8.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  512.000000
+    bytes_at_production:                   512.000000
+    bytes_at_root:                         2097152.000000
+    innermost_bytes_at_realization:        512.000000
+    innermost_bytes_at_production:         512.000000
+    innermost_bytes_at_root:               2048.000000
+    inlined_calls:                         0.000000
+    unique_bytes_read_per_realization:     520.000000
+    unique_lines_read_per_realization:     1.000000
+    allocation_bytes_read_per_realization: 520.000000
+    working_set:                           0.000000
+    vector_size:                           32.000000
+    native_vector_size:                    32.000000
+    num_vectors:                           32768.000000
+    num_scalars:                           0.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               5.000000
+    scalar_loads_per_scalar:               5.000000
+    bytes_at_task:                         512.000000
+    innermost_bytes_at_task:               512.000000
+    unique_bytes_read_per_vector:          72.000000
+    unique_lines_read_per_vector:          1.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   6172.000000
+    working_set_at_production:             512.000000
+    working_set_at_realization:            512.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for rows
+    num_realizations:                      1024.000000
+    num_productions:                       4096.000000
+    points_computed_per_realization:       1028.000000
+    points_computed_per_production:        288.000000
+    points_computed_total:                 1052672.000000
+    points_computed_minimum:               1052672.000000
+    innermost_loop_extent:                 9.000000
+    innermost_pure_loop_extent:            9.000000
+    unrolled_loop_extent:                  9.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  2056.000000
+    bytes_at_production:                   520.000000
+    bytes_at_root:                         2105344.000000
+    innermost_bytes_at_realization:        2056.000000
+    innermost_bytes_at_production:         520.000000
+    innermost_bytes_at_root:               2056.000000
+    inlined_calls:                         0.000000
+    unique_bytes_read_per_realization:     5140.000000
+    unique_lines_read_per_realization:     5.000000
+    allocation_bytes_read_per_realization: 5140.000000
+    working_set:                           0.000000
+    vector_size:                           32.000000
+    native_vector_size:                    32.000000
+    num_vectors:                           32768.000000
+    num_scalars:                           4096.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               5.000000
+    scalar_loads_per_scalar:               5.000000
+    bytes_at_task:                         2056.000000
+    innermost_bytes_at_task:               2056.000000
+    unique_bytes_read_per_vector:          160.000000
+    unique_lines_read_per_vector:          5.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   6172.000000
+    working_set_at_production:             512.000000
+    working_set_at_realization:            1032.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for input_16
+    num_realizations:                      0.000000
+    num_productions:                       0.000000
+    points_computed_per_realization:       0.000000
+    points_computed_per_production:        0.000000
+    points_computed_total:                 0.000000
+    points_computed_minimum:               1056784.000000
+    innermost_loop_extent:                 0.000000
+    innermost_pure_loop_extent:            9.000000
+    unrolled_loop_extent:                  0.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  0.000000
+    bytes_at_production:                   0.000000
+    bytes_at_root:                         2113568.000000
+    innermost_bytes_at_realization:        0.000000
+    innermost_bytes_at_production:         0.000000
+    innermost_bytes_at_root:               2056.000000
+    inlined_calls:                         5898240.000000
+    unique_bytes_read_per_realization:     0.000000
+    unique_lines_read_per_realization:     0.000000
+    allocation_bytes_read_per_realization: 0.000000
+    working_set:                           0.000000
+    vector_size:                           32.000000
+    native_vector_size:                    32.000000
+    num_vectors:                           163840.000000
+    num_scalars:                           20480.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               0.000000
+    scalar_loads_per_scalar:               0.000000
+    bytes_at_task:                         0.000000
+    innermost_bytes_at_task:               0.000000
+    unique_bytes_read_per_vector:          0.000000
+    unique_lines_read_per_vector:          0.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   0.000000
+    working_set_at_production:             0.000000
+    working_set_at_realization:            0.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for bounded_input
+    num_realizations:                      0.000000
+    num_productions:                       0.000000
+    points_computed_per_realization:       0.000000
+    points_computed_per_production:        0.000000
+    points_computed_total:                 0.000000
+    points_computed_minimum:               1056784.000000
+    innermost_loop_extent:                 0.000000
+    innermost_pure_loop_extent:            9.000000
+    unrolled_loop_extent:                  0.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  0.000000
+    bytes_at_production:                   0.000000
+    bytes_at_root:                         1056784.000000
+    innermost_bytes_at_realization:        0.000000
+    innermost_bytes_at_production:         0.000000
+    innermost_bytes_at_root:               1028.000000
+    inlined_calls:                         5898240.000000
+    unique_bytes_read_per_realization:     0.000000
+    unique_lines_read_per_realization:     0.000000
+    allocation_bytes_read_per_realization: 0.000000
+    working_set:                           0.000000
+    vector_size:                           32.000000
+    native_vector_size:                    32.000000
+    num_vectors:                           163840.000000
+    num_scalars:                           20480.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               0.000000
+    scalar_loads_per_scalar:               0.000000
+    bytes_at_task:                         0.000000
+    innermost_bytes_at_task:               0.000000
+    unique_bytes_read_per_vector:          0.000000
+    unique_lines_read_per_vector:          0.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   0.000000
+    working_set_at_production:             0.000000
+    working_set_at_realization:            0.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for repeat_edge
+    num_realizations:                      32.000000
+    num_productions:                       1024.000000
+    points_computed_per_realization:       37008.000000
+    points_computed_per_production:        5440.000000
+    points_computed_total:                 1184256.000000
+    points_computed_minimum:               1056784.000000
+    innermost_loop_extent:                 85.000000
+    innermost_pure_loop_extent:            85.000000
+    unrolled_loop_extent:                  1.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  37008.000000
+    bytes_at_production:                   5140.000000
+    bytes_at_root:                         1056784.000000
+    innermost_bytes_at_realization:        1028.000000
+    innermost_bytes_at_production:         1028.000000
+    innermost_bytes_at_root:               1028.000000
+    inlined_calls:                         0.000000
+    unique_bytes_read_per_realization:     36864.000000
+    unique_lines_read_per_realization:     36.000000
+    allocation_bytes_read_per_realization: 1048576.000000
+    working_set:                           0.000000
+    vector_size:                           64.000000
+    native_vector_size:                    64.000000
+    num_vectors:                           18432.000000
+    num_scalars:                           4608.000000
+    scalar_loads_per_vector:               64.000000
+    vector_loads_per_vector:               0.000000
+    scalar_loads_per_scalar:               1.000000
+    bytes_at_task:                         37008.000000
+    innermost_bytes_at_task:               1028.000000
+    unique_bytes_read_per_vector:          64.000000
+    unique_lines_read_per_vector:          1.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   6172.000000
+    working_set_at_production:             1032.000000
+    working_set_at_realization:            6172.000000
+    working_set_at_root:                   1054748.000000
+Schedule features for lambda_0
+    num_realizations:                      0.000000
+    num_productions:                       0.000000
+    points_computed_per_realization:       0.000000
+    points_computed_per_production:        0.000000
+    points_computed_total:                 0.000000
+    points_computed_minimum:               1048576.000000
+    innermost_loop_extent:                 0.000000
+    innermost_pure_loop_extent:            85.000000
+    unrolled_loop_extent:                  0.000000
+    inner_parallelism:                     1.000000
+    outer_parallelism:                     32.000000
+    bytes_at_realization:                  0.000000
+    bytes_at_production:                   0.000000
+    bytes_at_root:                         1048576.000000
+    innermost_bytes_at_realization:        0.000000
+    innermost_bytes_at_production:         0.000000
+    innermost_bytes_at_root:               1024.000000
+    inlined_calls:                         5570560.000000
+    unique_bytes_read_per_realization:     0.000000
+    unique_lines_read_per_realization:     0.000000
+    allocation_bytes_read_per_realization: 0.000000
+    working_set:                           0.000000
+    vector_size:                           64.000000
+    native_vector_size:                    64.000000
+    num_vectors:                           18432.000000
+    num_scalars:                           4608.000000
+    scalar_loads_per_vector:               0.000000
+    vector_loads_per_vector:               0.000000
+    scalar_loads_per_scalar:               0.000000
+    bytes_at_task:                         0.000000
+    innermost_bytes_at_task:               0.000000
+    unique_bytes_read_per_vector:          0.000000
+    unique_lines_read_per_vector:          0.000000
+    unique_bytes_read_per_task:            0.000000
+    unique_lines_read_per_task:            0.000000
+    working_set_at_task:                   0.000000
+    working_set_at_production:             0.000000
+    working_set_at_realization:            0.000000
+    working_set_at_root:                   1054748.000000
+State with cost 0.000000:
+
+realize: output
+output 1 32 (0, 0) t p
+ realize: repeat_edge
+ output 1 32c (0, 0)
+  realize: rows
+  repeat_edge 17 5c (0, 0) t
+   repeat_edge 64vc 1c (0, 0) *
+    inlined: lambda_0 1
+  output 4 1c (0, 0)
+   rows 9c 1c (0, 0) t
+    rows 32vc 1c (0, 0) *
+     inlined: input_16 5
+     inlined: bounded_input 5
+   output 1c 1c (0, 0) t
+    realize: cols
+    cols 8c 1c (0, 0) t
+     cols 32vc 1c (0, 0) *
+    output 4c 1c (0, 0) t
+     output 64vc 1c (0, 0) *
+Func output = get_pipeline().get_func(7);
+Func cols = get_pipeline().get_func(6);
+Func rows = get_pipeline().get_func(5);
+Func input_16 = get_pipeline().get_func(4);
+Func bounded_input = get_pipeline().get_func(3);
+Func repeat_edge = get_pipeline().get_func(2);
+Func lambda_0 = get_pipeline().get_func(1);
+Var _0(repeat_edge.get_schedule().dims()[0].var), _0i("_0i"), _1(repeat_edge.get_schedule().dims()[1].var), x(output.get_schedule().dims()[0].var), xi("xi"), xii("xii"), y(output.get_schedule().dims()[1].var), yi("yi");
+output
+    .split(y, y, yi, 32, TailStrategy::ShiftInwards)
+    .split(x, x, xi, 256, TailStrategy::ShiftInwards)
+    .split(xi, xi, xii, 64, TailStrategy::ShiftInwards)
+    .unroll(xi)
+    .vectorize(xii)
+    .compute_root()
+    .reorder(xii, xi, x, yi, y)
+    .parallel(y);
+cols
+    .store_in(MemoryType::Stack)
+    .split(x, x, xi, 32, TailStrategy::RoundUp)
+    .unroll(x)
+    .vectorize(xi)
+    .compute_at(output, x)
+    .reorder(xi, x, y);
+rows
+    .store_in(MemoryType::Stack)
+    .split(x, x, xi, 32, TailStrategy::RoundUp)
+    .unroll(x)
+    .vectorize(xi)
+    .compute_at(output, x)
+    .store_at(output, yi)
+    .reorder(xi, x, y);
+repeat_edge
+    .store_in(MemoryType::Stack)
+    .split(_0, _0, _0i, 64, TailStrategy::ShiftInwards)
+    .vectorize(_0i)
+    .compute_at(output, yi)
+    .store_at(output, y)
+    .reorder(_0i, _0, _1);
+Writing schedule to /home/sb54/Hydride/hexagon-benchmarks/halide_standalone_autoscheduler/apps/autoscheduler/samples/batch_1_0/1/schedule.txt...

@@ -1,0 +1,1 @@
+Benchmark for conv3x3_batch_05_sample_23 produces best case of 0.000138851 sec/iter (over 11 samples, 2805 iterations, accuracy 3.3%); best throughput is 7.2e+03 mpix/sec.

@@ -1,0 +1,245 @@
+module name=sobel_batch_01_sample_27, target=x86-64-linux-avx-avx2-avx512-avx512_skylake-disable_llvm_loop_unroll-disable_llvm_loop_vectorize-f16c-fma-sse41
+external_plus_metadata func sobel_batch_01_sample_27 (input, output) {
+assert((reinterpret(uint64, output.buffer) != (uint64)0), halide_error_buffer_argument_is_null("output"))
+assert((reinterpret(uint64, input.buffer) != (uint64)0), halide_error_buffer_argument_is_null("input"))
+let input = _halide_buffer_get_host(input.buffer)
+let input.type = _halide_buffer_get_type(input.buffer)
+let input.dimensions = _halide_buffer_get_dimensions(input.buffer)
+let input.min.0 = _halide_buffer_get_min(input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent(input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride(input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min(input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent(input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride(input.buffer, 1)
+let output = _halide_buffer_get_host(output.buffer)
+let output.type = _halide_buffer_get_type(output.buffer)
+let output.dimensions = _halide_buffer_get_dimensions(output.buffer)
+let output.min.0 = _halide_buffer_get_min(output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent(output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride(output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min(output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent(output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride(output.buffer, 1)
+let input.extent.0.required.s = (max(min((output.extent.0 + output.min.0), ((input.extent.0 + input.min.0) + -1)), input.min.0) - max((min((min(output.extent.0, 62) + output.min.0), ((input.extent.0 + input.min.0) + 62)) + -63), input.min.0))
+let input.min.0.required = max((min((min(output.extent.0, 62) + output.min.0), ((input.extent.0 + input.min.0) + 62)) + -63), input.min.0)
+let input.extent.1.required.s = (max(min((output.extent.1 + output.min.1), ((input.extent.1 + input.min.1) + -1)), input.min.1) - max((min((input.extent.1 + input.min.1), output.min.1) + -1), input.min.1))
+let input.min.1.required = max((min((input.extent.1 + input.min.1), output.min.1) + -1), input.min.1)
+let output.extent.0.required.s = (min((((output.extent.0 + -1)/256)*256), (output.extent.0 + -256)) - min(output.extent.0, 256))
+let output.extent.1.required.s = (min((((output.extent.1 + -1)/16)*16), (output.extent.1 + -16)) - min(output.extent.1, 16))
+assert((!_halide_buffer_is_bounds_query(input.buffer) || ((0 <= input.min.0.required) && (input.min.0.required <= 0))), halide_error_constraints_make_required_region_smaller("Input buffer input", 0, 0, input.extent.0.required.s, input.min.0.required, (input.extent.0.required.s + input.min.0.required)))
+assert((!_halide_buffer_is_bounds_query(input.buffer) || ((0 <= input.min.1.required) && (input.min.1.required <= 0))), halide_error_constraints_make_required_region_smaller("Input buffer input", 1, 0, input.extent.1.required.s, input.min.1.required, (input.extent.1.required.s + input.min.1.required)))
+if (_halide_buffer_is_bounds_query(input.buffer)) {
+  _halide_buffer_init(input.buffer, _halide_buffer_get_shape(input.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 1, 8, 2, make_struct((halide_dimension_t *), 0, (input.extent.0.required.s + 1), 1, 0, 0, (input.extent.1.required.s + 1), (input.extent.0.required.s + 1), 0), (uint64)0)
+}
+if (_halide_buffer_is_bounds_query(output.buffer)) {
+  _halide_buffer_init(output.buffer, _halide_buffer_get_shape(output.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 1, 8, 2, make_struct((halide_dimension_t *), ((min(output.extent.0, 256) + output.min.0) + -256), (output.extent.0.required.s + 512), 1, 0, ((min(output.extent.1, 16) + output.min.1) + -16), (output.extent.1.required.s + 32), (output.extent.0.required.s + 512), 0), (uint64)0)
+}
+if (!(_halide_buffer_is_bounds_query(input.buffer) || _halide_buffer_is_bounds_query(output.buffer))) {
+  assert((input.type == (uint32)67585), halide_error_bad_type("Input buffer input", input.type, (uint32)67585))
+  assert((input.dimensions == 2), halide_error_bad_dimensions("Input buffer input", input.dimensions, 2))
+  assert((output.type == (uint32)67585), halide_error_bad_type("Output buffer output", output.type, (uint32)67585))
+  assert((output.dimensions == 2), halide_error_bad_dimensions("Output buffer output", output.dimensions, 2))
+  assert(((input.min.0 <= input.min.0.required) && (((input.extent.0.required.s + input.min.0.required) + 1) <= (input.extent.0 + input.min.0))), halide_error_access_out_of_bounds("Input buffer input", 0, input.min.0.required, (input.extent.0.required.s + input.min.0.required), input.min.0, ((input.extent.0 + input.min.0) + -1)))
+  assert((0 <= input.extent.0), halide_error_buffer_extents_negative("Input buffer input", 0, input.extent.0))
+  assert(((input.min.1 <= input.min.1.required) && (((input.extent.1.required.s + input.min.1.required) + 1) <= (input.extent.1 + input.min.1))), halide_error_access_out_of_bounds("Input buffer input", 1, input.min.1.required, (input.extent.1.required.s + input.min.1.required), input.min.1, ((input.extent.1 + input.min.1) + -1)))
+  assert((0 <= input.extent.1), halide_error_buffer_extents_negative("Input buffer input", 1, input.extent.1))
+  assert(((256 <= output.extent.0) && ((((min(output.extent.0, 256) + output.min.0) + output.extent.0.required.s) + 256) <= (output.extent.0 + output.min.0))), halide_error_access_out_of_bounds("Output buffer output", 0, ((min(output.extent.0, 256) + output.min.0) + -256), (((min(output.extent.0, 256) + output.min.0) + output.extent.0.required.s) + 255), output.min.0, ((output.extent.0 + output.min.0) + -1)))
+  assert(((16 <= output.extent.1) && ((((min(output.extent.1, 16) + output.min.1) + output.extent.1.required.s) + 16) <= (output.extent.1 + output.min.1))), halide_error_access_out_of_bounds("Output buffer output", 1, ((min(output.extent.1, 16) + output.min.1) + -16), (((min(output.extent.1, 16) + output.min.1) + output.extent.1.required.s) + 15), output.min.1, ((output.extent.1 + output.min.1) + -1)))
+  assert((input.stride.0 == 1), halide_error_constraint_violated("input.stride.0", input.stride.0, "1", 1))
+  assert((input.min.0 == 0), halide_error_constraint_violated("input.min.0", input.min.0, "0", 0))
+  assert((input.min.1 == 0), halide_error_constraint_violated("input.min.1", input.min.1, "0", 0))
+  assert((output.stride.0 == 1), halide_error_constraint_violated("output.stride.0", output.stride.0, "1", 1))
+  let input.total_extent.1 = (int64(input.extent.1)*int64(input.extent.0))
+  let output.total_extent.1 = (int64(output.extent.1)*int64(output.extent.0))
+  assert((abs(int64(input.extent.0)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("input", abs(int64(input.extent.0)), (uint64)2147483647))
+  assert((abs((int64(input.extent.1)*int64(input.stride.1))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("input", abs((int64(input.extent.1)*int64(input.stride.1))), (uint64)2147483647))
+  assert((input.total_extent.1 <= (int64)2147483647), halide_error_buffer_extents_too_large("input", input.total_extent.1, (int64)2147483647))
+  assert((abs(int64(output.extent.0)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("output", abs(int64(output.extent.0)), (uint64)2147483647))
+  assert((abs((int64(output.extent.1)*int64(output.stride.1))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("output", abs((int64(output.extent.1)*int64(output.stride.1))), (uint64)2147483647))
+  assert((output.total_extent.1 <= (int64)2147483647), halide_error_buffer_extents_too_large("output", output.total_extent.1, (int64)2147483647))
+  assert((input != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Input buffer input"))
+  assert((output != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Output buffer output"))
+  produce output {
+    let t510 = (output.extent.0 + 1)
+    let t511 = (output.min.1*output.stride.1)
+    let t512 = ((output.extent.0 + 65)/64)
+    let t513 = min((max(((0 - output.min.0)/64), -1) + 1), t512)
+    let t514 = (input.extent.0 - output.min.0)
+    let t500 = max(((min(min(min((output.extent.0 + -62), t514), (min(t510, t514) + -63)), t510)/64) + 1), t513)
+    let t491 = ((output.extent.1 + 15)/16)
+    let t503 = ((output.extent.0 + 255)/256)
+    let t502 = ((output.extent.0 + 33)/32)
+    let t509 = (192 - t511)
+    let t508 = (128 - t511)
+    let t507 = (64 - t511)
+    let t506 = (0 - t511)
+    let t493 = (((t510/32)*32) + 32)
+    let t501 = (output.min.0 + -1)
+    let t497 = (output.min.0 + -63)
+    let t492 = (output.extent.1 + -16)
+    let t498 = (input.extent.0 + -1)
+    parallel (output.s0.y.y, 0, t491) {
+      let output.s0.y.yi.base.s = min((output.s0.y.y*16), t492)
+      allocate input_16[uint16 * t493 * 8] in Stack
+      let t523 = (output.min.1 + output.s0.y.yi.base.s)
+      let t517 = min((output.s0.y.y*16), t492)
+      for (output.s0.y.yi.yi, 0, 4) {
+        let input_16.s0.y.min_2 = ((output.s0.y.yi.yi*4) + (select((0 < output.s0.y.yi.yi), 1, -1) + t523))
+        produce input_16 {
+          let input_16.s0.y.prologue = min(max(input_16.s0.y.min_2, 0), (t523 + 17))
+          let input_16.s0.y.epilogue = min(max(input.extent.1, input_16.s0.y.min_2), (t523 + 17))
+          let t526 = select((0 < output.s0.y.yi.yi), 1, -1)
+          let t527 = (output.s0.y.yi.yi*4)
+          let t528 = (output.min.1 + t517)
+          let t524 = ((min((max(((t527 + t528) + t526), 0) - t528), 17) - t527) - t526)
+          let t525 = (input.extent.1 + -1)
+          for (input_16.s0.y, input_16.s0.y.min_2, t524) {
+            let t529 = (max(min(input_16.s0.y, t525), 0)*input.stride.1)
+            let t530 = (((input_16.s0.y % 8)*t493) + -62)
+            for (input_16.s0.x.x, 0, t512) {
+              let input_16.s0.x.xi.base.s = min(((input_16.s0.x.x*64) + 62), output.extent.0)
+              input_16[ramp((input_16.s0.x.xi.base.s + t530), 1, 64)] = uint16x64(input[(max(min(ramp((input_16.s0.x.xi.base.s + t497), 1, 64), x64(t498)), x64(0)) + x64(t529))])
+            }
+          }
+          let t534 = (output.min.1 + t517)
+          let t535 = ((select((0 < output.s0.y.yi.yi), 1, -1) + (output.s0.y.yi.yi*4)) + t534)
+          let t536 = (t534 + 17)
+          let t531 = (min(max(input.extent.1, t535), t536) - min(max(t535, 0), t536))
+          let t533 = (t512 - t500)
+          for (input_16.s0.y, input_16.s0.y.prologue, t531) {
+            let t537 = (input.stride.1*input_16.s0.y)
+            let t538 = (((input_16.s0.y % 8)*t493) + -62)
+            for (input_16.s0.x.x, 0, t513) {
+              let input_16.s0.x.xi.base.s = min(((input_16.s0.x.x*64) + 62), output.extent.0)
+              input_16[ramp((input_16.s0.x.xi.base.s + t538), 1, 64)] = uint16x64(input[(max(min(ramp((input_16.s0.x.xi.base.s + t497), 1, 64), x64(t498)), x64(0)) + x64(t537))])
+            }
+            let t541 = ((input_16.s0.y % 8)*t493)
+            let t539 = (t500 - t513)
+            let t540 = ((input.stride.1*input_16.s0.y) + t501)
+            for (input_16.s0.x.x, t513, t539) {
+              input_16[ramp(((input_16.s0.x.x*64) + t541), 1, 64) aligned(32, 0)] = uint16x64(input[ramp(((input_16.s0.x.x*64) + t540), 1, 64)])
+            }
+            let t542 = (input.stride.1*input_16.s0.y)
+            let t543 = (((input_16.s0.y % 8)*t493) + -62)
+            for (input_16.s0.x.x, t500, t533) {
+              let input_16.s0.x.xi.base.s = min(((input_16.s0.x.x*64) + 62), output.extent.0)
+              input_16[ramp((input_16.s0.x.xi.base.s + t543), 1, 64)] = uint16x64(input[(max(min(ramp((input_16.s0.x.xi.base.s + t497), 1, 64), x64(t498)), x64(0)) + x64(t542))])
+            }
+          }
+          let t546 = (output.min.1 + t517)
+          let t544 = (max((t546 - max(((output.s0.y.yi.yi*4) + (select((0 < output.s0.y.yi.yi), 1, -1) + t546)), input.extent.1)), -17) + 17)
+          let t545 = (input.extent.1 + -1)
+          for (input_16.s0.y, input_16.s0.y.epilogue, t544) {
+            let t547 = (max(min(input_16.s0.y, t545), 0)*input.stride.1)
+            let t548 = (((input_16.s0.y % 8)*t493) + -62)
+            for (input_16.s0.x.x, 0, t512) {
+              let input_16.s0.x.xi.base.s = min(((input_16.s0.x.x*64) + 62), output.extent.0)
+              input_16[ramp((input_16.s0.x.xi.base.s + t548), 1, 64)] = uint16x64(input[(max(min(ramp((input_16.s0.x.xi.base.s + t497), 1, 64), x64(t498)), x64(0)) + x64(t547))])
+            }
+          }
+        }
+        allocate sobel_y_avg[uint16 * t493 * 4] in Stack
+        produce sobel_y_avg {
+          consume input_16 {
+            let t549 = ((output.s0.y.yi.yi*4) + t523)
+            for (sobel_y_avg.s0.y, t549, 4) {
+              let t551 = (((sobel_y_avg.s0.y + 7) % 8)*t493)
+              let t550 = (((sobel_y_avg.s0.y + 1) % 8)*t493)
+              let t552 = ((sobel_y_avg.s0.y % 8)*t493)
+              let t553 = ((sobel_y_avg.s0.y - t549)*t493)
+              for (sobel_y_avg.s0.x.x, 0, t502) {
+                sobel_y_avg[ramp(((sobel_y_avg.s0.x.x*32) + t553), 1, 32) aligned(32, 0)] = ((input_16[ramp(((sobel_y_avg.s0.x.x*32) + t552), 1, 32) aligned(32, 0)]*x32((uint16)2)) + (input_16[ramp(((sobel_y_avg.s0.x.x*32) + t550), 1, 32) aligned(32, 0)] + input_16[ramp(((sobel_y_avg.s0.x.x*32) + t551), 1, 32) aligned(32, 0)]))
+              }
+            }
+          }
+        }
+        consume sobel_y_avg {
+          consume input_16 {
+            let t555 = ((output.s0.y.yi.yi*4) + t523)
+            let t554 = (output.extent.0 + -256)
+            for (output.s0.x.x, 0, t503) {
+              let output.s0.x.xi.base.s = min((output.s0.x.x*256), t554)
+              allocate sobel_x_avg[uint16 * 1024] in Stack
+              let t574 = (output.s0.x.xi.base.s + t509)
+              let t569 = (output.s0.x.xi.base.s + t508)
+              let t564 = (output.s0.x.xi.base.s + t507)
+              let t559 = (output.s0.x.xi.base.s + t506)
+              for (output.s0.y.yi.yii, 0, 4) {
+                let sobel_x_avg.s0.y.min_4 = ((select((0 < output.s0.y.yi.yii), 1, -1) + t555) + output.s0.y.yi.yii)
+                let sobel_x_avg.s0.y.loop_extent.s.s = (select((0 < output.s0.y.yi.yii), -1, 1) - output.s0.y.yi.yii)
+                produce sobel_x_avg {
+                  let t575 = (sobel_x_avg.s0.y.loop_extent.s.s + 5)
+                  for (sobel_x_avg.s0.y, sobel_x_avg.s0.y.min_4, t575) {
+                    let t577 = ((sobel_x_avg.s0.y % 4)*8)
+                    let t576 = (((sobel_x_avg.s0.y % 8)*t493) + output.s0.x.xi.base.s)
+                    for (sobel_x_avg.s0.x.x, 0, 8) {
+                      sobel_x_avg[ramp(((sobel_x_avg.s0.x.x + t577)*32), 1, 32) aligned(32, 0)] = ((input_16[ramp((((sobel_x_avg.s0.x.x*32) + t576) + 1), 1, 32)]*x32((uint16)2)) + (input_16[ramp((((sobel_x_avg.s0.x.x*32) + t576) + 2), 1, 32)] + input_16[ramp(((sobel_x_avg.s0.x.x*32) + t576), 1, 32)]))
+                    }
+                  }
+                }
+                allocate sobel_x[uint16 * 256] in Stack
+                produce sobel_x {
+                  consume sobel_x_avg {
+                    sobel_x[ramp(0, 1, 32)] = absd(sobel_x_avg[ramp(((((output.s0.y.yi.yii + t555) + 3) % 4)*256), 1, 32) aligned(256, 0)], sobel_x_avg[ramp(((((output.s0.y.yi.yii + t555) + 1) % 4)*256), 1, 32) aligned(256, 0)])
+                    sobel_x[ramp(32, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 32), 1, 32) aligned(256, 32)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 32), 1, 32) aligned(256, 32)])
+                    sobel_x[ramp(64, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 64), 1, 32) aligned(256, 64)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 64), 1, 32) aligned(256, 64)])
+                    sobel_x[ramp(96, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 96), 1, 32) aligned(256, 96)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 96), 1, 32) aligned(256, 96)])
+                    sobel_x[ramp(128, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 128), 1, 32) aligned(256, 128)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 128), 1, 32) aligned(256, 128)])
+                    sobel_x[ramp(160, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 160), 1, 32) aligned(256, 160)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 160), 1, 32) aligned(256, 160)])
+                    sobel_x[ramp(192, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 192), 1, 32) aligned(256, 192)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 192), 1, 32) aligned(256, 192)])
+                    sobel_x[ramp(224, 1, 32)] = absd(sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 3) % 4)*256) + 224), 1, 32) aligned(256, 224)], sobel_x_avg[ramp((((((output.s0.y.yi.yii + t555) + 1) % 4)*256) + 224), 1, 32) aligned(256, 224)])
+                  }
+                }
+                consume sobel_x {
+                  allocate sobel_y[uint16 * 64] in Stack
+                  produce sobel_y {
+                    sobel_y[ramp(0, 1, 32)] = absd(sobel_y_avg[ramp(((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 2), 1, 32)])
+                    sobel_y[ramp(32, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 32), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 34), 1, 32)])
+                  }
+                  consume sobel_y {
+                    output[ramp((((output.s0.y.yi.yii + t555)*output.stride.1) + t559), 1, 64)] = uint8x64(min((sobel_x[ramp(0, 1, 64)] + sobel_y[ramp(0, 1, 64)]), x64((uint16)255)))
+                  }
+                  free sobel_y
+                  allocate sobel_y[uint16 * 64] in Stack
+                  produce sobel_y {
+                    sobel_y[ramp(0, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 64), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 66), 1, 32)])
+                    sobel_y[ramp(32, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 96), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 98), 1, 32)])
+                  }
+                  consume sobel_y {
+                    output[ramp((((output.s0.y.yi.yii + t555)*output.stride.1) + t564), 1, 64)] = uint8x64(min((sobel_x[ramp(64, 1, 64)] + sobel_y[ramp(0, 1, 64)]), x64((uint16)255)))
+                  }
+                  free sobel_y
+                  allocate sobel_y[uint16 * 64] in Stack
+                  produce sobel_y {
+                    sobel_y[ramp(0, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 128), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 130), 1, 32)])
+                    sobel_y[ramp(32, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 160), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 162), 1, 32)])
+                  }
+                  consume sobel_y {
+                    output[ramp((((output.s0.y.yi.yii + t555)*output.stride.1) + t569), 1, 64)] = uint8x64(min((sobel_x[ramp(128, 1, 64)] + sobel_y[ramp(0, 1, 64)]), x64((uint16)255)))
+                  }
+                  free sobel_y
+                  allocate sobel_y[uint16 * 64] in Stack
+                  produce sobel_y {
+                    sobel_y[ramp(0, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 192), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 194), 1, 32)])
+                    sobel_y[ramp(32, 1, 32)] = absd(sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 224), 1, 32)], sobel_y_avg[ramp((((output.s0.y.yi.yii*t493) + output.s0.x.xi.base.s) + 226), 1, 32)])
+                  }
+                  consume sobel_y {
+                    output[ramp((((output.s0.y.yi.yii + t555)*output.stride.1) + t574), 1, 64)] = uint8x64(min((sobel_x[ramp(192, 1, 64)] + sobel_y[ramp(0, 1, 64)]), x64((uint16)255)))
+                  }
+                  free sobel_x
+                  free sobel_y
+                }
+              }
+              free sobel_x_avg
+            }
+          }
+        }
+        free sobel_y_avg
+      }
+      free input_16
+    }
+  }
+}
+}
+
+
