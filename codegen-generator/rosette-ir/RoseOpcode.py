@@ -220,7 +220,6 @@ class RoseOpcode(Enum):
         if self.value == self.opaquecall.value:
             Callee = Inputs[0]
             assert isinstance(Callee, RoseValues.RoseConstant)
-            assert isinstance(Callee.getType(), RoseStringType)
             return Callee.getType().getReturnType()
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
