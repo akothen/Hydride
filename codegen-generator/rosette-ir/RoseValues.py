@@ -47,7 +47,7 @@ class RoseConstant(RoseValue):
         assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     if isinstance(Type, RoseStringType):
-      assert type(self.Value) == str
+      assert type(Value) == str
     if not isinstance(Type, RoseStringType):
       super().__init__(str(Value), Type)
     else:
@@ -376,9 +376,14 @@ class RoseOperation(RoseValue):
     String = Spaces + "(define " + Name + " ("
     String += (self.Opcode.getRosetteOp() + " ")
     for Index, Operand in enumerate(self.getOperands()):
+      if isinstance(Operand, RoseConstant) \
+        and isinstance(Operand.getType(), RoseBitVectorType):
+        String += " " + "(bv " + str(Operand.getValue()) + \
+                  " " + str(Operand.getType().getBitwidth()) + ")"
+      else:
         String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
-          String += " "
+      if Index != len(self.getOperands()) - 1:
+        String += " "
     String += "))\n"
     return String
 
