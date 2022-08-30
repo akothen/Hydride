@@ -218,9 +218,10 @@ class RoseOpcode(Enum):
             assert isinstance(Callee, RoseAbstractions.RoseFunction)
             return Callee.getType().getReturnType()
         if self.value == self.opaquecall.value:
-            Callee = Inputs[0]
+            Callee = Inputs[1]
             assert isinstance(Callee, RoseValues.RoseConstant)
-            return Callee.getType().getReturnType()
+            assert isinstance(Inputs[0], RoseType)
+            return Inputs[0]
         if self.value == self.bvpadhighbits.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
@@ -478,10 +479,12 @@ class RoseOpcode(Enum):
                 return self.callInputsAreValid(Callee, Inputs[1:])
             return self.callInputsAreValid(Callee, [])
         if self.value == self.opaquecall.value:
-            Callee = Inputs[0]
+            Callee = Inputs[1]
             if not isinstance(Callee, RoseValues.RoseConstant):
                 return False
             if not isinstance(Callee.getType(), RoseStringType):
+                return False
+            if not isinstance(Inputs[0], RoseType):
                 return False
             return True
         if self.value == self.bvpadhighbits.value:
@@ -792,7 +795,7 @@ class RoseOpcode(Enum):
             return (NumInputs == 3)
         if self.value == self.call.value \
         or self.value == self.opaquecall.value:
-            return (NumInputs >= 1)
+            return (NumInputs >= 2)
         if self.value == self.bvpadhighbits.value:
             return (NumInputs == 2)
         if self.value == self.ret.value \
