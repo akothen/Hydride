@@ -68,6 +68,8 @@ class RosetteLifter:
   def liftRosetteAST(self, RosetteAST):
     print("RosetteAST:")
     print(RosetteAST)
+    print("type(RosetteAST):")
+    print(type(RosetteAST))
     InstMap = {
         '+': RoseAddOp,
         '-': RoseSubOp,
@@ -75,7 +77,7 @@ class RosetteLifter:
         '/': RoseDivOp
     }
     if isinstance(RosetteAST, int):
-          return RoseConstant.create(RosetteAST, RoseIntegerType.create(32))
+      return RoseConstant.create(RosetteAST, RoseIntegerType.create(32))
     if isinstance(RosetteAST, list):
       print("RosetteAST[0]:")
       print(RosetteAST[0])
@@ -106,7 +108,8 @@ class RosetteLifter:
         RosetteAST = RosetteAST[0]
       if RosetteAST[0] == 'bv':
         print("BV")
-        return RoseConstant.create(self.liftRosetteAST(RosetteAST[1]), \
+        BitvectorVal = int("0" + RosetteAST[1][1:], 16)
+        return RoseConstant.create(BitvectorVal, \
                                         RoseBitVectorType.create(RosetteAST[2]))
       elif RosetteAST[0] == 'lit':
         return self.liftRosetteAST(RosetteAST[1])
