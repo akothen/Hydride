@@ -10,17 +10,19 @@ from RosetteParser import *
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
+from RoseLLVMContext import *
 
+from llvmlite.ir.types import VectorType as LLVMVectorType
+from llvmlite.ir.types import IntType as LLVMIntType
 
 
 class RosetteLifter:
   #def __init__(self, FunctionName : str, ParamTypeList : list, FunctionBody : str):
   def __init__(self, FunctionName : str, FunctionBody : str):
     self.ID = -1
-    #self.ParamTypeList = ParamTypeList
     self.FunctionName = FunctionName
     self.FunctionBody = FunctionBody
-    #self.Params = [None] * len(ParamTypeList)
+    self.OpToLLVMType = dict()
     self.OpList = list()
     self.ParamToType = dict()
     self.Params = list()
@@ -43,9 +45,13 @@ class RosetteLifter:
     Function.addAbstraction(RetOp)
     Function.setRetValName(RetValue.getName())
     Function.print()
-    return Function
+    # Build the Rose LLVM context
+    RoseLLVMCtx = RoseLLVMContext.create()
+    for OpTypeInfo in self.OpToLLVMType.items():
+      RoseLLVMCtx.setLLVMTypeFor(OpTypeInfo[0], OpTypeInfo[1])
+    return Function, RoseLLVMCtx
 
-  def getTypeSize(self, Type : str):
+  def getRoseType(self, Type : str):
     Type = Type.strip()
     Type = Type.replace(" ", "")
     if "<" in Type and ">" in Type and "x" in Type:
@@ -64,6 +70,22 @@ class RosetteLifter:
     assert "i" in Type
     Precision = Precision[1:]
     return RoseIntegerType.create(int(Precision))
+
+  def getLLVMType(self, Type : str):
+    Type = Type.strip()
+    Type = Type.replace(" ", "")
+    assert "<" in Type and ">" in Type and "x" in Type
+    NumElems, Precision = Type.split("x")
+    print("NumElems:")
+    print(NumElems)
+    NumElems = NumElems[1:]
+    print("NumElems:")
+    print(NumElems)
+    assert "i" in Precision
+    Precision = Precision[1:-1]
+    print("Precision:")
+    print(Precision)
+    return LLVMVectorType(LLVMIntType(int(Precision)), int(NumElems))
 
   def liftRosetteAST(self, RosetteAST):
     print("RosetteAST:")
@@ -96,7 +118,7 @@ class RosetteLifter:
           Type = Comment[OpenParanIdx :]
           print("Type:")
           print(Type)
-          self.ParamToType[RegInfo] = self.getTypeSize(Type)
+          self.ParamToType[RegInfo] = Type
           # len(reg) = 3. Skip "reg"
           RegNo = int(RegInfo[3:])
           print("RegNo:")
@@ -109,8 +131,7 @@ class RosetteLifter:
       if RosetteAST[0] == 'bv':
         print("BV")
         BitvectorVal = int("0" + RosetteAST[1][1:], 16)
-        return RoseConstant.create(BitvectorVal, \
-                                        RoseBitVectorType.create(RosetteAST[2]))
+        return RoseConstant.create(BitvectorVal, RoseBitVectorType.create(RosetteAST[2]))
       elif RosetteAST[0] == 'lit':
         return self.liftRosetteAST(RosetteAST[1])
       elif RosetteAST[0] == 'reg':
@@ -119,13 +140,15 @@ class RosetteLifter:
         if RosetteAST[1] in self.Params: 
           return self.Params[RosetteAST[1]]
         ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
-        ParamType = self.ParamToType[RosetteAST[0] + str(RosetteAST[1])]#self.ParamTypeList[RosetteAST[1]]
+        ParamType = self.getRoseType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
         print("type(RosetteAST[1]):")
         print(type(RosetteAST[1]))
         print("RosetteAST[1]:")
         print(RosetteAST[1])
-        self.Params[RosetteAST[1]] = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
-        return self.Params[RosetteAST[1]]
+        NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
+        self.Params[RosetteAST[1]] = NewArg
+        self.OpToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+        return NewArg
       elif RosetteAST[0] in InstMap:
         Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
         Op = InstMap[RosetteAST[0]].create("%" + str(self.genUniqueID()), Args)
@@ -134,53 +157,35 @@ class RosetteLifter:
       else:
         print("--ELSE")
         [OutputType] = RosetteAST[-1]
-        OutputType = self.getTypeSize(OutputType[1:])
+        OutputRoseType = self.getRoseType(OutputType[1:])
         Args = list(map(self.liftRosetteAST, RosetteAST[1:-1]))
         print("RosetteAST[0]:")
         print(RosetteAST[0])
         CallOp = RoseOpaqueCallOp.create("%" + str(self.genUniqueID()),\
                   RoseConstant(RosetteAST[0], RoseStringType.create(len(RosetteAST[0]))), \
-                  Args, OutputType)
+                  Args, OutputRoseType)
         print("CallOp:")
         CallOp.print()
         self.OpList.append(CallOp)
+        self.OpToLLVMType[CallOp] = self.getLLVMType(OutputType[1:])
         return CallOp
   
 
 
-#def GetFuncDefinition(FileName : str):
-#  File = open(FileName, "r")
-#  Line = None
-#  while Line != "":
-#    Line = File.readline()
-#    if "declare" in Line and "@hydride." in Line:
-#      break
-#  assert Line != None
-#  OpenParanIdx = Line.find("(")
-#  CloseParanIdx = Line.find(")")
-#  ParamsStr = Line[OpenParanIdx + 1 : CloseParanIdx]
-#  ParamStrList = ParamsStr.split(",")
-#  # Get all the parameters
-#  ParamTypeList =  list()
-#  for ParamStr in ParamStrList:
-#    ParamTypeList.append(GetTypeSize(ParamStr))
-#  print("ParamList:")
-#  print(ParamTypeList)
-#  return ParamTypeList
-
-
-if __name__ == '__main__':
-  RosetteFileName = "test.rkt"
-  #FuncDefFileName = "test.ll"
-  #ParamTypeList = GetFuncDefinition(FuncDefFileName)
+def LiftRosetteCodeFrom(RosetteFileName : str, FunctionName : str):
   RosetteFile = open(RosetteFileName, "r")
   RosetteFunctionBody = list()
   Line = RosetteFile.readline()
   while Line != "":
     RosetteFunctionBody.append(Line)
-    Line = RosetteFile.readline()    
-  FunctionName = "kernel"
-  #Lifter = RosetteLifter(FunctionName, ParamTypeList, RosetteFunctionBody)
+    Line = RosetteFile.readline()
   Lifter = RosetteLifter(FunctionName, RosetteFunctionBody)
-  Lifter.lift()
+  return Lifter.lift()
+
+
+
+if __name__ == '__main__':
+  RosetteFileName = "test.rkt"
+  FunctionName = "kernel"
+  LiftRosetteCodeFrom(RosetteFileName, FunctionName)
 
