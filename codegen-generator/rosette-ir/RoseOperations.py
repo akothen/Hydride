@@ -90,7 +90,7 @@ class RoseCallOp(RoseOperation):
     String += self.getCallee().getName() + "("
     for Index, Operand in enumerate(self.getCallOperands()):
         String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
+        if Index != len(self.getCallOperands()) - 1:
           String += " "
     String += " )))\n"
     return String
@@ -109,7 +109,7 @@ class RoseCallOp(RoseOperation):
     String += " " + self.getCallee().getName() + "("
     for Index, Operand in enumerate(self.getCallOperands()):
         String += " " + str(Operand.getType()) + " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
+        if Index != len(self.getCallOperands()) - 1:
           String += ","
     String += " )"
     print(String)
@@ -123,21 +123,25 @@ class RoseCallOp(RoseOperation):
 
 
 class RoseOpaqueCallOp(RoseOperation):
-  def __init__(self, Name : str, Callee, OperandList : list, ParentBlock):
+  def __init__(self, Name : str, Callee, OperandList : list, \
+                    ReturnType : RoseType, ParentBlock):
     assert isinstance(Callee.getType(), RoseStringType)
-    Operands = [Callee]
+    Operands = [ReturnType, Callee]
     Operands.extend(OperandList)
     super().__init__(RoseOpcode.opaquecall, Name, Operands, ParentBlock)
     
   @staticmethod
-  def create(Name : str, Callee, OperandList : list, ParentBlock = RoseUndefRegion()):
-    return RoseOpaqueCallOp(Name, Callee, OperandList, ParentBlock)
+  def create(Name : str, Callee, OperandList : list, ReturnType : RoseType, \
+            ParentBlock = RoseUndefRegion()):
+    return RoseOpaqueCallOp(Name, Callee, OperandList, ReturnType, ParentBlock)
   
   def getCallee(self):
-    return self.getOperands()[0]
+    return self.getOperands()[1]
   
   def getCallOperands(self):
-    return self.getOperands()[1:]
+    if len(self.getOperands()) > 2:
+      return self.getOperands()[2:]
+    return []
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
@@ -148,8 +152,8 @@ class RoseOpaqueCallOp(RoseOperation):
     String = Spaces + "(define " + Name + " ("
     String += self.getCallee().getName() + "("
     for Index, Operand in enumerate(self.getCallOperands()):
-        String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
+        String += " " + Operand.getName()
+        if Index != len(self.getCallOperands()) - 1:
           String += " "
     String += " )))\n"
     return String
@@ -168,7 +172,7 @@ class RoseOpaqueCallOp(RoseOperation):
     String += " " + self.getCallee().getName() + "("
     for Index, Operand in enumerate(self.getCallOperands()):
         String += " " + str(Operand.getType()) + " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
+        if Index != len(self.getCallOperands()) - 1:
           String += ","
     String += " )"
     print(String)
@@ -1288,7 +1292,6 @@ class RoseXorOp(RoseOperation):
     assert Operand2 != llvmlite.ir.Undefined()
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.xor(Operand1, Operand2, self.getName())
-
 
 
 
