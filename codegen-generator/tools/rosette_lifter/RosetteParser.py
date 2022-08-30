@@ -36,7 +36,7 @@ class RosetteParser:
         print(Token)
         print("Line:")
         print(self.Line)
-        if Token != '':
+        if Token != '': #and not Token.startswith(";"):
           print("--")
           return Token
       return None
@@ -57,31 +57,54 @@ class RosetteParser:
     try: 
       return int(Token)
     except ValueError:
-        try: 
-          return float(Token)
-        except ValueError:
-          return str(Token)
+      try: 
+        return float(Token)
+      except ValueError:
+        return str(Token)
 
-  def readExpression(self, Tokens : list):
+  def readExpressions(self, Tokens : list):
+    print("readExpressions")
     # Read an expression from a sequence of tokens.
     if len(Tokens) == 0:
       raise SyntaxError('NO TOKENS IN ROSETTE CODE')
     Token = Tokens.pop(0)
+    print("POPPED TOKEN:")
+    print(Token)
     if Token == '(':
       ExprLst = list()
       while Tokens[0] != ')':
-        ExprLst.append(self.readExpression(Tokens))
+        ExprLst.append(self.readExpressions(Tokens))
       Tokens.pop(0)
+      if len(Tokens) != 0:
+        if ";" in Tokens[0]:
+          Token = Tokens.pop(0)
+          ExprLst.append([Token])
       return ExprLst
     elif Token == ')':
-        raise SyntaxError('unexpected )')
+      raise SyntaxError('unexpected )')
+    elif ';' in Token:
+      print("COMMENT")
+      CommentList = [Token]
+      if len(Tokens) == 0:
+        return CommentList
+      ExprLst = list()
+      ExprLst.append(CommentList)
+      while ";" in Tokens[0]:
+        Token = Tokens.pop(0)
+        ExprLst.append([Token])
+      if len(Tokens) == 0:
+        return ExprLst
+      else:
+        ExprLst.append(self.readExpressions(Tokens))
+        return ExprLst
     else:
-        return self.transformType(Token)
+      return self.transformType(Token)
 
   @staticmethod
   def parse(Code):
     Parser = RosetteParser()
-    ParsedExpr = Parser.readExpression(Parser.tokenize(Code))
+    TokenLists = Parser.tokenize(Code)
+    ParsedExpr = Parser.readExpressions(TokenLists)
     print("ParsedExpr:")
     print(ParsedExpr)
     return ParsedExpr
