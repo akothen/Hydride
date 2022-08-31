@@ -1,8 +1,8 @@
 ##################################################################
 #
 # This files contains definitions of all bitvector ops supported
-# in Rosette llvmlite.ir. Most of these operations are similar to 
-# the ones supported by the Rosette language.
+# in Rosette. Most of these operations are similar to the ones 
+# supported by the Rosette language.
 #
 ##################################################################
 
@@ -17,7 +17,10 @@ from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
 from RoseSizeExtBitVectorOperation import RoseBVSizeExensionOp
 from RoseLLVMContext import *
 
-import llvmlite
+from llvmlite.ir.values import Undefined as LLVMUndefined
+from llvmlite.ir.values import  Constant as LLVMConstant
+from llvmlite.ir.types import VectorType as LLVMVectorType
+from llvmlite.ir.types import IntType as LLVMIntType
 
 
 class RoseBVPadHighBitsOp(RoseBitVectorOp):
@@ -27,8 +30,7 @@ class RoseBVPadHighBitsOp(RoseBitVectorOp):
     super().__init__(RoseOpcode.bvpadhighbits, "", OperandList, ParentBlock)
   
   @staticmethod
-  def create(Bitvector : RoseValue, NumPadBits : RoseValue, 
-            ParentBlock = RoseUndefRegion()):
+  def create(Bitvector : RoseValue, NumPadBits : RoseValue, ParentBlock = RoseUndefRegion()):
     return RoseBVPadHighBitsOp(Bitvector, NumPadBits, ParentBlock)
 
   def getNumPadBits(self):
@@ -45,14 +47,12 @@ class RoseBVPadHighBitsOp(RoseBitVectorOp):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Name = super().getName()
     NumPadBits = self.getNumPadBits().getValue()
-    String = Spaces + "(define " + Name + " ("
-    String += ("bvpadhighbits ")
+    String = "(bvpadhighbits "
     String += " " + self.getInputBitVector().getName()
     String += " " + str(self.getInputBitVector().getType().getBitwidth() - NumPadBits) 
     String += " " + str(self.getInputBitVector().getType().getBitwidth())
-    String += ")))\n"
+    String += ")\n"
     return String
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
@@ -112,7 +112,7 @@ class RoseBVSignExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand != llvmlite.ir.Undefined()
+    assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.sext(Operand, self.getType().to_llvm_ir(), self.getName())
 
@@ -169,7 +169,7 @@ class RoseBVZeroExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand != llvmlite.ir.Undefined()
+    assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.zext(Operand, self.getType().to_llvm_ir(), self.getName())
 
@@ -327,14 +327,14 @@ class RoseBVTruncateLowOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand1 = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand1 != llvmlite.ir.Undefined()
-    Operand2 = llvmlite.ir.Constant(Operand1.type, llvmlite.ir.Undefined)
+    assert Operand1 != LLVMUndefined
+    Operand2 = LLVMConstant(Operand1.type, LLVMUndefined)
     # Create a mask that goes from 0 to length of truncation
     MaskList = list()
     for Idx in range(self.getOutputBitwidth()):
       MaskList.append(Idx)
-    MaskType = llvmlite.ir.types.VectorType(llvmlite.ir.types.IntType(32), len(MaskList))
-    Mask = llvmlite.ir.Constant(MaskType, MaskList)
+    MaskType = LLVMVectorType(LLVMIntType(32), len(MaskList))
+    Mask = LLVMConstant(MaskType, MaskList)
     IRBuilder = Context.getLLVMBuilder()
     IRBuilder.lshr(Operand1, Operand2, self.getName())
     return IRBuilder.shuffle_vector(Operand1, Operand2, Mask, self.getName())
@@ -409,7 +409,7 @@ class RoseBVTruncateHighOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand != llvmlite.ir.Undefined()
+    assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.trunc(Operand, self.getType().to_llvm_ir(), self.getName())
 
@@ -552,7 +552,7 @@ class RoseBVNotOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand != llvmlite.ir.Undefined()
+    assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.not_(Operand, self.getName())
 
@@ -570,9 +570,9 @@ class RoseBVAndOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.and_(Operand1, Operand2, self.getName())
 
@@ -590,9 +590,9 @@ class RoseBVOrOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.or_(Operand1, Operand2, self.getName())
 
@@ -610,9 +610,9 @@ class RoseBVXorOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.xor(Operand1, Operand2, self.getName())
 
@@ -635,9 +635,9 @@ class RoseBVShlOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.shl(Operand1, Operand2, self.getName())
 
@@ -660,9 +660,9 @@ class RoseBVLshrOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.lshr(Operand1, Operand2, self.getName())
 
@@ -685,9 +685,9 @@ class RoseBVAshrOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.ashr(Operand1, Operand2, self.getName())
 
@@ -710,7 +710,7 @@ class RoseBVNegOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     Operand = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand != llvmlite.ir.Undefined()
+    assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.neg(Operand, self.getName())
 
@@ -738,9 +738,9 @@ class RoseBVAddOp(RoseSaturableBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     SaturationQualifier = self.getSaturationQualifier()
     if SaturationQualifier != None:
@@ -771,9 +771,9 @@ class RoseBVSubOp(RoseSaturableBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     SaturationQualifier = self.getSaturationQualifier()
     if SaturationQualifier != None:
@@ -804,9 +804,9 @@ class RoseBVMulOp(RoseSaturableBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     SaturationQualifier = self.getSaturationQualifier()
     if SaturationQualifier != None:
@@ -829,9 +829,9 @@ class RoseBVUdivOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.udiv(Operand1, Operand2, self.getName())
 
@@ -851,9 +851,9 @@ class RoseBVSdivOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.sdiv(Operand1, Operand2, self.getName())
 
@@ -873,9 +873,9 @@ class RoseBVUremOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.urem(Operand1, Operand2, self.getName())
 
@@ -895,9 +895,9 @@ class RoseBVSremOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.srem(Operand1, Operand2, self.getName())
 
@@ -917,9 +917,9 @@ class RoseBVSmodOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.srem(Operand1, Operand2, self.getName())
 
@@ -941,9 +941,9 @@ class RoseBVEQOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("==", Operand1, Operand2, self.getName())
 
@@ -982,9 +982,9 @@ class RoseBVNEQOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("!=", Operand1, Operand2, self.getName())
 
@@ -1004,9 +1004,9 @@ class RoseBVSLTOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("<", Operand1, Operand2, self.getName())
 
@@ -1026,9 +1026,9 @@ class RoseBVULTOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_unsigned("<", Operand1, Operand2, self.getName())
 
@@ -1048,9 +1048,9 @@ class RoseBVSLEOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("<=", Operand1, Operand2, self.getName())
 
@@ -1070,9 +1070,9 @@ class RoseBVULEOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_unsigned("<=", Operand1, Operand2, self.getName())
 
@@ -1092,9 +1092,9 @@ class RoseBVSGTOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed(">", Operand1, Operand2, self.getName())
 
@@ -1114,9 +1114,9 @@ class RoseBVUGTOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_unsigned(">", Operand1, Operand2, self.getName())
 
@@ -1136,9 +1136,9 @@ class RoseBVSGEOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed(">=", Operand1, Operand2, self.getName())
 
@@ -1158,9 +1158,9 @@ class RoseBVUGEOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert Operand1 != llvmlite.ir.Undefined()
+    assert Operand1 != LLVMUndefined
     Operand2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert Operand2 != llvmlite.ir.Undefined()
+    assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_unsigned(">=", Operand1, Operand2, self.getName())
 
@@ -1193,8 +1193,8 @@ class RoseBVAdd1Op(RoseSaturableBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand != llvmlite.ir.Undefined()
-    OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
+    assert Operand != LLVMUndefined
+    OneLLVM =  LLVMConstant(self.getInputBitVector().getType().to_llvm_ir(), 1)
     IRBuilder = Context.getLLVMBuilder()
     SaturationQualifier = self.getSaturationQualifier()
     if SaturationQualifier != None:
@@ -1228,8 +1228,8 @@ class RoseBVSub1Op(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     Operand = Context.getLLVMValueFor(self.getInputBitVector())
-    assert Operand != llvmlite.ir.Undefined()
-    OneLLVM =  llvmlite.ir.Constant(self.getInputBitVector().getType().to_llvm_ir(), 1)
+    assert Operand != LLVMUndefined
+    OneLLVM =  LLVMConstant(self.getInputBitVector().getType().to_llvm_ir(), 1)
     IRBuilder = Context.getLLVMBuilder()
     SaturationQualifier = self.getSaturationQualifier()
     if SaturationQualifier != None:
@@ -1250,9 +1250,9 @@ class RoseBVSminOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM1 != llvmlite.ir.Undefined()
+    assert OperandInLLVM1 != LLVMUndefined
     OperandInLLVM2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert OperandInLLVM2 != llvmlite.ir.Undefined()
+    assert OperandInLLVM2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     Condition = IRBuilder.icmp_signed("<=", OperandInLLVM1, OperandInLLVM2, \
                                      "%" + "cond." + self.getName())
@@ -1274,9 +1274,9 @@ class RoseBVUminOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM1 != llvmlite.ir.Undefined()
+    assert OperandInLLVM1 != LLVMUndefined
     OperandInLLVM2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert OperandInLLVM2 != llvmlite.ir.Undefined()
+    assert OperandInLLVM2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     Condition = IRBuilder.icmp_unsigned("<=", OperandInLLVM1, OperandInLLVM2, \
                                      "%" + "cond." + self.getName())
@@ -1298,9 +1298,9 @@ class RoseBVSmaxOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM1 != llvmlite.ir.Undefined()
+    assert OperandInLLVM1 != LLVMUndefined
     OperandInLLVM2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert OperandInLLVM2 != llvmlite.ir.Undefined()
+    assert OperandInLLVM2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     Condition = IRBuilder.icmp_signed(">=", OperandInLLVM1, OperandInLLVM2, \
                                      "%" + "cond." + self.getName())
@@ -1322,9 +1322,9 @@ class RoseBVUmaxOp(RoseBitVectorOp):
   def to_llvm_ir(self, Context : RoseLLVMContext):
     assert len(self.getOperands()) == 2
     OperandInLLVM1 = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM1 != llvmlite.ir.Undefined()
+    assert OperandInLLVM1 != LLVMUndefined
     OperandInLLVM2 = Context.getLLVMValueFor(self.getOperand(1))
-    assert OperandInLLVM2 != llvmlite.ir.Undefined()
+    assert OperandInLLVM2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     Condition = IRBuilder.icmp_unsigned(">=", OperandInLLVM1, OperandInLLVM2, \
                                      "%" + "cond." + self.getName())
@@ -1377,8 +1377,8 @@ class RoseBVZeroOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     OperandInLLVM = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM != llvmlite.ir.Undefined()
-    ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
+    assert OperandInLLVM != LLVMUndefined
+    ZeroLLVM =  LLVMConstant(self.getOperand(0).getType().to_llvm_ir(), 0)
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("==", OperandInLLVM, ZeroLLVM, \
                                  "%" + "cond." + self.getName())
@@ -1396,8 +1396,8 @@ class RoseBVAbsOp(RoseBitVectorOp):
 
   def to_llvm_ir(self, Context : RoseLLVMContext):
     OperandInLLVM = Context.getLLVMValueFor(self.getOperand(0))
-    assert OperandInLLVM != llvmlite.ir.Undefined()
-    ZeroLLVM =  llvmlite.ir.Constant(self.getOperand(0).getType().to_llvm_ir(), 0)
+    assert OperandInLLVM != LLVMUndefined
+    ZeroLLVM =  LLVMConstant(self.getOperand(0).getType().to_llvm_ir(), 0)
     IRBuilder = Context.getLLVMBuilder()
     Condition = IRBuilder.icmp_signed(">=", OperandInLLVM, ZeroLLVM, \
                                      "%" + "cond." + self.getName())
