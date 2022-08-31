@@ -137,7 +137,11 @@ class RosetteLifter:
         BitvectorVal = int("0" + RosetteAST[1][1:], 16)
         return RoseConstant.create(BitvectorVal, RoseBitVectorType.create(RosetteAST[2]))
       elif RosetteAST[0] == 'lit':
-        return self.liftRosetteAST(RosetteAST[1])
+        ConstantVal = self.liftRosetteAST(RosetteAST[1])
+        assert isinstance(ConstantVal.getType(), RoseBitVectorType)
+        [OutputType] = RosetteAST[-1]
+        self.RoseValToLLVMType[ConstantVal] = self.getLLVMType(OutputType[1:])
+        return ConstantVal
       elif RosetteAST[0] == 'reg':
         print("REG")
         # This register is a binding
