@@ -1,0 +1,30 @@
+#############################################################
+#
+# This tool does codegen through LLVM
+#
+#############################################################
+
+
+from RosetteLifter import LiftRosetteCodeFrom
+from RoseLLVMCodeGen import LLVMCodeGen
+
+
+
+def HandleLowLevelCodeGen(RosetteFileName, KernelName):
+  # Build the Rose IR function and Rose LLVM context from Rosette code
+  RoseIRFunction, RoseLLVMCtx = LiftRosetteCodeFrom(RosetteFileName, KernelName)
+  # Now generate LLVM function
+  LLVMIRModule = LLVMCodeGen(RoseIRFunction, RoseLLVMCtx)
+  print("LLVM MODULE")
+  print(LLVMIRModule)
+
+
+
+if __name__ == '__main__':
+  RosetteFileName = "test.rkt"
+  FunctionName = "kernel"
+  HandleLowLevelCodeGen(RosetteFileName, FunctionName)
+
+
+
+
