@@ -17,12 +17,11 @@ from llvmlite.ir.types import IntType as LLVMIntType
 
 
 class RosetteLifter:
-  #def __init__(self, FunctionName : str, ParamTypeList : list, FunctionBody : str):
   def __init__(self, FunctionName : str, FunctionBody : str):
     self.ID = -1
     self.FunctionName = FunctionName
     self.FunctionBody = FunctionBody
-    self.OpToLLVMType = dict()
+    self.RoseValToLLVMType = dict()
     self.OpList = list()
     self.ParamToType = dict()
     self.Params = list()
@@ -35,6 +34,9 @@ class RosetteLifter:
     # Parse the Roseete file to get an AST
     RosetteAST = RosetteParser.parse(self.FunctionBody)
     RetValue = self.liftRosetteAST(RosetteAST)
+    print("self.RoseValToLLVMType of Retun value:")
+    print(self.RoseValToLLVMType[RetValue])
+    LLVMRetType = self.RoseValToLLVMType[RetValue]
     # Generate a Rosette function
     Function = RoseFunction.create(self.FunctionName, self.Params, RetValue.getType())
     # Add the lifted ops to the function
@@ -44,10 +46,11 @@ class RosetteLifter:
     RetOp = RoseReturnOp.create(RetValue)
     Function.addAbstraction(RetOp)
     Function.setRetValName(RetValue.getName())
+    self.RoseValToLLVMType[Function.getReturnValue()] = LLVMRetType
     Function.print()
     # Build the Rose LLVM context
     RoseLLVMCtx = RoseLLVMContext.create()
-    for OpTypeInfo in self.OpToLLVMType.items():
+    for OpTypeInfo in self.RoseValToLLVMType.items():
       RoseLLVMCtx.setLLVMTypeFor(OpTypeInfo[0], OpTypeInfo[1])
     return Function, RoseLLVMCtx
 
@@ -147,7 +150,7 @@ class RosetteLifter:
         print(RosetteAST[1])
         NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
         self.Params[RosetteAST[1]] = NewArg
-        self.OpToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+        self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
         return NewArg
       elif RosetteAST[0] in InstMap:
         Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
@@ -167,7 +170,7 @@ class RosetteLifter:
         print("CallOp:")
         CallOp.print()
         self.OpList.append(CallOp)
-        self.OpToLLVMType[CallOp] = self.getLLVMType(OutputType[1:])
+        self.RoseValToLLVMType[CallOp] = self.getLLVMType(OutputType[1:])
         return CallOp
   
 
