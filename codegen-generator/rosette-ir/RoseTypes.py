@@ -8,7 +8,10 @@
 from RoseType import RoseType
 from RoseValue import RoseValue
 
-import llvmlite
+from llvmlite.ir.types import IntType as LLVMIntType
+from llvmlite.ir.types import FloatType as LLVMFloatType
+from llvmlite.ir.types import DoubleType as LLVMDoubleType
+from llvmlite.ir.types import VoidType as LLVMVoidType
 
 
 # Sort of placeholder type
@@ -41,7 +44,7 @@ class RoseVoidType(RoseType):
         print("void")
 
     def to_llvm_ir(self):
-      return llvmlite.ir.VoidType()
+      return LLVMVoidType()
 
 
 class RoseBitVectorType(RoseType):
@@ -82,7 +85,7 @@ class RoseBitVectorType(RoseType):
     def to_llvm_ir(self):
         Bitwidth = self.getBitwidth()
         assert type(Bitwidth) == int
-        return llvmlite.ir.IntType(Bitwidth)
+        return LLVMIntType(Bitwidth)
 
 
 class RoseIntegerType(RoseType):
@@ -109,7 +112,7 @@ class RoseIntegerType(RoseType):
         print("int" + str(self.getBitwidth()))
   
     def to_llvm_ir(self):
-        return llvmlite.ir.IntType(self.getType().getBitwidth())
+        return LLVMIntType(self.getBitwidth())
 
 
 class RoseBooleanType(RoseType):
@@ -130,7 +133,7 @@ class RoseBooleanType(RoseType):
         print("bool")
 
     def to_llvm_ir(self):
-      return llvmlite.ir.IntType(self.getType().getBitwidth())
+      return LLVMIntType(self.getBitwidth())
   
 
 class RoseStringType(RoseType):
@@ -216,7 +219,7 @@ class RoseFloatType(RoseGenericFloatType):
         print("float")
 
     def to_llvm_ir(self):
-      return llvmlite.ir.FloatType()
+      return LLVMFloatType()
 
 
 class RoseDoubleType(RoseGenericFloatType):
@@ -233,7 +236,7 @@ class RoseDoubleType(RoseGenericFloatType):
         print("double")
 
     def to_llvm_ir(self):
-      return llvmlite.ir.DoubleType()
+      return LLVMDoubleType()
 
 
 class RoseVectorType(RoseType):
@@ -337,5 +340,4 @@ if __name__ == '__main__':
     print(BVType)
 
  
-
 
