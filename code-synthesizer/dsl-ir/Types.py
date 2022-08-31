@@ -99,10 +99,13 @@ class ConstBitVector(OperandType):
 
 class LaneSize(OperandType):
 
-    def __init__(self, name, value = None):
+    def __init__(self, name, value = None, input_precision = False,
+                 output_precision = False):
 
         self.name = name
         self.value = value
+        self.input_precision = input_precision
+        self.output_precision = output_precision
         super().__init__(OperandType.OperandTypeEnum.LaneSize)
 
 

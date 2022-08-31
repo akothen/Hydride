@@ -43,7 +43,7 @@
    v
    )
   (define printed-map (hash-map id-map print-helper))
-  (hydride-printer sol)
+  (displayln (hydride-printer sol))
   
   )
 
@@ -55,7 +55,8 @@
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
   (displayln "Synthesis completed:")
-  (pretty-print synthesized-sol)
+  ;;(pretty-print synthesized-sol)
+  (pretty-print id-map)
   (displayln "========================================")
   synthesized-sol
 
@@ -151,7 +152,7 @@
                   (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 50)
+                  (define cost-bound 30)
                   (define solver 'z3)
 
                   (clear-vc!)

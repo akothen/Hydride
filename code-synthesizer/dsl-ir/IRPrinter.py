@@ -17,7 +17,7 @@ class IRPrinter:
         defaults.append("[(idx-j id) (string-append \"(idx-j \" (~s id) \")\\n\")]")
         defaults.append("[(reg id) (string-append  \"(reg \" (~s id) \")\\n\")]")
 
-        defaults.append("[(lit v) (string-append  \"(lit \" (~s v) \")\\n\")]")
+        defaults.append("[(lit v) (string-append  \"(lit \" (~s v) \")\")]")
 
         defaults.append("[(nop v1) (string-append \"(nop \" ({} v1) \")\\n\")]".format( self.printer_name))
         defaults.append("[(idx-add i1 i2) (string-append \"(idx-add \" (~s i1) (~s i2) \")\\n\" )]")
@@ -50,8 +50,40 @@ class IRPrinter:
         str_expr = "(string-append \"({} \" ".format(dsl_inst.get_dsl_name())
         ir_args = dsl_inst.get_sample_context().context_args
 
+        input_prec_arg = None
+
+
+        # Identify argument corresponding to input precision
         for ir_arg in ir_args:
-            str_expr += "({} {}) \" \" ".format(self.printer_name, ir_arg.name)
+            if isinstance(ir_arg, Precision) and ir_arg.input_precision:
+                input_prec_arg = ir_arg
+                break
+
+            if isinstance(ir_arg, LaneSize) and ir_arg.input_precision:
+                input_prec_arg = ir_arg
+                break
+
+
+        #assert input_prec_arg != None, "DSL Inst must contain input precision argument "+dsl_inst.name
+
+        for ir_arg in ir_args:
+            # Literals don't have any precision information generated during synthesis, hence we use
+            # the user of the literals value to identify its type information.
+
+            lit_typeinfo = ""
+
+            # Fallback to default printer
+            # as DSL inst provides no precision information
+            if input_prec_arg == None:
+                lit_typeinfo = "({} {})".format(self.printer_name, ir_arg.name)
+            else:
+                lit_typeinfo = "(begin (define num_elem (/ (get-length {} (vector 0)) {})) ".format(ir_arg.name, input_prec_arg.name)
+                lit_typeinfo += "(string-append ({} {}) \" ; \" \"<\" {} \" x i\" {} \">\" \"\\n\" )".format(self.printer_name, ir_arg.name, "(~s num_elem)", "(~s " + input_prec_arg.name +")")
+                lit_typeinfo += ")"
+
+
+            conditional_printer = "(if (lit? {}) {} ({} {})) \" \"".format(ir_arg.name, lit_typeinfo, self.printer_name, ir_arg.name)
+            str_expr += "{} \" \" ".format(conditional_printer)
 
         str_expr += "\")\")"
 

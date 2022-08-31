@@ -180,7 +180,9 @@ class Context:
 
             elif idx == self.lanesize_index:
                 lane_size = int(arg)
-                context_arg = LaneSize("lane_size", value =  lane_size)
+                is_in = (idx == self.in_precision_index)
+                is_out = (idx == self.out_precision_index)
+                context_arg = LaneSize("lane_size", value =  lane_size, input_precision = is_in, output_precision = is_out)
             elif idx == self.in_precision_index or  idx == self.out_precision_index:
                 precision_value = int(arg)
 

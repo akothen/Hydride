@@ -4,6 +4,7 @@ from PredefinedDSL import *
 import random
 
 DEBUG = False
+USE_BW_ALGO = False
 
 class Synthesizer:
 
@@ -82,11 +83,11 @@ class Synthesizer:
 
 
     def get_memory_shuffles(self):
-        load_factors = [1.0, 1.5]
+        load_factors = [1.0]
         group_factors = [0.25, 0.5]#, 1.0]
         lane_offsets_factors = [0] #[0, "IDX_J"]
         dis_factors = [1]
-        rotate_factors =  [0]
+        rotate_factors = [0]
 
 
         input_vector_sizes = []
@@ -100,9 +101,17 @@ class Synthesizer:
 
 
 
+        skip_sizes = []
 
         for lf in load_factors:
             for idx ,input_size in enumerate(self.input_sizes):
+                datum = (input_size, self.spec.input_precision[idx])
+
+                if datum in skip_sizes:
+                    continue
+                else:
+                    skip_sizes.append(datum)
+
                 for gf in group_factors:
                     for lo in lane_offsets_factors:
                         for d in dis_factors:
@@ -182,10 +191,10 @@ class Synthesizer:
 
             ## Including bitwise operations such as bitwise 'or',  'not', 'neg' & 'and'
             ## may enable more novel arithemetic results
-            if False and self.consider_bitwise_heuristic(dsl_inst):
-                print("BITWISE OPERATIONS INCLUDED")
-                operator_contexts = self.get_supported_bitwise_context_for_dsl(dsl_inst, limit = self.contexts_per_dsl_inst)
-                print("#bitwise contexts: ", len(operator_contexts))
+            if  USE_BW_ALGO and  self.consider_bitwise_heuristic(dsl_inst):
+                #print("BITWISE OPERATIONS INCLUDED")
+                operator_contexts = self.get_supported_bitwise_context_for_dsl(dsl_inst, limit = 1) # All elementwise operations of same total length are equivlanet
+                #print("#bitwise contexts: ", len(operator_contexts))
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx.context_args for ctx in operator_contexts]
 
@@ -471,7 +480,7 @@ class Synthesizer:
 
             # Either can process the input or can produce output shape
             new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-            if new_condition:
+            if old_condition:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -548,13 +557,20 @@ class Synthesizer:
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
             new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-            return new_condition
+            return old_condition #new_condition
 
 
     def consider_bitwise_heuristic(self, dsl_inst):
 
         dsl_ops = dsl_inst.get_semantics_ops_list()
         bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg"]
+
+        # Ignore masked operations
+        exclude_ops  = ["if"]
+
+        for op in dsl_ops:
+            if op in exclude_ops:
+                return False
 
         for op in dsl_ops:
             if op in bitwise_logical_ops:
