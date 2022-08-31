@@ -10,8 +10,11 @@ from RoseValue import RoseValue
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
 import RoseAbstractions 
+from RoseLLVMContext import *
 
-import llvmlite
+from llvmlite.ir.values import Undefined as LLVMUndefined
+from llvmlite.ir.values import  Constant as LLVMConstant
+from llvmlite.ir.types import VectorType as LLVMVectorType
 
 
 class RoseUndefValue(RoseValue):
@@ -27,8 +30,8 @@ class RoseUndefValue(RoseValue):
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     NotImplemented
 
-  def to_llvm_ir(self, IRBuilder = None):
-    return llvmlite.ir.Undefined()
+  def to_llvm_ir(self, Context : RoseLLVMContext = None):
+    return LLVMUndefined
 
   def print(self):
     print(self.getName())
@@ -102,9 +105,46 @@ class RoseConstant(RoseValue):
       return self.Val
     return str(self.Val)
 
-  def to_llvm_ir(self, IRBuilder = None):
+  def to_llvm_ir(self, Context : RoseLLVMContext = None):
     assert not isinstance(self.getType(), RoseStringType)
-    return llvmlite.ir.Constant(self.getType().to_llvm_ir(), self.getValue())
+    if Context != None:
+      # If this constant is a bitvector, then we may have element type
+      # and number of elements.
+      LLVMType = Context.getLLVMTypeFor(self)
+      if LLVMType != None:
+        if isinstance(LLVMType, LLVMVectorType):
+          # Now let's convert the constant value to hex
+          HexVal = hex(self.getValue())
+          HexValStr = str(HexVal)
+          NumElem = LLVMType.count
+          Precision = LLVMType.element
+          ElemBitwidth = Precision.width
+          print("--HexValStr:")
+          print(HexValStr)
+          Diff = (ElemBitwidth * NumElem) - (4 * len(HexValStr[2:]))
+          if Diff != 0:
+            Zeros = ""
+            for _ in range(int(Diff / 4)):
+              Zeros += "0"
+            HexValStr = HexValStr[:2] + Zeros + HexValStr[2:]
+          print("HexValStr:")
+          print(HexValStr)
+          ElemList = list()
+          HexValStr = HexValStr[2:]
+          print("NumElem:")
+          print(NumElem)
+          for Idx in range(NumElem):
+            Index = Idx * int(ElemBitwidth / 4)
+            ElemStr = HexValStr[Index : (Index + int(ElemBitwidth / 4))]
+            ElemStr = "0x" + ElemStr
+            print("ElemStr:")
+            print(ElemStr)
+            print(int(ElemStr, 16))
+            ElemList.append(int(ElemStr, 16))
+          return LLVMConstant(LLVMType, ElemList)
+        else:
+          return LLVMConstant(LLVMType, self.getValue())
+    return LLVMConstant(self.getType().to_llvm_ir(), self.getValue())
 
   def print(self):
     print(self.Val)
