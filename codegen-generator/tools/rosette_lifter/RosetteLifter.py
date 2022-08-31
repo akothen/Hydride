@@ -25,6 +25,7 @@ class RosetteLifter:
     self.OpList = list()
     self.ParamToType = dict()
     self.Params = list()
+    self.NameToRoseVal = dict()
   
   def genUniqueID(self):
     self.ID += 1
@@ -143,15 +144,20 @@ class RosetteLifter:
         if RosetteAST[1] in self.Params: 
           return self.Params[RosetteAST[1]]
         ParamName = "%" + RosetteAST[0] + str(RosetteAST[1])
-        ParamType = self.getRoseType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
-        print("type(RosetteAST[1]):")
-        print(type(RosetteAST[1]))
-        print("RosetteAST[1]:")
-        print(RosetteAST[1])
-        NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
-        self.Params[RosetteAST[1]] = NewArg
-        self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
-        return NewArg
+        if ParamName in self.NameToRoseVal:
+          return self.NameToRoseVal[ParamName]
+        else:
+          ParamType = self.getRoseType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+          print("type(RosetteAST[1]):")
+          print(type(RosetteAST[1]))
+          print("RosetteAST[1]:")
+          print(RosetteAST[1])
+          print("CREATING ARGUMENT")
+          NewArg = RoseArgument.create(ParamName, ParamType, RoseUndefValue())
+          self.Params[RosetteAST[1]] = NewArg
+          self.RoseValToLLVMType[NewArg] = self.getLLVMType(self.ParamToType[RosetteAST[0] + str(RosetteAST[1])])
+          self.NameToRoseVal[NewArg.getName()] = NewArg
+          return NewArg
       elif RosetteAST[0] in InstMap:
         Args = list(map(self.liftRosetteAST, RosetteAST[1:]))
         Op = InstMap[RosetteAST[0]].create("%" + str(self.genUniqueID()), Args)
