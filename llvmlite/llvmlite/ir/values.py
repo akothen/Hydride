@@ -566,7 +566,7 @@ class NamedValue(_StrCaching, _StringReferenceCaching, Value):
         # Quote and escape value name
         if '\\' in name or '"' in name:
             name = name.replace('\\', '\\5c').replace('"', '\\22')
-        return '{0}"{1}"'.format(self.name_prefix, name)
+        return '{0}{1}'.format(self.name_prefix, name)
 
     def __repr__(self):
         return "<ir.%s %r of type '%s'>" % (
@@ -937,7 +937,7 @@ class Function(GlobalValue):
         self.scope = _utils.NameScope()
         self.blocks = []
         self.attributes = FunctionAttributes()
-        self.args = tuple([Argument(self, t)
+        self.args = tuple([Argument(self, t, "arg")
                            for t in ftype.args])
         self.return_value = ReturnValue(self, ftype.return_type)
         self.parent.add_global(self)
