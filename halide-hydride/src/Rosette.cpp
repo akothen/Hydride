@@ -618,7 +618,7 @@ namespace Halide {
                             return tabs() + "(" + op->name + " " + rkt_idx + ")";
                         else if (op->type.is_scalar()){
                             std::string cpp_type = type_to_rake_type(op->type, false, true);
-                            return tabs() + "(" + cpp_type + " (bv 3 (bitvector "+ std::to_string(op->type.bits())+"))"+")";
+                            return tabs() +   " (?? (bitvector "+ std::to_string(op->type.bits())+")"+")";
                             //return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
                             }
                         else{
@@ -1271,7 +1271,10 @@ namespace Halide {
 
 
 
-                            Expr call_expr = ExtractIntoCall().generate_call("hydride.node.1", final_expr);
+                            std::string fn_name = "hydride.node." + std::to_string(expr_id);
+                            Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr);
+
+                            expr_id++;
 
 
                             // Register that this node has been optimzied
@@ -1422,7 +1425,7 @@ namespace Halide {
                                 vec_lens.push_back(1024);
                                 break;
                             case Architecture::X86:
-                                debug(0) << "Abstraction vector sizes for X86 "<<"\n";
+                                debug(1) << "Abstraction vector sizes for X86 "<<"\n";
                                 // Push in vector register sizes in descending order
                                 vec_lens.push_back(1024);
                                 vec_lens.push_back(512);
@@ -1434,12 +1437,12 @@ namespace Halide {
 
                         bool supported = false;
                         for(int vec_len : vec_lens){
-                            debug(0) << "Testing for vector length: "<<vec_len <<"\n";
+                            debug(1) << "Testing for vector length: "<<vec_len <<"\n";
                             if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
                             } else {
-                                debug(0) << "True!"<<"\n";
-                                debug(0) << "v.bits(): "<<v.type().bits() << "\n";
-                                debug(0) << "v.lanes(): "<<v.type().lanes() << "\n";
+                                debug(1) << "True!"<<"\n";
+                                debug(1) << "v.bits(): "<<v.type().bits() << "\n";
+                                debug(1) << "v.lanes(): "<<v.type().lanes() << "\n";
                                 supported = true;
                             }
 
@@ -1467,17 +1470,30 @@ namespace Halide {
 
                     public:
 
+
+                    // Populate a std::vector with Halide expressions  correpsonding to load instructions
+                    // and Variable instructions. The index into the vector is determined by the
+                    // unsigned value attached to each argument type.
                     void get_call_args(const Expr &x, std::vector<Expr>& args){
 
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             const Load* op = bi->first;
-
-                            args.push_back(Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment));
+                            unsigned idx = bi->second;
+                            args[idx] = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment);
                         }
+
+                        for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
+                            const Variable* op = bi->first;
+                            unsigned idx = bi->second;
+                            args[idx] = Variable::make(op->type, op->name, op->image, op->param, op->reduction_domain);
+                        }
+
                     }
 
                     Expr generate_call(std::string function_name, const Expr &x){
-                        std::vector<Expr> args;
+                        size_t num_arguments = LoadToRegMap.size() + VariableToRegMap.size();
+                        std::vector<Expr> args(num_arguments);
+
 
                         get_call_args(x, args);
 
@@ -1703,7 +1719,7 @@ namespace Halide {
                     std::string emit_racket_debug(){
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
-                            (enable-debug)\n"; 
+                            ;(enable-debug)\n"; 
                     }
 
                     std::string emit_set_current_bitwidth(size_t bw){
@@ -1793,7 +1809,7 @@ namespace Halide {
 
                 rkt << "(clear-vc!)" << "\n";
                 rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes(), /* Hash map name */  "id-map") << ")" <<"\n";
-                rkt << "(pretty-print synth-res)"<<"\n";
+                rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
 
                 rkt.close();
 
@@ -1804,7 +1820,6 @@ namespace Halide {
                 
 
 
-                expr_id++;
                 SkipNodes.clear();
 
                 return spec_expr;

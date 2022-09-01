@@ -218,9 +218,9 @@ class Synthesizer:
         lit_holes = self.get_lit_holes(use_lit_holes, bitvector_sizes)
 
         print("="*50)
-        print("Number of Load DSL Instructions:\t",len(memory_dsl_args_list)+len(lit_holes) + len(top_level_grammar_args))
-        print("Number of Shuffle DSL Instructions:\t",len(memory_shuffle_args_list))
-        print("Number of DSL Compute Instructions:\t",len(operation_dsl_args_list))
+        print("Grammar Number of Load DSL Clauses:\t",len(memory_dsl_args_list)+len(lit_holes) + len(top_level_grammar_args))
+        print("Grammar Number of Shuffle DSL Clauses:\t",len(memory_shuffle_args_list))
+        print("Grammar Number of DSL Compute Clauses:\t",len(operation_dsl_args_list))
 
 
         return self.grammar_generator.emit_grammar(
