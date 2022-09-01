@@ -17,10 +17,8 @@ from llvmlite.ir.types import IntType as LLVMIntType
 
 
 class RosetteLifter:
-  def __init__(self, FunctionName : str, FunctionBody : str):
+  def __init__(self):
     self.ID = -1
-    self.FunctionName = FunctionName
-    self.FunctionBody = FunctionBody
     self.RoseValToLLVMType = dict()
     self.OpList = list()
     self.ParamToType = dict()
@@ -31,15 +29,15 @@ class RosetteLifter:
     self.ID += 1
     return self.ID
 
-  def lift(self):
+  def lift(self, FunctionName : str, RosetteCode : str):
     # Parse the Roseete file to get an AST
-    RosetteAST = RosetteParser.parse(self.FunctionBody)
+    RosetteAST = RosetteParser.parse(RosetteCode)
     RetValue = self.liftRosetteAST(RosetteAST)
     print("self.RoseValToLLVMType of Retun value:")
     print(self.RoseValToLLVMType[RetValue])
     LLVMRetType = self.RoseValToLLVMType[RetValue]
     # Generate a Rosette function
-    Function = RoseFunction.create(self.FunctionName, self.Params, RetValue.getType())
+    Function = RoseFunction.create(FunctionName, self.Params, RetValue.getType())
     # Add the lifted ops to the function
     for Op in self.OpList:
       Function.addAbstraction(Op)
@@ -185,20 +183,17 @@ class RosetteLifter:
   
 
 
-def LiftRosetteCodeFrom(RosetteFileName : str, FunctionName : str):
+if __name__ == '__main__':
+  RosetteFileName = "test.rkt"
+  FunctionName = "kernel"
   RosetteFile = open(RosetteFileName, "r")
   RosetteFunctionBody = list()
   Line = RosetteFile.readline()
   while Line != "":
     RosetteFunctionBody.append(Line)
     Line = RosetteFile.readline()
-  Lifter = RosetteLifter(FunctionName, RosetteFunctionBody)
-  return Lifter.lift()
+  Lifter = RosetteLifter()
+  Lifter.lift(FunctionName, RosetteFunctionBody)
 
 
-
-if __name__ == '__main__':
-  RosetteFileName = "test.rkt"
-  FunctionName = "kernel"
-  LiftRosetteCodeFrom(RosetteFileName, FunctionName)
 
