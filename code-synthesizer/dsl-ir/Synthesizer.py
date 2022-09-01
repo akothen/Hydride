@@ -480,7 +480,7 @@ class Synthesizer:
 
             # Either can process the input or can produce output shape
             new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-            if old_condition:
+            if new_condition:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -557,7 +557,7 @@ class Synthesizer:
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
             new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-            return old_condition #new_condition
+            return new_condition #new_condition
 
 
     def consider_bitwise_heuristic(self, dsl_inst):

@@ -223,20 +223,20 @@ namespace Halide {
 
                     std::string visit(const IntImm *op) {
 
+                        std::string reg_name = "(int-imm (bv "+ std::to_string(op->value)+" "+ std::to_string(op->type.bits())+")"+" #t)";
 
                         if (mode.top() == VarEncoding::Bitvector)
-                            return tabs() + " (bv " +
-                                std::to_string(op->value) + " " + std::to_string(op->type.bits()) + ")";
+                            return tabs() + reg_name; 
                         else
                             return tabs() + std::to_string(op->value);
                     }
 
                     std::string visit(const UIntImm *op) {
 
+                        std::string reg_name = "(int-imm (bv "+ std::to_string(op->value)+" "+ std::to_string(op->type.bits())+")"+" #f)";
 
                         if (mode.top() == VarEncoding::Bitvector)
-                            return tabs() + " (bv " +
-                                std::to_string(op->value) + " " + std::to_string(op->type.bits()) + ")";
+                            return tabs() + reg_name;                        
                         else
                             return tabs() + std::to_string(op->value);
                     }
@@ -617,8 +617,15 @@ namespace Halide {
                         if (op->type.is_scalar() && mode.top() == VarEncoding::Integer)
                             return tabs() + "(" + op->name + " " + rkt_idx + ")";
                         else if (op->type.is_scalar()){
-                            std::string cpp_type = type_to_rake_type(op->type, false, true);
-                            return tabs() +   " (?? (bitvector "+ std::to_string(op->type.bits())+")"+")";
+                            //std::string cpp_type = type_to_rake_type(op->type, false, true);
+
+                            std::string bits = std::to_string(op->type.bits() * 1);
+                            unsigned reg_counter = RegToLoadMap.size() + RegToVariableMap.size();
+                            std::string reg_name = "reg_"+std::to_string(reg_counter);
+                            RegToLoadMap[reg_counter] = op;
+                            LoadToRegMap[op] = reg_counter;
+                            std::string load_buff = define_load_buffer(op);
+                            return tabs() +   reg_name; //" (?? (bitvector "+ std::to_string(op->type.bits())+")"+")";
                             //return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
                             }
                         else{

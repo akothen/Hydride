@@ -87,41 +87,6 @@
                (debug-log halide-expr)
                (reg (hash-ref! id-map halide-expr -1)) ;; have a map to use accurate reg number
                ]
-              [(x32 sca)
-               (debug-log "synth-base case x32 scalar")
-               (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))
-               (debug-log "Synthesizing sub-expression")
-               (debug-log halide-expr)
-               (debug-log "Leaves are bitvectors of sizes:")
-               (debug-log expr-sizes)
-               ;; perform synthesis using expr sizes
-               (define broadcasted-val (apply concat (for/list ([i (range 32)]) sca)))
-               (lit broadcasted-val)
-               ]
-
-              [(x16 sca)
-               (debug-log "synth-base case x16 scalar")
-               (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))
-               (debug-log "Synthesizing sub-expression")
-               (debug-log halide-expr)
-               (debug-log "Leaves are bitvectors of sizes:")
-               (debug-log expr-sizes)
-               ;; perform synthesis using expr sizes
-               (define broadcasted-val (apply concat (for/list ([i (range 16)]) sca)))
-               (lit broadcasted-val)
-               ]
-
-              [(x8 sca)
-               (debug-log "synth-base case x8 scalar")
-               (define expr-sizes (halide:get-expr-bv-sizes (list halide-expr)))
-               (debug-log "Synthesizing sub-expression")
-               (debug-log halide-expr)
-               (debug-log "Leaves are bitvectors of sizes:")
-               (debug-log expr-sizes)
-               ;; perform synthesis using expr sizes
-               (define broadcasted-val (apply concat (for/list ([i (range 8)]) sca)))
-               (lit broadcasted-val)
-               ]
               [_ 
                 (begin
 
@@ -143,6 +108,7 @@
                   (define (invoke-spec env)
                     (define synth-buffers (halide:create-buffers leaves env))
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
+
 
                     (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) VF))
                     _result
@@ -182,14 +148,14 @@
 
 
                   (define synthesized-leaves 
-                    (if 
-                      (halide:is-broadcast expr-extract)
-                      (list )
+                    ;(if 
+                     ; (halide:is-broadcast expr-extract)
+                     ; (list )
 
                       (for/list  ([leaf leaves])
                                  (synthesize-halide-expr-step leaf expr-depth VF id-map)
                                  )
-                      )
+                      ;)
                     )
                   (bind-expr materialize (list->vector synthesized-leaves))
                   )]

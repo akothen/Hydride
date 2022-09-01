@@ -55,6 +55,7 @@
     [(ramp base stride len) len]
     [(load buf idxs alignment) (vec-len idxs)]
     [(load-sca buf idx) 1]
+    [(int-imm data signed?) 1]
     [(buffer data elemT buffsize) (/ buffsize (intr-elemT-size elemT)) ]
 
     ;; Type Casts
@@ -178,17 +179,18 @@
 (define (sub-exprs expr)
   (destruct expr
     ;; Constructors
-    [(x8 sca) (list )]
-    [(x16 sca) (list )]
-    [(x32 sca) (list )]
-    [(x64 sca) (list )]
-    [(x128 sca) (list )]
-    [(x256 sca) (list )]
-    [(x512 sca) (list )]
+    [(x8 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x16 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x32 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x64 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x128 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x256 sca) (if (int-imm? sca) (list ) (list sca))]
+    [(x512 sca) (if (int-imm? sca) (list ) (list sca))]
 
     [(ramp base stride len) (list)]
     [(load buf idxs alignment) (list buf)]
     [(load-sca buf idx) (list)]
+    [(int-imm data signed?) (list)]
     [(buffer data elemT buffsize) (list expr)]
 
     ;; Type Casts
@@ -314,13 +316,13 @@
     [(var-lookup var val) (interpret val)]
     
     ;; Constructors
-    [(x8 sca) (lambda (i) (interpret sca))]
-    [(x16 sca) (lambda (i) (interpret sca))]
-    [(x32 sca) (lambda (i) (interpret sca))]
-    [(x64 sca) (lambda (i) (interpret sca))]
-    [(x128 sca) (lambda (i) (interpret sca))]
-    [(x256 sca) (lambda (i) (interpret sca))]
-    [(x512 sca) (lambda (i) (interpret sca))]
+    [(x8 sca) (lambda (i) ((interpret sca) 0))]
+    [(x16 sca) (lambda (i) ((interpret sca) 0))]
+    [(x32 sca) (lambda (i) ((interpret sca) 0))]
+    [(x64 sca) (lambda (i) ((interpret sca) 0))]
+    [(x128 sca) (lambda (i) ((interpret sca) 0))]
+    [(x256 sca) (lambda (i) ((interpret sca) 0))]
+    [(x512 sca) (lambda (i) ((interpret sca) 0))]
 
     [(ramp base stride len)
      (define intr-base (interpret base))
@@ -339,6 +341,7 @@
            (cpp:type intr-base)))])]
 
     [(load buf idxs alignment) (lambda (i) (buffer-ref (interpret buf) ((interpret idxs) i)))]
+    [(int-imm data signed?) (lambda (i) data)]
     [(buffer data elemT buffsize) (lambda (i) (buffer-ref p  i))]
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
@@ -522,6 +525,7 @@
      ]
 
     [(load buf idxs alignment) empty-list]
+    [(int-imm data signed?) empty-list]
     [(buffer data elemT buffsize) empty-list]
     [(load-sca buf idx) empty-list]
 
