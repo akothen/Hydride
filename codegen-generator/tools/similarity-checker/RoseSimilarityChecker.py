@@ -14,9 +14,11 @@ from RoseToolsUtils import *
 from RoseEquivalenceClass import *
 from RoseSimilarityCheckerUtilities import *
 from RoseSimilarityCheckerSummaryGen import *
+from RoseValidityChecker import *
 from RoseLLVMIntrinsicsGen import *
 from RoseIRToLLVMMappingGen import *
 from RoseTargetInfo import *
+
 
 
 class RoseSimilarityChecker():
@@ -42,7 +44,13 @@ class RoseSimilarityChecker():
       # Generate code for all semantics first
       CodeGenerator = RoseCodeGenerator(TargetName)
       FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=True)
-      self.FunctionInfoList.extend(FunctionInfoList)
+      # Check the validity of a functioninfo
+      Checker = RoseValidityChecker(TargetName)
+      ValidFunctionInfoList = list()
+      for FunctionInfo in FunctionInfoList:
+        if Checker.isValid(FunctionInfo):
+          ValidFunctionInfoList.append(FunctionInfo)
+      self.FunctionInfoList.extend(ValidFunctionInfoList)
       # Generate rosette code
       for FunctionInfo in FunctionInfoList:
         Function = FunctionInfo.getLatestFunction()
@@ -167,7 +175,7 @@ class RoseSimilarityChecker():
       Output, Err = RunCommand("racket {}".format(FileName))
       RunCommand("killall z3")
       RunCommand("killall racket")
-      RunCommand("rm {}".format(FileName))
+      #RunCommand("rm {}".format(FileName))
       print("Output:")
       print(Output)
       print("Err:")
@@ -602,7 +610,8 @@ class RoseSimilarityChecker():
 
 
 if __name__ == '__main__':
-  SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
-  #SimilarityChecker = RoseSimilarityChecker(["x86"])
+  #SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
+  SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.fastest_run() #parallel_run()
+
 
