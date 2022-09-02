@@ -262,26 +262,24 @@ class CCodeEmitter(RoseCodeEmitter):
     ExecName = TestDirName + "/" + self.getExecutableName()
     SOut, SErr = self.run("clang -O0 -march=native -mavx512vl -mavx512ifma {} -o {}"\
                             .format(TestName, ExecName))
-    if SErr != "":
-        print(SErr)
-        return SOut, SErr
-    return None, None
+    return SOut, SErr
 
   def execute(self, TestDirName : str):
     return self.run(TestDirName + "/" + self.getExecutableName())
   
   def handleError(self, TestDirName : str, CErr):
+    if self.isErrorFatal(CErr):
+      File = open(TestDirName + "/error_log", "a")
+      File.write(CErr + "\n")
+      File.close()
+
+  def isErrorFatal(self, CErr):
     if isinstance(CErr, str):
       if "error" in CErr:
-        if ("error: call to undeclared function" in CErr \
-          and "ISO C99 and later do not support implicit function declarations" in CErr):
-          #or "avx512ifma" in CErr:
-          File = open(TestDirName + "/error_log", "a")
-          File.write(CErr + "\n")
-          File.close()
-        else:
-          # Terminate the whole damn thing.
-          exit(-1)
+        #if ("error: call to undeclared function" in CErr \
+          #and "ISO C99 and later do not support implicit function declarations" in CErr):
+        return True
+    return False
 
   def extractAndFormatOutput(self, Output):
     return "0x" + Output
@@ -293,4 +291,5 @@ if __name__ == '__main__':
   FunctionInfoList = CodeGenerator.codeGen()
   CEmitter = CCodeEmitter(FunctionInfoList[0])
   CEmitter.test("test")
+
 

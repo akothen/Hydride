@@ -23,7 +23,7 @@ class RosetteCodeEmitter(RoseCodeEmitter):
     Content = [
       "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
       "(require racket/pretty)", "(require rosette/solver/smt/boolector)",
-      "(require \"RosetteOpsImpl.rkt\")\n"
+      "(require \"../RosetteOpsImpl.rkt\")\n"
     ]
 
     def GenerateInputs(Index, Param, ConcArgs):
@@ -90,11 +90,20 @@ class RosetteCodeEmitter(RoseCodeEmitter):
       return None, None
 
   def execute(self, DirName : str):
-    return self.run("racket {}".format(self.getTestName()))
+    return self.run("racket {}/{}".format(DirName, self.getTestName()))
   
-  def handleError(self, DirName : str, Err : str):
-    pass
-  
+  def handleError(self, TestDirName : str, Err : str):
+    if self.isErrorFatal(Err):
+      File = open(TestDirName + "/error_log", "a")
+      File.write(Err + "\n")
+      File.close()
+
+  def isErrorFatal(self, Err):
+    if isinstance(Err, str):
+      if "context.." in Err:
+        return True
+    return False
+
   def extractAndFormatOutput(self, Output):
     Start = Output.find("#x")
     String = Output[Start:]
@@ -110,6 +119,7 @@ if __name__ == '__main__':
   FunctionInfoList = CodeGenerator.codeGen()
   RoseEmitter = RosetteCodeEmitter(FunctionInfoList[0])
   RoseEmitter.test("test")
+
 
 
 

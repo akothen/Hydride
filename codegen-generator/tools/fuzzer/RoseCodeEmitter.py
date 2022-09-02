@@ -67,7 +67,10 @@ class RoseCodeEmitter():
   def execute(self, TestDirName : str):
     NotImplemented
 
-  def handleError(self, TestDir : str, Error : str):
+  def handleError(self, TestDir : str, Error):
+    NotImplemented
+
+  def isErrorFatal(self, Error):
     NotImplemented
 
   def createTest(self, TestDir : str, ConcArgs : list):
@@ -91,6 +94,7 @@ class RoseCodeEmitter():
 
   def extractAndFormatOutput(self):
     NotImplemented
+
 
 
 
