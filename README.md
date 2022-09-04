@@ -1,6 +1,6 @@
 # Hydride
 
-Hydride is a retargetable synthesis-based compiler for modern tensor architectures.
+Hydride is a retargetable synthesis-based compiler for modern hardware architectures.
 
 Hydride has two major components:
 - CodeGen Generator - It is responsible for automatically generating target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
@@ -11,10 +11,6 @@ Hydride has two major components:
 ### Python
 - Install [Python](https://www.python.org/downloads/) > 3.0.
 
-### Rosette
-- Install [Racket](https://github.com/racket/racket) > 8.0.
-- Install [Rosette](https://docs.racket-lang.org/rosette-guide/index.html) by running `raco pkg install rosette`.
-
 ### Z3
 - Install [z3](https://github.com/Z3Prover/z3):
     - MacOS: `brew install z3`
@@ -24,14 +20,11 @@ Hydride has two major components:
 - Install [LLVM](https://github.com/llvm/llvm-project.git):
     - Source: `git clone -b release/13.x https://github.com/llvm/llvm-project.git`
 
-### Llvmlite
-- Install [llvmlite](https://llvmlite.readthedocs.io/en/latest/index.html):
-    - Install by running `pip install llvmlite`
-
 ## Directory Structure (WIP)
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
-- `codegen-generator` contains the custom compiler to generate target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
-- `rosette` tracks all the changes made to Rosette to synthesize code for Hydride.
+- `codegen-generator` contains the custom compiler to generate target-agnostic semantics for target ISAs in Rosette for synthesis, LLVM IR extensions and legalization code for generating low-level code executable on a given supported target.
+- `rosette` is the modified version of Rosette necessary for Hydride.
+- `llvmlite` is the modified version of llvmlite necessary for Hydride.
 - `halide-hydride` is the modified version of Halide. Modifications to Halide required to integrate Hydride with Halide.
 - `benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions. It also contains Halide basline kernels.
 
