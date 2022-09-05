@@ -940,6 +940,16 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           UnknownVal.add(Operand)
       continue
 
+    if isinstance(Op, RoseBVPadHighBitsOp):
+      # Extract the number of padded bits
+      if isinstance(Op.getOperand(1), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                      Op.getOperand(1).getType()))
+        ArgToConstantValsMap[Arg] = Op.getOperand(1).clone()
+        Op.setOperand(1, Arg)
+      Visited.add(Op)
+      continue
+
     if isinstance(Op, RoseBVExtractSliceOp):
       print("---EXTRACT OP:")
       Op.print()
