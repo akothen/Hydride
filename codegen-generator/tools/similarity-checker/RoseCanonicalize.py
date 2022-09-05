@@ -265,6 +265,14 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   # or there is some control flow (which we do not handle right now.)
   # TODO: Handle cases where control flow exists.
   NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
+  Blocks = Function.getRegionsOfType(RoseBlock, Level=0)
+  for Block in Blocks:
+    print("BLOCK IN FUNCTION:")
+    Block.print()
+  print("NumBlocksAtLevel0:")
+  print(NumBlocksAtLevel0)
+  print("Function:")
+  Function.print()
   assert NumBlocksAtLevel0 == 1
   [Block] = Function.getRegionsOfType(RoseBlock, 0)
 
@@ -469,45 +477,61 @@ def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
                                 InsertValue.getInputBitVector().getType().getBitwidth():
                         print("Op.print():")
                         Op.print()
-                        print("NewInitInstructions:")
-                        for Inst__ in NewInitInstructions:
-                          print(Inst__)
-                          print("^^^^^^^^")
-                          Inst__.print()
+                        #print("NewInitInstructions:")
+                        #for Inst__ in NewInitInstructions:
+                        #  print(Inst__)
+                        #  print("^^^^^^^^")
+                        #  Inst__.print()
                         print("=======================")
-                        assert len(NewInitInstructions) == 0
+                        #assert len(NewInitInstructions) == 0
                         InitInstructions.append(Op)
                         InitInstructions.append(InsertValue)
-                        NewInst = Op.clone()
-                        NewInst.setOperand(0, InsertValue.getInputBitVector())
-                        NewInst.setOperand(2, RoseConstant.create(0, \
-                                          NewInst.getOperand(2).getType()))
-                        NewInst.setOperand(3, \
-                            RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
-                                          NewInst.getOperand(3).getType()))
-                        NewInst.setOperand(4, \
-                            RoseConstant.create(Loop.getEndIndex().getValue(), \
-                                          NewInst.getOperand(3).getType()))
-                        print("NewInst:")
-                        NewInst.print()
-                        NewInitInstructions.append(NewInst)
+                        # Replace the uses of function return value in extract ops with 
+                        # init insert op's insert value.
+                        print("Function.getUsersOf(Function.getReturnValue()):")
+                        print(Function.getUsersOf(Function.getReturnValue()))
+                        for User in Function.getUsersOf(Function.getReturnValue()):
+                          if isinstance(User, RoseBVExtractSliceOp):
+                            assert User.getInputBitVector() == Function.getReturnValue()
+                            User.setOperand(0, InsertValue.getInputBitVector())
+                        #NewInst = Op.clone()
+                        #NewInst.setOperand(0, InsertValue.getInputBitVector())
+                        #NewInst.setOperand(2, RoseConstant.create(0, \
+                        #                  NewInst.getOperand(2).getType()))
+                        #NewInst.setOperand(3, \
+                        #    RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
+                        #                  NewInst.getOperand(3).getType()))
+                        #NewInst.setOperand(4, \
+                        #    RoseConstant.create(Loop.getEndIndex().getValue(), \
+                        #                  NewInst.getOperand(3).getType()))
+                        #print("NewInst:")
+                        #NewInst.print()
+                        #NewInitInstructions.append(NewInst)
                         continue
                 break
             elif isinstance(InsertValue, RoseConstant):
-              assert len( NewInitInstructions) == 0
+              #assert len( NewInitInstructions) == 0
               InitInstructions.append(Op)
-              NewInst = Op.clone()
-              NewInst.setOperand(2, RoseConstant.create(0, \
-                                NewInst.getOperand(2).getType()))
-              NewInst.setOperand(3, \
-                  RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
-                                NewInst.getOperand(3).getType()))
-              NewInst.setOperand(4, \
-                  RoseConstant.create(Loop.getEndIndex().getValue(), \
-                                NewInst.getOperand(3).getType()))
-              print("NewInst:")
-              NewInst.print()
-              NewInitInstructions.append(NewInst)
+              # Replace the uses of function return value in extract ops with 
+              # init insert op's insert value.
+              print("Function.getUsersOf(Function.getReturnValue()):")
+              print(Function.getUsersOf(Function.getReturnValue()))
+              for User in Function.getUsersOf(Function.getReturnValue()):
+                if isinstance(User, RoseBVExtractSliceOp):
+                  assert User.getInputBitVector() == Function.getReturnValue()
+                  User.setOperand(0, Op.getInsertValue())
+              #NewInst = Op.clone()
+              #NewInst.setOperand(2, RoseConstant.create(0, \
+              #                  NewInst.getOperand(2).getType()))
+              #NewInst.setOperand(3, \
+              #    RoseConstant.create(Loop.getEndIndex().getValue() - 1, \
+              #                  NewInst.getOperand(3).getType()))
+              #NewInst.setOperand(4, \
+              #    RoseConstant.create(Loop.getEndIndex().getValue(), \
+              #                  NewInst.getOperand(3).getType()))
+              #print("NewInst:")
+              #NewInst.print()
+              #NewInitInstructions.append(NewInst)
               continue
             break
           else:
@@ -527,7 +551,7 @@ def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
   print(NewInitInstructions)
   print("AccumulationPatterFound:")
   print(AccumulationPatterFound)
-  if len( NewInitInstructions) == 0:
+  if len(InitInstructions) == 0:
     #assert AccumulationPatterFound == False
     return False
   if AccumulationPatterFound == False:
@@ -559,7 +583,7 @@ def FixAccumulationCodeForBlockList(BlockList : list, Context : RoseContext):
       FirstBlock.addRegion(Op)
     else:
       FirstBlock.addOperationBefore(Op, FirstBlock.getOperation(0))
-  
+    
   print("INTERMEDIATE FUNCTION:")
   Function.print()
   # Erase gathered ops
