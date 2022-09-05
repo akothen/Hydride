@@ -41,17 +41,15 @@ class RoseBVPadHighBitsOp(RoseBitVectorOp):
 
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
-    #if not isinstance(self.getExtensionKind(), RoseConstant):
-    #  return super().to_rosette(NumSpace, ReverseIndexing)
-    # Use existing Rosette function
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    NumPadBits = self.getNumPadBits().getValue()
     String = "(bvpadhighbits "
     String += " " + self.getInputBitVector().getName()
-    String += " " + str(self.getInputBitVector().getType().getBitwidth() - NumPadBits) 
-    String += " " + str(self.getInputBitVector().getType().getBitwidth())
+    if isinstance(self.getNumPadBits(), RoseConstant):
+      String += " " + str(self.getNumPadBits().getValue())
+    else:
+      String += " " + str(self.getNumPadBits().getName())
     String += ")\n"
     return String
 
