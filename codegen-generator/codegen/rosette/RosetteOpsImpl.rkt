@@ -79,13 +79,13 @@
 )
 
 
-(define (bvpadhighbits vect bitwidth target_bitwidth)
-  (if (equal? bitwidth target_bitwidth)
+(define (bvpadhighbits vect num_pad_bits)
+  (if (equal? num_pad_bits 0)
     (begin
       vect
     )
     (begin
-      (concat (bv 0 (- target_bitwidth bitwidth)) vect)
+      (concat (bv 0 num_pad_bits) vect)
     )
   )
 )
