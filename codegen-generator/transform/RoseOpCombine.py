@@ -988,6 +988,46 @@ def CombineSizeExtendingIndexingOps(Operation : RoseOperation, Context : RoseCon
     Block.eraseOperation(Operand)
 
 
+def CombineBVInsertAndPaddingOps(Block : RoseBlock):
+  # Reverse iterate the block and find the padding op first
+  OpList = list()
+  OpList.extend(Block.getOperations())
+  OpList.reverse()
+  for Idx, Op in enumerate(OpList):
+    if isinstance(Op, RoseBVPadHighBitsOp):
+      # Check if this operation is preceded by a bvinsert op
+      for Operation in OpList[Idx + 1:]:
+        # If we encounter an extract op that extracts from the same
+        # bitvector that is later padded, we abort.
+        if isinstance(Operation, RoseBVExtractSliceOp):
+          if Operation.getInputBitVector() == Op.getInputBitVector():
+            return
+          continue
+        if isinstance(Operation, RoseBVInsertSliceOp):
+          # Insert value must be zero and must be to the bitvector that
+          # will be later padded in the block.
+          if Operation.getInputBitVector() == Op.getInputBitVector():
+            if isinstance(Operation.getInsertValue(), RoseConstant): 
+              if Operation.getInsertValue().getValue() == 0:
+                # The bits being zeroed must be high bits
+                if not isinstance(Operation.getLowIndex(), RoseConstant) \
+                  or not isinstance(Operation.getHighIndex(), RoseConstant):
+                  return
+                InputVectorBitwidth = Operation.getInputBitVector().getType().getBitwidth()
+                if Operation.getHighIndex().getValue() + 1 != InputVectorBitwidth:
+                  return
+                # Compute the number of padded bits
+                NumPaddedBits = Operation.getOutputBitwidth()
+                assert isinstance(Op.getNumPadBits(), RoseConstant)
+                NumPaddedBits += Op.getNumPadBits().getValue()
+                # Modify the high padding op and erase bvinsert
+                Op.setOperand(1, RoseConstant(NumPaddedBits, Op.getNumPadBits().getType()))
+                Block.eraseOperation(Operation)
+            return
+          continue
+  return
+
+
 def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   print("RUN OP COMBINE ON BLOCK")
   print("BLOCK:")
@@ -1249,6 +1289,9 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
   # Some binary operations need to be switched.
   SwitchBinaryOperations(Block, Context)
 
+  # Combine redundant bvinserts and high padding ops
+  CombineBVInsertAndPaddingOps(Block)
+
 
 def RunOpCombineOnRegion(Region, Context : RoseContext):
   # Iterate over all the contents of this function
@@ -1281,7 +1324,6 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpCombineOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
