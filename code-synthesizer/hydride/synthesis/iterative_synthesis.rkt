@@ -109,6 +109,49 @@
   )
 
 
+(define (general-verify-synth-sol invoke_f1 invoke_f2  bw-list assert-query-fn generate-params solver)
+  (define start (current-seconds))
+  (debug-log "Attempting to verify synthesized solution")
+  (define num-bw (length bw-list))
+  (define symbols (create-symbolic-bvs bw-list))
+  (define cex 
+    (verify 
+        ;(equal? (interpret sol symbols) (invoke_ref symbols) )
+        (assert-query-fn symbols)
+        )
+    )
+  (define end (current-seconds))
+  (debug-log (format "Verification took ~a seconds\n" (- end start)))
+  (debug-log cex)
+  (begin
+    (if
+      (sat? cex) ;; If there exists some cex for which it is not equal
+
+      (begin
+        (define (helper i)
+          (eval-bv-cex symbols cex i)
+          )
+        (debug-log "Verification failed :(")
+
+        (define new-bvs (build-vector num-bw helper))
+        (debug-log new-bvs)
+        (define spec_res (invoke_f2 (generate-params new-bvs)))
+        (debug-log spec_res)
+
+        (define synth_res (invoke_f1 (generate-params new-bvs)))
+        (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
+        (values #f new-bvs)
+
+        )
+
+      (values #t '()) ;; No cex exists => Verified solution
+
+      )
+    )
+
+  )
+
+
 (define (get-concrete-asserts assert-query-fn cex-ls)
   (define (helper i)
     (assert-query-fn (list-ref cex-ls i))
@@ -207,14 +250,19 @@
   )
 
 
+;; fn1 with holes, and invoke_ref: fn2  -> iterative synthesis with concrete/symbolic vectors
+;; (fn1 -> int depth -> fn1 with specific depth)
+
+;; invoke_ref :: (vector symb_bv1 symb_bv2 1 2)
+;; generate-params :: (vector symbolic-bvs) -> (vector sym-bv1 symbv2 16 23)
 
 
 (define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs cost-bound solver)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
-  ;(define curr-bw (current-bitwidth))
-  ;(define curr-solver (current-solver))
+  ;; (define curr-bw (current-bitwidth))
+  ;; (define curr-solver (current-solver))
   
   (if (equal? solver 'boolector)
     (current-solver (boolector))
@@ -358,3 +406,122 @@
 
 
   )
+
+
+
+
+(define (general-synthesize-sol-iterative invoke_f1 invoke_f2 bitwidth-list generate-params cexs solver)
+
+  
+  (if (equal? solver 'boolector)
+    (current-solver (boolector))
+    (current-solver (z3))
+    )
+
+
+  ;; Clear the verification condition up till this point
+  ;;(clear-vc!)
+
+  ;; If the cexs is empty 
+  ;; create a random set of concrete inputs
+  ;; else use the concrete inputs accumulated
+  ;; so far
+  (define cex-ls
+    (if
+      (equal? (length cexs) 0)
+      (list (create-concrete-bvs bitwidth-list) (create-concrete-bvs bitwidth-list))
+      cexs
+      )
+    )
+
+  (debug-log "Concrete counter examples:")
+  (debug-log cex-ls)
+
+
+  (define (assert-query-fn env)
+    (define parameters (generate-params env))
+    (assert (equal? (invoke_f1 parameters)  (invoke_f2 parameters)))
+    )
+
+  (define start_time (current-seconds))
+  (define sol?
+    (iterative-synth-query assert-query-fn invoke_f1 cex-ls #f '() 0 solver)
+    )
+
+  (define end_time (current-seconds))
+  (define elapsed_time (- end_time start_time))
+
+  (define satisfiable? (sat? sol?))
+
+  (debug-log satisfiable?)
+
+
+
+
+  (define materialize 
+    (if satisfiable? 
+      ;(generate-forms sol?)
+      (evaluate invoke_f1 sol?)
+      '()
+      )
+    )
+
+  (define boolector-opt-case #f)
+
+
+  (if 
+    satisfiable?
+
+    ;; If satisfiable, verify current solution and check
+    ;; if it's true over ALL inputs
+    (begin
+      (debug-log "Unchecked solution:")
+      (debug-log materialize)
+      (print-forms sol?)
+      (displayln "Testing materialized!")
+      (println (invoke_f2 (generate-params (list-ref cex-ls 0))))
+      (println (evaluate (materialize (generate-params (list-ref cex-ls 0))) sol?))
+
+
+      (define (exec-synth-sol env)
+        (evaluate (materialize env) sol?)
+        )
+
+      (define (assert-query-mat-fn env)
+        (define parameters (generate-params env))
+
+        (assert (equal? (exec-synth-sol parameters)  (invoke_f2 parameters)))
+        )
+
+      (define-values 
+        (verified? new-cex) 
+                (general-verify-synth-sol exec-synth-sol invoke_f2 bitwidth-list assert-query-mat-fn generate-params  solver)
+        )
+
+
+
+
+      (if
+        verified? ;; If solution is found to be correct for all possible inputs
+
+          ;; If not doing optimizaiton and boolector then return current verified solution directly
+          (values satisfiable? materialize elapsed_time)
+
+
+            ;; If not verified then attempt synthesizing with appended counter example
+            (general-synthesize-sol-iterative invoke_f1 invoke_f2  bitwidth-list generate-params 
+                                      (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
+                                      solver
+                                      )
+        )
+      )
+
+    (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
+    )
+
+
+  )
+
+
+
+
