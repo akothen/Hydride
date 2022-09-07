@@ -110,14 +110,22 @@ def GenerateRosetteForBlock(Block : RoseBlock, RosetteCode : str, \
     #  if Operation.getInputBitVector() in Block.getOperations():
     #    RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
     #    continue
-    if isinstance(Operation, RoseBVTruncateHighOp):
+    #if isinstance(Operation, RoseBVTruncateHighOp):
       # There are situations where value being extracted is defined
       # outside a loop. In Rosette, the indexing into bitvectors takes
       # place from right to left, instead of left to right. So we need
       # to reverse the order of extraction as well.
-      if Operation.getInputBitVector() in Block.getOperations():
-        RosetteCode += Operation.to_rosette(NumSpace, ReverseIndexing=True)
-        continue
+      #if Operation.getInputBitVector() in Block.getOperations():
+      #  RosetteCode += Operation.to_rosette(NumSpace)#, ReverseIndexing=True)
+      #  continue
+    #if isinstance(Operation, RoseBVTruncateLowOp):
+      # There are situations where value being extracted is defined
+      # outside a loop. In Rosette, the indexing into bitvectors takes
+      # place from right to left, instead of left to right. So we need
+      # to reverse the order of extraction as well.
+      #if Operation.getInputBitVector() in Block.getOperations():
+      #  RosetteCode += Operation.to_rosette(NumSpace)#, ReverseIndexing=True)
+      #  continue
     # Skip emitting rosette code for op that pads high bits
     if isinstance(Operation, RoseBVPadHighBitsOp):
       continue
