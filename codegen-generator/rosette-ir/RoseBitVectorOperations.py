@@ -57,7 +57,6 @@ class RoseBVPadHighBitsOp(RoseBitVectorOp):
     NotImplemented
 
 
-
 class RoseBVSignExtendOp(RoseBitVectorOp):#RoseBVSizeExensionOp):
   def __init__(self, Name : str, Bitvector : RoseValue, TargetBitwidth : RoseValue, ParentBlock):
     assert isinstance(Bitvector.getType(), RoseBitVectorType) 
@@ -285,8 +284,11 @@ class RoseBVTruncateLowOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getTruncateWidth(self):
+    return self.getOperand(1)
+
   # Rosette has no truncate op. So we use bitvector extract to model it.
-  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+  def to_rosette2(self, NumSpace = 0, ReverseIndexing = False):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -312,6 +314,42 @@ class RoseBVTruncateLowOp(RoseBitVectorOp):
         ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
       else:
          ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
+      # DO NOT CHANGE THIS ORDER
+      String += " " + ReverseIndexString + LowIndexName + ")"
+      String += " " + ReverseIndexString + HighIndexName + ")"
+    String += Spaces + "(define " + Name + " ("
+    String += RoseOpcode.bvextract.getRosetteOp() + " "
+    String += " " + HighIndexName
+    String += " " + LowIndexName
+    String += " " + self.getInputBitVector().getName()
+    String += "))\n"
+    return String
+
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    String = ""
+    Name = self.getName()
+    LowIndexName = Name + ".low.idx"
+    HighIndexName = Name + ".high.idx"
+    if isinstance(self.getTruncateWidth(), RoseConstant):
+      TruncateWidth = str(self.getTruncateWidth().getValue())
+    else:
+      TruncateWidth = self.getTruncateWidth().getName()
+    if ReverseIndexing == False:
+      # Generate the high index
+      String += Spaces + "(define " + HighIndexName \
+                          + " (- " + TruncateWidth + " 1))\n"
+      # Generate the low index
+      String += Spaces + "(define " + LowIndexName + " 0)\n"
+    else:
+      # THIS IMPLEMENTATION IS WRONG. TODO: FIX THIS.
+      InputBVSize = self.getInputBitVector().getType().getBitwidth()
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+        ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
       # DO NOT CHANGE THIS ORDER
       String += " " + ReverseIndexString + LowIndexName + ")"
       String += " " + ReverseIndexString + HighIndexName + ")"
@@ -366,9 +404,12 @@ class RoseBVTruncateHighOp(RoseBitVectorOp):
 
   def getInputBitVector(self):
     return self.getOperand(0)
+  
+  def getTruncateWidth(self):
+    return self.getOperand(1)
 
   # Rosette has no truncate op. So we use bitvector extract to model it.
-  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+  def to_rosette2(self, NumSpace = 0, ReverseIndexing = False):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
@@ -394,6 +435,50 @@ class RoseBVTruncateHighOp(RoseBitVectorOp):
         ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
       else:
          ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
+      # DO NOT CHANGE THIS ORDER
+      String += " " + ReverseIndexString + LowIndexName + ")"
+      String += " " + ReverseIndexString + HighIndexName + ")"
+    String += Spaces + "(define " + Name + " ("
+    String += RoseOpcode.bvextract.getRosetteOp() + " "
+    String += " " + HighIndexName
+    String += " " + LowIndexName
+    String += " " + self.getInputBitVector().getName()
+    String += "))\n"
+    return String
+
+  def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    String = ""
+    Name = self.getName()
+    LowIndexName = Name + ".low.idx"
+    HighIndexName = Name + ".high.idx"
+    InputVal= self.getInputBitVector()
+    if isinstance(InputVal, RoseOperation):
+      InputValBitwidth = InputVal.getOutputBitwidth()
+    else:
+      InputValBitwidth = InputVal.getType().getBitwidth()
+    if isinstance(self.getTruncateWidth(), RoseConstant):
+      TruncateWidth = str(self.getTruncateWidth().getValue())
+    else:
+      TruncateWidth = self.getTruncateWidth().getName()
+    if ReverseIndexing == False:
+      if isinstance(InputValBitwidth, RoseValue):
+        String += Spaces + "(define " + HighIndexName \
+                          + " (- " + InputValBitwidth.getName() + " 1))\n"
+      else:
+        String += Spaces + "(define " + HighIndexName \
+                          + str(InputValBitwidth - 1) + " )\n"
+      String += Spaces + "(define " + LowIndexName \
+                          + " (+ (- " + HighIndexName + " " + TruncateWidth + ") 1) )\n"
+    else:
+      # THIS IMPLEMENTATION IS WRONG. TODO: FIX THIS.
+      InputBVSize = self.getInputBitVector().getType().getBitwidth()
+      if not isinstance(InputBVSize, RoseValue):
+        ReverseIndexString = "(- " + str(InputBVSize - 1)+ " "
+      else:
+        ReverseIndexString = "(- (- " + str(InputBVSize)+ " 1) "
       # DO NOT CHANGE THIS ORDER
       String += " " + ReverseIndexString + LowIndexName + ")"
       String += " " + ReverseIndexString + HighIndexName + ")"
@@ -461,7 +546,7 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Name = super().getName()
+    Name = self.getName()
     String = Spaces + "(define " + Name + " ("
     String += (self.Opcode.getRosetteOp() + " ")
     if ReverseIndexing == False:
