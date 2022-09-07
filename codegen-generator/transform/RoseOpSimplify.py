@@ -59,11 +59,11 @@ def RunOpSimplifyOnBlock(Block : RoseBlock,  Context : RoseContext):
 
   # Gather all the truncate and extract ops in this block
   OpList = list()
-  for Operation in Block:
-    if isinstance(Operation, RoseBVTruncateHighOp) \
-    or isinstance(Operation, RoseBVTruncateLowOp) \
-    or isinstance(Operation, RoseBVExtractSliceOp):
-      OpList.append(Operation)
+  #for Operation in Block:
+  #  if isinstance(Operation, RoseBVTruncateHighOp) \
+  #  or isinstance(Operation, RoseBVTruncateLowOp) \
+  #  or isinstance(Operation, RoseBVExtractSliceOp):
+  #    OpList.append(Operation)
   # Now deal with all the truncate ops in this block
   for Op in OpList:
     if isinstance(Op, RoseBVTruncateHighOp):
