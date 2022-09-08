@@ -1,10 +1,12 @@
 #include "Rosette.h"
 
+#include "ExprUsesVar.h"
 #include "Bounds.h"
 #include "CSE.h"
 #include "FindIntrinsics.h"
 #include "IRMutator.h"
 #include "IROperator.h"
+#include "IREquality.h"
 #include "IRPrinter.h"
 #include "IRVisitor.h"
 #include "ModulusRemainder.h"
@@ -36,6 +38,10 @@ namespace Halide {
             std::set<const IRNode*> SkipNodes;
 
 
+
+
+            std::set<const IRNode*> StoreSet;
+            std::map<const IRNode*, const IRNode*> StoreMap;
             std::map<const IRNode*, std::string> SynthLog;
             std::map<unsigned, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Load*, unsigned> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
@@ -578,7 +584,6 @@ namespace Halide {
 
                     std::string check_expr_in_log(const IRNode* op){
 
-                        return "";
 
                         if(SynthLog.find(op)
                                 != SynthLog.end()){
@@ -590,6 +595,40 @@ namespace Halide {
 
                     }
 
+                    const Store* check_load_in_storemap(const Load* l){
+                            for(auto bi = StoreMap.begin(); bi != StoreMap.end(); bi++){
+                                const Store* s = (const Store*) bi->first;
+
+                                if(s->name != l->name)
+                                    continue;
+
+                                
+                                
+                                if(!equal(s->predicate, l->predicate))
+                                    continue;
+
+
+                                if(!equal(s->index, l->index))
+                                    continue;
+
+                                if(!s->param.same_as(l->param))
+                                    continue;
+
+                                // Halide modulus remainder class only
+                                // defines equality
+                                if(!(s->alignment == l->alignment))
+                                    continue;
+
+
+                                debug(0) << "LOAD STORE MATCHED!"<<"\n";
+                                return s;
+
+                            }
+
+                            return nullptr;
+
+                        }
+
                     std::string visit(const Load *op) {
                         indent.push(0);
 
@@ -597,8 +636,11 @@ namespace Halide {
                         std::string expr_exists = check_expr_in_log(op);
                         if(expr_exists != "") return expr_exists;
 
+
+
                         SkipNodes.insert(op->predicate.get());
                         SkipNodes.insert(op->index.get());
+
 
 
                         // Print index
@@ -930,6 +972,8 @@ namespace Halide {
                     std::set<std::string> names;
                 };
 
+
+
             }
 
             Encoding get_encoding(const Expr &expr, const std::map<std::string, Expr> &let_vars, const std::map<std::string, Expr> &llet_vars) {
@@ -1137,6 +1181,227 @@ namespace Halide {
                     }
                 };
 
+                class FoldLoadStores : public IRMutator {
+                    using IRMutator::visit;
+                    using IRMutator::mutate;
+
+                    public:
+
+                    std::set<const IRNode*>& DeadStatements;
+
+                    FoldLoadStores(std::set<const IRNode*>& DeadStatements) : DeadStatements(DeadStatements) {}
+
+                    Scope<std::map<const Store* ,Expr>> MemMap;
+                    std::stack<std::string> scope_name;
+
+
+                    std::set<const IRNode*> getDeadStatements(){
+                        return DeadStatements;
+                    }
+
+                    
+                    bool isConstantValue(const Expr v){
+                            if(v.node_type() == IRNodeType::IntImm){
+                                return true;
+                            }
+
+                            if(v.node_type() == IRNodeType::UIntImm){
+                                return true;
+                            }
+
+                            if(v.node_type() == IRNodeType::Broadcast){
+                                const Broadcast *b = v.as<Broadcast>();
+
+                                return isConstantValue(b->value);
+
+                            }
+
+                            return false;
+                        }
+
+                    void UpdateDeadStatements(std::map<const Store*, Expr>& Context, const Store* StoreStmt){
+
+                        std::vector<const Store*> EraseKeys;
+                        for(auto const& x : Context){
+                            auto store = x.first;
+                            debug(0) << "UpdateDeadStatements checking: "<<store<<"\n";
+
+
+                            if(store->name != StoreStmt->name){
+                                debug(0) << "Name mismatch" <<"\n";
+                                continue;
+                            }
+
+                            if(!equal(store->predicate, StoreStmt->predicate)){
+                                debug(0) << "predicate mismatch" <<"\n";
+                                continue;
+                            }
+
+                            /*
+                            if(!equal(store->value, StoreStmt->value)){
+                                continue;
+                                */
+
+                            if(!store->param.same_as(StoreStmt->param))
+                                continue;
+
+
+                            // Halide modulus remainder class only
+                            // defines equality
+                            if(!(store->alignment == StoreStmt->alignment))
+                                continue;
+
+                            debug(0) << "Adding pointer: "<<store<<" to dead statements ...\n";
+                            DeadStatements.insert(store);
+                            EraseKeys.push_back(store);
+                        }       
+
+                        for(auto k : EraseKeys){
+                            Context.erase(k);
+                        }
+
+                    }
+
+                    Stmt mutate(const Stmt &stmt) override {
+                        if(stmt.node_type() == IRNodeType::Store){
+                                const Store* s = stmt.as<Store>();
+
+                                if(!isConstantValue(s->value)){
+                                    Expr updated_val  = mutate(s->value);
+                                    debug(0) << "Store Instruction: "<< stmt <<"\n";
+                                    debug(0) << "Store name: "<<s->name <<"\n";
+
+                                    
+                                    std::string current_scope = scope_name.top();
+                                    debug(0) << "Current Scope name: "<<current_scope <<"\n";
+                                    
+                                    auto& context = MemMap.ref(scope_name.top());
+
+                                    Stmt NewStore =  Store::make(s->name, updated_val, s->index, s->param, s->predicate, s->alignment);
+
+                                    UpdateDeadStatements(context, s);
+                                    context[NewStore.as<Store>()] = updated_val;
+
+
+                                    return  NewStore;
+                                }
+                            }
+
+                            if(stmt.node_type() == IRNodeType::For){
+                                const For* f = stmt.as<For>();
+                                debug(0) << "For Instruction: "<< stmt <<"\n";
+                                std::map<const Store*, Expr> scoped_map;
+
+                                scope_name.push(f->name);
+                                
+                                debug(0) << "Pushing scope_name: "<< scope_name.top() << "\n";
+                                MemMap.push(scope_name.top(), scoped_map);
+                                auto new_stmt = mutate(f->body);
+                                debug(0) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                MemMap.pop(scope_name.top());
+                                scope_name.pop();
+
+
+                                Stmt NewFor =  For::make(f->name, f->min, f->extent, f->for_type, f->device_api, new_stmt);
+                                return  NewFor;
+                                
+                            }
+
+                        return IRMutator::mutate(stmt);
+                    }
+
+
+                    Expr visit(const Load* op) override {
+                        Expr folded = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate,  op->alignment);
+
+                        if(scope_name.empty() || !MemMap.contains(scope_name.top())){
+                            return folded;
+                        }
+
+                        auto& context = MemMap.ref(scope_name.top());
+
+                        for(auto const& x : context){
+
+                            auto store = x.first;
+
+                            if(store->name != op->name)
+                                continue;
+
+
+                            if(!equal(store->predicate, op->predicate))
+                                continue;
+
+
+                            if(!equal(store->index, op->index))
+                                continue;
+
+                            if(!store->param.same_as(op->param))
+                                continue;
+
+                            // Halide modulus remainder class only
+                            // defines equality
+                            if(!(store->alignment == op->alignment))
+                                continue;
+
+                            debug(0) << "LOAD STORE MATCHED!" <<"\n";
+                            
+                            folded = x.second;
+                        }
+
+
+
+                        return folded;
+                    }
+
+                    
+                };
+
+                class RemoveRedundantStmt : public IRMutator {
+                    using IRMutator::visit;
+                    using IRMutator::mutate;
+
+                    public:
+
+                    std::set<const IRNode*>& DeadStatements;
+
+                    RemoveRedundantStmt(std::set<const IRNode*> DeadStatements) : DeadStatements(DeadStatements) {}
+
+                    
+
+                    Stmt mutate(const Stmt &stmt) override {
+                        debug(0) << "DeadStatement Size: "<<DeadStatements.size() << "\n";
+                        if(stmt.node_type() == IRNodeType::Store){
+                            const Store* s = stmt.as<Store>();
+
+                            debug(0) << "Checking if pointer "<< s << " is redundant "<<"\n";
+
+                            for(auto DS_IR : DeadStatements){
+
+                                const Store* DS = (const Store*) DS_IR;
+                                
+                                Stmt DeadStoreStmt = Store::make(DS->name, DS->value, DS->index, DS->param, DS->predicate, DS->alignment);
+
+                                debug(0) << "Orig Stmt: "<< stmt << "\n";
+                                debug(0) << "Test Stmt: "<< DeadStoreStmt << "\n";
+
+                                if(equal(DeadStoreStmt, stmt)){
+                                    debug(0) << "It is redundant!\n";
+                                    return Evaluate::make(0);
+                                }
+                            }
+
+                        }
+
+                            
+
+                        return IRMutator::mutate(stmt);
+                    }
+
+
+
+                    
+                };
+
 
                 // This IR mutator optimizes vector expressions for the Hexagon HVX ISA
                 class IROptimizer : public IRMutator {
@@ -1152,10 +1417,56 @@ namespace Halide {
                             : arch(_arch), func_value_bounds(fvb), mutated_exprs(ms) {
                             }
 
+                        bool isConstantValue(const Expr v){
+                            if(v.node_type() == IRNodeType::IntImm){
+                                return true;
+                            }
+
+                            if(v.node_type() == IRNodeType::UIntImm){
+                                return true;
+                            }
+
+                            if(v.node_type() == IRNodeType::Broadcast){
+                                const Broadcast *b = v.as<Broadcast>();
+
+                                return isConstantValue(b->value);
+
+                            }
+
+                            return false;
+                        }
+
                         // We don't currently perform any optimizations at the Stmt level
                         Stmt mutate(const Stmt &stmt) override {
+
+                            if(stmt.node_type() == IRNodeType::Store){
+                                const Store* s = stmt.as<Store>();
+
+                                if(!isConstantValue(s->value)){
+                                    debug(0) << "Store Instruction: "<< stmt <<"\n";
+                                    debug(0) << "Store name: "<<s->name <<"\n";
+                                    process_store_inst(s);
+                                }
+                            }
+
+                            if(stmt.node_type() == IRNodeType::For){
+                                StoreSet.clear();
+                                StoreMap.clear();
+                                debug(0) << "For Instruction: "<< stmt <<"\n";
+                            }
+
                             return IRMutator::mutate(stmt);
                         }
+
+                        // populate store map to directly replace
+                        // load from a previously stored location 
+                        void process_store_inst(const Store* s){
+                            //StoreMap[s] = s->value.get(); 
+                            StoreSet.insert(s);
+                            //StoreMap.clear();
+                        }
+
+                        
 
                         Expr mutate(const Expr &expr) override {
                             if (arch == IROptimizer::ARM){
@@ -1276,6 +1587,12 @@ namespace Halide {
                             // Replace abstracted abstractions
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
 
+                            for(auto v : StoreSet){
+                                debug(0) << "Transferring values from storeset to store map";
+                                StoreMap[v] = ((const Store*) v)->value.get();
+                            }
+                            StoreSet.clear();
+
 
 
                             std::string fn_name = "hydride.node." + std::to_string(expr_id);
@@ -1368,6 +1685,8 @@ namespace Halide {
                         return IRMutator::visit(op);
                     }
                 };
+
+                    
 
                 class FloatFinder : public IRVisitor {
                     using IRVisitor::visit;
@@ -1842,18 +2161,29 @@ namespace Halide {
 
 
         Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
-            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
+            std::set<const IRNode*> DeadStmts;
+            auto FLS = Hydride::FoldLoadStores(DeadStmts);
+            auto folded = FLS.mutate(s);
+            debug(0) << "Printing Folded Stmt:\n";
+            debug(0) << folded <<"\n";
+
+            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+
+            auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
+            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
         }
 
         Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
 
-    std::set<const BaseExprNode *> mutated_exprs;
-    s = hydride_optimize_x86(fvb, s, mutated_exprs);
+            std::set<const BaseExprNode *> mutated_exprs;
+            s = hydride_optimize_x86(fvb, s, mutated_exprs);
 
-    return s;
+            return s;
 
-}
+        }
 
 Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
 
