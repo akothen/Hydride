@@ -817,6 +817,29 @@ def ExtractBVSignedness(Function : RoseFunction, SizeExtOp : RoseBVSizeExensionO
   return True
 
 
+def ComputeBitvectorValue(RoseElemVal, Bitwidth):
+  ElementVal = RoseElemVal.getValue()
+  HexElemVal = hex(ElementVal)
+  ElemBitwidth = RoseElemVal.getType().getBitwidth()
+  HexElemValStr = str(HexElemVal)
+  NumElem = int(Bitwidth / ElemBitwidth)
+  Diff = (ElemBitwidth) - (4 * len(HexElemValStr[2:]))
+  if Diff != 0:
+    Zeros = ""
+    for _ in range(int(Diff / 4)):
+      Zeros += "0"
+    HexElemValStr = HexElemValStr[:2] + Zeros + HexElemValStr[2:]
+  print("HexElemValStr:")
+  print(HexElemValStr)
+  BitvectorValStr = ""
+  for _ in range(NumElem):
+    BitvectorValStr += HexElemValStr[2:]
+  BitvectorValStr = HexElemValStr[:2] + BitvectorValStr
+  print("BitvectorValStr:")
+  print(BitvectorValStr)
+  return int(BitvectorValStr, 16)
+
+
 def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
                               Visited : set, UnknownVal : set,  IndexingOps : set, \
                               LoopList : list, SkipBVExtracts : set, \
@@ -1073,10 +1096,28 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
         if isinstance(Op.getInsertValue(), RoseConstant):
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                        Op.getType()))
-          ArgToConstantValsMap[Arg] = Op.getOperand(0).clone()
-          Op.setOperand(0, Arg)
+          #Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+          #                                              Op.getType()))
+          #ArgToConstantValsMap[Arg] = Op.getOperand(0).clone()
+          #Op.setOperand(0, Arg)
+          FullBitvectorVal = ComputeBitvectorValue(Op.getInsertValue(), \
+                                        Op.getInputBitVector().getType().getBitwidth())
+          Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                        Op.getInputBitVector().getType()))
+          # Generate an extract op
+          if isinstance(Op.getOperand(Op.getBitwidthPos()), RoseConstant):
+            ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), Arg,  \
+                    Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
+          else:
+            ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), Arg,  \
+                                  Op.getLowIndex(), Op.getHighIndex(), \
+                                  ArgToConstantValsMap[Op.getOperand(Op.getBitwidthPos())])
+            ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Op.getOperand(Op.getBitwidthPos()))
+          Block.addOperationBefore(ExtractOp, Op)
+          ArgToConstantValsMap[Arg] = RoseConstant(FullBitvectorVal, Op.getInputBitVector().getType())
+                                      #Op.getInsertValue().clone()
+          #Op.setOperand(0, Arg)
+          Op.setOperand(0, ExtractOp)
         Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
         BVValToBitwidthVal[Op.getInsertValue()] =  Op.getOperand(Op.getBitwidthPos())
         # Add indexing ops in a set
@@ -1134,11 +1175,26 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       Op.print()
       Visited.add(Op)
       if isinstance(Op.getInsertValue(), RoseConstant):
-        # If the insert value is 1-bit long, then no need to extract it.
-        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                      Op.getType()))
-        ArgToConstantValsMap[Arg] = Op.getInsertValue().clone()
-        Op.setOperand(0, Arg)
+        #Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+        #                                              Op.getType()))
+        FullBitvectorVal = ComputeBitvectorValue(Op.getInsertValue(), \
+                                        Op.getInputBitVector().getType().getBitwidth())
+        Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                      Op.getInputBitVector().getType()))
+        # Generate an extract op
+        if isinstance(Op.getOperand(Op.getBitwidthPos()), RoseConstant):
+          ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), Arg,  \
+                  Op.getLowIndex(), Op.getHighIndex(), Op.getOperand(Op.getBitwidthPos()))
+        else:
+          ExtractOp = RoseBVExtractSliceOp.create(Context.genName(), Arg,  \
+                                Op.getLowIndex(), Op.getHighIndex(), \
+                                ArgToConstantValsMap[Op.getOperand(Op.getBitwidthPos())])
+          ExtractOp.setOperand(ExtractOp.getBitwidthPos(), Op.getOperand(Op.getBitwidthPos()))
+        Block.addOperationBefore(ExtractOp, Op)
+        ArgToConstantValsMap[Arg] = RoseConstant(FullBitvectorVal, Op.getInputBitVector().getType())
+                                    #Op.getInsertValue().clone()
+        #Op.setOperand(0, Arg)
+        Op.setOperand(0, ExtractOp)
       Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
       # Add indexing ops in a set
       for IndexingOp in GatherIndexingOps(Op):
@@ -1477,11 +1533,11 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
   # Handle accumulation code
   Visited = set()
   BVValToBitwidthVal = dict()
-  ExtractConstantsFromAccumulationCode(Function, BVValToBitwidthVal, \
-                                      Context, ArgToConstantValsMap, Visited)
+  #ExtractConstantsFromAccumulationCode(Function, BVValToBitwidthVal, \
+  #                                    Context, ArgToConstantValsMap, Visited)
 
   # Replace the inserted constants by new arguments
-  ReplaceInsertedConstantBVWithArg(Function, Context, ArgToConstantValsMap)
+  #ReplaceInsertedConstantBVWithArg(Function, Context, ArgToConstantValsMap)
   print("*********Function:")
   Function.print()
 
