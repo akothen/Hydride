@@ -819,25 +819,29 @@ def ExtractBVSignedness(Function : RoseFunction, SizeExtOp : RoseBVSizeExensionO
 
 def ComputeBitvectorValue(RoseElemVal, Bitwidth):
   ElementVal = RoseElemVal.getValue()
-  HexElemVal = hex(ElementVal)
   ElemBitwidth = RoseElemVal.getType().getBitwidth()
-  HexElemValStr = str(HexElemVal)
   NumElem = int(Bitwidth / ElemBitwidth)
-  Diff = (ElemBitwidth) - (4 * len(HexElemValStr[2:]))
-  if Diff != 0:
-    Zeros = ""
-    for _ in range(int(Diff / 4)):
-      Zeros += "0"
-    HexElemValStr = HexElemValStr[:2] + Zeros + HexElemValStr[2:]
-  print("HexElemValStr:")
-  print(HexElemValStr)
+  if ElemBitwidth >= 4:
+    ElemValStr = str(hex(ElementVal))
+    Diff = ElemBitwidth - (4 * len(ElemValStr[2:]))
+    if Diff != 0:
+      Zeros = ""
+      for _ in range(int(Diff / 4)):
+        Zeros += "0"
+      ElemValStr = ElemValStr[:2] + Zeros + ElemValStr[2:]
+  else:
+    ElemValStr = str(bin(ElementVal))
+  print("ElemValStr:")
+  print(ElemValStr)
   BitvectorValStr = ""
   for _ in range(NumElem):
-    BitvectorValStr += HexElemValStr[2:]
-  BitvectorValStr = HexElemValStr[:2] + BitvectorValStr
+    BitvectorValStr += ElemValStr[2:]
+  BitvectorValStr = ElemValStr[:2] + BitvectorValStr
   print("BitvectorValStr:")
   print(BitvectorValStr)
-  return int(BitvectorValStr, 16)
+  if ElemBitwidth >= 4:
+    return int(BitvectorValStr, 16)
+  return int(BitvectorValStr, 2)
 
 
 def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
