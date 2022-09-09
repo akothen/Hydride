@@ -76,6 +76,53 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
                   LoopIterator : RoseValue, LoopStep : RoseValue, Visited : set, \
                   Context : RoseContext, ArgToConstantValsMap : dict):
   # Now we have to deal with the low index that is a mul op
+  if Op.getLowIndex() in Visited:
+    return
+  Block = Op.getParent()
+  print("FixLowIndices OP:")
+  Op.print()
+  print("Bitwidth:")
+  Bitwidth.print()
+  if isinstance(Op.getLowIndex(), RoseMulOp):
+    assert len(Op.getLowIndex().getOperands()) == 2
+    if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
+      # If the other operand is an iterator, deal with it.
+      if Op.getLowIndex().getOperand(1) == LoopIterator:
+        # Generate a div op for generality
+        DivOp = RoseDivOp.create(Context.genName("%" + "factor"), \
+                                  Op.getOutputBitwidth(), LoopStep)
+        Block.addOperationBefore(DivOp, Op.getLowIndex())
+        Op.getLowIndex().setOperand(0, DivOp)
+        Visited.add(DivOp)
+        Visited.add(Op.getLowIndex())
+        return
+      else:
+        assert isinstance(Op.getLowIndex().getOperand(1), RoseOperation)
+        Op.getLowIndex().setOperand(0, Op.getOutputBitwidth())
+        Visited.add(Op.getLowIndex())
+        return
+    if isinstance(Op.getLowIndex().getOperand(1), RoseConstant):
+      # If the other operand is an iterator, deal with it.
+      if Op.getLowIndex().getOperand(0) == LoopIterator:
+        # Generate a div op for generality
+        DivOp = RoseDivOp.create(Context.genName("%" + "factor"), \
+                                  Op.getOutputBitwidth(), LoopStep)
+        Block.addOperationBefore(DivOp, Op.getLowIndex())
+        Op.getLowIndex().setOperand(1, DivOp)
+        Visited.add(DivOp)
+        Visited.add(Op.getLowIndex())
+        return
+      else:
+        assert isinstance(Op.getLowIndex().getOperand(0), RoseOperation)
+        Op.getLowIndex().setOperand(1, Op.getOutputBitwidth())
+        Visited.add(Op.getLowIndex())
+        return
+
+
+def FixLowIndices2(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : RoseValue, \
+                  LoopIterator : RoseValue, LoopStep : RoseValue, Visited : set, \
+                  Context : RoseContext, ArgToConstantValsMap : dict):
+  # Now we have to deal with the low index that is a mul op
   LowIndex = Op.getLowIndex()
   if LowIndex in Visited:
     return
@@ -849,6 +896,15 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
       continue
   
+    if isinstance(Op, RoseDivOp):
+      print("DIV OP:")
+      if Loop != RoseUndefRegion():
+        if isinstance(Op.getOperand(1), RoseConstant):
+          if Op.getOperand(0) == Loop.getIterator():
+            Op.setOperand(1, Loop.getStep())
+            Visited.add(Op)
+            continue
+
     if Op.getOpcode().typesOfInputsAndOutputEqual():
       print("typesOfInputsAndOutputEqual:")
       Op.print()
