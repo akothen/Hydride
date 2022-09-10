@@ -3,7 +3,7 @@ from collections import defaultdict
 
 
 
-def Parsex86Semantics(FileName):
+def GenRelevantXML(FileName):
   DataRoot = ET.parse(FileName)
   NumSkipped = 0
   SkippedInsts = set()
@@ -36,6 +36,7 @@ def Parsex86Semantics(FileName):
 
     if (intrin.attrib['name'].endswith('getcsr') or
         intrin.attrib['name'].endswith('setcsr') or
+        'setzero' in intrin.attrib['name'] or
         '_cmp_' in intrin.attrib['name'] or
         'zeroall' in intrin.attrib['name'] or
         'zeroupper' in intrin.attrib['name'] or
@@ -148,6 +149,7 @@ def Parsex86Semantics(FileName):
 
 
 if __name__ == '__main__':
-  Parsex86Semantics("hydride.x86.xml")
+  GenRelevantXML("hydride.x86.xml")
+
 
 
