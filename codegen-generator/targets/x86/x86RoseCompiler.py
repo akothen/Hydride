@@ -92,6 +92,9 @@ class x86RoseContext(RoseContext):
       ChildContext.setParentContext(self)
       ChildContext.copyAbstractionsFromParent()
       super().createContext(ID, ChildContext)
+      # Add function definitions from the parent into the child context
+      for _, FuncDef in self.FunctionDefs.items():
+        ChildContext.addFunctionDef(FuncDef)
 
   def destroyContext(self, ContextName : str):
     print("ROOT ABSTRACTION:")
@@ -1309,6 +1312,10 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     print("ARGUMENTS COMPILED")
 
   # This is a function call
+  print("CONTEXT:")
+  print(Context)
+  print("Context.FunctionDefs:")
+  print(Context.FunctionDefs)
   FunctionDef = Context.getFunctionDef(CallStmt.funcname)
   assert len(FunctionDef.params) == len(CallStmt.args)
 
@@ -1431,6 +1438,13 @@ def CompileFunction(FunctionDef, Context : x86RoseContext):
   # Add the function definiton to the current context
   # This function will be compiled later.
   Context.addFunctionDef(FunctionDef)
+  print("FunctionDef.name:")
+  print(FunctionDef.name)
+  print("CONTEXT:")
+  print(Context)
+  print("Context.FunctionDefs:")
+  print(Context.FunctionDefs)
+  print(Context.getFunctionDef(FunctionDef.name))
 
 
 def CompileForLoop(ForStmt, Context : x86RoseContext):
@@ -1734,6 +1748,8 @@ def CompileStatement(Stmt, Context : x86RoseContext):
   print(StmtTy)
   if Stmt == None:
     return None
+  print("---CONTEXT:")
+  print(Context)
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
@@ -1818,6 +1834,8 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   RootContext.pushRootAbstraction(RootFunction)
   print("RootFunction:")
   RootFunction.print()
+  print("RootContext:")
+  print(RootContext)
 
   # Compile all the statements
   CompiledRetVal = RoseUndefValue()
