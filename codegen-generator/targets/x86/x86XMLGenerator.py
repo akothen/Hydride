@@ -29,7 +29,7 @@ def GenRelevantXML(FileName):
     if cpuid is not None:
       if cpuid.text in ('AES', 'SHA', 'MPX', 
           'AVX512_4FMAPS', 'AVX512_BF16',
-          'INVPCID', 'XSAVE', 'FSGSBASE'):
+          'INVPCID', 'XSAVE', 'FSGSBASE', 'GFNI'):
         Categories[cpuid.text] += 1
         NumSkipped += 1
         continue
@@ -37,6 +37,10 @@ def GenRelevantXML(FileName):
     if (intrin.attrib['name'].endswith('getcsr') or
         intrin.attrib['name'].endswith('setcsr') or
         'setzero' in intrin.attrib['name'] or
+        'pos' in intrin.attrib['name'] or
+        'conflict' in intrin.attrib['name'] or
+        'expand' in intrin.attrib['name'] or
+        'compress' in intrin.attrib['name'] or
         '_cmp_' in intrin.attrib['name'] or
         'zeroall' in intrin.attrib['name'] or
         'zeroupper' in intrin.attrib['name'] or
@@ -60,7 +64,9 @@ def GenRelevantXML(FileName):
     if cat is not None and cat.text in (
         'Elementary Math Functions', 
         'General Support', 
-        'Load', 'Store'):
+        'Load', 'Store',
+        'Bit Manipulation',
+        'Application-Targeted'):
       NumSkipped += 1
       Categories[cat.text] += 1
       continue
@@ -100,7 +106,14 @@ def GenRelevantXML(FileName):
         'SignBit' in operation.text or
         'SSP' in operation.text or
         'Convert' in operation.text or 
-        'CASE' in operation.text):
+        'CASE' in operation.text or
+        'WHILE' in operation.text or
+        'Carry' in operation.text or
+        'parity' in operation.text or
+        'Borrow' in operation.text or
+        'k_old' in operation.text or
+        'sign' in operation.text or
+        'DO WHILE' in operation.text):
       Categories['MISC'] += 1
       NumSkipped += 1
       continue
@@ -130,6 +143,15 @@ def GenRelevantXML(FileName):
       Categories['PREFETCH'] += 1
       continue
 
+    if "AVX512_VBMI2" == cpuid.text:
+      NumSkipped += 1
+      continue
+
+    #if "alignr" in intrin.attrib['name'] or \
+    #  "donflict" in intrin.attrib['name']:
+    #  NumSkipped += 1
+    #  continue
+
     #if #inst is not None and 
     if operation is not None:
       InstructionList.append(intrin)
@@ -150,6 +172,5 @@ def GenRelevantXML(FileName):
 
 if __name__ == '__main__':
   GenRelevantXML("hydride.x86.xml")
-
 
 
