@@ -827,6 +827,32 @@ def RemoveRedundantBVInsertOps(Block : RoseBlock):
       Block.eraseOperation(BVInsertOp)
 
 
+def RemoveRedundantBVExtractOps(Block : RoseBlock):
+  # In Rosette, one cannot extract a bitvector and write into it
+  # in the same block. So all we need to look for is redundant 
+  # extract ops which extract from the same bitvector and at same
+  # low and high indices. We will keep this pass on the block simple.
+  ExtractOps = set()
+  OpList = list()
+  OpList.extend(Block.getOperations())
+  for Index, Op in enumerate(OpList):
+    if not isinstance(Op, RoseBVExtractSliceOp):
+      continue
+    OpFoundAndErased = False
+    for ExtractOp in ExtractOps:
+      if ExtractOp.getInputBitVector() == Op.getInputBitVector() \
+        and ExtractOp.getLowIndex() == Op.getLowIndex() \
+        and ExtractOp.getHighIndex() == Op.getHighIndex():
+        # Replace the uses of the new found extract op
+        Op.replaceUsesWith(ExtractOp)
+        # Erase the extract op
+        Block.eraseOperation(Op)
+        OpFoundAndErased = True
+        break
+    if OpFoundAndErased == False:
+      ExtractOps.add(Op)
+    
+
 def SwitchBinaryOperations(Block : RoseBlock, Context : RoseContext):
   OpList = list()
   OpList.extend(Block.getOperations())
@@ -1291,6 +1317,9 @@ def RunOpCombineOnBlock(Block : RoseBlock, Context : RoseContext):
 
   # Combine redundant bvinserts and high padding ops
   CombineBVInsertAndPaddingOps(Block)
+
+  # Remove redundant extract ops
+  RemoveRedundantBVExtractOps(Block)
 
 
 def RunOpCombineOnRegion(Region, Context : RoseContext):
