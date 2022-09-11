@@ -1286,30 +1286,30 @@ def CompileCall(CallStmt, Context : x86RoseContext):
 
   # Try to get the types of the arguments first
   print("TRYING TO GET TYPES OF ARGUMENTS")
-  ArgTypesUndefined = False
-  ArgsTypeList = list()
-  for Arg in CallStmt.args:
-    ArgType = GetExpressionType(Arg, Context)
-    # Argument type cannot be undefined or void
-    assert not isinstance(ArgType, RoseVoidType) 
-    if isinstance(ArgType, RoseUndefinedType):
-      ArgTypesUndefined = True
-      break
-    ArgsTypeList.append(ArgType)
-  print("ARGUMENTS TYPES FOUND")
+  #ArgTypesUndefined = False
+  #ArgsTypeList = list()
+  #for Arg in CallStmt.args:
+  #  ArgType = GetExpressionType(Arg, Context)
+  #  # Argument type cannot be undefined or void
+  #  assert not isinstance(ArgType, RoseVoidType) 
+  #  if isinstance(ArgType, RoseUndefinedType):
+  #    ArgTypesUndefined = True
+  #    break
+  #  ArgsTypeList.append(ArgType)
+  #print("ARGUMENTS TYPES FOUND")
 
   # Compile the arguments (we have no other choice)
   ArgValuesList = list()
-  if ArgTypesUndefined == True:
-    print("COMPILE ARGUMENTS")
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not isinstance(CompiledArg.getType(), RoseVoidType)  \
-        and not isinstance(CompiledArg.getType(), RoseUndefinedType)
-      ArgValuesList.append(CompiledArg)
-    ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
-    print("ARGUMENTS COMPILED")
+  #if ArgTypesUndefined == True:
+  print("COMPILE ARGUMENTS")
+  for Arg in CallStmt.args:
+    CompiledArg = CompileExpression(Arg, Context)
+    # Argument type cannot be undefined or void
+    assert not isinstance(CompiledArg.getType(), RoseVoidType)  \
+      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
+    ArgValuesList.append(CompiledArg)
+  ArgsTypeList = [Arg.getType() for Arg in ArgValuesList]
+  print("ARGUMENTS COMPILED")
 
   # This is a function call
   print("CONTEXT:")
@@ -1363,16 +1363,30 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       Param = FunctionDef.params[Index]
       Arg = Function.getArg(Index)
       ChildContext.addCompiledAbstraction(Param.id, Arg)
+      if Context.isValueSignKnown(ArgValuesList[Index]) == True:
+        print("ArgValuesList[Index]:")
+        ArgValuesList[Index].print()
+        print("SIGN:")
+        print(Context.isValueSigned(ArgValuesList[Index]))
+        print("SIGN IS KNOWN")
+        ChildContext.addSignednessInfoForValue(Arg, Context.isValueSigned(ArgValuesList[Index]))
     print("ADDED ARGUMENTS TO THE CHILD CONTEXT")
     
+    RootAbstraction = Context.getRootAbstraction()
+    if isinstance(RootAbstraction, RoseFunction):
+      RegionContext = Context
+    else:
+      RegionContext, Region = Context.getFirsRootAbstractionsOfType(RoseFunction)
+      assert not isinstance(Region, RoseUndefRegion)
+
     # Add the generated function to the current context
-    Context.addCompiledAbstraction(FunctionDef.id, Function)
+    RegionContext.addCompiledAbstraction(FunctionDef.id, Function)
     
     # Add this function as the root abstraction for this this child context
     ChildContext.pushRootAbstraction(Function)
 
     # Create a new context for this funtcion
-    Context.createContext(FunctionDef.id, ChildContext)
+    RegionContext.createContext(FunctionDef.id, ChildContext)
     print("FUNCTION ADDED TO CONTEXT")
     
     # Compile the function body
@@ -1392,31 +1406,37 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     CompiledFunction.setRetVal(ReturnValue.getOperand(0))
 
     # Add this function to the root abstraction and update context
-    Context.addAbstractionToIR(CompiledFunction)
+    RegionContext.addAbstractionToIR(CompiledFunction)
 
     # Update the compiled function in this context now
-    Context.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
+    RegionContext.updateCompiledAbstraction(FunctionDef.id, CompiledFunction)
 
     # Destroy the child context now. But copy the context over for this function.
-    Context.copyContext(FunctionDef.id, CompiledFunction)
-    Context.destroyContext(FunctionDef.id)
+    RegionContext.copyContext(FunctionDef.id, CompiledFunction)
+    RegionContext.destroyContext(FunctionDef.id)
     print("COMPILED FUNCITON:")
     CompiledFunction.print()
   
   # Compile the function call arguments now
-  if ArgTypesUndefined == False:
-    print("COMPILE ARGUMENTS")
-    ArgValuesList = list()
-    for Arg in CallStmt.args:
-      CompiledArg = CompileExpression(Arg, Context)
-      # Argument type cannot be undefined or void
-      assert not isinstance(CompiledArg.getType(), RoseVoidType) \
-        and not isinstance(CompiledArg.getType(), RoseUndefinedType)
-      ArgValuesList.append(CompiledArg)
-    print("ARGUMENTS COMPILED")
+  #if ArgTypesUndefined == False:
+  #  print("COMPILE ARGUMENTS")
+  #  ArgValuesList = list()
+  #  for Arg in CallStmt.args:
+  #    CompiledArg = CompileExpression(Arg, Context)
+  #    # Argument type cannot be undefined or void
+  #    assert not isinstance(CompiledArg.getType(), RoseVoidType) \
+  #      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
+  #    ArgValuesList.append(CompiledArg)
+  #  print("ARGUMENTS COMPILED")
 
   # Compile call statement now.
-  Function = Context.getCompiledAbstractionForID(FunctionDef.id)
+  RootAbstraction = Context.getRootAbstraction()
+  if isinstance(RootAbstraction, RoseFunction):
+    RegionContext = Context
+  else:
+    RegionContext, Region = Context.getFirsRootAbstractionsOfType(RoseFunction)
+    assert not isinstance(Region, RoseUndefRegion)
+  Function = RegionContext.getCompiledAbstractionForID(FunctionDef.id)
   FunctionCall = RoseCallOp.create(Context.genName(), Function, ArgValuesList)
   print(FunctionCall)
   # Add the op to the IR
