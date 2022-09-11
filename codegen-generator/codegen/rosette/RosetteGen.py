@@ -236,6 +236,10 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
     TmpRosetteCode += Spaces + " )\n"
 
     if CondRegion.hasElseRegion():
@@ -251,6 +255,10 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
         if isinstance(Abstraction, RoseForLoop):
           TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                             NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+          continue
+        if isinstance(Abstraction, RoseCond):
+          TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                        VisitedLoop, ReductionLoops, SkipOpsMap)
           continue
       TmpRosetteCode += Spaces + " )\n"
   else:
@@ -271,6 +279,10 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
     TmpRosetteCode += Spaces + " )]\n"
   
     if isinstance(CondRegion.getCondition().getType(), RoseBitVectorType):
@@ -290,6 +302,10 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
     TmpRosetteCode += Spaces + " )]\n"
 
     TmpRosetteCode += Spaces + "[else (begin\n"
@@ -304,6 +320,10 @@ def GenerateRosetteForCondRegion(CondRegion : RoseCond, RosetteCode : str, NumSp
       if isinstance(Abstraction, RoseForLoop):
         TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
                                           NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
         continue
     TmpRosetteCode += Spaces + " )]\n"
 
