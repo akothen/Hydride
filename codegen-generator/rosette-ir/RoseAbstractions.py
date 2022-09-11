@@ -26,6 +26,7 @@ class RoseUndefRegion(RoseRegion):
 
 
 from RoseValues import RoseUndefValue, RoseOperation, RoseArgument, RoseConstant
+from RoseOperations import RoseReturnOp
 
 
 ####################################### ROSE FUNCTION ############################################
@@ -122,6 +123,16 @@ class RoseFunction(RoseValue, RoseRegion):
     for Abstraction in self:
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
       ClonedFunction.addRegion(ClonedAbstraction)
+    if ClonedFunction.getReturnValue().getType() == RoseUndefinedType() \
+      and ClonedFunction.getReturnValue() == RoseUndefValue():
+      BlockList = ClonedFunction.getRegionsOfType(RoseBlock)
+      for Block in BlockList:
+        for Op in Block:
+          if isinstance(Op, RoseReturnOp):
+            ClonedFunction.setRetVal(Op.getReturnedValue())
+            break
+        if ClonedFunction.getReturnValue() != RoseUndefValue():
+          break
     return ClonedFunction
 
   def getNumArgs(self):
@@ -214,6 +225,22 @@ class RoseFunction(RoseValue, RoseRegion):
     RoseRegion.print(self, NumSpace + 1)
     print(Spaces + "}")
 
+  def __str__(self, NumSpace = 0):
+    String = ""
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    # Print function signature first
+    Func_Sig = Spaces + "function " + self.getName() + " ("
+    for Index, Arg in enumerate(self.ArgList):
+      Func_Sig += (" " + str(Arg.getType()) + " " + Arg.getName())
+      if Index != len(self.ArgList) - 1:
+        Func_Sig += ","
+    Func_Sig += " ) {\n"
+    String += Func_Sig
+    String += RoseRegion.__str__(self, NumSpace + 1)
+    String += (Spaces + "}\n")
+    return String
 
 
 ####################################### ROSE BLOCK ############################################
@@ -284,17 +311,27 @@ class RoseBlock(RoseRegion):
     assert isinstance(Abstraction, RoseValue)
     Users = list()
     for Op in self.getOperations():
+      print("*****OP:")
+      Op.print()
+      print("Abstraction:")
+      Abstraction.print()
       if Op.usesValue(Abstraction):
         Users.append(Op)
     return Users
 
   def getNumUsersInRegion(self, Abstraction):
+    print("GETTING NUMBER OF USERS IN REGION")
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
+    print("Abstraction:")
+    Abstraction.print()
     NumUsers = 0
     for Op in self.getOperations():
+      print("CHECK OPERATION:")
+      Op.print()
       if Op.usesValue(Abstraction):
+        print("USES VALUE!!!!")
         NumUsers += 1
     return NumUsers
 
@@ -543,6 +580,20 @@ class RoseForLoop(RoseRegion):
     super().print(NumSpace + 1)
     print(Spaces + "}")
 
+  def __str__(self, NumSpace=0):
+    String = ""
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    LoopHeader = Spaces + "for ([" + self.Iterator.getName() + " (range " \
+        + self.getStartIndex().getName() + " " + self.getEndIndex().getName() \
+        + " " + self.getStep().getName() + ")]) {\n"
+    String += LoopHeader
+    # Print regions in this loop
+    String += super().__str__(NumSpace + 1)
+    String += (Spaces + "}\n")
+    return String
+
 
 ####################################### ROSE IF-ELSE ############################################
 
@@ -719,6 +770,37 @@ class RoseCond(RoseRegion):
         assert Region.getParent() == self
         Region.print(NumSpace + 1)
     print(Spaces + "}")
+
+
+  def __str__(self, NumSpace=0):
+    String = ""
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Condtiion = Spaces + "if (" + str(self.Conditions[0].getType()) \
+                       + " " + self.Conditions[0].getName() + ") {\n"
+    String += Condtiion
+    # Print regions in this then regions
+    for Region in self.getChildren(self.getKeyForThenRegion()):
+      assert Region.getParent() == self
+      String += Region.__str__(NumSpace + 1)
+    # Printing other cond regions
+    if len(self.getKeys()) > 1:
+      if len(self.getKeys()) > 2:
+        for Index, ConditionVal in enumerate(self.Conditions[1:-1]):
+          Condtiion = Spaces + "} elif (" + str(ConditionVal.getType()) \
+                      + " " + self.Conditions[0].getName() + ") {\n"
+          String += Condtiion
+          # Print regions in this then regions
+          for Region in self.getChildren(self.getKeys()[Index + 1]):
+            assert Region.getParent() == self
+            String += Region.__str__(NumSpace + 1)
+      String += Spaces + "} else {\n"
+      for Region in self.getChildren(self.getKeyForElseRegion()):
+        assert Region.getParent() == self
+        String += Region.__str__(NumSpace + 1)
+    String += Spaces + "}\n"
+    return String
 
 
 
