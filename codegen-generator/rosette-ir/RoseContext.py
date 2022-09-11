@@ -1,8 +1,14 @@
+#############################################################
+#
+# Target-agnostic context for Rosette IR.
+#
+#############################################################
+
 
 from RoseType import *
 from RoseValue import RoseValue
 from RoseValues import *
-from RoseAbstractions import RoseFunction, RoseUndefRegion
+from RoseAbstractions import *
 
 from copy import deepcopy
 
@@ -62,8 +68,8 @@ class RoseContext:
     self.CompiledAbstractionsKeys[Abstraction] = Key
     
   def updateCompiledAbstraction(self, ID : str, NewAbstraction):
-      assert ID in self.CompiledAbstractions
-      self.CompiledAbstractions[ID] = NewAbstraction
+    assert ID in self.CompiledAbstractions
+    self.CompiledAbstractions[ID] = NewAbstraction
 
   def getCompiledAbstractionForID(self, ID : str):
     assert ID in self.CompiledAbstractions
@@ -72,6 +78,8 @@ class RoseContext:
   def addSignednessInfoForValue(self, Value : RoseValue, IsSigned : bool):
     assert not isinstance(Value, RoseUndefValue)
     print("addSignednessInfoForValue:")
+    print(IsSigned)
+    print("VALUE:")
     Value.print()
     self.CompiledValToSignedness[Value] = IsSigned
   
@@ -129,6 +137,19 @@ class RoseContext:
   def getContextOfChildFunction(self, Function : RoseFunction):
     assert Function in self.FunctionToContexts
     return self.FunctionToContexts[Function]
+
+  def getFirsRootAbstractionsOfType(self, RegionType):
+    assert RegionType != RoseAbstractions.RoseUndefRegion
+    assert RegionType == RoseAbstractions.RoseFunction \
+        or RegionType == RoseAbstractions.RoseForLoop \
+        or RegionType == RoseAbstractions.RoseCond
+    for Region in reversed(self.RootAbstractions):
+      if isinstance(Region, RegionType):
+        return self, Region
+    # Try the parent context
+    if self.ParentContext != None:
+      return self.ParentContext.getFirsRootAbstractionsOfType(RegionType)
+    return None, RoseUndefRegion()
 
   def pushRootAbstraction(self, Abstraction):
     self.RootAbstractions.append(Abstraction)
