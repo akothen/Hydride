@@ -1093,9 +1093,10 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
     if isinstance(Op, RoseBVInsertSliceOp):
       print("---INSERT OP:")
       Op.print()
-      CorrespondingCondOp = RoseUndefValue()
+      #CorrespondingCondOp = RoseUndefValue()
+      CorrespondingCondOps = None
       if Op in CondBlocksBVInsertsMap:
-        CorrespondingCondOp = CondBlocksBVInsertsMap[Op]
+        CorrespondingCondOps = CondBlocksBVInsertsMap[Op]
       if Loop == RoseUndefRegion():
         FixIndicesForBVOpsOutsideOfLoops(Op, Visited, LoopList[0].getEndIndex(), Context)
         Visited.add(Op)
@@ -1128,8 +1129,10 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         for IndexingOp in GatherIndexingOps(Op):
           IndexingOps.add(IndexingOp)
         # Map the output bitwidth of corresponding bvinsert, if any.
-        if CorrespondingCondOp in CondBlocksBVInsertsMap:
-          BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
+        if CorrespondingCondOps != None:
+          for CorrespondingCondOp in CorrespondingCondOps:
+            if CorrespondingCondOp in CondBlocksBVInsertsMap:
+              BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
         IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
         continue
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
@@ -1204,45 +1207,73 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       for IndexingOp in GatherIndexingOps(Op):
         IndexingOps.add(IndexingOp)
       # Map the output bitwidth of corresponding bvinsert, if any.
-      if not isinstance(CorrespondingCondOp, RoseUndefValue):
-        if CorrespondingCondOp in CondBlocksBVInsertsMap \
-        and Op in BVValToBitwidthVal:
-          print("CorrespondingCondOp:")
-          CorrespondingCondOp.print()
-          BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
+      if CorrespondingCondOps != None:
+        for CorrespondingCondOp in CorrespondingCondOps:
+          if not isinstance(CorrespondingCondOp, RoseUndefValue):
+            if CorrespondingCondOp in CondBlocksBVInsertsMap \
+            and Op in BVValToBitwidthVal:
+              print("CorrespondingCondOp:")
+              CorrespondingCondOp.print()
+              BVValToBitwidthVal[CorrespondingCondOp] = BVValToBitwidthVal[Op]
       IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
       continue
   return
 
 
 def MapBVInsertsInCondBlocks(Function : RoseFunction):
+  CondBlocksBVInsertsMap = dict()
+
   # Lambda function
   def ExtractBVInsertsToRetVal(Regions : list):
     OpList = list()
+    LocalCondBlocksBVInsertsMap = dict()
     for Region in Regions:
       if isinstance(Region, RoseBlock):
         for Op in Region.getOperations():
           if isinstance(Op, RoseBVInsertSliceOp):
             if Op.getInputBitVector() == Function.getReturnValue():
               OpList.append(Op)
+      elif isinstance(Region, RoseCond):
+        MapBVInsertsInCondRegion(Region, LocalCondBlocksBVInsertsMap)
+    for Op, ItemOps in LocalCondBlocksBVInsertsMap.items():
+      assert isinstance(ItemOps, list)
+      if Op not in OpList:
+        OpList.append(Op)
+      if Op not in CondBlocksBVInsertsMap:
+        CondBlocksBVInsertsMap[Op] = ItemOps
+      else:
+        CondBlocksBVInsertsMap[Op].extend(ItemOps)
     return OpList
-
-  CondBlocksBVInsertsMap = dict()
-  CondRegions = Function.getRegionsOfType(RoseCond)
-  for CondRegion in CondRegions:
+  
+  def MapBVInsertsInCondRegion(CondRegion : RoseCond, LocalCondBlocksBVInsertsMap : dict):
     ThenRegions = list()
     ElseRegions = list()
     ThenRegions.extend(CondRegion.getThenRegions())
     ElseRegions.extend(CondRegion.getElseRegions())
     ThenBVInsertOps = ExtractBVInsertsToRetVal(ThenRegions)
     ElseBVInsertOps = ExtractBVInsertsToRetVal(ElseRegions)
-    assert len(ThenBVInsertOps) == len(ElseBVInsertOps)
-    for ThenBVInsertOp, ElseBVInsertOp in zip(ThenBVInsertOps, ElseBVInsertOps):
-      CondBlocksBVInsertsMap[ThenBVInsertOp] = ElseBVInsertOp
-      CondBlocksBVInsertsMap[ElseBVInsertOp] = ThenBVInsertOp
+    print("ThenBVInsertOps:")
+    print(ThenBVInsertOps)
+    print("ElseBVInsertOps:")
+    print(ElseBVInsertOps)
+    #assert len(ThenBVInsertOps) == len(ElseBVInsertOps)
+    for ThenBVInsertOp in ThenBVInsertOps:
+      for ElseBVInsertOp in ElseBVInsertOps:
+        if ThenBVInsertOp not in LocalCondBlocksBVInsertsMap:
+          LocalCondBlocksBVInsertsMap[ThenBVInsertOp] = [ElseBVInsertOp]
+        else:
+          LocalCondBlocksBVInsertsMap[ThenBVInsertOp].append(ElseBVInsertOp)
+        if ElseBVInsertOp not in LocalCondBlocksBVInsertsMap:
+          LocalCondBlocksBVInsertsMap[ElseBVInsertOp] = [ThenBVInsertOp]
+        else:
+          LocalCondBlocksBVInsertsMap[ElseBVInsertOp].append(ThenBVInsertOp)
       print("ThenBVInsertOp <-> ElseBVInsertOp:")
       ThenBVInsertOp.print()
       ElseBVInsertOp.print()
+
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    MapBVInsertsInCondRegion(CondRegion, CondBlocksBVInsertsMap)
   return CondBlocksBVInsertsMap
 
 
