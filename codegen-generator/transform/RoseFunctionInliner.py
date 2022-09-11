@@ -36,8 +36,11 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   for UserIndex, User in enumerate(Users):
     # Clone the function
     ClonedFunction = Function.clone(Suffix + str(UserIndex))
+    ClonedReturnValue = ClonedFunction.getReturnValue()
     print("ClonedFunction:")
     ClonedFunction.print()
+    print("-----ClonedFunction.getReturnValue():")
+    ClonedFunction.getReturnValue().print()
     # Get the params of the function
     FunctionArgs = ClonedFunction.getArgs()
     print("USER OF FUNCTION:")
@@ -49,17 +52,26 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
     UserPos = Block.getPosOfOperation(User)
     print("BLOCK BEFORE SPLITTING:")
     Block.print()
+    print("ClonedFunction:")
+    ClonedFunction.print()
     NewBlock = Block.splitAt(UserPos)
     print("NEW BLOCK:")
     NewBlock.print()
     print("UPDATED BLOCK:")
     Block.print()
+    print("+++ClonedFunction:")
+    ClonedFunction.print()
+    print("ClonedFunction.getReturnValue():")
+    ClonedFunction.getReturnValue().print()
     # Clone all the regions of the function to be inlined
     # and add them to the parent region.
     ParentRegion = Block.getParent()
-    InsertionPoint = ParentRegion.getPosOfChild(NewBlock)
+    Key = ParentRegion.getKeyForChild(NewBlock)
+    InsertionPoint = ParentRegion.getPosOfChild(NewBlock, Key)
+    print("InsertionPoint:")
+    print(InsertionPoint)
     for Region in ClonedFunction.getChildren():
-      ParentRegion.addRegionBefore(InsertionPoint, Region)
+      ParentRegion.addRegionBefore(InsertionPoint, Region, Key)
       InsertionPoint += 1
     print("ParentRegion:")
     ParentRegion.print()
@@ -70,20 +82,24 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
       print("FunctionArgs[Index]:")
       FunctionArgs[Index].print()
       ParentRegion.replaceUsesWith(FunctionArgs[Index], CallArgs[Index])
+    print("ParentRegion:")
+    ParentRegion.print()
         
     # Get uses of callsites
-    ClonedReturnValue = ClonedFunction.getReturnValue()
     CallSiteUsers = User.getParent().getFunction().getUsersOf(User)
     print("CallSiteUsers:")
     print(CallSiteUsers)
     assert len(CallSiteUsers) == 1
     CallSiteUser = CallSiteUsers[0]
     # Get users of return value
+    print("ClonedReturnValue")
+    print(ClonedReturnValue)
+    print(type(ClonedReturnValue))
     TempDstUsers = ParentRegion.getUsersOf(ClonedReturnValue)
     # Replace the value at callsite with return value
-    User.replaceUsesWith(ClonedFunction.getReturnValue())
+    User.replaceUsesWith(ClonedReturnValue)
     # Erase the return op
-    for Op in ParentRegion.getUsersOf(ClonedFunction.getReturnValue()):
+    for Op in ParentRegion.getUsersOf(ClonedReturnValue):
       if isinstance(Op, RoseReturnOp):
         ParentBlock = Op.getParent()
         ParentBlock.eraseOperation(Op)
@@ -155,6 +171,8 @@ def RunInlinerOnFunction(Function : RoseFunction, Context : RoseContext):
   ParentRegionOfFunction.print()
 
   # Now fuse adjacent blocks in this function
+  print("ParentRegionOfFunction:")
+  ParentRegionOfFunction.print()
   FuseAdjacentBlocks(ParentRegionOfFunction)
 
 
