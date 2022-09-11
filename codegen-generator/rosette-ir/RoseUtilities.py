@@ -242,7 +242,7 @@ def GetInvariantsInRegion(Abstraction, Invariants = dict()):
   return Invariants
 
 
-def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
+def FuseAdjacentBlocks(Region, RegionAndKeyToBlock : dict = dict()):
   assert not isinstance(Region, RoseUndefRegion)
   assert not isinstance(Region, RoseBlock)
   print("FuseAdjacentBlocks:")
@@ -250,50 +250,58 @@ def FuseAdjacentBlocks(Region, RegionToBlock : dict = dict()):
   Region.print()
   # Now just go over the function and fuse adjacent blocks
   if Region.getKeys() is not None:
+    print("THIS IS A KEYED REGION")
     for Key in Region.getKeys():
+      print("KEY")
+      print(Key)
       ChildrenList = list()
       ChildrenList.extend(Region.getChildren(Key))
       for Abstraction in ChildrenList:
         if isinstance(Abstraction, RoseBlock):
-          if Region not in RegionToBlock:
-            RegionToBlock[Region] = Abstraction
+          if (Region, Key) not in RegionAndKeyToBlock:
+            RegionAndKeyToBlock[(Region, Key)] = Abstraction
             continue
           # Fuse this block with the currently tracked block
+          print("FUSING")
           OperationList = list()
           OperationList.extend(Abstraction.getOperations())
           for Operation in OperationList:
             Abstraction.removeOperation(Operation)
-            RegionToBlock[Region].addOperation(Operation)
+            RegionAndKeyToBlock[(Region, Key)].addOperation(Operation)
           # Delete this block
           #ParentRegion = Abstraction.getParent()
           Region.eraseChild(Abstraction, Key)
           continue
         # Deal with other types of subregions
-        if Region in RegionToBlock:
-          RegionToBlock.pop(Region)
-        FuseAdjacentBlocks(Abstraction, RegionToBlock)
+        if (Region, Key) in RegionAndKeyToBlock:
+          print("DEAL WITH ANOTHER KIND OF REGION")
+          RegionAndKeyToBlock.pop((Region, Key))
+        FuseAdjacentBlocks(Abstraction, RegionAndKeyToBlock)
   else:
     ChildrenList = list()
     ChildrenList.extend(Region.getChildren())
+    print("len(ChildrenList)")
+    print(len(ChildrenList))
     for Abstraction in ChildrenList:
       if isinstance(Abstraction, RoseBlock):
-        if Region not in RegionToBlock:
-          RegionToBlock[Region] = Abstraction
+        if (Region, None) not in RegionAndKeyToBlock:
+          RegionAndKeyToBlock[(Region, None)] = Abstraction
           continue
         # Fuse this block with the currently tracked block
+        print("FUSING BLOCKS")
         OperationList = list()
         OperationList.extend(Abstraction.getOperations())
         for Operation in OperationList:
           Abstraction.removeOperation(Operation)
-          RegionToBlock[Region].addOperation(Operation)
+          RegionAndKeyToBlock[(Region, None)].addOperation(Operation)
         # Delete this block
         #ParentRegion = Abstraction.getParent()
         Region.eraseChild(Abstraction)
         continue
       # Deal with other types of subregions
-      if Region in RegionToBlock:
-        RegionToBlock.pop(Region)
-      FuseAdjacentBlocks(Abstraction, RegionToBlock)
+      if (Region, None) in RegionAndKeyToBlock:
+        RegionAndKeyToBlock.pop((Region, None))
+      FuseAdjacentBlocks(Abstraction, RegionAndKeyToBlock)
 
 
 def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperation, \
