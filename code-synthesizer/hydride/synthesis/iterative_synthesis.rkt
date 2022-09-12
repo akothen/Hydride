@@ -10,6 +10,7 @@
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
 
 
@@ -74,7 +75,7 @@
   (define cex 
     (verify 
       (assert
-        (equal? (interpret sol symbols) (invoke_ref symbols) )
+        (equal?  (interpret sol symbols) (invoke_ref symbols) )
         ))
     )
   (define end (current-seconds))
@@ -95,8 +96,9 @@
         (define spec_res (invoke_ref new-bvs))
         (debug-log spec_res)
 
-        (define synth_res (interpret sol new-bvs))
-        (debug-log (format "Verification failed ...\n\tspec produced: ~a\n\tsynthesized result produced: ~a\n" spec_res synth_res))
+
+        (define synth_res  (interpret sol new-bvs))
+        (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
         )
@@ -178,7 +180,7 @@
 
 (define (z3-optimize assert-query-fn grammar cex-ls cost-fn)
   (begin 
-    (current-solver (z3))
+    ;(current-solver (z3))
 
     (optimize 
       #:minimize (list (cost-fn grammar))
@@ -257,7 +259,7 @@
 ;; generate-params :: (vector symbolic-bvs) -> (vector sym-bv1 symbv2 16 23)
 
 
-(define (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn cexs cost-bound solver)
+(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs cost-bound solver)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -271,7 +273,9 @@
 
 
   ;; Clear the verification condition up till this point
-  ;;(clear-vc!)
+  ;(clear-vc!)
+  ;(clear-terms!)
+  ;(collect-garbage)
 
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs
@@ -289,13 +293,22 @@
   (debug-log cex-ls)
 
 
-  (define (assert-query-fn env)
-    (assert (equal? (invoke_ref env)  (interpret grammar env)))
+  ;; Sythesizing keeping only a single lane
+  ;; in the assertion. We'll verify over all
+  ;; lanes
+  (define (assert-query-synth-fn env)
+    ;; FIXME: Hacky way to get extraction limits
+    (define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
+    (define interpret-res (extract extraction-limits 0 (interpret grammar env)))
+    (begin
+        (assert (equal? (invoke_ref_lane env)   interpret-res))
+        (assert (equal? (get-length grammar env) (bvlength (invoke_ref env))))
+        )
     )
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver)
+    (iterative-synth-query assert-query-synth-fn grammar cex-ls optimize? cost-fn cost-bound solver)
     )
 
   (define end_time (current-seconds))
@@ -372,7 +385,7 @@
           (begin
             (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn materialize)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
-              (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
+              (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
                                         cex-ls  
                                         (cost-fn materialize) ;; Use tighter cost bound
                                         solver
@@ -393,7 +406,7 @@
 
 
         ;; If not verified then attempt synthesizing with appended counter example
-        (synthesize-sol-iterative invoke_ref grammar bitwidth-list optimize? cost-fn 
+        (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
                                   (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
                                   cost-bound
                                   solver

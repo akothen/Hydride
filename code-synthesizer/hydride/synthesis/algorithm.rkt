@@ -15,6 +15,7 @@
 (require hydride/synthesis/synth_main)
 (require hydride/synthesis/python)
 (require hydride/halide)
+(require hydride/cpp)
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/printer)
@@ -74,8 +75,8 @@
   (define sym-bvs (create-symbolic-bvs leaves-sizes))
 
 
-
-
+  ;(clear-vc!)
+  ;(clear-terms!)
 
   (define dummy-args (halide:create-buffers leaves sym-bvs))
 
@@ -111,6 +112,16 @@
 
 
                     (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) VF))
+                    ;;(define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
+                    _result
+                    )
+
+
+                  ;; Calculate result for last most lane
+                  (define (invoke-spec-lane env)
+                    (define synth-buffers (halide:create-buffers leaves env))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
+                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
                     _result
                     )
 
@@ -121,15 +132,17 @@
                   (define cost-bound 30)
                   (define solver 'z3)
 
-                  (clear-vc!)
+                  ;(clear-vc!)
+                  ;(clear-terms!)
                   (displayln "Synthesizing sub-expression")
                   (pretty-print expr-extract)
                   (debug-log "Leaves are bitvectors of sizes:")
                   (debug-log leaves-sizes)
                   (define test-start (current-seconds))
                   (debug-log "Beginning Synthesis")
+
                   (define-values (satisfiable? materialize elap) 
-                                 (synthesize-sol-with-depth 2 depth-limit invoke-spec grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) )
+                                 (synthesize-sol-with-depth 2 depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) )
 
                   (define test-end (current-seconds))
 

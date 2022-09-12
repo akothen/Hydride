@@ -55,7 +55,7 @@
 ;; materialize  : If a solutio exists, refers to the specific solution. else it returns a '()
 ;; elapsed_time : Returns the synthesis time (in seconds)
 
-(define (synthesize-sol invoke_ref grammar bitwidth-list optimize? cost-fn cost-bound solver)
+(define (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cost-bound solver)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
