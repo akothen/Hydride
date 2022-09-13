@@ -45,6 +45,22 @@
   result
   )
 
+;; Extract num_extract contigous elements of individual size type_size
+(define (vector-extract-slice v1 num_elems type_size offset num_extract)
+  (define result
+    (apply
+      concat
+      (for/list ([i (range num_extract)])
+                (define offset-from-right (- num_elems offset 1))
+                (define index (+ offset i))
+                (ext-bv v1 (- (- num_elems 1) index) type_size)
+                )
+      )
+    )
+  result
+  
+  )
+
 ;; General version of swizzle with two input vectors
 (define (vector-two-input-swizzle v1 v2 num_elems type_size lane_offset lane_size group_size dis_size rot_factor)
   (define high_lane_offset (+ group_size lane_offset))
