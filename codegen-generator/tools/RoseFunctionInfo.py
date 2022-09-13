@@ -41,6 +41,12 @@ class RoseFunctionInfo():
 
   def __hash__(self):
     return hash(self.ID)
+  
+  def destroyAllRecentFunctionVersions(self, KeepOldestFunction : bool = True):
+    if KeepOldestFunction:
+      self.FunctionAtStages = [self.FunctionAtStages[0]]
+    else:
+      self.FunctionAtStages = list()
 
   def getInElemType(self):
     return self.InElemType
@@ -74,6 +80,39 @@ class RoseFunctionInfo():
 
   def isSIMD(self):
     return self.IsSIMD
+
+  def setInElemType(self, ElemType):
+    self.InElemType = ElemType
+
+  def setOutElemType(self, ElemType):
+    self.OutElemType = ElemType
+
+  def setInVectorLength(self, Length : int):
+    self.InVectorLength = Length
+
+  def setOutVectorLength(self, Length : int):
+    self.OutVectorLength = Length
+
+  def setLaneSize(self, Size : int):
+    self.LaneSize = Size
+
+  def setInElemTypeIndex(self, Idx : int):
+    self.InElemTypeIndex = Idx
+
+  def setOutElemTypeIndex(self, Idx : int):
+    self.OutElemTypeIndex = Idx
+
+  def setInVectorLengthIndex(self, Idx : int):
+    self.InVectorLengthIndex = Idx
+
+  def setOutVectorLengthIndex(self, Idx : int):
+    self.OutVectorLengthIndex = Idx
+
+  def setLaneSizeIndex(self, Idx : int):
+    self.LaneSizeIndex = Idx
+
+  def setIsSIMD(self, IsSIMD : bool):
+    self.IsSIMD = IsSIMD
 
   def addTargetSpecificFunction(self, Function : RoseFunction):
     self.TargetSpecificFunction = Function
