@@ -35,6 +35,9 @@ class RoseUndefValue(RoseValue):
 
   def print(self):
     print(self.getName())
+  
+  def __str__(self):
+    return self.getName()
 
 
 # Constant value (integer and float) class
@@ -148,6 +151,12 @@ class RoseConstant(RoseValue):
 
   def print(self):
     print(self.Val)
+  
+  def __str__(self):
+    if not isinstance(self.Val, str):
+      return str(self.Val)
+    else:
+      return self.Val
 
 
 class RoseArgument(RoseValue):
@@ -216,6 +225,9 @@ class RoseArgument(RoseValue):
 
   def print(self):
     print(self.getName())
+  
+  def __str__(self):
+    return self.getName()
 
 
 # An operation in Rosette
@@ -293,15 +305,19 @@ class RoseOperation(RoseValue):
       ClonedOp = self.clone()
     else:
       ClonedOp = self.clone(self.getName() + "." + Suffix)
-    ValueToValueMap[self] = ClonedOp
     for Index, Operand in enumerate(self.getOperands()):
-      print("Operand:")
-      Operand.print()
       if isinstance(Operand, RoseConstant):
         ClonedOperand = RoseConstant.create(Operand.getValue(), Operand.getType())
       else:
-        ClonedOperand = ValueToValueMap[Operand]
+        if Operand in ValueToValueMap:
+          ClonedOperand = ValueToValueMap[Operand]
+        else:
+          Function = self.getParent().getFunction()
+          ReturnValue = Function.getReturnValue()
+          assert Operand == ReturnValue
+          ClonedOperand = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
       ClonedOp.setOperand(Index, ClonedOperand)
+    ValueToValueMap[self] = ClonedOp
     return ClonedOp
   
   def getOpcode(self):
@@ -444,4 +460,20 @@ class RoseOperation(RoseValue):
           String += ","
     print(String)
 
-
+  def __str__(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
+    String += str(self.Opcode)
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += ","
+    String += "\n"
+    return String
