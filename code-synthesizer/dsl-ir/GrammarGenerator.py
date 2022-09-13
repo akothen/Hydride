@@ -43,8 +43,8 @@ class GrammarGenerator:
         return "\n\t".join(grammar_clause)
 
     def emit_lit_hole(self, bv_size):
-        #return "(lit (create-symbolic-bv {}))".format(bv_size)
-        return "(lit (?? (bitvector {})))".format(bv_size)
+        return "(lit (create-symbolic-bv {}))".format(bv_size)
+        #return "(lit (?? (bitvector {})))".format(bv_size)
 
     def emit_lit_hole_clause(self, bv_size, last_clause = False):
         condition = None
@@ -84,6 +84,12 @@ class GrammarGenerator:
         assert_depth = "\t(assert (> {} 0))".format(depth_name)
         choose_vars = "\t[(choose* #t #f) (apply choose* {})]".format(vars_name)
 
+        ## Input variables should only be access via mem layer
+        if "mem" not in layer_name:
+            choose_vars = "\n"
+            pass
+
+
         clauses = []
         for i in range(0, len(layer_dsl_insts)):
             clauses.append(self.emit_grammar_clause(layer_dsl_insts[i], layer_dsl_args_list[i],
@@ -100,6 +106,10 @@ class GrammarGenerator:
 
 
         define_grammar = "(define ({} {} #:depth {})".format(layer_name, vars_name, depth_name)
+
+        if len(clauses) == 0:
+            return define_grammar +"\n" +assert_depth +"\n" +  "\t(apply choose* {})".format(vars_name)+"\n)\n"
+
 
         return define_grammar +"\n" +assert_depth +"\n" +"\t(cond" + "\n"+ choose_vars +"\n" +"\n".join(clauses)+"\n\t)"+"\n)\n"
 

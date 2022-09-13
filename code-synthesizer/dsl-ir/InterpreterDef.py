@@ -64,7 +64,12 @@ class InterpreterDef:
         for idx,arg in enumerate(sample_ctx.context_args):
             if idx % 3 == 0 and idx != 0:
                 sub_interpret.append("\n\t\t")
-            sub_interpret.append("(interpret {} {})".format(arg.name, env_name))
+
+            if isinstance(arg, BitVector):
+                sub_interpret.append("(interpret {} {})".format(arg.name, env_name))
+            else:
+                sub_interpret.append("{}".format(arg.name))
+
 
         interpret_cmd = "({} {})".format(dsl_inst.name, " ".join(sub_interpret))
 

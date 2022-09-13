@@ -164,8 +164,18 @@
   )
 
 
+(define (get-concrete-noteq-asserts grammar failed-sols)
+  (define (helper i)
+    (printf "Adding ~a to exclude list ...\n" (list-ref failed-sols i))
+    (assert (not (equal? (list-ref failed-sols i) grammar)))
+    )
+  (define num-fail (length failed-sols))
+  (define assertions (build-list num-fail helper))
+  assertions
+  )
 
-(define (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn)
+
+(define (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn failed-sols)
   (begin 
     (synthesize 
       #:forall (list cex-ls)
@@ -173,14 +183,15 @@
       (begin 
         ;; loop over inputs and add asserts
         (get-concrete-asserts assert-query-fn cex-ls)
+        (get-concrete-noteq-asserts grammar failed-sols)
         )
       ) 
     )
   )
 
-(define (z3-optimize assert-query-fn grammar cex-ls cost-fn)
+(define (z3-optimize assert-query-fn grammar cex-ls cost-fn failed-sols)
   (begin 
-    ;(current-solver (z3))
+    (current-solver (z3))
 
     (optimize 
       #:minimize (list (cost-fn grammar))
@@ -188,6 +199,7 @@
       (begin 
         ;; loop over inputs and add asserts
         (get-concrete-asserts assert-query-fn cex-ls)
+        (get-concrete-noteq-asserts grammar failed-sols)
 
         )
       )
@@ -196,7 +208,7 @@
   )
 
 
-(define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
+(define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound failed-sols)
   (begin
     (debug-log (format "Boolector optimize with cost-bound ~a ...\n" cost-bound))
     (debug-log "Synthesizing...\n")
@@ -209,6 +221,7 @@
         (begin 
           ;; loop over inputs and add asserts
           (get-concrete-asserts assert-query-fn cex-ls)
+          (get-concrete-noteq-asserts grammar failed-sols)
           (assert (< (cost-fn grammar) cost-bound))
           )
         ) 
@@ -239,15 +252,15 @@
   )
 
 
-(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver) 
+(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver failed-sols) 
   (if optimize?
     (if 
       (equal? solver 'z3)
-      (z3-optimize assert-query-fn grammar cex-ls cost-fn)
-      (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound)
+      (z3-optimize assert-query-fn grammar cex-ls cost-fn failed-sols)
+      (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound failed-sols)
       )
 
-    (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn)
+    (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn failed-sols)
     )
   )
 
@@ -259,7 +272,7 @@
 ;; generate-params :: (vector symbolic-bvs) -> (vector sym-bv1 symbv2 16 23)
 
 
-(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs cost-bound solver)
+(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs cost-bound solver failed-sols)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -273,9 +286,9 @@
 
 
   ;; Clear the verification condition up till this point
-  ;(clear-vc!)
-  ;(clear-terms!)
-  ;(collect-garbage)
+  (clear-vc!)
+  (clear-terms!)
+  (collect-garbage 'major)
 
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs
@@ -298,17 +311,52 @@
   ;; lanes
   (define (assert-query-synth-fn env)
     ;; FIXME: Hacky way to get extraction limits
-    (define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
-    (define interpret-res (extract extraction-limits 0 (interpret grammar env)))
+    ;(define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
+    (define word-size (bvlength (invoke_ref_lane env)))
+    ;16
+    ;32 - 1 = 32
+    (define interpret-res (extract (- (* 2 word-size) 1 ) word-size (interpret grammar env)))
+    ;(define test-synth-bit-1 (bit 0 interpret-res))
+    ;(define test-spec-bit-1 (bit 0 (invoke_ref_lane env)))
+
+    ;(define test-synth-bit-2 (bit 2 interpret-res))
+    ;(define test-spec-bit-2 (bit 2 (invoke_ref_lane env)))
+
+    ;(define test-synth-bit-3 (bit 3 interpret-res))
+    ;(define test-spec-bit-3 (bit 3 (invoke_ref_lane env)))
+
+    ;(define test-synth-bit-8 (bit 8 interpret-res))
+    ;(define test-spec-bit-8 (bit 8 (invoke_ref_lane env)))
+
+    ;(define rand-bit (random 15))
+    ;(printf "Random bit is ~a\n" rand-bit)
+
+    ;(define test-synth-bit-rand (bit rand-bit interpret-res))
+    ;(define test-spec-bit-rand (bit rand-bit (invoke_ref_lane env)))
+
+
+    ;(define test-synth-bit-n (bit 15 interpret-res))
+    ;(define test-spec-bit-n (bit 15 (invoke_ref_lane env)))
+    
+    ;(define full-interpret-res (interpret grammar env))
+
     (begin
+        ;(assert (equal? (invoke_ref env)   full-interpret-res))
         (assert (equal? (invoke_ref_lane env)   interpret-res))
-        (assert (equal? (get-length grammar env) (bvlength (invoke_ref env))))
+        ;(assert (equal? test-synth-bit-1 test-spec-bit-1))
+        ;(assert (equal? test-synth-bit-2 test-spec-bit-2))
+        ;(assert (equal? test-synth-bit-3 test-spec-bit-3))
+        ;(assert (equal? test-synth-bit-8 test-spec-bit-8))
+        ;(assert (equal? test-synth-bit-n test-spec-bit-n))
+        ;(assert (equal? test-synth-bit-rand test-spec-bit-rand))
+        ;(assert (equal? (get-length grammar env) (bvlength (invoke_ref env))))
+        ;(assert (equal? full-interpret-res (invoke_ref env)))
         )
     )
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-synth-fn grammar cex-ls optimize? cost-fn cost-bound solver)
+    (iterative-synth-query assert-query-synth-fn grammar cex-ls optimize? cost-fn cost-bound solver failed-sols)
     )
 
   (define end_time (current-seconds))
@@ -389,6 +437,7 @@
                                         cex-ls  
                                         (cost-fn materialize) ;; Use tighter cost bound
                                         solver
+                                        failed-sols
                                         )
               )
 
@@ -410,6 +459,7 @@
                                   (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
                                   cost-bound
                                   solver
+                                  (append failed-sols (list materialize))
                                   )
         )
       )
@@ -433,7 +483,7 @@
 
 
   ;; Clear the verification condition up till this point
-  ;;(clear-vc!)
+  (clear-vc!)
 
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs

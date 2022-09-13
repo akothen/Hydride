@@ -4,7 +4,9 @@ from PredefinedDSL import *
 import random
 
 DEBUG = False
+DEBUG_LIST = ["_mm_mulhi_pi16","_mm_mulhi_pi16"]
 USE_BW_ALGO = False
+ENABLE_SHUFFLE = True
 
 class Synthesizer:
 
@@ -88,6 +90,8 @@ class Synthesizer:
         lane_offsets_factors = [0] #[0, "IDX_J"]
         dis_factors = [1]
         rotate_factors = [0]
+        num_elems_factors = [self.VF, int(0.5 * self.VF)]
+        lane_size_factors = [self.VF, int(0.5 * self. VF)]
 
 
         input_vector_sizes = []
@@ -98,6 +102,97 @@ class Synthesizer:
         precisions = []
         lane_offsets = []
         lane_sizes = []
+
+        first_half_memo = []
+        def first_half_concat_pattern(num_elems, type_size, input_size):
+            datum = (input_size, type_size)
+
+            if datum in first_half_memo:
+                return
+            else:
+                first_half_memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            num_elem_sizes.append(num_elems)
+            precisions.append(type_size)
+            lane_offsets.append(0)
+            lane_sizes.append(num_elems)
+            group_sizes.append(int(num_elems * 0.5))
+            dis_sizes.append(1)
+            rotate_sizes.append(0)
+
+
+        second_half_memo = []
+        def second_half_concat_pattern(num_elems, type_size, input_size):
+            datum = (input_size, type_size)
+
+            if datum in second_half_memo:
+                return
+            else:
+                second_half_memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            num_elem_sizes.append(int(0.5 * num_elems))
+            precisions.append(type_size)
+            lane_offsets.append(0)
+            lane_sizes.append(int(0.5 * num_elems))
+            group_sizes.append(int(num_elems * 0.5))
+            dis_sizes.append(1)
+            rotate_sizes.append(0)
+
+
+        first_half_interleave_memo = []
+        def first_half_interleave_pattern(num_elems, type_size, input_size):
+            datum = (input_size, type_size)
+
+            if datum in first_half_interleave_memo:
+                return
+            else:
+                first_half_interleave_memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            num_elem_sizes.append(num_elems)
+            precisions.append(type_size)
+            lane_offsets.append(0)
+            lane_sizes.append(num_elems)
+            group_sizes.append(int(num_elems * 0.5))
+            dis_sizes.append(int(num_elems * 0.5))
+            rotate_sizes.append(0)
+
+
+        second_half_interleave_memo = []
+        def second_half_interleave_pattern(num_elems, type_size, input_size):
+            datum = (input_size, type_size)
+
+            if datum in second_half_interleave_memo:
+                return
+            else:
+                second_half_interleave_memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            num_elem_sizes.append(int(0.5 * num_elems))
+            precisions.append(type_size)
+            lane_offsets.append(0)
+            lane_sizes.append(num_elems)
+            group_sizes.append(int(num_elems * 0.5))
+            dis_sizes.append(int(num_elems * 0.5))
+            rotate_sizes.append(0)
+
+        for idx, input_size in enumerate(self.input_sizes):
+            if not ENABLE_SHUFFLE:
+                continue
+            precision = self.spec.input_precision[idx]
+            number_elems = self.spec.input_shapes[idx][1]
+
+            # Scalar case, no need to shuffle
+            if number_elems == 1:
+                continue
+
+            first_half_concat_pattern(number_elems , precision, input_size)
+            second_half_concat_pattern(number_elems, precision, input_size)
+
+            first_half_interleave_pattern(number_elems, precision, input_size)
+            second_half_interleave_pattern(number_elems, precision, input_size)
 
 
 
@@ -116,6 +211,9 @@ class Synthesizer:
                     for lo in lane_offsets_factors:
                         for d in dis_factors:
                             for r in rotate_factors:
+
+                                continue
+
                                 input_vector_sizes.append(int(input_size * lf))
                                 num_elem_sizes.append(self.VF)
                                 precisions.append(self.spec.input_precision[idx])
@@ -157,7 +255,7 @@ class Synthesizer:
 
         return holes
 
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = True):
+    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = False):
 
         ## Memory loading layer
         spec_memory_loads = self.get_memory_loads()
@@ -449,12 +547,21 @@ class Synthesizer:
 
         contexts = []
 
-        check = dsl_inst.name == "_mm_cvtepi16_epi64" and DEBUG
+        check = dsl_inst.name in DEBUG_LIST and DEBUG
 
         if check:
             print("Here")
 
         for ctx in dsl_inst.contexts:
+
+            if ctx.name == "_mm512_broadcastw_epi16":
+                print("SKIPPING DUPLICATE ARGS")
+                continue
+
+
+            if False and dsl_inst.name == "_mm256_broadcastq_epi64" and ctx.name != "_mm512_set1_epi16":
+                #print("SKIPPING DUPLICATE ARGS")
+                continue
 
             if not ctx.has_output_size():
                 continue
@@ -467,6 +574,7 @@ class Synthesizer:
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
             #supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
+
 
             if check:
                 print(ctx.name, "Supports Input Prec:", supports_inputs_prec)
@@ -485,8 +593,27 @@ class Synthesizer:
                     ctx.print_context()
                 contexts.append(ctx)
 
+        # When limiting contexts, we extract only the first :limit values
+        # hence sorting accordingly to 'relavance' is important to keep
+        # most useful contexts
+        def score_context(ctx):
+            score = 0
+            score += int(any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]))
+            score += int(ctx.supports_output_precision(self.spec.output_precision))
+            score += int(ctx.supports_output_size(self.output_slice_length))
+            score += int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+
+            return score
+
+
+        contexts = sorted(contexts, key = lambda x : score_context(x))
+
+
+
         if limit != None and len(contexts) > limit:
-            return contexts[:limit]
+
+            return contexts[-limit:]
+            #return contexts[:limit]
 
 
         return contexts
@@ -506,7 +633,7 @@ class Synthesizer:
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        if dsl_inst.name in ["_mm512_mullo_epi16","_mm512_abs_epi64"] and DEBUG :
+        if dsl_inst.name in DEBUG_LIST and DEBUG :
             print("Spec Ops", spec_ops)
             print("DSL Ops", dsl_ops)
 
@@ -613,7 +740,7 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
-        if dsl_inst.name in ["_mm512_mullo_epi16"] and DEBUG:
+        if dsl_inst.name in DEBUG_LIST and DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))

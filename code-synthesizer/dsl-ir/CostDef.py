@@ -56,7 +56,10 @@ class CostDef:
             if idx % 3 == 0 and idx != 0:
                 sub_cost.append("\n\t\t")
 
-            sub_cost.append("(cost  {})".format(arg.name))
+
+            if isinstance(arg, BitVector):
+                sub_cost.append("(cost  {})".format(arg.name))
+
 
         cost_clause = "(+ {} {})".format(cost_label, " ".join(sub_cost))
 

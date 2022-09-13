@@ -29,7 +29,7 @@
         (satisfiable? materialize elapsed_time)
         (if symbolic?
             (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cost-bound solver)
-            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn '() cost-bound solver)
+            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn '() cost-bound solver '())
           )
         )
 

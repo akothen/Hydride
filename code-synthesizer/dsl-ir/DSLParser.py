@@ -54,13 +54,13 @@ def parse_dict(sem_dict):
     dsl = []
 
     for inst_name in sem_dict:
-        x86_insts = list(sem_dict[inst_name]['x86_instructions'].keys())
+        x86_insts = list(sem_dict[inst_name]['target_instructions'].keys())
 
-        is_simd = sem_dict[inst_name]['x86_instructions'][x86_insts[0]]['SIMD'] == "True"
+        is_simd = sem_dict[inst_name]['target_instructions'][x86_insts[0]]['SIMD'] == "True"
 
         dsl_inst = create_dsl_inst(sem_dict[inst_name], inst_name, is_simd)
 
-        dsl_inst = populate_dsl_inst(dsl_inst, sem_dict[inst_name]['x86_instructions'])
+        dsl_inst = populate_dsl_inst(dsl_inst, sem_dict[inst_name]['target_instructions'])
 
         dsl.append(dsl_inst)
 

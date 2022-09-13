@@ -72,7 +72,7 @@
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
-  (define sym-bvs (create-symbolic-bvs leaves-sizes))
+  (define sym-bvs (create-concrete-bvs leaves-sizes))
 
 
   ;(clear-vc!)
@@ -95,6 +95,9 @@
 
                   (define base_name (string-append "base_" (~s (random 10000))))
 
+                  (clear-vc!)
+                  (clear-terms!)
+                  (collect-garbage)
 
                   (define grammar (get-expr-grammar expr-extract leaves base_name VF))
                   (debug-log "Grammar:")
@@ -103,6 +106,8 @@
                   (define regs (create-n-reg (length leaves)))
                   (debug-log regs)
                   (define (grammar-fn i)
+                    (clear-vc!)
+                    (clear-terms!)
                     (grammar regs #:depth i)
                     )
 
@@ -121,7 +126,7 @@
                   (define (invoke-spec-lane env)
                     (define synth-buffers (halide:create-buffers leaves env))
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
-                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
+                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 2))))
                     _result
                     )
 
@@ -129,7 +134,7 @@
                   (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 30)
+                  (define cost-bound 50)
                   (define solver 'z3)
 
                   ;(clear-vc!)
@@ -142,7 +147,7 @@
                   (debug-log "Beginning Synthesis")
 
                   (define-values (satisfiable? materialize elap) 
-                                 (synthesize-sol-with-depth 2 depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) )
+                                 (synthesize-sol-with-depth (+ 1 expr-depth) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) )
 
                   (define test-end (current-seconds))
 

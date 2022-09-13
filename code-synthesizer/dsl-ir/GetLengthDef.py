@@ -95,7 +95,7 @@ class GetLengthDef:
 
 
         if size_expr == "" and ctx.out_vectsize == None:
-            print("UNKNOWN SIZE")
+            print("UNKNOWN SIZE for", ctx.name)
             size_expr = "-1 ; Unable to reason about length\n"
 
         if ctx.name in ["_mm256_movm_epi64", "_mm_movm_epi16", "_mm512_movm_epi64"]:
@@ -121,7 +121,7 @@ class GetLengthDef:
         for ctx in dsl_inst.contexts:
             cond_clauses.append(self.emit_ctx_len_clause(ctx))
 
-        if len(cond_clauses) == 1:
+        if len(cond_clauses) == 1 and output_size_arg != None:
             clause.append(output_size_arg.name)
         else:
             cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
