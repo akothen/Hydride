@@ -501,7 +501,29 @@ class RoseSimilarityChecker():
                 OriginalFuncArgsToConcreteMap[OriginalFunction.getArg(OrgArgIndex)]
     return PermArgsToConcreteValMap
 
-  
+
+  def completeFunctionInfo(self, CopyFunctionInfo : RoseFunctionInfo, \
+                        OriginalFunctionInfo : RoseFunctionInfo, ArgPermutation : list):
+    CopyFunctionInfo.addRawSemantics(OriginalFunctionInfo.getRawSemantics())
+    CopyFunctionInfo.setInElemType(OriginalFunctionInfo.getInElemType())
+    CopyFunctionInfo.setOutElemType(OriginalFunctionInfo.getOutElemType())
+    CopyFunctionInfo.setInVectorLength(OriginalFunctionInfo.getInVectorLength())
+    CopyFunctionInfo.setOutVectorLength(OriginalFunctionInfo.getOutVectorLength())
+    CopyFunctionInfo.setLaneSize(OriginalFunctionInfo.getLaneSize())
+    CopyFunctionInfo.setIsSIMD(OriginalFunctionInfo.isSIMD())
+    for PermArgIdx, OrgArgIndex in enumerate(ArgPermutation):
+      if OrgArgIndex == OriginalFunctionInfo.getInElemTypeIndex():
+        CopyFunctionInfo.setInElemTypeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getOutElemTypeIndex():
+        CopyFunctionInfo.setOutElemTypeIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getInVectorLengthIndex():
+        CopyFunctionInfo.setInVectorLengthIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getOutVectorLengthIndex():
+        CopyFunctionInfo.setOutVectorLengthIndex(PermArgIdx)
+      if OrgArgIndex == OriginalFunctionInfo.getLaneSizeIndex():
+        CopyFunctionInfo.setLaneSizeIndex(PermArgIdx)
+
+
   def reorderArgsAndPerformSimilarityChecking(self):
     # Track verification results
     EQToEQMap = dict()
@@ -579,7 +601,7 @@ class RoseSimilarityChecker():
               if OrgFunction == CheckFunction:
                 PermutedCheckFunctions.append(PermCheckFunction)
                 FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
-                PermCheckFunctionInfo.addRawSemantics(CheckFunctionInfo.getRawSemantics())
+                self.completeFunctionInfo(PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
                 self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
                 continue
               CopyFunction = self.createPermutatedFunction(OrgFunction, ArgPermutation)
@@ -592,7 +614,7 @@ class RoseSimilarityChecker():
               CopyFunctionInfo = RoseFunctionInfo()
               CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
               CopyFunctionInfo.addArgsToConcreteMap(OrgFuncArgsToConcreteValMap)
-              CopyFunctionInfo.addRawSemantics(OrgFunctionInfo.getRawSemantics())
+              self.completeFunctionInfo(CopyFunctionInfo, OrgFunctionInfo, ArgPermutation)
               self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
