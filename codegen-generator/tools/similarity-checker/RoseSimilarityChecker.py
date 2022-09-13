@@ -5,7 +5,6 @@
 #############################################################
 
 
-from calendar import c
 from RoseAbstractions import *
 from RoseContext import *
 #from RosetteCodeEmitter import *
@@ -405,11 +404,16 @@ class RoseSimilarityChecker():
     ClonedFunction = RoseFunction.create(OriginalFunction.getName(), ClonedArgsList, \
                                   OriginalFunction.getType().getReturnType())
     ReturnValue = OriginalFunction.getReturnValue()
+    print("ReturnValue:")
+    ReturnValue.print()
+    print("type(ReturnValue):")
+    print(type(ReturnValue))
     if not isinstance(ReturnValue, RoseOperation) \
       and not isinstance(ReturnValue, RoseArgument):
       ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
       ClonedFunction.setRetVal(ClonedReturnVal)
       ValueToValueMap[ReturnValue] = ClonedReturnVal
+      print("RETURN VALUE MAPPED")
     for Abstraction in OriginalFunction:
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
       ClonedFunction.addRegion(ClonedAbstraction)
@@ -492,13 +496,15 @@ class RoseSimilarityChecker():
     PermArgsToConcreteValMap = dict()
     for PermArgIdx, PermArg in enumerate(PermutedFunction.getArgs()):
       OrgArgIndex = ArgPermutation[PermArgIdx]
-      PermArgsToConcreteValMap[PermArg] = \
-              OriginalFuncArgsToConcreteMap[OriginalFunction.getArg(OrgArgIndex)]
+      if OriginalFunction.getArg(OrgArgIndex) in OriginalFuncArgsToConcreteMap:
+        PermArgsToConcreteValMap[PermArg] = \
+                OriginalFuncArgsToConcreteMap[OriginalFunction.getArg(OrgArgIndex)]
     return PermArgsToConcreteValMap
 
   
   def reorderArgsAndPerformSimilarityChecking(self):
     # Track verification results
+    EQToEQMap = dict()
     #RemovedEquivalenceClasses = set()
     EquivalenceClasses = set()
     EquivalenceClasses.update(self.EquivalenceClasses)
@@ -508,6 +514,10 @@ class RoseSimilarityChecker():
       for CheckEquivalenceClass in EquivalenceClasses:
         #if CheckEquivalenceClass in RemovedEquivalenceClasses:
         #  continue
+        if EquivalenceClass in EQToEQMap:
+          EquivalenceClass = EQToEQMap[EquivalenceClass]
+        if CheckEquivalenceClass in EQToEQMap:
+          CheckEquivalenceClass = EQToEQMap[CheckEquivalenceClass]
         if EquivalenceClass == CheckEquivalenceClass:
           continue
         Function = EquivalenceClass.getAFunction()
@@ -557,12 +567,20 @@ class RoseSimilarityChecker():
             print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
             # Merge the two equivalent classes
             CheckedEqFunctions = CheckEquivalenceClass.getEquivalentFunctions()
+            print("CheckedEqFunctions:")
+            print(CheckedEqFunctions)
             PermutedCheckFunctions = list()
             FunctionToArgsMapping = dict()
             for OrgFunction in CheckedEqFunctions:
+              print("OrgFunction:")
+              OrgFunction.print()
+              print("CheckFunction:")
+              CheckFunction.print()
               if OrgFunction == CheckFunction:
                 PermutedCheckFunctions.append(PermCheckFunction)
                 FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
+                PermCheckFunctionInfo.addRawSemantics(CheckFunctionInfo.getRawSemantics())
+                self.FunctionToFunctionInfo[PermCheckFunction] = PermCheckFunctionInfo
                 continue
               CopyFunction = self.createPermutatedFunction(OrgFunction, ArgPermutation)
               PermutedCheckFunctions.append(CopyFunction)
@@ -570,13 +588,19 @@ class RoseSimilarityChecker():
               OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
               FunctionToArgsMapping[CopyFunction] = self.getFunctionToArgMapping(OrgFunction, \
                                     OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+              OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
+              CopyFunctionInfo = RoseFunctionInfo()
+              CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
+              CopyFunctionInfo.addArgsToConcreteMap(OrgFuncArgsToConcreteValMap)
+              CopyFunctionInfo.addRawSemantics(OrgFunctionInfo.getRawSemantics())
+              self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
             self.EquivalenceClasses.remove(CheckEquivalenceClass)
             #RemovedEquivalenceClasses.add(CheckEquivalenceClass)
-            CheckEquivalenceClass = EquivalenceClass
-            #EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
+            EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
+            print("DONE MERGING")
             break
 
 
