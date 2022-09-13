@@ -24,6 +24,7 @@ def build_halide(hydride_root):
 
 
 def install_custom_rosette(hydride_root):
+    print("Installing rosette package....")
     rosette_src = llvm_src = os.path.join(hydride_root, "rosette")
     if dep_exists('raco'):
         install_cmd = [
@@ -38,10 +39,27 @@ def install_custom_rosette(hydride_root):
         print("Please install Racket and the raco pkg manager")
 
 
+def install_hydride_rkt(hydride_root):
+    print("Installing hydride package....")
+    hydride_src = llvm_src = os.path.join(hydride_root, "code-synthesizer", "hydride")
+    if dep_exists('raco'):
+        install_cmd = [
+            "raco",
+            "pkg install",
+            hydride_src,
+        ]
+        install_cmd = " ".join(install_cmd)
+
+        execute(install_cmd)
+    else:
+        print("Please install Racket and the raco pkg manager")
+
+
 def main():
     hydride_root = os.getcwd()
-    # build_halide(hydride_root)
+    build_halide(hydride_root)
     install_custom_rosette(hydride_root)
+    install_hydride_rkt(hydride_root)
 
 if __name__ == "__main__":
     main()
