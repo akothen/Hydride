@@ -399,10 +399,12 @@ class RoseSimilarityChecker():
     ValueToValueMap = dict()
     for Arg in NewArgList:
       ClonedArg = Arg.clone(Arg.getName() + "." + Suffix)
-      ValueToValueMap[Arg] = ClonedArg
       ClonedArgsList.append(ClonedArg)
     ClonedFunction = RoseFunction.create(OriginalFunction.getName(), ClonedArgsList, \
                                   OriginalFunction.getType().getReturnType())
+    for Idx in range(ClonedFunction.getNumArgs()):
+      ClonedFunction.getArg(Idx).setFunction(ClonedFunction)
+      ValueToValueMap[NewArgList[Idx]] = ClonedFunction.getArg(Idx)
     ReturnValue = OriginalFunction.getReturnValue()
     print("ReturnValue:")
     ReturnValue.print()
@@ -608,12 +610,13 @@ class RoseSimilarityChecker():
               PermutedCheckFunctions.append(CopyFunction)
               OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
               OrgFuncArgsToConcreteValMap = OrgFunctionInfo.getArgsToConcreteValMap()
-              FunctionToArgsMapping[CopyFunction] = self.getFunctionToArgMapping(OrgFunction, \
+              CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction, \
                                     OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
+              FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
               OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
               CopyFunctionInfo = RoseFunctionInfo()
               CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
-              CopyFunctionInfo.addArgsToConcreteMap(OrgFuncArgsToConcreteValMap)
+              CopyFunctionInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
               self.completeFunctionInfo(CopyFunctionInfo, OrgFunctionInfo, ArgPermutation)
               self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
