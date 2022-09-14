@@ -49,3 +49,50 @@ function _m_packsswb ( bv64 a, bv64 b ) {
  }
  ret bv64 dst
 }
+
+
+
+function _m_packsswb ( bv64 a, bv64 b ) {
+ for ([%outer.it (range 0 64 64)]) {
+  for ([iterator.0 (range 0 32 8)]) {
+   %low.cofactor0 = mul int32 iterator.0, int32 2
+   %hole.0 = call @hole.grammar.0(int32 %outer.it, int32 iterator.0, int32 %low.cofactor0)
+   %high.offset0 = add int32 %hole.0, int32 15
+   %0 = bvextract bv64 a, int32 %hole.0, int32 %high.offset0, int32 16
+   %1 = bvssat bv16 %0, int32 8
+   %high.offset1 = add int32 iterator.0, int32 7
+   bvinsert bv8 %1, bv64 dst, int32 iterator.0, int32 %high.offset1, int32 8
+  }
+  for ([iterator.1 (range 32 64 8)]) {
+   %low.cofactor1 = mul int32 iterator.1, int32 2
+   %low.offset0.new0 = sub int32 %low.cofactor1, int32 64
+   %hole.1 = call @hole.grammar.1(int32 %outer.it, int32 iterator.1, int32 %low.offset0.new0)
+   %high.offset2 = add int32 %hole.1, int32 15
+   %8 = bvextract bv64 b, int32 %hole.1, int32 %high.offset2, int32 16
+   %9 = bvssat bv16 %8, int32 8
+   %high.offset3 = add int32 iterator.1, int32 7
+   bvinsert bv8 %9, bv64 dst, int32 iterator.1, int32 %high.offset3, int32 8
+  }
+ }
+ ret bv64 dst
+}
+
+
+
+(define-grammar (hole.grammar.0 a b c)
+                [expr 
+                  ( choose
+                    a
+                    b
+                    c
+                    0
+                    1
+                    (+ (expr) (expr))
+                    (- (expr) (expr))
+                    (/ (expr) (expr))
+                    (* (expr) (expr))
+                    )]
+                )
+
+
+
