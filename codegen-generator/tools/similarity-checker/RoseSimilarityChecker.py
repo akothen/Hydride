@@ -529,6 +529,7 @@ class RoseSimilarityChecker():
   def reorderArgsAndPerformSimilarityChecking(self):
     # Track verification results
     EQToEQMap = dict()
+    EQToResultMap = dict()
     #RemovedEquivalenceClasses = set()
     EquivalenceClasses = set()
     EquivalenceClasses.update(self.EquivalenceClasses)
@@ -538,6 +539,9 @@ class RoseSimilarityChecker():
       for CheckEquivalenceClass in EquivalenceClasses:
         #if CheckEquivalenceClass in RemovedEquivalenceClasses:
         #  continue
+        if (CheckEquivalenceClass, EquivalenceClass) in EQToResultMap:
+          assert EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] == False
+          continue
         if EquivalenceClass in EQToEQMap:
           EquivalenceClass = EQToEQMap[EquivalenceClass]
         if CheckEquivalenceClass in EQToEQMap:
@@ -551,7 +555,7 @@ class RoseSimilarityChecker():
           continue
         # Generate different permutations of CheckFunction
         if CheckFunction in self.FunctionToCopies:
-          CheckFunctionList = self.FunctionToCopiesp[CheckFunction]
+          CheckFunctionList = self.FunctionToCopies[CheckFunction]
         else:
           CheckFunctionList = self.generateFunctionPermutations(CheckFunction)
         if len(CheckFunctionList) == 0:
@@ -613,12 +617,13 @@ class RoseSimilarityChecker():
               CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(OrgFunction, \
                                     OrgFuncArgsToConcreteValMap, CopyFunction, ArgPermutation)
               FunctionToArgsMapping[CopyFunction] = CopyFuncArgsToConcreteValMap
-              OrgFunctionInfo = self.FunctionToFunctionInfo[OrgFunction]
               CopyFunctionInfo = RoseFunctionInfo()
               CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
               CopyFunctionInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
               self.completeFunctionInfo(CopyFunctionInfo, OrgFunctionInfo, ArgPermutation)
               self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
+              self.FunctionToRosetteCodeMap[CopyFunction] = \
+                                        RosetteGen.CodeGen(CopyFunction)
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
@@ -627,6 +632,9 @@ class RoseSimilarityChecker():
             EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
             print("DONE MERGING")
             break
+          else:
+            EQToResultMap[(EquivalenceClass, CheckEquivalenceClass)] = VerifyResult
+            EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] = VerifyResult
 
 
 if __name__ == '__main__':
