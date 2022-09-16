@@ -115,11 +115,16 @@ class RoseFunction(RoseValue, RoseRegion):
     ClonedFunction = RoseFunction.create(FunctionName, ClonedArgsList, \
                                         self.getType().getReturnType())
     ReturnValue = self.getReturnValue()
+    print("ReturnValue:")
+    ReturnValue.print()
+    print("type(ReturnValue):")
+    print(type(ReturnValue))
     if not isinstance(ReturnValue, RoseOperation) \
       and not isinstance(ReturnValue, RoseArgument):
       ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
       ClonedFunction.setRetVal(ClonedReturnVal)
       ValueToValueMap[ReturnValue] = ClonedReturnVal
+      print("RETURN VALUE MAPPED")
     for Abstraction in self:
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
       ClonedFunction.addRegion(ClonedAbstraction)
@@ -160,6 +165,18 @@ class RoseFunction(RoseValue, RoseRegion):
     OldArg = self.ArgsList[ArgIndex]
     self.ArgsList[ArgIndex] = Arg
     self.replaceUsesWith(OldArg, Arg)
+
+  def eraseArg(self, ArgIndex : int):
+    # Some sanity checks
+    assert ArgIndex < len(self.ArgsList)
+    # The argument to be erased must have no uses
+    Arg = self.ArgList[ArgIndex]
+    assert self.getNumUsersOf(Arg) == 0
+    Arg.setFunction(RoseUndefRegion())
+    self.ArgList.remove(Arg)
+    ArgTyList = [Arg.getType() for Arg in self.ArgList]
+    FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
+    self.setType(FunctionType)
 
   def appendArg(self, NewArg : RoseValue):
     # Add the argument to this function and change the type of this function
@@ -491,6 +508,25 @@ class RoseForLoop(RoseRegion):
     else:
       LoopStep = ValueToValueMap[LoopStep]
     IteratorName = self.getIterator().getName() + "." + Suffix
+    print("type(LoopStart):")
+    print(type(LoopStart))
+    print("type(LoopEnd):")
+    print(type(LoopEnd))
+    print("type(LoopStep):")
+    print(type(LoopStep))
+    if isinstance(LoopStart, RoseValue) and not isinstance(LoopEnd, RoseValue):
+      assert isinstance(LoopEnd, int)
+      LoopEnd = RoseConstant(LoopEnd, LoopStart.getType())
+    if isinstance(LoopEnd, RoseValue) and not isinstance(LoopStart, RoseValue):
+      assert isinstance(LoopStart, int)
+      LoopStart = RoseConstant(LoopStart, LoopEnd.getType())
+    if isinstance(LoopStart, RoseValue) and not isinstance(LoopStep, RoseValue):
+      assert isinstance(LoopStep, int)
+      LoopStep = RoseConstant(LoopStep, LoopStart.getType())
+    if isinstance(LoopStep, RoseValue) and not isinstance(LoopStart, RoseValue):
+      assert isinstance(LoopStart, int)
+      LoopStart = RoseConstant(LoopStart, LoopStep.getType())
+      LoopEnd = RoseConstant(LoopEnd, LoopStep.getType())
     ClonedLoop = RoseForLoop.create(IteratorName, LoopStart, LoopEnd, LoopStep)
     ValueToValueMap[self.getIterator()] = ClonedLoop.getIterator()
     ValueToValueMap[self.getStartIndex()] = ClonedLoop.getStartIndex()
@@ -516,7 +552,7 @@ class RoseForLoop(RoseRegion):
   # Note that this does not replace the uses of the iterator
   def setIteratorName(self, Name):
     self.Iterator = RoseValue.create(Name, self.Iterator.getType())
-  
+
   def setStartIndex(self, NewStart : int):
     self.Start = RoseConstant(NewStart, self.Start.getType())
   
@@ -525,6 +561,10 @@ class RoseForLoop(RoseRegion):
 
   def setEndIndex(self, NewEnd : int):
     self.End = RoseConstant(NewEnd, self.End.getType())
+  
+  def setIterator(self, IteratorVal : RoseValue):
+    assert self.getIterator().getType() == IteratorVal.getType()
+    self.Iterator = IteratorVal
   
   def setStartIndexVal(self, NewStart : RoseValue):
     assert self.Start.getType() == NewStart.getType()
@@ -567,6 +607,17 @@ class RoseForLoop(RoseRegion):
     if self.getStep() == Abstraction:
       NumUsers += self.getStep()
     return NumUsers
+
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    if self.getIterator() == Abstraction:
+      self.setIterator(NewAbstraction)
+    elif self.getStartIndex() == Abstraction:
+      self.setStartIndexVal(NewAbstraction)
+    elif self.getStep() == Abstraction:
+      self.setStepVal(NewAbstraction)
+    elif self.getEndIndex() == Abstraction:
+      self.setEndIndexVal(NewAbstraction)
+    super().replaceUsesWith(Abstraction, NewAbstraction)
 
   def print(self, NumSpace = 0):
     Spaces = ""
@@ -672,10 +723,13 @@ class RoseCond(RoseRegion):
     ClonedConditions = list()
     for Condition in self.Conditions:
       ClonedConditions.append(ValueToValueMap[Condition])
-    ClonedCondRegion = RoseCond.create(ClonedConditions)
+    print("ClonedConditions:")
+    print(ClonedConditions)
+    ClonedCondRegion = RoseCond.create(ClonedConditions, len(self.getKeys()))
     for Abstraction in self:
       ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
-      ClonedCondRegion.addRegion(ClonedAbstraction)
+      Key = self.getKeyForChild(Abstraction)
+      ClonedCondRegion.addRegion(ClonedAbstraction, Key)
     return ClonedCondRegion
 
   def getCondition(self, Index = 0):
