@@ -168,12 +168,12 @@ class RoseFunction(RoseValue, RoseRegion):
 
   def eraseArg(self, ArgIndex : int):
     # Some sanity checks
-    assert ArgIndex < len(self.ArgsList)
+    assert ArgIndex < len(self.ArgList)
     # The argument to be erased must have no uses
     Arg = self.ArgList[ArgIndex]
     assert self.getNumUsersOf(Arg) == 0
-    Arg.setFunction(RoseUndefRegion())
     self.ArgList.remove(Arg)
+    Arg.setFunction(RoseUndefRegion())
     ArgTyList = [Arg.getType() for Arg in self.ArgList]
     FunctionType = RoseFunctionType.create(ArgTyList, self.RetVal.getType())
     self.setType(FunctionType)
