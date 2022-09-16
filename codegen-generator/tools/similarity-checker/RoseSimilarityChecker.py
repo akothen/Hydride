@@ -539,9 +539,10 @@ class RoseSimilarityChecker():
       for CheckEquivalenceClass in EquivalenceClasses:
         #if CheckEquivalenceClass in RemovedEquivalenceClasses:
         #  continue
-        if (CheckEquivalenceClass, EquivalenceClass) in EQToResultMap:
-          assert EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] == False
+        if EquivalenceClass == CheckEquivalenceClass:
           continue
+        if (CheckEquivalenceClass, EquivalenceClass) in EQToResultMap:
+            continue
         if EquivalenceClass in EQToEQMap:
           EquivalenceClass = EQToEQMap[EquivalenceClass]
         if CheckEquivalenceClass in EQToEQMap:
@@ -556,16 +557,18 @@ class RoseSimilarityChecker():
         # Generate different permutations of CheckFunction
         if CheckFunction in self.FunctionToCopies:
           CheckFunctionList = self.FunctionToCopies[CheckFunction]
+          print("OBTAINED FROM CACHE")
         else:
           CheckFunctionList = self.generateFunctionPermutations(CheckFunction)
+          print("FRESHLY COMPUTED PERMUTATIONS")
         if len(CheckFunctionList) == 0:
           continue
         # Go over the list of permutations of the given function
         for PermCheckFunction in CheckFunctionList:
-          print("PERM ARG MAP:")
-          print(self.FunctionToArgPermutationMap[PermCheckFunction])
           print("CHECKING PERM FUNCTION:")
           PermCheckFunction.print()
+          print("PERM ARG MAP:")
+          print(self.FunctionToArgPermutationMap[PermCheckFunction])
           assert PermCheckFunction.getNumArgs() == Function.getNumArgs()
           # Check if there is any worth in performing similarity checking
           PerformChecking = True
@@ -630,11 +633,52 @@ class RoseSimilarityChecker():
             self.EquivalenceClasses.remove(CheckEquivalenceClass)
             #RemovedEquivalenceClasses.add(CheckEquivalenceClass)
             EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
+            EQToResultMap[(EquivalenceClass, CheckEquivalenceClass)] = VerifyResult
+            EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] = VerifyResult
             print("DONE MERGING")
             break
           else:
             EQToResultMap[(EquivalenceClass, CheckEquivalenceClass)] = VerifyResult
             EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] = VerifyResult
+
+
+  def eliminateUnecessaryArgs(self):
+    for EquivalenceClass in self.EquivalenceClasses:
+      # Go through all the functions and loop for arguments to eliminate
+      ArgIdxToConcreteValMap = dict()
+      Functions = set()
+      Functions.update(EquivalenceClass.getEquivalentFunctions())
+      for Function in Functions:
+        assert isinstance(Function, RoseFunction)
+        FunctionInfo = self.FunctionToFunctionInfo[Function]
+        if len(ArgIdxToConcreteValMap) == 0:
+          for Idx, Arg in enumerate(Function.getArgs()):
+            if FunctionInfo.argHasConcreteVal(Arg) == True:
+              ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
+          continue
+        # Compare concrete values
+        for Idx, Arg in enumerate(Function.getArgs()):
+          if FunctionInfo.argHasConcreteVal(Arg) == True:
+            if Function.getConcreteValFor(Arg) != ArgIdxToConcreteValMap[Idx]:
+              ArgIdxToConcreteValMap[Idx] = None
+      # Remove some unecessary Arguments
+      for Function in Functions:
+        print("OLD FUNCTION:")
+        Function.print()
+        NumArgs = len(Function.getArgs())
+        ModificationMade = False
+        for Idx in range(NumArgs - 1, -1):
+          if Idx in ArgIdxToConcreteValMap:
+            if ArgIdxToConcreteValMap[Idx] != None:
+              FunctionInfo = self.FunctionToFunctionInfo[Function]
+              Function.replaceUsesWith(Function.getArg(Idx), \
+                    FunctionInfo.getConcreteValFor(Function.getArg(Idx)))
+              Function.eraseArg(Idx)
+              ModificationMade = True
+        print("NEW FUNCTION:")
+        Function.print()
+        if ModificationMade == True:
+          self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
 
 
   def punchHolesInFunction(self, Function : RoseFunction, Context : RoseContext):
@@ -796,6 +840,7 @@ class RoseSimilarityChecker():
     except IOError:
       print("Error making: {}.rkt".format(FileName))
       return False
+
 
 
 if __name__ == '__main__':
