@@ -216,7 +216,8 @@ class RoseArgument(RoseValue):
   
   def setFunction(self, Function):
     # Sanity checks
-    assert isinstance(Function, RoseAbstractions.RoseFunction)
+    assert (isinstance(Function, RoseAbstractions.RoseFunction) \
+      or isinstance(Function, RoseAbstractions.RoseUndefRegion))
     self.Callee = Function
   
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
