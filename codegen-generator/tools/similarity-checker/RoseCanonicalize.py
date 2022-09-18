@@ -302,6 +302,9 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   Block = LastBVInsertOp.getParent()
   # Use the return value of the function as the end and step
   Bitwidth = Function.getReturnValue().getType().getBitwidth()
+  #PrimaryOps = GetOpDeterminingLoopBounds(Loop)
+  PrimaryOps = GetOpDeterminingLoopBoundsInBlockList(Function, [Block])
+  Bitwidth = PrimaryOps[0].getType().getBitwidth()
   # Create the inner loop
   InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
   # Add the first block to the inner loop and remove it from the function
