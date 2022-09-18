@@ -5,6 +5,7 @@
 #############################################################
 
 
+from tkinter import E
 from RoseAbstractions import *
 from RoseContext import *
 #from RosetteCodeEmitter import *
@@ -88,11 +89,6 @@ class RoseSimilarityChecker():
                                     FunctionInfo2 : RoseFunctionInfo):
     Function1 = FunctionInfo1.getLatestFunction()
     Function2 = FunctionInfo2.getLatestFunction()
-    # Number of arguments must be equal
-    #print("Function1.getNumArgs():")
-    #print(Function1.getNumArgs())
-    #print("Function2.getNumArgs():")
-    #print(Function2.getNumArgs())
     if Function1.getNumArgs() != Function2.getNumArgs():
       return False
 
@@ -367,7 +363,8 @@ class RoseSimilarityChecker():
           continue
     # Try another heuristic
     print("****TRY NEW HEURISTIC****")
-    self.reorderArgsAndPerformSimilarityChecking()
+    #self.reorderArgsAndPerformSimilarityChecking()
+    self.eliminateUnecessaryArgs()
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -444,7 +441,7 @@ class RoseSimilarityChecker():
         continue
       RemainingArgs.append(Arg)
     if len(BVArgs) <= 1:
-      return [Function]
+      return list()
 
     # Lamda function for getting permulations of a list
     def Permutations(Elements):
@@ -652,7 +649,13 @@ class RoseSimilarityChecker():
       # Ensure that the iterator of the outer loop has no uses
       assert Function.getNumUsersOf(Loop.getIterator()) == 0
       ReligionList = list()
-      for Region in Loop.getChildren():
+      print("len(Loop.getChildren()):")
+      print(len(Loop.getChildren()))
+      LoopChildren = list()
+      LoopChildren.extend(Loop.getChildren())
+      for Region in LoopChildren:
+        print("REGION IN DEAD LOOP:")
+        Region.print()
         Loop.eraseChild(Region)
         ReligionList.append(Region)
       for Region in reversed(ReligionList):
@@ -691,10 +694,15 @@ class RoseSimilarityChecker():
 
 
   def removeDeadArguments(self, FunctionInfo : RoseFunctionInfo, Function : RoseFunction):
+    print("REMOVE DEAD ARGUMENTS")
+    print("FUNCTION:")
+    Function.print()
     ErasedArgs = False
     NumArgs = len(Function.getArgs())
     for Idx in range(NumArgs - 1, -1, -1):
       Arg = Function.getArg(Idx)
+      print("ARG:")
+      Arg.print()
       if Function.getNumUsersOf(Arg) == 0:
         FunctionInfo.eraseConcreteValForArg(Arg)
         Function.eraseArg(Idx)
@@ -758,14 +766,13 @@ class RoseSimilarityChecker():
                 FunctionInfo.eraseConcreteValForArg(Arg)
                 Function.eraseArg(Idx)
                 ModificationMade = True
-          print("len(FunctionToDeadLoops[Function]):")
-          print(len(FunctionToDeadLoops[Function]))
-          for Loop in FunctionToDeadLoops[Function]:
-            print("DEAD LOOP:")
-            Loop.print()
-            print("FUNCTION:")
-            Function.print()
-            self.removeDeadLoop(FunctionInfo, Function, Loop)
+          if Function in FunctionToDeadLoops:
+            for Loop in FunctionToDeadLoops[Function]:
+              print("DEAD LOOP:")
+              Loop.print()
+              print("FUNCTION:")
+              Function.print()
+              self.removeDeadLoop(FunctionInfo, Function, Loop)
           print("NEW FUNCTION:")
           Function.print()
           ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
@@ -955,8 +962,10 @@ class RoseSimilarityChecker():
       return False
 
 
+
 if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
   SimilarityChecker = RoseSimilarityChecker(["x86"])
   SimilarityChecker.performSimilarityChecking()
+
 
