@@ -642,44 +642,157 @@ class RoseSimilarityChecker():
             EQToResultMap[(CheckEquivalenceClass, EquivalenceClass)] = VerifyResult
 
 
+  def removeDeadLoop(self, FunctionInfo : RoseFunctionInfo, Function : RoseFunction, \
+                            Loop : RoseForLoop):
+    #assert Loop.getParent() == Function
+    if not isinstance(Loop.getEndIndex(), RoseConstant) \
+      and not isinstance(Loop.getStep(), RoseConstant):
+      assert FunctionInfo.getConcreteValFor(Loop.getEndIndex()) \
+              == FunctionInfo.getConcreteValFor(Loop.getStep())
+      # Ensure that the iterator of the outer loop has no uses
+      assert Function.getNumUsersOf(Loop.getIterator()) == 0
+      ReligionList = list()
+      for Region in Loop.getChildren():
+        Loop.eraseChild(Region)
+        ReligionList.append(Region)
+      for Region in reversed(ReligionList):
+        Function.addRegionBefore(Function.getPosOfChild(Loop), Region)
+      Function.eraseChild(Loop)
+      # If the outer loop end index and step are function arguments and have no uses,
+      # remove can remove them.
+      if Function.getNumUsersOf(Loop.getEndIndex()) == 0 \
+        and Function.getNumUsersOf(Loop.getStep()) == 0:
+        EndIndexArgIndex = Function.getIndexOfArg(Loop.getEndIndex())
+        StepArgIndex = Function.getIndexOfArg(Loop.getStep())
+        # Remove arg with higher index first
+        if EndIndexArgIndex > StepArgIndex:
+          FunctionInfo.eraseConcreteValForArg(Loop.getEndIndex())
+          FunctionInfo.eraseConcreteValForArg(Loop.getStep())
+          Function.eraseArg(EndIndexArgIndex)
+          Function.eraseArg(StepArgIndex)
+        else:
+          FunctionInfo.eraseConcreteValForArg(Loop.getEndIndex())
+          FunctionInfo.eraseConcreteValForArg(Loop.getStep())
+          Function.eraseArg(StepArgIndex)
+          Function.eraseArg(EndIndexArgIndex)
+    elif isinstance(Loop.getEndIndex(), RoseConstant) \
+      and isinstance(Loop.getStep(), RoseConstant):
+      if Loop.getEndIndex().getValue() == Loop.getStep().getValue():
+        ReligionList = list()
+        for Region in Loop.getChildren():
+          Loop.eraseChild(Region)
+          ReligionList.append(Region)
+        for Region in reversed(ReligionList):
+          Function.addRegionBefore(Function.getPosOfChild(Loop), Region)
+        Function.eraseChild(Loop)
+    print("FRESH FUNCTION:")
+    Function.print()
+    return Function
+
+
+  def removeDeadArguments(self, FunctionInfo : RoseFunctionInfo, Function : RoseFunction):
+    ErasedArgs = False
+    NumArgs = len(Function.getArgs())
+    for Idx in range(NumArgs - 1, -1, -1):
+      Arg = Function.getArg(Idx)
+      if Function.getNumUsersOf(Arg) == 0:
+        FunctionInfo.eraseConcreteValForArg(Arg)
+        Function.eraseArg(Idx)
+        ErasedArgs = True
+    return ErasedArgs
+
+
   def eliminateUnecessaryArgs(self):
     for EquivalenceClass in self.EquivalenceClasses:
-      # Go through all the functions and loop for arguments to eliminate
-      ArgIdxToConcreteValMap = dict()
-      Functions = set()
-      Functions.update(EquivalenceClass.getEquivalentFunctions())
-      for Function in Functions:
-        assert isinstance(Function, RoseFunction)
+      if len(EquivalenceClass.getEquivalentFunctions()) > 1:
+        # Go through all the functions and loop for arguments to eliminate
+        ArgIdxToConcreteValMap = dict()
+        FunctionToDeadLoops = dict()
+        Functions = set()
+        Functions.update(EquivalenceClass.getEquivalentFunctions())
+        for Function in Functions:
+          assert isinstance(Function, RoseFunction)
+          FunctionInfo = self.FunctionToFunctionInfo[Function]
+          if len(ArgIdxToConcreteValMap) == 0:
+            for Idx, Arg in enumerate(Function.getArgs()):
+              if FunctionInfo.argHasConcreteVal(Arg) == True:
+                ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
+          else:
+            # Compare concrete values
+            for Idx, Arg in enumerate(Function.getArgs()):
+              if FunctionInfo.argHasConcreteVal(Arg) == True:
+                print("ArgIdxToConcreteValMap[Idx]:")
+                print(ArgIdxToConcreteValMap[Idx])
+                print("FunctionInfo.getConcreteValFor(Arg):")
+                print(FunctionInfo.getConcreteValFor(Arg))
+                if FunctionInfo.getConcreteValFor(Arg) != ArgIdxToConcreteValMap[Idx]:
+                  print("NONE")
+                  ArgIdxToConcreteValMap[Idx] = None
+          # Check if the outer loop in the function has the same end index and 
+          # loop step.
+          LoopList = Function.getRegionsOfType(RoseForLoop)
+          for Loop in LoopList:
+            print("LOOP IN LOOP LIST:")
+            Loop.print()
+            assert not isinstance(Loop, RoseUndefRegion)
+            if FunctionInfo.getConcreteValFor(Loop.getEndIndex()) \
+                == FunctionInfo.getConcreteValFor(Loop.getStep()):
+              if Function not in FunctionToDeadLoops:
+                FunctionToDeadLoops[Function] = [Loop]
+              else:
+                FunctionToDeadLoops[Function].append(Loop)
+        # Remove some unecessary Arguments
+        for Function in Functions:
+          print("OLD FUNCTION:")
+          Function.print()
+          NumArgs = len(Function.getArgs())
+          ModificationMade = False
+          FunctionInfo = self.FunctionToFunctionInfo[Function]
+          for Idx in range(NumArgs - 1, -1, -1):
+            if Idx in ArgIdxToConcreteValMap:
+              if ArgIdxToConcreteValMap[Idx] != None:
+                print("INDEX DOES NOT MAP TO NONE")
+                Arg = Function.getArg(Idx)
+                Function.replaceUsesWith(Arg, \
+                      FunctionInfo.getConcreteValFor(Function.getArg(Idx)))
+                FunctionInfo.eraseConcreteValForArg(Arg)
+                Function.eraseArg(Idx)
+                ModificationMade = True
+          print("len(FunctionToDeadLoops[Function]):")
+          print(len(FunctionToDeadLoops[Function]))
+          for Loop in FunctionToDeadLoops[Function]:
+            print("DEAD LOOP:")
+            Loop.print()
+            print("FUNCTION:")
+            Function.print()
+            self.removeDeadLoop(FunctionInfo, Function, Loop)
+          print("NEW FUNCTION:")
+          Function.print()
+          ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
+          if ModificationMade == True or len(FunctionToDeadLoops[Function]) != 0\
+               or ErasedArgs == True:
+            self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+      else:
+        # Remove dead outer loops
+        Function = EquivalenceClass.getAFunction()
         FunctionInfo = self.FunctionToFunctionInfo[Function]
-        if len(ArgIdxToConcreteValMap) == 0:
-          for Idx, Arg in enumerate(Function.getArgs()):
-            if FunctionInfo.argHasConcreteVal(Arg) == True:
-              ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
-          continue
-        # Compare concrete values
-        for Idx, Arg in enumerate(Function.getArgs()):
-          if FunctionInfo.argHasConcreteVal(Arg) == True:
-            if Function.getConcreteValFor(Arg) != ArgIdxToConcreteValMap[Idx]:
-              ArgIdxToConcreteValMap[Idx] = None
-      # Remove some unecessary Arguments
-      for Function in Functions:
-        print("OLD FUNCTION:")
-        Function.print()
-        NumArgs = len(Function.getArgs())
-        ModificationMade = False
-        for Idx in range(NumArgs - 1, -1):
-          if Idx in ArgIdxToConcreteValMap:
-            if ArgIdxToConcreteValMap[Idx] != None:
-              FunctionInfo = self.FunctionToFunctionInfo[Function]
-              Function.replaceUsesWith(Function.getArg(Idx), \
-                    FunctionInfo.getConcreteValFor(Function.getArg(Idx)))
-              Function.eraseArg(Idx)
-              ModificationMade = True
-        print("NEW FUNCTION:")
-        Function.print()
-        if ModificationMade == True:
+        LoopList = Function.getRegionsOfType(RoseForLoop)
+        DeadLoops = list()
+        for Loop in LoopList:
+          assert not isinstance(Loop, RoseUndefRegion)
+          if FunctionInfo.getConcreteValFor(Loop.getEndIndex()) \
+              == FunctionInfo.getConcreteValFor(Loop.getStep()):
+            DeadLoops.append(Loop)
+        for Loop in DeadLoops:
+          if FunctionInfo.getConcreteValFor(Loop.getEndIndex()) \
+              == FunctionInfo.getConcreteValFor(Loop.getStep()):
+            self.removeDeadLoop(FunctionInfo, Function, Loop)
+        ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
+        if len(DeadLoops) != 0 or ErasedArgs == True:
           self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
-
+        print("--NEW FUNCTION:")
+        Function.print()
+      
 
   def punchHolesInFunction(self, Function : RoseFunction, Context : RoseContext):
     print("RUN ON OP SIMPLIFY FUNCTION")
@@ -840,7 +953,6 @@ class RoseSimilarityChecker():
     except IOError:
       print("Error making: {}.rkt".format(FileName))
       return False
-
 
 
 if __name__ == '__main__':
