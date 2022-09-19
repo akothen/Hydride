@@ -40,8 +40,6 @@ namespace Halide {
 
 
 
-            std::set<const IRNode*> StoreSet;
-            std::map<const IRNode*, const IRNode*> StoreMap;
             std::map<const IRNode*, std::string> SynthLog;
             std::map<unsigned, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Load*, unsigned> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
@@ -56,6 +54,7 @@ namespace Halide {
                 IRPrinter printer;
                 std::stack<int> indent;
                 std::stack<VarEncoding> mode;
+                std::set<std::string> defined;
 
                 // Context of the expression being printed:-
                 //   - let_vars holds all of the let expressions defined in the program thus far
@@ -126,6 +125,7 @@ namespace Halide {
                         mode.push(VarEncoding::Bitvector);
                         let_vars = lvs;
                         encoding = enc;
+
                     }
 
                     void int_mode() {
@@ -209,6 +209,11 @@ namespace Halide {
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             return "";
                         }
+
+                        if(defined.find(op->name) != defined.end()){
+                            return tabs() + op->name;
+                        }
+
 
                         if(VariableToRegMap.find(op) != VariableToRegMap.end()){
                             std::string reg_name = "reg_"+std::to_string(VariableToRegMap[op]);
@@ -496,6 +501,8 @@ namespace Halide {
                         std::string rkt_bdy = dispatch(op->body);
                         indent.pop();
 
+                        defined.insert(op->name);
+
                         return tabs() + "(let ([" + op->name + " " + rkt_val + "])\n" + rkt_bdy + ")";
                     }
 
@@ -595,39 +602,6 @@ namespace Halide {
 
                     }
 
-                    const Store* check_load_in_storemap(const Load* l){
-                            for(auto bi = StoreMap.begin(); bi != StoreMap.end(); bi++){
-                                const Store* s = (const Store*) bi->first;
-
-                                if(s->name != l->name)
-                                    continue;
-
-                                
-                                
-                                if(!equal(s->predicate, l->predicate))
-                                    continue;
-
-
-                                if(!equal(s->index, l->index))
-                                    continue;
-
-                                if(!s->param.same_as(l->param))
-                                    continue;
-
-                                // Halide modulus remainder class only
-                                // defines equality
-                                if(!(s->alignment == l->alignment))
-                                    continue;
-
-
-                                debug(0) << "LOAD STORE MATCHED!"<<"\n";
-                                return s;
-
-                            }
-
-                            return nullptr;
-
-                        }
 
                     std::string visit(const Load *op) {
                         indent.push(0);
@@ -678,6 +652,7 @@ namespace Halide {
                             LoadToRegMap[op] = reg_counter;
                             std::string load_buff = define_load_buffer(op);
                             return tabs()   + reg_name; //+ load_buff + "\n"+ "(load " + reg_name + " " + rkt_idx + " " + alignment + ")";
+                            //return tabs() + "(load " + op->name + " " + rkt_idx + " " + alignment + ")";
                         }
 
                     }
@@ -727,6 +702,28 @@ namespace Halide {
                             std::string rkt_true = dispatch(op->true_value);
                             std::string rkt_false = dispatch(op->false_value);
                             return tabs() + "(if " + rkt_cond + " " + rkt_true + " " + rkt_false + ")";
+                        }
+                    }
+
+                    std::string emit_general_concat_vectors(const std::vector<Expr>& vectors, int start, int end){
+                        bool is_even = ((end-start) % 2) == 0;
+                        debug(0) << "start: "<<start <<", end: "<< end <<", is_even: "<< is_even <<"\n";
+                        if (start + 1 == end || start == end) {
+                            std::string rkt_lhs = dispatch(vectors[start]);
+                            return rkt_lhs;
+                        }
+
+
+                        if(is_even){
+                            int mid_point = (end+start)/2;
+                            std::string rkt_lhs = emit_general_concat_vectors(vectors, start, mid_point); 
+                            std::string rkt_rhs = emit_general_concat_vectors(vectors, mid_point, end); 
+                            return "(concat_vectors\n"+ rkt_lhs +" "+ rkt_rhs +")\n";
+                        } else {
+                            // Seperate out odd element from the end
+                            std::string concat_even = emit_general_concat_vectors(vectors, start, end-1); 
+
+                            return "(concat_vectors\n"+ concat_even +" " + dispatch(vectors[end-1]) +")\n";
                         }
                     }
 
@@ -786,6 +783,7 @@ namespace Halide {
                             }
                         } 
                         else if (op->is_concat()) {
+                            /*
                             switch (op->vectors.size()) {
                                 case 2: {
                                             indent.push(indent.top() + 1);
@@ -849,9 +847,12 @@ namespace Halide {
                                             return tabs() + "(concat_vectors\n" + rkt_lhs + "\n" + rkt_rhs + ")";
                                         }
                                 default:
+                                        debug(0) << "Concat vectors with number of vectors: "<<op->vectors.size()<<"\n";
                                         printer.print(op);
                                         return NYI();
                             }
+                            */
+                            return tabs() + emit_general_concat_vectors(op->vectors, 0, op->vectors.size());
                         }
                         printer.print(op);
                         return NYI();
@@ -1189,7 +1190,10 @@ namespace Halide {
 
                     std::set<const IRNode*>& DeadStatements;
 
-                    FoldLoadStores(std::set<const IRNode*>& DeadStatements) : DeadStatements(DeadStatements) {}
+                    FoldLoadStores(std::set<const IRNode*>& DeadStatements) : DeadStatements(DeadStatements) {
+                        debug(0) << "Invoked Fold Load Stores" <<"\n";
+
+                    }
 
                     Scope<std::map<const Store* ,Expr>> MemMap;
                     std::stack<std::string> scope_name;
@@ -1224,16 +1228,21 @@ namespace Halide {
                         std::vector<const Store*> EraseKeys;
                         for(auto const& x : Context){
                             auto store = x.first;
-                            debug(0) << "UpdateDeadStatements checking: "<<store<<"\n";
+                            debug(1) << "UpdateDeadStatements checking: "<<store<<"\n";
 
 
                             if(store->name != StoreStmt->name){
-                                debug(0) << "Name mismatch" <<"\n";
+                                debug(1) << "Name mismatch" <<"\n";
                                 continue;
                             }
 
                             if(!equal(store->predicate, StoreStmt->predicate)){
-                                debug(0) << "predicate mismatch" <<"\n";
+                                debug(1) << "predicate mismatch" <<"\n";
+                                continue;
+                            }
+
+                            if(!equal(store->index, StoreStmt->index)){
+                                debug(1) << "index mismatch" <<"\n";
                                 continue;
                             }
 
@@ -1251,7 +1260,7 @@ namespace Halide {
                             if(!(store->alignment == StoreStmt->alignment))
                                 continue;
 
-                            debug(0) << "Adding pointer: "<<store<<" to dead statements ...\n";
+                            debug(1) << "Adding pointer: "<<store<<" to dead statements ...\n";
                             DeadStatements.insert(store);
                             EraseKeys.push_back(store);
                         }       
@@ -1263,17 +1272,26 @@ namespace Halide {
                     }
 
                     Stmt mutate(const Stmt &stmt) override {
+                        debug(0) << "Mutating: "<< stmt << "\n";
+                        
+                        // Undefined statements may arise in the case
+                        // of if-then-else blocks where the else case
+                        // is not defined. In this case we simply return.
+                        if(!stmt.defined()){
+                            return IRMutator::mutate(stmt);
+                        }
+
                         if(stmt.node_type() == IRNodeType::Store){
                                 const Store* s = stmt.as<Store>();
 
                                 if(!isConstantValue(s->value)){
                                     Expr updated_val  = mutate(s->value);
-                                    debug(0) << "Store Instruction: "<< stmt <<"\n";
-                                    debug(0) << "Store name: "<<s->name <<"\n";
+                                    debug(1) << "Store Instruction: "<< stmt <<"\n";
+                                    debug(1) << "Store name: "<<s->name <<"\n";
 
                                     
                                     std::string current_scope = scope_name.top();
-                                    debug(0) << "Current Scope name: "<<current_scope <<"\n";
+                                    debug(1) << "Current Scope name: "<<current_scope <<"\n";
                                     
                                     auto& context = MemMap.ref(scope_name.top());
 
@@ -1289,15 +1307,15 @@ namespace Halide {
 
                             if(stmt.node_type() == IRNodeType::For){
                                 const For* f = stmt.as<For>();
-                                debug(0) << "For Instruction: "<< stmt <<"\n";
+                                debug(1) << "For Instruction: "<< stmt <<"\n";
                                 std::map<const Store*, Expr> scoped_map;
 
                                 scope_name.push(f->name);
                                 
-                                debug(0) << "Pushing scope_name: "<< scope_name.top() << "\n";
+                                debug(1) << "Pushing scope_name: "<< scope_name.top() << "\n";
                                 MemMap.push(scope_name.top(), scoped_map);
                                 auto new_stmt = mutate(f->body);
-                                debug(0) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
                                 MemMap.pop(scope_name.top());
                                 scope_name.pop();
 
@@ -1364,12 +1382,21 @@ namespace Halide {
 
                     std::set<const IRNode*>& DeadStatements;
 
-                    RemoveRedundantStmt(std::set<const IRNode*> DeadStatements) : DeadStatements(DeadStatements) {}
+                    RemoveRedundantStmt(std::set<const IRNode*> DeadStatements) : DeadStatements(DeadStatements) {
+                        debug(0) << "RemoveRedundant Statements invoked" << "\n";
+                    }
 
                     
 
                     Stmt mutate(const Stmt &stmt) override {
-                        debug(0) << "DeadStatement Size: "<<DeadStatements.size() << "\n";
+
+                        // Undefined statements may arise in the case
+                        // of if-then-else blocks where the else case
+                        // is not defined. In this case we simply return.
+                        if(!stmt.defined()){
+                            return IRMutator::mutate(stmt);
+                        }
+
                         if(stmt.node_type() == IRNodeType::Store){
                             const Store* s = stmt.as<Store>();
 
@@ -1439,32 +1466,9 @@ namespace Halide {
                         // We don't currently perform any optimizations at the Stmt level
                         Stmt mutate(const Stmt &stmt) override {
 
-                            if(stmt.node_type() == IRNodeType::Store){
-                                const Store* s = stmt.as<Store>();
-
-                                if(!isConstantValue(s->value)){
-                                    debug(0) << "Store Instruction: "<< stmt <<"\n";
-                                    debug(0) << "Store name: "<<s->name <<"\n";
-                                    process_store_inst(s);
-                                }
-                            }
-
-                            if(stmt.node_type() == IRNodeType::For){
-                                StoreSet.clear();
-                                StoreMap.clear();
-                                debug(0) << "For Instruction: "<< stmt <<"\n";
-                            }
-
                             return IRMutator::mutate(stmt);
                         }
 
-                        // populate store map to directly replace
-                        // load from a previously stored location 
-                        void process_store_inst(const Store* s){
-                            //StoreMap[s] = s->value.get(); 
-                            StoreSet.insert(s);
-                            //StoreMap.clear();
-                        }
 
                         
 
@@ -1575,7 +1579,7 @@ namespace Halide {
                             std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
 
                             // Abstract out unsupported nodes if they appear as sub-expressions
-                            spec_expr = AbstractUnsupportedNodes(IROptimizer::X86, abstractions).mutate(spec_expr);
+                            spec_expr = AbstractUnsupportedNodes(arch, abstractions).mutate(spec_expr);
 
 
                             // Lift cse for more readable specs
@@ -1587,11 +1591,6 @@ namespace Halide {
                             // Replace abstracted abstractions
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
 
-                            for(auto v : StoreSet){
-                                debug(0) << "Transferring values from storeset to store map";
-                                StoreMap[v] = ((const Store*) v)->value.get();
-                            }
-                            StoreSet.clear();
 
 
 
@@ -1955,7 +1954,9 @@ namespace Halide {
 
                         if(elemT == "'") return "";
 
-                        std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        //std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
+
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
                         return define_bitvector_str + "\n" + define_buffer_str;
@@ -2045,7 +2046,7 @@ namespace Halide {
                     std::string emit_racket_debug(){
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
-                            ;(enable-debug)\n"; 
+                            (enable-debug)\n"; 
                     }
 
                     std::string emit_set_current_bitwidth(size_t bw){
@@ -2083,11 +2084,6 @@ namespace Halide {
 
                 std::cout << "Input expression to synthesize: "<< orig_expr <<"\n";
 
-                std::cout << "Printing Synth Log"<<"\n";
-
-                for(auto bi = SynthLog.begin(); bi != SynthLog.end(); bi++){
-                    std::cout << "\t" << bi->first <<": "<<bi->second <<"\n";
-                }
 
 
                 RegToLoadMap.clear();
@@ -2156,11 +2152,26 @@ namespace Halide {
 
 
         Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
-            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs).mutate(s);
+
+            debug(0) << "Hydride Optimize HVX" <<"\n";
+
+            std::set<const IRNode*> DeadStmts;
+            auto FLS = Hydride::FoldLoadStores(DeadStmts);
+            auto folded = FLS.mutate(s);
+            debug(0) << "Printing Folded Stmt:\n";
+            debug(0) << folded <<"\n";
+
+            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+
+            auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
+            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs).mutate(pruned);
         }
 
 
         Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
+            debug(0) << "Hydride Optimize X86" <<"\n";
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
@@ -2189,6 +2200,7 @@ Stmt optimize_hexagon_instructions_synthesis(Stmt s, const Target &t, FuncValueB
 
 
     std::set<const BaseExprNode *> mutated_exprs;
+    debug(0) << "Input Statement to Compile through HVX:\n"<<s<<"\n";
     s = hydride_optimize_hvx(fvb, s, mutated_exprs);
 
     return s;
