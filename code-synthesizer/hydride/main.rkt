@@ -53,6 +53,7 @@
 (require hydride/synthesis/spec_utils)
 (require hydride/synthesis/python)
 (require hydride/synthesis/algorithm)
+(require hydride/synthesis/llvm_codegen)
 
 
 
@@ -84,5 +85,6 @@
   (all-from-out hydride/synthesis/spec_utils)
   (all-from-out hydride/synthesis/algorithm)
   (all-from-out hydride/synthesis/python)
+  (all-from-out hydride/synthesis/llvm_codegen)
   )
 

@@ -2043,6 +2043,14 @@ namespace Halide {
                     }
 
 
+                    std::string emit_compile_to_llvm(std::string expr_name, std::string map_name, std::string call_name, std::string bitcode_path){
+                        std::string comment = "; Translate synthesized hydride-expression into LLVM-IR";
+                        std::string command = "(compile-to-llvm "+expr_name + " " + map_name + " \"" + call_name + "\" \"" + bitcode_path + "\")\n";
+
+                        return comment + "\n" + command;
+
+                    }
+
                     std::string emit_racket_debug(){
                         return "\n \
                             ;; Uncomment the line below to enable verbose logging\n \
@@ -2132,6 +2140,10 @@ namespace Halide {
                 rkt << "(clear-vc!)" << "\n";
                 rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes(), /* Hash map name */  "id-map") << ")" <<"\n";
                 rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
+
+
+                std::string fn_name = "hydride.node." + std::to_string(expr_id);
+                rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , "/tmp/test.ll");
 
                 rkt.close();
 
