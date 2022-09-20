@@ -130,10 +130,14 @@ def CompileVariable(Variable, Context):
   print(Variable)
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(Variable.name):
+    print("VARIABLE FOUND")
     ID = Context.getVariableID(Variable.name)
+    print("Context.getCompiledAbstractionForID(ID):")
+    print(id(Context.getCompiledAbstractionForID(ID)))
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+  print("CREATED A NEW VARIABLE")
   Var = RoseValue.create(Variable.name, \
           RoseBitVectorType.create(Context.getMaxVectorLength()))
 
@@ -1887,9 +1891,12 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
 
   # See if the function returns anything, if not add a return op
   if CompiledRetVal == RoseUndefValue():
-      Op = RoseReturnOp.create(RetValue)
-      # NO meed to add this operation to the context but add it to the function
-      CompiledFunction.addAbstraction(Op)
+    print("COMPILING RETURN SPECIAL")
+    print(id(CompiledFunction.getReturnValue()))
+    CompiledFunction.getReturnValue().print()
+    Op = RoseReturnOp.create(CompiledFunction.getReturnValue())
+    # NO meed to add this operation to the context but add it to the function
+    CompiledFunction.addAbstraction(Op)
 
   print("\n\n\n\n\n")
   CompiledFunction.print()
@@ -2395,6 +2402,18 @@ def HandleToLshr():
   return LamdaImplFunc
 
 
+def HandleToShl():
+  def LamdaImplFunc(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                      Context : x86RoseContext):
+    assert isinstance(Operand1.getType(), RoseBitVectorType) == True
+    assert isinstance(Operand2.getType(), RoseBitVectorType) == True
+    Op = RoseBVShlOp.create(Name, Operand1, Operand2)
+    Context.addSignednessInfoForValue(Op, Context.isValueSigned(Operand1))
+    return Op
+  
+  return LamdaImplFunc
+
+
 BinaryOps = {
     '+': HandleToAdd,
     '-' : HandleToSub,
@@ -2408,7 +2427,7 @@ BinaryOps = {
     '==' : HandleToEqual,
     '!=' : HandleToNotEqual,
     '>>' : HandleToAshr,
-    '<<' : HandleToLshr,
+    '<<' : HandleToShl,
     '&' : HandleToAnd,
     '|' : HandleToOr,
     'AND' : HandleToAnd,
