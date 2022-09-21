@@ -81,7 +81,7 @@ else
 fi
 
 # Compile the benchmark
-g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -I $HALIDE_ROOT/apps/support -lpthread -ldl -o proc
+g++ $CXXFLAGS proc_common.cpp $BENCH_DIR/proc.cpp $BENCH_DIR/$BENCH_DIR.a -I $HALIDE_INCLUDE -I $HALIDE_TOOLS -I $HALIDE_ROOT/apps/support -lpthread -ldl -ljpeg -lpng -o proc
 
 # Run it
 ./proc || (exit 1 & echo "FAILED!")

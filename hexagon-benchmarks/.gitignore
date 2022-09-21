@@ -2,6 +2,7 @@
 *.h
 *.s
 *.swp
+camera_pipe/*.schedule
 conv3x3/*.schedule
 dilate3x3/*.schedule
 gaussian5x5/*.schedule

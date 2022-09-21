@@ -19,18 +19,36 @@ using namespace Halide::Runtime;
 using namespace Halide::Tools;
 
 int main(int argc, char **argv) {
-    if (argc < 8) {
-        printf("Usage: ./process raw.png color_temp gamma contrast sharpen timing_iterations output.png\n"
-               "e.g. ./process raw.png 3200 2 50 5 output.png");
-        return 0;
-    }
+    // NOTE(Stefanos): Overwrite with handwritten arguments
+    // (I didn't introduce Makefile for each benchmark so now we kind of have to do
+    // that so that this proc works as the rest)
+    //
+    // For the specific args I use, check:
+    // https://github.com/halide/Halide/blob/standalone_autoscheduler/apps/camera_pipe/Makefile#L37
+
+    // Remember that ./proc is placed one dir up.
+    const char *arg1 = "./camera_pipe/bayer_raw.png";
+    const char *arg2 = "3700";
+    const char *arg3 = "2.0";
+    const char *arg4 = "50";
+    const char *arg5 = "1.0";
+    // NOTE(Stefanos): Don't use that.
+    // const char *arg6 = "5";
+    // NOTE(Stefanos): Don't use that
+    // const char *arg7 = "out.png";
+
+    // if (argc < 8) {
+    //     printf("Usage: ./process raw.png color_temp gamma contrast sharpen timing_iterations output.png\n"
+    //            "e.g. ./process raw.png 3200 2 50 5 output.png");
+    //     return 0;
+    // }
 
 #ifdef HL_MEMINFO
     halide_enable_malloc_trace();
 #endif
 
-    fprintf(stderr, "input: %s\n", argv[1]);
-    Buffer<uint16_t> input = load_and_convert_image(argv[1]);
+    fprintf(stderr, "input: %s\n", arg1);
+    Buffer<uint16_t> input = load_and_convert_image(arg1);
     fprintf(stderr, "       %d %d\n", input.width(), input.height());
     Buffer<uint8_t> output(((input.width() - 32)/32)*32, ((input.height() - 24)/32)*32, 3);
 
@@ -57,13 +75,14 @@ int main(int argc, char **argv) {
         }
     }
 
-    float color_temp = (float) atof(argv[2]);
-    float gamma = (float) atof(argv[3]);
-    float contrast = (float) atof(argv[4]);
-    float sharpen = (float) atof(argv[5]);
+    float color_temp = (float) atof(arg2);
+    float gamma = (float) atof(arg3);
+    float contrast = (float) atof(arg4);
+    float sharpen = (float) atof(arg5);
     int blackLevel = 25;
     int whiteLevel = 1023;
 
+    // This says manually tuned time. It might say it even if it's auto-scheduled.
     three_way_bench(
         [&]() { camera_pipe(input, matrix_3200, matrix_7000, color_temp, gamma, contrast, sharpen, blackLevel, whiteLevel, output); output.device_sync(); },
         // NOTE(Stefanos): run.sh names the function the same either auto-scheduled or not.
@@ -77,8 +96,9 @@ int main(int argc, char **argv) {
     // #endif
     );
 
-    fprintf(stderr, "output: %s\n", argv[7]);
-    convert_and_save_image(output, argv[7]);
+    // NOTE(Stefanos): Don't need to output it...
+    // fprintf(stderr, "output: %s\n", argv[7]);
+    // convert_and_save_image(output, argv[7]);
     fprintf(stderr, "        %d %d\n", output.width(), output.height());
 
     return 0;
