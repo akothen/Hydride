@@ -67,7 +67,7 @@ public:
   }
 
   int run() {
-    return conv3x3(u8_in, i8_mask, u8_out);
+    return conv3x3a16(u8_in, i8_mask, u8_out);
   }
   void finalize() {
     u8_in.device_free();

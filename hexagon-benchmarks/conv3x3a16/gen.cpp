@@ -4,6 +4,8 @@ using namespace Halide;
 
 class Conv3x3 : public Generator<Conv3x3> {
 public:
+  // Taken from here:
+  // https://github.com/halide/Halide/blob/standalone_autoscheduler/apps/hexagon_benchmarks/Makefile#L26
   GeneratorParam<Type> accumulator_type{"accumulator_type", Int(16)};
   // Takes an 8 bit image; one channel.
   Input<Buffer<uint8_t>> input{"input", 2};
@@ -52,4 +54,4 @@ private:
   Func bounded_input{"input_bounded"};
 };
 
-HALIDE_REGISTER_GENERATOR(Conv3x3, conv3x3)
+HALIDE_REGISTER_GENERATOR(Conv3x3, conv3x3a16)
