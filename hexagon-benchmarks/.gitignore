@@ -6,6 +6,7 @@ camera_pipe/*.schedule
 conv3x3/*.schedule
 dilate3x3/*.schedule
 gaussian5x5/*.schedule
+mat_mul/*.schedule
 median3x3/*.schedule
 sobel/*.schedule
 */samples/*/*/bench
