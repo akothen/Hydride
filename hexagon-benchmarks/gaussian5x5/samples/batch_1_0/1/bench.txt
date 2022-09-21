@@ -1,1 +1,0 @@
-Benchmark for gaussian5x5_batch_01_sample_01 produces best case of 0.000128275 sec/iter (over 8 samples, 2720 iterations, accuracy 1.9%); best throughput is 7.8e+03 mpix/sec.
