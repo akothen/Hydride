@@ -2,6 +2,7 @@
 *.h
 *.s
 *.swp
+box_blur/*.schedule
 camera_pipe/*.schedule
 conv3x3a16/*.schedule
 conv3x3a32/*.schedule
