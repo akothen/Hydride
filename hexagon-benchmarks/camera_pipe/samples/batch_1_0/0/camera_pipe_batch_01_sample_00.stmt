@@ -1,0 +1,727 @@
+module name=camera_pipe_batch_01_sample_00, target=x86-64-linux-avx-avx2-avx512-avx512_skylake-disable_llvm_loop_unroll-disable_llvm_loop_vectorize-f16c-fma-sse41
+external_plus_metadata func camera_pipe_batch_01_sample_00 (input, matrix_3200, matrix_7000, color_temp, gamma, contrast, sharpen_strength, blackLevel, whiteLevel, processed) {
+assert((reinterpret(uint64, processed.buffer) != (uint64)0), halide_error_buffer_argument_is_null("processed"))
+assert((reinterpret(uint64, matrix_7000.buffer) != (uint64)0), halide_error_buffer_argument_is_null("matrix_7000"))
+assert((reinterpret(uint64, matrix_3200.buffer) != (uint64)0), halide_error_buffer_argument_is_null("matrix_3200"))
+assert((reinterpret(uint64, input.buffer) != (uint64)0), halide_error_buffer_argument_is_null("input"))
+let input = _halide_buffer_get_host(input.buffer)
+let input.type = _halide_buffer_get_type(input.buffer)
+let input.dimensions = _halide_buffer_get_dimensions(input.buffer)
+let input.min.0 = _halide_buffer_get_min(input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent(input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride(input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min(input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent(input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride(input.buffer, 1)
+let matrix_3200 = _halide_buffer_get_host(matrix_3200.buffer)
+let matrix_3200.type = _halide_buffer_get_type(matrix_3200.buffer)
+let matrix_3200.dimensions = _halide_buffer_get_dimensions(matrix_3200.buffer)
+let matrix_3200.min.0 = _halide_buffer_get_min(matrix_3200.buffer, 0)
+let matrix_3200.extent.0 = _halide_buffer_get_extent(matrix_3200.buffer, 0)
+let matrix_3200.stride.0 = _halide_buffer_get_stride(matrix_3200.buffer, 0)
+let matrix_3200.min.1 = _halide_buffer_get_min(matrix_3200.buffer, 1)
+let matrix_3200.extent.1 = _halide_buffer_get_extent(matrix_3200.buffer, 1)
+let matrix_3200.stride.1 = _halide_buffer_get_stride(matrix_3200.buffer, 1)
+let matrix_7000 = _halide_buffer_get_host(matrix_7000.buffer)
+let matrix_7000.type = _halide_buffer_get_type(matrix_7000.buffer)
+let matrix_7000.dimensions = _halide_buffer_get_dimensions(matrix_7000.buffer)
+let matrix_7000.min.0 = _halide_buffer_get_min(matrix_7000.buffer, 0)
+let matrix_7000.extent.0 = _halide_buffer_get_extent(matrix_7000.buffer, 0)
+let matrix_7000.stride.0 = _halide_buffer_get_stride(matrix_7000.buffer, 0)
+let matrix_7000.min.1 = _halide_buffer_get_min(matrix_7000.buffer, 1)
+let matrix_7000.extent.1 = _halide_buffer_get_extent(matrix_7000.buffer, 1)
+let matrix_7000.stride.1 = _halide_buffer_get_stride(matrix_7000.buffer, 1)
+let processed = _halide_buffer_get_host(processed.buffer)
+let processed.type = _halide_buffer_get_type(processed.buffer)
+let processed.dimensions = _halide_buffer_get_dimensions(processed.buffer)
+let processed.min.0 = _halide_buffer_get_min(processed.buffer, 0)
+let processed.extent.0 = _halide_buffer_get_extent(processed.buffer, 0)
+let processed.stride.0 = _halide_buffer_get_stride(processed.buffer, 0)
+let processed.min.1 = _halide_buffer_get_min(processed.buffer, 1)
+let processed.extent.1 = _halide_buffer_get_extent(processed.buffer, 1)
+let processed.stride.1 = _halide_buffer_get_stride(processed.buffer, 1)
+let processed.min.2 = _halide_buffer_get_min(processed.buffer, 2)
+let processed.extent.2 = _halide_buffer_get_extent(processed.buffer, 2)
+let processed.stride.2 = _halide_buffer_get_stride(processed.buffer, 2)
+if (_halide_buffer_is_bounds_query(input.buffer)) {
+  _halide_buffer_init(input.buffer, _halide_buffer_get_shape(input.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 1, 16, 2, make_struct((halide_dimension_t *), 0, 2592, 1, 0, 0, 1968, 2572, 0), (uint64)0)
+}
+if (_halide_buffer_is_bounds_query(matrix_3200.buffer)) {
+  _halide_buffer_init(matrix_3200.buffer, _halide_buffer_get_shape(matrix_3200.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 2, 32, 2, make_struct((halide_dimension_t *), 0, 4, 1, 0, 0, 3, 4, 0), (uint64)0)
+}
+if (_halide_buffer_is_bounds_query(matrix_7000.buffer)) {
+  _halide_buffer_init(matrix_7000.buffer, _halide_buffer_get_shape(matrix_7000.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 2, 32, 2, make_struct((halide_dimension_t *), 0, 4, 1, 0, 0, 3, 4, 0), (uint64)0)
+}
+if (_halide_buffer_is_bounds_query(processed.buffer)) {
+  _halide_buffer_init(processed.buffer, _halide_buffer_get_shape(processed.buffer), reinterpret((void *), (uint64)0), (uint64)0, reinterpret((halide_device_interface_t *), (uint64)0), 1, 8, 3, make_struct((halide_dimension_t *), 0, 2560, 1, 0, 0, 1920, 2560, 0, 0, 3, 4915200, 0), (uint64)0)
+}
+if (!(_halide_buffer_is_bounds_query(processed.buffer) || (_halide_buffer_is_bounds_query(matrix_7000.buffer) || (_halide_buffer_is_bounds_query(input.buffer) || _halide_buffer_is_bounds_query(matrix_3200.buffer))))) {
+  assert((input.type == (uint32)69633), halide_error_bad_type("Input buffer input", input.type, (uint32)69633))
+  assert((input.dimensions == 2), halide_error_bad_dimensions("Input buffer input", input.dimensions, 2))
+  assert((matrix_3200.type == (uint32)73730), halide_error_bad_type("Input buffer matrix_3200", matrix_3200.type, (uint32)73730))
+  assert((matrix_3200.dimensions == 2), halide_error_bad_dimensions("Input buffer matrix_3200", matrix_3200.dimensions, 2))
+  assert((matrix_7000.type == (uint32)73730), halide_error_bad_type("Input buffer matrix_7000", matrix_7000.type, (uint32)73730))
+  assert((matrix_7000.dimensions == 2), halide_error_bad_dimensions("Input buffer matrix_7000", matrix_7000.dimensions, 2))
+  assert((processed.type == (uint32)67585), halide_error_bad_type("Output buffer processed", processed.type, (uint32)67585))
+  assert((processed.dimensions == 3), halide_error_bad_dimensions("Output buffer processed", processed.dimensions, 3))
+  assert(((input.min.0 <= 10) && (2582 <= (input.extent.0 + input.min.0))), halide_error_access_out_of_bounds("Input buffer input", 0, 10, 2581, input.min.0, ((input.extent.0 + input.min.0) + -1)))
+  assert((0 <= input.extent.0), halide_error_buffer_extents_negative("Input buffer input", 0, input.extent.0))
+  assert(((input.min.1 <= 6) && (1938 <= (input.extent.1 + input.min.1))), halide_error_access_out_of_bounds("Input buffer input", 1, 6, 1937, input.min.1, ((input.extent.1 + input.min.1) + -1)))
+  assert((0 <= input.extent.1), halide_error_buffer_extents_negative("Input buffer input", 1, input.extent.1))
+  assert(((matrix_3200.min.0 <= 0) && (4 <= (matrix_3200.extent.0 + matrix_3200.min.0))), halide_error_access_out_of_bounds("Input buffer matrix_3200", 0, 0, 3, matrix_3200.min.0, ((matrix_3200.extent.0 + matrix_3200.min.0) + -1)))
+  assert((0 <= matrix_3200.extent.0), halide_error_buffer_extents_negative("Input buffer matrix_3200", 0, matrix_3200.extent.0))
+  assert(((matrix_3200.min.1 <= 0) && (3 <= (matrix_3200.extent.1 + matrix_3200.min.1))), halide_error_access_out_of_bounds("Input buffer matrix_3200", 1, 0, 2, matrix_3200.min.1, ((matrix_3200.extent.1 + matrix_3200.min.1) + -1)))
+  assert((0 <= matrix_3200.extent.1), halide_error_buffer_extents_negative("Input buffer matrix_3200", 1, matrix_3200.extent.1))
+  assert(((matrix_7000.min.0 <= 0) && (4 <= (matrix_7000.extent.0 + matrix_7000.min.0))), halide_error_access_out_of_bounds("Input buffer matrix_7000", 0, 0, 3, matrix_7000.min.0, ((matrix_7000.extent.0 + matrix_7000.min.0) + -1)))
+  assert((0 <= matrix_7000.extent.0), halide_error_buffer_extents_negative("Input buffer matrix_7000", 0, matrix_7000.extent.0))
+  assert(((matrix_7000.min.1 <= 0) && (3 <= (matrix_7000.extent.1 + matrix_7000.min.1))), halide_error_access_out_of_bounds("Input buffer matrix_7000", 1, 0, 2, matrix_7000.min.1, ((matrix_7000.extent.1 + matrix_7000.min.1) + -1)))
+  assert((0 <= matrix_7000.extent.1), halide_error_buffer_extents_negative("Input buffer matrix_7000", 1, matrix_7000.extent.1))
+  assert(((processed.min.0 <= 0) && (2560 <= (processed.extent.0 + processed.min.0))), halide_error_access_out_of_bounds("Output buffer processed", 0, 0, 2559, processed.min.0, ((processed.extent.0 + processed.min.0) + -1)))
+  assert((0 <= processed.extent.0), halide_error_buffer_extents_negative("Output buffer processed", 0, processed.extent.0))
+  assert(((processed.min.1 <= 0) && (1920 <= (processed.extent.1 + processed.min.1))), halide_error_access_out_of_bounds("Output buffer processed", 1, 0, 1919, processed.min.1, ((processed.extent.1 + processed.min.1) + -1)))
+  assert((0 <= processed.extent.1), halide_error_buffer_extents_negative("Output buffer processed", 1, processed.extent.1))
+  assert(((processed.min.2 <= 0) && (3 <= (processed.extent.2 + processed.min.2))), halide_error_access_out_of_bounds("Output buffer processed", 2, 0, 2, processed.min.2, ((processed.extent.2 + processed.min.2) + -1)))
+  assert((0 <= processed.extent.2), halide_error_buffer_extents_negative("Output buffer processed", 2, processed.extent.2))
+  assert((input.stride.0 == 1), halide_error_constraint_violated("input.stride.0", input.stride.0, "1", 1))
+  assert((input.min.0 == 0), halide_error_constraint_violated("input.min.0", input.min.0, "0", 0))
+  assert((input.extent.0 == 2592), halide_error_constraint_violated("input.extent.0", input.extent.0, "2592", 2592))
+  assert((input.min.1 == 0), halide_error_constraint_violated("input.min.1", input.min.1, "0", 0))
+  assert((input.extent.1 == 1968), halide_error_constraint_violated("input.extent.1", input.extent.1, "1968", 1968))
+  assert((matrix_3200.stride.0 == 1), halide_error_constraint_violated("matrix_3200.stride.0", matrix_3200.stride.0, "1", 1))
+  assert((matrix_7000.stride.0 == 1), halide_error_constraint_violated("matrix_7000.stride.0", matrix_7000.stride.0, "1", 1))
+  assert((processed.stride.0 == 1), halide_error_constraint_violated("processed.stride.0", processed.stride.0, "1", 1))
+  let matrix_3200.total_extent.1 = (int64(matrix_3200.extent.1)*int64(matrix_3200.extent.0))
+  let matrix_7000.total_extent.1 = (int64(matrix_7000.extent.1)*int64(matrix_7000.extent.0))
+  let processed.total_extent.1 = (int64(processed.extent.1)*int64(processed.extent.0))
+  let processed.total_extent.2 = (processed.total_extent.1*int64(processed.extent.2))
+  assert((abs((int64(input.stride.1)*(int64)1968)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("input", abs((int64(input.stride.1)*(int64)1968)), (uint64)2147483647))
+  assert((abs(int64(matrix_3200.extent.0)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("matrix_3200", abs(int64(matrix_3200.extent.0)), (uint64)2147483647))
+  assert((abs((int64(matrix_3200.extent.1)*int64(matrix_3200.stride.1))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("matrix_3200", abs((int64(matrix_3200.extent.1)*int64(matrix_3200.stride.1))), (uint64)2147483647))
+  assert((matrix_3200.total_extent.1 <= (int64)2147483647), halide_error_buffer_extents_too_large("matrix_3200", matrix_3200.total_extent.1, (int64)2147483647))
+  assert((abs(int64(matrix_7000.extent.0)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("matrix_7000", abs(int64(matrix_7000.extent.0)), (uint64)2147483647))
+  assert((abs((int64(matrix_7000.extent.1)*int64(matrix_7000.stride.1))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("matrix_7000", abs((int64(matrix_7000.extent.1)*int64(matrix_7000.stride.1))), (uint64)2147483647))
+  assert((matrix_7000.total_extent.1 <= (int64)2147483647), halide_error_buffer_extents_too_large("matrix_7000", matrix_7000.total_extent.1, (int64)2147483647))
+  assert((abs(int64(processed.extent.0)) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("processed", abs(int64(processed.extent.0)), (uint64)2147483647))
+  assert((abs((int64(processed.extent.1)*int64(processed.stride.1))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("processed", abs((int64(processed.extent.1)*int64(processed.stride.1))), (uint64)2147483647))
+  assert((processed.total_extent.1 <= (int64)2147483647), halide_error_buffer_extents_too_large("processed", processed.total_extent.1, (int64)2147483647))
+  assert((abs((int64(processed.extent.2)*int64(processed.stride.2))) <= (uint64)2147483647), halide_error_buffer_allocation_too_large("processed", abs((int64(processed.extent.2)*int64(processed.stride.2))), (uint64)2147483647))
+  assert((processed.total_extent.2 <= (int64)2147483647), halide_error_buffer_extents_too_large("processed", processed.total_extent.2, (int64)2147483647))
+  assert((input != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Input buffer input"))
+  assert((matrix_3200 != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Input buffer matrix_3200"))
+  assert((matrix_7000 != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Input buffer matrix_7000"))
+  assert((processed != reinterpret((void *), (uint64)0)), halide_error_host_is_null("Output buffer processed"))
+  allocate curve[uint8 * 1024]
+  produce curve {
+    let t6856 = pow_f32(2.000000f, (contrast*0.010000f))
+    let t6855 = (1.000000f/gamma)
+    let t6854 = (1.000000f/float32((whiteLevel - blackLevel)))
+    parallel (curve.s0.v0.v0, 0, 16) {
+      curve[ramp((curve.s0.v0.v0*64), 1, 64) aligned(64, 0)] = (let t6672 = pow_f32(max(min((float32x64(ramp(((curve.s0.v0.v0*64) - blackLevel), 1, 64))*x64(t6854)), x64(1.000000f)), x64(0.000000f)), x64(t6855)) in select((x64(blackLevel) < ramp((curve.s0.v0.v0*64), 1, 64)), select((x64(whiteLevel) < ramp((curve.s0.v0.v0*64), 1, 64)), x64((uint8)255), uint8x64((max(min((select((x64(0.500000f) < t6672), (x64(1.000000f) - ((x64(1.000000f) - t6672)*((((x64(1.000000f) - t6672)*x64(((t6856*2.000000f) + -2.000000f))) - x64(t6856)) + x64(2.000000f)))), ((((t6672*x64(((t6856*2.000000f) + -2.000000f))) - x64(t6856)) + x64(2.000000f))*t6672))*x64(255.000000f)), x64(254.500000f)), x64(-0.500000f)) + x64(0.500000f)))), x64((uint8)0)))
+    }
+  }
+  allocate f26[int16 * 12]
+  produce f26 {
+    let t6861 = (1.000000f/color_temp)
+    let t6860 = ((t6861*5894.736816f) + -0.842105f)
+    let t6858 = ((t6861*-5894.736816f) + 1.842105f)
+    let t6859 = ((matrix_7000.min.1*matrix_7000.stride.1) + matrix_7000.min.0)
+    let t6857 = ((matrix_3200.min.1*matrix_3200.stride.1) + matrix_3200.min.0)
+    parallel (f26.s0.v1, 0, 3) {
+      let t6864 = (f26.s0.v1*4)
+      let t6863 = ((f26.s0.v1*matrix_7000.stride.1) - t6859)
+      let t6862 = ((f26.s0.v1*matrix_3200.stride.1) - t6857)
+      for (f26.s0.v0.v0i, 0, 4) {
+        f26[(f26.s0.v0.v0i + t6864)] = int16((((matrix_3200[(f26.s0.v0.v0i + t6862)]*t6858) + (matrix_7000[(f26.s0.v0.v0i + t6863)]*t6860))*256.000000f))
+      }
+    }
+  }
+  allocate sharpen_strength_x32[uint8 * 1]
+  produce sharpen_strength_x32 {
+    sharpen_strength_x32[0] = uint8(max(min((sharpen_strength*32.000000f), 255.000000f), 0.000000f))
+  }
+  assert(((0 <= processed.min.1) && ((processed.extent.1 + processed.min.1) <= 1920)), halide_error_explicit_bounds_too_small("v1", "processed", 0, 1919, processed.min.1, ((processed.extent.1 + processed.min.1) + -1)))
+  assert(((0 <= processed.min.0) && ((processed.extent.0 + processed.min.0) <= 2560)), halide_error_explicit_bounds_too_small("v0", "processed", 0, 2559, processed.min.0, ((processed.extent.0 + processed.min.0) + -1)))
+  assert(((0 <= processed.min.2) && ((processed.extent.2 + processed.min.2) <= 3)), halide_error_explicit_bounds_too_small("v2", "processed", 0, 2, processed.min.2, ((processed.extent.2 + processed.min.2) + -1)))
+  produce processed {
+    consume sharpen_strength_x32 {
+      consume f26 {
+        consume curve {
+          let t6867 = (input.stride.1*12)
+          let t6866 = (t6867 + 174)
+          let t6865 = (t6867 + 10)
+          parallel (processed.s0.v0.v0.v0, 0, 256) {
+            allocate deinterleaved[int16 * 385 * 16 * 4] in Stack
+            allocate f2[int16 * 10784] in Stack
+            allocate f7[int16 * 10784] in Stack
+            allocate f11[int16 * 10768] in Stack
+            let t6888 = (processed.s0.v0.v0.v0/4)
+            let t6889 = (t6888*15)
+            let t6890 = (t6888*30)
+            let t6891 = (processed.s0.v0.v0.v0 % 4)
+            let t6892 = (t6891*320)
+            let t6868 = (t6888*2)
+            for (processed.s0.v1.v1i.v1i, 0, 2) {
+              let f11.s0.v1.min_2 = select((0 < processed.s0.v1.v1i.v1i), ((((processed.s0.v1.v1i.v1i + t6868)*15)/2) + 1), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2))
+              let f7.s0.v1.min_2 = select((0 < processed.s0.v1.v1i.v1i), ((((processed.s0.v1.v1i.v1i + t6868)*15)/2) + 2), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2))
+              let f3.s0.v1.min_2 = min(min(((((processed.s0.v1.v1i.v1i + t6868)*15) + -3)/2), f7.s0.v1.min_2), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2))
+              let f4.s0.v1.min_2 = min(min(min(((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2), f11.s0.v1.min_2), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -3)/2)), (f7.s0.v1.min_2 + -1))
+              let deinterleaved.s0.v1.min_2 = select((0 < processed.s0.v1.v1i.v1i), ((((processed.s0.v1.v1i.v1i + t6868)*15)/2) + 2), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -3)/2))
+              produce deinterleaved {
+                let t6905 = (processed.s0.v1.v1i.v1i*15)
+                let t6893 = ((((t6905 + 19)/2) + t6889) - select((0 < processed.s0.v1.v1i.v1i), (((t6905/2) + t6889) + 2), (((t6905 + -3)/2) + t6889)))
+                for (deinterleaved.s0.v0.v0, 0, 4) {
+                  let deinterleaved.s0.v0.v0i.base.s = (min((deinterleaved.s0.v0.v0*96), 228) + t6892)
+                  allocate f0[int16 * 1568] in Stack
+                  let t6919 = (deinterleaved.s0.v0.v0i.base.s - t6892)
+                  let t6906 = ((deinterleaved.s0.v0.v0i.base.s*2) + t6866)
+                  for (deinterleaved.s0.v1, deinterleaved.s0.v1.min_2, t6893) {
+                    let f0.s0.v1.min_4 = (select((deinterleaved.s0.v1.min_2 < deinterleaved.s0.v1), 2, -2) + (deinterleaved.s0.v1*2))
+                    let f0.s0.v1.loop_extent = select((deinterleaved.s0.v1.min_2 < deinterleaved.s0.v1), 2, 6)
+                    produce f0 {
+                      for (f0.s0.v1, f0.s0.v1.min_4, f0.s0.v1.loop_extent) {
+                        let t6921 = ((f0.s0.v1 % 8)*196)
+                        let t6920 = ((f0.s0.v1*input.stride.1) + t6865)
+                        for (f0.s0.v0.v0, 0, 6) {
+                          f0[ramp(((f0.s0.v0.v0*32) + t6921), 1, 32) aligned(4, 0)] = int16x32(input[ramp(((((f0.s0.v0.v0*16) + deinterleaved.s0.v0.v0i.base.s)*2) + t6920), 1, 32)])
+                        }
+                        f0[ramp((((f0.s0.v1 % 8)*196) + 164), 1, 32) aligned(196, 164)] = int16x32(input[ramp(((f0.s0.v1*input.stride.1) + t6906), 1, 32)])
+                      }
+                    }
+                    allocate f1[int16 * 384] in Stack
+                    produce f1 {
+                      consume f0 {
+                        f1[ramp(0, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 2), 1, 32) aligned(392, 2)], max(f0[ramp(((deinterleaved.s0.v1 % 4)*392), 1, 32) aligned(392, 0)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 4), 1, 32) aligned(392, 4)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 2), 1, 32) aligned(392, 2)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 2), 1, 32) aligned(392, 2)])))), x32((int16)0))
+                        f1[ramp(32, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 34), 1, 32) aligned(392, 34)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 32), 1, 32) aligned(392, 32)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 36), 1, 32) aligned(392, 36)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 34), 1, 32) aligned(392, 34)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 34), 1, 32) aligned(392, 34)])))), x32((int16)0))
+                        f1[ramp(64, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 66), 1, 32) aligned(392, 66)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 64), 1, 32) aligned(392, 64)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 68), 1, 32) aligned(392, 68)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 66), 1, 32) aligned(392, 66)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 66), 1, 32) aligned(392, 66)])))), x32((int16)0))
+                        f1[ramp(96, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 98), 1, 32) aligned(392, 98)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 96), 1, 32) aligned(392, 96)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 100), 1, 32) aligned(392, 100)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 98), 1, 32) aligned(392, 98)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 98), 1, 32) aligned(392, 98)])))), x32((int16)0))
+                        f1[ramp(128, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 130), 1, 32) aligned(392, 130)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 128), 1, 32) aligned(392, 128)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 132), 1, 32) aligned(392, 132)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 130), 1, 32) aligned(392, 130)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 130), 1, 32) aligned(392, 130)])))), x32((int16)0))
+                        f1[ramp(160, 1, 32)] = max(min(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 162), 1, 32) aligned(392, 162)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 160), 1, 32) aligned(392, 160)], max(f0[ramp((((deinterleaved.s0.v1 % 4)*392) + 164), 1, 32) aligned(392, 164)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 6) % 8)*196) + 162), 1, 32) aligned(392, 162)], f0[ramp((((((deinterleaved.s0.v1*2) + 2) % 8)*196) + 162), 1, 32) aligned(392, 162)])))), x32((int16)0))
+                        f1[ramp(192, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 2), 1, 32) aligned(392, 198)], max(f0[ramp(((((deinterleaved.s0.v1*2) + 1) % 8)*196), 1, 32) aligned(392, 196)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 4), 1, 32) aligned(392, 200)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 2), 1, 32) aligned(392, 198)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 2), 1, 32) aligned(392, 198)])))), x32((int16)0))
+                        f1[ramp(224, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 34), 1, 32) aligned(392, 230)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 32), 1, 32) aligned(392, 228)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 36), 1, 32) aligned(392, 232)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 34), 1, 32) aligned(392, 230)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 34), 1, 32) aligned(392, 230)])))), x32((int16)0))
+                        f1[ramp(256, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 66), 1, 32) aligned(392, 262)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 64), 1, 32) aligned(392, 260)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 68), 1, 32) aligned(392, 264)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 66), 1, 32) aligned(392, 262)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 66), 1, 32) aligned(392, 262)])))), x32((int16)0))
+                        f1[ramp(288, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 98), 1, 32) aligned(392, 294)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 96), 1, 32) aligned(392, 292)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 100), 1, 32) aligned(392, 296)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 98), 1, 32) aligned(392, 294)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 98), 1, 32) aligned(392, 294)])))), x32((int16)0))
+                        f1[ramp(320, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 130), 1, 32) aligned(392, 326)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 128), 1, 32) aligned(392, 324)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 132), 1, 32) aligned(392, 328)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 130), 1, 32) aligned(392, 326)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 130), 1, 32) aligned(392, 326)])))), x32((int16)0))
+                        f1[ramp(352, 1, 32)] = max(min(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 162), 1, 32) aligned(392, 358)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 160), 1, 32) aligned(392, 356)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 1) % 8)*196) + 164), 1, 32) aligned(392, 360)], max(f0[ramp((((((deinterleaved.s0.v1*2) + 7) % 8)*196) + 162), 1, 32) aligned(392, 358)], f0[ramp((((((deinterleaved.s0.v1*2) + 3) % 8)*196) + 162), 1, 32) aligned(392, 358)])))), x32((int16)0))
+                      }
+                    }
+                    consume f1 {
+                      deinterleaved[ramp((((deinterleaved.s0.v1 % 16)*385) + t6919), 1, 32)] = f1[ramp(0, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 32), 1, 32)] = f1[ramp(64, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 64), 1, 32)] = f1[ramp(128, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 6160), 1, 32)] = f1[ramp(1, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 6192), 1, 32)] = f1[ramp(65, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 6224), 1, 32)] = f1[ramp(129, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 12320), 1, 32)] = f1[ramp(192, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 12352), 1, 32)] = f1[ramp(256, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 12384), 1, 32)] = f1[ramp(320, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 18480), 1, 32)] = f1[ramp(193, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 18512), 1, 32)] = f1[ramp(257, 2, 32)]
+                      deinterleaved[ramp(((((deinterleaved.s0.v1 % 16)*385) + t6919) + 18544), 1, 32)] = f1[ramp(321, 2, 32)]
+                      free f1
+                    }
+                  }
+                  free f0
+                }
+              }
+              produce f2 {
+                consume deinterleaved {
+                  let t6923 = (processed.s0.v1.v1i.v1i*15)
+                  let t6922 = ((((t6923 + 19)/2) + t6889) - select((0 < processed.s0.v1.v1i.v1i), (((t6923/2) + t6889) + 2), (((t6923 + -1)/2) + t6889)))
+                  for (f2.s0.v1, f7.s0.v1.min_2, t6922) {
+                    let t6926 = (f2.s0.v1 % 16)
+                    let t6925 = (t6926*674)
+                    let t6924 = ((t6926*385) + 6160)
+                    for (f2.s0.v0.v0, 0, 11) {
+                      f2[ramp(((f2.s0.v0.v0*32) + t6925), 1, 32) aligned(2, 0)] = deinterleaved[ramp(((f2.s0.v0.v0*32) + t6924), 1, 32)]
+                    }
+                  }
+                }
+              }
+              let f4.v1.min_realized = min(min(min(min(min((f7.s0.v1.min_2 + -1), f11.s0.v1.min_2), (((processed.s0.v1.v1i.v1i + t6868)*15)/2)), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -3)/2)), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2)), f4.s0.v1.min_2)
+              let f4.v1.extent_realized.s = (let t6693 = (0 < processed.s0.v1.v1i.v1i) in (((((processed.s0.v1.v1i.v1i*15) + 17)/2) + t6889) - min(min(select(t6693, ((((processed.s0.v1.v1i.v1i*15)/2) + t6889) + 1), ((((processed.s0.v1.v1i.v1i*15) + -1)/2) + t6889)), (select(t6693, ((((processed.s0.v1.v1i.v1i*15)/2) + t6889) + 2), ((((processed.s0.v1.v1i.v1i*15) + -1)/2) + t6889)) + -1)), ((((processed.s0.v1.v1i.v1i*15) + -3)/2) + t6889))))
+              allocate f4[int16 * 385 * (f4.v1.extent_realized.s + 1)] in Stack
+              produce f4 {
+                consume deinterleaved {
+                  let t6928 = (0 < processed.s0.v1.v1i.v1i)
+                  let t6929 = (processed.s0.v1.v1i.v1i*15)
+                  let t6930 = ((t6929/2) + t6889)
+                  let t6931 = (((t6929 + -1)/2) + t6889)
+                  let t6927 = ((((t6929 + 19)/2) + t6889) - min(min(select(t6928, (t6930 + 1), t6931), (((t6929 + -3)/2) + t6889)), (select(t6928, (t6930 + 2), t6931) + -1)))
+                  for (f4.s0.v1, f4.s0.v1.min_2, t6927) {
+                    let t6933 = ((f4.s0.v1 - f4.v1.min_realized)*385)
+                    let t6932 = (((f4.s0.v1 % 16)*385) + 18480)
+                    for (f4.s0.v0.v0, 0, 11) {
+                      f4[ramp(((f4.s0.v0.v0*32) + t6933), 1, 32)] = deinterleaved[ramp(((f4.s0.v0.v0*32) + t6932), 1, 32)]
+                    }
+                  }
+                }
+              }
+              let f3.v1.min_realized = min(min(min(min(((((processed.s0.v1.v1i.v1i + t6868)*15) + -1)/2), f7.s0.v1.min_2), (((processed.s0.v1.v1i.v1i + t6868)*15)/2)), ((((processed.s0.v1.v1i.v1i + t6868)*15) + -3)/2)), f3.s0.v1.min_2)
+              let f3.v1.extent_realized.s.s = (max(max((t6889 - select((0 < processed.s0.v1.v1i.v1i), ((((processed.s0.v1.v1i.v1i*15)/2) + t6889) + 2), ((((processed.s0.v1.v1i.v1i*15) + -1)/2) + t6889))), (((0 - (processed.s0.v1.v1i.v1i*15))/2) + 1)), (((processed.s0.v1.v1i.v1i*-15)/2) + 2)) + ((processed.s0.v1.v1i.v1i*15)/2))
+              allocate f3[int16 * 674 * (f3.v1.extent_realized.s.s + 10)] in Stack
+              produce f3 {
+                consume deinterleaved {
+                  let t6935 = (processed.s0.v1.v1i.v1i*15)
+                  let t6934 = ((((t6935 + 19)/2) + t6889) - min(select((0 < processed.s0.v1.v1i.v1i), (((t6935/2) + t6889) + 2), (((t6935 + -1)/2) + t6889)), (((t6935 + -3)/2) + t6889)))
+                  for (f3.s0.v1, f3.s0.v1.min_2, t6934) {
+                    let t6936 = ((f3.s0.v1 % 16)*385)
+                    let t6937 = ((f3.s0.v1 - f3.v1.min_realized)*674)
+                    for (f3.s0.v0.v0, 0, 11) {
+                      f3[ramp(((f3.s0.v0.v0*32) + t6937), 1, 32) aligned(2, 0)] = deinterleaved[ramp(((f3.s0.v0.v0*32) + t6936), 1, 32)]
+                    }
+                  }
+                }
+              }
+              produce f7 {
+                consume f3 {
+                  consume f4 {
+                    let t6939 = (processed.s0.v1.v1i.v1i*15)
+                    let t6938 = ((((t6939 + 19)/2) + t6889) - select((0 < processed.s0.v1.v1i.v1i), (((t6939/2) + t6889) + 2), (((t6939 + -1)/2) + t6889)))
+                    for (f7.s0.v1, f7.s0.v1.min_2, t6938) {
+                      let t6942 = ((f7.s0.v1 % 16)*674)
+                      let t6941 = ((f7.s0.v1 - f4.v1.min_realized)*385)
+                      let t6940 = ((f7.s0.v1 - f3.v1.min_realized)*674)
+                      for (f7.s0.v0.v0, 0, 11) {
+                        f7[ramp(((f7.s0.v0.v0*32) + t6942), 1, 32) aligned(2, 0)] = (let t6703 = f3[ramp((((f7.s0.v0.v0*32) + t6940) + 1), 1, 32) aligned(2, 1)] in (let t6704 = f3[ramp(((f7.s0.v0.v0*32) + t6940), 1, 32) aligned(2, 0)] in (let t6706 = f4[ramp((((f7.s0.v0.v0*32) + t6941) + -385), 1, 32)] in (let t6707 = f4[ramp(((f7.s0.v0.v0*32) + t6941), 1, 32)] in select((absd(t6703, t6704) < absd(t6706, t6707)), int16x32((((int32x32(t6703) + int32x32(t6704)) + x32(1))/x32(2))), int16x32((((int32x32(t6706) + int32x32(t6707)) + x32(1))/x32(2))))))))
+                      }
+                    }
+                  }
+                }
+              }
+              produce f11 {
+                consume f7 {
+                  consume f4 {
+                    consume f2 {
+                      let t6944 = (processed.s0.v1.v1i.v1i*15)
+                      let t6943 = ((((t6944 + 17)/2) + t6889) - select((0 < processed.s0.v1.v1i.v1i), (((t6944/2) + t6889) + 1), (((t6944 + -1)/2) + t6889)))
+                      for (f11.s0.v1, f11.s0.v1.min_2, t6943) {
+                        let t6949 = (f11.s0.v1 % 16)
+                        let t6946 = (((f11.s0.v1 + 1) % 16)*674)
+                        let t6945 = (t6949*674)
+                        let t6948 = (t6949*673)
+                        let t6947 = (((f11.s0.v1 - f4.v1.min_realized)*385) + 1)
+                        for (f11.s0.v0.v0, 0, 11) {
+                          f11[ramp(((f11.s0.v0.v0*32) + t6948), 1, 32)] = ((f4[ramp(((f11.s0.v0.v0*32) + t6947), 1, 32)] - int16x32((((int32x32(f7[ramp((((f11.s0.v0.v0*32) + t6945) + 1), 1, 32) aligned(2, 1)]) + int32x32(f7[ramp((((f11.s0.v0.v0*32) + t6946) + 1), 1, 32) aligned(2, 1)])) + x32(1))/x32(2)))) + int16x32((((int32x32(f2[ramp((((f11.s0.v0.v0*32) + t6945) + 1), 1, 32) aligned(2, 1)]) + int32x32(f2[ramp((((f11.s0.v0.v0*32) + t6946) + 1), 1, 32) aligned(2, 1)])) + x32(1))/x32(2))))
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              allocate f13[int16 * 4235] in Stack
+              allocate f12[int16 * 2692] in Stack
+              allocate f9[int16 * 2692] in Stack
+              allocate f20[int16 * 5376] in Stack
+              allocate f5[int16 * 4235] in Stack
+              allocate f10[int16 * 1536] in Stack
+              allocate f23[int16 * 5376] in Stack
+              allocate f28[uint8 * 704 * 18 * 3] in Stack
+              produce f28 {
+                consume f11 {
+                  consume f7 {
+                    consume f3 {
+                      consume f4 {
+                        consume f2 {
+                          consume deinterleaved {
+                            let t6961 = (processed.s0.v1.v1i.v1i + t6868)
+                            let t6962 = ((0 - processed.s0.v1.v1i.v1i)/2)
+                            let t6963 = (processed.s0.v1.v1i.v1i*15)
+                            let t6964 = (t6963/2)
+                            let t6965 = (t6961*15)
+                            let t6956 = ((t6965 + -3)/2)
+                            let t6952 = ((t6963 + 17)/2)
+                            let t6955 = ((t6963 + -3)/2)
+                            let t6960 = (t6891*20)
+                            let t6959 = (t6891*10)
+                            let t6957 = (t6962 + 4)
+                            let t6958 = (t6962 + 2)
+                            for (f28.s0.v1.v1, 0, 3) {
+                              let f28.s0.v1.v1i.base.s = ((f28.s0.v1.v1*6) + t6965)
+                              let f23.s0.v1.min_3 = (select((0 < f28.s0.v1.v1), ((t6961*15)/2), (((t6961*15) + -1)/2)) + (f28.s0.v1.v1*3))
+                              let f5.s0.v1.min_3 = (select((0 < f28.s0.v1.v1), ((t6961*15)/2), (((t6961*15) + -3)/2)) + (f28.s0.v1.v1*3))
+                              let f13.s0.v1.loop_extent = ((max((((f28.s0.v1.v1*3) + t6964) + 3), t6952) - select((0 < f28.s0.v1.v1), t6964, t6955)) - (f28.s0.v1.v1*3))
+                              produce f13 {
+                                for (f13.s0.v1, f5.s0.v1.min_3, f13.s0.v1.loop_extent) {
+                                  let t6968 = ((f13.s0.v1 - t6956)*385)
+                                  let t6966 = ((f13.s0.v1 - f4.v1.min_realized)*385)
+                                  let t6967 = ((f13.s0.v1 - f3.v1.min_realized)*674)
+                                  for (f13.s0.v0.v0, 0, 12) {
+                                    f13[ramp(((f13.s0.v0.v0*32) + t6968), 1, 32)] = (let t6713 = f4[ramp(((f13.s0.v0.v0*32) + t6966), 1, 32)] in (let t6714 = f4[ramp((((f13.s0.v0.v0*32) + t6966) + 1), 1, 32)] in (let t6716 = f3[ramp((((f13.s0.v0.v0*32) + t6967) + 675), 1, 32) aligned(2, 1)] in (let t6717 = f3[ramp((((f13.s0.v0.v0*32) + t6967) + 1), 1, 32) aligned(2, 1)] in select((absd(t6713, t6714) < absd(t6716, t6717)), int16x32((((int32x32(t6713) + int32x32(t6714)) + x32(1))/x32(2))), int16x32((((int32x32(t6716) + int32x32(t6717)) + x32(1))/x32(2))))))))
+                                  }
+                                }
+                              }
+                              let f12.s0.v1.loop_extent = select((0 < f28.s0.v1.v1), 3, t6957)
+                              produce f12 {
+                                consume f13 {
+                                  for (f12.s0.v1, f23.s0.v1.min_3, f12.s0.v1.loop_extent) {
+                                    let t6970 = (((f12.s0.v1 + 1) % 16)*674)
+                                    let t6969 = ((f12.s0.v1 % 16)*674)
+                                    let t6972 = ((f12.s0.v1 % 4)*673)
+                                    let t6971 = ((f12.s0.v1 - t6956)*385)
+                                    for (f12.s0.v0.v0, 0, 12) {
+                                      f12[ramp(((f12.s0.v0.v0*32) + t6972), 1, 32)] = (let t6719 = f2[ramp((((f12.s0.v0.v0*32) + t6969) + 1), 1, 32) aligned(2, 1)] in (let t6721 = f2[ramp(((f12.s0.v0.v0*32) + t6970), 1, 32) aligned(2, 0)] in (let t6722 = f2[ramp(((f12.s0.v0.v0*32) + t6969), 1, 32) aligned(2, 0)] in (let t6723 = f2[ramp((((f12.s0.v0.v0*32) + t6970) + 1), 1, 32) aligned(2, 1)] in (let t6724 = f13[ramp(((f12.s0.v0.v0*32) + t6971), 1, 32)] in select((absd(t6719, t6721) < absd(t6722, t6723)), ((t6724 - int16x32((((int32x32(f7[ramp((((f12.s0.v0.v0*32) + t6969) + 1), 1, 32) aligned(2, 1)]) + int32x32(f7[ramp(((f12.s0.v0.v0*32) + t6970), 1, 32) aligned(2, 0)])) + x32(1))/x32(2)))) + int16x32((((int32x32(t6719) + int32x32(t6721)) + x32(1))/x32(2)))), ((t6724 - int16x32((((int32x32(f7[ramp(((f12.s0.v0.v0*32) + t6969), 1, 32) aligned(2, 0)]) + int32x32(f7[ramp((((f12.s0.v0.v0*32) + t6970) + 1), 1, 32) aligned(2, 1)])) + x32(1))/x32(2)))) + int16x32((((int32x32(t6722) + int32x32(t6723)) + x32(1))/x32(2))))))))))
+                                    }
+                                  }
+                                }
+                              }
+                              let f9.s0.v1.loop_extent = select((0 < f28.s0.v1.v1), 3, t6957)
+                              produce f9 {
+                                for (f9.s0.v1, f23.s0.v1.min_3, f9.s0.v1.loop_extent) {
+                                  let t6973 = ((f9.s0.v1 % 16)*674)
+                                  let t6975 = ((f9.s0.v1 % 4)*673)
+                                  let t6974 = (((f9.s0.v1 - f3.v1.min_realized)*674) + 1)
+                                  for (f9.s0.v0.v0, 0, 12) {
+                                    f9[ramp(((f9.s0.v0.v0*32) + t6975), 1, 32)] = ((f3[ramp(((f9.s0.v0.v0*32) + t6974), 1, 32) aligned(2, 1)] - int16x32((((int32x32(f7[ramp((((f9.s0.v0.v0*32) + t6973) + 1), 1, 32) aligned(2, 1)]) + int32x32(f7[ramp(((f9.s0.v0.v0*32) + t6973), 1, 32) aligned(2, 0)])) + x32(1))/x32(2)))) + int16x32((((int32x32(f2[ramp(((f9.s0.v0.v0*32) + t6973), 1, 32) aligned(2, 0)]) + int32x32(f2[ramp((((f9.s0.v0.v0*32) + t6973) + 1), 1, 32) aligned(2, 1)])) + x32(1))/x32(2))))
+                                  }
+                                }
+                              }
+                              let f20.s0.v1.loop_extent = select((0 < f28.s0.v1.v1), 3, t6957)
+                              produce f20 {
+                                consume f13 {
+                                  for (f20.s0.v1, f23.s0.v1.min_3, f20.s0.v1.loop_extent) {
+                                    let t6978 = ((f20.s0.v1 % 4)*42)
+                                    let t6977 = (((f20.s0.v1 - t6956)*385) + 1)
+                                    let t6976 = (((f20.s0.v1 - f4.v1.min_realized)*385) + 1)
+                                    for (f20.s0.v0.v0, 0, 22) {
+                                      f20[ramp(((f20.s0.v0.v0 + t6978)*32), 1, 32) aligned(32, 0)] = interleave_vectors(f4[ramp(((f20.s0.v0.v0*16) + t6976), 1, 16)], f13[ramp(((f20.s0.v0.v0*16) + t6977), 1, 16)])
+                                    }
+                                  }
+                                }
+                              }
+                              let f5.s0.v1.loop_extent = ((max((((f28.s0.v1.v1*3) + t6964) + 3), t6952) - select((0 < f28.s0.v1.v1), t6964, t6955)) - (f28.s0.v1.v1*3))
+                              produce f5 {
+                                for (f5.s0.v1, f5.s0.v1.min_3, f5.s0.v1.loop_extent) {
+                                  let t6980 = ((f5.s0.v1 - t6956)*385)
+                                  let t6979 = (((f5.s0.v1 % 16)*385) + 12321)
+                                  for (f5.s0.v0.v0, 0, 12) {
+                                    f5[ramp(((f5.s0.v0.v0*32) + t6980), 1, 32)] = deinterleaved[ramp(((f5.s0.v0.v0*32) + t6979), 1, 32)]
+                                  }
+                                }
+                              }
+                              let f10.s0.v1.loop_extent = select((0 < f28.s0.v1.v1), 3, t6957)
+                              produce f10 {
+                                consume f5 {
+                                  consume f13 {
+                                    for (f10.s0.v1, f23.s0.v1.min_3, f10.s0.v1.loop_extent) {
+                                      let t6983 = ((f10.s0.v1 % 4)*12)
+                                      let t6981 = ((f10.s0.v1 - t6956)*385)
+                                      let t6982 = (((f10.s0.v1 - f4.v1.min_realized)*385) + 1)
+                                      for (f10.s0.v0.v0, 0, 12) {
+                                        f10[ramp(((f10.s0.v0.v0 + t6983)*32), 1, 32) aligned(32, 0)] = ((f4[ramp(((f10.s0.v0.v0*32) + t6982), 1, 32)] - int16x32((((int32x32(f13[ramp(((f10.s0.v0.v0*32) + t6981), 1, 32)]) + int32x32(f13[ramp((((f10.s0.v0.v0*32) + t6981) + 1), 1, 32)])) + x32(1))/x32(2)))) + int16x32((((int32x32(f5[ramp(((f10.s0.v0.v0*32) + t6981), 1, 32)]) + int32x32(f5[ramp((((f10.s0.v0.v0*32) + t6981) + 1), 1, 32)])) + x32(1))/x32(2))))
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                              let f23.s0.v1.loop_extent = select((0 < f28.s0.v1.v1), 3, t6957)
+                              produce f23 {
+                                consume f10 {
+                                  consume f5 {
+                                    for (f23.s0.v1, f23.s0.v1.min_3, f23.s0.v1.loop_extent) {
+                                      let t6987 = (f23.s0.v1 % 4)
+                                      let t6986 = (t6987*42)
+                                      let t6984 = (t6987*24)
+                                      let t6985 = (((f23.s0.v1 - t6956)*385) + 1)
+                                      for (f23.s0.v0.v0, 0, 22) {
+                                        f23[ramp(((f23.s0.v0.v0 + t6986)*32), 1, 32) aligned(32, 0)] = interleave_vectors(f10[ramp(((f23.s0.v0.v0 + t6984)*16), 1, 16) aligned(16, 0)], f5[ramp(((f23.s0.v0.v0*16) + t6985), 1, 16)])
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                              allocate f6[int16 * 1346] in Stack
+                              allocate f8[int16 * 1346] in Stack
+                              consume f23 {
+                                consume f5 {
+                                  consume f20 {
+                                    consume f9 {
+                                      consume f12 {
+                                        consume f13 {
+                                          let t6995 = (f28.s0.v1.v1i.base.s/2)
+                                          let t6996 = ((f28.s0.v1.v1i.base.s + -1)/2)
+                                          let t6991 = ((f28.s0.v1.v1i.base.s % 2) == 0)
+                                          let t6994 = (f28.s0.v1.v1i.base.s - t6965)
+                                          let t6990 = (f28.s0.v1.v1i.base.s + 1)
+                                          for (f28.s0.v1.v1i.v1i, 0, 3) {
+                                            let f8.s0.v1.min_4.s = select((0 < f28.s0.v1.v1i.v1i), t6995, t6996)
+                                            let f6.s0.v1.loop_extent = select((0 < f28.s0.v1.v1i.v1i), 1, t6958)
+                                            produce f6 {
+                                              let t6997 = (f28.s0.v1.v1i.v1i + f8.s0.v1.min_4.s)
+                                              for (f6.s0.v1, t6997, f6.s0.v1.loop_extent) {
+                                                let t7000 = ((f6.s0.v1 % 2)*673)
+                                                let t6998 = ((f6.s0.v1 - t6956)*385)
+                                                let t6999 = (((f6.s0.v1 % 16)*674) + 1)
+                                                for (f6.s0.v0.v0, 0, 12) {
+                                                  f6[ramp(((f6.s0.v0.v0*32) + t7000), 1, 32)] = (let t6728 = f5[ramp(((f6.s0.v0.v0*32) + t6998), 1, 32)] in (let t6729 = f5[ramp((((f6.s0.v0.v0*32) + t6998) + -384), 1, 32)] in (let t6730 = f5[ramp((((f6.s0.v0.v0*32) + t6998) + 1), 1, 32)] in (let t6731 = f5[ramp((((f6.s0.v0.v0*32) + t6998) + -385), 1, 32)] in (let t6732 = f7[ramp(((f6.s0.v0.v0*32) + t6999), 1, 32) aligned(2, 1)] in select((absd(t6728, t6729) < absd(t6730, t6731)), ((t6732 - int16x32((((int32x32(f13[ramp(((f6.s0.v0.v0*32) + t6998), 1, 32)]) + int32x32(f13[ramp((((f6.s0.v0.v0*32) + t6998) + -384), 1, 32)])) + x32(1))/x32(2)))) + int16x32((((int32x32(t6728) + int32x32(t6729)) + x32(1))/x32(2)))), ((t6732 - int16x32((((int32x32(f13[ramp((((f6.s0.v0.v0*32) + t6998) + 1), 1, 32)]) + int32x32(f13[ramp((((f6.s0.v0.v0*32) + t6998) + -385), 1, 32)])) + x32(1))/x32(2)))) + int16x32((((int32x32(t6730) + int32x32(t6731)) + x32(1))/x32(2))))))))))
+                                                }
+                                              }
+                                            }
+                                            let f8.s0.v1.loop_extent = select((0 < f28.s0.v1.v1i.v1i), 1, t6958)
+                                            produce f8 {
+                                              let t7001 = (f28.s0.v1.v1i.v1i + f8.s0.v1.min_4.s)
+                                              for (f8.s0.v1, t7001, f8.s0.v1.loop_extent) {
+                                                let t7004 = ((f8.s0.v1 % 2)*673)
+                                                let t7002 = ((f8.s0.v1 - t6956)*385)
+                                                let t7003 = (((f8.s0.v1 - f3.v1.min_realized)*674) + 1)
+                                                for (f8.s0.v0.v0, 0, 12) {
+                                                  f8[ramp(((f8.s0.v0.v0*32) + t7004), 1, 32)] = ((f3[ramp(((f8.s0.v0.v0*32) + t7003), 1, 32) aligned(2, 1)] - int16x32((((int32x32(f13[ramp(((f8.s0.v0.v0*32) + t7002), 1, 32)]) + int32x32(f13[ramp((((f8.s0.v0.v0*32) + t7002) + -385), 1, 32)])) + x32(1))/x32(2)))) + int16x32((((int32x32(f5[ramp(((f8.s0.v0.v0*32) + t7002), 1, 32)]) + int32x32(f5[ramp((((f8.s0.v0.v0*32) + t7002) + -385), 1, 32)])) + x32(1))/x32(2))))
+                                                }
+                                              }
+                                            }
+                                            allocate output[int16 * 8064] in Stack
+                                            consume f8 {
+                                              consume f6 {
+                                                let t7005 = ((t6990 % 2) == 0)
+                                                let t7010 = (((f28.s0.v1.v1i.v1i*2) + t6994)*11)
+                                                let t7008 = ((((t6996 - f3.v1.min_realized) + f28.s0.v1.v1i.v1i)*674) + 2)
+                                                let t7009 = ((((t6995 - f3.v1.min_realized) + f28.s0.v1.v1i.v1i)*674) + 2)
+                                                let t7006 = (f28.s0.v1.v1i.v1i + t6996)
+                                                let t7007 = (f28.s0.v1.v1i.v1i + t6995)
+                                                for (f28.s0.v0.v0, 0, 11) {
+                                                  produce output {
+                                                    let t7012 = ((t7006 % 4)*673)
+                                                    let t7013 = (t7006 % 16)
+                                                    let t7011 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp(((output.s0.v0.v0 + t7011)*32), 1, 32) aligned(32, 0)] = interleave_vectors(select(t7005, f2[ramp(((((output.s0.v0.v0 + t7011)*16) + (t7013*674)) + 1), 1, 16) aligned(2, 1)], f11[ramp(((t7013*673) + ((output.s0.v0.v0 + t7011)*16)), 1, 16)]), select(t7005, f9[ramp(((((output.s0.v0.v0 + t7011)*16) + t7012) + 1), 1, 16)], f12[ramp(((((output.s0.v0.v0 + t7011)*16) + t7012) + 1), 1, 16)]))
+                                                    }
+                                                    let t7015 = ((t7007 % 4)*673)
+                                                    let t7016 = (t7007 % 16)
+                                                    let t7014 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp((((output.s0.v0.v0 + t7014)*32) + 1344), 1, 32) aligned(32, 0)] = interleave_vectors(select(t6991, f2[ramp(((((output.s0.v0.v0 + t7014)*16) + (t7016*674)) + 1), 1, 16) aligned(2, 1)], f11[ramp(((t7016*673) + ((output.s0.v0.v0 + t7014)*16)), 1, 16)]), select(t6991, f9[ramp(((((output.s0.v0.v0 + t7014)*16) + t7015) + 1), 1, 16)], f12[ramp(((((output.s0.v0.v0 + t7014)*16) + t7015) + 1), 1, 16)]))
+                                                    }
+                                                    let t7018 = ((t7006 % 4)*42)
+                                                    let t7017 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    let t7019 = (((t7006 % 16)*674) + 1)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp((((output.s0.v0.v0 + t7017)*32) + 2688), 1, 32) aligned(32, 0)] = interleave_vectors(select(t7005, f7[ramp((((output.s0.v0.v0 + t7017)*16) + t7019), 1, 16) aligned(2, 1)], f20[ramp((((output.s0.v0.v0 + t7017) + t7018)*32), 2, 16) aligned(32, 0)]), select(t7005, f3[ramp((((output.s0.v0.v0 + t7017)*16) + t7008), 1, 16) aligned(2, 0)], f20[ramp(((((output.s0.v0.v0 + t7017) + t7018)*32) + 1), 2, 16) aligned(32, 1)]))
+                                                    }
+                                                    let t7021 = ((t7007 % 4)*42)
+                                                    let t7020 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    let t7022 = (((t7007 % 16)*674) + 1)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp((((output.s0.v0.v0 + t7020)*32) + 4032), 1, 32) aligned(32, 0)] = interleave_vectors(select(t6991, f7[ramp((((output.s0.v0.v0 + t7020)*16) + t7022), 1, 16) aligned(2, 1)], f20[ramp((((output.s0.v0.v0 + t7020) + t7021)*32), 2, 16) aligned(32, 0)]), select(t6991, f3[ramp((((output.s0.v0.v0 + t7020)*16) + t7009), 1, 16) aligned(2, 0)], f20[ramp(((((output.s0.v0.v0 + t7020) + t7021)*32) + 1), 2, 16) aligned(32, 1)]))
+                                                    }
+                                                    let t7025 = ((t7006 % 4)*42)
+                                                    let t7024 = ((t7006 % 2)*673)
+                                                    let t7023 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp((((output.s0.v0.v0 + t7023)*32) + 5376), 1, 32) aligned(32, 0)] = interleave_vectors(select(t7005, f6[ramp((((output.s0.v0.v0 + t7023)*16) + t7024), 1, 16)], f23[ramp((((output.s0.v0.v0 + t7023) + t7025)*32), 2, 16) aligned(32, 0)]), select(t7005, f8[ramp(((((output.s0.v0.v0 + t7023)*16) + t7024) + 1), 1, 16)], f23[ramp(((((output.s0.v0.v0 + t7023) + t7025)*32) + 1), 2, 16) aligned(32, 1)]))
+                                                    }
+                                                    let t7028 = ((t7007 % 4)*42)
+                                                    let t7027 = ((t7007 % 2)*673)
+                                                    let t7026 = (((f28.s0.v0.v0 + t6959)*2) - t6960)
+                                                    for (output.s0.v0.v0, 0, 2) {
+                                                      output[ramp((((output.s0.v0.v0 + t7026)*32) + 6720), 1, 32) aligned(32, 0)] = interleave_vectors(select(t6991, f6[ramp((((output.s0.v0.v0 + t7026)*16) + t7027), 1, 16)], f23[ramp((((output.s0.v0.v0 + t7026) + t7028)*32), 2, 16) aligned(32, 0)]), select(t6991, f8[ramp(((((output.s0.v0.v0 + t7026)*16) + t7027) + 1), 1, 16)], f23[ramp(((((output.s0.v0.v0 + t7026) + t7028)*32) + 1), 2, 16) aligned(32, 1)]))
+                                                    }
+                                                  }
+                                                  consume output {
+                                                    f28[ramp(((f28.s0.v0.v0 + t7010)*64), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp((f28.s0.v0.v0*64), 1, 64) aligned(64, 0)])*x64(int32(f26[0]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 2688), 1, 64) aligned(64, 0)])*x64(int32(f26[1]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 5376), 1, 64) aligned(64, 0)])*x64(int32(f26[2]))) + x64(int32(f26[3])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                    f28[ramp((((f28.s0.v0.v0 + t7010)*64) + 704), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp(((f28.s0.v0.v0*64) + 1344), 1, 64) aligned(64, 0)])*x64(int32(f26[0]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 4032), 1, 64) aligned(64, 0)])*x64(int32(f26[1]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 6720), 1, 64) aligned(64, 0)])*x64(int32(f26[2]))) + x64(int32(f26[3])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                    f28[ramp((((f28.s0.v0.v0 + t7010)*64) + 12672), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp((f28.s0.v0.v0*64), 1, 64) aligned(64, 0)])*x64(int32(f26[4]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 2688), 1, 64) aligned(64, 0)])*x64(int32(f26[5]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 5376), 1, 64) aligned(64, 0)])*x64(int32(f26[6]))) + x64(int32(f26[7])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                    f28[ramp((((f28.s0.v0.v0 + t7010)*64) + 13376), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp(((f28.s0.v0.v0*64) + 1344), 1, 64) aligned(64, 0)])*x64(int32(f26[4]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 4032), 1, 64) aligned(64, 0)])*x64(int32(f26[5]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 6720), 1, 64) aligned(64, 0)])*x64(int32(f26[6]))) + x64(int32(f26[7])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                    f28[ramp((((f28.s0.v0.v0 + t7010)*64) + 25344), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp((f28.s0.v0.v0*64), 1, 64) aligned(64, 0)])*x64(int32(f26[8]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 2688), 1, 64) aligned(64, 0)])*x64(int32(f26[9]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 5376), 1, 64) aligned(64, 0)])*x64(int32(f26[10]))) + x64(int32(f26[11])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                    f28[ramp((((f28.s0.v0.v0 + t7010)*64) + 26048), 1, 64) aligned(64, 0)] = curve[int32x64(max(min(int16x64((((int32x64(output[ramp(((f28.s0.v0.v0*64) + 1344), 1, 64) aligned(64, 0)])*x64(int32(f26[8]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 4032), 1, 64) aligned(64, 0)])*x64(int32(f26[9]))) + ((int32x64(output[ramp(((f28.s0.v0.v0*64) + 6720), 1, 64) aligned(64, 0)])*x64(int32(f26[10]))) + x64(int32(f26[11])))))/x64(256))), x64((int16)1023)), x64((int16)0)))]
+                                                  }
+                                                }
+                                              }
+                                            }
+                                            free output
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                              free f6
+                              free f8
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              free f4
+              free f3
+              free f13
+              free f12
+              free f9
+              free f20
+              free f5
+              free f10
+              free f23
+              consume f28 {
+                let t7076 = ((processed.s0.v1.v1i.v1i*15) + t6890)
+                let t7077 = (processed.s0.v1.v1i.v1i*384)
+                let t7078 = (processed.s0.v1.v1i.v1i + t6868)
+                let t7079 = (t7078*15)
+                let t7080 = (t7079 + 1)
+                let t7081 = (processed.stride.1*t7080)
+                let t7082 = ((t7079 + 13)*processed.stride.1)
+                let t7083 = ((t7079 + 14)*processed.stride.1)
+                let t7084 = (t7080 % 2)
+                let t7085 = (t7084*384)
+                let t7086 = ((processed.stride.1*t7078)*15)
+                let t7053 = (t6891*2)
+                for (processed.s0.v2, 0, 3) {
+                  let t7169 = (processed.s0.v2*processed.stride.2)
+                  let t7170 = (t7081 + t7169)
+                  let t7171 = (t7082 + t7169)
+                  let t7172 = (t7083 + t7169)
+                  let t7173 = (t7086 + t7169)
+                  let t7174 = (processed.s0.v2*12672)
+                  let t7175 = (t7084*384)
+                  for (processed.s0.v0.v0i.v0i, 0, 2) {
+                    allocate unsharp_y[uint8 * 768] in Stack
+                    produce unsharp_y {
+                      unsharp_y[ramp(t7077, 1, 64) aligned(384, 0)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((processed.s0.v0.v0i.v0i*320) + t7174), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1408), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 704), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 64), 1, 64) aligned(384, 64)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 64), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1472), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 768), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 128), 1, 64) aligned(384, 128)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 128), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1536), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 832), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 192), 1, 64) aligned(384, 192)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 192), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1600), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 896), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 256), 1, 64) aligned(384, 256)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 256), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1664), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 960), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 320), 1, 64) aligned(384, 320)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 320), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1728), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1024), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp(t7085, 1, 64) aligned(384, 0)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 704), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2112), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1408), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7085 + 64), 1, 64) aligned(384, 64)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 768), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2176), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1472), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7085 + 128), 1, 64) aligned(384, 128)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 832), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2240), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1536), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7085 + 192), 1, 64) aligned(384, 192)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 896), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2304), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1600), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7085 + 256), 1, 64) aligned(384, 256)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 960), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2368), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1664), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7085 + 320), 1, 64) aligned(384, 320)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1024), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 2432), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1728), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                    }
+                    allocate sharpened[uint8 * 640] in Stack
+                    produce sharpened {
+                      consume unsharp_y {
+                        sharpened[ramp(0, 1, 64)] = (let t6786.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 705), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6786.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(t7077, 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp((t7077 + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6786.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(64, 1, 64)] = (let t6787.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 769), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6787.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp((t7077 + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6787.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(128, 1, 64)] = (let t6788.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 833), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6788.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp((t7077 + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6788.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(192, 1, 64)] = (let t6789.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 897), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6789.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp((t7077 + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6789.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(256, 1, 64)] = (let t6790.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 961), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6790.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp((t7077 + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6790.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(320, 1, 64)] = (let t6791.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1409), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6791.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(t7175, 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp((t7175 + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6791.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(384, 1, 64)] = (let t6793.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1473), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6793.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp((t7175 + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6793.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(448, 1, 64)] = (let t6795.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1537), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6795.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp((t7175 + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6795.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(512, 1, 64)] = (let t6797.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1601), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6797.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp((t7175 + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6797.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(576, 1, 64)] = (let t6799.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 1665), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6799.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp((t7175 + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6799.s)), x64((int16)255)), x64((int16)0))))
+                      }
+                    }
+                    consume sharpened {
+                      processed[ramp((((processed.s0.v0.v0i.v0i + t7053)*320) + t7173), 1, 64)] = sharpened[ramp(0, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7173) + 64), 1, 64)] = sharpened[ramp(64, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7173) + 128), 1, 64)] = sharpened[ramp(128, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7173) + 192), 1, 64)] = sharpened[ramp(192, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7173) + 256), 1, 64)] = sharpened[ramp(256, 1, 64)]
+                      processed[ramp((((processed.s0.v0.v0i.v0i + t7053)*320) + t7170), 1, 64)] = sharpened[ramp(320, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7170) + 64), 1, 64)] = sharpened[ramp(384, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7170) + 128), 1, 64)] = sharpened[ramp(448, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7170) + 192), 1, 64)] = sharpened[ramp(512, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7170) + 256), 1, 64)] = sharpened[ramp(576, 1, 64)]
+                      free sharpened
+                    }
+                    let t7193 = ((processed.s0.v0.v0i.v0i*320) + t7174)
+                    let t7194 = (((processed.s0.v0.v0i.v0i + t7053)*320) + t7169)
+                    for (processed.s0.v1.v1i.v1ii.v1ii, 1, 6) {
+                      let processed.s0.v1.min_5 = ((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)
+                      let unsharp_y.s0.v1.min_4 = ((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)
+                      produce unsharp_y {
+                        unsharp_y[ramp(((unsharp_y.s0.v1.min_4 % 2)*384), 1, 64) aligned(384, 0)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1408), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 704), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 % 2)*384) + 64), 1, 64) aligned(384, 64)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 64), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1472), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 768), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 % 2)*384) + 128), 1, 64) aligned(384, 128)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 128), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1536), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 832), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 % 2)*384) + 192), 1, 64) aligned(384, 192)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 192), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1600), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 896), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 % 2)*384) + 256), 1, 64) aligned(384, 256)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 256), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1664), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 960), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 % 2)*384) + 320), 1, 64) aligned(384, 320)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 320), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1728), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1024), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp((((unsharp_y.s0.v1.min_4 + 1) % 2)*384), 1, 64) aligned(384, 0)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 704), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2112), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1408), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp(((((unsharp_y.s0.v1.min_4 + 1) % 2)*384) + 64), 1, 64) aligned(384, 64)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 768), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2176), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1472), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp(((((unsharp_y.s0.v1.min_4 + 1) % 2)*384) + 128), 1, 64) aligned(384, 128)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 832), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2240), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1536), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp(((((unsharp_y.s0.v1.min_4 + 1) % 2)*384) + 192), 1, 64) aligned(384, 192)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 896), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2304), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1600), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp(((((unsharp_y.s0.v1.min_4 + 1) % 2)*384) + 256), 1, 64) aligned(384, 256)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 960), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2368), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1664), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                        unsharp_y[ramp(((((unsharp_y.s0.v1.min_4 + 1) % 2)*384) + 320), 1, 64) aligned(384, 320)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1024), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 2432), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp(((((unsharp_y.s0.v1.min_4 - t7079)*704) + t7193) + 1728), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      }
+                      allocate sharpened[uint8 * 640] in Stack
+                      produce sharpened {
+                        consume unsharp_y {
+                          sharpened[ramp(0, 1, 64)] = (let t6813.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 705), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6813.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(((processed.s0.v1.min_5 % 2)*384), 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6813.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(64, 1, 64)] = (let t6815.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 769), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6815.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6815.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(128, 1, 64)] = (let t6817.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 833), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6817.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6817.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(192, 1, 64)] = (let t6819.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 897), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6819.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6819.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(256, 1, 64)] = (let t6821.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 961), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6821.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 % 2)*384) + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6821.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(320, 1, 64)] = (let t6823.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 1409), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6823.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((((processed.s0.v1.min_5 + 1) % 2)*384), 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6823.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(384, 1, 64)] = (let t6825.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 1473), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6825.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6825.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(448, 1, 64)] = (let t6827.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 1537), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6827.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6827.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(512, 1, 64)] = (let t6829.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 1601), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6829.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6829.s)), x64((int16)255)), x64((int16)0))))
+                          sharpened[ramp(576, 1, 64)] = (let t6831.s = f28[ramp(((((processed.s0.v1.min_5 - t7079)*704) + t7193) + 1665), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6831.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp(((((processed.s0.v1.min_5 + 1) % 2)*384) + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6831.s)), x64((int16)255)), x64((int16)0))))
+                        }
+                      }
+                      consume sharpened {
+                        processed[ramp(((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)*processed.stride.1) + t7194), 1, 64)] = sharpened[ramp(((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320), 1, 64) aligned(320, 0)]
+                        processed[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)*processed.stride.1) + t7194) + 64), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 64), 1, 64) aligned(320, 64)]
+                        processed[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)*processed.stride.1) + t7194) + 128), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 128), 1, 64) aligned(320, 128)]
+                        processed[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)*processed.stride.1) + t7194) + 192), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 192), 1, 64) aligned(320, 192)]
+                        processed[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076)*processed.stride.1) + t7194) + 256), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 256), 1, 64) aligned(320, 256)]
+                        processed[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) + 1)*processed.stride.1) + t7194), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 320), 1, 64) aligned(320, 0)]
+                        processed[ramp(((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) + 1)*processed.stride.1) + t7194) + 64), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 384), 1, 64) aligned(320, 64)]
+                        processed[ramp(((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) + 1)*processed.stride.1) + t7194) + 128), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 448), 1, 64) aligned(320, 128)]
+                        processed[ramp(((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) + 1)*processed.stride.1) + t7194) + 192), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 512), 1, 64) aligned(320, 192)]
+                        processed[ramp(((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) + 1)*processed.stride.1) + t7194) + 256), 1, 64)] = sharpened[ramp((((((processed.s0.v1.v1i.v1ii.v1ii*2) + t7076) - processed.s0.v1.min_5)*320) + 576), 1, 64) aligned(320, 256)]
+                        free sharpened
+                      }
+                    }
+                    produce unsharp_y {
+                      unsharp_y[ramp(t7077, 1, 64) aligned(384, 0)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9856), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11264), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10560), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 64), 1, 64) aligned(384, 64)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9920), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11328), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10624), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 128), 1, 64) aligned(384, 128)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9984), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11392), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10688), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 192), 1, 64) aligned(384, 192)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10048), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11456), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10752), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 256), 1, 64) aligned(384, 256)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10112), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11520), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10816), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                      unsharp_y[ramp((t7077 + 320), 1, 64) aligned(384, 320)] = uint8x64((((uint16x64(uint8x64((((uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10176), 1, 64) aligned(64, 0)]) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 11584), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10880), 1, 64) aligned(64, 0)])) + x64((uint16)1))/x64((uint16)2)))
+                    }
+                    allocate sharpened[uint8 * 640] in Stack
+                    produce sharpened {
+                      consume unsharp_y {
+                        sharpened[ramp(0, 1, 64)] = (let t6839.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9857), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6839.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(t7175, 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp((t7175 + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6839.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(64, 1, 64)] = (let t6841.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9921), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6841.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp((t7175 + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6841.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(128, 1, 64)] = (let t6843.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 9985), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6843.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp((t7175 + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6843.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(192, 1, 64)] = (let t6845.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10049), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6845.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp((t7175 + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6845.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(256, 1, 64)] = (let t6847.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10113), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6847.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7175 + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp((t7175 + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7175 + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6847.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(320, 1, 64)] = (let t6849.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10561), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6849.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp(t7077, 1, 64) aligned(384, 0)]) + uint16x64(unsharp_y[ramp((t7077 + 2), 1, 64) aligned(384, 2)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 1), 1, 64) aligned(384, 1)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6849.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(384, 1, 64)] = (let t6850.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10625), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6850.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 64), 1, 64) aligned(384, 64)]) + uint16x64(unsharp_y[ramp((t7077 + 66), 1, 64) aligned(384, 66)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 65), 1, 64) aligned(384, 65)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6850.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(448, 1, 64)] = (let t6851.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10689), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6851.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 128), 1, 64) aligned(384, 128)]) + uint16x64(unsharp_y[ramp((t7077 + 130), 1, 64) aligned(384, 130)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 129), 1, 64) aligned(384, 129)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6851.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(512, 1, 64)] = (let t6852.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10753), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6852.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 192), 1, 64) aligned(384, 192)]) + uint16x64(unsharp_y[ramp((t7077 + 194), 1, 64) aligned(384, 194)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 193), 1, 64) aligned(384, 193)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6852.s)), x64((int16)255)), x64((int16)0))))
+                        sharpened[ramp(576, 1, 64)] = (let t6853.s = f28[ramp((((processed.s0.v0.v0i.v0i*320) + t7174) + 10817), 1, 64) aligned(64, 1)] in uint8x64(max(min(((((int16x64(t6853.s) - int16x64(uint8x64((((uint16x64(uint8x64((((uint16x64(unsharp_y[ramp((t7077 + 256), 1, 64) aligned(384, 256)]) + uint16x64(unsharp_y[ramp((t7077 + 258), 1, 64) aligned(384, 258)])) + x64((uint16)1))/x64((uint16)2)))) + uint16x64(unsharp_y[ramp((t7077 + 257), 1, 64) aligned(384, 257)])) + x64((uint16)1))/x64((uint16)2)))))*x64(int16(sharpen_strength_x32[0])))/x64((int16)32)) + int16x64(t6853.s)), x64((int16)255)), x64((int16)0))))
+                        free unsharp_y
+                      }
+                    }
+                    consume sharpened {
+                      processed[ramp((((processed.s0.v0.v0i.v0i + t7053)*320) + t7171), 1, 64)] = sharpened[ramp(0, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7171) + 64), 1, 64)] = sharpened[ramp(64, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7171) + 128), 1, 64)] = sharpened[ramp(128, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7171) + 192), 1, 64)] = sharpened[ramp(192, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7171) + 256), 1, 64)] = sharpened[ramp(256, 1, 64)]
+                      processed[ramp((((processed.s0.v0.v0i.v0i + t7053)*320) + t7172), 1, 64)] = sharpened[ramp(320, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7172) + 64), 1, 64)] = sharpened[ramp(384, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7172) + 128), 1, 64)] = sharpened[ramp(448, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7172) + 192), 1, 64)] = sharpened[ramp(512, 1, 64)]
+                      processed[ramp(((((processed.s0.v0.v0i.v0i + t7053)*320) + t7172) + 256), 1, 64)] = sharpened[ramp(576, 1, 64)]
+                      free sharpened
+                    }
+                  }
+                }
+              }
+              free f28
+            }
+            free deinterleaved
+            free f2
+            free f7
+            free f11
+          }
+        }
+      }
+    }
+  }
+  free curve
+  free f26
+  free sharpen_strength_x32
+}
+}
+
+

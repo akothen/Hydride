@@ -1,0 +1,33 @@
+// --- BEGIN machine-generated schedule
+Func blur_y = get_pipeline().get_func(4);
+Func blur_x = get_pipeline().get_func(3);
+Func repeat_edge = get_pipeline().get_func(2);
+Func lambda_0 = get_pipeline().get_func(1);
+Var _0(repeat_edge.get_schedule().dims()[0].var), _0i("_0i"), _1(repeat_edge.get_schedule().dims()[1].var), x(blur_y.get_schedule().dims()[0].var), xi("xi"), xii("xii"), y(blur_y.get_schedule().dims()[1].var), yi("yi"), yii("yii"), yiii("yiii");
+blur_y
+    .split(y, y, yi, 76, TailStrategy::ShiftInwards)
+    .split(yi, yi, yii, 38, TailStrategy::ShiftInwards)
+    .split(yii, yii, yiii, 4, TailStrategy::ShiftInwards)
+    .split(x, x, xi, 64, TailStrategy::ShiftInwards)
+    .split(xi, xi, xii, 32, TailStrategy::ShiftInwards)
+    .unroll(xi)
+    .unroll(yiii)
+    .vectorize(xii)
+    .compute_root()
+    .reorder(xii, xi, yiii, x, yii, yi, y)
+    .parallel(y);
+blur_x
+    .store_in(MemoryType::Stack)
+    .split(x, x, xi, 32, TailStrategy::RoundUp)
+    .unroll(x)
+    .unroll(y)
+    .vectorize(xi)
+    .compute_at(blur_y, x)
+    .reorder(xi, x, y);
+repeat_edge
+    .split(_0, _0, _0i, 32, TailStrategy::ShiftInwards)
+    .vectorize(_0i)
+    .compute_at(blur_y, yii)
+    .store_at(blur_y, yi)
+    .reorder(_0i, _0, _1);
+// --- END machine-generated schedule

@@ -1,0 +1,41 @@
+// --- BEGIN machine-generated schedule
+Func output = get_pipeline().get_func(7);
+Func cols = get_pipeline().get_func(6);
+Func rows = get_pipeline().get_func(5);
+Func input_16 = get_pipeline().get_func(4);
+Func bounded_input = get_pipeline().get_func(3);
+Func repeat_edge = get_pipeline().get_func(2);
+Func lambda_0 = get_pipeline().get_func(1);
+Var _0(repeat_edge.get_schedule().dims()[0].var), _0i("_0i"), _1(repeat_edge.get_schedule().dims()[1].var), x(output.get_schedule().dims()[0].var), xi("xi"), xii("xii"), y(output.get_schedule().dims()[1].var), yi("yi");
+output
+    .split(y, y, yi, 32, TailStrategy::ShiftInwards)
+    .split(x, x, xi, 256, TailStrategy::ShiftInwards)
+    .split(xi, xi, xii, 64, TailStrategy::ShiftInwards)
+    .unroll(xi)
+    .vectorize(xii)
+    .compute_root()
+    .reorder(xii, xi, x, yi, y)
+    .parallel(y);
+cols
+    .store_in(MemoryType::Stack)
+    .split(x, x, xi, 32, TailStrategy::RoundUp)
+    .unroll(x)
+    .vectorize(xi)
+    .compute_at(output, x)
+    .reorder(xi, x, y);
+rows
+    .store_in(MemoryType::Stack)
+    .split(x, x, xi, 32, TailStrategy::RoundUp)
+    .unroll(x)
+    .vectorize(xi)
+    .compute_at(output, x)
+    .store_at(output, yi)
+    .reorder(xi, x, y);
+repeat_edge
+    .store_in(MemoryType::Stack)
+    .split(_0, _0, _0i, 64, TailStrategy::ShiftInwards)
+    .vectorize(_0i)
+    .compute_at(output, yi)
+    .store_at(output, y)
+    .reorder(_0i, _0, _1);
+// --- END machine-generated schedule

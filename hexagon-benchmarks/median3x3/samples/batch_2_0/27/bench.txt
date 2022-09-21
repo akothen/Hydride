@@ -1,0 +1,1 @@
+Benchmark for median3x3_batch_02_sample_27 produces best case of 0.000130429 sec/iter (over 10 samples, 2500 iterations, accuracy 17%); best throughput is 7.7e+03 mpix/sec.

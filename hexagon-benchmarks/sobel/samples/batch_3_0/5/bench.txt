@@ -1,0 +1,1 @@
+Benchmark for sobel_batch_03_sample_05 produces best case of 0.000154344 sec/iter (over 11 samples, 1892 iterations, accuracy 3%); best throughput is 6.5e+03 mpix/sec.

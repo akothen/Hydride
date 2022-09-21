@@ -1,0 +1,1 @@
+Benchmark for mat_mul_batch_02_sample_22 produces best case of 0.0152881 sec/iter (over 3 samples, 12 iterations, accuracy 1.7%); best throughput is 1.5e+02 mpix/sec.
