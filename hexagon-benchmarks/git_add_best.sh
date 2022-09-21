@@ -22,7 +22,7 @@ add_best_sample_for_bench () {
   git add $full_dir
 }
 
-BENCHMARKS="conv3x3 dilate3x3 gaussian5x5 median3x3 sobel"
+BENCHMARKS="box_blur camera_pipe conv3x3a16 conv3x3a32 dilate3x3 gaussian5x5 mat_mul median3x3 sobel"
 
 for bench in $BENCHMARKS
 do
