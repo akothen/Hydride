@@ -36,6 +36,13 @@
 		(vector-load_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr num_2 env) 
 		 (bind-expr num_3 env) (bind-expr prec_i_o env))
 	]
+
+    [ (vector-choose_dsl val prec num_elems)
+     (vector-choose_dsl (bind-expr val env) prec num_elems)
+     ]
+    [ (vector-deinterleave_dsl val prec num_elems)
+     (vector-deinterleave_dsl (bind-expr val env) prec num_elems)
+     ]
 	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
 		(vector-two-input-swizzle_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
 		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr lane_size env) 

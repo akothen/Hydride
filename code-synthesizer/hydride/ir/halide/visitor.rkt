@@ -37,6 +37,7 @@
     [(int32x1 sca) (handler (int32x1 (visit sca handler)))]
     [(int64x1 sca) (handler (int64x1 (visit sca handler)))]
 
+
     [(uint1x32 vec) (handler (uint1x32 (visit vec handler)))]
     [(uint1x64 vec) (handler (uint1x64 (visit vec handler)))]
     [(uint1x128 vec) (handler (uint1x128 (visit vec handler)))]
@@ -54,6 +55,18 @@
     [(int16x8 vec) (handler (int16x8 (visit vec handler)))]
     [(int32x8 vec) (handler (int32x8 (visit vec handler)))]
     [(int64x8 vec) (handler (int64x8 (visit vec handler)))]
+
+
+    [(uint8x16 vec) (handler (uint8x16 (visit vec handler)))]
+    [(uint16x16 vec) (handler (uint16x16 (visit vec handler)))]
+    [(uint32x16 vec) (handler (uint32x16 (visit vec handler)))]
+    [(uint64x16 vec) (handler (uint64x16 (visit vec handler)))]
+
+
+    [(int8x16 vec) (handler (int8x16 (visit vec handler)))]
+    [(int16x16 vec) (handler (int16x16 (visit vec handler)))]
+    [(int32x16 vec) (handler (int32x16 (visit vec handler)))]
+    [(int64x16 vec) (handler (int64x16 (visit vec handler)))]
 
     [(uint8x32 vec) (handler (uint8x32 (visit vec handler)))]
     [(uint16x32 vec) (handler (uint16x32 (visit vec handler)))]

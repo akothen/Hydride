@@ -3,10 +3,13 @@ from Instructions import *
 from PredefinedDSL import *
 import random
 
-DEBUG = False
-DEBUG_LIST = ["_mm_mulhi_pi16","_mm_mulhi_pi16"]
+DEBUG = True
+DEBUG_LIST = [ "_mm_mulhi_epu16"]
+SKIP_LIST = ["pack", "mask"]
 USE_BW_ALGO = False
-ENABLE_SHUFFLE = True
+ENABLE_SHUFFLE = False
+UPCAST_OPERATIONS = False
+USE_LIT_HOLES = True
 
 class Synthesizer:
 
@@ -253,9 +256,25 @@ class Synthesizer:
             # remove duplicates
             holes = list(set(holes))
 
-        return holes
+        if len(holes) == 0  :
+            return []
 
-    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = False):
+
+        max_prec = max(self.spec.input_precision, default = 32)
+
+        pairs = []
+
+        for hole in holes:
+            if hole % max_prec != 0:
+                pairs.append((hole, hole))
+            else:
+                pairs.append((hole, max_prec))
+
+
+
+        return pairs
+
+    def emit_synthesis_grammar(self, main_grammar_name = "synth_grammar", use_lit_holes = USE_LIT_HOLES):
 
         ## Memory loading layer
         spec_memory_loads = self.get_memory_loads()
@@ -279,6 +298,7 @@ class Synthesizer:
 
         for dsl_inst in self.dsl_operators:
 
+
             if self.consider_dsl_inst(dsl_inst):
                 operator_contexts = self.get_supported_context_for_dsl(dsl_inst, limit = self.contexts_per_dsl_inst)
 
@@ -297,17 +317,23 @@ class Synthesizer:
                 operation_dsl_args_list += [ctx.context_args for ctx in operator_contexts]
 
 
+        ## Due to the volume of instructions available, selecting contexts
+        ## Based of operations and input/output configurations may still result
+        ## in too many instructions which would explode synthesis times.
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+
+
         top_level_grammar_args = self.get_top_level_grammar_args()
 
         for context_args in operation_dsl_args_list:
             for ctx_arg in context_args:
-                if isinstance(ctx_arg, BitVector):
+                if isBitVectorType(ctx_arg):
                     bitvector_sizes.append(ctx_arg.size)
 
 
         for context_args in memory_shuffle_args_list:
             for ctx_arg in context_args:
-                if isinstance(ctx_arg, BitVector):
+                if isBitVectorType(ctx_arg):
                     bitvector_sizes.append(ctx_arg.size)
 
         bitvector_sizes = list(set(bitvector_sizes))
@@ -319,6 +345,15 @@ class Synthesizer:
         print("Grammar Number of Load DSL Clauses:\t",len(memory_dsl_args_list)+len(lit_holes) + len(top_level_grammar_args))
         print("Grammar Number of Shuffle DSL Clauses:\t",len(memory_shuffle_args_list))
         print("Grammar Number of DSL Compute Clauses:\t",len(operation_dsl_args_list))
+
+        #TEMP
+        operation_dsl_insts += memory_shuffle_insts
+        operation_dsl_args_list += memory_shuffle_args_list
+        memory_shuffle_insts = []
+        memory_shuffle_args_list = []
+
+
+
 
 
         return self.grammar_generator.emit_grammar(
@@ -334,8 +369,19 @@ class Synthesizer:
             top_level_grammar_name = main_grammar_name,
             top_level_grammar_args = top_level_grammar_args,
             depth = self.depth,
-            lit_holes = lit_holes
+            lit_holes = lit_holes,
+            num_inputs = len(self.input_sizes)
         )
+
+
+    def reduce_operations(self, operation_insts, operation_contexts, bound = None):
+
+        dsl_names = list(set([dsl_inst.name for dsl_inst in operation_insts]))
+
+        if bound != None and bound < len(operation_insts):
+            return (operation_insts[-bound:], operation_contexts[-bound:])
+        else:
+            return (operation_insts, operation_contexts)
 
 
 
@@ -545,6 +591,9 @@ class Synthesizer:
     def get_supported_context_for_dsl(self, dsl_inst, limit = None):
         assert self.consider_dsl_inst(dsl_inst), "Can not get supported contexts for dsl inst"
 
+
+
+
         contexts = []
 
         check = dsl_inst.name in DEBUG_LIST and DEBUG
@@ -575,6 +624,17 @@ class Synthesizer:
             #supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
 
+            if UPCAST_OPERATIONS:
+                # One precision higher
+                supports_inputs_prec = supports_inputs_prec or  any([ctx.supports_input_precision(2 * input_precision) for  input_precision in self.spec.input_precision])
+
+                # Twice vector size
+                supports_input_length = supports_input_length or any([ctx.supports_input_size(2 * input_size) for  input_size in self.input_sizes])
+
+
+                supports_output_length = supports_output_length or ctx.supports_output_size(2 * self.output_slice_length)
+
+                supports_outputs_prec = supports_outputs_prec or ctx.supports_output_precision(2 * self.spec.output_precision)
 
             if check:
                 print(ctx.name, "Supports Input Prec:", supports_inputs_prec)
@@ -598,10 +658,21 @@ class Synthesizer:
         # most useful contexts
         def score_context(ctx):
             score = 0
-            score += int(any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]))
+            score +=  int(any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score += int(ctx.supports_output_size(self.output_slice_length))
-            score += int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+            score +=  int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+
+
+            if UPCAST_OPERATIONS:
+                alt_score = 0
+                alt_score += 1.5 * int(any([ctx.supports_input_precision(2 * input_precision) for input_precision in self.spec.input_precision]))
+                alt_score += int(ctx.supports_output_precision(2 * self.spec.output_precision))
+                alt_score += int(ctx.supports_output_size(2 * self.output_slice_length))
+                alt_score += 1.5 * int(any([ctx.supports_input_size(2 * input_size) for input_size in self.input_sizes]))
+                score = max(alt_score, score)
+
+
 
             return score
 
@@ -610,9 +681,34 @@ class Synthesizer:
 
 
 
+        # Over riding limit to means including those contexts
+        # which have the top 'limit' scores. In cases of ties
+        # for a given score, we include both ties.
+
         if limit != None and len(contexts) > limit:
 
-            return contexts[-limit:]
+            limited_context = []
+
+            remaining = limit
+            previous_score = None
+            for ctx in reversed(contexts):
+                ctx_score = score_context(ctx)
+
+                if remaining == 0 and previous_score != ctx_score:
+                    break
+
+                if previous_score != ctx_score:
+                    previous_score = ctx_score
+                    remaining -= 1
+
+                limited_context.append(ctx)
+
+
+
+
+
+            return limited_context
+            #return contexts[-limit:]
             #return contexts[:limit]
 
 
@@ -644,11 +740,48 @@ class Synthesizer:
 
             return False
         else:
+            overlap = False
+
+            def is_cast_expr(ops_list):
+                in_cast_set = True
+                for op in ops_list:
+                    in_cast_set = in_cast_set and  op in ["sign-extend", "extract", "zero-extend"]
+                return in_cast_set
+
+
+
+            ## Multiplication and division operations can make the
+            ## Synthesis more complex and hence any dsl operations
+            ## which contain them should only be included if necessary
+
+            if "bvmul" in dsl_ops and "bvmul" not in spec_ops:
+                return False
+
+            if "bvsdiv" in dsl_ops and "bvsdiv" not in spec_ops:
+                return False
+
+            if "bvudiv" in dsl_ops and "bvudiv" not in spec_ops:
+                return False
+
+
+            if "sign-extend" in dsl_ops and "sign-extend" not in spec_ops:
+                return False
+
+            if "zero-extend" in dsl_ops and "zero-extend" not in spec_ops:
+                return False
+
+
             # Match in any order
             for bv_op in dsl_ops:
-                if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
-                    return False
-            return True
+                #if bv_op not in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]:
+                #    return False
+
+
+                cond = bv_op in spec_ops and bv_op not in ["sign-extend", "extract", "zero-extend"]
+
+                overlap = overlap or cond
+            #return True
+            return overlap or (is_cast_expr(spec_ops) and is_cast_expr(dsl_ops))   or is_cast_expr(dsl_ops)
 
 
 
@@ -675,11 +808,25 @@ class Synthesizer:
                 return False
 
             supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
+
             supports_outputs_prec = dsl_inst.supports_output_precision(self.spec.output_precision)
 
             supports_output_length = dsl_inst.supports_output_size(self.output_slice_length)
 
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
+
+            if UPCAST_OPERATIONS:
+                # One precision higher
+                supports_inputs_prec = supports_inputs_prec or  any([dsl_inst.supports_input_precision(2 * input_precision) for  input_precision in self.spec.input_precision])
+
+                # Twice vector size
+                supports_input_length = supports_input_length or any([dsl_inst.supports_input_size(2 * input_size) for  input_size in self.input_sizes])
+
+
+                supports_output_length = supports_output_length or dsl_inst.supports_output_size(2 * self.output_slice_length)
+
+                supports_outputs_prec = supports_outputs_prec or dsl_inst.supports_output_precision(2 * self.spec.output_precision)
+
 
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
@@ -740,6 +887,12 @@ class Synthesizer:
 
     # Simple place holder
     def consider_dsl_inst(self, dsl_inst):
+
+        for SKIP in SKIP_LIST:
+            if SKIP in dsl_inst.name:
+                #print("checking if ",SKIP," in ",dsl_inst.name)
+                return False
+
         if dsl_inst.name in DEBUG_LIST and DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))

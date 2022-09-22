@@ -1736,6 +1736,51 @@ namespace Halide {
                             return IRMutator::visit(op);
                     }
 
+
+
+                    Expr visit(const Broadcast *op) override {
+
+                        std::vector<int> supported_input_sizes;
+
+                        switch(_arch){
+                            case Architecture::ARM:
+                                supported_input_sizes.push_back(64);
+                                break;
+                            case Architecture::HVX:
+                                supported_input_sizes.push_back(1024);
+                                break;
+                            case Architecture::X86:
+                                debug(1) << "Abstraction vector sizes for X86 "<<"\n";
+                                // Push in vector register sizes in descending order
+                                supported_input_sizes.push_back(512);
+                                supported_input_sizes.push_back(128);
+                                supported_input_sizes.push_back(64);
+                                supported_input_sizes.push_back(32);
+                        };
+
+                        Expr v = op->value;
+
+                        bool supported = false;
+                        for(int input_size : supported_input_sizes){
+                            debug(1) << "Testing for vector input length: "<<input_size <<"\n";
+                            if ((v.type().bits() * v.type().lanes() % input_size != 0) && (v.type().bits() > 1)) {
+                            } else {
+                                supported = true;
+                            }
+
+                        }
+
+                        if(!supported){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        } else {
+                        return IRMutator::visit(op);
+                        }
+
+                    }
+
+
                     Expr visit(const Cast *op) override {
                         Expr v = op->value;
 
@@ -1756,6 +1801,7 @@ namespace Halide {
                                 vec_lens.push_back(512);
                                 vec_lens.push_back(256);
                                 vec_lens.push_back(128);
+                                vec_lens.push_back(32);
 
 
                         };

@@ -31,6 +31,8 @@
             [(idx-add i1 i2) 1]
             [(idx-mul i1 i2) 1]
             [(vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o) prec_i_o]
+            [ (vector-choose_dsl val prec num_elems) prec]
+            [ (vector-deinterleave_dsl val prec num_elems) prec]
             [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8) num_2]
             [(_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (cond 

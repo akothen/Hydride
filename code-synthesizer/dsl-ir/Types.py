@@ -371,3 +371,8 @@ class InstructionType:
 
     def __hash__(self):
         return hash(self.TypeEnum)
+
+
+
+def isBitVectorType(arg):
+    return isinstance(arg, BitVector) or isinstance(arg, ConstBitVector)

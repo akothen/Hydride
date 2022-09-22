@@ -107,8 +107,6 @@
       ]
 
      [(buffer data elemT buffsize)  
-      ;(debug-log "Bind Args")
-      (debug-log args)
        (if is-leaf-depth
         (values (arg 0)   1)
         (begin
@@ -315,6 +313,80 @@
         )
      ]
    
+    [(uint8x16 vec) 
+       (if is-leaf-depth
+        (values (uint8x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint8x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint16x16 vec) 
+       (if is-leaf-depth
+        (values (uint16x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint16x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint32x16 vec) 
+       (if is-leaf-depth
+        (values (uint32x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint32x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(uint64x16 vec) 
+       (if is-leaf-depth
+        (values (uint64x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (uint64x16 leaf-sol) args-used)
+        )
+        )
+     ]
+
+
+    [(int8x16 vec) 
+       (if is-leaf-depth
+        (values (int8x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int8x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int16x16 vec) 
+       (if is-leaf-depth
+        (values (int16x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int16x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int32x16 vec) 
+       (if is-leaf-depth
+        (values (int32x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int32x16 leaf-sol) args-used)
+        )
+        )
+     ]
+    [(int64x16 vec) 
+       (if is-leaf-depth
+        (values (int64x16 (arg 0)) 1)
+        (begin
+          (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
+          (values (int64x16 leaf-sol) args-used)
+        )
+        )
+     ]
     [(uint8x32 vec) 
        (if is-leaf-depth
         (values (uint8x32 (arg 0)) 1)
@@ -1004,7 +1076,7 @@
 
 ;; Returns the sub-expressions at depth away from
 ;; the root of expr. In the case where a leaf is reached
-;; before at an earleir depth, we return '().
+;; before at an earlir depth, we return '().
 (define (get-sub-exprs expr depth)
 
   (cond
@@ -1012,8 +1084,9 @@
      expr
      ]
 
+
     [(equal? depth 1)
-     (list expr)
+        (list expr)
      ]
 
     [else
@@ -1048,8 +1121,6 @@
 
 
 (define (create-buffers sub-expr-ls sym-bvs)
-  (debug-log "CREATE BUFFERS")
-  (debug-log sub-expr-ls)
   (list->vector (for/list ([i (range (length sub-expr-ls))])
             (define expr (list-ref sub-expr-ls i))
             (define sym-bv (vector-ref sym-bvs i))
@@ -1199,6 +1270,18 @@
     [(int16x8 vec) (* 16 8)]
     [(int32x8 vec) (* 32 8)]
     [(int64x8 vec) (* 64 8)]
+
+
+    [(uint8x16 vec) (* 8 16)]
+    [(uint16x16 vec) (* 16 16)]
+    [(uint32x16 vec) (* 32 16)]
+    [(uint64x16 vec) (* 64 16)]
+
+
+    [(int8x16 vec) (* 8 16)]
+    [(int16x16 vec) (* 16 16)]
+    [(int32x16 vec) (* 32 16)]
+    [(int64x16 vec) (* 64 16)]
    
     [(uint8x32 vec) (* 8 32)]
     [(uint16x32 vec) (* 16 32)]
@@ -1316,6 +1399,21 @@
   )
 
 
+(define (hash-expr expr)
+  (define (visitor-fn e)
+    (destruct e
+              [(buffer data elemT buffsize) 
+               (list 'buf elemT buffsize)
+               ]
+              [_ e]
+              )
+    )
+
+  (define hashed-expr (halide:visit expr visitor-fn))
+  hashed-expr
+  )
+
+
 (define (elemT-size elemT) 
 (cond
     [(eq? elemT 'int8) 8]
@@ -1403,6 +1501,17 @@
     [(int16x8 vec) 'int16]
     [(int32x8 vec) 'int32]
     [(int64x8 vec) 'int64]
+
+
+    [(uint8x16 vec) 'uint8]
+    [(uint16x16 vec) 'uint16]
+    [(uint32x16 vec) 'uint32]
+    [(uint64x16 vec) 'uint64]
+
+    [(int8x16 vec) 'int8]
+    [(int16x16 vec) 'int16]
+    [(int32x16 vec) 'int32]
+    [(int64x16 vec) 'int64]
 
     [(uint8x32 vec) 'uint8]
     [(uint16x32 vec) 'uint16]
@@ -1543,6 +1652,18 @@
     [(int16x8 vec) 16]
     [(int32x8 vec) 32]
     [(int64x8 vec) 64]
+
+
+    [(uint8x16 vec) 8]
+    [(uint16x16 vec) 16]
+    [(uint32x16 vec) 32]
+    [(uint64x16 vec) 64]
+
+
+    [(int8x16 vec) 8]
+    [(int16x16 vec) 16]
+    [(int32x16 vec) 32]
+    [(int64x16 vec) 64]
 
     [(uint8x32 vec) 8]
     [(uint16x32 vec) 16]

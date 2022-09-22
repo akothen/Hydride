@@ -33,6 +33,13 @@
 	[(nop v1) (string-append "(nop " (hydride-printer v1) ")\n")]
 	[(idx-add i1 i2) (string-append "(idx-add " (~s i1) (~s i2) ")\n" )]
 	[(idx-mul i1 i2) (string-append "(idx-mul " (~s i1) (~s i2) ")\n" )]
+    [ (vector-choose_dsl val prec num_elems)
+     (string-append "(vector-choose_dsl " (hydride-printer val) " " (~s prec) " " (~s num_elems) ")\n")
+     ]
+
+    [ (vector-deinterleave_dsl val prec num_elems)
+     (string-append "(vector-deinterleave_dsl " (hydride-printer val) " " (~s prec) " " (~s num_elems) ")\n")
+     ]
 	[(vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o) 
 	(string-append 
 	(string-append "(vector-load_dsl " (if (lit? v0) (begin (define num_elem (/ (get-length v0 (vector 0)) prec_i_o)) (string-append (hydride-printer v0) " ; " "<" (~s num_elem) " x i" (~s prec_i_o) ">" "\n" )) (hydride-printer v0)) " " " " (if (lit? size_i_o) (begin (define num_elem (/ (get-length size_i_o (vector 0)) prec_i_o)) (string-append (hydride-printer size_i_o) " ; " "<" (~s num_elem) " x i" (~s prec_i_o) ">" "\n" )) (hydride-printer size_i_o)) " " " " (if (lit? num_2) (begin (define num_elem (/ (get-length num_2 (vector 0)) prec_i_o)) (string-append (hydride-printer num_2) " ; " "<" (~s num_elem) " x i" (~s prec_i_o) ">" "\n" )) (hydride-printer num_2)) " " " " (if (lit? num_3) (begin (define num_elem (/ (get-length num_3 (vector 0)) prec_i_o)) (string-append (hydride-printer num_3) " ; " "<" (~s num_elem) " x i" (~s prec_i_o) ">" "\n" )) (hydride-printer num_3)) " " " " (if (lit? prec_i_o) (begin (define num_elem (/ (get-length prec_i_o (vector 0)) prec_i_o)) (string-append (hydride-printer prec_i_o) " ; " "<" (~s num_elem) " x i" (~s prec_i_o) ">" "\n" )) (hydride-printer prec_i_o)) " " " " ")")

@@ -64,7 +64,9 @@
 
 
   ;; Clear the verification condition up till this point
-  ;; (clear-vc!)
+  (clear-vc!)
+  (clear-terms!)
+  (collect-garbage)
 
   ;; Create the symbolic bitvectors to use in synthesis
   (define symbols (create-symbolic-bvs bitwidth-list))

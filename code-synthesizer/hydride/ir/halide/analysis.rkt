@@ -286,6 +286,17 @@
     [(int32x8 vec) (strip-casts vec)]
     [(int64x8 vec) (strip-casts vec)]
 
+    [(uint8x16 vec) (strip-casts vec)]
+    [(uint16x16 vec) (strip-casts vec)]
+    [(uint32x16 vec) (strip-casts vec)]
+    [(uint64x16 vec) (strip-casts vec)]
+
+
+    [(int8x16 vec) (strip-casts vec)]
+    [(int16x16 vec) (strip-casts vec)]
+    [(int32x16 vec) (strip-casts vec)]
+    [(int64x16 vec) (strip-casts vec)]
+
     [(uint8x32 vec) (strip-casts vec)]
     [(uint16x32 vec) (strip-casts vec)]
     [(uint32x32 vec) (strip-casts vec)]

@@ -38,8 +38,8 @@ class StructDef:
 
             struct_arg = None
 
-            if isinstance(arg, BitVector) or isinstance(arg, ConstBitVector):
-                struct_arg = "{}".format(arg.name) #"[{} #:mutable]".format(arg.name)
+            if isBitVectorType(arg):
+                struct_arg = "[{} #:mutable]".format(arg.name)
             else:
                 struct_arg = "{}".format(arg.name)
 

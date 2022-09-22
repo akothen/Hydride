@@ -39,7 +39,7 @@
 
 (struct int-imm (data signed?) #:transparent)
 
-(struct buffer (data elemT buffSize) #:transparent)
+(struct buffer ([data #:mutable]  elemT buffSize) #:transparent)
 (struct load (buf idxs alignment) #:transparent)
 (struct ramp (base stride len) #:transparent)
 (struct aligned (mod rem) #:transparent)
@@ -64,6 +64,7 @@
 
 
 (struct uint8x8 (vec) #:transparent)
+(struct uint8x16 (vec) #:transparent)
 (struct uint8x32 (vec) #:transparent)
 (struct uint8x64 (vec) #:transparent)
 (struct uint8x128 (vec) #:transparent)
@@ -72,6 +73,7 @@
 
 
 (struct uint16x8 (vec) #:transparent)
+(struct uint16x16 (vec) #:transparent)
 (struct uint16x32 (vec) #:transparent)
 (struct uint16x64 (vec) #:transparent)
 (struct uint16x128 (vec) #:transparent)
@@ -80,6 +82,7 @@
 
 
 (struct uint32x8 (vec) #:transparent)
+(struct uint32x16 (vec) #:transparent)
 (struct uint32x32 (vec) #:transparent)
 (struct uint32x64 (vec) #:transparent)
 (struct uint32x128 (vec) #:transparent)
@@ -88,6 +91,7 @@
 
 
 (struct uint64x8 (vec) #:transparent)
+(struct uint64x16 (vec) #:transparent)
 (struct uint64x32 (vec) #:transparent)
 (struct uint64x64 (vec) #:transparent)
 (struct uint64x128 (vec) #:transparent)
@@ -96,6 +100,7 @@
 
 
 (struct int8x8 (vec) #:transparent)
+(struct int8x16 (vec) #:transparent)
 (struct int8x32 (vec) #:transparent)
 (struct int8x64 (vec) #:transparent)
 (struct int8x128 (vec) #:transparent)
@@ -104,6 +109,7 @@
 
 
 (struct int16x8 (vec) #:transparent)
+(struct int16x16 (vec) #:transparent)
 (struct int16x32 (vec) #:transparent)
 (struct int16x64 (vec) #:transparent)
 (struct int16x128 (vec) #:transparent)
@@ -112,6 +118,7 @@
 
 
 (struct int32x8 (vec) #:transparent)
+(struct int32x16 (vec) #:transparent)
 (struct int32x32 (vec) #:transparent)
 (struct int32x64 (vec) #:transparent)
 (struct int32x128 (vec) #:transparent)
@@ -121,6 +128,7 @@
 
 
 (struct int64x8 (vec) #:transparent)
+(struct int64x16 (vec) #:transparent)
 (struct int64x32 (vec) #:transparent)
 (struct int64x64 (vec) #:transparent)
 (struct int64x128 (vec) #:transparent)
@@ -150,7 +158,7 @@
 
 (struct sca-bwand (v1 v2) #:transparent)
 
-(struct vec-add (v1 v2) #:transparent)
+(struct vec-add (v1 v2 ) #:transparent)
 (struct vec-sub (v1 v2) #:transparent)
 (struct vec-mul (v1 v2) #:transparent)
 (struct vec-div (v1 v2) #:transparent)

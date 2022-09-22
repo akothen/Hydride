@@ -51,6 +51,7 @@
   (generate-grammar-file spec-contents mod-path base_name VF)
   (debug-log "Generated Grammar File")
   (define (get-grammar mod name)
+    (debug-log (format "Dynamically importing from ~a ... \n" name))
     (dynamic-require mod (string->symbol name))
     )
 

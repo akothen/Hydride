@@ -135,6 +135,13 @@
                    ))
   )
 
+(define (create-splat-bv val rows)
+  (apply concat
+         (for/list ([i (range rows )])
+                   val
+                   ))
+  )
+
 (define (pad-with-zeros vec extended-len)
   (define remaining-bits (- extended-len (bvlength vec)))
   (define zero (bv 0 (bitvector remaining-bits)))
