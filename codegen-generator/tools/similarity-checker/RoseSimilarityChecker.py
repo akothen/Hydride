@@ -876,6 +876,43 @@ class RoseSimilarityChecker():
     return ErasedArgs
 
 
+  # This function is needed to avoid triggering some asserts in the API
+  # that has similar functionality.
+  def replaceUsesInRegion(self, Region, Abstraction, NewAbstraction):
+    assert not isinstance(Abstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseConstant) \
+      and not isinstance(Abstraction, RoseAbstractions.RoseFunction)
+    assert not isinstance(NewAbstraction, RoseAbstractions.RoseUndefValue) \
+      and not isinstance(NewAbstraction, RoseAbstractions.RoseFunction)
+    assert isinstance(Abstraction, RoseAbstractions.RoseValue)
+    assert isinstance(NewAbstraction, RoseAbstractions.RoseValue)
+    #assert Abstraction.getType() == NewAbstraction.getType()
+    if isinstance(Region, RoseForLoop):
+      if Region.getIterator() == Abstraction:
+        Region.setIterator(NewAbstraction)
+      elif Region.getStartIndex() == Abstraction:
+        Region.setStartIndexVal(NewAbstraction)
+      elif Region.getStep() == Abstraction:
+        Region.setStepVal(NewAbstraction)
+      elif Region.getEndIndex() == Abstraction:
+        Region.setEndIndexVal(NewAbstraction) 
+    if Region.getKeys() != None:
+      for Key in Region.getKeys():
+        for Child in Region.getChildren(Key):
+          assert Region.isChildValid(Child)
+          if isinstance(Child, RoseOperation):
+            Child.replaceUsesWith(Abstraction, NewAbstraction)
+          else:
+            self.replaceUsesInRegion(Child, Abstraction, NewAbstraction)
+    else:
+      for Child in Region.getChildren():
+        assert Region.isChildValid(Child)
+        if isinstance(Child, RoseOperation):
+          Child.replaceUsesWith(Abstraction, NewAbstraction)
+        else:
+          self.replaceUsesInRegion(Child, Abstraction, NewAbstraction)
+
+
   def eliminateUnecessaryArgs(self):
     for EquivalenceClass in self.EquivalenceClasses:
       if len(EquivalenceClass.getEquivalentFunctions()) > 1:
@@ -899,6 +936,8 @@ class RoseSimilarityChecker():
             # Compare concrete values
             for Idx, Arg in enumerate(Function.getArgs()):
               if FunctionInfo.argHasConcreteVal(Arg) == True:
+                if Idx not in ArgIdxToConcreteValMap:
+                  ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
                 print("FunctionInfo.getConcreteValFor(Arg):")
                 print(FunctionInfo.getConcreteValFor(Arg))
                 print("Idx:")
@@ -929,17 +968,19 @@ class RoseSimilarityChecker():
           ModificationMade = False
           FunctionInfo = self.FunctionToFunctionInfo[Function]
           for Idx in range(NumArgs - 1, -1, -1):
-            if Idx in ArgIdxToConcreteValMap:
+            Arg = Function.getArg(Idx)
+            if Idx in ArgIdxToConcreteValMap and FunctionInfo.argHasConcreteVal(Arg) == True:
               if ArgIdxToConcreteValMap[Idx] != None:
                 print("INDEX DOES NOT MAP TO NONE")
-                Arg = Function.getArg(Idx)
                 print("Arg:")
                 Arg.print()
                 Arg.getType().print()
                 print("FunctionInfo.getConcreteValFor(Arg):")
                 FunctionInfo.getConcreteValFor(Arg).print()
                 FunctionInfo.getConcreteValFor(Arg).getType().print()
-                Function.replaceUsesWith(Arg, FunctionInfo.getConcreteValFor(Arg))
+                self.replaceUsesInRegion(Function, Arg, FunctionInfo.getConcreteValFor(Arg))
+                print("--Function:")
+                Function.print()
                 FunctionInfo.eraseConcreteValForArg(Arg)
                 Function.eraseArg(Idx)
                 ModificationMade = True
