@@ -859,6 +859,41 @@ class RoseSimilarityChecker():
     return Function
 
 
+  def propagateType(self, Arg : RoseArgument, Function : RoseFunction, ArgToConcVaMap : dict):
+    BlockList = Function.getRegionsOfType(RoseBlock)
+    Users = Function.getUsersOf(Arg)
+    BitvectorToBitwidth = dict()
+    for User in Users:
+      if isinstance(User, RoseBVExtractSliceOp):
+        if isinstance(User.getType().getBitwidth(), RoseArgument):
+          if User.getOutputBitwidth() == Arg:
+            BitvectorToBitwidth[User] = Arg
+            assert isinstance(ArgToConcVaMap[Arg], RoseConstant)
+            User.setType(RoseBitVectorType.create(ArgToConcVaMap[Arg].getValue()))
+        continue
+      if isinstance(User, RoseBVInsertSliceOp):
+        if isinstance(User.getOutputBitwidth(), RoseArgument):
+          if User.getOutputBitwidth() == Arg:
+            BitvectorToBitwidth[User] = Arg
+            BitvectorToBitwidth[User.getInsertValue()] = Arg
+            assert isinstance(ArgToConcVaMap[Arg], RoseConstant)
+            User.setType(RoseBitVectorType.create(ArgToConcVaMap[Arg].getValue()))
+        continue
+      if User.getOpcode().typesOfInputsAndOutputEqual():
+        for Operand in User.getOperands():
+          if isinstance(Operand.getType(), RoseBitVectorType):
+            Operand.setType(RoseBitVectorType.create(ArgToConcVaMap[Arg].getValue()))
+          else:
+            assert isinstance(Operand.getType(), RoseIntegerType)
+            Operand.setType(RoseIntegerType.create(ArgToConcVaMap[Arg].getValue()))
+        if isinstance(Operand.getType(), RoseBitVectorType):
+          User.setType(RoseBitVectorType.create(ArgToConcVaMap[Arg].getValue()))
+        else:
+          assert isinstance(Operand.getType(), RoseIntegerType)
+          User.setType(RoseIntegerType.create(ArgToConcVaMap[Arg].getValue()))
+        continue
+
+
   def removeDeadArguments(self, FunctionInfo : RoseFunctionInfo, Function : RoseFunction):
     #print("REMOVE DEAD ARGUMENTS")
     print("FUNCTION:")
