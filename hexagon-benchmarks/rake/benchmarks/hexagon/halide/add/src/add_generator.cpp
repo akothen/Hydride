@@ -2,7 +2,7 @@
 #include "../../hannk/common_halide.h"
 #include "../../hannk/constants.h"
 #include "../../hannk/interpreter/elementwise_program.h"
-#include "../../test/common_params.h"
+#include "../../common_params.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;

@@ -12,7 +12,7 @@
 
 #include "common.h"
 #include <Halide.h>
-#include "../../test/common_params.h"
+#include "../../common_params.h"
 
 using Halide::Generator;
 using Halide::RVar;

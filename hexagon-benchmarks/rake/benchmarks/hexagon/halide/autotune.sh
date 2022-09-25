@@ -34,7 +34,7 @@ make -j
 
 BENCHMARK_ROOT=/home/sb54/Hydride/hexagon-benchmarks/rake/benchmarks/hexagon/halide
 
-NUM_BATCHES=1
+NUM_BATCHES=100
 for ((i=0; i < $NUM_BATCHES; i++))
 do
   for bench in $BENCHMARKS

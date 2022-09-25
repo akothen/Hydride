@@ -1,5 +1,5 @@
 #include "Halide.h"
-#include "../../test/common_params.h"
+#include "../../common_params.h"
 
 using namespace Halide;
 

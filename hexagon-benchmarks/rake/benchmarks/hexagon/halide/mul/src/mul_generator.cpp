@@ -1,7 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../hannk/constants.h"
-#include "../../test/common_params.h"
+#include "../../common_params.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
