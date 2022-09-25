@@ -35,21 +35,26 @@ make -j
 BENCHMARK_ROOT=/home/sb54/Hydride/hexagon-benchmarks/rake/benchmarks/hexagon/halide
 
 NUM_BATCHES=100
+# Note this: https://github.com/halide/Halide/blob/a8174147251f7b525dbecd1d2c9dc176be94eaad/src/autoschedulers/adams2019/autotune_loop.sh#L59
+# So, we don't start over in every batch.
+# NOTE(Stefanos): Theoretically, then, there's no difference in running many batches outside of autotune_loop.sh
+# or inside. I think it's better to change the original script as less as possible so that's why I'm doing it this way.
+# Another question is whether it matters if we interchange the loop below. I think not.
 for ((i=0; i < $NUM_BATCHES; i++))
 do
   for bench in $BENCHMARKS
   do
     echo "--- ${bench} ---"
 
-	echo ${BENCHMARK_ROOT}/${bench}/samples
+		echo ${BENCHMARK_ROOT}/${bench}/samples
 
-	${AUTOSCHED_SRC}/autotune_loop.sh \
-		${BENCHMARK_ROOT}/${bench}/bin/${bench}_generator \
-		${bench} \
-		"" \
-		${AUTOSCHED_SRC}/baseline.weights \
-		${HALIDE_BIN} \
-		${HALIDE_DISTRIB} \
-		${BENCHMARK_ROOT}/${bench}/samples
+		${AUTOSCHED_SRC}/autotune_loop.sh \
+			${BENCHMARK_ROOT}/${bench}/bin/${bench}_generator \
+			${bench} \
+			"" \
+			${AUTOSCHED_SRC}/baseline.weights \
+			${HALIDE_BIN} \
+			${HALIDE_DISTRIB} \
+			${BENCHMARK_ROOT}/${bench}/samples
   done
 done
