@@ -273,6 +273,7 @@
 
 
 (define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs cost-bound solver failed-sols)
+  (debug-log "synthesize-sol-iterative")
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
@@ -286,10 +287,11 @@
 
 
   ;; Clear the verification condition up till this point
-  (clear-vc!)
-  (clear-terms!)
-  (collect-garbage 'major)
+  ;(clear-vc!)
+  ;(clear-terms!)
+  ;(collect-garbage 'major)
 
+  (debug-log "Garbage collected")
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs
   ;; else use the concrete inputs accumulated
@@ -312,45 +314,17 @@
   (define (assert-query-synth-fn env)
     ;; FIXME: Hacky way to get extraction limits
     ;(define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
-    (define word-size (bvlength (invoke_ref_lane env)))
+    ;(define lane-sol (invoke_ref_lane env))
+    ;(define word-size (bvlength lane-sol ))
     ;16
     ;32 - 1 = 32
-    (define interpret-res (extract (- (* 2 word-size) 1 ) word-size (interpret grammar env)))
-    ;(define test-synth-bit-1 (bit 0 interpret-res))
-    ;(define test-spec-bit-1 (bit 0 (invoke_ref_lane env)))
-
-    ;(define test-synth-bit-2 (bit 2 interpret-res))
-    ;(define test-spec-bit-2 (bit 2 (invoke_ref_lane env)))
-
-    ;(define test-synth-bit-3 (bit 3 interpret-res))
-    ;(define test-spec-bit-3 (bit 3 (invoke_ref_lane env)))
-
-    ;(define test-synth-bit-8 (bit 8 interpret-res))
-    ;(define test-spec-bit-8 (bit 8 (invoke_ref_lane env)))
-
-    ;(define rand-bit (random 15))
-    ;(printf "Random bit is ~a\n" rand-bit)
-
-    ;(define test-synth-bit-rand (bit rand-bit interpret-res))
-    ;(define test-spec-bit-rand (bit rand-bit (invoke_ref_lane env)))
-
-
-    ;(define test-synth-bit-n (bit 15 interpret-res))
-    ;(define test-spec-bit-n (bit 15 (invoke_ref_lane env)))
+    ;(define interpret-res (extract (- (* 2 word-size) 1 ) word-size (interpret grammar env)))
     
-    ;(define full-interpret-res (interpret grammar env))
+    (define full-interpret-res (interpret grammar env))
 
     (begin
-        ;(assert (equal? (invoke_ref env)   full-interpret-res))
-        (assert (equal? (invoke_ref_lane env)   interpret-res))
-        ;(assert (equal? test-synth-bit-1 test-spec-bit-1))
-        ;(assert (equal? test-synth-bit-2 test-spec-bit-2))
-        ;(assert (equal? test-synth-bit-3 test-spec-bit-3))
-        ;(assert (equal? test-synth-bit-8 test-spec-bit-8))
-        ;(assert (equal? test-synth-bit-n test-spec-bit-n))
-        ;(assert (equal? test-synth-bit-rand test-spec-bit-rand))
-        ;(assert (equal? (get-length grammar env) (bvlength (invoke_ref env))))
-        ;(assert (equal? full-interpret-res (invoke_ref env)))
+        (assert (equal? (invoke_ref env)   full-interpret-res))
+        ;(assert (equal? lane-sol   interpret-res))
         )
     )
 

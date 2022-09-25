@@ -42,11 +42,17 @@ class GrammarGenerator:
 
         return "\n\t".join(grammar_clause)
 
-    def emit_lit_hole(self, bv_size):
-        return "(lit (create-symbolic-bv {}))".format(bv_size)
+    def emit_lit_hole(self, bv_size, prec):
+        splat_factor = bv_size // prec
+        #return "(lit (create-symbolic-bv {}))".format(bv_size)
         #return "(lit (?? (bitvector {})))".format(bv_size)
+        return "(lit (create-splat-bv (?? (bitvector {})) {}))".format(prec, splat_factor)
 
-    def emit_lit_hole_clause(self, bv_size, last_clause = False):
+
+
+
+
+    def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
         condition = None
 
         if last_clause:
@@ -54,11 +60,12 @@ class GrammarGenerator:
         else:
             condition = "\t[(choose* #t #f)"
 
-        hole = self.emit_lit_hole(bv_size)
+        hole = self.emit_lit_hole(bv_size, prec)
 
         close = "]"
 
         return "\n\t".join([condition, hole, close])
+
 
 
 
@@ -84,9 +91,15 @@ class GrammarGenerator:
         assert_depth = "\t(assert (> {} 0))".format(depth_name)
         choose_vars = "\t[(choose* #t #f) (apply choose* {})]".format(vars_name)
 
+        #TEMP
+        extra_choose = "\t[(choose* #t #f) (vector-choose_dsl ({} {} #:depth {}) 16 32)]".format(layer_name, vars_name, "(- {} 1)".format(depth_name))
+        extra_choose += "\n" + "\t[(choose* #t #f) (vector-deinterleave_dsl ({} {} #:depth {}) 16 32)]".format(layer_name, vars_name, "(- {} 1)".format(depth_name))
+        extra_choose = ""
+
+
         ## Input variables should only be access via mem layer
         if "mem" not in layer_name:
-            choose_vars = "\n"
+            #choose_vars = "\n"
             pass
 
 
@@ -101,7 +114,7 @@ class GrammarGenerator:
 
 
         for idx, lh in enumerate(lit_holes):
-            clauses.append(self.emit_lit_hole_clause(lh, last_clause = (idx == (len(lit_holes) - 1))))
+            clauses.append(self.emit_lit_hole_clause(lh[0], lh[1], last_clause = (idx == (len(lit_holes) - 1))))
 
 
 
@@ -111,7 +124,7 @@ class GrammarGenerator:
             return define_grammar +"\n" +assert_depth +"\n" +  "\t(apply choose* {})".format(vars_name)+"\n)\n"
 
 
-        return define_grammar +"\n" +assert_depth +"\n" +"\t(cond" + "\n"+ choose_vars +"\n" +"\n".join(clauses)+"\n\t)"+"\n)\n"
+        return define_grammar +"\n" +assert_depth +"\n" +"\t(cond" + "\n"+ choose_vars + "\n"+ extra_choose +"\n" +"\n" +"\n".join(clauses)+"\n\t)"+"\n)\n"
 
 
 
@@ -124,7 +137,9 @@ class GrammarGenerator:
                      top_level_grammar_name = "synth_grammar",
                      top_level_grammar_args = [],
                      depth = 6,
-                     lit_holes = []):
+                     lit_holes = [],
+                     num_inputs = None):
+
 
 
 
@@ -134,7 +149,7 @@ class GrammarGenerator:
         mem_layer = self.emit_grammar_layer(layer_name = memory_layer_name,
                                             layer_dsl_insts = memory_dsl_insts,
                                             layer_dsl_args_list = memory_dsl_args_list,
-                                            lit_holes = lit_holes)
+                                            lit_holes = [])
 
         # TODO: Shuffle layer
         shuffle_layer = self.emit_grammar_layer(layer_name = shuffle_layer_name,
@@ -146,7 +161,11 @@ class GrammarGenerator:
         operation_layer = self.emit_grammar_layer(layer_name = operation_layer_name,
                                             layer_dsl_insts = operation_dsl_insts,
                                             layer_dsl_args_list = operation_dsl_args_list,
-                                                other_grammars = [shuffle_layer_name])
+                                                  # TEMP
+                                                  lit_holes = lit_holes,
+                                                  # TEMP
+                                                other_grammars = [])
+
 
         top_level_grammar = "(define {} ({} (list {}) #:depth {} ))".format(top_level_grammar_name,
                                                                             operation_layer_name,

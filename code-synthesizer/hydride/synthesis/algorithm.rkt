@@ -19,7 +19,7 @@
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/printer)
-
+(require hydride/ir/halide/utils)
 
 (provide (all-defined-out))
 
@@ -37,15 +37,15 @@
 (define (dump-synth-res-with-typeinfo sol id-map)
 
   (define (print-helper k v)
-   (display "; (reg ")
-   (display (~s v))
-   (display ") ")
-   (displayln (halide:print-buffer-type-info k))
-   v
-   )
+    (display "; (reg ")
+    (display (~s v))
+    (display ") ")
+    (displayln (halide:print-buffer-type-info k))
+    v
+    )
   (define printed-map (hash-map id-map print-helper))
   (displayln (hydride-printer sol))
-  
+
   )
 
 
@@ -64,12 +64,16 @@
 
   )
 
+(define synth-log (make-hash))
+
 (define (synthesize-halide-expr-step halide-expr expr-depth VF id-map)
 
 
 
   (debug-log "=======================================")
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
+  (debug-log "leaves")
+  (debug-log leaves)
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes))
@@ -79,6 +83,8 @@
   ;(clear-terms!)
 
   (define dummy-args (halide:create-buffers leaves sym-bvs))
+  (debug-log "dummy-args")
+  (debug-log dummy-args)
 
 
   (define synthesized-sol 
@@ -92,6 +98,7 @@
                 (begin
 
                   (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args expr-depth))
+                  (debug-log "HERE")
 
                   (define base_name (string-append "base_" (~s (random 10000))))
 
@@ -101,14 +108,18 @@
 
                   (define grammar (get-expr-grammar expr-extract leaves base_name VF))
                   (debug-log "Grammar:")
-                  (debug-log grammar)
+                  ;(debug-log grammar)
 
                   (define regs (create-n-reg (length leaves)))
                   (debug-log regs)
                   (define (grammar-fn i)
                     (clear-vc!)
                     (clear-terms!)
-                    (grammar regs #:depth i)
+                    (define use-simple-grammar #t)
+                    (if use-simple-grammar
+                      (grammar i)
+                      (grammar regs #:depth i)
+                      )
                     )
 
                   (define (invoke-spec env)
@@ -131,30 +142,53 @@
                     )
 
 
-                  (define depth-limit 5)
-                  (define optimize? #t)
-                  (define symbolic? #f)
+                  (define depth-limit 6)
+                  (define optimize? #f)
+                  (define symbolic? #t)
                   (define cost-bound 50)
-                  (define solver 'z3)
+                  (define solver 'boolector)
 
                   ;(clear-vc!)
                   ;(clear-terms!)
                   (displayln "Synthesizing sub-expression")
                   (pretty-print expr-extract)
+
+                  (define hashed-expr (halide:hash-expr expr-extract))
+
+                  (displayln "Hashed expression")
+                  (println hashed-expr)
                   (debug-log "Leaves are bitvectors of sizes:")
                   (debug-log leaves-sizes)
-                  (define test-start (current-seconds))
-                  (debug-log "Beginning Synthesis")
+                  (define-values 
+                    (satisfiable? materialize elap)
+                    (if (hash-has-key? synth-log hashed-expr)
+                      (begin 
+                        (debug-log "Equivalent expression synthesized before, returned stored solution")
+                        (define memo-result (hash-ref synth-log hashed-expr))
+                        (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
+                        )
+                      (begin
+                        (define test-start (current-seconds))
+                        (debug-log "Beginning Synthesis")
 
-                  (define-values (satisfiable? materialize elap) 
-                                 (synthesize-sol-with-depth (+ 1 expr-depth) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) )
+                        (define-values (sat? mat el) 
+                                       (synthesize-sol-with-depth (+ -1 expr-depth) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) 
+                                       )
 
-                  (define test-end (current-seconds))
+                        (define test-end (current-seconds))
 
-                  (debug-log "Test elapsed time: ")
-                  (debug-log (- test-end test-start))
+                        (debug-log "Test elapsed time: ")
+                        (debug-log (- test-end test-start))
 
-                  (debug-log "Synthesis step completed!")
+                        (hash-set! synth-log hashed-expr (vector sat? mat el) )
+
+
+
+                        (debug-log "Synthesis step completed!")
+                        (values sat? mat el)
+                        )
+                      )
+                    )
 
                   (if satisfiable? 
                     (begin
@@ -166,15 +200,14 @@
 
 
                   (define synthesized-leaves 
-                    ;(if 
-                     ; (halide:is-broadcast expr-extract)
-                     ; (list )
 
-                      (for/list  ([leaf leaves])
-                                 (synthesize-halide-expr-step leaf expr-depth VF id-map)
-                                 )
-                      ;)
+                    (for/list  ([leaf leaves])
+                               (synthesize-halide-expr-step leaf expr-depth VF id-map)
+                               )
+                    ;)
                     )
+                  (debug-log "Synthesized-leaves")
+                  (debug-log synthesized-leaves)
                   (bind-expr materialize (list->vector synthesized-leaves))
                   )]
               )

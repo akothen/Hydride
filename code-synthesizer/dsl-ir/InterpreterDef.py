@@ -65,7 +65,7 @@ class InterpreterDef:
             if idx % 3 == 0 and idx != 0:
                 sub_interpret.append("\n\t\t")
 
-            if isinstance(arg, BitVector):
+            if isBitVectorType(arg):
                 sub_interpret.append("(interpret {} {})".format(arg.name, env_name))
             else:
                 sub_interpret.append("{}".format(arg.name))

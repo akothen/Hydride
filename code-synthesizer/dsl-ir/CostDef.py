@@ -22,7 +22,7 @@ class CostDef:
 
         defaults.append("[(idx-i id) {}]".format(IDX_I_COST))
         defaults.append("[(idx-j id) {}]".format(IDX_J_COST))
-        defaults.append("[(reg id) {}]".format(REG_COST))
+        defaults.append("[(reg id) id]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
         defaults.append("[(nop v1) (+ {} (cost v1))]".format(NOP_COST))
 
@@ -57,8 +57,8 @@ class CostDef:
                 sub_cost.append("\n\t\t")
 
 
-            if isinstance(arg, BitVector):
-                sub_cost.append("(cost  {})".format(arg.name))
+            if isBitVectorType(arg):
+                sub_cost.append("(* {} (cost  {}))".format( idx+1 ,arg.name))
 
 
         cost_clause = "(+ {} {})".format(cost_label, " ".join(sub_cost))

@@ -80,6 +80,16 @@
     [(int32x8 sca) 8]
     [(int64x8 sca) 8]
 
+    [(uint8x16 sca) 16]
+    [(uint16x16 sca) 16]
+    [(uint32x16 sca) 16]
+    [(uint64x16 sca) 16]
+    
+    [(int8x16 sca) 16]
+    [(int16x16 sca) 16]
+    [(int32x16 sca) 16]
+    [(int64x16 sca) 16]
+
     [(uint1x32 vec) 32]
     [(uint1x64 vec) 64]
     [(uint1x128 vec) 128]
@@ -221,6 +231,18 @@
     [(int16x8 vec) (list vec)]
     [(int32x8 vec) (list vec)]
     [(int64x8 vec) (list vec)]
+
+
+    [(uint8x16 vec) (list vec)]
+    [(uint16x16 vec) (list vec)]
+    [(uint32x16 vec) (list vec)]
+    [(uint64x16 vec) (list vec)]
+
+
+    [(int8x16 vec) (list vec)]
+    [(int16x16 vec) (list vec)]
+    [(int32x16 vec) (list vec)]
+    [(int64x16 vec) (list vec)]
    
     [(uint8x32 vec) (list vec)]
     [(uint16x32 vec) (list vec)]
@@ -363,6 +385,7 @@
 
 
     [(uint8x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint8))]
+    [(uint8x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint8))]
     [(uint8x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint8))]
     [(uint8x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint8))]
     [(uint8x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint8))]
@@ -371,6 +394,7 @@
 
 
     [(int8x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int8))]
+    [(int8x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int8))]
     [(int8x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int8))]
     [(int8x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int8))]
     [(int8x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int8))]
@@ -379,6 +403,7 @@
 
 
     [(uint16x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint16))]
+    [(uint16x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint16))]
     [(uint16x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint16))]
     [(uint16x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint16))]
     [(uint16x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint16))]
@@ -388,6 +413,7 @@
 
 
     [(int16x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int16))]
+    [(int16x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int16))]
     [(int16x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int16))]
     [(int16x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int16))]
     [(int16x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int16))]
@@ -398,6 +424,7 @@
     
 
     [(uint32x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint32))]
+    [(uint32x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint32))]
     [(uint32x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint32))]
     [(uint32x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint32))]
     [(uint32x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint32))]
@@ -406,6 +433,7 @@
 
 
     [(int32x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int32))]
+    [(int32x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int32))]
     [(int32x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int32))]
     [(int32x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int32))]
     [(int32x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int32))]
@@ -414,6 +442,7 @@
     
 
     [(uint64x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint64))]
+    [(uint64x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint64))]
     [(uint64x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint64))]
     [(uint64x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint64))]
     [(uint64x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'uint64))]
@@ -422,6 +451,7 @@
 
 
     [(int64x8 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int64))]
+    [(int64x16 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int64))]
     [(int64x32 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int64))]
     [(int64x64 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int64))]
     [(int64x128 vec) (lambda (i) (cpp:cast ((interpret vec) i) 'int64))]
@@ -530,15 +560,15 @@
     [(load-sca buf idx) empty-list]
 
     ;; Type Casts
-    [(uint8x1 sca) (list extract sign-extend zero-extend)]
-    [(uint16x1 sca) (list  extract sign-extend zero-extend)]    
-    [(uint32x1 sca) (list  extract sign-extend zero-extend)]
-    [(uint64x1 sca) (list  extract sign-extend zero-extend)]
+    [(uint8x1 sca) (list extract  zero-extend)]
+    [(uint16x1 sca) (list  extract  zero-extend)]    
+    [(uint32x1 sca) (list  extract  zero-extend)]
+    [(uint64x1 sca) (list  extract  zero-extend)]
 
-    [(int8x1 sca) (list  extract sign-extend zero-extend)]
-    [(int16x1 sca) (list  extract sign-extend zero-extend)]
-    [(int32x1 sca) (list  extract sign-extend zero-extend)]
-    [(int64x1 sca) (list  extract sign-extend zero-extend)]
+    [(int8x1 sca) (list  extract sign-extend )]
+    [(int16x1 sca) (list  extract sign-extend )]
+    [(int32x1 sca) (list  extract sign-extend )]
+    [(int64x1 sca) (list  extract sign-extend )]
 
     ;[(uint1x32 vec) NYI: Not sure what would be casted into uint1?]
     ;[(uint1x64 vec) NYI: Not sure what would be casted into uint1?]
@@ -546,110 +576,118 @@
     ;[(uint1x256 vec) NYI: Not sure what would be casted into uint1?]    
 
 
-    [(uint8x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint8x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint8x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint8x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint8x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint8x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(uint8x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint8x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint8x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint8x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint8x128 vec) (append (list  extract zero-extend) (get-bv-ops vec))]
+    [(uint8x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint8x512 vec) (append (list  extract zero-extend) (get-bv-ops vec))]
 
 
-    [(int8x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int8x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int8x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int8x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int8x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int8x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int8x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int8x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
 
 
-    [(uint16x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint16x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint16x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint16x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint16x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint16x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(uint16x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint16x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
 
 
 
-    [(int16x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int16x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int16x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int16x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int16x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int16x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     
 
-    [(uint32x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint32x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint32x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint32x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint32x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint32x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(uint32x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
 
 
-    [(int32x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int32x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int32x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int32x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int32x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int32x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     
 
-    [(uint64x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint64x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint64x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint64x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint64x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(uint64x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(uint64x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x128 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x256 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint64x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
 
 
 
-    [(int64x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int64x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int64x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int64x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int64x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
-    [(int64x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int64x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int64x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     
     ;; Operations
-    [(sca-add v1 v2) (append (list extract bvadd) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(sca-sub v1 v2) (append (list extract bvsub) (get-bv-ops v1)  (get-bv-ops v2) ) ]
-    [(sca-mul v1 v2) (append (list extract bvmul) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(sca-div v1 v2) (append (list  extract) (list (if (is-signed-expr? v1 v2) bvsdiv bvudiv) ) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(sca-mod v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsrem bvurem)) (list (if (is-signed-expr? v1 v2) bvsmod bvurem)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(sca-min v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmin bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(sca-max v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(sca-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) ) ]
+    [(sca-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv) (list zero-extend bvudiv))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsrem bvsmod) (list zero-extend bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsmin) (list zero-extend bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-max v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsmax) (list zero-extend bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(sca-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(sca-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
-    [(sca-lt v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvslt bvult)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(sca-le v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvsle bvule)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-lt v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvslt) (list zero-extend bvult))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(sca-le v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(sca-absd v1 v2) (append (list abs bvsub) (list (if (is-signed-expr? v1 v2) bvsge bvuge)) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (list (if (is-signed-expr? v1 v2) bvsmin bvumin)) (get-bv-ops v1) (get-bv-ops v2))]
-    [(sca-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
-    [(sca-shr v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvashr bvlshr)) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-absd v1 v2) (append (list abs bvsub) (if (is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shl v1 v2) (append (list bvshl bvmul) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr bvsdiv sign-extend) (list bvlshr bvudiv zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
 
     [(sca-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
     
-    [(vec-add v1 v2) (append (list extract bvadd) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-sub v1 v2) (append (list extract bvsub) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-div v1 v2) (append (list  extract) (list (if (is-signed-expr? v1 v2) bvsdiv bvudiv) ) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-mod v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsrem bvurem)) (list (if (is-signed-expr? v1 v2) bvsmod bvurem)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-min v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmin bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv) (list zero-extend bvudiv))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsrem bvsmod) (list zero-extend bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsmin) (list zero-extend bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-max v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
-    [(vec-lt v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvslt bvult)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-le v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvsle bvule)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-lt v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvslt) (list zero-extend bvult))   (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-le v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (list (if (is-signed-expr? v1 v2) bvashr bvlshr)) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-absd v1 v2) (append (list abs bvsub) (list (if (is-signed-expr? v1 v2) bvsge bvuge)) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (list (if (is-signed-expr? v1 v2) bvsmin bvumin)) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl bvmul) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr bvsdiv sign-extend) (list bvlshr bvudiv zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-absd v1 v2) (append (list abs bvsub) (if (is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 
     [(vec-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
@@ -657,7 +695,7 @@
     [(vector_reduce op width vec)
      (cond
        [(eq? op 'add)
-        (append (list extract bvadd) (get-bv-ops vec))]
+        (append (list extract bvadd bvmul) (if (is-signed-expr? vec vec) (list sign-extend) (list  zero-extend )) (get-bv-ops vec))]
        [else (error "Unexpected vector_reduce op:" op)])]
 
     ;; Shuffles
@@ -733,62 +771,73 @@
     [else (mk-cpp-type max-bw #t)]))
 
 (define (do-add lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (+ lhs rhs)]
-    [else
+  ;(cond
+  ;  [(and (integer? lhs) (integer? rhs))
+  ;   (+ lhs rhs)]
+  ;  [else
      (define outT (infer-out-type lhs rhs))
      (define res (mk-cpp-expr (bvadd (cpp:eval lhs) (cpp:eval rhs)) outT))
        res
-       ]))
+   ;    ])
+   )
   
 
 (define (do-sub lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (- lhs rhs)]
-    [else
+  ;(cond
+    ;[(and (integer? lhs) (integer? rhs))
+    ; (- lhs rhs)]
+    ;[else
      (define outT (infer-out-type lhs rhs))
-     (mk-cpp-expr (bvsub (cpp:eval lhs) (cpp:eval rhs)) outT)]))
+     (mk-cpp-expr (bvsub (cpp:eval lhs) (cpp:eval rhs)) outT)
+     ;])
+     )
 
 (define (do-mul lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (* lhs rhs)]
-    [else
+  ;(cond
+  ;  [(and (integer? lhs) (integer? rhs))
+  ;   (* lhs rhs)]
+  ;  [else
      (define outT (infer-out-type lhs rhs))
-     (mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)]))
+     (mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)
+  ;   ])
+)
 
 (define (do-div lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (quotient lhs rhs)]
-    [else
+  ;(cond
+  ;  [(and (integer? lhs) (integer? rhs))
+  ;   (quotient lhs rhs)]
+  ;  [else
      (define outT (infer-out-type lhs rhs))
      (cond
        [(cpp:signed-type? outT)
         ;(cpp:euclidean-div lhs rhs outT)]
         (mk-cpp-expr (bvsdiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
        [else
-        (mk-cpp-expr (bvudiv (cpp:eval lhs) (cpp:eval rhs)) outT)])]))
+        (mk-cpp-expr (bvudiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
+       )
+     ;])
+)
 
 (define (do-mod lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (remainder lhs rhs)]
-    [else
+ ; (cond
+ ;   [(and (integer? lhs) (integer? rhs))
+ ;    (remainder lhs rhs)]
+ ;   [else
      (define outT (infer-out-type lhs rhs))
      (cond
        [(cpp:signed-type? outT)
         (mk-cpp-expr (bvsrem (cpp:eval lhs) (cpp:eval rhs)) outT)]
        [else
-        (mk-cpp-expr (bvurem (cpp:eval lhs) (cpp:eval rhs)) outT)])]))
+        (mk-cpp-expr (bvurem (cpp:eval lhs) (cpp:eval rhs)) outT)]
+       )
+     ;])
+)
 
 (define (do-min lhs rhs)
-  (cond
-    [(and (integer? lhs) (integer? rhs))
-     (min lhs rhs)]
-    [else
+  ;(cond
+  ;  [(and (integer? lhs) (integer? rhs))
+  ;   (min lhs rhs)]
+  ;  [else
      (define outT (infer-out-type lhs rhs))
      (cond
        [(cpp:signed-type? outT)
@@ -807,7 +856,9 @@
             [(eq? (cpp:type-bw outT) 32) cpp:minu32]
             [(eq? (cpp:type-bw outT) 64) cpp:minu64]))
 
-        (minF lhs rhs)])]))
+        (minF lhs rhs)])
+     ;])
+)
 
 (define (do-max lhs rhs)
   (cond
@@ -837,8 +888,10 @@
   (define outT (cpp:type lhs))
   (cond
     [(cpp:signed-type? outT)
+     ;(displayln "ARETHMETIC RIGHT SHIFT")
      (mk-cpp-expr (bvashr (cpp:eval lhs) (cpp:eval rhs)) outT)]
     [else
+     ;(displayln "LOGICAL RIGHT SHIFT")
      (mk-cpp-expr (bvlshr (cpp:eval lhs) (cpp:eval rhs)) outT)]))
 
 (define (do-shl lhs rhs)
@@ -912,6 +965,10 @@
 
 (define (do-reduce vec op base width)
   (define outT (cpp:type (vec 0)))
+  ;(printf "outT: ~a\n" outT)
+  ;(printf "Base: ~a\n" base)
+  ;(printf "Width: ~a\n" width)
+
   (mk-cpp-expr
    (cond
      [(eq? width 2) (op (cpp:eval (vec base)) (cpp:eval (vec (+ base 1))))]

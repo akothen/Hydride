@@ -1623,7 +1623,7 @@
                                 (define %4 (+  j0.new  %lastidx1))
                                 (define %5 (extract  %4 j0.new a))
                                 (define %7 (extract  %4 j0.new count))
-                                (define %8 (bvashr  %5  %7))
+                                (define %8 (bvlshr  %5  %7))
                                 %8
                                 )
                               (begin
@@ -3290,7 +3290,7 @@
                                 (define %highidx1 (+  %lastidx3  %arg5))
                                 (define %7 (extract  %highidx1 %arg5 imm8))
                                 (define %8 (zero-extend  %7 (bitvector %arg2)))
-                                (define %9 (bvlshr  %6  %8))
+                                (define %9 (bvshl  %6  %8))
                                 %9
                                 )
                               )
@@ -4244,7 +4244,7 @@
                                 (define %4 (+  j0.new  %lastidx1))
                                 (define %5 (extract  %4 j0.new a))
                                 (define %7 (extract  %4 j0.new count))
-                                (define %8 (bvlshr  %5  %7))
+                                (define %8 (bvshl  %5  %7)) ;; MODIFIED
                                 %8
                                 )
                               (begin
