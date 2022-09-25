@@ -1,16 +1,6 @@
 *.a
-*.h
 *.s
 *.swp
-box_blur/*.schedule
-camera_pipe/*.schedule
-conv3x3a16/*.schedule
-conv3x3a32/*.schedule
-dilate3x3/*.schedule
-gaussian5x5/*.schedule
-mat_mul/*.schedule
-median3x3/*.schedule
-sobel/*.schedule
 */samples/*/*/bench
 *.data
 *.registration*
