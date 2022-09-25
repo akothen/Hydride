@@ -1,1 +1,0 @@
-Benchmark for dilate3x3_batch_02_sample_14 produces best case of 0.000138276 sec/iter (over 11 samples, 2618 iterations, accuracy 6.6%); best throughput is 7.2e+03 mpix/sec.

@@ -1,1 +1,0 @@
-Benchmark for box_blur_batch_01_sample_07 produces best case of 0.00193042 sec/iter (over 3 samples, 96 iterations, accuracy 0.17%); best throughput is 1.5e+04 mpix/sec.

@@ -1,1 +1,0 @@
-Benchmark for camera_pipe_batch_01_sample_00 produces best case of 0.00355877 sec/iter (over 6 samples, 108 iterations, accuracy 4.5%); best throughput is 1.3e+03 mpix/sec.
