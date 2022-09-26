@@ -378,8 +378,8 @@ class RoseSimilarityChecker():
           continue
     # Try another heuristic
     print("****TRY NEW HEURISTIC****")
-    #self.reorderArgsAndPerformSimilarityChecking()
-    self.eliminateUnecessaryArgs()
+    self.reorderArgsAndPerformSimilarityChecking()
+    #self.eliminateUnecessaryArgs()
     # Summmarize
     self.summarize()
     # Generate LLVM intrinsics
@@ -623,7 +623,7 @@ class RoseSimilarityChecker():
   def canonicalizeEquivalenceClasses(self):
     for EquivalenceClass in self.EquivalenceClasses:
       Function = EquivalenceClass.getAFunction()
-      CanonicalizedFunction = self.canonicalizeEquivalenceClasses(Function)
+      CanonicalizedFunction = self.canonicalizeFunctionArgs(Function)
       if Function != CanonicalizedFunction:
         ArgPermutation = self.FunctionToArgPermutationMap[CanonicalizedFunction]
         for EqFunction in EquivalenceClass.getEquivalentFunctions():
@@ -636,7 +636,13 @@ class RoseSimilarityChecker():
           CopyFuncArgsToConcreteValMap = self.getFunctionToArgMapping(EqFunction, \
                                 OrgFuncArgsToConcreteValMap, FunctionCopy, ArgPermutation)
           EquivalenceClass.replaceFunction(EqFunction, FunctionCopy, CopyFuncArgsToConcreteValMap)
-          self.FunctionToCopies[Function] = [FunctionCopy]
+          FunctionCopyInfo = RoseFunctionInfo()
+          FunctionCopyInfo.addFunctionAtNewStage(FunctionCopy)
+          FunctionCopyInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
+          self.FunctionToFunctionInfo[FunctionCopy] = FunctionCopyInfo
+          self.FunctionToRosetteCodeMap[FunctionCopy] = \
+                                    RosetteGen.CodeGen(FunctionCopy)
+          #self.FunctionToCopies[Function] = [FunctionCopy]
 
 
   def createPermutatedFunction(self, OriginalFunction : RoseFunction, ArgPermutation : list):
@@ -714,11 +720,15 @@ class RoseSimilarityChecker():
         if self.doFunctionsQualifyForSimilarityChecking(Function, CheckFunction)  == False:
           continue
         # Generate different permutations of CheckFunction
-        if CheckFunction in self.FunctionToCopies:
-          CheckFunctionList = self.FunctionToCopies[CheckFunction]
+        if CheckFunction in self.CopyFunctionToOriginalMap:
+          OriginalCheckFunction = self.CopyFunctionToOriginalMap[CheckFunction]
+        else:
+          OriginalCheckFunction = CheckFunction
+        if OriginalCheckFunction in self.FunctionToCopies:
+          CheckFunctionList = self.FunctionToCopies[OriginalCheckFunction]
           print("OBTAINED FROM CACHE")
         else:
-          CheckFunctionList = self.generateFunctionPermutations(CheckFunction)
+          CheckFunctionList = self.generateFunctionPermutations(OriginalCheckFunction)
           print("FRESHLY COMPUTED PERMUTATIONS")
         if len(CheckFunctionList) == 0:
           continue
@@ -746,27 +756,31 @@ class RoseSimilarityChecker():
                                     RosetteGen.CodeGen(PermCheckFunction)
           # Map args to concrete values
           ArgPermutation = self.FunctionToArgPermutationMap[PermCheckFunction]
-          CheckFunctionInfo = self.FunctionToFunctionInfo[CheckFunction]
+          CheckFunctionInfo = self.FunctionToFunctionInfo[OriginalCheckFunction]
           CheckArgsToConcreteValMap = CheckFunctionInfo.getArgsToConcreteValMap()
-          PermArgsToConcreteValMap = self.getFunctionToArgMapping(CheckFunction, \
+          PermArgsToConcreteValMap = self.getFunctionToArgMapping(OriginalCheckFunction, \
                             CheckArgsToConcreteValMap, PermCheckFunction, ArgPermutation)
           PermCheckFunctionInfo.addArgsToConcreteMap(PermArgsToConcreteValMap)
           # Perform verification
           VerifyResult = self.verify(self.FunctionToFunctionInfo[Function], PermCheckFunctionInfo)
           if VerifyResult == True:
-            print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
+            print("Merged {} and {} eq class".format(Function.getName(), OriginalCheckFunction.getName()))
             # Merge the two equivalent classes
             CheckedEqFunctions = CheckEquivalenceClass.getEquivalentFunctions()
             print("CheckedEqFunctions:")
             print(CheckedEqFunctions)
             PermutedCheckFunctions = list()
             FunctionToArgsMapping = dict()
-            for OrgFunction in CheckedEqFunctions:
-              print("OrgFunction:")
-              OrgFunction.print()
-              print("CheckFunction:")
-              CheckFunction.print()
-              if OrgFunction == CheckFunction:
+            for EqFunction in CheckedEqFunctions:
+              print("EqFunction:")
+              EqFunction.print()
+              if EqFunction in self.CopyFunctionToOriginalMap:
+                OrgFunction = self.CopyFunctionToOriginalMap[EqFunction]
+              else:
+                OrgFunction = EqFunction
+              print("OriginalCheckFunction:")
+              OriginalCheckFunction.print()
+              if OrgFunction == OriginalCheckFunction:
                 PermutedCheckFunctions.append(PermCheckFunction)
                 FunctionToArgsMapping[PermCheckFunction] = PermArgsToConcreteValMap
                 self.completeFunctionInfo(PermCheckFunctionInfo, CheckFunctionInfo, ArgPermutation)
@@ -1167,7 +1181,6 @@ class RoseSimilarityChecker():
         print("--NEW FUNCTION:")
         Function.print()
 
-
   def verifyParallel(self, FunctionInfo1 : RoseFunctionInfo, \
                    FunctionInfo2 : RoseFunctionInfo):
     if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2) == False:
@@ -1539,8 +1552,6 @@ class RoseSimilarityChecker():
     #self.genLLVMIntrinsics()
     # Generate Rose IR to LLVM IR mappings
     #self.genRoseIRToLLVMIRMappings()
-
-
 
 if __name__ == '__main__':
   #SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
