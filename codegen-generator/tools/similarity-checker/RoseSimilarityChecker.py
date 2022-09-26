@@ -26,7 +26,7 @@ EquivalenceClassesLock = threading.Lock()
 EQToEQMapLock = threading.Lock()
 RegionLock = threading.Lock()
 
-NumThreads = 20
+NumThreads = 48
 
 
 class RoseSimilarityChecker():
@@ -878,7 +878,6 @@ class RoseSimilarityChecker():
 
   def replaceUsesAndPropagateTypes(self, Region : RoseRegion, Arg : RoseArgument, NewVal : RoseConstant):
     assert isinstance(NewVal, RoseConstant)
-    Ops = Region.getOpsOf(Arg)
     BitvectorToBitwidth = dict()
     # Iterate over all blocks and all operations to propagate type information
     if not isinstance(Region, RoseBlock):
@@ -892,6 +891,8 @@ class RoseSimilarityChecker():
             if Op.getOutputBitwidth() == Arg:
               BitvectorToBitwidth[Op] = NewVal.getValue()
               Op.setOperand(Op.getBitwidthPos(), NewVal)
+              continue
+          Op.replaceUsesWith(Arg, NewVal)
           continue
         if isinstance(Op, RoseBVInsertSliceOp):
           if isinstance(Op.getOutputBitwidth(), RoseArgument):
@@ -900,6 +901,7 @@ class RoseSimilarityChecker():
               BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getValue()
               Op.getInsertValue().setType(RoseBitVectorType.create(Arg.getType().getBitwidth()))
               Op.setOperand(Op.getBitwidthPos(), NewVal)
+              continue
           elif Op.getInputBitVector() == Arg:
             assert isinstance(NewVal.getType().getBitwidth(), int)
             Op.setOperand(Op.getBitwidthPos(), RoseConstant(NewVal.getType().getBitwidth(), \
@@ -907,6 +909,16 @@ class RoseSimilarityChecker():
             BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
             BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getType().getBitwidth()
             Op.setOperand(0, NewVal)
+            continue
+          Op.replaceUsesWith(Arg, NewVal)
+          continue
+        if Op.isSizeChangingOp():
+          if Op.getOperand(1) == Arg:
+            Op.setOperand(1, NewVal)
+            BitvectorToBitwidth[Op] = NewVal.getValue()
+          elif Op.getInputBitVector() == Arg:
+            Op.setOperand(0, NewVal) 
+            BitvectorToBitwidth[Op.getInputBitVector()] = NewVal.getType().getBitwidth()
           continue
         if Op.getOpcode().typesOfInputsAndOutputEqual():
           if Arg in Op.getOperands():
@@ -987,7 +999,7 @@ class RoseSimilarityChecker():
             Op.setType(Op.getThenValue().getType())
             BitvectorToBitwidth[Op] = Op.getThenValue().getType().getBitwidth()
             continue
-          for OperandIndex, Operand in enumerate(Op.sgetOperands()):
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
             if OperandIndex == 0:
               continue
             if Operand == Arg:
@@ -1504,213 +1516,6 @@ class RoseSimilarityChecker():
           EQToEQMapLock.release()
         continue
 
-
-  def lambdaFunctionForSimilarityChecking2(self, FunctionInfo):
-    Function = FunctionInfo.getLatestFunction()
-    EquivalentClass = None
-    #print("ACQUIRE1 {}".format(threading.current_thread().ident))
-    RegionLock.acquire()
-    #print("ACQUIRED1 {}".format(threading.current_thread().ident))
-    if Function in self.FunctionToEquivalenceClassMap:
-      EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
-    #print("RELEASE1 {}".format(threading.current_thread().ident))
-    RegionLock.release()
-    #print("RELEASED1 {}".format(threading.current_thread().ident))
-    for CheckFunctionInfo in self.FunctionInfoList:
-      CheckFunction = CheckFunctionInfo.getLatestFunction()
-      print("---------------------------------------------------")
-      print("Function:")
-      print(Function.getName())
-      print("CheckFunction:")
-      print(CheckFunction.getName())
-      if Function == CheckFunction:
-        print("FUNCTIONS ARE EQUAL")
-        continue
-      CheckedEquivalentClass = None
-      #print("ACQUIRE2 {}".format(threading.current_thread().ident))
-      RegionLock.acquire()
-      #print("ACQUIRED2 {}".format(threading.current_thread().ident))
-      if CheckFunction in self.FunctionToEquivalenceClassMap:
-        CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
-      #print("RELEASE2 {}".format(threading.current_thread().ident))
-      RegionLock.release()
-      #print("RELEASED2 {}".format(threading.current_thread().ident))
-      # Perform similarity checking
-      # Case 1:
-      if EquivalentClass != None and CheckedEquivalentClass != None:
-        #assert EquivalentClass in self.EquivalenceClasses
-        #assert CheckedEquivalentClass in self.EquivalenceClasses
-        if EquivalentClass == CheckedEquivalentClass:
-          continue
-        # Do we know what the equivalence relation between the two classes?
-        #print("ACQUIRE3 {}".format(threading.current_thread().ident))
-        RegionLock.acquire()
-        #print("ACQUIRED3 {}".format(threading.current_thread().ident))
-        if (EquivalentClass, CheckedEquivalentClass) in self.EQToEQMap:
-          assert (CheckedEquivalentClass, EquivalentClass) in self.EQToEQMap
-          VerifyResult = self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)]
-          #print("RELEASE3 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED3 {}".format(threading.current_thread().ident))
-        else:
-          #print("--RELEASE3 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("--RELEASED3 {}".format(threading.current_thread().ident))
-          VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo) 
-          if VerifyResult == True:
-            print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
-            # Merge the two equivalent classes
-            EqFunctions = CheckedEquivalentClass.getEquivalentFunctions()
-            EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctToArgsMapping())
-            #print("ACQUIRE4 {}".format(threading.current_thread().ident))
-            RegionLock.acquire()
-            #print("ACQUIRED4 {}".format(threading.current_thread().ident))
-            for EqFunction in EqFunctions:
-              self.FunctionToEquivalenceClassMap[EqFunction] = EquivalentClass
-            if CheckedEquivalentClass in self.EquivalenceClasses:
-              self.EquivalenceClasses.remove(CheckedEquivalentClass)
-            #print("RELEASE4 {}".format(threading.current_thread().ident))
-            RegionLock.release()
-            #print("RELEASED4 {}".format(threading.current_thread().ident))
-          #print("ACQUIRE5 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED5 {}".format(threading.current_thread().ident))
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          #print("RELEASE5 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED5 {}".format(threading.current_thread().ident))
-        continue
-      # Case 2:
-      if EquivalentClass == None and CheckedEquivalentClass != None:
-        #assert CheckedEquivalentClass in self.EquivalenceClasses
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          #print("ACQUIRE6 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED6 {}".format(threading.current_thread().ident))
-          if CheckedEquivalentClass in self.EquivalenceClasses:
-            self.EquivalenceClasses.remove(CheckedEquivalentClass)
-          #print("RELEASE6 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED6 {}".format(threading.current_thread().ident))
-          print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-          CheckedEquivalentClass.addFunction(Function)
-          CheckedEquivalentClass.addFunctToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap())
-          #print("ACQUIRE7 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED7 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          #print("RELEASE7 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED7 {}".format(threading.current_thread().ident))
-        else:
-          EquivalentClass = RoseEquivalenceClass()
-          print("--Added {} to new eq class".format(Function.getName()))
-          EquivalentClass.addFunction(Function)
-          EquivalentClass.addFunctToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap()) 
-          #print("ACQUIRE8 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED8 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          self.EquivalenceClasses.add(EquivalentClass)
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          #print("RELEASE8 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED8 {}".format(threading.current_thread().ident))
-        continue
-      # Case 3:
-      if EquivalentClass != None and CheckedEquivalentClass == None:
-        #assert EquivalentClass in self.EquivalenceClasses
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          #print("ACQUIRE9 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED9 {}".format(threading.current_thread().ident))
-          if EquivalentClass in self.EquivalenceClasses:
-            self.EquivalenceClasses.remove(EquivalentClass)
-          #print("RELEASE9 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED9 {}".format(threading.current_thread().ident))
-          print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
-          EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap())   
-          #print("ACQUIRE10 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED10 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-          self.EquivalenceClasses.add(EquivalentClass)
-          #print("RELEASE10 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED10 {}".format(threading.current_thread().ident))
-        else:
-          CheckedEquivalentClass = RoseEquivalenceClass()
-          print("--Added {} to new eq class".format(CheckFunction.getName()))
-          CheckedEquivalentClass.addFunction(CheckFunction)
-          CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap())
-          #print("ACQUIRE11 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED11 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          #print("RELEASE11 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED11 {}".format(threading.current_thread().ident))
-        continue
-      # Case 4:
-      if EquivalentClass == None and CheckedEquivalentClass == None:
-        VerifyResult = self.verifyParallel(FunctionInfo, CheckFunctionInfo)
-        if VerifyResult == True:
-          EquivalentClass = RoseEquivalenceClass()
-          EquivalentClass.addFunction(Function)
-          EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap())
-          EquivalentClass.addFunctToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap()) 
-          #print("ACQUIRE12 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED12 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
-          self.EquivalenceClasses.add(EquivalentClass)
-          #print("RELEASE12 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED12 {}".format(threading.current_thread().ident))
-        else:
-          EquivalentClass = RoseEquivalenceClass()
-          CheckedEquivalentClass = RoseEquivalenceClass()
-          print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
-          EquivalentClass.addFunction(Function)
-          CheckedEquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(Function, \
-                                        FunctionInfo.getArgsToConcreteValMap()) 
-          CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
-                                        CheckFunctionInfo.getArgsToConcreteValMap()) 
-          #print("ACQUIRE13 {}".format(threading.current_thread().ident))
-          RegionLock.acquire()
-          #print("ACQUIRED13 {}".format(threading.current_thread().ident))
-          self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
-          self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
-          self.EquivalenceClasses.add(EquivalentClass)
-          self.EquivalenceClasses.add(CheckedEquivalentClass)
-          self.EQToEQMap[(EquivalentClass, CheckedEquivalentClass)] = VerifyResult
-          self.EQToEQMap[(CheckedEquivalentClass, EquivalentClass)] = VerifyResult
-          #print("RELEASE13 {}".format(threading.current_thread().ident))
-          RegionLock.release()
-          #print("RELEASED13 {}".format(threading.current_thread().ident))
-        continue
-
-
-  #def populateEquivalenceClasses(self):
 
   def parallelizeSimilarityChecking(self):
     # Track verification results
