@@ -95,7 +95,7 @@ def create_vector_load_dsl(input_vector_sizes = [],
             lanesize_index = 1,
             in_precision_index = 4,
             out_precision_index = 4,
-            cost = "",
+            cost = "2",
         )
 
     return vec_load_dsl
@@ -137,10 +137,158 @@ def create_two_input_swizzle(input_vector_sizes = [],
             lanesize_index = 5,
             in_precision_index = 3,
             out_precision_index = 3,
-            cost = "",
+            cost = "2",
         )
 
     return swizzle_dsl
+
+
+
+interleave_two_vectors_sema = [
+    "(define (interleave-vectors v1 v2 size prec)",
+    "(define num-elems (/ size prec))",
+    "(apply concat",
+    "(for/list ([i (reverse (range num-elems))])",
+    "(define low (* prec i))",
+    "(define high (+ low (- prec 1)))",
+    "(define v1-extract (extract high low v1))",
+    "(define v2-extract (extract high low v2))",
+    "(concat v1-extract v2-extract)",
+    ")",
+    ")",
+    ")"
+]
+
+
+def create_interleave_two_dsl(input_vector_sizes = [],
+                              precisions = []):
+    vec_interleave_two_dsl = DSLInstruction(name = "interleave-vectors", simd = False,
+                                            operation = False, semantics = interleave_two_vectors_sema)
+
+
+    for i in range(0, len(input_vector_sizes)):
+        vec_interleave_two_dsl.add_context(
+            name = "interleave-vectors-{}-{}".format(input_vector_sizes[i], precisions[i]),
+            in_vectsize = input_vector_sizes[i],
+            out_vectsize = input_vector_sizes[i] * 2,
+            lane_size = input_vector_sizes[i],
+            in_precision = precisions[i],
+            out_precision = precisions[i],
+            SIMD = "False",
+            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),"SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
+                    str(precisions[i])],
+            in_vectsize_index = 2,
+            out_vectsize_index = 2,
+            lanesize_index = 2,
+            in_precision_index = 3,
+            out_precision_index = 3,
+            cost = "2",
+        )
+
+    return vec_interleave_two_dsl
+
+
+interleave_vector_sema = [
+    " (define (interleave-vector v1 size prec) ",
+    "   (define num-elems (/ size prec)) ",
+    "   (define base (/ num-elems 2)) ",
+    "   (apply concat ",
+    "          (for/list ([i (range num-elems)]) ",
+    "                    (define offset-index ",
+    "                      (cond  ",
+    "                        [(eq? (modulo i 2) 0) (/ i 2)] ",
+    "                        [else (+ base (- (/ (+ i 1) 2) 1))] ",
+    "                        ) ",
+    "                      ) ",
+    "                    (define random-index (- num-elems 1 offset-index)) ",
+    "                    (define low-index (* random-index prec)) ",
+    "                    (define high-index (+ low-index (- prec 1))) ",
+    "                    (extract high-index low-index v1) ",
+    "                    ) ",
+    "          ) ",
+    "   ) "
+]
+
+
+def create_interleave_dsl(input_vector_sizes = [],
+                          precisions = []):
+    vec_interleave_dsl = DSLInstruction(name = "interleave-vector", simd = False,
+                                        operation = False, semantics = interleave_vector_sema)
+
+
+    for i in range(0, len(input_vector_sizes)):
+        vec_interleave_dsl.add_context(
+            name = "interleave-vector-{}-{}".format(input_vector_sizes[i], precisions[i]),
+            in_vectsize = input_vector_sizes[i],
+            out_vectsize = input_vector_sizes[i],
+            lane_size = input_vector_sizes[i],
+            in_precision = precisions[i],
+            out_precision = precisions[i],
+            SIMD = "False",
+            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
+                    str(precisions[i])],
+            in_vectsize_index = 1,
+            out_vectsize_index = 1,
+            lanesize_index = 1,
+            in_precision_index = 2,
+            out_precision_index = 2,
+            cost = "2",
+        )
+
+    return vec_interleave_dsl
+
+
+deinterleave_vector_sema = [
+    " (define (deinterleave-vector v1 size prec) ",
+    "   (define num-elems (/ size prec)) ",
+    "   (define base (/ num-elems 2)) ",
+    "   (apply concat ",
+    "          (for/list ([i (range num-elems)]) ",
+    "                    (define offset-index ",
+    "                      (cond  ",
+    "                        [(< i base) (* i 2)] ",
+    "                        [else (- (* (+ (- i base) 1) 2) 1)] ",
+    "                        ) ",
+    "                      ) ",
+    "                    (define random-index (- num-elems 1 offset-index)) ",
+    "                    (define low-index (* random-index prec)) ",
+    "                    (define high-index (+ low-index (- prec 1))) ",
+    "                    (extract high-index low-index v1) ",
+    "                    ) ",
+    "          ) ",
+    "  ",
+    "   ) "
+]
+
+
+
+def create_deinterleave_dsl(input_vector_sizes = [],
+                            precisions = []):
+    vec_deinterleave_dsl = DSLInstruction(name = "deinterleave-vector", simd = False,
+                                          operation = False, semantics = deinterleave_vector_sema)
+
+
+    for i in range(0, len(input_vector_sizes)):
+        vec_deinterleave_dsl.add_context(
+            name = "deinterleave-vector-{}-{}".format(input_vector_sizes[i], precisions[i]),
+            in_vectsize = input_vector_sizes[i],
+            out_vectsize = input_vector_sizes[i],
+            lane_size = input_vector_sizes[i],
+            in_precision = precisions[i],
+            out_precision = precisions[i],
+            SIMD = "False",
+            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(input_vector_sizes[i]),
+                    str(precisions[i])],
+            in_vectsize_index = 1,
+            out_vectsize_index = 1,
+            lanesize_index = 1,
+            in_precision_index = 2,
+            out_precision_index = 2,
+            cost = "2",
+        )
+
+    return vec_deinterleave_dsl
+
 
 # Placeholder instruction definition to faciliate other classes
 # emitting racket code for interpreter
@@ -164,3 +312,28 @@ dummy_vector_swizzle_dsl = create_two_input_swizzle(
 )
 
 
+dummy_vector_two_interleave_dsl = create_interleave_two_dsl(
+    input_vector_sizes = [128],
+    precisions = [16]
+)
+
+
+dummy_vector_interleave_dsl = create_interleave_dsl(
+    input_vector_sizes = [128],
+    precisions = [16]
+)
+
+
+dummy_vector_deinterleave_dsl = create_deinterleave_dsl(
+    input_vector_sizes = [128],
+    precisions = [16]
+)
+
+
+default_structs = [
+    dummy_vector_load_dsl,
+    dummy_vector_swizzle_dsl,
+    dummy_vector_two_interleave_dsl,
+    dummy_vector_interleave_dsl,
+    dummy_vector_deinterleave_dsl,
+]

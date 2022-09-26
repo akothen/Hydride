@@ -33,11 +33,17 @@ class IRPrinter:
         load_len_str = "(string-append \"({} \"".format(dummy_vector_load_dsl.get_dsl_name())
         load_len_expr = "(* {} {})".format(load_args[3].name, load_args[4].name)
 
-        defaults.append(self.emit_print_clause(dummy_vector_load_dsl, struct_definer))
+        #defaults.append(self.emit_print_clause(dummy_vector_load_dsl, struct_definer))
 
         # Special case handling for two input swizzle
 
-        defaults.append(self.emit_print_clause(dummy_vector_swizzle_dsl, struct_definer))
+        #defaults.append(self.emit_print_clause(dummy_vector_swizzle_dsl, struct_definer))
+
+
+        for structs in default_structs:
+            defaults.append(self.emit_print_clause(structs, struct_definer))
+
+
 
         return ["\t{}".format(d) for d in defaults]
 

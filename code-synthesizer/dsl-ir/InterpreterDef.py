@@ -16,7 +16,7 @@ class InterpreterDef:
         defaults.append("[(dim-y id) (vector-ref {} (- (vector-length {}) 1))]".format(env_name, env_name))
         defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 4))]".format(env_name, env_name))
         defaults.append("[(idx-j id) (vector-ref {} (- (vector-length {}) 3))]".format(env_name, env_name))
-        defaults.append("[(reg id) (vector-ref {} id)]".format(env_name))
+        defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 
@@ -24,18 +24,9 @@ class InterpreterDef:
         defaults.append("[(idx-add i1 i2) (+ (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
         defaults.append("[(idx-mul i1 i2) (* (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
 
-        choose_interpret = """
-	[ (vector-choose_dsl  num_elems)
-        (define random-regs (for/list ([i (range (vector-length {}))])  (reg i)))
-        (apply concat
-         (for/list ([i (range num_elems)])
-                  (interpret (apply choose* random-regs) {})
-            )
-         )
-	]""".format(env_name, env_name)
-        defaults.append(choose_interpret)
-        defaults.append(self.emit_interpret_def(dummy_vector_load_dsl, struct_definer)[1:])
-        defaults.append(self.emit_interpret_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
+        for structs in default_structs:
+            defaults.append(self.emit_interpret_def(structs, struct_definer)[1:])
+
 
         return ["\t{}".format(d) for d in defaults]
 

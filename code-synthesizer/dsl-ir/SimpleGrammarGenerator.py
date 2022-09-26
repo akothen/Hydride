@@ -36,19 +36,32 @@ class SimpleGrammarGenerator:
 
     def emit_lit_hole(self, bv_size, prec):
         splat_factor = bv_size // prec
-        return "(lit (create-splat-bv (?? (bitvector {})) {}))".format(prec, splat_factor)
+
+        sym_bv_str = "(create-symbolic-bv {})".format(prec)
+        sym_bv_str = "(?? (bitvector {}))".format(prec)
+        return "(lit (create-splat-bv {} {}))".format(sym_bv_str, splat_factor)
 
 
+    def emit_lit_0(self, bv_size, prec):
+        return "(lit (bv 0 (bitvector {})))".format(bv_size)
+
+
+    def emit_lit_1(self, bv_size, prec):
+        splat_factor = bv_size // prec
+        return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
 
 
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
 
 
-        hole = self.emit_lit_hole(bv_size, prec)
+        hole = "" # self.emit_lit_hole(bv_size, prec)
+        zero = self.emit_lit_0(bv_size, prec)
+        one = self.emit_lit_1(bv_size, prec)
 
 
-        return "\n\t".join([hole])
+
+        return "\n\t".join([hole,zero, one])
 
 
 
@@ -73,7 +86,7 @@ class SimpleGrammarGenerator:
 
         if num_inputs != None:
             for i in range(num_inputs):
-                choose_vars += "(reg {}) ".format(i)
+                choose_vars += "(reg (bv {} 4)) ".format(i)
 
 
 

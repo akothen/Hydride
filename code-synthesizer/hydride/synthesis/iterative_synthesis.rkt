@@ -68,6 +68,12 @@
 ;; values we return the counter example
 ;; which it failed on
 (define (verify-synth-sol sol bw-list invoke_ref solver)
+
+  ;;; Clear nay previous terms and collect garbage
+  (clear-vc!)
+  (clear-terms!)
+  (collect-garbage)
+
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
@@ -75,7 +81,8 @@
   (define cex 
     (verify 
       (assert
-        (equal?  (interpret sol symbols) (invoke_ref symbols) )
+        (bveq;equal?  
+          (interpret sol symbols) (invoke_ref symbols) )
         ))
     )
   (define end (current-seconds))
@@ -287,9 +294,9 @@
 
 
   ;; Clear the verification condition up till this point
-  ;(clear-vc!)
-  ;(clear-terms!)
-  ;(collect-garbage 'major)
+  (clear-vc!)
+  (clear-terms!)
+  (collect-garbage 'major)
 
   (debug-log "Garbage collected")
   ;; If the cexs is empty 
@@ -303,6 +310,8 @@
       cexs
       )
     )
+
+  (define output-size (bvlength (invoke_ref (list-ref cex-ls 0))))
 
   (debug-log "Concrete counter examples:")
   (debug-log cex-ls)
@@ -318,13 +327,23 @@
     ;(define word-size (bvlength lane-sol ))
     ;16
     ;32 - 1 = 32
-    ;(define interpret-res (extract (- (* 2 word-size) 1 ) word-size (interpret grammar env)))
-    
+
     (define full-interpret-res (interpret grammar env))
+    ;(define interpret-res (extract (- (* 2 word-size) 1 ) word-size full-interpret-res))
+
+    ;(println (invoke_ref env))
+    
+    ;(debug-log (format "Output size length is :~a\n" output-size))
+    
+    ;(println full-interpret-res)
+
+    (debug-log "Generated SMT constraints ... ")
 
     (begin
-        (assert (equal? (invoke_ref env)   full-interpret-res))
-        ;(assert (equal? lane-sol   interpret-res))
+        (assert (bveq (invoke_ref env)   full-interpret-res))
+        ;(assert (equal? lane-sol interpret-res))
+        ;(assert (equal? (get-length grammar env) output-size))
+
         )
     )
 
@@ -366,15 +385,15 @@
     (begin
       (debug-log "Unchecked solution:")
       (debug-log materialize)
-      (define cur-out-port (current-output-port))
-      (define cur-err-port (current-error-port))
-      (define cur-inp-port (current-input-port))
-      (define cur-solver (current-solver))
+      ;(define cur-out-port (current-output-port))
+      ;(define cur-err-port (current-error-port))
+      ;(define cur-inp-port (current-input-port))
+      ;(define cur-solver (current-solver))
 
-      (debug-log (format "Current Output port: ~a\n" cur-out-port))
-      (debug-log (format "Current Error  port: ~a\n" cur-err-port))
-      (debug-log (format "Current Input  port: ~a\n" cur-inp-port))
-      (debug-log (format "Current Solver: ~a\n" cur-solver))
+      ;(debug-log (format "Current Output port: ~a\n" cur-out-port))
+      ;(debug-log (format "Current Error  port: ~a\n" cur-err-port))
+      ;(debug-log (format "Current Input  port: ~a\n" cur-inp-port))
+      ;(debug-log (format "Current Solver: ~a\n" cur-solver))
 
       (define-values 
         (verified? new-cex) 
@@ -389,10 +408,10 @@
         )
 
 
-      (current-solver cur-solver)
-      (current-output-port cur-out-port)
-      (current-input-port cur-inp-port)
-      (current-error-port cur-err-port)
+      ;(current-solver cur-solver)
+      ;(current-output-port cur-out-port)
+      ;(current-input-port cur-inp-port)
+      ;(current-error-port cur-err-port)
 
 
       (if

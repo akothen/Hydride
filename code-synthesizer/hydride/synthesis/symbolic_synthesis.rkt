@@ -87,7 +87,7 @@
           #:guarantee 
           (begin 
             (assert 
-              (equal? 
+              (bveq ;equal? 
                 (interpret grammar symbols)  (invoke_ref symbols)
                 )
               )
@@ -104,7 +104,7 @@
           #:guarantee 
           (begin 
             (assert 
-              (equal? 
+              (bveq ;equal? 
                 (interpret grammar symbols)  (invoke_ref symbols)
                 )
               )

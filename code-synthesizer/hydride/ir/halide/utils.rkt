@@ -995,7 +995,7 @@
         (values (vec-broadcast n (arg 0)) 1)
         (begin
           (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (values (vector_reduce n leaf1-sol) args-used1)
+          (values (vec-broadcast n leaf1-sol) args-used1)
         )
         )
      ]

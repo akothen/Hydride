@@ -4,10 +4,10 @@ from PredefinedDSL import *
 import random
 
 DEBUG = True
-DEBUG_LIST = [ "_mm_mulhi_epu16"]
+DEBUG_LIST = ["_mm512_broadcastd_epi32",  "_mm512_dpwssd_epi32", "_mm256_cvtepi16_epi8"]
 SKIP_LIST = ["pack", "mask"]
 USE_BW_ALGO = False
-ENABLE_SHUFFLE = False
+ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 
@@ -25,7 +25,7 @@ class Synthesizer:
         self.grammar_generator = grammar_generator
         self.VF = vectorization_factor
         self.depth = depth
-        self.output_slice_length = self.VF * self.spec.output_precision
+        self.output_slice_length = self.spec.output_shape[0] * self.spec.output_shape[1] * self.spec.output_precision #self.VF * self.spec.output_precision
         self.contexts_per_dsl_inst = contexts_per_dsl_inst
         self.input_sizes = []
 
@@ -87,7 +87,105 @@ class Synthesizer:
                                       precisions = precisions)
 
 
-    def get_memory_shuffles(self):
+
+    def get_single_interleave_shuffles(self):
+        memo = []
+
+        input_vector_sizes = []
+        precisions = []
+
+        for idx, input_size in enumerate(self.input_sizes):
+            if not ENABLE_SHUFFLE:
+                continue
+            precision = self.spec.input_precision[idx]
+            number_elems = self.spec.input_shapes[idx][1]
+
+            # Scalar case, no need to shuffle
+            if number_elems == 1:
+                continue
+
+            datum = (input_size,precision)
+
+            if datum in memo:
+                continue
+            else:
+                memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            precisions.append(precision)
+
+        return create_interleave_dsl(
+            input_vector_sizes = input_vector_sizes,
+            precisions = precisions
+        )
+
+
+    def get_single_deinterleave_shuffles(self):
+        memo = []
+
+        input_vector_sizes = []
+        precisions = []
+
+        for idx, input_size in enumerate(self.input_sizes):
+            if not ENABLE_SHUFFLE:
+                continue
+            precision = self.spec.input_precision[idx]
+            number_elems = self.spec.input_shapes[idx][1]
+
+            # Scalar case, no need to shuffle
+            if number_elems == 1:
+                continue
+
+            datum = (input_size,precision)
+
+            if datum in memo:
+                continue
+            else:
+                memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            precisions.append(precision)
+
+        return create_deinterleave_dsl(
+            input_vector_sizes = input_vector_sizes,
+            precisions = precisions
+        )
+
+
+    def get_two_interleave_shuffles(self):
+        memo = []
+
+        input_vector_sizes = []
+        precisions = []
+
+        for idx, input_size in enumerate(self.input_sizes):
+            if not ENABLE_SHUFFLE:
+                continue
+            precision = self.spec.input_precision[idx]
+            number_elems = self.spec.input_shapes[idx][1]
+
+            # Scalar case, no need to shuffle
+            if number_elems == 1:
+                continue
+
+            datum = (input_size,precision)
+
+            if datum in memo:
+                continue
+            else:
+                memo.append(datum)
+
+            input_vector_sizes.append(input_size)
+            precisions.append(precision)
+
+        return create_interleave_two_dsl(
+            input_vector_sizes = input_vector_sizes,
+            precisions = precisions
+        )
+
+
+
+    def get_memory_two_input_shuffles(self):
         load_factors = [1.0]
         group_factors = [0.25, 0.5]#, 1.0]
         lane_offsets_factors = [0] #[0, "IDX_J"]
@@ -285,10 +383,27 @@ class Synthesizer:
         # or consumed by either layers.
         bitvector_sizes = []
 
+
         ## Memory Shuffle layer
-        spec_memory_shuffles = self.get_memory_shuffles()
+        spec_memory_shuffles = self.get_memory_two_input_shuffles()
         memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list = [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
+
+        spec_memory_shuffles = self.get_single_interleave_shuffles()
+        memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        memory_shuffle_args_list += [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
+
+        spec_memory_shuffles = self.get_single_deinterleave_shuffles()
+        memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        memory_shuffle_args_list += [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
+
+        spec_memory_shuffles = self.get_two_interleave_shuffles()
+        memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
+        memory_shuffle_args_list += [ctx.context_args for ctx in spec_memory_shuffles.contexts]
+
 
 
         ## Operation Layers
@@ -321,6 +436,7 @@ class Synthesizer:
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+
 
 
         top_level_grammar_args = self.get_top_level_grammar_args()
@@ -598,19 +714,12 @@ class Synthesizer:
 
         check = dsl_inst.name in DEBUG_LIST and DEBUG
 
-        if check:
-            print("Here")
+        is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
+
+        print("is_broadcast_like:",is_broadcast_like)
 
         for ctx in dsl_inst.contexts:
 
-            if ctx.name == "_mm512_broadcastw_epi16":
-                print("SKIPPING DUPLICATE ARGS")
-                continue
-
-
-            if False and dsl_inst.name == "_mm256_broadcastq_epi64" and ctx.name != "_mm512_set1_epi16":
-                #print("SKIPPING DUPLICATE ARGS")
-                continue
 
             if not ctx.has_output_size():
                 continue
@@ -637,18 +746,20 @@ class Synthesizer:
                 supports_outputs_prec = supports_outputs_prec or ctx.supports_output_precision(2 * self.spec.output_precision)
 
             if check:
+                print("-"*50)
                 print(ctx.name, "Supports Input Prec:", supports_inputs_prec)
                 print(ctx.name, "Supports Input Length:",supports_input_length)
                 print(ctx.name,"Supports Output prec", supports_outputs_prec)
                 print(ctx.name, "Supports Output Length:", supports_output_length)
+                print("-"*50)
 
 
             #if (supports_inputs_prec or supports_outputs_prec or supports_output_length) or supports_input_length :
             old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
             # Either can process the input or can produce output shape
-            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
-            if new_condition:
+            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) and (not is_broadcast_like)
+            if new_condition or (is_broadcast_like and supports_input_length and supports_output_length):
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -662,6 +773,11 @@ class Synthesizer:
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score += int(ctx.supports_output_size(self.output_slice_length))
             score +=  int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+
+            if is_broadcast_like:
+                score = 0
+                score +=  int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+                score += int(ctx.supports_output_size(self.output_slice_length))
 
 
             if UPCAST_OPERATIONS:
@@ -831,8 +947,14 @@ class Synthesizer:
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
             new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
+
+
+
             return new_condition #new_condition
 
+
+    def is_broadcast_like_operation(self, dsl_inst):
+        return dsl_inst.get_semantics_ops_list() == []
 
     def consider_bitwise_heuristic(self, dsl_inst):
 
@@ -857,6 +979,7 @@ class Synthesizer:
         assert self.consider_bitwise_heuristic(dsl_inst), "Can not get supported contexts for dsl inst"
 
         contexts = []
+
 
         for ctx in dsl_inst.contexts:
             if not ctx.has_output_size():

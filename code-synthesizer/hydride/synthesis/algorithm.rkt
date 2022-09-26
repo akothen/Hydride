@@ -19,7 +19,7 @@
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
 (require hydride/ir/hydride/printer)
-(require hydride/ir/halide/utils)
+; (require hydride/ir/halide/utils)
 
 (provide (all-defined-out))
 
@@ -29,7 +29,7 @@
 
 (define (create-n-reg n)
   (for/list ([i (range n)])
-            (reg i)
+            (reg (bv i 4))
             )
   )
 
@@ -72,8 +72,6 @@
 
   (debug-log "=======================================")
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
-  (debug-log "leaves")
-  (debug-log leaves)
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes))
@@ -83,8 +81,6 @@
   ;(clear-terms!)
 
   (define dummy-args (halide:create-buffers leaves sym-bvs))
-  (debug-log "dummy-args")
-  (debug-log dummy-args)
 
 
   (define synthesized-sol 
@@ -102,19 +98,23 @@
 
                   (define base_name (string-append "base_" (~s (random 10000))))
 
-                  (clear-vc!)
-                  (clear-terms!)
-                  (collect-garbage)
+                  ;(clear-vc!)
+                  ;(clear-terms!)
+                  ;(collect-garbage)
 
-                  (define grammar (get-expr-grammar expr-extract leaves base_name VF))
+
+                  (define expr-VF (halide:vec-len expr-extract))
+
+                  (define grammar (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
                   (debug-log "Grammar:")
-                  ;(debug-log grammar)
+                  (debug-log grammar)
 
                   (define regs (create-n-reg (length leaves)))
                   (debug-log regs)
                   (define (grammar-fn i)
                     (clear-vc!)
                     (clear-terms!)
+                    (collect-garbage)
                     (define use-simple-grammar #t)
                     (if use-simple-grammar
                       (grammar i)
@@ -127,7 +127,7 @@
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
 
 
-                    (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) VF))
+                    (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) expr-VF))
                     ;;(define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
                     _result
                     )
@@ -137,16 +137,16 @@
                   (define (invoke-spec-lane env)
                     (define synth-buffers (halide:create-buffers leaves env))
                     (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
-                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 2))))
+                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- expr-VF 2))))
                     _result
                     )
 
 
-                  (define depth-limit 6)
-                  (define optimize? #f)
-                  (define symbolic? #t)
+                  (define depth-limit 5)
+                  (define optimize? #t)
+                  (define symbolic? #f)
                   (define cost-bound 50)
-                  (define solver 'boolector)
+                  (define solver 'z3)
 
                   ;(clear-vc!)
                   ;(clear-terms!)
@@ -172,7 +172,7 @@
                         (debug-log "Beginning Synthesis")
 
                         (define-values (sat? mat el) 
-                                       (synthesize-sol-with-depth (+ -1 expr-depth) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) 
+                                       (synthesize-sol-with-depth (+ 0 expr-depth) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) 
                                        )
 
                         (define test-end (current-seconds))
@@ -197,6 +197,11 @@
                       )
                     (debug-log "Unsatisfiable")
                     )
+
+                  (println materialize)
+
+                  (displayln "Cost")
+                  (println (cost materialize))
 
 
                   (define synthesized-leaves 
