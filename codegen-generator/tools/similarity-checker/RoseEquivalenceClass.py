@@ -15,7 +15,7 @@ import uuid
 class RoseEquivalenceClass:
   def __init__(self):
     self.EquivalentFuctions = set()
-    self.FunctToArgsMapping = dict()
+    self.FunctionToArgsMapping = dict()
     # Unique ID for each equivalent class
     self.ID = uuid.uuid4()
 
@@ -37,20 +37,27 @@ class RoseEquivalenceClass:
   def addFunction(self, Function : RoseFunction):
     self.EquivalentFuctions.add(Function)
   
-  def addFunctToArgsMapping(self, Function : RoseFunction, ArgToConcreteValMap : dict):
-    self.FunctToArgsMapping[Function] = ArgToConcreteValMap
+  def addFunctionToArgsMapping(self, Function : RoseFunction, ArgToConcreteValMap : dict):
+    self.FunctionToArgsMapping[Function] = ArgToConcreteValMap
   
   def getAFunction(self):
     return list(self.EquivalentFuctions)[0]
   
-  def getFunctToArgsMapping(self):
-    return self.FunctToArgsMapping
+  def getFunctionToArgsMapping(self):
+    return self.FunctionToArgsMapping
 
   def getEquivalentFunctions(self):
     return self.EquivalentFuctions
+  
+  def replaceFunction(self, OldFunction : RoseFunction, NewFunction : RoseFunction, \
+                            NewFunctionToArgsMapping : dict):
+    self.EquivalentFuctions.remove(OldFunction)
+    self.EquivalentFuctions.add(NewFunction)
+    del self.FunctionToArgsMapping[OldFunction]
+    self.FunctionToArgsMapping[NewFunction] = NewFunctionToArgsMapping
 
-  def extend(self, EquivalentFuctions : set,  FunctToArgsMapping : dict):
+  def extend(self, EquivalentFuctions : set,  FunctionToArgsMapping : dict):
     self.EquivalentFuctions.update(EquivalentFuctions)
-    self.FunctToArgsMapping.update(FunctToArgsMapping)
+    self.FunctionToArgsMapping.update(FunctionToArgsMapping)
 
 
