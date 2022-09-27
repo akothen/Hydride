@@ -292,7 +292,7 @@ class RoseSimilarityChecker():
               print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
               # Merge the two equivalent classes
               EqFunctions = CheckedEquivalentClass.getEquivalentFunctions()
-              EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctToArgsMapping())
+              EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctionToArgsMapping())
               for EqFunction in EqFunctions:
                 self.FunctionToEquivalenceClassMap[EqFunction] = EquivalentClass
               self.EquivalenceClasses.remove(CheckedEquivalentClass)
@@ -307,7 +307,7 @@ class RoseSimilarityChecker():
             self.EquivalenceClasses.remove(CheckedEquivalentClass)
             print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
             CheckedEquivalentClass.addFunction(Function)
-            CheckedEquivalentClass.addFunctToArgsMapping(Function, \
+            CheckedEquivalentClass.addFunctionToArgsMapping(Function, \
                                           FunctionInfo.getArgsToConcreteValMap())   
             self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
             self.EquivalenceClasses.add(CheckedEquivalentClass)
@@ -315,7 +315,7 @@ class RoseSimilarityChecker():
             EquivalentClass = RoseEquivalenceClass()
             print("--Added {} to new eq class".format(Function.getName()))
             EquivalentClass.addFunction(Function)
-            EquivalentClass.addFunctToArgsMapping(Function, \
+            EquivalentClass.addFunctionToArgsMapping(Function, \
                                           FunctionInfo.getArgsToConcreteValMap()) 
             self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
             self.EquivalenceClasses.add(EquivalentClass)
@@ -330,7 +330,7 @@ class RoseSimilarityChecker():
             self.EquivalenceClasses.remove(EquivalentClass)
             print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
             EquivalentClass.addFunction(CheckFunction)
-            EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+            EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                           CheckFunctionInfo.getArgsToConcreteValMap())   
             self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
             self.EquivalenceClasses.add(EquivalentClass)
@@ -338,7 +338,7 @@ class RoseSimilarityChecker():
             CheckedEquivalentClass = RoseEquivalenceClass()
             print("--Added {} to new eq class".format(CheckFunction.getName()))
             CheckedEquivalentClass.addFunction(CheckFunction)
-            CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+            CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                           CheckFunctionInfo.getArgsToConcreteValMap())
             self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
             self.EquivalenceClasses.add(CheckedEquivalentClass)
@@ -352,9 +352,9 @@ class RoseSimilarityChecker():
             EquivalentClass = RoseEquivalenceClass()
             EquivalentClass.addFunction(Function)
             EquivalentClass.addFunction(CheckFunction)
-            EquivalentClass.addFunctToArgsMapping(Function, \
+            EquivalentClass.addFunctionToArgsMapping(Function, \
                                           FunctionInfo.getArgsToConcreteValMap())
-            EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+            EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                           CheckFunctionInfo.getArgsToConcreteValMap()) 
             self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
             self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
@@ -365,9 +365,9 @@ class RoseSimilarityChecker():
             print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
             EquivalentClass.addFunction(Function)
             CheckedEquivalentClass.addFunction(CheckFunction)
-            EquivalentClass.addFunctToArgsMapping(Function, \
+            EquivalentClass.addFunctionToArgsMapping(Function, \
                                           FunctionInfo.getArgsToConcreteValMap()) 
-            CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+            CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                           CheckFunctionInfo.getArgsToConcreteValMap()) 
             self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
             self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
@@ -445,14 +445,15 @@ class RoseSimilarityChecker():
 
 
   def getMaskArgsInFunction(self, Function : RoseFunction):
+    print("getMaskArgsInFunction")
     CondList = Function.getRegionsOfType(RoseCond)
-    MaskList = list()
+    MaskList = set()
     for CondRegion in CondList:
       Condition = CondRegion.getCondition()
       if isinstance(Condition, RoseOperation):
         if isinstance(Condition, RoseBVExtractSliceOp):
           if isinstance(Condition.getInputBitVector(), RoseArgument):
-            MaskList.append(Condition.getInputBitVector())
+            MaskList.add(Condition.getInputBitVector())
           continue
         else:
           Worklist = list()
@@ -463,23 +464,24 @@ class RoseSimilarityChecker():
               continue
             if isinstance(Operation, RoseBVExtractSliceOp):
               if isinstance(Operation.getInputBitVector(), RoseArgument):
-                MaskList.append(Operation.getInputBitVector())
+                MaskList.add(Operation.getInputBitVector())
                 break
               Worklist.append(Operation.getInputBitVector())
             Worklist.extend(Operation.getOperands())
-    return MaskList
+    return list(MaskList)
             
 
   def getSelectArgsInFunction(self, Function : RoseFunction):
+    print("getSelectArgsInFunction")
     BlockList = Function.getRegionsOfType(RoseBlock)
-    SelectArgs = list()
+    SelectArgs = set()
     for Block in BlockList:
       for Op in Block:
         if isinstance(Op, RoseSelectOp):
           if isinstance(Op.getThenValue(), RoseArgument):
-            SelectArgs.append(Op.getThenValue())
+            SelectArgs.add(Op.getThenValue())
           elif isinstance(Op.getThenValue(), RoseBVExtractSliceOp):
-            SelectArgs.append(Op.getThenValue().getInputBitVector())
+            SelectArgs.add(Op.getThenValue().getInputBitVector())
           else:
             Worklist = list()
             Worklist.extend(Op.getThenValue().getOperands())
@@ -489,14 +491,14 @@ class RoseSimilarityChecker():
                 continue
               if isinstance(Operation, RoseBVExtractSliceOp):
                 if isinstance(Operation.getInputBitVector(), RoseArgument):
-                  SelectArgs.append(Operation.getInputBitVector())
+                  SelectArgs.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
               Worklist.extend(Operation.getOperands())
           if isinstance(Op.getElseValue(), RoseArgument):
-            SelectArgs.append(Op.getElseValue())
+            SelectArgs.add(Op.getElseValue())
           elif isinstance(Op.getElseValue(), RoseBVExtractSliceOp):
-            SelectArgs.append(Op.getElseValue().getInputBitVector())
+            SelectArgs.add(Op.getElseValue().getInputBitVector())
           else:
             Worklist = list()
             Worklist.extend(Op.getElseValue().getOperands())
@@ -506,11 +508,11 @@ class RoseSimilarityChecker():
                 continue
               if isinstance(Operation, RoseBVExtractSliceOp):
                 if isinstance(Operation.getInputBitVector(), RoseArgument):
-                  SelectArgs.append(Operation.getInputBitVector())
+                  SelectArgs.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
               Worklist.extend(Operation.getOperands())
-    return SelectArgs
+    return list(SelectArgs)
 
 
   def generateFunctionPermutations(self, Function : RoseFunction):
@@ -596,7 +598,15 @@ class RoseSimilarityChecker():
   
   def canonicalizeFunctionArgs(self, Function : RoseFunction):
     MaskArgs = self.getMaskArgsInFunction(Function)
+    print("MaskArgs:")
+    for Arg in MaskArgs:
+      print("ARG:")
+      Arg.print()
     SelectArgs = self.getSelectArgsInFunction(Function)
+    print("SelectArgs:")
+    for Arg in SelectArgs:
+      print("ARG:")
+      Arg.print()
     RemainingBVArgs = list()
     RemainingArgs = list()
     for Arg in Function.getArgs():
@@ -611,6 +621,10 @@ class RoseSimilarityChecker():
     if len(MaskArgs) != 0 or len(SelectArgs) != 0:
       NewArgsList = MaskArgs + SelectArgs + RemainingBVArgs + RemainingArgs
       FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, "copy")
+      print("FUNCTION:")
+      Function.print()
+      print("FunctionCopy:")
+      FunctionCopy.print()
       self.CopyFunctionToOriginalMap[FunctionCopy] = Function
       ArgPermutation = list()
       for Arg in NewArgsList:
@@ -626,7 +640,13 @@ class RoseSimilarityChecker():
       CanonicalizedFunction = self.canonicalizeFunctionArgs(Function)
       if Function != CanonicalizedFunction:
         ArgPermutation = self.FunctionToArgPermutationMap[CanonicalizedFunction]
+        print("ONE FUNCTION:")
+        Function.print()
         for EqFunction in EquivalenceClass.getEquivalentFunctions():
+          print("EqFunction:")
+          EqFunction.print()
+          print("ArgPermutation:")
+          print(ArgPermutation)
           if Function == EqFunction:
             FunctionCopy = CanonicalizedFunction
           else:
@@ -639,6 +659,7 @@ class RoseSimilarityChecker():
           FunctionCopyInfo = RoseFunctionInfo()
           FunctionCopyInfo.addFunctionAtNewStage(FunctionCopy)
           FunctionCopyInfo.addArgsToConcreteMap(CopyFuncArgsToConcreteValMap)
+          FunctionCopyInfo.addRawSemantics(OrgFunctionInfo.getRawSemantics())
           self.FunctionToFunctionInfo[FunctionCopy] = FunctionCopyInfo
           self.FunctionToRosetteCodeMap[FunctionCopy] = \
                                     RosetteGen.CodeGen(FunctionCopy)
@@ -1248,7 +1269,7 @@ class RoseSimilarityChecker():
       FunctionToEquivalenceClassMapLock.acquire()
       EquivalentClass = self.FunctionToEquivalenceClassMap[Function]
       EquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+      EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                     CheckFunctionInfo.getArgsToConcreteValMap())
       self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
       FunctionToEquivalenceClassMapLock.release()
@@ -1256,7 +1277,7 @@ class RoseSimilarityChecker():
       CheckedEquivalentClass = RoseEquivalenceClass()
       print("--Added {} to new eq class".format(CheckFunction.getName()))
       CheckedEquivalentClass.addFunction(CheckFunction)
-      CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+      CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                     CheckFunctionInfo.getArgsToConcreteValMap())
       FunctionToEquivalenceClassMapLock.acquire()
       self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
@@ -1277,7 +1298,7 @@ class RoseSimilarityChecker():
       FunctionToEquivalenceClassMapLock.acquire()
       CheckedEquivalentClass = self.FunctionToEquivalenceClassMap[CheckFunction]
       CheckedEquivalentClass.addFunction(Function)
-      CheckedEquivalentClass.addFunctToArgsMapping(Function, \
+      CheckedEquivalentClass.addFunctionToArgsMapping(Function, \
                                     FunctionInfo.getArgsToConcreteValMap())
       self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
       FunctionToEquivalenceClassMapLock.release()
@@ -1285,7 +1306,7 @@ class RoseSimilarityChecker():
       EquivalentClass = RoseEquivalenceClass()
       print("--Added {} to new eq class".format(Function.getName()))
       EquivalentClass.addFunction(Function)
-      EquivalentClass.addFunctToArgsMapping(Function, \
+      EquivalentClass.addFunctionToArgsMapping(Function, \
                                     FunctionInfo.getArgsToConcreteValMap()) 
       FunctionToEquivalenceClassMapLock.acquire()
       self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
@@ -1304,9 +1325,9 @@ class RoseSimilarityChecker():
       EquivalentClass = RoseEquivalenceClass()
       EquivalentClass.addFunction(Function)
       EquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctToArgsMapping(Function, \
+      EquivalentClass.addFunctionToArgsMapping(Function, \
                                     FunctionInfo.getArgsToConcreteValMap())
-      EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+      EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                     CheckFunctionInfo.getArgsToConcreteValMap()) 
       FunctionToEquivalenceClassMapLock.acquire()
       self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
@@ -1318,9 +1339,9 @@ class RoseSimilarityChecker():
       print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
       EquivalentClass.addFunction(Function)
       CheckedEquivalentClass.addFunction(CheckFunction)
-      EquivalentClass.addFunctToArgsMapping(Function, \
+      EquivalentClass.addFunctionToArgsMapping(Function, \
                                     FunctionInfo.getArgsToConcreteValMap()) 
-      CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+      CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                     CheckFunctionInfo.getArgsToConcreteValMap()) 
       FunctionToEquivalenceClassMapLock.acquire()
       self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
@@ -1401,7 +1422,7 @@ class RoseSimilarityChecker():
             print("Merged {} and {} eq class".format(Function.getName(), CheckFunction.getName()))
             # Merge the two equivalent classes
             EqFunctions = CheckedEquivalentClass.getEquivalentFunctions()
-            EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctToArgsMapping())
+            EquivalentClass.extend(EqFunctions, CheckedEquivalentClass.getFunctionToArgsMapping())
             FunctionToEquivalenceClassMapLock.acquire()
             for EqFunction in EqFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalentClass
@@ -1426,7 +1447,7 @@ class RoseSimilarityChecker():
           EquivalenceClassesLock.release()
           print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
           CheckedEquivalentClass.addFunction(Function)
-          CheckedEquivalentClass.addFunctToArgsMapping(Function, \
+          CheckedEquivalentClass.addFunctionToArgsMapping(Function, \
                                         FunctionInfo.getArgsToConcreteValMap())
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[Function] = CheckedEquivalentClass
@@ -1438,7 +1459,7 @@ class RoseSimilarityChecker():
           EquivalentClass = RoseEquivalenceClass()
           print("--Added {} to new eq class".format(Function.getName()))
           EquivalentClass.addFunction(Function)
-          EquivalentClass.addFunctToArgsMapping(Function, \
+          EquivalentClass.addFunctionToArgsMapping(Function, \
                                         FunctionInfo.getArgsToConcreteValMap()) 
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
@@ -1462,7 +1483,7 @@ class RoseSimilarityChecker():
           EquivalenceClassesLock.release()
           print("--Added {} and {} to existing eq class".format(CheckFunction.getName(), Function.getName()))
           EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+          EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                         CheckFunctionInfo.getArgsToConcreteValMap())   
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[CheckFunction] = EquivalentClass
@@ -1474,7 +1495,7 @@ class RoseSimilarityChecker():
           CheckedEquivalentClass = RoseEquivalenceClass()
           print("--Added {} to new eq class".format(CheckFunction.getName()))
           CheckedEquivalentClass.addFunction(CheckFunction)
-          CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+          CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                         CheckFunctionInfo.getArgsToConcreteValMap())
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[CheckFunction] = CheckedEquivalentClass
@@ -1494,9 +1515,9 @@ class RoseSimilarityChecker():
           EquivalentClass = RoseEquivalenceClass()
           EquivalentClass.addFunction(Function)
           EquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(Function, \
+          EquivalentClass.addFunctionToArgsMapping(Function, \
                                         FunctionInfo.getArgsToConcreteValMap())
-          EquivalentClass.addFunctToArgsMapping(CheckFunction, \
+          EquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                         CheckFunctionInfo.getArgsToConcreteValMap()) 
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
@@ -1511,9 +1532,9 @@ class RoseSimilarityChecker():
           print("--Added {} and {} to new eq classes".format(CheckFunction.getName(), Function.getName()))
           EquivalentClass.addFunction(Function)
           CheckedEquivalentClass.addFunction(CheckFunction)
-          EquivalentClass.addFunctToArgsMapping(Function, \
+          EquivalentClass.addFunctionToArgsMapping(Function, \
                                         FunctionInfo.getArgsToConcreteValMap()) 
-          CheckedEquivalentClass.addFunctToArgsMapping(CheckFunction, \
+          CheckedEquivalentClass.addFunctionToArgsMapping(CheckFunction, \
                                         CheckFunctionInfo.getArgsToConcreteValMap()) 
           FunctionToEquivalenceClassMapLock.acquire()
           self.FunctionToEquivalenceClassMap[Function] = EquivalentClass
