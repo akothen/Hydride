@@ -148,14 +148,14 @@ def RunFixLoopsBooundsInLoop(Loop : RoseForLoop, Context : RoseContext):
   #assert False
 
 
-def RunFixLoopsBooundsInFunction(Region, Context : RoseContext):
+def RunFixLoopsBoundsInRegion(Region, Context : RoseContext):
   # Iterate over all the contents of this function
   for Abstraction in Region:
     assert not isinstance(Abstraction, RoseFunction)
     if isinstance(Abstraction, RoseForLoop):
       RunFixLoopsBooundsInLoop(Abstraction, Context)
     if not isinstance(Abstraction, RoseBlock):
-      RunFixLoopsBooundsInFunction(Abstraction, Context)
+      RunFixLoopsBoundsInRegion(Abstraction, Context)
     print("REGION:")
     print(Abstraction)
     Abstraction.print()
@@ -192,7 +192,39 @@ def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
 
 
 def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
-  print("AddOuterLoopInFunction")
+  print("ADD OUTER LOOP IN FUNCTION")
+  # Use the return value of the function as the end and step
+  #Bitwidth = Function.getReturnValue().getType().getBitwidth()
+  # Get the op that we can use to canonicalize the loop bounds
+  LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
+  assert len(LoopList) != 0
+  for Loop in LoopList:
+    PrimaryOps = GetOpDeterminingOuterLoopBounds(Loop)
+    if PrimaryOps == None:
+      continue
+    print("PrimaryOps[0]:")
+    PrimaryOps[0].print()
+    # Find the maximum bitwidth and use that
+    MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+    print("PrimaryOps[0]:")
+    PrimaryOps[0].print()
+    for Op in PrimaryOps[1:]:
+      print("PrimaryOp:")
+      Op.print()
+      if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
+        MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
+    # Create a new loop
+    NewLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+    ParentRegion = Loop.getParent()
+    Key = ParentRegion.getKeyForChild(Loop)
+    Index = ParentRegion.getPosOfChild(Loop)
+    ParentRegion.eraseChild(Loop, Key)
+    NewLoop.addRegion(Loop)
+    ParentRegion.addRegionBefore(Index, NewLoop, Key)
+
+
+def AddOuterLoopInFunction2(Function : RoseFunction, Context : RoseContext):
+  print("ADD OUTER LOOP IN FUNCTION")
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
   # Get the op that we can use to canonicalize the loop bounds
@@ -304,7 +336,10 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   Bitwidth = Function.getReturnValue().getType().getBitwidth()
   #PrimaryOps = GetOpDeterminingLoopBounds(Loop)
   PrimaryOps = GetOpDeterminingLoopBoundsInBlockList(Function, [Block])
-  Bitwidth = PrimaryOps[0].getType().getBitwidth()
+  if isinstance(PrimaryOps[0], RoseBVInsertSliceOp):
+    Bitwidth = PrimaryOps[0].getInsertValue().getType().getBitwidth()
+  else:
+    Bitwidth = PrimaryOps[0].getType().getBitwidth()
   # Create the inner loop
   InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
   # Add the first block to the inner loop and remove it from the function
@@ -325,6 +360,13 @@ def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):
   if NumLoopsAtLevel0 == 0:
     AddTwoNestedLoopsInFunction(Function)
     return
+  # There are cases where there are subregions that are inlinable,
+  # which means that there can be multiple loop nests at level zero.
+  InlinableRegions = HasInlinableSubRegion(Function)
+  if InlinableRegions != None:
+    if len(InlinableRegions) != 0:
+      AddOuterLoopInFunction(Function, Context)
+      return
   if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
     # If one cond region has no loop but another does, add loop
     # around the other region.
@@ -348,6 +390,7 @@ def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):
         return
     print("ADDING OUTER LOOP IN FUNCTION")
     AddOuterLoopInFunction(Function, Context)
+  return
 
 
 def FixBlocksWithMultipleBVInserts(Function : RoseFunction):
@@ -740,7 +783,7 @@ def CanonicalizeFunction(Function : RoseFunction, Context : RoseContext):
 
   # Adjust the loop bounds
   print("ADJUST LOOP BOUNDS IN FUNCTION")
-  RunFixLoopsBooundsInFunction(Function, Context)
+  RunFixLoopsBoundsInRegion(Function, Context)
   FixAccumulationCodeInFunction(Function, Context)
   if IsFunctionInCanonicalForm(Function) == True:
     print("_____FUNCTION IS IN CANONICAL FORM")
