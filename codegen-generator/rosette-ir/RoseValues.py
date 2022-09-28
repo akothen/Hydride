@@ -313,10 +313,8 @@ class RoseOperation(RoseValue):
         if Operand in ValueToValueMap:
           ClonedOperand = ValueToValueMap[Operand]
         else:
-          Function = self.getParent().getFunction()
-          ReturnValue = Function.getReturnValue()
-          assert Operand == ReturnValue
-          ClonedOperand = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
+          ClonedOperand = Operand.clone(Operand.getName() + "." + Suffix)
+          ValueToValueMap[Operand] = ClonedOperand
       ClonedOp.setOperand(Index, ClonedOperand)
     ValueToValueMap[self] = ClonedOp
     return ClonedOp
@@ -401,7 +399,9 @@ class RoseOperation(RoseValue):
         if type(OldValue) != type(Operand):
             continue
         if Operand == OldValue:
+          #print("OPERAND SET")
           self.setOperand(Index, NewValue)
+      #print("DONE REPLACING")
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
 
@@ -478,3 +478,4 @@ class RoseOperation(RoseValue):
           String += ","
     String += "\n"
     return String
+
