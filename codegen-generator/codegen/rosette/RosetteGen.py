@@ -5,6 +5,7 @@
 #############################################################
 
 
+from tkinter.tix import Tree
 from RoseAbstractions import *
 from RoseValues import *
 from RoseOperations import *
@@ -459,7 +460,6 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   else:
     TmpRosetteCode = Spaces + "(apply\n" + Spaces + "concat\n" + TmpRosetteCode
     TmpRosetteCode += (Spaces + ")\n")
-  
   RosetteCode += TmpRosetteCode
   return RosetteCode
 
@@ -474,7 +474,30 @@ def GenerateRosetteForRegion(Region, RosetteCode : str, NumSpace = 0):
       continue
     # Generate Rosette for a loop
     if isinstance(Abstraction, RoseForLoop):
-      RosetteCode = GenerateRosetteForForLoop(Abstraction, RosetteCode, NumSpace)
+      LoopRosetteCode = GenerateRosetteForForLoop(Abstraction, "", NumSpace)
+      # Check what variable to wrap the outer loop around.
+      BlockList = Abstraction.getRegionsOfType(RoseBlock)
+      Variable = RoseUndefValue()
+      for Block in BlockList:
+        for Op in Block:
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if isinstance(Variable, RoseUndefValue):
+              Variable = Op.getInputBitVector()
+            else:
+              assert Variable == Op.getInputBitVector()
+      assert not isinstance(Variable, RoseUndefValue)
+      # Now emit a variable definition
+      Spaces = ""
+      for _ in range(NumSpace):
+        Spaces += " "
+      LoopRosetteCode = Spaces + "(define " + Variable.getName() \
+                            + "\n" + LoopRosetteCode
+      LoopRosetteCode += Spaces + ")\n"
+      print("LoopRosetteCode:")
+      print(LoopRosetteCode)
+      RosetteCode += LoopRosetteCode
+      print("RosetteCode:")
+      print(RosetteCode)
       continue
     # Generate Rosette for block
     if isinstance(Abstraction, RoseBlock):
@@ -510,14 +533,11 @@ def GenerateRosetteForFunction(Function : RoseFunction, RosetteCode : str, NumSp
     #RosetteCode += Function.getReturnValue().getName() + "\n"
   # Now check if the function has any op for padding high bits in the end
   BlockList = Function.getRegionsOfType(RoseBlock)
+  FoundHighBitsPaddingOp = False
   for Block in reversed(BlockList):
-    FoundHighBitsPaddingOp = False
     for Op in reversed(Block.getOperations()):
       if isinstance(Op, RoseBVPadHighBitsOp):
         # Emit rosette code
-        FunctionBody = Spaces + "(define " + Function.getReturnValue().getName() \
-                              + "\n" + FunctionBody
-        FunctionBody += Spaces + ")\n"
         FunctionBody += Op.to_rosette(NumSpace)
         print("FunctionBody")
         print(FunctionBody)
@@ -525,6 +545,8 @@ def GenerateRosetteForFunction(Function : RoseFunction, RosetteCode : str, NumSp
         break
     if FoundHighBitsPaddingOp == True:
       break
+  if FoundHighBitsPaddingOp == False:
+    FunctionBody += Spaces + Function.getReturnValue().getName()
   RosetteCode += FunctionBody
   RosetteCode += (Spaces + ")\n")
   return RosetteCode
