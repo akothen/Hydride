@@ -103,7 +103,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   Bitwidth = BVOp1.getOutputBitwidth()
 
   # Function used to strip off casts, and sign and zero extensions
-  def StripCastsAndSizeExtensiosn(X : RoseOperation):
+  def StripCastsAndSizeExtension(X : RoseOperation):
     if isinstance(X, RoseCastOp) \
     or isinstance(X, RoseBVSignExtendOp) \
     or isinstance(X, RoseBVZeroExtendOp):
@@ -111,8 +111,8 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
     return X
 
   # Strip any casts and size extensions away
-  Low1 = StripCastsAndSizeExtensiosn(Low1)
-  Low2 = StripCastsAndSizeExtensiosn(Low2)
+  Low1 = StripCastsAndSizeExtension(Low1)
+  Low2 = StripCastsAndSizeExtension(Low2)
   print("LOW1:")
   Low1.print()
   print("LOW2:")
@@ -139,7 +139,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
     Low2IndexValue = Low2.getOperand(0)
     ConstantLow2Index = Low2.getOperand(1)
   # Strip any casts away
-  Low2IndexValue = StripCastsAndSizeExtensiosn(Low2IndexValue)
+  Low2IndexValue = StripCastsAndSizeExtension(Low2IndexValue)
   # High index is expressed in terms of low index
   # TODO: Make this more general.
   print("Low2IndexValue:")
@@ -150,31 +150,33 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   Low1.getType().print()
 
   # Just handle one _very_ common case where low1 = i
-  assert isinstance(Low2IndexValue, RoseOperation)
-  assert isinstance(Low1, RoseOperation)
-  if Low1.isSameAs(Low2IndexValue):
-    if ConstantLow2Index.getValue() == Bitwidth:
+  if isinstance(Low2IndexValue, RoseOperation) and isinstance(Low1, RoseOperation):
+    if Low1.isSameAs(Low2IndexValue):
+      if ConstantLow2Index.getValue() == Bitwidth:
+        return True
+      return False
+    # Now handle a rare case where low1 = i + some_constant
+    assert isinstance(Low1, RoseAddOp)
+    if isinstance(Low1.getOperand(0), RoseConstant):
+      Low1IndexValue = Low1.getOperand(1)
+      ConstantLow1Index = Low1.getOperand(0)
+    else:
+      assert isinstance(Low1.getOperand(1), RoseConstant)
+      Low1IndexValue = Low1.getOperand(0)
+      ConstantLow1Index = Low1.getOperand(1) 
+    # Strip any casts away
+    Low1IndexValue = StripCastsAndSizeExtension(Low1IndexValue)
+    assert Low1IndexValue.isSameAs(Low2IndexValue)
+    assert ConstantLow2Index.getValue() >= ConstantLow1Index.getValue()
+    if (ConstantLow2Index.getValue() - ConstantLow1Index.getValue()) == Bitwidth:
       return True
     return False
   
-  # Now handle a rare case where low1 = i + some_constant
-  assert isinstance(Low1, RoseAddOp)
-  if isinstance(Low1.getOperand(0), RoseConstant):
-    Low1IndexValue = Low1.getOperand(1)
-    ConstantLow1Index = Low1.getOperand(0)
-  else:
-    assert isinstance(Low1.getOperand(1), RoseConstant)
-    Low1IndexValue = Low1.getOperand(0)
-    ConstantLow1Index = Low1.getOperand(1) 
-  # Strip any casts away
-  Low1IndexValue = StripCastsAndSizeExtensiosn(Low1IndexValue)
-  assert Low1IndexValue.isSameAs(Low2IndexValue)
-  assert ConstantLow2Index.getValue() >= ConstantLow1Index.getValue()
-  if (ConstantLow2Index.getValue() - ConstantLow1Index.getValue()) == Bitwidth:
+  # Check if Low2IndexValue and low1 are equal
+  if Low1 == Low2IndexValue and ConstantLow2Index.getValue() == Bitwidth:
     return True
   return False
-
-
+    
 
 def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
   assert not isinstance(Block, RoseUndefRegion)
@@ -245,15 +247,9 @@ def GetInvariantsInRegion(Abstraction, Invariants = dict()):
 def FuseAdjacentBlocks(Region, RegionAndKeyToBlock : dict = dict()):
   assert not isinstance(Region, RoseUndefRegion)
   assert not isinstance(Region, RoseBlock)
-  print("FuseAdjacentBlocks:")
-  print("REGION:")
-  Region.print()
   # Now just go over the function and fuse adjacent blocks
   if Region.getKeys() is not None:
-    print("THIS IS A KEYED REGION")
     for Key in Region.getKeys():
-      print("KEY")
-      print(Key)
       ChildrenList = list()
       ChildrenList.extend(Region.getChildren(Key))
       for Abstraction in ChildrenList:
@@ -262,7 +258,6 @@ def FuseAdjacentBlocks(Region, RegionAndKeyToBlock : dict = dict()):
             RegionAndKeyToBlock[(Region, Key)] = Abstraction
             continue
           # Fuse this block with the currently tracked block
-          print("FUSING")
           OperationList = list()
           OperationList.extend(Abstraction.getOperations())
           for Operation in OperationList:
@@ -274,21 +269,17 @@ def FuseAdjacentBlocks(Region, RegionAndKeyToBlock : dict = dict()):
           continue
         # Deal with other types of subregions
         if (Region, Key) in RegionAndKeyToBlock:
-          print("DEAL WITH ANOTHER KIND OF REGION")
           RegionAndKeyToBlock.pop((Region, Key))
         FuseAdjacentBlocks(Abstraction, RegionAndKeyToBlock)
   else:
     ChildrenList = list()
     ChildrenList.extend(Region.getChildren())
-    print("len(ChildrenList)")
-    print(len(ChildrenList))
     for Abstraction in ChildrenList:
       if isinstance(Abstraction, RoseBlock):
         if (Region, None) not in RegionAndKeyToBlock:
           RegionAndKeyToBlock[(Region, None)] = Abstraction
           continue
         # Fuse this block with the currently tracked block
-        print("FUSING BLOCKS")
         OperationList = list()
         OperationList.extend(Abstraction.getOperations())
         for Operation in OperationList:
@@ -319,7 +310,6 @@ def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperat
   InsertionPoint = ParentBlock.getPosOfOperation(InsertBefore)
 
   if InsertionPoint > ParentBlock.getPosOfOperation(Operation):
-    print("HERE2")
     return Operation
   
   # Deal with case: InsertionPoint < ParentBlock.getPosOfOperation(Operation)
@@ -332,14 +322,7 @@ def CloneAndInsertOperation(Operation : RoseOperation, InsertBefore : RoseOperat
     if Operand in OrginalValToClonedValMap:
       NewOperand = OrginalValToClonedValMap[Operand]
     else:
-      print("CloneAndInsertOperation:")
-      print("OEPRATION:")
-      Operation.print()
-      print("Operand:")
-      Operand.print()
       NewOperand = CloneAndInsertOperation(Operand, InsertBefore, Context)
-      print("NewOperand:")
-      NewOperand.print()
       OrginalValToClonedValMap[Operand] = NewOperand
     OperandList.append(NewOperand)
   
@@ -422,17 +405,13 @@ def GatherIndexingOps(Operation : RoseOperation):
 
 
 def HasReductionPattern(Block : RoseBlock):
-  print("HAS REDUCTION PATTERN")
-  Block.print()
   Loop = Block.getParentOfType(RoseForLoop)
   if isinstance(Loop, RoseUndefRegion):
-    print("RETURN FALSE1")
     return False
   Op = Block.getOperation(len(Block.getOperations()) - 1)
   if not isinstance(Op, RoseBVInsertSliceOp):
     return False
   if Op.getInputBitVector() != Block.getFunction().getReturnValue():
-    print("RETURN FALSE2")
     return False
   # The low index must be dependent on the outer loop if an outer loop
   # exists.
@@ -441,28 +420,20 @@ def HasReductionPattern(Block : RoseBlock):
     if not isinstance(Op.getLowIndex(), RoseConstant):
       if not isinstance(Op.getLowIndex(), RoseArgument):
         if ParentLoop.getIterator() != Op.getLowIndex():
-          print("RETURN FALSE4")
           return False
   ReductionOp = Op.getInsertValue()
   if not isinstance(ReductionOp, RoseOperation):
-    print("---RETURN FALSE5")
     return False
-  print("ReductionOp:")
-  ReductionOp.print()
   if ReductionOp.getOpcode().typesOfInputsAndOutputEqual() == False:
-    print("RETURN FALSE5")
     return False
   for Operand in ReductionOp.getOperands():
     if isinstance(Operand, RoseBVExtractSliceOp):
       if Operand.getInputBitVector() == Block.getFunction().getReturnValue():
-        print("RETURN TRUE")
         return True
-  print("RETURN FALSE6")
   return False
 
 
 def GetReductionOps(Block : RoseBlock):
-  print("GET REDUCTION OPS")
   assert HasReductionPattern(Block)
   OpList = list()
   InsertOp = Block.getOperation(len(Block.getOperations()) - 1)
@@ -478,25 +449,16 @@ def GetReductionOps(Block : RoseBlock):
     if IndexingOp not in OpList:
       OpList.append(IndexingOp)
   OpList.append(InsertOp)
-  for Op in OpList:
-    Op.print()
   return OpList
 
 
 def IsBlockPreheader(Block : RoseBlock):
   assert isinstance(Block, RoseBlock)
-  print("IS BLOCK PREHEADER:")
-  print("BLOCK:")
-  Block.print()
   ParentRegion = Block.getParent()
   assert not isinstance(ParentRegion, RoseUndefRegion)
-  print("PARENT REGION:")
-  ParentRegion.print()
   Key = ParentRegion.getKeyForChild(Block)
   if ParentRegion.getTailChild(Key) != Block:
     BlockPos = ParentRegion.getPosOfChild(Block, Key)
-    print("BlockPos:")
-    print(BlockPos)
     NextRegion = ParentRegion.getChild(BlockPos + 1, Key)
     if isinstance(NextRegion, RoseForLoop):
       return True
@@ -673,17 +635,9 @@ def DFGsOfBlocksAreIsomorphic(Block1 : RoseBlock, Block2 : RoseBlock, \
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
   while len(OpsList1) != 0:
-    #print("OpsList1:")
-    #print(OpsList1)
-    #print("OpsList2:")
-    #print(OpsList2)
     assert len(OpsList1) == len(OpsList2)
     Op1 = OpsList1.pop()
     Op2 = OpsList2.pop()
-    print("----OP1:")
-    Op1.print()
-    print("----OP2:")
-    Op2.print()
     assert not isinstance(Op1, RoseUndefValue)
     assert not isinstance(Op2, RoseUndefValue)
     # Skip constants
@@ -814,10 +768,6 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
   while len(OpsList1) != 0:
-    #print("OpsList1:")
-    #print(OpsList1)
-    #print("OpsList2:")
-    #print(OpsList2)
     assert len(OpsList1) == len(OpsList2)
     Op1 = OpsList1.pop()
     Op2 = OpsList2.pop()
