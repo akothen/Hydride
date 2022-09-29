@@ -3,8 +3,7 @@ import time
 import json
 import subprocess as sb
 from DSLParser import parse_dict
-from semantics import semantics
-from semantics_with_costs import cost_semantics
+from latest_semantics import semantcs
 from PredefinedDSL import *
 from StructDef import StructDef
 from InterpreterDef import InterpreterDef
@@ -15,6 +14,8 @@ from Specification import Specification, parse_spec
 
 
 from GrammarGenerator import GrammarGenerator
+from TypedGrammarGenerator import TypedGrammarGenerator
+from SimpleGrammarGenerator import SimpleGrammarGenerator
 
 from Synthesizer import Synthesizer
 
@@ -22,7 +23,7 @@ INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
 
-dsl_list = parse_dict(cost_semantics)
+dsl_list = parse_dict(semantcs)
 
 #print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
 #print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
@@ -31,7 +32,7 @@ dsl_list = parse_dict(cost_semantics)
 sd = StructDef()
 idd = InterpreterDef()
 cd = CostDef()
-gg = GrammarGenerator()
+gg = TypedGrammarGenerator()
 gl = GetLengthDef(get_len_name = "get-length")
 
 
@@ -81,7 +82,7 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
 
     syn = Synthesizer(spec = sp, dsl_operators = dsl_list,
                   struct_definer = sd, grammar_generator = gg,
-                  contexts_per_dsl_inst = 4,
+                  contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
                   depth = 3
                   )
