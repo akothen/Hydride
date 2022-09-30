@@ -849,11 +849,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
                               LoopList : list, SkipBVExtracts : set, \
                               CondBlocksBVInsertsMap : dict, Context : RoseContext, \
                               ArgToConstantValsMap : dict):
-  # Some sanity checks
-  assert len(LoopList) > 1
-  Function = Block.getFunction()
   print("EXTRACTING CONSTANTS FROM BLOCK")
   Block.print()
+  # Some sanity checks
+  #assert len(LoopList) > 1
+  Function = Block.getFunction()
   OpList = []
   OpList.extend(Block.getOperations())
   Loop = Block.getParentOfType(RoseForLoop)
@@ -1156,10 +1156,6 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
         continue
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
-      print("Loop.getParentOfType(RoseForLoop):")
-      Loop.getParentOfType(RoseForLoop).print()
-      print("LoopList[0]:")
-      LoopList[0].print()
       if Loop.getParentOfType(RoseForLoop) != LoopList[0]:
         assert Op.getLowIndex() != LoopList[0].getIterator()
         Op.setOperand(Op.getBitwidthPos(), LoopList[0].getStep())
@@ -1594,11 +1590,17 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
 
   UnknownVal = set()
   BlockList = Function.getRegionsOfType(RoseBlock)
-  LoopList = Function.getRegionsOfType(RoseForLoop)
+  #LoopList = Function.getRegionsOfType(RoseForLoop)
   IndexingOps = set()
   for Block in BlockList:
     print("---Block in List:")
     Block.print()
+    LoopList = list()
+    Parent = Block.getParentOfType(RoseForLoop)
+    while not isinstance(Parent, RoseUndefRegion):
+      LoopList.append(Parent)
+      Parent = Parent.getParentOfType(RoseForLoop)
+    LoopList.reverse()
     ExtractConstantsFromBlock(Block, BVValToBitwidthVal, Visited, \
                               UnknownVal,  IndexingOps, LoopList, SkipBVExtracts,\
                               CondBlocksBVInsertsMap, Context, ArgToConstantValsMap)
