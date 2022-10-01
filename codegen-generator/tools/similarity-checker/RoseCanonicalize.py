@@ -198,98 +198,47 @@ def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
   # Get the op that we can use to canonicalize the loop bounds
   LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
   assert len(LoopList) != 0
+  MaxBitwidth = None
+  InnerLoops = list()
   for Loop in LoopList:
     PrimaryOps = GetOpDeterminingOuterLoopBounds(Loop)
     if PrimaryOps == None:
+      print("PrimaryOps is NONE")
+      if MaxBitwidth != None:
+        OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+        Index = Function.getPosOfChild(InnerLoops[0])
+        for InnerLoop in InnerLoops:
+          Function.eraseChild(InnerLoop)
+          OuterLoop.addRegion(InnerLoop)
+        Function.addRegionBefore(Index, OuterLoop)
+        MaxBitwidth = None
       continue
-    print("PrimaryOps[0]:")
-    PrimaryOps[0].print()
     # Find the maximum bitwidth and use that
-    MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
-    print("PrimaryOps[0]:")
-    PrimaryOps[0].print()
-    for Op in PrimaryOps[1:]:
-      print("PrimaryOp:")
-      Op.print()
-      if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
-        MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
-    # Create a new loop
-    NewLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
-    ParentRegion = Loop.getParent()
-    Key = ParentRegion.getKeyForChild(Loop)
-    Index = ParentRegion.getPosOfChild(Loop)
-    ParentRegion.eraseChild(Loop, Key)
-    NewLoop.addRegion(Loop)
-    ParentRegion.addRegionBefore(Index, NewLoop, Key)
-
-
-def AddOuterLoopInFunction2(Function : RoseFunction, Context : RoseContext):
-  print("ADD OUTER LOOP IN FUNCTION")
-  # Use the return value of the function as the end and step
-  #Bitwidth = Function.getReturnValue().getType().getBitwidth()
-  # Get the op that we can use to canonicalize the loop bounds
-  LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
-  assert len(LoopList) != 0
-  PrimaryOps = GetOpDeterminingOuterLoopBounds(LoopList[0])
-  assert PrimaryOps != None
-  print("PrimaryOps[0]:")
-  PrimaryOps[0].print()
-  # Find the maximum bitwidth and use that
-  MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
-  print("PrimaryOps[0]:")
-  PrimaryOps[0].print()
-  for Op in PrimaryOps[1:]:
-    print("PrimaryOp:")
-    Op.print()
-    if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
-      MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
-  # Create a new loop
-  Loop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
-  # Add the regions in the function into the loop
-  RegionList = list()
-  for Region in Function:
-    RegionList.append(Region)
-  # The last region has the return operation
-  LastRegion = RegionList[len(RegionList) - 1]
-  ReturnOpFound = False
-  for Op in LastRegion:
-    if isinstance(Op, RoseReturnOp):
-      ReturnOpFound = True
-      break
-  assert ReturnOpFound == True
-  RegionList.pop(len(RegionList) - 1)
-  for Region in RegionList:
-    Function.eraseChild(Region)
-    Loop.addRegion(Region)
-  # Now add the loop to the function
-  Function.addRegionBefore(0, Loop)
-  # Now we will modify indexing for ops that perform
-  # cross lane operations.
-  #OpList = GetAllCrossLaneOpsInFunction(Function)
-  #if len(OpList) != 0:
-  #  ModifiedOp = set()
-  #  for Op in OpList:
-  #    # Sanity check
-  #    assert isinstance(Op, RoseBVExtractSliceOp)
-  #    assert isinstance(Op.getLowIndex(), RoseOperation)
-  #    print("CROSS LANE OP:")
-  #    Op.print()
-  #    IndexingOp = Op.getLowIndex()
-  #    if IndexingOp in ModifiedOp:
-  #      continue
-  #    OuterIterator = Loop.getIterator()
-  #    NewIndexingOp = RoseAddOp.create(Context.genName(IndexingOp.getName()), \
-  #                    [IndexingOp, OuterIterator])
-  #    IndexingOp.replaceUsesWith(NewIndexingOp)
-  #    Block = IndexingOp.getParent()
-  #    Block.addOperationAfter(NewIndexingOp, IndexingOp)
-  #    print("NewIndexingOp:")
-  #    NewIndexingOp.print()
-  #    print("Block:")
-  #    Block.print()
-  #    ModifiedOp.add(NewIndexingOp)
-  #print("FINAL FUNCTION:")
-  #Function.print()
+    if MaxBitwidth == None:
+      MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+      print("PrimaryOps[0]:")
+      PrimaryOps[0].print()
+      for Op in PrimaryOps[1:]:
+        print("PrimaryOp:")
+        Op.print()
+        if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
+          MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
+    else:
+      for Op in PrimaryOps:
+        print("PrimaryOp:")
+        Op.print()
+        if MaxBitwidth < Op.getInputBitVector().getType().getBitwidth():
+          MaxBitwidth = Op.getInputBitVector().getType().getBitwidth()
+    InnerLoops.append(Loop)
+  # If the outer loop has not been created and inserted in the function, let's
+  # do that here.
+  if MaxBitwidth != None:
+    OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+    Index = Function.getPosOfChild(InnerLoops[0])
+    for InnerLoop in InnerLoops:
+      Function.eraseChild(InnerLoop)
+      OuterLoop.addRegion(InnerLoop)
+    Function.addRegionBefore(Index, OuterLoop)
 
 
 def AddTwoNestedLoopsInFunction(Function : RoseFunction):
@@ -800,7 +749,5 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
-
 
 
