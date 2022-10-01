@@ -117,6 +117,8 @@ def CompileNumber(Num, Context : x86RoseContext):
 
 
 def CompileVariable(Variable, Context):
+  print("COMPILING VARIABLE")
+  print(Variable)
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(Variable.name):
     ID = Context.getVariableID(Variable.name)
@@ -681,6 +683,10 @@ def CompileUpdate(Update, Context : x86RoseContext):
       # Add this add op to the IR and the context
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
+    # Add signedness info
+    if not Context.isValueSignKnown(BitVector):
+      if Context.isValueSignKnown(RHSExprVal):
+        Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
   else:
     # This could be a mask generator
@@ -704,6 +710,9 @@ def CompileUpdate(Update, Context : x86RoseContext):
       BitVector = CompileExpression(Update.lhs.obj, Context)
       # Get the high index
       assert Context.isElemTypeOfVariableKnown(BitVector.getName()) == True
+      if not Context.isValueSignKnown(BitVector):
+        if Context.isValueSignKnown(RHSExprVal):
+          Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
       ElemType = Context.getElemTypeOfVariable(BitVector.getName())
       assert isinstance(ElemType, RoseBitVectorType)
       IndexDiff = RoseConstant.create(ElemType.getBitwidth() - 1, LowIndex.getType())
@@ -719,6 +728,9 @@ def CompileUpdate(Update, Context : x86RoseContext):
       IndexVal = CompileExpression(Update.lhs.idx, Context)
       # Compile the vector
       BitVector = CompileExpression(Update.lhs.obj, Context)
+      if not Context.isValueSignKnown(BitVector):
+        if Context.isValueSignKnown(RHSExprVal):
+          Context.addSignednessInfoForValue(BitVector, Context.isValueSigned(RHSExprVal))
       # The bit slice size here is 1 bit
       BitwidthValue = RoseConstant.create(1, IndexVal.getType())
       # Compile the op
@@ -2069,7 +2081,7 @@ BinaryOps = {
     '>=' : HandleToGreaterThanEqual,
     '==' : HandleToEqual,
     '!=' : HandleToNotEqual,
-    '>>' : HandleToAshr,
+    '>>' : HandleToLshr,
     '<<' : HandleToShl,
     '&' : HandleToAnd,
     '|' : HandleToOr,
