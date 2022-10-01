@@ -102,6 +102,24 @@ class x86RoseContext(RoseContext):
     elif isinstance(ChildContext.getRootAbstraction(), RoseForLoop) \
        or isinstance(ChildContext.getRootAbstraction(), RoseCond):
       ChildContext.replaceParentAbstractionsWithChild()
+      # There are times when temporary variables are written to (using bvinsert)
+      # so we will need to get those variables.
+      BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
+      ParentFunction = ChildContext.getRootAbstraction().getFunction()
+      for Block in BlockList:
+        for Op in Block:
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if Op.getInputBitVector() != ParentFunction.getReturnValue():
+              # Add the new variable
+              VariableName = Op.getInputBitVector().getName()
+              self.addVariable(VariableName, ChildContext.getVariableID(VariableName))
+              # Add signedness information
+              assert ChildContext.isValueSignKnown(Op.getInputBitVector())
+              Signedness = ChildContext.isValueSigned(Op.getInputBitVector())
+              self.addSignednessInfoForValue(Op.getInputBitVector(), Signedness)
+              # Add this variable as an abstraction
+              self.addCompiledAbstraction(ChildContext.getVariableID(VariableName), \
+                                          Op.getInputBitVector())
       super().destroyContext(ContextName)
     
 
