@@ -873,6 +873,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   IndicesToBitwidth = dict()
   OpsWithUnknownExtensionKind = set()
   for Op in reversed(OpList):
+    print("TRY OP:")
+    Op.print()
     if Op in Visited:
       print("ALREADY VISITED")
       continue
@@ -887,6 +889,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
           if Operand in UnknownVal:
             UnknownVal.remove(Operand)
+          Operand.setType(Op.getType())
       continue
 
     if Op.isSizeChangingOp():
@@ -948,6 +951,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue
+          print("SETTING TYPE FOR Operand:")
+          Operand.print()
           Operand.setType(Op.getType())
           BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
           if Operand in UnknownVal:
