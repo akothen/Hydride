@@ -15,6 +15,7 @@ from Specification import Specification, parse_spec
 
 from GrammarGenerator import GrammarGenerator
 from TypedGrammarGenerator import TypedGrammarGenerator
+from TypedSimpleGrammarGenerator import TypedSimpleGrammarGenerator
 from SimpleGrammarGenerator import SimpleGrammarGenerator
 
 from Synthesizer import Synthesizer
@@ -32,7 +33,7 @@ dsl_list = parse_dict(semantcs)
 sd = StructDef()
 idd = InterpreterDef()
 cd = CostDef()
-gg = TypedGrammarGenerator()
+gg = TypedSimpleGrammarGenerator()
 gl = GetLengthDef(get_len_name = "get-length")
 
 
@@ -60,7 +61,9 @@ rosette_imports = """
 (require hydride)
 
 
-(provide {}_grammar_operations)
+;(provide {}_grammar_operations)
+
+(provide (all-defined-out))
 
 """
 
@@ -86,7 +89,7 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   vectorization_factor = VF,
                   depth = 3
                   )
-    grammar_name = spec['name'] + "_grammar"
+    grammar_name = spec['name']
     write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))
 
 

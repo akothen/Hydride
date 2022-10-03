@@ -62,7 +62,7 @@ class CostDef:
 
 
             if isBitVectorType(arg):
-                sub_cost.append("(cost  {}) ".format(arg.name))
+                sub_cost.append("(* {} (cost  {})) ".format( idx + 1, arg.name))
 
         cost_clause = ""
 

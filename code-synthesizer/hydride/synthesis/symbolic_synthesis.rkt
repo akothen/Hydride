@@ -1,14 +1,8 @@
-#lang rosette
-(require rosette/lib/synthax)
-(require rosette/lib/angelic)
-(require racket/pretty)
-(require data/bit-vector)
-(require rosette/lib/destruct)
-(require rosette/solver/smt/boolector)
-(require rosette/solver/smt/z3)
-(require hydride/utils/bvops)
-(require hydride/utils/debug)
-(require hydride/ir/hydride/interpreter)
+#lang rosette (require rosette/lib/synthax) (require rosette/lib/angelic) (require racket/pretty) (require data/bit-vector) (require rosette/lib/destruct) (require rosette/solver/smt/boolector) (require rosette/solver/smt/z3) (require hydride/utils/bvops) (require hydride/utils/debug) (require hydride/ir/hydride/interpreter)
+
+
+
+(require (only-in racket build-vector))
 
 ;; Use 16 bits as a default bitwidth for
 ;; the Boolector solver
@@ -79,16 +73,17 @@
     (if optimize?
       ;; Use Z3 for optimization
       (begin 
-        (current-solver (z3))
+        ;(current-solver (z3))
         ;(current-bitwidth #f) 
 
         (optimize 
           #:minimize (list (cost-fn grammar))
           #:guarantee 
           (begin 
+            ;(define symbols-new (create-symbolic-bvs bitwidth-list))
             (assert 
               (bveq ;equal? 
-                (interpret grammar symbols)  (invoke_ref symbols)
+                (hydride-interpret grammar symbols)  (invoke_ref symbols)
                 )
               )
             )
@@ -105,7 +100,7 @@
           (begin 
             (assert 
               (bveq ;equal? 
-                (interpret grammar symbols)  (invoke_ref symbols)
+                (hydride-interpret grammar symbols)  (invoke_ref symbols)
                 )
               )
             )

@@ -29,7 +29,7 @@
 
 (define (create-n-reg n)
   (for/list ([i (range n)])
-            (reg (bv i 4))
+            (reg i )
             )
   )
 
@@ -38,7 +38,7 @@
 
   (define (print-helper k v)
     (display "; (reg ")
-    (display (~s v))
+    (display (~s  v))
     (display ") ")
     (displayln (halide:print-buffer-type-info k))
     v
@@ -49,9 +49,9 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr id-map expr-depth VF)
+(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver)
   (debug-log id-map)
-  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map))
+  (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
@@ -66,7 +66,7 @@
 
 (define synth-log (make-hash))
 
-(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map)
+(define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver)
 
 
 
@@ -74,13 +74,14 @@
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
-  (define sym-bvs (create-concrete-bvs leaves-sizes))
+  (define sym-bvs (create-symbolic-bvs leaves-sizes))
 
 
   ;(clear-vc!)
   ;(clear-terms!)
 
   (define dummy-args (halide:create-buffers leaves sym-bvs))
+
 
 
   (define synthesized-sol 
@@ -105,16 +106,19 @@
 
                   (define expr-VF (halide:vec-len expr-extract))
 
+                  (debug-log (format "Vectorization factor for sub expression ~a\n" expr-VF))
+
                   (define grammar (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
                   (debug-log "Grammar:")
                   (debug-log grammar)
 
+
                   (define regs (create-n-reg (length leaves)))
                   (debug-log regs)
                   (define (grammar-fn i)
-                    (clear-vc!)
-                    (clear-terms!)
-                    (collect-garbage)
+                    ;(clear-vc!)
+                    ;(clear-terms!)
+                    ;(collect-garbage)
                     (define use-simple-grammar #t)
                     (if use-simple-grammar
                       (grammar i)
@@ -122,31 +126,42 @@
                       )
                     )
 
-                  (define (invoke-spec env)
-                    (define synth-buffers (halide:create-buffers leaves env))
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
+                  (define (invoke-spec env-full)
+                    (printf "invoke-spec with env: ~a\n" env-full)
+                    (define synth-buffers-full (halide:create-buffers leaves env-full))
 
 
-                    (define _result (halide:assemble-bitvector (halide:interpret _expr-extract) expr-VF))
+
+
+                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args halide-expr synth-buffers-full expr-depth))
+
+                    (println _expr-extract-full)
+
+
+                    (define _result_full (halide:assemble-bitvector (halide:interpret _expr-extract-full) expr-VF))
+                    (displayln "Spec result")
+                    (println _result_full)
                     ;;(define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
-                    _result
+                    _result_full
                     )
 
 
                   ;; Calculate result for last most lane
-                  (define (invoke-spec-lane env)
-                    (define synth-buffers (halide:create-buffers leaves env))
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers expr-depth))
-                    (define _result (cpp:eval ((halide:interpret _expr-extract) (- expr-VF 2))))
-                    _result
+                  (define (invoke-spec-lane lane-idx env-lane)
+                    (printf "invoke-spec-lane with env: ~a\n" env-lane)
+                    (define synth-buffers-lane (halide:create-buffers leaves env-lane))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers-lane expr-depth))
+                    (define output-idx (- expr-VF 1 lane-idx))
+                    (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))
+                    _result_lane
                     )
 
 
                   (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 50)
-                  (define solver 'z3)
+                  (define cost-bound 20)
+                  ;(define solver ')
 
                   ;(clear-vc!)
                   ;(clear-terms!)
@@ -207,7 +222,7 @@
                   (define synthesized-leaves 
 
                     (for/list  ([leaf leaves])
-                               (synthesize-halide-expr-step leaf expr-depth VF id-map)
+                               (synthesize-halide-expr-step leaf expr-depth VF id-map solver)
                                )
                     ;)
                     )

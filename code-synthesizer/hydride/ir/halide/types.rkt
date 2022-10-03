@@ -39,7 +39,7 @@
 
 (struct int-imm (data signed?) #:transparent)
 
-(struct buffer ([data #:mutable]  elemT buffSize) #:transparent)
+(struct buffer (data  elemT buffSize) #:transparent)
 (struct load (buf idxs alignment) #:transparent)
 (struct ramp (base stride len) #:transparent)
 (struct aligned (mod rem) #:transparent)

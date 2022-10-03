@@ -3513,6 +3513,7 @@
 
 
 (define (_mm512_dpwssd_epi32  src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 )
+  ;(printf "Invoked _mm512_dpwssd_epi32 with arguments ~a ~a ~a ~a ~a ~a ~a ~a ~a\n" src a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0)
 (define dst src)
 (define res (apply
 concat
@@ -4797,13 +4798,13 @@ concat
   (define dst
     (apply
       concat
-      (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))]) ; 0 256 256 => 1
+      (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))]) ; 0 512 512 => 1
                 (apply
                   concat
-                  (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))]) ; 0 256 16 => 16
-                            (define %lastidx1 (-  %elemsize  1)) ; 15
-                            (define %highidx0 (+  %lastidx1  %arg0)) ; 15 + 0 = 15
-                            (define %1 (extract  %highidx0 %arg0 a)) ; 15 0 => first 16 bits
+                  (for/list ([j0.new (reverse (range %laneoffset %lanesize2 %elemsize))]) ; 0 512 32 => 16
+                            (define %lastidx1 (-  %elemsize  1)) ; 31
+                            (define %highidx0 (+  %lastidx1  %arg0)) ; 31 + 0 = 1531
+                            (define %1 (extract  %highidx0 %arg0 a)) ; 31 0 => first 31 bits
                             %1
                             )
                   )

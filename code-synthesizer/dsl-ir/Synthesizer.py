@@ -4,7 +4,7 @@ from PredefinedDSL import *
 import random
 
 DEBUG = False
-DEBUG_LIST = ["_mm512_broadcastd_epi32",  "_mm512_dpwssd_epi32", "_mm256_cvtepi16_epi8"]
+DEBUG_LIST = ["_m_paddd"]
 SKIP_LIST = ["pack", "mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -398,9 +398,6 @@ class Synthesizer:
         memory_shuffle_insts = [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list = spec_memory_shuffles.contexts #[ctx.context_args for ctx in spec_memory_shuffles.contexts]
 
-        # TEMP
-        memory_shuffle_insts = []
-        memory_shuffle_args_list = []
 
         spec_memory_shuffles = self.get_single_interleave_shuffles()
         memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
@@ -457,7 +454,7 @@ class Synthesizer:
 
             context_args = ctx.context_args
             for ctx_arg in context_args:
-                if isBitVectorType(ctx_arg):
+                if isinstance(ctx_arg, BitVector):
                     bitvector_sizes.append(ctx_arg.size)
 
 
@@ -465,7 +462,7 @@ class Synthesizer:
 
             context_args = ctx.context_args
             for ctx_arg in context_args:
-                if isBitVectorType(ctx_arg):
+                if isinstance(ctx_arg, BitVector):
                     bitvector_sizes.append(ctx_arg.size)
 
         bitvector_sizes = list(set(bitvector_sizes))
@@ -489,7 +486,7 @@ class Synthesizer:
 
 
         return self.grammar_generator.emit_grammar(
-            operation_layer_name = main_grammar_name + "_operations",
+            operation_layer_name = main_grammar_name,
             operation_dsl_insts = operation_dsl_insts,
             operation_dsl_args_list = operation_dsl_args_list,
             top_level_grammar_name = main_grammar_name,
@@ -511,15 +508,13 @@ class Synthesizer:
         # will be compute/shuffle
 
 
-        num_broadcasts = int(bound * 0.50)
-        num_computes = bound - num_broadcasts
 
-        print("Num Broadcasts:", num_broadcasts)
-        print("Num Computes:", num_computes)
+        upcast_ops = []
+        upcast_ctxs = []
 
-        broadcast_ops = []
-        broadcast_ctxs = []
 
+        downcast_ops = []
+        downcast_ctxs = []
 
         compute_ops = []
         compute_ctxs = []
@@ -539,16 +534,27 @@ class Synthesizer:
 
             names.append(op.name)
 
-            if self.is_broadcast_like_operation(op):
-                broadcast_ops.append(op)
-                broadcast_ctxs.append(ctx)
+            if self.is_downcast_like_operation(op,ctx):
+                downcast_ops.append(op)
+                downcast_ctxs.append(ctx)
+            elif self.is_upcast_like_operation(op, ctx):
+                upcast_ops.append(op)
+                upcast_ctxs.append(ctx)
             else :
                 compute_ops.append(op)
                 compute_ctxs.append(ctx)
 
 
-        print("Actual Broadcast ops", len(broadcast_ops))
+        num_broadcasts_actual = len(upcast_ops) + len(downcast_ops)
+        print("Actual Broadcast ops", num_broadcasts_actual)
         print("Actual Compute ops", len(compute_ops))
+
+
+        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
+        num_computes = bound - num_broadcasts
+
+        print("Num Broadcasts:", num_broadcasts)
+        print("Num Computes:", num_computes)
 
         def get_top_N_ops(ops, ctxs, N):
 
@@ -566,6 +572,7 @@ class Synthesizer:
 
 
             if  N < len(ops):
+                print(N , "<",  len(ops))
                 return (globally_sorted_operation_insts[-N:], globally_sorted_operation_contexts[-N:])
             else:
                 return (globally_sorted_operation_insts, globally_sorted_operation_contexts)
@@ -573,11 +580,22 @@ class Synthesizer:
 
 
         computes = get_top_N_ops(compute_ops,compute_ctxs, num_computes)
-        broadcasts = get_top_N_ops(broadcast_ops, broadcast_ctxs, num_broadcasts)
+
+        # Divide upcasts and downcasts evenly when both exceed 50% of
+        # the allocated number of rules for broadcast instructions
+        num_upcasts = min(len(upcast_ops), int(0.5 * num_broadcasts))
+        num_downcasts = num_broadcasts - num_upcasts
+
+        upcasts = get_top_N_ops(upcast_ops,upcast_ctxs, num_upcasts)
+        downcasts = get_top_N_ops(downcast_ops,downcast_ctxs, num_downcasts)
+
+
+        grammar_ops = computes[0] + upcasts[0] + downcasts[0]
+        grammar_ctxs = computes[1] + upcasts[1] + downcasts[1]
 
 
 
-        return (computes[0]+broadcasts[0] , computes[1] + broadcasts[1])
+        return (grammar_ops, grammar_ctxs)
 
 
 
@@ -799,7 +817,7 @@ class Synthesizer:
 
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
-        print("is_broadcast_like:",is_broadcast_like)
+        print(dsl_inst.name,"is_broadcast_like:",is_broadcast_like)
 
         for ctx in dsl_inst.contexts:
 
@@ -1039,7 +1057,20 @@ class Synthesizer:
 
 
     def is_broadcast_like_operation(self, dsl_inst):
-        return dsl_inst.get_semantics_ops_list() == []
+        ops = dsl_inst.get_semantics_ops_list()
+
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat"] for op in ops])
+        #return dsl_inst.get_semantics_ops_list() == []
+
+
+    # Is the operation either a broadcast operation or an
+    # operation which sign/zero extends from a smallar
+    # type to a larger type
+    def is_upcast_like_operation(self, dsl_inst, ctx):
+        return self.is_broadcast_like_operation(dsl_inst) and ((ctx.out_vectsize > ctx.in_vectsize) or (ctx.in_precision < ctx.out_precision))
+
+    def is_downcast_like_operation(self, dsl_inst, ctx):
+        return self.is_broadcast_like_operation(dsl_inst) and not (self.is_upcast_like_operation(dsl_inst, ctx))
 
     def consider_bitwise_heuristic(self, dsl_inst):
 

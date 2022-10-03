@@ -13,6 +13,8 @@
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
 
+(require (only-in racket build-vector))
+(require (only-in racket build-list))
 
 (provide (all-defined-out))
 
@@ -26,7 +28,7 @@
     (begin
       (define max-val (expt 2 bw))
       (define rand-val (random max-val))
-      (bv rand-val (bitvector bw))
+      (integer->bitvector rand-val (bitvector bw))
       )
     (concat
       (create-concrete-bv (/ bw 2))
@@ -67,23 +69,30 @@
 ;; the solution is not true for all
 ;; values we return the counter example
 ;; which it failed on
-(define (verify-synth-sol sol bw-list invoke_ref solver)
+(define (verify-synth-sol  sol bw-list invoke_ref solver)
 
-  ;;; Clear nay previous terms and collect garbage
-  (clear-vc!)
-  (clear-terms!)
-  (collect-garbage)
+  ;;; Clear any previous terms and collect garbage
+  ;(clear-vc!)
+  ;(clear-terms!)
+  ;(collect-garbage)
 
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
+  (debug-log (format "Symbols: ~a\n" symbols))
+  ;(define ref-result (invoke_ref symbols))
+  ;(define synth-res (hydride-interpret sol symbols))
+  ;(println ref-result)
+  ;(println synth-res)
   (define cex 
     (verify 
-      (assert
-        (bveq;equal?  
-          (interpret sol symbols) (invoke_ref symbols) )
-        ))
+      (begin
+          (assert (bveq   (invoke_ref symbols) (hydride-interpret sol symbols)))
+          ;(assert (bveq (extract 31 0 synth-res) (extract 31 0 ref-result)))
+
+           )
+      )
     )
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
@@ -92,9 +101,11 @@
     (if
       (sat? cex) ;; If there exists some cex for which it is not equal
 
+
       (begin
+        (define complete-sol (complete-solution cex (vector->list symbols)))
         (define (helper i)
-          (eval-bv-cex symbols cex i)
+          (eval-bv-cex symbols complete-sol i)
           )
         (debug-log "Verification failed :(")
 
@@ -104,7 +115,7 @@
         (debug-log spec_res)
 
 
-        (define synth_res  (interpret sol new-bvs))
+        (define synth_res  (hydride-interpret sol new-bvs))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
@@ -161,11 +172,47 @@
   )
 
 
-(define (get-concrete-asserts assert-query-fn cex-ls)
+(define (fold-and ls)
+  (define list-len (length ls))
+
+  (cond
+    [(equal? list-len 0)
+     #t
+     ]
+    [(equal? list-len 1)
+     (list-ref ls 0)
+     ]
+    [else
+      (and (car ls) (fold-and (cdr ls)))
+      ]
+    )
+  
+  )
+
+
+(define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+  ;(debug-log "- Generating concrete asserts ...")
+
+
   (define (helper i)
-    (assert-query-fn (list-ref cex-ls i))
+    (assert-query-fn (list-ref cex-ls i) (list-ref failing-ls i))
     )
   (define num-cex (length cex-ls))
+
+  ;; Build list of conditions
+  (define assertions (build-list num-cex helper))
+  assertions
+  )
+
+
+(define (get-concrete-asserts-grammar assert-query-fn grammar cex-ls)
+  ;(debug-log "- Generating concrete asserts ...")
+  (define (helper i)
+    (assert-query-fn grammar (list-ref cex-ls i))
+    )
+  (define num-cex (length cex-ls))
+
+  ;; Build list of conditions
   (define assertions (build-list num-cex helper))
   assertions
   )
@@ -173,7 +220,6 @@
 
 (define (get-concrete-noteq-asserts grammar failed-sols)
   (define (helper i)
-    (printf "Adding ~a to exclude list ...\n" (list-ref failed-sols i))
     (assert (not (equal? (list-ref failed-sols i) grammar)))
     )
   (define num-fail (length failed-sols))
@@ -182,40 +228,57 @@
   )
 
 
-(define (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn failed-sols)
+(define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
   (begin 
     (synthesize 
       #:forall (list cex-ls)
       #:guarantee 
       (begin 
         ;; loop over inputs and add asserts
-        (get-concrete-asserts assert-query-fn cex-ls)
-        (get-concrete-noteq-asserts grammar failed-sols)
+        (get-concrete-asserts assert-query-fn cex-ls failing-ls) 
+        ;(get-concrete-noteq-asserts grammar failed-sols)
         )
       ) 
     )
   )
 
-(define (z3-optimize assert-query-fn grammar cex-ls cost-fn failed-sols)
+(define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
   (begin 
-    (current-solver (z3))
+    ;(current-solver (z3))
+    (debug-log "*********** z3-optimize *****************")
 
-    (optimize 
-      #:minimize (list (cost-fn grammar))
-      #:guarantee 
-      (begin 
-        ;; loop over inputs and add asserts
-        (get-concrete-asserts assert-query-fn cex-ls)
-        (get-concrete-noteq-asserts grammar failed-sols)
+    (define sol?
+            (optimize 
+              #:minimize (list (cost-fn grammar))
+              #:guarantee 
+                ;; loop over inputs and add asserts
+                (begin 
+                      ;(forall (list cex-ls)
+                        (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                        ;(get-concrete-asserts assert-query-fn cex-ls)
+                        ;(andmap (lambda (v) (assert-query-fn grammar v)) cex-ls)
+                        ;(assert-query-fn grammar (list-ref cex-ls 0))
 
-        )
+                      ;)
+                  )
+                ;(get-concrete-noteq-asserts grammar failed-sols)
+
+                )
+              )
+    (if (sat? sol?)
+      (begin
+        (define mat (evaluate grammar sol?))
+        (displayln "Z3 Synthesized Solution")
+        (println mat)
       )
-
+      '()
+      )
+    sol?
     )
-  )
+)
 
 
-(define (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound failed-sols)
+(define (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin
     (debug-log (format "Boolector optimize with cost-bound ~a ...\n" cost-bound))
     (debug-log "Synthesizing...\n")
@@ -227,8 +290,8 @@
         #:guarantee 
         (begin 
           ;; loop over inputs and add asserts
-          (get-concrete-asserts assert-query-fn cex-ls)
-          (get-concrete-noteq-asserts grammar failed-sols)
+          (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+          ;(get-concrete-noteq-asserts grammar failed-sols)
           (assert (< (cost-fn grammar) cost-bound))
           )
         ) 
@@ -259,15 +322,15 @@
   )
 
 
-(define (iterative-synth-query assert-query-fn grammar cex-ls optimize? cost-fn cost-bound solver failed-sols) 
+(define (iterative-synth-query assert-query-fn grammar cex-ls failing-ls optimize? cost-fn cost-bound solver failed-sols) 
   (if optimize?
     (if 
       (equal? solver 'z3)
-      (z3-optimize assert-query-fn grammar cex-ls cost-fn failed-sols)
-      (boolector-optimize assert-query-fn grammar cex-ls cost-fn cost-bound failed-sols)
+      (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
+      (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
       )
 
-    (regular-concrete-synthesis assert-query-fn grammar cex-ls cost-fn failed-sols)
+    (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
     )
   )
 
@@ -278,25 +341,79 @@
 ;; invoke_ref :: (vector symb_bv1 symb_bv2 1 2)
 ;; generate-params :: (vector symbolic-bvs) -> (vector sym-bv1 symbv2 16 23)
 
+(define (print-temp-result-on-cex mat invoke_ref cex-ls)
+  (for/list
+    ([cex cex-ls])
+    (define hydride-result (hydride-interpret mat cex))
+    (define halide-result (invoke_ref cex))
+    (displayln "Counter Example:")
+    (println cex)
+    (displayln "Hydride Result:")
+    (println hydride-result)
 
-(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs cost-bound solver failed-sols)
+    (displayln "Halide Result:")
+    (println halide-result)
+    cex
+    )
+  )
+
+
+(define (get-failing-lanes invoke_ref synth-sol cex-ls word-size)
+
+  (define difference-predicate
+  (for/list ([cex cex-ls])
+            (define spec-result (invoke_ref cex))
+            (define synth-result (hydride-interpret synth-sol cex))
+            (define size (bvlength spec-result))
+            (define num-elems (/ size word-size))
+
+            (for/list ([i (reverse (range num-elems))])
+                      (define low (* word-size (- num-elems 1 i)))
+                      (define high (+ low (- word-size 1)))
+                      (define ext-spec (extract high low spec-result))
+                      (define ext-synth (extract high low synth-result))
+                      (if
+                        (bveq ext-spec ext-synth )
+                        0 ; 0 if the element in the lane is the same
+                        1
+                       )
+            )
+                    )
+   )
+
+  (displayln "Difference  Predicate")
+  (println difference-predicate)
+  
+  (define differing-lanes
+      (for/list ([diff-list difference-predicate])
+                (if (equal? (member 1 diff-list) #f)
+                  0
+                  (index-of diff-list 1)
+                )
+               ) 
+      
+  )
+
+  (displayln "differing-lanes")
+  (println differing-lanes)
+  differing-lanes
+)
+
+
+(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs failing-lanes cost-bound solver failed-sols)
   (debug-log "synthesize-sol-iterative")
+
+
+  ;; Clear the verification condition up till this point
+  (clear-vc!)
 
   ;; Save current solver environment and restore 
   ;; after synthesis step
   ;; (define curr-bw (current-bitwidth))
   ;; (define curr-solver (current-solver))
   
-  (if (equal? solver 'boolector)
-    (current-solver (boolector))
-    (current-solver (z3))
-    )
 
 
-  ;; Clear the verification condition up till this point
-  (clear-vc!)
-  (clear-terms!)
-  (collect-garbage 'major)
 
   (debug-log "Garbage collected")
   ;; If the cexs is empty 
@@ -306,50 +423,71 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list) (create-concrete-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list)  (create-concrete-bvs bitwidth-list))
       cexs
       )
     )
 
+
+  (define failing-ls
+    (if
+      (equal? (length failing-lanes) 0)
+      (list 0 0)
+      failing-lanes
+      )
+    )
+
   (define output-size (bvlength (invoke_ref (list-ref cex-ls 0))))
+  (define lane-sol (invoke_ref_lane 0 (list-ref cex-ls 0)))
+  (define word-size (bvlength lane-sol ))
+  (define num-lanes (/ output-size word-size))
 
   (debug-log "Concrete counter examples:")
   (debug-log cex-ls)
 
 
+  (debug-log "Failing lanes examples:")
+  (debug-log failing-ls)
+
+
   ;; Sythesizing keeping only a single lane
   ;; in the assertion. We'll verify over all
   ;; lanes
-  (define (assert-query-synth-fn env)
+  (define (assert-query-synth-fn env random-idx)
     ;; FIXME: Hacky way to get extraction limits
     ;(define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
-    ;(define lane-sol (invoke_ref_lane env))
-    ;(define word-size (bvlength lane-sol ))
     ;16
     ;32 - 1 = 32
 
-    (define full-interpret-res (interpret grammar env))
-    ;(define interpret-res (extract (- (* 2 word-size) 1 ) word-size full-interpret-res))
+    (define full-interpret-res (hydride-interpret grammar env))
+    ;(define random-idx (random (- num-lanes 1)))
+    (displayln "Random Index")
+    (println random-idx)
+    (define low (* word-size random-idx))
+    ;(define high (+ low word-size (- word-size 1)))
+    (define high (+ low  (- word-size 1)))
 
-    ;(println (invoke_ref env))
-    
-    ;(debug-log (format "Output size length is :~a\n" output-size))
-    
-    ;(println full-interpret-res)
+    (define interpret-res (extract high low full-interpret-res))
 
-    (debug-log "Generated SMT constraints ... ")
+    (define halide-res 
+      ;(concat 
+       ; (invoke_ref_lane (+ random-idx 1) env) 
+        (invoke_ref_lane (+ random-idx 0) env)
+       ; )
+      )
 
-    (begin
-        (assert (bveq (invoke_ref env)   full-interpret-res))
-        ;(assert (equal? lane-sol interpret-res))
-        ;(assert (equal? (get-length grammar env) output-size))
+    (displayln "Halide Produced:")
+    (println halide-res)
 
-        )
+    ;(define condition (equal? halide-res interpret-res)) ;; TEST WITH EQUAL?
+    (define condition (equal? halide-res interpret-res))
+    (assert condition)
     )
+
 
   (define start_time (current-seconds))
   (define sol?
-    (iterative-synth-query assert-query-synth-fn grammar cex-ls optimize? cost-fn cost-bound solver failed-sols)
+    (iterative-synth-query assert-query-synth-fn grammar cex-ls failing-ls optimize? cost-fn cost-bound solver failed-sols)
     )
 
   (define end_time (current-seconds))
@@ -370,6 +508,7 @@
       )
     )
 
+
   (define boolector-opt-case (and
     optimize?
     (equal? solver 'boolector)
@@ -383,35 +522,17 @@
     ;; If satisfiable, verify current solution and check
     ;; if it's true over ALL inputs
     (begin
+
+      (print-temp-result-on-cex materialize invoke_ref cex-ls)
       (debug-log "Unchecked solution:")
       (debug-log materialize)
-      ;(define cur-out-port (current-output-port))
-      ;(define cur-err-port (current-error-port))
-      ;(define cur-inp-port (current-input-port))
-      ;(define cur-solver (current-solver))
-
-      ;(debug-log (format "Current Output port: ~a\n" cur-out-port))
-      ;(debug-log (format "Current Error  port: ~a\n" cur-err-port))
-      ;(debug-log (format "Current Input  port: ~a\n" cur-inp-port))
-      ;(debug-log (format "Current Solver: ~a\n" cur-solver))
 
       (define-values 
         (verified? new-cex) 
-            ;(with-handlers 
-            ;  ([exn:fail? (lambda (exn) (begin
-            ;                             (values #t '())
-            ;                             )
-            ;                )])  
-            ;  (with-deep-time-limit 10 
-                                    (verify-synth-sol materialize bitwidth-list invoke_ref solver)
-            ;                        ))
+            (verify-synth-sol  materialize bitwidth-list invoke_ref solver)
         )
 
 
-      ;(current-solver cur-solver)
-      ;(current-output-port cur-out-port)
-      ;(current-input-port cur-inp-port)
-      ;(current-error-port cur-err-port)
 
 
       (if
@@ -428,6 +549,7 @@
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
               (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
                                         cex-ls  
+                                        failing-ls
                                         (cost-fn materialize) ;; Use tighter cost bound
                                         solver
                                         failed-sols
@@ -448,12 +570,17 @@
 
 
         ;; If not verified then attempt synthesizing with appended counter example
-        (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
-                                  (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
-                                  cost-bound
-                                  solver
-                                  (append failed-sols (list materialize))
-                                  )
+        (begin
+          (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-cex) word-size))
+
+            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
+                                      (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
+                                      (append failing-ls new-failing-lane)
+                                      cost-bound
+                                      solver
+                                      (append failed-sols (list materialize))
+                                      )
+            )
         )
       )
 
@@ -476,7 +603,7 @@
 
 
   ;; Clear the verification condition up till this point
-  (clear-vc!)
+  ;(clear-vc!)
 
   ;; If the cexs is empty 
   ;; create a random set of concrete inputs
@@ -485,13 +612,14 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list) (create-concrete-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list) );;(create-concrete-bvs bitwidth-list))
       cexs
       )
     )
 
   (debug-log "Concrete counter examples:")
   (debug-log cex-ls)
+
 
 
   (define (assert-query-fn env)

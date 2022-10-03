@@ -1,21 +1,23 @@
 from Types import *
 from Instructions import *
 
+USE_CAST_SHORTCUT = False
 
 
-class TypedGrammarGenerator:
+class TypedSimpleGrammarGenerator:
 
     def __init__(self ):
         self.typed_contexts = {}
+        self.prec_holes = {}
 
 
 
 
     def emit_grammar_hole(self, vars_name, depth_name, grammar_name, decrement = True):
         if decrement:
-            return "({} {} #:depth (- {} 1))".format(grammar_name, vars_name, depth_name)
+            return "({})".format(grammar_name)
         else:
-            return "({} {} #:depth {})".format(grammar_name, vars_name, depth_name)
+            return "({})".format(grammar_name)
 
     def emit_grammar_clause(self, dsl_inst, grammar_args , vars_name = "vars",
                              depth_name = "k", grammar_name = "operations",
@@ -27,9 +29,7 @@ class TypedGrammarGenerator:
 
         for ga in grammar_args:
 
-            if ga.is_hole and dsl_inst.name == "vector-load":
-                grammar_clause.append("(apply choose* {})".format(vars_name))
-            elif ga.is_hole:
+            if ga.is_hole:
                 grammar_clause.append(self.emit_grammar_hole(vars_name, depth_name, grammar_name) +" "+ga.get_rkt_comment())
             else:
                 grammar_clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
@@ -37,9 +37,9 @@ class TypedGrammarGenerator:
         combined = "\n\t\t".join(grammar_clause)
 
         if last_clause:
-            grammar_clause = ["\t[else"] + [combined] + [")]"]
+            grammar_clause =  [combined] + [")"]
         else:
-            grammar_clause = ["\t[(choose* #t #f)"] + [combined] + [")]"]
+            grammar_clause =  [combined] + [")"]
 
         return "\n\t".join(grammar_clause)
 
@@ -47,7 +47,12 @@ class TypedGrammarGenerator:
         splat_factor = bv_size // prec
         #return "(lit (create-symbolic-bv {}))".format(bv_size)
         #return "(lit (?? (bitvector {})))".format(bv_size)
-        return "(lit (create-splat-bv (?? (bitvector {})) {}))".format(prec, splat_factor)
+        if prec not in self.prec_holes:
+            hole_name = "hole-bv{}".format(prec)
+            definition = ";(define-symbolic {} (bitvector {}))".format(hole_name, prec)
+            self.prec_holes[prec] = {"name": hole_name, "def": definition}
+
+        return "(lit (create-splat-bv {}  {}))".format(self.prec_holes[prec]["name"], splat_factor)
 
 
     def emit_lit_0(self, bv_size, prec):
@@ -67,23 +72,23 @@ class TypedGrammarGenerator:
         condition = None
 
         if last_clause:
-            condition = "\t[else"
+            condition = "\t"
         else:
-            condition = "\t[(choose* #t #f)"
+            condition = "\t"
 
         hole =  self.emit_lit_hole(bv_size, prec)
         zero = self.emit_lit_0(bv_size, prec)
         one = self.emit_lit_1(bv_size, prec)
         neg_one = self.emit_lit_neg_1(bv_size, prec)
 
-        zero_clause = "[(choose* #t #f) {}]".format(zero)
-        one_clause = "[(choose* #t #f) {}]".format(one)
+        zero_clause = "{}".format(zero)
+        one_clause = "{}".format(one)
 
-        neg_one_clause = "[(choose* #t #f) {}]".format(neg_one)
+        neg_one_clause = "{}".format(neg_one)
 
-        close = "]"
+        close = ""
 
-        hole_clause =  "\n\t".join([condition, hole, close])
+        hole_clause =  "" # "\n\t".join([condition, hole, close])
 
         return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause])
 
@@ -179,43 +184,44 @@ class TypedGrammarGenerator:
 
         joined_clause = []
 
-        for idx, input_size in enumerate(self.input_sizes):
-            if not is_broadcast_like:
-                break
+        if USE_CAST_SHORTCUT and is_broadcast_like:
+            for idx, input_size in enumerate(self.input_sizes):
+                if not is_broadcast_like:
+                    break
 
-            clause = ["(", dsl_inst.get_dsl_name()]
-            use_clause = True
+                clause = ["(", dsl_inst.get_dsl_name()]
+                use_clause = True
 
-            for ga in grammar_args:
+                for ga in grammar_args:
 
-                if ga.is_hole:
+                    if ga.is_hole:
 
-                    self.init_typed_context(ga.size)
+                        self.init_typed_context(ga.size)
 
-                    if ga.size != input_size:
-                        use_clause = False
-                        break
-                    clause.append("(reg {})".format(idx) +" "+ga.get_rkt_comment())
-                else:
-                    clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
-            if use_clause:
-                joined_clause.append(
-                    "[(choose* #t #f)"+ "\n\t\t".join(clause) +" \n)]"
-                )
+                        if ga.size != input_size:
+                            use_clause = False
+                            break
+                        clause.append("(reg {})".format(idx) +" "+ga.get_rkt_comment())
+                    else:
+                        clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
+                if use_clause:
+                    joined_clause.append(
+                         "\n\t\t".join(clause) +" \n)"
+                    )
 
 
 
 
         if last_clause:
-            joined_clause += (["\t[else"] + [combined] + [")]"])
+            joined_clause += ( [combined] + [")"])
         else:
-            joined_clause += (["\t[(choose* #t #f)"] + [combined] + [")]"])
+            joined_clause += ( [combined] + [")"])
 
         return "\n\t".join(joined_clause)
 
 
     def emit_choose_reg(self, reg_id):
-        return "[(choose* #t #f) (reg  {})]".format(reg_id)
+        return "(reg  {})".format(reg_id)
 
     def emit_choose_lit(self, bv_size, prec):
         return self.emit_lit_hole_clause(bv_size,prec)
@@ -248,10 +254,11 @@ class TypedGrammarGenerator:
             )
 
 
-        assert_depth = "\t(assert (> {} 0))".format(depth_name)
         define_grammar = "(define ({} {} #:depth {})".format(layer_name, vars_name, depth_name)
 
-        return define_grammar +"\n" +assert_depth +"\n" +"\t(cond" + "\n" +"\n".join(clauses)+"\n\t)"+"\n)\n"
+        define_grammar = "[{}  (choose \n".format(layer_name)
+
+        return define_grammar +"\n"  + "\n" +"\n".join(clauses)+"\n\t"+"\n)]\n"
 
 
     def init_typed_context(self, output_size):
@@ -290,13 +297,12 @@ class TypedGrammarGenerator:
 
 
     def get_layer_name(self, bv_type):
-
         bv_type = int(bv_type)
 
         if bv_type == self.return_type:
-            return self.operation_layer_name
+            return "expr"+ "_start"
         else:
-            return self.operation_layer_name + "-bv"+str(bv_type)
+            return "expr" + "-bv"+str(bv_type)
 
 
 
@@ -308,7 +314,8 @@ class TypedGrammarGenerator:
                      depth = 6,
                      return_type = 256,
                      lit_holes = [],
-                     input_sizes = []
+                     input_sizes = [],
+                     vars_name = "vars"
                      ):
 
         self.return_type = return_type
@@ -355,11 +362,19 @@ class TypedGrammarGenerator:
         prefix += ";; "+" "*30 +" DSL Grammar"+'\n'
         prefix += ";; "+"="*80 + "\n"
 
-        grammar_tree = "\n\n".join(grammars)
+        lit_holes_def = "\n".join([""] + [hole['def'] for key,hole in self.prec_holes.items()])
+
+        simple_grammar_name = operation_layer_name + "_grammar"
+
+        grammar_tree = "(define-grammar ("+simple_grammar_name+ " "+vars_name+")\n"+" \n\n".join(grammars) +")"
+
+
+        grammar_depth_fn = "(define ({} k) ({} 'a #:depth k #:start {}))\n".format(operation_layer_name, simple_grammar_name,
+                                                                                   self.get_layer_name(return_type))
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        return prefix + "\n" + grammar_tree + "\n" + sufix
+        return prefix + "\n" + lit_holes_def + "\n"+ grammar_tree  + "\n" + grammar_depth_fn + "\n" + sufix
 
 
 

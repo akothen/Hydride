@@ -1737,6 +1737,19 @@ namespace Halide {
                     }
 
 
+                    Expr visit(const Shuffle *op) override{
+                        if (op->is_concat()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+
+                    }
+
+
 
                     Expr visit(const Broadcast *op) override {
 
@@ -2019,7 +2032,8 @@ namespace Halide {
 
                         if(elemT == "'") return "";
 
-                        std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        //std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
                         return define_bitvector_str + "\n" + define_buffer_str;
@@ -2032,14 +2046,14 @@ namespace Halide {
 
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             unsigned id = bi->second;
-                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+ std::to_string(id) + ")"+"\n";
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" " +  std::to_string(id) + ")"+"\n";
 
 
                         }
 
                         for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
                             unsigned id = bi->second;
-                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+ std::to_string(id) + ")"+"\n";
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+  std::to_string(id)  + ")"+"\n";
                         }
 
                         return comment + define_buff_map + add_entry;
@@ -2112,7 +2126,7 @@ namespace Halide {
                     }
 
                     std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name){
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " )";
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " 'z3 )";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
