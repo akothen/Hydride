@@ -104,8 +104,15 @@ class x86RoseContext(RoseContext):
       ChildContext.replaceParentAbstractionsWithChild()
       # There are times when temporary variables are written to (using bvinsert)
       # so we will need to get those variables.
-      BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
-      ParentFunction = ChildContext.getRootAbstraction().getFunction()
+      print("ChildContext.getRootAbstraction():")
+      ChildContext.getRootAbstraction().print()
+      BlockList = list()
+      if ChildContext.getRootAbstraction().getKeys() == None:
+        BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
+      else:
+        for Key in ChildContext.getRootAbstraction().getKeys():
+          BlockList.extend(ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock, Key=Key))
+      _, ParentFunction = self.getFirsRootAbstractionsOfType(RoseFunction)
       for Block in BlockList:
         for Op in Block:
           if isinstance(Op, RoseBVInsertSliceOp):
@@ -283,6 +290,10 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
 
   # Add an bitslice operation
   Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, Low, High, BitwidthValue)
+  print("EXTRACT OP CREATED:")
+  print("Operation.getInputBitVector():")
+  Operation.getInputBitVector().print()
+  print(Operation.getInputBitVector().ID)
 
   # Add signedness info on the op
   if Context.isValueSignKnown(BitVector):
@@ -327,6 +338,10 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
     # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, LowIndex, HighIndex, BitwidthValue)
+    print("EXTRACT OP CREATED:")
+    print("Operation.getInputBitVector():")
+    Operation.getInputBitVector().print()
+    print(Operation.getInputBitVector().ID)
   else:
     # Compile the index first
     IndexVal = CompileIndex(IndexExpr.idx, Context)
@@ -336,6 +351,10 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(1, IndexVal.getType())
     # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, IndexVal, IndexVal, BitwidthValue)
+    print("EXTRACT OP CREATED:")
+    print("Operation.getInputBitVector():")
+    Operation.getInputBitVector().print()
+    print(Operation.getInputBitVector().ID)
 
   # Add signedness info
   Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Vector))
@@ -1544,6 +1563,9 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   for Index in range(RootFunction.getNumArgs()):
     RootContext.addVariable(RootFunction.getArg(Index).getName(), ParamsIDs[Index])
     RootContext.addCompiledAbstraction(ParamsIDs[Index], RootFunction.getArg(Index))
+    print("ROOT FUNCTION ARG:")
+    RootFunction.getArg(Index).print()
+    print(RootFunction.getArg(Index).ID)
   
   # Add the function to the context
   RootContext.addCompiledAbstraction(Sema.intrin, RootFunction)
