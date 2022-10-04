@@ -191,16 +191,52 @@ def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
   ParentRegion.getFunction().print()
 
 
-def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
+def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : set = None):
   print("ADD OUTER LOOP IN FUNCTION")
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
   # Get the op that we can use to canonicalize the loop bounds
-  LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
+  LoopList = list()
+  if InlinableRegions != None:
+    FunctionChildren = list()
+    FunctionChildren.extend(Function.getChildren())
+    for Index, Region in enumerate(FunctionChildren):
+      if Region in InlinableRegions:
+        if not isinstance(Region, RoseForLoop):
+          assert isinstance(Region, RoseBlock)
+          #Index = Function.getPosOfChild(Region)
+          PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, [Region])
+          assert PrimaryOps != None
+          MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+          OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+          InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
+          OuterLoop.addRegion(InnerLoop)
+          Function.addRegionBefore(Index, OuterLoop)
+          Function.eraseChild(Region)
+          InnerLoop.addRegion(Region)
+          LoopList.append(OuterLoop)
+          continue
+      if isinstance(Region, RoseForLoop):
+        # If we have got another nested loop in the region, we have to do nothing
+        if len(Region.getRegionsOfType(RoseForLoop)) == 0:
+          PrimaryOps = GetOpDeterminingOuterLoopBounds(Region)
+          assert PrimaryOps != None
+          MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+          OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+          Function.addRegionBefore(Index, OuterLoop)
+          Function.eraseChild(Region)
+          OuterLoop.addRegion(Region)
+          LoopList.append(OuterLoop)
+          continue
+        LoopList.append(Region)
+  else:
+    LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
   assert len(LoopList) != 0
   MaxBitwidth = None
   InnerLoops = list()
   for Loop in LoopList:
+    print("=====LOOP:")
+    Loop.print()
     PrimaryOps = GetOpDeterminingOuterLoopBounds(Loop)
     if PrimaryOps == None:
       print("PrimaryOps is NONE")
@@ -212,6 +248,7 @@ def AddOuterLoopInFunction(Function : RoseFunction, Context : RoseContext):
           OuterLoop.addRegion(InnerLoop)
         Function.addRegionBefore(Index, OuterLoop)
         MaxBitwidth = None
+        InnerLoops = list()
       continue
     # Find the maximum bitwidth and use that
     if MaxBitwidth == None:
@@ -312,9 +349,11 @@ def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):
   # There are cases where there are subregions that are inlinable,
   # which means that there can be multiple loop nests at level zero.
   InlinableRegions = HasInlinableSubRegion(Function)
+  print("InlinableRegions:")
+  print(InlinableRegions)
   if InlinableRegions != None:
     if len(InlinableRegions) != 0:
-      AddOuterLoopInFunction(Function, Context)
+      AddOuterLoopInFunction(Function, InlinableRegions)
       return
   if Function.numLevelsOfRegion(RoseForLoop, 1) == 0:
     # If one cond region has no loop but another does, add loop
@@ -338,7 +377,7 @@ def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):
         AddOuterLoopAroundRegions(CondRegion, SubRegionList, KeyForRelevantRegion)
         return
     print("ADDING OUTER LOOP IN FUNCTION")
-    AddOuterLoopInFunction(Function, Context)
+    AddOuterLoopInFunction(Function)
   return
 
 
@@ -749,5 +788,7 @@ def Run(Function : RoseFunction, Context : RoseContext):
   CanonicalizeFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
+
+
 
 
