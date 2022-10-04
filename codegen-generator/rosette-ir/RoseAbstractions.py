@@ -303,7 +303,7 @@ class RoseBlock(RoseRegion):
     return hash(self.getRegionID())
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
-    if Suffix == "":
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     ClonedBlock = RoseBlock.create()
     for Operation in self:
@@ -708,7 +708,7 @@ class RoseCond(RoseRegion):
     return hash(self.getRegionID())
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
-    if Suffix == "":
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     ClonedConditions = list()
     for Condition in self.Conditions:
