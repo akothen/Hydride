@@ -16,6 +16,12 @@
 (provide (all-defined-out))
 
 (define (synthesize-sol-with-depth depth depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+
+  (if (equal? solver 'boolector)
+    (current-solver (boolector))
+    (current-solver (z3))
+    )
+
   (debug-log (format "Synthesizing solution with depth ~a, depth-limit ~a, and cost-bound ~a ...\n" depth depth-limit cost-bound))
 
   (if
@@ -23,13 +29,15 @@
 
     (begin
 
-      (define grammar (grammar-fn depth))
+      (define grammar
+        (grammar-fn depth)
+        )
 
       (define-values 
         (satisfiable? materialize elapsed_time)
         (if symbolic?
             (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cost-bound solver)
-            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn '() cost-bound solver '())
+            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn '() '() cost-bound solver '())
           )
         )
 

@@ -1,5 +1,6 @@
 from Instructions import DSLInstruction
 from Types import *
+from PredefinedDSL import default_structs
 
 DEFAULT_COST = 1
 IDX_I_COST = 1
@@ -15,14 +16,14 @@ class CostDef:
         return
 
 
-    def emit_default_def(self):
+    def emit_default_def(self, struct_definer):
         defaults = []
 
 
 
         defaults.append("[(idx-i id) {}]".format(IDX_I_COST))
         defaults.append("[(idx-j id) {}]".format(IDX_J_COST))
-        defaults.append("[(reg id) id]")
+        defaults.append("[(reg id) 1]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
         defaults.append("[(nop v1) (+ {} (cost v1))]".format(NOP_COST))
 
@@ -32,11 +33,14 @@ class CostDef:
 
         defaults.append("[(idx-add i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
         defaults.append("[(idx-mul i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
-        defaults.append("[(vector-choose_dsl n ) n]")
+
+        for struct in default_structs:
+            defaults.append(self.emit_dsl_cost_def(struct, struct_definer, use_label = False)[1])
+
 
         return ["\t{}".format(d) for d in defaults]
 
-    def emit_dsl_cost_def(self, dsl_inst, struct_definer):
+    def emit_dsl_cost_def(self, dsl_inst, struct_definer, use_label = True):
 
 
         dsl_cost = dsl_inst.get_cost()
@@ -58,10 +62,15 @@ class CostDef:
 
 
             if isBitVectorType(arg):
-                sub_cost.append("(* {} (cost  {}))".format( idx+1 ,arg.name))
+                sub_cost.append("(* {} (cost  {})) ".format( idx + 1, arg.name))
 
+        cost_clause = ""
 
-        cost_clause = "(+ {} {})".format(cost_label, " ".join(sub_cost))
+        if use_label:
+            cost_clause = "(+ {} {})".format(cost_label, " ".join(sub_cost))
+        else:
+            cost_clause = "(+ {} {})".format(dsl_cost, " ".join(sub_cost))
+
 
         cost_cmd_list = [struct_definer.emit_dsl_struct_use(dsl_inst)] + [cost_clause]
 
@@ -76,7 +85,7 @@ class CostDef:
         return "\t[_ {}]".format(DEFAULT_COST)
 
     def emit_cost_model(self, dsl_list, struct_definer):
-        default_costs = self.emit_default_def()
+        default_costs = self.emit_default_def(struct_definer)
 
 
         dsl_costs = [self.emit_dsl_cost_def(dsl_inst, struct_definer) for dsl_inst in dsl_list ]

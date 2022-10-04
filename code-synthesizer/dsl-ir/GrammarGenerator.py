@@ -49,6 +49,13 @@ class GrammarGenerator:
         return "(lit (create-splat-bv (?? (bitvector {})) {}))".format(prec, splat_factor)
 
 
+    def emit_lit_0(self, bv_size, prec):
+        return "(lit (bv 0 (bitvector {})))".format(bv_size)
+
+
+    def emit_lit_1(self, bv_size, prec):
+        splat_factor = bv_size // prec
+        return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
 
 
@@ -60,11 +67,18 @@ class GrammarGenerator:
         else:
             condition = "\t[(choose* #t #f)"
 
-        hole = self.emit_lit_hole(bv_size, prec)
+        hole =  self.emit_lit_hole(bv_size, prec)
+        zero = self.emit_lit_0(bv_size, prec)
+        one = self.emit_lit_1(bv_size, prec)
+
+        zero_clause = "[(choose* #t #f) {}]".format(zero)
+        one_clause = "[(choose* #t #f) {}]".format(one)
 
         close = "]"
 
-        return "\n\t".join([condition, hole, close])
+        hole_clause = "" #"\n\t".join([condition, hole, close])
+
+        return "\n".join([zero_clause, one_clause, hole_clause])
 
 
 

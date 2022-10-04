@@ -15,7 +15,7 @@ class BindDef:
         defaults.append("[(dim-y id) (dim-y id)]")
         defaults.append("[(idx-i id) (idx-i id)]")
         defaults.append("[(idx-j id) (idx-j id)]")
-        defaults.append("[(reg id) (vector-ref {} id)]".format(env_name))
+        defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
 
         defaults.append("[(lit v) (lit v)]")
 
@@ -25,6 +25,9 @@ class BindDef:
 
         defaults.append(self.emit_bind_def(dummy_vector_load_dsl, struct_definer)[1:])
         defaults.append(self.emit_bind_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
+        defaults.append(self.emit_bind_def(dummy_vector_two_interleave_dsl, struct_definer)[1:])
+        defaults.append(self.emit_bind_def(dummy_vector_interleave_dsl, struct_definer)[1:])
+        defaults.append(self.emit_bind_def(dummy_vector_deinterleave_dsl, struct_definer)[1:])
 
         return ["\t{}".format(d) for d in defaults]
 

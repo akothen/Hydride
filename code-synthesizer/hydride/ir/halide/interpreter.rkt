@@ -729,11 +729,13 @@
     )
   (define buffer-size (bvlength data))
   (define buffer-num-elem (/ buffer-size step-size))
-  (define (buffer-fn i)
+  (define buffer-fn (lambda (i) 
+                      (begin
     (define offset-from-left (- (- buffer-num-elem 1) i)) ;; bit offsets start from LSB and ascend towards MSB
     (extract (+ (* offset-from-left step-size) (- step-size 1)) (* offset-from-left step-size) data)
     )
-
+                      )
+    )
   ;; Create buffer object with
   ;; specified buffer function
   (buffer buffer-fn elemT (bvlength data))

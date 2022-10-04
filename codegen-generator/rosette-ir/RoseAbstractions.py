@@ -103,30 +103,31 @@ class RoseFunction(RoseValue, RoseRegion):
   def __hash__(self):
     return hash((self.getName(), self.getType(), self.getRegionID()))
   
-  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
-    if Suffix == "":
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     ClonedArgsList = list()
     for Arg in self.getArgs():
-      ClonedArg = Arg.clone(Arg.getName() + "." + Suffix)
+      if Suffix != "":
+        ClonedArg = Arg.clone(Arg.getName() + "." + Suffix, ChangeID)
+      else:
+        ClonedArg = Arg.clone(ChangeID=ChangeID)
       ValueToValueMap[Arg] = ClonedArg
       ClonedArgsList.append(ClonedArg)
     FunctionName = self.getName() + "." + Suffix
     ClonedFunction = RoseFunction.create(FunctionName, ClonedArgsList, \
                                         self.getType().getReturnType())
     ReturnValue = self.getReturnValue()
-    print("ReturnValue:")
-    ReturnValue.print()
-    print("type(ReturnValue):")
-    print(type(ReturnValue))
     if not isinstance(ReturnValue, RoseOperation) \
       and not isinstance(ReturnValue, RoseArgument):
-      ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix)
+      if Suffix != "":
+        ClonedReturnVal = ReturnValue.clone(ReturnValue.getName() + "." + Suffix, ChangeID)
+      else:
+        ClonedReturnVal = ReturnValue.clone(ChangeID=ChangeID)
       ClonedFunction.setRetVal(ClonedReturnVal)
       ValueToValueMap[ReturnValue] = ClonedReturnVal
-      print("RETURN VALUE MAPPED")
     for Abstraction in self:
-      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap, ChangeID)
       ClonedFunction.addRegion(ClonedAbstraction)
     if ClonedFunction.getReturnValue().getType() == RoseUndefinedType() \
       and ClonedFunction.getReturnValue() == RoseUndefValue():
@@ -301,12 +302,12 @@ class RoseBlock(RoseRegion):
     #return hash((tuple(self.getOperations()), self.getRegionID()))
     return hash(self.getRegionID())
 
-  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
     if Suffix == "":
       return self.cloneRegion()
     ClonedBlock = RoseBlock.create()
     for Operation in self:
-      ClonedOperation = Operation.cloneOperation(Suffix, ValueToValueMap)
+      ClonedOperation = Operation.cloneOperation(Suffix, ValueToValueMap, ChangeID)
       ClonedBlock.addRegion(ClonedOperation)
     return ClonedBlock
 
@@ -337,18 +338,12 @@ class RoseBlock(RoseRegion):
     return Users
 
   def getNumUsersInRegion(self, Abstraction):
-    print("GETTING NUMBER OF USERS IN REGION")
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
-    print("Abstraction:")
-    Abstraction.print()
     NumUsers = 0
     for Op in self.getOperations():
-      print("CHECK OPERATION:")
-      Op.print()
       if Op.usesValue(Abstraction):
-        print("USES VALUE!!!!")
         NumUsers += 1
     return NumUsers
 
@@ -489,8 +484,8 @@ class RoseForLoop(RoseRegion):
   def __hash__(self):
     return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
 
-  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
-    if Suffix == "":
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(),  ChangeID : bool = False):
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     LoopStart = self.getStartIndex()
     if isinstance(LoopStart, RoseConstant):
@@ -507,13 +502,10 @@ class RoseForLoop(RoseRegion):
       LoopStep = LoopStep.getValue()
     else:
       LoopStep = ValueToValueMap[LoopStep]
-    IteratorName = self.getIterator().getName() + "." + Suffix
-    print("type(LoopStart):")
-    print(type(LoopStart))
-    print("type(LoopEnd):")
-    print(type(LoopEnd))
-    print("type(LoopStep):")
-    print(type(LoopStep))
+    if Suffix != "":
+      IteratorName = self.getIterator().getName() + "." + Suffix
+    else:
+      IteratorName = self.getIterator().getName()
     if isinstance(LoopStart, RoseValue) and not isinstance(LoopEnd, RoseValue):
       assert isinstance(LoopEnd, int)
       LoopEnd = RoseConstant(LoopEnd, LoopStart.getType())
@@ -533,7 +525,7 @@ class RoseForLoop(RoseRegion):
     ValueToValueMap[self.getEndIndex()] = ClonedLoop.getEndIndex()
     ValueToValueMap[self.getStep()] = ClonedLoop.getStep()
     for Abstraction in self:
-      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap, ChangeID)
       ClonedLoop.addRegion(ClonedAbstraction)
     return ClonedLoop
 
@@ -598,14 +590,12 @@ class RoseForLoop(RoseRegion):
       and not isinstance(Abstraction, RoseConstant)
     assert isinstance(Abstraction, RoseValue)
     NumUsers = 0
-    if self.getIterator() == Abstraction:
-      NumUsers += self.getIterator()
     if self.getStartIndex() == Abstraction:
-      NumUsers += self.getStartIndex()
+      NumUsers += 1
     if self.getEndIndex() == Abstraction:
-      NumUsers += self.getEndIndex()
+      NumUsers += 1
     if self.getStep() == Abstraction:
-      NumUsers += self.getStep()
+      NumUsers += 1
     return NumUsers
 
   def replaceUsesWith(self, Abstraction, NewAbstraction):
@@ -717,17 +707,15 @@ class RoseCond(RoseRegion):
   def __hash__(self):
     return hash(self.getRegionID())
 
-  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict()):
+  def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
     if Suffix == "":
       return self.cloneRegion()
     ClonedConditions = list()
     for Condition in self.Conditions:
       ClonedConditions.append(ValueToValueMap[Condition])
-    print("ClonedConditions:")
-    print(ClonedConditions)
     ClonedCondRegion = RoseCond.create(ClonedConditions, len(self.getKeys()))
     for Abstraction in self:
-      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap)
+      ClonedAbstraction = Abstraction.clone(Suffix, ValueToValueMap, ChangeID)
       Key = self.getKeyForChild(Abstraction)
       ClonedCondRegion.addRegion(ClonedAbstraction, Key)
     return ClonedCondRegion

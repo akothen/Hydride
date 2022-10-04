@@ -107,13 +107,7 @@
       ]
 
      [(buffer data elemT buffsize)  
-       (if is-leaf-depth
-        (values (arg 0)   1)
-        (begin
-          (define-values (leaf-sol args-used) (bind-expr-args data args (- depth 1)))
-          (values (buffer leaf-sol elemT buffsize) args-used)
-        )
-        )
+        (values (arg 0) 1)
       ]
 
     ;; Type Casts
@@ -765,7 +759,9 @@
           (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
           (define remaining-values (- (vector-length args) args-used1))
           (define remaining-args (vector-take-right args remaining-values))
+
           (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
 
           (values (vec-add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
         )
@@ -995,7 +991,7 @@
         (values (vec-broadcast n (arg 0)) 1)
         (begin
           (define-values (leaf1-sol args-used1) (bind-expr-args vec args (- depth 1)))
-          (values (vector_reduce n leaf1-sol) args-used1)
+          (values (vec-broadcast n leaf1-sol) args-used1)
         )
         )
      ]

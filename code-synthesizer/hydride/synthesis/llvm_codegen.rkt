@@ -25,7 +25,7 @@
 (define (hydride-to-str hydride-expr id-map)
   (define (print-helper k v)
    (define type-str  
-     (string-append "; (reg " (~s v) ") " (halide:print-buffer-type-info k) "\n")
+     (string-append "; (reg " (~s  v) ") " (halide:print-buffer-type-info k) "\n")
      )
    type-str
    )

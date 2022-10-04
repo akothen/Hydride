@@ -100,6 +100,7 @@ class Context:
 
 
     def supports_output_size(self, output_size):
+        #print("check if outvectsize for {} : {} supports {}".format(self.name, self.get_output_size(), output_size))
         return self.get_output_size() == output_size
 
 

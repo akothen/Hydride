@@ -18,7 +18,7 @@ class GetOutPrecDef:
         defaults.append("[(dim-y id) 1]".format(env_name, env_name))
         defaults.append("[(idx-i id) 1]".format(env_name, env_name))
         defaults.append("[(idx-j id) 1]".format(env_name, env_name))
-        defaults.append("[(reg id) (bvlength (vector-ref {} id))] ;; FIX-ME NOTE: DO NOT USE THIS METHOD FOR PREC".format(env_name))
+        defaults.append("[(reg id) (bvlength (vector-ref-bv {} id))] ;; FIX-ME NOTE: DO NOT USE THIS METHOD FOR PREC".format(env_name))
 
         defaults.append("[(lit v) (bvlength v)]")
 
@@ -42,6 +42,30 @@ class GetOutPrecDef:
         swizzle_args = dummy_vector_swizzle_dsl.get_sample_context().context_args
         swizzle_prec_expr = "{}".format(swizzle_args[2].name)
         defaults.append("[{} {}]".format(swizzle_dsl_use, swizzle_prec_expr))
+
+
+        # Special case handling for vector two interleave
+
+        dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_two_interleave_dsl)
+        args = dummy_vector_two_interleave_dsl.get_sample_context().context_args
+        len_expr = "{}".format(args[3].name)
+        defaults.append("[{} {}]".format(dsl_use, len_expr))
+
+
+        # Special case handling for vector  interleave
+
+        dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_interleave_dsl)
+        args = dummy_vector_interleave_dsl.get_sample_context().context_args
+        len_expr = "{}".format(args[2].name)
+        defaults.append("[{} {}]".format(dsl_use, len_expr))
+
+
+        # Special case handling for vector  deinterleave
+
+        dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_deinterleave_dsl)
+        args = dummy_vector_deinterleave_dsl.get_sample_context().context_args
+        len_expr = "{}".format(args[2].name)
+        defaults.append("[{} {}]".format(dsl_use, len_expr))
 
         return ["\t{}".format(d) for d in defaults]
 

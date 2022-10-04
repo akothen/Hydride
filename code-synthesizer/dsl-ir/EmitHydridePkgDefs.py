@@ -73,7 +73,7 @@ with open("gen.rkt","w+") as RacketFile:
 
     write_to_file(cd.emit_cost_model(dsl_list, sd))
 
-    write_to_file(idd.emit_interpreter(dsl_list, sd))
+    write_to_file(idd.emit_interpreter(dsl_list, sd, add_assertions = False))
 
     write_to_file(gl.emit_get_length(dsl_list, sd))
 

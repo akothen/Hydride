@@ -55,7 +55,7 @@
     (dynamic-require mod (string->symbol name))
     )
 
-  (define grammar (get-grammar mod-path (string-append base_name "_grammar_operations")));;(dynamic-require gen (string->symbol (string-append base_name "_grammar_operations"))))
+  (define grammar (get-grammar mod-path (string-append base_name "")));;(dynamic-require gen (string->symbol (string-append base_name "_grammar_operations"))))
   grammar
   )
 

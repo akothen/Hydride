@@ -31,9 +31,10 @@
             [(idx-add i1 i2) 1]
             [(idx-mul i1 i2) 1]
             [(vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o) prec_i_o]
-            [ (vector-choose_dsl val prec num_elems) prec]
-            [ (vector-deinterleave_dsl val prec num_elems) prec]
             [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8) num_2]
+            [(interleave-vectors_dsl v0 v1 size_i_o prec_i_o) prec_i_o]
+            [(interleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
+            [(deinterleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
             [(_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (cond 
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_4 512) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 16) (equal? num_8 32) (equal? num_9 0)) 16]
@@ -2899,5 +2900,6 @@
              ]
             )
   )
+
 ;; ================================================================================
 

@@ -849,11 +849,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
                               LoopList : list, SkipBVExtracts : set, \
                               CondBlocksBVInsertsMap : dict, Context : RoseContext, \
                               ArgToConstantValsMap : dict):
-  # Some sanity checks
-  assert len(LoopList) > 1
-  Function = Block.getFunction()
   print("EXTRACTING CONSTANTS FROM BLOCK")
   Block.print()
+  # Some sanity checks
+  #assert len(LoopList) > 1
+  Function = Block.getFunction()
   OpList = []
   OpList.extend(Block.getOperations())
   Loop = Block.getParentOfType(RoseForLoop)
@@ -873,6 +873,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   IndicesToBitwidth = dict()
   OpsWithUnknownExtensionKind = set()
   for Op in reversed(OpList):
+    print("TRY OP:")
+    Op.print()
     if Op in Visited:
       print("ALREADY VISITED")
       continue
@@ -887,6 +889,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
           if Operand in UnknownVal:
             UnknownVal.remove(Operand)
+          Operand.setType(Op.getType())
       continue
 
     if Op.isSizeChangingOp():
@@ -939,11 +942,17 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         for OperandIndex, Operand in enumerate(Op.getOperands()):
           if isinstance(Operand, RoseConstant):
             # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Op.getType()))
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
             ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue
+          print("SETTING TYPE FOR Operand:")
+          Operand.print()
           Operand.setType(Op.getType())
           BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
           if Operand in UnknownVal:
@@ -953,8 +962,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         for OperandIndex, Operand in enumerate(Op.getOperands()):
           if isinstance(Operand, RoseConstant):
             # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Op.getType()))
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
             ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue       
@@ -979,8 +992,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       for OperandIndex, Operand in enumerate(Op.getOperands()):
         if isinstance(Operand, RoseConstant):
           # Abstract away this constant value
-          Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                        CommonType))
+          if isinstance(Operand.getType(), RoseBitVectorType):
+            Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          CommonType))
+          else:
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          CommonType))
           ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
           Op.setOperand(OperandIndex, Arg)
           continue
@@ -998,8 +1015,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             continue
           if isinstance(Operand, RoseConstant):
             # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Op.getType()))
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
             ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue
@@ -1015,8 +1036,12 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
             continue
           if isinstance(Operand, RoseConstant):
             # Abstract away this constant value
-            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
-                                                          Operand.getType()))
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Operand.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Operand.getType()))
             ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
             Op.setOperand(OperandIndex, Arg)
             continue
@@ -1136,10 +1161,6 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())] = Op.getOperand(Op.getBitwidthPos())
         continue
       Bitwidth = Op.getOperand(Op.getBitwidthPos())
-      print("Loop.getParentOfType(RoseForLoop):")
-      Loop.getParentOfType(RoseForLoop).print()
-      print("LoopList[0]:")
-      LoopList[0].print()
       if Loop.getParentOfType(RoseForLoop) != LoopList[0]:
         assert Op.getLowIndex() != LoopList[0].getIterator()
         Op.setOperand(Op.getBitwidthPos(), LoopList[0].getStep())
@@ -1521,48 +1542,33 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
   #  ExtractConstantsMultipleLoops(Function, Context, ArgToConstantValsMap)
   #  return
 
-  # Get all the induction variables
-  LoopList = Function.getRegionsOfType(RoseForLoop)
-  for Loop in LoopList:
-    print("PRINTING LOOP")
-    Loop.print()
-  Iterators = [Loop.getIterator() for Loop in LoopList]
-
-  # Generate rose arguments for vector length, lane size and element size
-  # and overwrite loop bounds and step. Also, map the args to the concrete values.
-  VectorSize = Function.appendArg(RoseArgument.create("%vectsize", Iterators[0].getType()))
-  ArgToConstantValsMap[VectorSize] = LoopList[0].getEndIndex().clone()
-  LoopList[0].setEndIndexVal(VectorSize)
-  #if LoopList[0].getStep() == LoopList[1].getEndIndex():
-  #  LaneSize = Function.appendArg(RoseArgument.create("%" + "lanesize", Iterators[0].getType()))
-  #  ArgToConstantValsMap[LaneSize] = LoopList[0].getStep().clone()
-  #  LoopList[0].setStepVal(LaneSize)
-  #  LoopList[1].setEndIndexVal(LaneSize)
-  #else:
-  LaneSize1 = Function.appendArg(RoseArgument.create("%" + "lanesize1", Iterators[0].getType()))
-  ArgToConstantValsMap[LaneSize1] = LoopList[0].getStep().clone()
-  LoopList[0].setStepVal(LaneSize1)
-  LaneSize2 = Function.appendArg(RoseArgument.create("%" + "lanesize2", Iterators[1].getType()))
-  ArgToConstantValsMap[LaneSize2] = LoopList[1].getEndIndex().clone()
-  LoopList[1].setEndIndexVal(LaneSize2)
-  if len(LoopList) == 3:
-    LaneSize3 = Function.appendArg(RoseArgument.create("%" + "lanesize3", Iterators[2].getType()))
-    ArgToConstantValsMap[LaneSize3] = LoopList[2].getEndIndex().clone()
-    LoopList[2].setEndIndexVal(LaneSize3)
-  ElemSize = Function.appendArg(RoseArgument.create("%" + "elemsize", Iterators[1].getType()))
-  ArgToConstantValsMap[ElemSize] = LoopList[1].getStep().clone()
-  LoopList[1].setStepVal(ElemSize)
-  if len(LoopList) == 3:
-      ElemSize1 = Function.appendArg(RoseArgument.create("%" + "elemsize1", Iterators[2].getType()))
-      ArgToConstantValsMap[ElemSize1] = LoopList[2].getStep().clone()
-      LoopList[2].setStepVal(ElemSize1)
-  LaneOffset = Function.appendArg(RoseArgument.create("%" + "laneoffset", Iterators[1].getType()))
-  ArgToConstantValsMap[LaneOffset] = LoopList[1].getStartIndex().clone()
-  LoopList[1].setStartIndexVal(LaneOffset)
-  if len(LoopList) == 3:
-    LaneOffset1 = Function.appendArg(RoseArgument.create("%" + "laneoffset1", Iterators[2].getType()))
-    ArgToConstantValsMap[LaneOffset1] = LoopList[2].getStartIndex().clone()
-    LoopList[2].setStartIndexVal(LaneOffset1)
+  # Fix the loop bounds
+  OuterLoopList = Function.getRegionsOfType(RoseForLoop, 0)
+  for OuterLoop in OuterLoopList:
+    # Fix the bounds of this outer loop.
+    VectorSize = Function.appendArg(RoseArgument.create(Context.genName("%vectsize"), \
+                                      OuterLoop.getIterator().getType()))
+    ArgToConstantValsMap[VectorSize] = OuterLoop.getEndIndex().clone()
+    OuterLoop.setEndIndexVal(VectorSize)
+    OuterLaneSize = Function.appendArg(RoseArgument.create(Context.genName("%outerlanesize"), \
+                                        OuterLoop.getIterator().getType()))
+    ArgToConstantValsMap[OuterLaneSize] = OuterLoop.getStep().clone()
+    OuterLoop.setStepVal(OuterLaneSize)
+    # Fix the bounds of the inner loops
+    InnerLoops = OuterLoop.getRegionsOfType(RoseForLoop)
+    for InnerLoop in InnerLoops:
+      InnerLaneOffset = Function.appendArg(RoseArgument.create(Context.genName("%innerlaneoffset"), \
+                                        InnerLoop.getIterator().getType()))
+      ArgToConstantValsMap[InnerLaneOffset] = InnerLoop.getStartIndex().clone()
+      InnerLoop.setStartIndexVal(InnerLaneOffset)
+      InnerLaneSize = Function.appendArg(RoseArgument.create(Context.genName("%innerlanesize"), \
+                                        InnerLoop.getIterator().getType()))
+      ArgToConstantValsMap[InnerLaneSize] = InnerLoop.getEndIndex().clone()
+      InnerLoop.setEndIndexVal(InnerLaneSize)
+      InnerElemSize = Function.appendArg(RoseArgument.create(Context.genName("%elemsize"), \
+                                        InnerLoop.getIterator().getType()))
+      ArgToConstantValsMap[InnerElemSize] = InnerLoop.getStep().clone()
+      InnerLoop.setStepVal(InnerElemSize)
   Function.print()
 
   # Handle accumulation code
@@ -1589,10 +1595,17 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
 
   UnknownVal = set()
   BlockList = Function.getRegionsOfType(RoseBlock)
+  #LoopList = Function.getRegionsOfType(RoseForLoop)
   IndexingOps = set()
   for Block in BlockList:
     print("---Block in List:")
     Block.print()
+    LoopList = list()
+    Parent = Block.getParentOfType(RoseForLoop)
+    while not isinstance(Parent, RoseUndefRegion):
+      LoopList.append(Parent)
+      Parent = Parent.getParentOfType(RoseForLoop)
+    LoopList.reverse()
     ExtractConstantsFromBlock(Block, BVValToBitwidthVal, Visited, \
                               UnknownVal,  IndexingOps, LoopList, SkipBVExtracts,\
                               CondBlocksBVInsertsMap, Context, ArgToConstantValsMap)

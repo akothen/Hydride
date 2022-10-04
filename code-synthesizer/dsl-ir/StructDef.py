@@ -11,7 +11,7 @@ class StructDef:
         defaults = []
 
         defaults.append("(struct reg (id) #:transparent #:mutable)")
-        defaults.append("(struct lit (val) #:transparent)")
+        defaults.append("(struct lit (val) #:transparent #:mutable)")
         defaults.append("(struct idx-i (id) #:transparent #:mutable)")
         defaults.append("(struct idx-j (id) #:transparent #:mutable)")
         defaults.append("(struct dim-x (id) #:transparent #:mutable)")
@@ -19,11 +19,13 @@ class StructDef:
         defaults.append("(struct nop (v1) #:transparent)")
         defaults.append("(struct idx-add ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
         defaults.append("(struct idx-mul ([i1 #:mutable] [i2 #:mutable] ) #:transparent )")
-        defaults.append("(struct vector-choose_dsl (num_elems) #:transparent)")
 
 
-        defaults.append(self.emit_dsl_struct_def(dummy_vector_load_dsl))
-        defaults.append(self.emit_dsl_struct_def(dummy_vector_swizzle_dsl))
+        #defaults.append(self.emit_dsl_struct_def(dummy_vector_load_dsl))
+        #defaults.append(self.emit_dsl_struct_def(dummy_vector_swizzle_dsl))
+
+        for structs in default_structs:
+            defaults.append(self.emit_dsl_struct_def(structs))
 
         return defaults
 
@@ -39,13 +41,13 @@ class StructDef:
             struct_arg = None
 
             if isBitVectorType(arg):
-                struct_arg = "[{} #:mutable]".format(arg.name)
+                struct_arg = "{}".format(arg.name)
             else:
                 struct_arg = "{}".format(arg.name)
 
             struct_args.append(struct_arg)
 
-        return "(struct {} ({}) #:transparent)".format(dsl_name, " ".join(struct_args))
+        return "(struct {} ({}) #:transparent #:mutable)".format(dsl_name, " ".join(struct_args))
 
 
     def emit_struct_defs(self, dsl_inst_ls):

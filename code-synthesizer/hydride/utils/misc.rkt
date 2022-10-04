@@ -149,6 +149,61 @@
   )
 
 
+(define (interleave-vectors v1 v2 size prec)
+  (define num-elems (/ size prec))
+
+  (apply concat
+         (for/list ([i (reverse (range num-elems))])
+                   (define low (* prec i))
+                   (define high (+ low (- prec 1)))
+                   (define v1-extract (extract high low v1))
+                   (define v2-extract (extract high low v2))
+                   (concat v1-extract v2-extract)
+                   )
+         )
+  )
+
+(define (interleave-vector v1 size prec)
+  (define num-elems (/ size prec))
+  (define base (/ num-elems 2))
+  (apply concat
+         (for/list ([i (range num-elems)])
+                   (define offset-index
+                     (cond 
+                       [(eq? (modulo i 2) 0) (/ i 2)]
+                       [else (+ base (- (/ (+ i 1) 2) 1))]
+                       )
+                     )
+                   (define random-index (- num-elems 1 offset-index))
+                   (define low-index (* random-index prec))
+                   (define high-index (+ low-index (- prec 1)))
+                   (extract high-index low-index v1)
+                   )
+         )
+  )
+
+
+(define (deinterleave-vector v1 size prec)
+  (define num-elems (/ size prec))
+  (define base (/ num-elems 2))
+  (apply concat
+         (for/list ([i (range num-elems)])
+                   (define offset-index
+                     (cond 
+                       [(< i base) (* i 2)]
+                       [else (- (* (+ (- i base) 1) 2) 1)]
+                       )
+                     )
+                   (define random-index (- num-elems 1 offset-index))
+                   (define low-index (* random-index prec))
+                   (define high-index (+ low-index (- prec 1)))
+                   (extract high-index low-index v1)
+                   )
+         )
+
+  )
+
+
 (define (write-str-to-file str file)
   (debug-log (format "Writing [~a] to file ~a\n" str file))
   (system (string-append "rm " file))

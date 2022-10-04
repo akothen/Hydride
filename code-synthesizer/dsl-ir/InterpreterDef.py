@@ -9,14 +9,14 @@ class InterpreterDef:
         self.constraints_def = InterpreterConstraintsDef()
 
 
-    def emit_default_def(self, struct_definer , env_name = "env"):
+    def emit_default_def(self, struct_definer , env_name = "env", add_assertions = True):
         defaults = []
 
         defaults.append("[(dim-x id) (vector-ref {} (- (vector-length {}) 2))]".format(env_name, env_name))
         defaults.append("[(dim-y id) (vector-ref {} (- (vector-length {}) 1))]".format(env_name, env_name))
         defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 4))]".format(env_name, env_name))
         defaults.append("[(idx-j id) (vector-ref {} (- (vector-length {}) 3))]".format(env_name, env_name))
-        defaults.append("[(reg id) (vector-ref {} id)]".format(env_name))
+        defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 
@@ -24,18 +24,9 @@ class InterpreterDef:
         defaults.append("[(idx-add i1 i2) (+ (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
         defaults.append("[(idx-mul i1 i2) (* (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
 
-        choose_interpret = """
-	[ (vector-choose_dsl  num_elems)
-        (define random-regs (for/list ([i (range (vector-length {}))])  (reg i)))
-        (apply concat
-         (for/list ([i (range num_elems)])
-                  (interpret (apply choose* random-regs) {})
-            )
-         )
-	]""".format(env_name, env_name)
-        defaults.append(choose_interpret)
-        defaults.append(self.emit_interpret_def(dummy_vector_load_dsl, struct_definer)[1:])
-        defaults.append(self.emit_interpret_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
+        for structs in default_structs:
+            defaults.append(self.emit_interpret_def(structs, struct_definer, add_assertions = add_assertions)[1:])
+
 
         return ["\t{}".format(d) for d in defaults]
 
@@ -79,8 +70,8 @@ class InterpreterDef:
 
     def emit_interpreter(self, dsl_inst_ls, struct_definer, add_assertions = True, env_name = "env"):
 
-        interpret_clauses = self.emit_default_def(struct_definer , env_name = env_name)
-        interpret_clauses += [self.emit_interpret_def(dsl_inst, struct_definer, env_name = env_name) for dsl_inst in dsl_inst_ls]
+        interpret_clauses = self.emit_default_def(struct_definer , env_name = env_name, add_assertions = add_assertions)
+        interpret_clauses += [self.emit_interpret_def(dsl_inst, struct_definer, env_name = env_name, add_assertions = add_assertions) for dsl_inst in dsl_inst_ls]
         interpret_clauses.append(self.emit_fallback_def())
 
         prefix = ";; "+"="*80 + "\n"

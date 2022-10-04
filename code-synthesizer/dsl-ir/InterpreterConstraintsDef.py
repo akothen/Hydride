@@ -52,6 +52,9 @@ class InterpreterConstraintsDef:
         indices = self.get_bitvector_operand_indices(dsl_inst)
 
 
+        def get_length_name(var):
+            return var+"-length"
+
         # Get all pair-wise constraints on the bitvector operands
         for idx_i in range(len(indices)):
             for idx_j in range(idx_i + 1, len(indices)):
@@ -67,16 +70,31 @@ class InterpreterConstraintsDef:
                 lhs_arg_name = lhs_arg.name
                 rhs_arg_name = rhs_arg.name
 
-                lhs_len = self.emit_get_length_operand(lhs_arg_name, env_name = env_name,
-                                                       get_len_name = get_len_name)
-                rhs_len = self.emit_get_length_operand(rhs_arg_name, env_name = env_name,
-                                                       get_len_name = get_len_name)
+                lhs_len = None
+                rhs_len = None
+
+                if lhs_arg_name not in self.arg_to_len_map:
+                    emit_lhs_len = self.emit_get_length_operand(lhs_arg_name, env_name = env_name, get_len_name = get_len_name)
+                    self.arg_to_len_map[lhs_arg_name] = (get_length_name(lhs_arg_name), emit_lhs_len)
+
+                lhs_len = self.arg_to_len_map[lhs_arg_name][0]
+
+
+                if rhs_arg_name not in self.arg_to_len_map:
+                    emit_rhs_len = self.emit_get_length_operand(rhs_arg_name, env_name = env_name, get_len_name = get_len_name)
+                    self.arg_to_len_map[rhs_arg_name] = (get_length_name(rhs_arg_name), emit_rhs_len)
+
+                rhs_len = self.arg_to_len_map[rhs_arg_name][0]
+
 
                 constraint = self.emit_pairwise_length_constraint(lhs_len, rhs_len)
 
                 constraints.append(constraint)
 
-        return constraints
+        #definitions = ["(define {} {})".format(len_name, len_expr) for (len_name, len_expr) in self.arg_to_len_map.values()]
+
+
+        return  constraints
 
 
 
@@ -238,6 +256,11 @@ class InterpreterConstraintsDef:
         sample_arg_names = [arg.name for arg in sample_ctx.context_args]
         skip_constraint = lambda v : v not in sample_arg_names
 
+
+
+        def get_length_name(var):
+            return var+"-length"
+
         for key_name in constraints:
             if key_name in inconsistent:
                 continue
@@ -262,20 +285,45 @@ class InterpreterConstraintsDef:
 
                 # Size + Bitvector constraint
                 if cons['lhs_type'] is Integer:
-                    rhs_len = self.emit_get_length_operand(cons['rhs'], env_name = env_name, get_len_name = get_len_name)
+                    #rhs_len = self.emit_get_length_operand(cons['rhs'], env_name = env_name, get_len_name = get_len_name)
+
+                    if cons['rhs'] not in self.arg_to_len_map:
+                        emit_rhs_len = self.emit_get_length_operand(cons['rhs'], env_name = env_name, get_len_name = get_len_name)
+                        self.arg_to_len_map[cons['rhs']] = (get_length_name(cons['rhs']), emit_rhs_len)
+
+                    rhs_len = self.arg_to_len_map[cons['rhs']][0]
+
                     pair_ctx = self.emit_pairwise_length_constraint(cons['lhs'], rhs_len)
                 else:
                     # Bitvector + Bitvector constraint
                     lhs_len = self.emit_get_length_operand(cons['lhs'], env_name = env_name, get_len_name = get_len_name)
                     rhs_len = self.emit_get_length_operand(cons['rhs'], env_name = env_name, get_len_name = get_len_name)
+
+                    lhs_len = None
+                    rhs_len = None
+
+                    if cons['lhs'] not in self.arg_to_len_map:
+                        emit_lhs_len = self.emit_get_length_operand(cons['lhs'], env_name = env_name, get_len_name = get_len_name)
+                        self.arg_to_len_map[cons['lhs']] = (get_length_name(cons['lhs']), emit_lhs_len)
+
+                    lhs_len = self.arg_to_len_map[cons['lhs']][0]
+
+
+                    if cons['rhs'] not in self.arg_to_len_map:
+                        emit_rhs_len = self.emit_get_length_operand(cons['rhs'], env_name = env_name, get_len_name = get_len_name)
+                        self.arg_to_len_map[cons['rhs']] = (get_length_name(cons['rhs']), emit_rhs_len)
+
+                    rhs_len = self.arg_to_len_map[cons['rhs']][0]
+
                     pair_ctx = self.emit_pairwise_length_constraint(lhs_len, rhs_len)
 
                 across_ctx_cons.append(pair_ctx)
 
 
+        #definitions = ["(define {} {})".format(len_name, len_expr) for (len_name, len_expr) in self.arg_to_len_map.values()]
 
 
-        return across_ctx_cons
+        return  across_ctx_cons
 
 
 
@@ -291,12 +339,15 @@ class InterpreterConstraintsDef:
 
         constraints = []
 
+        self.arg_to_len_map = {}
+
         if dsl_inst.simd:
             constraints += self.get_simd_constraints(dsl_inst, env_name = env_name , get_len_name = get_len_name)
 
         constraints += self.get_constraints_across_contexts(dsl_inst, env_name = env_name, get_len_name = get_len_name)
+        definitions = ["(define {} {})".format(len_name, len_expr) for (len_name, len_expr) in self.arg_to_len_map.values()]
 
 
-        return constraints
+        return definitions + constraints
 
 
