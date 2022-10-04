@@ -1,0 +1,2 @@
+Benchmark for fully_connected_batch_0029_sample_0031 produces best case of 0.0370827 sec/iter (over 6 samples, 6 iterations, accuracy 2.5%).
+Best output throughput is 53 mpix/sec.
