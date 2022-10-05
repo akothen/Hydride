@@ -9,11 +9,18 @@ import xml.etree.ElementTree as ET
 from x86AST import *
 
 
-def ParseCpuId(CPUID):
-  CPUID = CPUID.text.lower().replace('_', '')
-  if '/' in CPUID:
-      return CPUID.split('/')[0]
-  return CPUID
+
+def ParseX86Intructions(XMLFileName : str):
+  # Intializing x86 parser
+  InitX86Parser()
+  # Collect all x86 instuctions semantics
+  SemaList = list()
+  DataRoot = ET.parse(XMLFileName)
+  for Node in DataRoot.iter('intrinsic'):
+    SemaList.append(GetSemaFromXML(Node))
+  print("SemaList lngth:")
+  print(len(SemaList))
+  return SemaList
 
 
 def GetSemaFromXML(node):
@@ -36,6 +43,13 @@ def GetSemaFromXML(node):
     id = "param" + "." + name + "." + str(ID)
     Params.append(Parameter(name, type, is_signed, is_imm, is_mask, id))
     ID += 1
+
+  def ParseCpuId(CPUID):
+    CPUID = CPUID.text.lower().replace('_', '')
+    if '/' in CPUID:
+        return CPUID.split('/')[0]
+    return CPUID
+  
   CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
   inst = node.find('instruction')
   #assert (inst is not None)
@@ -58,18 +72,6 @@ def GetSemaFromXML(node):
       xed = None if inst is None else inst.attrib.get('xed')
     )
 
-
-def ParseX86Intructions(XMLFileName : str):
-  # Intializing x86 parser
-  InitX86Parser()
-  # Collect all x86 instuctions semantics
-  SemaList = list()
-  DataRoot = ET.parse(XMLFileName)
-  for Node in DataRoot.iter('intrinsic'):
-    SemaList.append(GetSemaFromXML(Node))
-  print("SemaList lngth:")
-  print(len(SemaList))
-  return SemaList
 
 
 ########## PSEUDOCODE PARSER
@@ -134,7 +136,7 @@ def Parse(src):
   return AST
 
 
-############ Lexer
+############ LEXER
 
 x86Reserved = {
     'FOR',
@@ -295,7 +297,7 @@ t_ignore  = ' \t'
 
 
 
-########### Parser
+########### PARSING RULES
 
 
 # Expressions have unique IDs
@@ -586,3 +588,6 @@ def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
 
+
+  
+  
