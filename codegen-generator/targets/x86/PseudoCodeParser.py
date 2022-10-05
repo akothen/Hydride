@@ -5,11 +5,297 @@
 ###################################################################
 
 
-import ply.yacc as yacc
-from lex import tokens
 import xml.etree.ElementTree as ET
-from AST import *
-from collections import defaultdict
+from x86AST import *
+
+
+def ParseCpuId(CPUID):
+  CPUID = CPUID.text.lower().replace('_', '')
+  if '/' in CPUID:
+      return CPUID.split('/')[0]
+  return CPUID
+
+
+def GetSemaFromXML(node):
+  Params = []
+  imm_width = None
+  ID = 0
+  for param_node in node.findall('parameter'):
+    name = param_node.attrib.get('varname', '')
+    type = param_node.attrib['type']
+    if name == '':
+        continue
+    is_signed = param_node.attrib.get('etype', '').startswith('SI')
+    is_imm = param_node.attrib.get('etype') == 'IMM'
+    if is_imm:
+        imm_width = int(param_node.attrib.get('immwidth', '8'))
+    if "__mmask" in type:
+      is_mask = True
+    else:
+      is_mask = False
+    id = "param" + "." + name + "." + str(ID)
+    Params.append(Parameter(name, type, is_signed, is_imm, is_mask, id))
+    ID += 1
+  CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
+  inst = node.find('instruction')
+  #assert (inst is not None)
+  operation = node.find('operation')
+  assert (operation is not None)
+  spec = Parse(operation.text)
+  output = node.find('return')
+  assert (output is not None)
+  return Sema(
+      intrin=node.attrib['name'],
+      inst= None if inst is None else inst.attrib.get('name'),
+      spec=spec,
+      params=Params,
+      rettype=output.attrib['type'],
+      ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
+      cpuids=CPUIDs,
+      inst_form = None if inst is None else inst.attrib.get('form', ''),
+      imm_width=imm_width,
+      elem_type=output.attrib['etype'],
+      xed = None if inst is None else inst.attrib.get('xed')
+    )
+
+
+def ParseX86Intructions(XMLFileName : str):
+  # Intializing x86 parser
+  InitX86Parser()
+  # Collect all x86 instuctions semantics
+  SemaList = list()
+  DataRoot = ET.parse(XMLFileName)
+  for Node in DataRoot.iter('intrinsic'):
+    SemaList.append(GetSemaFromXML(Node))
+  print("SemaList lngth:")
+  print(len(SemaList))
+  return SemaList
+
+
+########## PSEUDOCODE PARSER
+
+import ply.yacc as yacc
+import ply.lex as lex
+
+Parser = None
+lexer = None
+binary_regexp = None
+tokens = None
+precedence = None
+
+
+def InitX86Parser():
+  global Parser 
+  global lexer
+  global binary_regexp
+  global tokens
+  global precedence
+  # Initialize the tokens
+  tokens = [
+    'PSEUDO', 'ID', 'COMMENT', 'DE', 'NUMBER',
+    'LBRACE', 'RBRACE', 'COLON',
+    'UPDATE', 'SEMICOLON',
+    'LPAREN', 'RPAREN', 'COMMA',
+    'DOT',
+    'LBRACKET', 'RBRACKET',
+    'QUEST',
+    'CASE_HEADER',
+    # pseudo token
+    'NEG'
+    ] + list(x86BinaryOps.values()) + list(x86Reserved)
+  binary_regexp = r'|'.join(x86BinaryOps)
+  # in increasing order
+  precedence = (
+      ('left', 'BITWISE_OR'),
+      ('left', 'BITWISE_AND'),
+      ('left', 'OR'),
+      ('left', 'AND'),
+      ('left', 'XOR'),
+      ('left', 'EQUAL', 'NOT_EQUAL'),
+      ('left', 'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL'),
+      ('left', 'LSHIFT', 'RSHIFT', 'LSHIFT_LOGICAL', 'RSHIFT_LOGICAL'),
+      ('left', 'PLUS', 'MINUS'),
+      ('left', 'TIMES', 'DIV', 'MOD'),
+      ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
+      ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE'),
+  )
+  print("INTIALIZE PARSER")
+  lexer = lex.lex()
+  Parser = yacc.yacc()
+
+
+def ResetParser(Parser):
+  Parser.id_counter = 0
+  Parser.binary_exprs = []
+
+def Parse(src):
+  ResetParser(Parser)
+  AST = Parser.parse(src)
+  return AST
+
+
+############ Lexer
+
+x86Reserved = {
+    'FOR',
+    'ENDFOR',
+
+    'CASE',
+    'OF',
+    'ESAC',
+
+    'IF',
+    'THEN',
+    'ELSE',
+    'ELSEIF',
+    'FI',
+
+    'DO',
+    'WHILE',
+    'OD',
+
+    'TO',
+    'DOWNTO',
+
+    'BREAK',
+
+    'RETURN',
+    'DEFINE',
+
+    'OP',
+
+    'AND', 'OR', 'XOR', 'NOT',
+    }
+
+x86BinaryOps = {
+    r'<<': 'LSHIFT',
+    r'>>' : 'RSHIFT',
+    r'<<<': 'LSHIFT_LOGICAL',
+    r'>>>' : 'RSHIFT_LOGICAL',
+
+    r'+':  'PLUS',
+    r'-':  'MINUS',
+
+    r'+=': 'PLUS_EQUAL',
+    r'|=': 'OR_EQUAL',
+
+    r'*':  'TIMES',
+    r'/':  'DIV',
+    r'%':  'MOD',
+
+    r'<': 'LESS',
+    r'>': 'GREATER',
+    r'<=': 'LESS_EQUAL',
+    r'>=': 'GREATER_EQUAL',
+
+    r'==': 'EQUAL',
+    r'!=': 'NOT_EQUAL',
+
+    r'~':  'BITWISE_NOT',
+
+    r'&':  'BITWISE_AND',
+    r'|':  'BITWISE_OR',
+    }
+
+
+def t_pseudo(t):
+  r'\n\s*//.*'
+  lexed = t.value 
+  t.value = lexed[lexed.index('/') + 2:]
+  t.type = 'PSEUDO'
+  return t
+
+def t_CASE_HEADER(t):
+  r'\n\s*\d+:|\n\s*DEFAULT:|\n\s*[a-zA-Z_][a-zA-Z_0-9]*:'
+  if t.value.strip().startswith('DEFAULT'):
+    t.value = None
+  else:
+    try:
+      value = int(t.value[:-1])
+      t.value = Number(value)
+    except:
+      t.value = Var(t.value[:-1])
+  return t
+
+def t_binary(t):
+  r'\|=|\+=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)'
+  t.type = x86BinaryOps[t.value]
+  return t
+
+def t_not(t):
+  r'!'
+  t.type = 'NOT'
+  return t
+
+def t_and(t):
+  r'&&'
+  t.type = 'AND'
+  return t
+
+def t_or(t):
+  r'\|\|'
+  t.type = 'OR'
+  return t
+
+# pseudo code
+def t_PSEUDO(t):
+  r'\*.*\*'
+  t.value = t.value[1:-1]
+  return t
+
+def t_ID(t):
+  r'[a-zA-Z_][a-zA-Z_0-9]*'
+  lexed = t.value.upper()
+  if lexed in x86Reserved:
+    t.type = lexed
+    t.value = lexed
+  return t
+
+def t_COMMENT(t):
+  r'//.*|;'
+  pass
+
+# TODO: multiline comment?
+
+def t_DE(t):
+  r'\#DE'
+  pass
+
+def t_NUMBER(t):
+  r'\d+\.\d*|0x[0-9a-fA-F]+|\d+'
+  base = 16 if t.value.startswith('0x') else 10
+  try:
+    t.value = int(t.value, base)
+  except:
+    t.value = float(t.value)
+  return t
+
+def t_newline(t):
+  r'\n|\\\n'
+  t.lexer.lineno += 1
+
+def t_error(t):
+  raise SyntaxError('Lexer error')
+
+
+
+t_LBRACE = r'\['
+t_RBRACE = r'\]'
+t_LBRACKET = r'{'
+t_RBRACKET = r'}'
+t_COLON = r':'
+t_UPDATE = r'←|=|:='
+t_SEMICOLON = ';'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_DOT = r'\.'
+t_COMMA = r','
+t_QUEST = r'\?'
+t_ignore  = ' \t'
+
+
+
+########### Parser
 
 
 # Expressions have unique IDs
@@ -299,228 +585,4 @@ def p_expr_var(p):
 def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
-
-
-# in increasing order
-precedence = (
-    ('left', 'BITWISE_OR'),
-    ('left', 'BITWISE_AND'),
-    ('left', 'OR'),
-    ('left', 'AND'),
-    ('left', 'XOR'),
-    ('left', 'EQUAL', 'NOT_EQUAL'),
-    ('left', 'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL'),
-    ('left', 'LSHIFT', 'RSHIFT', 'LSHIFT_LOGICAL', 'RSHIFT_LOGICAL'),
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIV', 'MOD'),
-    ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
-    ('left', 'DOT', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE'),
-)
-
-Parser = None
-
-def ResetParser(Parser):
-  Parser.id_counter = 0
-  Parser.binary_exprs = []
-
-def Parse(src):
-  ResetParser(Parser)
-  AST = Parser.parse(src)
-  return AST
-
-
-def ParseCpuId(CPUID):
-    global Parser 
-    Parser = yacc.yacc()
-    CPUID = CPUID.text.lower().replace('_', '')
-    if '/' in CPUID:
-        return CPUID.split('/')[0]
-    return CPUID
-
-
-def GetSemaFromXML(node):
-  Params = []
-  imm_width = None
-  ID = 0
-  for param_node in node.findall('parameter'):
-    name = param_node.attrib.get('varname', '')
-    type = param_node.attrib['type']
-    if name == '':
-        continue
-    is_signed = param_node.attrib.get('etype', '').startswith('SI')
-    is_imm = param_node.attrib.get('etype') == 'IMM'
-    if is_imm:
-        imm_width = int(param_node.attrib.get('immwidth', '8'))
-    if "__mmask" in type:
-      is_mask = True
-    else:
-      is_mask = False
-    id = "param" + "." + name + "." + str(ID)
-    Params.append(Parameter(name, type, is_signed, is_imm, is_mask, id))
-    ID += 1
-  CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
-  inst = node.find('instruction')
-  #assert (inst is not None)
-  operation = node.find('operation')
-  assert (operation is not None)
-  spec = Parse(operation.text)
-  output = node.find('return')
-  assert (output is not None)
-  return Sema(
-      intrin=node.attrib['name'],
-      inst= None if inst is None else inst.attrib.get('name'),
-      spec=spec,
-      params=Params,
-      rettype=output.attrib['type'],
-      ret_is_signed=node.find('return').attrib.get('etype', '').startswith('SI'),
-      cpuids=CPUIDs,
-      inst_form = None if inst is None else inst.attrib.get('form', ''),
-      imm_width=imm_width,
-      elem_type=output.attrib['etype'],
-      xed = None if inst is None else inst.attrib.get('xed')
-    )
-
-
-def Parsex86Semantics(FileName):
-  DataRoot = ET.parse(FileName)
-  NumSkipped = 0
-  SkippedInsts = set()
-  Skipped = False
-  #SkipTo = '_mm512_popcnt_epi16'
-  SkipTo = None
-  #debug = '_mm_sad_epu8'
-  debug = None
-  Categories = defaultdict(int)
-
-  InstructionList = []
-  for intrin in DataRoot.iter('intrinsic'):
-    cpuid = intrin.find('CPUID')
-    operation = intrin.find('operation') 
-    inst = intrin.find('instruction')
-    inst_form = None
-    if inst is None:
-      Categories['NO-INST'] += 1
-      NumSkipped += 1
-      continue
-
-    if debug and intrin.attrib['name'] != debug:
-      NumSkipped += 1
-      continue
-
-    inst_form = inst.attrib['name'], inst.attrib.get('form')
-    cpuid_text = 'Unknown'
-    if cpuid is not None:
-      if cpuid.text in ('MMX', 'AES', 'SHA', 'MPX', 'KNCNI', 
-          'AVX512_4FMAPS', 'AVX512_BF16',
-          'INVPCID', 'RTM', 'XSAVE', 
-          'FSGSBASE', 'RDRAND', 'RDSEED'):
-        Categories[cpuid.text] += 1
-        NumSkipped += 1
-        continue
-      cpuid_text = cpuid.text
-
-    if (intrin.attrib['name'].endswith('getcsr') or
-        intrin.attrib['name'].endswith('setcsr') or
-        '_cmp_' in intrin.attrib['name'] or
-        'zeroall' in intrin.attrib['name'] or
-        'zeroupper' in intrin.attrib['name'] or
-        intrin.attrib['name'] == '_mm_sha1rnds4_epu32' or
-        'mant' in intrin.attrib['name'] or
-        'ord' in intrin.attrib['name'] or
-        '4dpwss' in intrin.attrib['name'] or
-        'ternarylogic' in intrin.attrib['name'] or
-        #'cvt' in intrin.attrib['name'] or
-        intrin.attrib['name'].startswith('_bit') or
-        intrin.attrib['name'] in ('_rdpmc', '_rdtsc') or
-        'lzcnt' in intrin.attrib['name'] or
-        'popcnt' in intrin.attrib['name']
-        ):
-      if 'mask' in intrin.attrib['name']:
-        Categories['mask'] += 1
-      else:
-        Categories['zero/fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    cat = intrin.find('category')
-    if cat is not None and cat.text in (
-        'Elementary Math Functions', 
-        'General Support', 
-        'Load', 'Store'):
-      NumSkipped += 1
-      Categories[cat.text] += 1
-      continue
-    if SkipTo is not None and not Skipped:
-      if intrin.attrib['name'] != SkipTo:
-        NumSkipped += 1
-        continue
-      else:
-        Skipped = True
-    if operation is not None and (
-        'MEM' in operation.text or
-        'FP16' in operation.text or
-        'Float16' in operation.text or
-        'MOD2' in operation.text or
-        'affine_inverse_byte' in operation.text or
-        'ShiftRows' in operation.text or
-        'MANTISSA' in operation.text or
-        'ConvertExpFP' in operation.text or
-        '<<<' in operation.text or
-        ' MXCSR ' in operation.text or
-        'ZF' in operation.text or
-        'CF' in operation.text or
-        'NaN' in operation.text or 
-        'CheckFPClass' in operation.text or
-        'ROUND' in operation.text or
-        'carry_out' in operation.text or
-        'SignBit' in operation.text or
-        'SSP' in operation.text):
-      Categories['MISC'] += 1
-      NumSkipped += 1
-      continue
-    if 'str' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      NumSkipped += 1
-      Categories['STR'] += 1
-      continue
-
-    if 'fixup' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      Categories['fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    if 'round' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      Categories['fp-manip'] += 1
-      NumSkipped += 1
-      continue
-    if 'prefetch' in intrin.attrib['name']:
-      if inst is not None:
-        SkippedInsts.add(inst_form)
-      NumSkipped += 1
-      Categories['PREFETCH'] += 1
-      continue
-
-    if inst is not None and operation is not None:
-      InstructionList.append(intrin)
-
-  # Parse every instruction
-  SemaList = list()
-  for Instruction in InstructionList:
-    Sema = GetSemaFromXML(Instruction)
-    print(Sema)
-    print(Sema.intrin, Sema.cpuids, flush=True)
-    SemaList.append(Sema)
-  print("NUM SKIPPED INSTRUCTIONS:")
-  print(NumSkipped)
-
-  return SemaList
-
-
-if __name__ == '__main__':
-  Parsex86Semantics("intel_sema.xml")
-
-
 
