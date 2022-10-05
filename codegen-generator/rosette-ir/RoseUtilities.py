@@ -92,7 +92,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   # Some sanity checks
   assert isinstance(BVOp1, RoseBVInsertSliceOp) or isinstance(BVOp1, RoseBVExtractSliceOp)
   assert isinstance(BVOp2, RoseBVInsertSliceOp) or isinstance(BVOp2, RoseBVExtractSliceOp)
-  assert BVOp1.getOutputBitwidth() == BVOp2.getOutputBitwidth()
+  #assert BVOp1.getOutputBitwidth() == BVOp2.getOutputBitwidth()
   print("BVOp1:")
   BVOp1.print()
   print("BVOp2:")
@@ -130,7 +130,9 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
 
   # Just handle one _very_ common case where low2 = i + some_constant
   # Strip away any cast first
-  assert isinstance(Low2, RoseAddOp)
+  #assert isinstance(Low2, RoseAddOp)
+  if not isinstance(Low2, RoseAddOp):
+    return False
   if isinstance(Low2.getOperand(0), RoseConstant):
     Low2IndexValue = Low2.getOperand(1)
     ConstantLow2Index = Low2.getOperand(0)
@@ -156,7 +158,9 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
         return True
       return False
     # Now handle a rare case where low1 = i + some_constant
-    assert isinstance(Low1, RoseAddOp)
+    #assert isinstance(Low1, RoseAddOp)
+    if not isinstance(Low1, RoseAddOp):
+      return False
     if isinstance(Low1.getOperand(0), RoseConstant):
       Low1IndexValue = Low1.getOperand(1)
       ConstantLow1Index = Low1.getOperand(0)
@@ -600,9 +604,10 @@ def NewSizeExtendOp(Name : str, Opcode : RoseOpcode, Operand : RoseBitVectorOp, 
     return RoseBVSSaturateOp.create(Name, Operand, NewSize)
   if Opcode == RoseOpcode.bvusat:
     return RoseBVUSaturateOp.create(Name, Operand, NewSize)
-  if Opcode == RoseOpcode.bvtrunc:
-    return RoseBVTruncateOp.create(Name, Operand, NewSize)
-
+  if Opcode == RoseOpcode.bvtrunclow:
+    return RoseBVTruncateLowOp.create(Name, Operand, NewSize)
+  if Opcode == RoseOpcode.bvtrunchigh:
+    return RoseBVTruncateHighOp.create(Name, Operand, NewSize)
   assert False, "Operation is not a size extending op"
 
 
