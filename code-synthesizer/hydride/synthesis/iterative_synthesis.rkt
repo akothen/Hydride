@@ -474,6 +474,7 @@
        ; (invoke_ref_lane (+ random-idx 1) env) 
         (invoke_ref_lane (+ random-idx 0) env)
        ; )
+       ;(invoke_ref env)
       )
 
     (displayln "Halide Produced:")

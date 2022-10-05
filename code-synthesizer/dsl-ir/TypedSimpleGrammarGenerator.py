@@ -66,6 +66,11 @@ class TypedSimpleGrammarGenerator:
         splat_factor = bv_size // prec
         return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
+    def emit_lit_imm(self, imm, bv_size, prec):
+        splat_factor = bv_size // prec
+        return "(lit (create-splat-bv (bv {} (bitvector {})) {}))".format(imm, prec, splat_factor)
+
+
 
 
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
@@ -81,6 +86,8 @@ class TypedSimpleGrammarGenerator:
         one = self.emit_lit_1(bv_size, prec)
         neg_one = self.emit_lit_neg_1(bv_size, prec)
 
+        imm_clauses = [self.emit_lit_imm(imm ,bv_size, prec) for imm in self.imms if imm not in [1,0,-1]]
+
         zero_clause = "{}".format(zero)
         one_clause = "{}".format(one)
 
@@ -90,7 +97,7 @@ class TypedSimpleGrammarGenerator:
 
         hole_clause =  "" # "\n\t".join([condition, hole, close])
 
-        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause])
+        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause] + imm_clauses)
 
 
     def is_broadcast_like_operation(self, dsl_inst):
@@ -315,12 +322,14 @@ class TypedSimpleGrammarGenerator:
                      return_type = 256,
                      lit_holes = [],
                      input_sizes = [],
-                     vars_name = "vars"
+                     vars_name = "vars",
+                     imms = []
                      ):
 
         self.return_type = return_type
         self.operation_layer_name = operation_layer_name
         self.input_sizes = input_sizes
+        self.imms = imms
 
         # Sort grammar operations into buckets identified by the return type
         # of the operation contexts

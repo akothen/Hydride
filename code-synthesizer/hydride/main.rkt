@@ -39,6 +39,7 @@
 (require hydride/ir/hydride/printer)
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/binder)
+(require hydride/ir/hydride/const_fold)
 
 ;; CPP IR
 (require hydride/cpp)
@@ -70,6 +71,7 @@
   (all-from-out hydride/ir/hydride/printer)
   (all-from-out hydride/ir/hydride/interpreter)
   (all-from-out hydride/ir/hydride/binder)
+  (all-from-out hydride/ir/hydride/const_fold)
 
 
   (all-from-out hydride/cpp)

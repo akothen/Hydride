@@ -16,7 +16,7 @@ class CostDef:
         return
 
 
-    def emit_default_def(self, struct_definer):
+    def emit_default_def(self, struct_definer, cost_name = "hydride:cost"):
         defaults = []
 
 
@@ -25,22 +25,22 @@ class CostDef:
         defaults.append("[(idx-j id) {}]".format(IDX_J_COST))
         defaults.append("[(reg id) 1]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
-        defaults.append("[(nop v1) (+ {} (cost v1))]".format(NOP_COST))
+        defaults.append("[(nop v1) (+ {} ({} v1))]".format(NOP_COST, cost_name))
 
         defaults.append("[(dim-x id) {}]".format(DEFAULT_COST))
         defaults.append("[(dim-y id) {}]".format(DEFAULT_COST))
 
 
-        defaults.append("[(idx-add i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
-        defaults.append("[(idx-mul i1 i2) (+ {} (cost i1) (cost i2))]".format(DEFAULT_COST))
+        defaults.append("[(idx-add i1 i2) (+ {} ({} i1) ({} i2))]".format(DEFAULT_COST, cost_name, cost_name))
+        defaults.append("[(idx-mul i1 i2) (+ {} ({} i1) ({} i2))]".format(DEFAULT_COST, cost_name, cost_name))
 
         for struct in default_structs:
-            defaults.append(self.emit_dsl_cost_def(struct, struct_definer, use_label = False)[1])
+            defaults.append(self.emit_dsl_cost_def(struct, struct_definer, use_label = False, cost_name = cost_name)[1])
 
 
         return ["\t{}".format(d) for d in defaults]
 
-    def emit_dsl_cost_def(self, dsl_inst, struct_definer, use_label = True):
+    def emit_dsl_cost_def(self, dsl_inst, struct_definer, use_label = True, cost_name = "hydride:cost"):
 
 
         dsl_cost = dsl_inst.get_cost()
@@ -62,7 +62,7 @@ class CostDef:
 
 
             if isBitVectorType(arg):
-                sub_cost.append("(* {} (cost  {})) ".format( idx + 1, arg.name))
+                sub_cost.append("(* {} ({}  {})) ".format( idx + 1, cost_name , arg.name))
 
         cost_clause = ""
 
@@ -84,11 +84,11 @@ class CostDef:
     def emit_fallback_def(self):
         return "\t[_ {}]".format(DEFAULT_COST)
 
-    def emit_cost_model(self, dsl_list, struct_definer):
-        default_costs = self.emit_default_def(struct_definer)
+    def emit_cost_model(self, dsl_list, struct_definer, cost_name = "hydride:cost"):
+        default_costs = self.emit_default_def(struct_definer, cost_name = cost_name)
 
 
-        dsl_costs = [self.emit_dsl_cost_def(dsl_inst, struct_definer) for dsl_inst in dsl_list ]
+        dsl_costs = [self.emit_dsl_cost_def(dsl_inst, struct_definer, cost_name = cost_name) for dsl_inst in dsl_list ]
 
         cost_defs = [dsl_cost[0] for dsl_cost in dsl_costs] +["\n"]
 
@@ -102,7 +102,7 @@ class CostDef:
         sufix = "\n;; "+"="*80 + "\n"
 
         cost_model = "\n".join(cost_defs)
-        cost_model += "(define (cost prog)\n (destruct prog\n{}\n )\n)".format("\n".join(cost_clauses))
+        cost_model += "(define ({} prog)\n (destruct prog\n{}\n )\n)".format(cost_name , "\n".join( cost_clauses))
         return prefix + cost_model + sufix
 
 

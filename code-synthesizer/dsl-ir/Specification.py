@@ -5,7 +5,7 @@ class Specification:
 
     def __init__(self, name = None, semantics = None,
                  output_shape = [], input_shapes = [] ,args = [], input_precision = [],
-                 output_precision = None, spec_invokation = ""):
+                 output_precision = None, spec_invokation = "", imms = []):
         self.name = name
         self.semantics = semantics
         self.input_shapes = input_shapes
@@ -14,6 +14,7 @@ class Specification:
         self.input_precision = input_precision
         self.output_precision = output_precision
         self.spec_invokation = spec_invokation
+        self.imms = imms
 
 
     def get_output_size(self):
@@ -81,6 +82,7 @@ def parse_spec(spec_dict):
         args = spec_dict['args'],
         spec_invokation = spec_dict['spec_invokation'],
         input_precision = spec_dict['input_precision'],
-        output_precision = spec_dict['output_precision']
+        output_precision = spec_dict['output_precision'],
+        imms = spec_dict['imms']
     )
 
