@@ -5,7 +5,37 @@
 #############################################################
 
 
+from RoseHexPseudoCodeParser import ParseHexagonSemantics
 from RoseHexCompiler import CompileSemantics, HexRoseContext
+
+from HVXPass import HVXInsts
+
+
+def Compile():
+   Test = HVXInsts
+   SemaList = ParseHexagonSemantics(Test)
+   print("SemaList lngth:")
+   print(len(SemaList))
+   from RoseFunctionInfo import RoseFunctionInfo
+   FunctionInfoList = list()
+   for Index, Spec in enumerate(SemaList):
+      RootContext = HexRoseContext()
+      print("RootContext---:")
+      print(RootContext)
+      print("Spec:")
+      print(Spec)
+      FunctionInfo = RoseFunctionInfo()
+      CompiledFunction = CompileSemantics(Spec)
+      FunctionInfo.addContext(RootContext)
+      FunctionInfo.addRawSemantics(Spec)
+      FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+      print("Index*****")
+      print(Index)
+      print("CompiledFunction:")
+      CompiledFunction.print()
+      FunctionInfoList.append(FunctionInfo)
+   return FunctionInfoList
+
 
 test1 ={
  'hexagon_V6_vaddb_128B': {
@@ -401,12 +431,7 @@ test62 = {
 }
 
 test63 = {
- 'hexagon_V6_vabsdiffuh_128B': {
-                           'hvx_intrinsic': 'Vd.uh=vabsdiff(Vu.uh,Vv.uh)',
-                           'spec': 'for (i = 0; i < VELEM(16); i++) {Vd.uh[i] '
-                                   '= (Vu.uh[i] > Vv.uh[i]) ? (Vu.uh[i]- '
-                                   'Vv.uh[i]) : (Vv.uh[i] - Vu.uh[i]) ;}'
-                          },
+
 }
 
 test64 = {
@@ -1654,38 +1679,38 @@ test234 = {
                                      '= sat32(Vu.w[i]+Vv.w[i]+QsV[i*4]) ;}'},
 }
 
+test235 = {
+ 'hexagon_V6_vdmpyhvsat_acc_128B': {'hvx_intrinsic': 'Vx.w+=vdmpy(Vu.h,Vv.h):sat',
+                               'spec': 'for (i = 0; i < VELEM(32); i++) {accum '
+                                       '= (Vu.w[i].h[0] * Vv.w[i].h[0]);accum '
+                                       '+= (Vu.w[i].h[1] * '
+                                       'Vv.w[i].h[1]);Vx.w[i] = '
+                                       'sat32(Vx.w[i]+accum) ;}'},
+}
 
-from RoseHexPseudoCodeParser import *
+test236 = {
+ 'hexagon_V6_vdmpyhb_128B': {'hvx_intrinsic': 'Vd.w=vdmpy(Vu.h,Rt.b)',
+                        'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.w[i] = '
+                                '(Vu.w[i].h[0] * Rt.b[(2*i+0)%4]);Vd.w[i] += '
+                                '(Vu.w[i].h[1] * Rt.b[(2*i+1)%4]);}'},
+}
 
-def Compile():
-   Test = test234
-   SemaList = list()
-   for Name, Dictionary in Test.items():
-      Pseudocode = Dictionary['spec']
-      Inst = Dictionary['hvx_intrinsic']
-      Spec = GetSpecFrom(Name, Inst, Pseudocode)
-      SemaList.append(Spec)
-   print("SemaList lngth:")
-   print(len(SemaList))
-   from RoseFunctionInfo import RoseFunctionInfo
-   FunctionInfoList = list()
-   for Index, Spec in enumerate(SemaList):
-      RootContext = HexRoseContext()
-      print("RootContext---:")
-      print(RootContext)
-      print("Spec:")
-      print(Spec)
-      FunctionInfo = RoseFunctionInfo()
-      CompiledFunction = CompileSemantics(Spec)
-      FunctionInfo.addContext(RootContext)
-      FunctionInfo.addRawSemantics(Spec)
-      FunctionInfo.addFunctionAtNewStage(CompiledFunction)
-      print("Index*****")
-      print(Index)
-      print("CompiledFunction:")
-      CompiledFunction.print()
-      FunctionInfoList.append(FunctionInfo)
-   return FunctionInfoList
+test237 = {
+ 'hexagon_V6_vsatwh_128B': {'hvx_intrinsic': 'Vd.h=vsat(Vu.w,Vv.w)',
+                       'spec': 'for (i = 0; i < VELEM(32); i++) '
+                               '{Vd.w[i].h[0]=sat16(Vv.w[i]);Vd.w[i].h[1]=sat16(Vu.w[i]) '
+                               ';}'},
+}
+
+test238 = {
+ 'hexagon_V6_vdealb4w_128B': {'hvx_intrinsic': 'Vd.b=vdeale(Vu.b,Vv.b)',
+                         'spec': 'for (i = 0; i < VELEM(32); i++) {Vd.ub[0+i ] '
+                                 '= Vv.uw[i].ub[0];Vd.ub[VBITS/32+i ] = '
+                                 'Vv.uw[i].ub[2];Vd.ub[2*VBITS/32+i] = '
+                                 'Vu.uw[i].ub[0];Vd.ub[3*VBITS/32+i] = '
+                                 'Vu.uw[i].ub[2] ;}'},
+}
+
 
 
 if __name__ == '__main__':
