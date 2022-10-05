@@ -5,9 +5,6 @@
 #############################################################
 
 
-from PseudoCodeParser import GetSemaFromXML
-import xml.etree.ElementTree as ET
-from x86RoseCompiler import CompileSemantics, x86RoseContext
 
 def test1():
   return '''
@@ -5060,9 +5057,12 @@ def Compile_Tests():
 
 
 
-from PseudoCodeParser import *
+from PseudoCodeParser import InitX86Parser, GetSemaFromXML
+import xml.etree.ElementTree as ET
+from x86RoseCompiler import CompileSemantics, x86RoseContext
 
 def Compile():
+	InitX86Parser()
 	SemaList = list()
 	DataRoot = ET.parse("test.xml")
 	for Node in DataRoot.iter('intrinsic'):
@@ -5093,7 +5093,5 @@ def Compile():
 
 if __name__ == '__main__':
   Compile_Tests()
-
-
 
 
