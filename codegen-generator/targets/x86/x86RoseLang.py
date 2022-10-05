@@ -6,6 +6,36 @@
 
 
 
+from PseudoCodeParser import ParseX86Intructions
+import xml.etree.ElementTree as ET
+from x86RoseCompiler import CompileSemantics, x86RoseContext
+
+def Compile():
+	SemaList = ParseX86Intructions("test.xml")
+	print("SemaList lngth:")
+	print(len(SemaList))
+	from RoseFunctionInfo import RoseFunctionInfo
+	FunctionInfoList = list()
+	for Index, Spec in enumerate(SemaList):
+		RootContext = x86RoseContext()
+		print("RootContext---:")
+		print(RootContext)
+		print("Spec:")
+		print(Spec)
+		FunctionInfo = RoseFunctionInfo()
+		CompiledFunction = CompileSemantics(Spec, RootContext)
+		FunctionInfo.addContext(RootContext)
+		FunctionInfo.addRawSemantics(Spec)
+		FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+		print("Index*****")
+		print(Index)
+		print("CompiledFunction:")
+		CompiledFunction.print()
+		FunctionInfoList.append(FunctionInfo)
+	return FunctionInfoList
+
+
+
 def test1():
   return '''
 <intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
@@ -5043,7 +5073,9 @@ def Compile_Tests():
 	#sema = test50()
 	#sema = test96()
 	print(sema)
+	from PseudoCodeParser import GetSemaFromXML, InitX86Parser
 	Node = ET.fromstring(sema)
+	InitX86Parser()
 	Spec = GetSemaFromXML(Node)
 	print(Spec)
 	RootContext = x86RoseContext()
@@ -5054,41 +5086,6 @@ def Compile_Tests():
 	FunctionInfo.addRawSemantics(Spec)
 	FunctionInfo.addFunctionAtNewStage(CompiledFunction)
 	return [FunctionInfo]
-
-
-
-from PseudoCodeParser import InitX86Parser, GetSemaFromXML
-import xml.etree.ElementTree as ET
-from x86RoseCompiler import CompileSemantics, x86RoseContext
-
-def Compile():
-	InitX86Parser()
-	SemaList = list()
-	DataRoot = ET.parse("test.xml")
-	for Node in DataRoot.iter('intrinsic'):
-		SemaList.append(GetSemaFromXML(Node))
-	print("SemaList lngth:")
-	print(len(SemaList))
-	from RoseFunctionInfo import RoseFunctionInfo
-	FunctionInfoList = list()
-	for Index, Spec in enumerate(SemaList):
-		RootContext = x86RoseContext()
-		print("RootContext---:")
-		print(RootContext)
-		print("Spec:")
-		print(Spec)
-		FunctionInfo = RoseFunctionInfo()
-		CompiledFunction = CompileSemantics(Spec, RootContext)
-		FunctionInfo.addContext(RootContext)
-		FunctionInfo.addRawSemantics(Spec)
-		FunctionInfo.addFunctionAtNewStage(CompiledFunction)
-		print("Index*****")
-		print(Index)
-		print("CompiledFunction:")
-		CompiledFunction.print()
-		FunctionInfoList.append(FunctionInfo)
-	return FunctionInfoList
-
 
 
 if __name__ == '__main__':
