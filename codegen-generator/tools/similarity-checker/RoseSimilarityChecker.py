@@ -5,7 +5,6 @@
 #############################################################
 
 
-from pickle import NONE
 from RoseAbstractions import *
 from RoseContext import *
 #from RosetteCodeEmitter import *
@@ -204,6 +203,8 @@ class RoseSimilarityChecker():
       File.close()
       # Perform verification
       Output, Err = RunCommandUsingPipes("racket {}".format(FileName))
+      RunCommandUsingPipes("killall z3")
+      RunCommandUsingPipes("killall racket")
       print("Output:")
       print(Output)
       print("Err:")
@@ -930,7 +931,8 @@ class RoseSimilarityChecker():
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
-            self.EquivalenceClasses.remove(CheckEquivalenceClass)
+            if CheckEquivalenceClass in self.EquivalenceClasses:
+              self.EquivalenceClasses.remove(CheckEquivalenceClass)
             #RemovedEquivalenceClasses.add(CheckEquivalenceClass)
             EQToEQMap[CheckEquivalenceClass] = EquivalenceClass
             EQToResultMap[(EquivalenceClass, CheckEquivalenceClass)] = VerifyResult
@@ -1235,6 +1237,9 @@ class RoseSimilarityChecker():
                 if FunctionInfo.getConcreteValFor(Arg) != ArgIdxToConcreteValMap[Idx]:
                   print("NONE")
                   ArgIdxToConcreteValMap[Idx] = None
+                elif isinstance(FunctionInfo.getConcreteValFor(Arg).getType(), RoseBitVectorType):
+                  if FunctionInfo.getConcreteValFor(Arg).getValue() != ArgIdxToConcreteValMap[Idx].getValue():
+                    ArgIdxToConcreteValMap[Idx] = None
           # Check if the outer loop in the function has the same end index and 
           # loop step for all functions in this equivalence class.
           if DeadLoopsFound == None or DeadLoopsFound == True:
