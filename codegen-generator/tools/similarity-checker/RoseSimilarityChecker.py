@@ -964,9 +964,17 @@ class RoseSimilarityChecker():
         Loop.eraseChild(Region)
         ReligionList.append(Region)
       ParentRegion = Loop.getParent()
+      print("++++++ParentRegion:")
+      ParentRegion.print()
       Key = ParentRegion.getKeyForChild(Loop)
-      for Region in reversed(ReligionList):
+      for Region in ReligionList:
+        print("ParentRegion.getPosOfChild(Loop, Key):")
+        print(ParentRegion.getPosOfChild(Loop, Key))
         ParentRegion.addRegionBefore(ParentRegion.getPosOfChild(Loop, Key), Region, Key)
+        print("-------ParentRegion:")
+        ParentRegion.print()
+      print("ParentRegion:")
+      ParentRegion.print()
       ParentRegion.eraseChild(Loop, Key)
       # If the outer loop end index and step are function arguments and have no uses,
       # remove can remove them.
@@ -994,8 +1002,10 @@ class RoseSimilarityChecker():
           ReligionList.append(Region)
         ParentRegion = Loop.getParent()
         Key = ParentRegion.getKeyForChild(Loop)
-        for Region in reversed(ReligionList):
+        for Region in ReligionList:
           ParentRegion.addRegionBefore(ParentRegion.getPosOfChild(Loop, Key), Region, Key)
+        print("--ParentRegion:")
+        ParentRegion.print()
         ParentRegion.eraseChild(Loop, Key)
     print("FRESH FUNCTION:")
     Function.print()
