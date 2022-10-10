@@ -997,7 +997,15 @@ class RoseSimilarityChecker():
       and isinstance(Loop.getStep(), RoseConstant):
       if Loop.getEndIndex().getValue() == Loop.getStep().getValue():
         ReligionList = list()
-        for Region in Loop.getChildren():
+        print("LOOP TO BE REMOVED:")
+        Loop.print()
+        print("len(Loop.getChildren()):")
+        print(len(Loop.getChildren()))
+        LoopChildren = list()
+        LoopChildren.extend(Loop.getChildren())
+        for Region in LoopChildren:
+          print("Region:")
+          Region.print()
           Loop.eraseChild(Region)
           ReligionList.append(Region)
         ParentRegion = Loop.getParent()
@@ -1237,7 +1245,8 @@ class RoseSimilarityChecker():
             for Idx, Arg in enumerate(Function.getArgs()):
               if FunctionInfo.argHasConcreteVal(Arg) == True:
                 if Idx not in ArgIdxToConcreteValMap:
-                  ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
+                  continue
+                #  ArgIdxToConcreteValMap[Idx] = FunctionInfo.getConcreteValFor(Arg)
                 print("FunctionInfo.getConcreteValFor(Arg):")
                 print(FunctionInfo.getConcreteValFor(Arg))
                 print("Idx:")
@@ -1250,6 +1259,9 @@ class RoseSimilarityChecker():
                 elif isinstance(FunctionInfo.getConcreteValFor(Arg).getType(), RoseBitVectorType):
                   if FunctionInfo.getConcreteValFor(Arg).getValue() != ArgIdxToConcreteValMap[Idx].getValue():
                     ArgIdxToConcreteValMap[Idx] = None
+              else:
+                if Idx in ArgIdxToConcreteValMap:
+                  ArgIdxToConcreteValMap[Idx] = None
           # Check if the outer loop in the function has the same end index and 
           # loop step for all functions in this equivalence class.
           if DeadLoopsFound == None or DeadLoopsFound == True:
@@ -1310,8 +1322,11 @@ class RoseSimilarityChecker():
           print("NEW FUNCTION:")
           Function.print()
           ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
-          if ModificationMade == True or DeadLoopsFound == True \
-               or ErasedArgs == True:
+          if ModificationMade == True or DeadLoopsFound == True or ErasedArgs == True:
+            # Let's simplify the function first
+            RoseOpSimplify.Run(Function, FunctionInfo.getContext())
+            print("FINAL FUNCTION:")
+            Function.print()
             self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
       else:
         # Remove dead outer loops
