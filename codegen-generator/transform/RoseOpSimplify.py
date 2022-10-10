@@ -14,46 +14,33 @@ from RoseContext import *
 
 
 def SimplifyOperations(Block : RoseBlock):
-  print("SIMPLIFY OPERATIONS")
+  print("SIMPLIFYING BLOCK:")
+  Block.print()
   # Gather mapping between simplifiable ops and the simplified op
   OpToSimplifiedOp = dict()
   OpList = list()
-  print("==============================================")
   for Operation in Block:
     SimplifiedOp = Operation.simplify()
-    Operation.print()
-    print("SIMPLIFIED OP:")
-    print(SimplifiedOp)
-    SimplifiedOp.print()
     if not isinstance(SimplifiedOp, RoseUndefValue):
-      print("PUT")
       OpList.append(Operation)
       OpToSimplifiedOp[Operation] = SimplifiedOp
-      Operation.print()
-      print("-->")
-      SimplifiedOp.print()
   # Now replace the uses of the ops that can be simplified and delete the ops
   for Operation in OpList:
-    Operation.print()
-    print("-----SIMPLIFIED OP:")
-    print(SimplifiedOp)
-    SimplifiedOp.print()
     SimplifiedOp = OpToSimplifiedOp[Operation]
+    print("OPERATION:")
     Operation.print()
-    print("-->")
+    print("SIMPLIFY OPERATION:")
     SimplifiedOp.print()
-    if isinstance(SimplifiedOp, RoseOperation) and SimplifiedOp not in Block:
-      Block.addOperationBefore(SimplifiedOp, Operation)
+    if isinstance(SimplifiedOp, RoseOperation):
+      if not isinstance(SimplifiedOp.getParent(), RoseBlock):
+        Block.addOperationBefore(SimplifiedOp, Operation)
+      elif SimplifiedOp not in Block:
+        Block.addOperationBefore(SimplifiedOp, Operation)
     Operation.replaceUsesWith(SimplifiedOp)
     Block.eraseOperation(Operation)
-  print("SIMPLIFY OPERATIONS DONE")
 
 
 def RunOpSimplifyOnBlock(Block : RoseBlock,  Context : RoseContext):
-  print("RUN OP SIMPLIFY ON BLOCK")
-  print("BLOCK:")
-  print(Block)
-  Block.print()
   # Time to simplify some instructions that can be simplified
   SimplifyOperations(Block)
 
@@ -95,9 +82,6 @@ def RunOpSimplifyOnBlock(Block : RoseBlock,  Context : RoseContext):
             Block.addOperationBefore(NewLow, ExtractOp)
             Block.addOperationBefore(NewHigh, ExtractOp)
           # Generate the new operation now
-          ExtractOp.getInputBitVector().print()
-          ExtractOp.getInputBitVector().getType().print()
-          print(type(ExtractOp.getInputBitVector()))
           TruncBitwidthVal = RoseConstant(TruncBitwidth, High.getType())
           NewOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".new"), \
                                     ExtractOp.getInputBitVector(), NewLow, NewHigh, TruncBitwidthVal)
@@ -142,9 +126,6 @@ def RunOpSimplifyOnBlock(Block : RoseBlock,  Context : RoseContext):
           # Add this new high index computation to the IR
           Block.addOperationBefore(NewHigh, ExtractOp)
           # Generate the new operation now
-          ExtractOp.getInputBitVector().print()
-          ExtractOp.getInputBitVector().getType().print()
-          print(type(ExtractOp.getInputBitVector()))
           TruncBitwidthVal = RoseConstant(TruncBitwidth, Low.getType())
           NewOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".new"), \
                                 ExtractOp.getInputBitVector(), Low, NewHigh, TruncBitwidthVal)
@@ -227,9 +208,6 @@ def RunOpSimplifyOnRegion(Region, Context : RoseContext):
       continue
     # Op simplification only happens on blocks
     if not isinstance(Abstraction, RoseBlock):
-      print("REGION:")
-      print(Abstraction)
-      Abstraction.print()
       RunOpSimplifyOnRegion(Abstraction, Context)
       continue
     RunOpSimplifyOnBlock(Abstraction, Context)
@@ -248,6 +226,4 @@ def Run(Function : RoseFunction, Context : RoseContext):
   RunOpSimplifyOnFunction(Function, Context)
   print("\n\n\n\n\n")
   Function.print()
-
-
 
