@@ -8,6 +8,7 @@ benchmarks = gaussian3x3 \
 			 sobel3x3 \
 			 blur3x3 \
 			 matmul \
+			 matmul_simple \
 			 add \
 			 mul \
 			 l2norm \
@@ -35,11 +36,11 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-#	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
-#		-o $@/bin \
-#		-g $@ \
-#		-e static_library,stmt,h,llvm_assembly,assembly \
-#		-f $@ target=host-noos-no_bounds_query-no_asserts
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
+		-o $@/bin \
+		-g $@ \
+		-e static_library,stmt,h,llvm_assembly,assembly \
+		-f $@ target=host-noos-no_bounds_query-no_asserts
 
 # Make the bin dirs if needed
 $(bin_dirs): %:

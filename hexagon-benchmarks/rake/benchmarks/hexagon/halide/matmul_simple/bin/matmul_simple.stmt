@@ -1,0 +1,53 @@
+module name=matmul_simple, target=x86-64-noos-avx-avx2-avx512-avx512_skylake-f16c-fma-no_asserts-no_bounds_query-sse41
+external_plus_metadata func matmul_simple (A, B, res) {
+assert((uint64)reinterpret((halide_buffer_t *)res.buffer) != (uint64)0, halide_error_buffer_argument_is_null("res"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let res = (void *)_halide_buffer_get_host((halide_buffer_t *)res.buffer)
+let res.min.0 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 0)
+let res.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 0)
+let res.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 0)
+let res.min.1 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 1)
+let res.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 1)
+let res.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 1)
+assert(A.stride.0 == 1, 0)
+assert(B.stride.0 == 1, 0)
+assert(res.stride.0 == 1, 0)
+produce res {
+ let t10 = 0 - (res.min.1*res.stride.1)
+ for (res.s0.y.rebased, 0, res.extent.1) {
+  let t11 = ((res.min.1 + res.s0.y.rebased)*res.stride.1) + t10
+  for (res.s0.x.rebased, 0, res.extent.0) {
+   res[res.s0.x.rebased + t11] = 0
+  }
+ }
+ let t14 = (res.min.0 - (B.min.1*B.stride.1)) - B.min.0
+ let t12 = 0 - (res.min.1*res.stride.1)
+ let t13 = (A.min.1*A.stride.1) + A.min.0
+ for (res.s1.y.rebased, 0, res.extent.1) {
+  let t17 = res.min.1 + res.s1.y.rebased
+  let t16 = (A.stride.1*t17) - t13
+  let t15 = (res.stride.1*t17) + t12
+  for (res.s1.x.rebased, 0, res.extent.0) {
+   let t18 = res.s1.x.rebased + t15
+   let t19 = res.s1.x.rebased + t14
+   for (res.s1.r8$x, 0, A.extent.0) {
+    res[t18] = res[t18] + (A[res.s1.r8$x + t16]*B[(B.stride.1*res.s1.r8$x) + t19])
+   }
+  }
+ }
+}
+}
+
+
