@@ -6,6 +6,7 @@
 
 
 from copy import deepcopy
+from pyclbr import Function
 
 from RoseAbstractions import *
 from RoseContext import *
@@ -18,40 +19,84 @@ from RoseSimilarityCheckerUtilities import *
 
 
 class RoseTransformationVerifier():
-  def __init__(self, ReferenceFunctionInfo : RoseFunctionInfo, CheckFunctionInfo : RoseFunctionInfo):
+  def __init__(self, ReferenceFunctionInfo : RoseFunctionInfo, CheckFunctionInfo : RoseFunctionInfo, \
+                    ArgsPermutation : list = None):
     self.CheckFunctionInfo = CheckFunctionInfo
     self.ReferenceFunctionInfo = ReferenceFunctionInfo
-
-  def genSymbolicInput(self, Param, NameSuffix):
+    self.CheckArgToRefArg = dict()
+    CheckFunction = self.CheckFunctionInfo.getLatestFunction()
+    ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
+    if ArgsPermutation != None:
+      assert len(ArgsPermutation) == ReferenceFunction.getNumArgs()
+      for CheckArgIndex, RefArgIndex  in enumerate(ArgsPermutation):
+        self.CheckArgToRefArg[CheckFunction.getArg(CheckArgIndex)] = \
+                                ReferenceFunction.getArg(RefArgIndex)
+    else:
+      # The symbolic arguments in each of the functions must map to each other
+      RefIndex = 0
+      for CheckArg in CheckFunction.getArgs():
+        if CheckFunctionInfo.argHasConcreteVal(CheckArg) == False:
+          RefArg = ReferenceFunction.getArg(RefIndex)
+          assert ReferenceFunctionInfo.argHasConcreteVal(RefArg) == False
+          self.CheckArgToRefArg[CheckArg] = RefArg
+          RefIndex += 1
+        
+  
+  def genSymbolicInput(self, Param : RoseArgument, NameSuffix : str, ArgToDefinitionMap : dict):
     Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
                                          str(Param.getType().getBitwidth()))
+    ArgToDefinitionMap[Param] = Param.getName() + NameSuffix
     return Input
 
-  def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str):
+  def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str, \
+                             ArgToDefinitionMap : dict):
     assert isinstance(ConcreteArg, RoseConstant)
     Input = "(define {} {})\n".format(Param.getName() + NameSuffix, GenConcreteValue(ConcreteArg))
+    ArgToDefinitionMap[Param] = Param.getName() + NameSuffix
     return Input
 
 
-  def emitVerificationCodeForFunction(self, Function : RoseFunction, 
-                                      FunctionInfo : RoseFunctionInfo, NameSuffix : str):
+  def emitDefinitionOfRefFunctionArgs(self, ReferenceFunction : RoseFunction, \
+                                      ReferenceFunctionInfo : RoseFunctionInfo, NameSuffix : str):
     Code = ""
-    for Arg in  Function.getArgs():
-      if FunctionInfo.argHasConcreteVal(Arg) == False:
-        Code += self.genSymbolicInput(Arg, NameSuffix)
+    ArgToDefinitionMap = dict()
+    for Arg in  ReferenceFunction.getArgs():
+      if ReferenceFunctionInfo.argHasConcreteVal(Arg) == False:
+        Code += self.genSymbolicInput(Arg, NameSuffix, ArgToDefinitionMap)
       else:
-        ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
-        Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix)
-    return Code
+        ConcreteVal = ReferenceFunctionInfo.getConcreteValFor(Arg)
+        Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix, ArgToDefinitionMap)
+    return Code, ArgToDefinitionMap
+
+
+  def emitDefinitionOfCheckFunctionArgs(self, CheckFunction : RoseFunction, ReferenceFunction : RoseFunction, \
+                                      CheckFunctionInfo : RoseFunctionInfo, NameSuffix : str, \
+                                      RefArgToDefinitionMap : dict):
+    Code = ""
+    assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
+    CheckArgToDefinitionMap = dict()
+    for Arg in  CheckFunction.getArgs():
+      if Arg in self.CheckArgToRefArg:
+        CheckArgToDefinitionMap[Arg] = RefArgToDefinitionMap[self.CheckArgToRefArg[Arg]]
+      if CheckFunctionInfo.argHasConcreteVal(Arg) == False:
+        if Arg in self.CheckArgToRefArg:
+          CheckArgToDefinitionMap[Arg] = RefArgToDefinitionMap[self.CheckArgToRefArg[Arg]]
+        else:
+          Code += self.genSymbolicInput(Arg, NameSuffix, CheckArgToDefinitionMap)
+      else:
+        ConcreteVal = CheckFunctionInfo.getConcreteValFor(Arg)
+        Code += self.genConcreteInput(Arg, ConcreteVal, NameSuffix, CheckArgToDefinitionMap)
+    return Code, CheckArgToDefinitionMap
+
 
   def emitVerificationCode(self):
     CheckFunction = self.CheckFunctionInfo.getLatestFunction()
     ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
+    assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
     # Rosette code headers
     Content = [
       "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
-      "(require racket/pretty)", "(require rosette/solver/smt/boolector)", 
-      "(require \"RosetteOpsImpl.rkt\")\n"
+      "(require racket/pretty)", "(require \"RosetteOpsImpl.rkt\")\n"
     ]
     # If the function names are the same, first, change function names
     if CheckFunction.getName() == ReferenceFunction.getName():
@@ -63,21 +108,27 @@ class RoseTransformationVerifier():
     Content.append(RosetteGen.CodeGen(CheckFunction))
     Content.append(RosetteGen.CodeGen(ReferenceFunction))
     # Generate verification code on first set of inputs
-    NameSuffix = "_1"
-    Content.append(self.emitVerificationCodeForFunction(CheckFunction, \
-                                        self.CheckFunctionInfo, NameSuffix))
-    ArgNamesList = [Arg.getName() for Arg in CheckFunction.getArgs()]
-    CheckFuncArgNamesListString = ""
+    NameSuffix1 = "_1"
+    Code, RefArgToDefinitionMap = self.emitDefinitionOfRefFunctionArgs(ReferenceFunction, \
+                                        self.ReferenceFunctionInfo, NameSuffix1)
+    Content.append(Code)
+    ArgNamesList = [Arg.getName() for Arg in ReferenceFunction.getArgs()]
+    NameSuffix2 = "_2"
+    Code, CheckArgToDefinitionMap = self.emitDefinitionOfCheckFunctionArgs(CheckFunction, \
+                        ReferenceFunction, self.CheckFunctionInfo, NameSuffix2, RefArgToDefinitionMap)
+    Content.append(Code)
     ReferenceFunctionListString = ""
-    for Idx, Name in enumerate(ArgNamesList):
-      if self.CheckFunctionInfo.argHasConcreteVal(CheckFunction.getArg(Idx)) == False:
-        ReferenceFunctionListString += Name + NameSuffix + " "
-      CheckFuncArgNamesListString += Name + NameSuffix + " "
+    for Arg in ReferenceFunction.getArgs():
+      ReferenceFunctionListString += RefArgToDefinitionMap[Arg] + " "
+    CheckFuncArgNamesListString = ""
+    for Arg in CheckFunction.getArgs():
+      CheckFuncArgNamesListString += CheckArgToDefinitionMap[Arg] + " "
     Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(CheckFunction.getName(), \
                                 CheckFuncArgNamesListString, ReferenceFunction.getName(), \
-                                ReferenceFunctionListString, NameSuffix))
+                                ReferenceFunctionListString))
     return "\n".join(Content)
-    
+
+
   def verifyEquivalence(self):
     # Generate verification code
     Code = self.emitVerificationCode()
@@ -88,9 +139,9 @@ class RoseTransformationVerifier():
       File.write(Code)
       File.close()
       # Perform verification
-      Output, Err = RunCommand("racket {}".format(FileName))
-      RunCommand("killall z3")
-      RunCommand("killall racket")
+      Output, Err = RunCommandUsingPipes("racket {}".format(FileName))
+      RunCommandUsingPipes("killall z3")
+      RunCommandUsingPipes("killall racket")
       #RunCommand("rm {}".format(FileName))
       print("Output:")
       print(Output)
@@ -100,14 +151,10 @@ class RoseTransformationVerifier():
         Out = Output.split("\n")
         print("Out[0]:")
         print(Out[0])
-        print("Out[1]:")
-        print(Out[1])
-        if "unsat" in Out[0] and "unsat" in Out[1]:
+        if "unsat" in Out[0]:
           return True
       return False
     except IOError:
       print("Error making: {}.rkt".format(FileName))
       return False
-  
-
 
