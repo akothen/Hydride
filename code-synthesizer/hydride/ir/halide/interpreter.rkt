@@ -183,7 +183,7 @@
     [(vec-broadcast n vec) (* n (vec-len vec))]
     
     ;; Base case
-    [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
+    [_ (error "halide\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
 
 ;; Get the (vector) sub-expressions
 (define (sub-exprs expr)
@@ -197,7 +197,7 @@
     [(x256 sca) (if (int-imm? sca) (list ) (list sca))]
     [(x512 sca) (if (int-imm? sca) (list ) (list sca))]
 
-    [(ramp base stride len) (list)]
+    [(ramp base stride len) (list base stride)]
     [(load buf idxs alignment) (list buf)]
     [(load-sca buf idx) (list)]
     [(int-imm data signed?) (list)]
@@ -351,16 +351,16 @@
      (define intr-stride (interpret stride))
      (cond
        [(integer? intr-base)
-        (lambda (i) (+ (interpret base) (* i (interpret stride))))]
+        (lambda (i) (+ ((interpret base) 0) (* i ((interpret stride) 0))))]
        [else
         (lambda (i)
           (mk-cpp-expr
            (bvadd
-            (cpp:eval intr-base)
+            (cpp:eval (intr-base 0))
             (bvmul
-             (integer->bitvector i (bitvector (cpp:expr-bw intr-stride)))
-             (cpp:eval intr-stride)))
-           (cpp:type intr-base)))])]
+             (integer->bitvector i (bitvector (cpp:expr-bw (intr-stride 0))))
+             (cpp:eval (intr-stride 0))))
+           (cpp:type (intr-base 0))))])]
 
     [(load buf idxs alignment) (lambda (i) (buffer-ref (interpret buf) ((interpret idxs) i)))]
     [(int-imm data signed?) (lambda (i) data)]
@@ -551,7 +551,7 @@
     [(x512 sca) empty-list]
 
     [(ramp base stride len)
-     empty-list
+     (list extract bvmul bvadd sign-extend zero-extend)
      ]
 
     [(load buf idxs alignment) empty-list]

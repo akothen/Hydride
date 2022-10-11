@@ -80,7 +80,22 @@
       (broadcast-helper x512 sca)
      ]
 
-    [(ramp base stride len) (values '() 0)]
+    [(ramp base stride len) 
+     (if is-leaf-depth
+        (values (ramp (arg 0) (arg 1) len) 2)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args base args (- depth 1)))
+          (define remaining-values (- (vector-length args) args-used1))
+          (define remaining-args (vector-take-right args remaining-values))
+
+          (define-values (leaf2-sol args-used2) (bind-expr-args stride remaining-args (- depth 1)))
+
+
+          (values (ramp leaf1-sol leaf2-sol len) (+ args-used1 args-used2))
+        )
+        )
+     
+     ]
     [(load buf idxs alignment) 
        (if is-leaf-depth
         (values (load (arg 0) idxs alignment) 1)
@@ -1485,7 +1500,7 @@
     [(x256 sca)  (get-elemT sca)]
     [(x512 sca)  (get-elemT sca)]
 
-    [(ramp base stride len) (size-to-elemT len)]
+    [(ramp base stride len) (size-to-elemT base)]
     [(load buf idxs alignment) (size-to-elemT (vec-precision idxs))]
     [(load-sca buf idx) 'int8]
     [(int-imm data signed?) (size-to-elemT-signed (bvlength data) signed?)]
@@ -1615,7 +1630,7 @@
     [(vec-broadcast n vec) (get-elemT vec)]
     
     ;; Base case
-    [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
+    [_ (error "halide\\utils.rkt: Don't know how to infer vector elemT for Halide expression:" expr)]))
 
 ;; 
 
@@ -1635,7 +1650,7 @@
     [(x256 sca) (vec-precision sca)]
     [(x512 sca) (vec-precision sca)]
 
-    [(ramp base stride len) len]
+    [(ramp base stride len) (vec-precision base)]
     [(load buf idxs alignment) (vec-precision idxs)]
     [(load-sca buf idx) 1]
     [(int-imm data signed?) (bvlength data)]
@@ -1767,6 +1782,6 @@
     [(vec-broadcast n vec) (vec-precision vec)]
     
     ;; Base case
-    [_ (error "halide\\ir\\interpreter.rkt: Don't know how to infer vector length for Halide expression:" expr)]))
+    [_ (error "halide\\utils.rkt: Don't know how to infer vector precision for Halide expression:" expr)]))
 
 ;; 
