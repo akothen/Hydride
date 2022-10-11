@@ -83,8 +83,7 @@ class RoseSimilarityChecker():
         self.FunctionInfoListToTarget[FunctionInfo] = TargetInfo
         self.FunctionToFunctionInfo[Function] = FunctionInfo
         assert not isinstance(Function, RoseUndefRegion)
-        self.FunctionToRosetteCodeMap[Function] = \
-                    RosetteGen.CodeGen(Function) #FunctionInfo, JustGenRosette=True)
+        self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
         print("self.FunctionToRosetteCodeMap[Function]:")
         print(self.FunctionToRosetteCodeMap[Function])
 
@@ -887,6 +886,8 @@ class RoseSimilarityChecker():
           PermArgsToConcreteValMap = self.getFunctionToArgMapping(OriginalCheckFunction, \
                             CheckArgsToConcreteValMap, PermCheckFunction, ArgPermutation)
           PermCheckFunctionInfo.addArgsToConcreteMap(PermArgsToConcreteValMap)
+          PermCheckFunctionInfo.addTargetAgnosticFunction(PermCheckFunction)
+          PermCheckFunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
           # Perform verification
           Suffix += 1
           VerifyResult = self.verify(self.FunctionToFunctionInfo[Function], \
@@ -928,6 +929,8 @@ class RoseSimilarityChecker():
               self.FunctionToFunctionInfo[CopyFunction] = CopyFunctionInfo
               self.FunctionToRosetteCodeMap[CopyFunction] = \
                                         RosetteGen.CodeGen(CopyFunction)
+              CopyFunctionInfo.addTargetAgnosticFunction(CopyFunction)
+              CopyFunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
@@ -1328,6 +1331,10 @@ class RoseSimilarityChecker():
             print("FINAL FUNCTION:")
             Function.print()
             self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+            FunctionInfo.addTargetAgnosticFunction(Function)
+            FunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+            print("ROSETTE CODE:")
+            print(self.FunctionToRosetteCodeMap[Function])
       else:
         # Remove dead outer loops
         Function = EquivalenceClass.getAFunction()
@@ -1346,6 +1353,10 @@ class RoseSimilarityChecker():
         ErasedArgs = self.removeDeadArguments(FunctionInfo, Function)
         if len(DeadLoops) != 0 or ErasedArgs == True:
           self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+          FunctionInfo.addTargetAgnosticFunction(Function)
+          FunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+          print("ROSETTE CODE:")
+          print(self.FunctionToRosetteCodeMap[Function])
         print("--NEW FUNCTION:")
         Function.print()
 
