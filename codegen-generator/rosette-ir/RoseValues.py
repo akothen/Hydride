@@ -75,7 +75,7 @@ class RoseConstant(RoseValue):
     and isinstance(Other, RoseValue):
         return False
     assert isinstance(Other, RoseConstant)
-    return self.Val == Other.Val and super().__eq__(Other)
+    return self.Val == Other.Val and self.getType() == Other.getType()
 
   def __ne__(self, Other):
     if not isinstance(Other, RoseValue):
@@ -89,7 +89,7 @@ class RoseConstant(RoseValue):
     and isinstance(Other, RoseValue):
         return True
     assert isinstance(Other, RoseConstant)
-    return self.Val != Other.Val or super().__ne__(Other)
+    return self.Val != Other.Val or self.getType() != Other.getType()
   
   def __hash__(self):
     return super().__hash__()
@@ -106,6 +106,8 @@ class RoseConstant(RoseValue):
     assert ReverseIndexing == False
     if isinstance(self.getType(), RoseStringType):
       return self.Val
+    if isinstance(self.getType(), RoseBitVectorType):
+      return "(bv " + str(self.Val) + " " + str(self.getType().getBitwidth()) + ")"
     return str(self.Val)
 
   def to_llvm_ir(self, Context : RoseLLVMContext = None):
@@ -299,13 +301,16 @@ class RoseOperation(RoseValue):
     return self.Opcode == Other.getOpcode() and self.Operands == Other.getOperands() \
         and self.getType() == Other.getType()
   
-  def cloneOperation(self, Suffix : str = "", ValueToValueMap : dict = dict()):
-    if Suffix == "":
+  def cloneOperation(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
+    if Suffix == "" and ChangeID == False:
       return self.clone()
     if isinstance(self.getType(), RoseVoidType):
-      ClonedOp = self.clone()
+      ClonedOp = self.clone(ChangeID=ChangeID)
     else:
-      ClonedOp = self.clone(self.getName() + "." + Suffix)
+      if Suffix != "":
+        ClonedOp = self.clone(self.getName() + "." + Suffix, ChangeID)
+      else:
+        ClonedOp = self.clone(ChangeID=ChangeID)
     for Index, Operand in enumerate(self.getOperands()):
       if isinstance(Operand, RoseConstant):
         ClonedOperand = RoseConstant.create(Operand.getValue(), Operand.getType())
@@ -313,7 +318,13 @@ class RoseOperation(RoseValue):
         if Operand in ValueToValueMap:
           ClonedOperand = ValueToValueMap[Operand]
         else:
-          ClonedOperand = Operand.clone(Operand.getName() + "." + Suffix)
+          if isinstance(Operand, RoseValue):
+            if Suffix != "":
+              ClonedOperand = Operand.clone(Operand.getName() + "." + Suffix, ChangeID)
+            else:
+              ClonedOperand = Operand.clone(ChangeID=ChangeID)
+          else:
+            ClonedOperand = Operand.clone()
           ValueToValueMap[Operand] = ClonedOperand
       ClonedOp.setOperand(Index, ClonedOperand)
     ValueToValueMap[self] = ClonedOp
@@ -399,9 +410,7 @@ class RoseOperation(RoseValue):
         if type(OldValue) != type(Operand):
             continue
         if Operand == OldValue:
-          #print("OPERAND SET")
           self.setOperand(Index, NewValue)
-      #print("DONE REPLACING")
       return
     assert False, "Illegal number of arguments to replaceUsesWith"
 
@@ -478,4 +487,3 @@ class RoseOperation(RoseValue):
           String += ","
     String += "\n"
     return String
-
