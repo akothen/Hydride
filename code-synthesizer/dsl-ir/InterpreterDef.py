@@ -9,20 +9,20 @@ class InterpreterDef:
         self.constraints_def = InterpreterConstraintsDef()
 
 
-    def emit_default_def(self, struct_definer , env_name = "env", add_assertions = True):
+    def emit_default_def(self, struct_definer , env_name = "env", add_assertions = True, interpret_name = "hydride:interpret"):
         defaults = []
 
         defaults.append("[(dim-x id) (vector-ref {} (- (vector-length {}) 2))]".format(env_name, env_name))
         defaults.append("[(dim-y id) (vector-ref {} (- (vector-length {}) 1))]".format(env_name, env_name))
         defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 4))]".format(env_name, env_name))
         defaults.append("[(idx-j id) (vector-ref {} (- (vector-length {}) 3))]".format(env_name, env_name))
-        defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
+        defaults.append("[(reg id) (vector-ref {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 
-        defaults.append("[(nop v1) (interpret v1 {})]".format(env_name))
-        defaults.append("[(idx-add i1 i2) (+ (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
-        defaults.append("[(idx-mul i1 i2) (* (interpret i1 {}) (interpret i2 {}))]".format(env_name, env_name))
+        defaults.append("[(nop v1) ({} v1 {})]".format(interpret_name , env_name))
+        defaults.append("[(idx-add i1 i2) (+ ({} i1 {}) ({} i2 {}))]".format(interpret_name , env_name, interpret_name , env_name))
+        defaults.append("[(idx-mul i1 i2) (* ({} i1 {}) ({} i2 {}))]".format(interpret_name , env_name, interpret_name, env_name))
 
         for structs in default_structs:
             defaults.append(self.emit_interpret_def(structs, struct_definer, add_assertions = add_assertions)[1:])
@@ -38,7 +38,7 @@ class InterpreterDef:
         return self.constraints_def.emit_dsl_interpreter_constraints(dsl_inst, struct_definer)
 
 
-    def emit_interpret_def(self, dsl_inst, struct_definer  , add_assertions = True,  env_name = "env"):
+    def emit_interpret_def(self, dsl_inst, struct_definer  , add_assertions = True,  env_name = "env", interpret_name = "hydride:interpret"):
         interpret = [struct_definer.emit_dsl_struct_use(dsl_inst)]
 
         assertions = []
@@ -57,7 +57,7 @@ class InterpreterDef:
                 sub_interpret.append("\n\t\t")
 
             if isBitVectorType(arg):
-                sub_interpret.append("(interpret {} {})".format(arg.name, env_name))
+                sub_interpret.append("({} {} {})".format(interpret_name , arg.name, env_name))
             else:
                 sub_interpret.append("{}".format(arg.name))
 
@@ -68,10 +68,10 @@ class InterpreterDef:
 
         return "\t[ {}\n\t]".format("\n\t\t".join(interpret))
 
-    def emit_interpreter(self, dsl_inst_ls, struct_definer, add_assertions = True, env_name = "env"):
+    def emit_interpreter(self, dsl_inst_ls, struct_definer, add_assertions = True, env_name = "env", interpret_name = "hydride:interpret"):
 
-        interpret_clauses = self.emit_default_def(struct_definer , env_name = env_name, add_assertions = add_assertions)
-        interpret_clauses += [self.emit_interpret_def(dsl_inst, struct_definer, env_name = env_name, add_assertions = add_assertions) for dsl_inst in dsl_inst_ls]
+        interpret_clauses = self.emit_default_def(struct_definer , env_name = env_name, add_assertions = add_assertions, interpret_name = interpret_name)
+        interpret_clauses += [self.emit_interpret_def(dsl_inst, struct_definer, env_name = env_name, add_assertions = add_assertions, interpret_name = interpret_name) for dsl_inst in dsl_inst_ls]
         interpret_clauses.append(self.emit_fallback_def())
 
         prefix = ";; "+"="*80 + "\n"
@@ -80,7 +80,7 @@ class InterpreterDef:
 
         sufix = "\n;; "+"="*80 + "\n"
 
-        interpreter = "(define (interpret prog {})\n (destruct prog\n{}\n )\n)".format(env_name, "\n".join(interpret_clauses))
+        interpreter = "(define ({} prog {})\n (destruct prog\n{}\n )\n)".format(interpret_name, env_name, "\n".join(interpret_clauses))
         return prefix + interpreter + sufix
 
 

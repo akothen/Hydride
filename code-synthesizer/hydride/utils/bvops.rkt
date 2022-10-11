@@ -71,12 +71,29 @@
   )
 
 
+;(define (bvssat vect bitwidth sat_size)
+;  (if (> bitwidth sat_size)
+;    (begin
+;      (cond
+;        [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
+;        [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
+;        [else (extract (- sat_size 1) 0 vect)])
+;      )
+;    (begin
+;      vect
+;      )
+;    )
+;  )
+
+
 (define (bvssat vect bitwidth sat_size)
   (if (> bitwidth sat_size)
     (begin
+      (define sminval (bvsminval sat_size))
+      (define smaxval (bvsmaxval sat_size))
       (cond
-        [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
-        [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
+        [(bvslt vect (sign-extend sminval (bitvector bitwidth))) sminval]
+        [(bvsgt vect (sign-extend smaxval (bitvector bitwidth))) smaxval]
         [else (extract (- sat_size 1) 0 vect)])
       )
     (begin
@@ -84,7 +101,6 @@
       )
     )
   )
-
 
 (define (bvpadhighbits vect num_pad_bits)
   (if (equal? num_pad_bits 0)

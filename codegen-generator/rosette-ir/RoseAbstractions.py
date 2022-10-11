@@ -303,7 +303,7 @@ class RoseBlock(RoseRegion):
     return hash(self.getRegionID())
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
-    if Suffix == "":
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     ClonedBlock = RoseBlock.create()
     for Operation in self:
@@ -329,10 +329,6 @@ class RoseBlock(RoseRegion):
     assert isinstance(Abstraction, RoseValue)
     Users = list()
     for Op in self.getOperations():
-      print("*****OP:")
-      Op.print()
-      print("Abstraction:")
-      Abstraction.print()
       if Op.usesValue(Abstraction):
         Users.append(Op)
     return Users
@@ -708,7 +704,7 @@ class RoseCond(RoseRegion):
     return hash(self.getRegionID())
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
-    if Suffix == "":
+    if Suffix == "" and ChangeID == False:
       return self.cloneRegion()
     ClonedConditions = list()
     for Condition in self.Conditions:
@@ -720,8 +716,11 @@ class RoseCond(RoseRegion):
       ClonedCondRegion.addRegion(ClonedAbstraction, Key)
     return ClonedCondRegion
 
-  def getCondition(self, Index = 0):
+  def getCondition(self, Index : int = 0):
     return self.Conditions[Index]
+  
+  def getConditions(self):
+    return self.Conditions
   
   def getThenRegions(self):
     return self.getChildren(self.getKeyForThenRegion())
@@ -789,28 +788,36 @@ class RoseCond(RoseRegion):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Condtiion = Spaces + "if (" + str(self.Conditions[0].getType()) \
+    Condition = Spaces + "if (" + str(self.Conditions[0].getType()) \
                        + " " + self.Conditions[0].getName() + ") {"
-    print(Condtiion)
+    print(Condition)
     # Print regions in this then regions
     for Region in self.getChildren(self.getKeyForThenRegion()):
       assert Region.getParent() == self
       Region.print(NumSpace + 1)
     # Printing other cond regions
-    if len(self.getKeys()) > 1:
-      if len(self.getKeys()) > 2:
-        for Index, ConditionVal in enumerate(self.Conditions[1:-1]):
-          Condtiion = Spaces + "} elif (" + str(ConditionVal.getType()) \
-                      + " " + self.Conditions[0].getName() + ") {"
-          print(Condtiion)
+    if len(self.getConditions()) >= 1:
+      if len(self.getConditions()) >= 2:
+        if len(self.getChildren()) > len(self.getConditions()):
+          assert len(self.getChildren()) - 1 == len(self.getConditions())
+          Conditions = self.Conditions[1:-1]
+        else:
+          assert len(self.getChildren()) == len(self.getConditions())
+          Conditions = self.Conditions[1:]
+        for Index, ConditionVal in enumerate(Conditions):
+          Condition = Spaces + "} elif (" + str(ConditionVal.getType()) \
+                      + " " + ConditionVal.getName() + ") {"
+          print(Condition)
           # Print regions in this then regions
           for Region in self.getChildren(self.getKeys()[Index + 1]):
             assert Region.getParent() == self
             Region.print(NumSpace + 1)
-      print(Spaces + "} else {")
-      for Region in self.getChildren(self.getKeyForElseRegion()):
-        assert Region.getParent() == self
-        Region.print(NumSpace + 1)
+      if len(self.getChildren()) > len(self.getConditions()):
+        assert len(self.getChildren()) - 1 == len(self.getConditions())
+        print(Spaces + "} else {")
+        for Region in self.getChildren(self.getKeyForElseRegion()):
+          assert Region.getParent() == self
+          Region.print(NumSpace + 1)
     print(Spaces + "}")
 
 
@@ -819,28 +826,36 @@ class RoseCond(RoseRegion):
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
-    Condtiion = Spaces + "if (" + str(self.Conditions[0].getType()) \
+    Condition = Spaces + "if (" + str(self.Conditions[0].getType()) \
                        + " " + self.Conditions[0].getName() + ") {\n"
-    String += Condtiion
+    String += Condition
     # Print regions in this then regions
     for Region in self.getChildren(self.getKeyForThenRegion()):
       assert Region.getParent() == self
       String += Region.__str__(NumSpace + 1)
     # Printing other cond regions
-    if len(self.getKeys()) > 1:
-      if len(self.getKeys()) > 2:
-        for Index, ConditionVal in enumerate(self.Conditions[1:-1]):
-          Condtiion = Spaces + "} elif (" + str(ConditionVal.getType()) \
-                      + " " + self.Conditions[0].getName() + ") {\n"
-          String += Condtiion
+    if len(self.getConditions()) >= 1:
+      if len(self.getConditions()) >= 2:
+        if len(self.getChildren()) > len(self.getConditions()):
+          assert len(self.getChildren()) - 1 == len(self.getConditions())
+          Conditions = self.Conditions[1:-1]
+        else:
+          assert len(self.getChildren()) == len(self.getConditions())
+          Conditions = self.Conditions[1:]
+        for Index, ConditionVal in enumerate(Conditions):
+          Condition = Spaces + "} elif (" + str(ConditionVal.getType()) \
+                      + " " + ConditionVal.getName() + ") {\n"
+          String += Condition
           # Print regions in this then regions
           for Region in self.getChildren(self.getKeys()[Index + 1]):
             assert Region.getParent() == self
             String += Region.__str__(NumSpace + 1)
-      String += Spaces + "} else {\n"
-      for Region in self.getChildren(self.getKeyForElseRegion()):
-        assert Region.getParent() == self
-        String += Region.__str__(NumSpace + 1)
+      if len(self.getChildren()) > len(self.getConditions()):
+        assert len(self.getChildren()) - 1 == len(self.getConditions())
+        String += Spaces + "} else {\n"
+        for Region in self.getChildren(self.getKeyForElseRegion()):
+          assert Region.getParent() == self
+          String += Region.__str__(NumSpace + 1)
     String += Spaces + "}\n"
     return String
 

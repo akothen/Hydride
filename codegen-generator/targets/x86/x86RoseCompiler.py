@@ -14,7 +14,7 @@ from RoseOperations import *
 from RoseBitVectorOperations import *
 from RoseContext import *
 
-from AST import *
+from x86AST import *
 from x86Types import x86Types
 
 import math
@@ -104,8 +104,15 @@ class x86RoseContext(RoseContext):
       ChildContext.replaceParentAbstractionsWithChild()
       # There are times when temporary variables are written to (using bvinsert)
       # so we will need to get those variables.
-      BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
-      ParentFunction = ChildContext.getRootAbstraction().getFunction()
+      #print("ChildContext.getRootAbstraction():")
+      #ChildContext.getRootAbstraction().print()
+      BlockList = list()
+      if ChildContext.getRootAbstraction().getKeys() == None:
+        BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
+      else:
+        for Key in ChildContext.getRootAbstraction().getKeys():
+          BlockList.extend(ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock, Key=Key))
+      _, ParentFunction = self.getFirsRootAbstractionsOfType(RoseFunction)
       for Block in BlockList:
         for Op in Block:
           if isinstance(Op, RoseBVInsertSliceOp):
@@ -135,8 +142,8 @@ def CompileNumber(Num, Context : x86RoseContext):
 
 
 def CompileVariable(Variable, Context):
-  print("COMPILING VARIABLE")
-  print(Variable)
+  #print("COMPILING VARIABLE")
+  #print(Variable)
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(Variable.name):
     ID = Context.getVariableID(Variable.name)
@@ -283,6 +290,10 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
 
   # Add an bitslice operation
   Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, Low, High, BitwidthValue)
+  #print("EXTRACT OP CREATED:")
+  #print("Operation.getInputBitVector():")
+  #Operation.getInputBitVector().print()
+  #print(Operation.getInputBitVector().ID)
 
   # Add signedness info on the op
   if Context.isValueSignKnown(BitVector):
@@ -327,6 +338,10 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
     # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, LowIndex, HighIndex, BitwidthValue)
+    #print("EXTRACT OP CREATED:")
+    #print("Operation.getInputBitVector():")
+    #Operation.getInputBitVector().print()
+    #print(Operation.getInputBitVector().ID)
   else:
     # Compile the index first
     IndexVal = CompileIndex(IndexExpr.idx, Context)
@@ -336,6 +351,10 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     BitwidthValue = RoseConstant.create(1, IndexVal.getType())
     # Now, generate the extract op. 
     Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, IndexVal, IndexVal, BitwidthValue)
+    #print("EXTRACT OP CREATED:")
+    #print("Operation.getInputBitVector():")
+    #Operation.getInputBitVector().print()
+    #print(Operation.getInputBitVector().ID)
 
   # Add signedness info
   Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Vector))
@@ -1133,7 +1152,7 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       FuncArgList.append(ArgVal)
     
     # Compile the function and its arguments
-    print("CREATING A NEW FUNCTION")
+    #print("CREATING A NEW FUNCTION")
     Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseUndefinedType.create())
 
     # Add arguments to the child context
@@ -1145,15 +1164,15 @@ def CompileCall(CallStmt, Context : x86RoseContext):
         ChildContext.addSignednessInfoForValue(Arg, Context.isValueSigned(ArgValuesList[Index]))
     
     RootAbstraction = Context.getRootAbstraction()
-    print("ROOT ABSTRACTION:")
-    RootAbstraction.print()
+    #print("ROOT ABSTRACTION:")
+    #RootAbstraction.print()
     if isinstance(RootAbstraction, RoseFunction):
       RegionContext = Context
       RootFunction = RootAbstraction
     else:
       RegionContext, RootFunction = Context.getFirsRootAbstractionsOfType(RoseFunction)
-      print("FIRST ROOT ABSTRACTION:")
-      RootFunction.print()
+      #print("FIRST ROOT ABSTRACTION:")
+      #RootFunction.print()
       assert not isinstance(RootFunction, RoseUndefRegion)
     
     # Empty the function first. We want to make sure that the nested function
@@ -1467,6 +1486,65 @@ def CompileLookup(LookupExpr, Context : x86RoseContext):
   return CompiledValue
 
 
+def CompileMatch(MatchExpr, Context : x86RoseContext):
+  assert type(MatchExpr.val) == BitIndex or type(MatchExpr.val) == BitSlice
+  # Compile the bit slice
+  CompiledValue = CompileExpression(MatchExpr.val, Context)
+  # Compile the cases
+  Conditions = list()
+  for Case in MatchExpr.cases:
+    # Compile case value
+    assert type(Case.val) == Number
+    # Generate a bitvector
+    ConstantVal = RoseConstant.create(Case.val.val, CompiledValue.getType())
+    Condition = RoseBVEQOp.create(Context.genName("%cond"), CompiledValue, ConstantVal)
+    print("NEW CONDITION:")
+    Condition.print()
+    # Add the op to the IR
+    Context.addAbstractionToIR(Condition)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(Case.id, Condition)
+    Conditions.append(Condition)
+
+  # Generate a cond region
+  CondRegion = RoseCond.create(Conditions, len(MatchExpr.cases))
+  print("NEW COND REGION:")
+  CondRegion.print()
+
+  # Add cond region as root abstraction 
+  ChildContext = x86RoseContext()
+  ChildContext.pushRootAbstraction(CondRegion)
+
+  # Add the generated cond region to the current context
+  Context.addCompiledAbstraction(MatchExpr.id, CondRegion)
+
+  # Add a new context for this cond region
+  Context.createContext(MatchExpr.id, ChildContext)
+
+  # Now compile all the case statements
+  for Idx, Key in enumerate(CondRegion.getKeys()):
+    # Add key to this cond region
+    ChildContext.addKeyForCompiledAbstraction(Key, CondRegion)
+    # Compile the case statements
+    for Stmt in MatchExpr.cases[Idx].stmts:
+      CompileStatement(Stmt, ChildContext)
+    CondRegion = ChildContext.getRootAbstraction()
+
+  # Pop the root cond region from the child context 
+  CompiledCondRegion = ChildContext.getRootAbstraction()
+  print("CompiledCondRegion:")
+  CompiledCondRegion.print()
+
+  # Add cond region to the root abstraction
+  Context.addAbstractionToIR(CompiledCondRegion)
+
+  # Update the compiled cond region to the current context
+  Context.updateCompiledAbstraction(MatchExpr.id, CompiledCondRegion)
+
+  # Remove the child context now
+  Context.destroyContext(MatchExpr.id)
+
+
 def CompileExpression(Expr, Context : x86RoseContext):
   ExprTy = type(Expr)
   CompiledExpr = CompileAbstractions[ExprTy](Expr, Context)
@@ -1544,6 +1622,9 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   for Index in range(RootFunction.getNumArgs()):
     RootContext.addVariable(RootFunction.getArg(Index).getName(), ParamsIDs[Index])
     RootContext.addCompiledAbstraction(ParamsIDs[Index], RootFunction.getArg(Index))
+    #print("ROOT FUNCTION ARG:")
+    #RootFunction.getArg(Index).print()
+    #print(RootFunction.getArg(Index).ID)
   
   # Add the function to the context
   RootContext.addCompiledAbstraction(Sema.intrin, RootFunction)
@@ -1604,10 +1685,9 @@ CompileAbstractions = {
   IfElse: CompileIfElse,
   IfElseIfElse: CompileIfElseIfElse,
   BinaryExpr: CompileBinaryExpr,
-  BitIndex : CompileBitIndex,
+  BitIndex: CompileBitIndex,
   Lookup: CompileLookup,
-  #While: CompileWhile,
-  #Match: CompileMatch,
+  Match: CompileMatch,
 }
 
 
@@ -2118,300 +2198,5 @@ def NeedToExtendOperandSize(Op):
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
 
 
-def Compile():
-  from PseudoCodeParser import GetSemaFromXML
-  import xml.etree.ElementTree as ET
-
-  sema = test11()
-  print(sema)
-  intrin_node = ET.fromstring(sema)
-  spec = GetSemaFromXML(intrin_node)
-  print(spec)
-  RootContext = x86RoseContext()
-  CompiledFunction = CompileSemantics(spec, RootContext)
-
-
-def test1():
-  return '''
-<intrinsic tech="SSE2" vexEq="TRUE" name="_mm_unpacklo_epi8">
-	<type>Integer</type>
-	<CPUID>SSE2</CPUID>
-	<category>Swizzle</category>
-	<return type="__m128i" varname="dst" etype="UI8"/>
-	<parameter type="__m128i" varname="a" etype="UI8"/>
-	<parameter type="__m128i" varname="b" etype="UI8"/>
-	<description>Unpack and interleave 8-bit integers from the low half of "a" and "b", and store the results in "dst".</description>
-	<operation>
-DEFINE INTERLEAVE_BYTES(src1[127:0], src2[127:0]) {
-	dst[7:0] := src1[7:0] 
-	dst[15:8] := src2[7:0] 
-	dst[23:16] := src1[15:8] 
-	dst[31:24] := src2[15:8] 
-	dst[39:32] := src1[23:16] 
-	dst[47:40] := src2[23:16] 
-	dst[55:48] := src1[31:24] 
-	dst[63:56] := src2[31:24] 
-	dst[71:64] := src1[39:32]
-	dst[79:72] := src2[39:32] 
-	dst[87:80] := src1[47:40] 
-	dst[95:88] := src2[47:40] 
-	dst[103:96] := src1[55:48] 
-	dst[111:104] := src2[55:48]
-	dst[119:112] := src1[63:56] 
-	dst[127:120] := src2[63:56] 
-	RETURN dst[127:0]	
-}
-dst[127:0] := INTERLEAVE_BYTES(a[127:0], b[127:0])
-	</operation>
-	<instruction name="PUNPCKLBW" form="xmm, xmm" xed="PUNPCKLBW_XMMdq_XMMq"/>
-	<header>emmintrin.h</header>
-</intrinsic>
-  '''
-
-def test2():
-  return '''
-<intrinsic tech="AVX2" name="_mm256_unpacklo_epi16">
-	<type>Integer</type>
-	<CPUID>AVX2</CPUID>
-	<category>Swizzle</category>
-	<return type="__m256i" varname="dst" etype="UI16"/>
-	<parameter type="__m256i" varname="a" etype="UI16"/>
-	<parameter type="__m256i" varname="b" etype="UI16"/>
-	<description>Unpack and interleave 16-bit integers from the low half of each 128-bit lane in "a" and "b", and store the results in "dst".</description>
-	<operation>
-DEFINE INTERLEAVE_WORDS(src1[127:0], src2[127:0]) {
-	dst[15:0] := src1[15:0] 
-	dst[31:16] := src2[15:0] 
-	dst[47:32] := src1[31:16] 
-	dst[63:48] := src2[31:16] 
-	dst[79:64] := src1[47:32] 
-	dst[95:80] := src2[47:32] 
-	dst[111:96] := src1[63:48] 
-	dst[127:112] := src2[63:48] 
-	RETURN dst[127:0]	
-}
-dst[127:0] := INTERLEAVE_WORDS(a[127:0], b[127:0])
-dst[255:128] := INTERLEAVE_WORDS(a[255:128], b[255:128])
-	</operation>
-	<instruction name="VPUNPCKLWD" form="ymm, ymm, ymm" xed="VPUNPCKLWD_YMMqq_YMMqq_YMMqq"/>
-	<header>immintrin.h</header>
-</intrinsic>
-  '''
-
-
-def test3():
-  return '''
-<intrinsic tech="AVX2" name="_mm_broadcastb_epi8">
-	<type>Integer</type>
-	<CPUID>AVX2</CPUID>
-	<category>Swizzle</category>
-	<return type="__m128i" varname="dst" etype="UI8"/>
-	<parameter type="__m128i" varname="a" etype="UI8"/>
-	<description>Broadcast the low packed 8-bit integer from "a" to all elements of "dst".</description>
-	<operation>
-FOR j := 0 to 15
-	i := j*8
-	dst[i+7:i] := a[7:0]
-ENDFOR
-	</operation>
-	<instruction name="VPBROADCASTB" form="xmm, xmm" xed="VPBROADCASTB_XMMdq_XMMb"/>
-	<header>immintrin.h</header>
-</intrinsic>
-  '''
-#dst[MAX:128] := 0
-
-
-def test4():
-  return '''
-<intrinsic tech="SSSE3" vexEq="TRUE" name="_mm_hadd_epi16">
-	<type>Integer</type>
-	<CPUID>SSSE3</CPUID>
-	<category>Arithmetic</category>
-	<return type="__m128i" varname="dst" etype="SI16"/>
-	<parameter type="__m128i" varname="a" etype="SI16"/>
-	<parameter type="__m128i" varname="b" etype="SI16"/>
-	<description>Horizontally add adjacent pairs of 16-bit integers in "a" and "b", and pack the signed 16-bit results in "dst".</description>
-	<operation>
-dst[15:0] := a[31:16] + a[15:0]
-dst[31:16] := a[63:48] + a[47:32]
-dst[47:32] := a[95:80] + a[79:64]
-dst[63:48] := a[127:112] + a[111:96]
-dst[79:64] := b[31:16] + b[15:0]
-dst[95:80] := b[63:48] + b[47:32]
-dst[111:96] := b[95:80] + b[79:64]
-dst[127:112] := b[127:112] + b[111:96]
-	</operation>
-	<instruction name="PHADDW" form="xmm, xmm" xed="PHADDW_XMMdq_XMMdq"/>
-	<header>tmmintrin.h</header>
-</intrinsic>
-  '''
-
-def test5():
-  return '''
-<intrinsic tech="AVX-512" name="_mm_cmpeq_epi8_mask">
-	<type>Integer</type>
-	<type>Mask</type>
-	<CPUID>AVX512VL</CPUID>
-	<CPUID>AVX512BW</CPUID>
-	<category>Compare</category>
-	<return type="__mmask16" varname="k" etype="MASK"/>
-	<parameter type="__m128i" varname="a" etype="SI8"/>
-	<parameter type="__m128i" varname="b" etype="SI8"/>
-	<description>Compare packed signed 8-bit integers in "a" and "b" for equality, and store the results in mask vector "k".</description>
-	<operation>
-FOR j := 0 to 15
-	i := j*8
-	k[j] := ( a[i+7:i] == b[i+7:i] ) ? 1 : 0
-ENDFOR
-	</operation>
-	<instruction name="VPCMPB" form="k, xmm, xmm" xed="VPCMPB_MASKmskw_MASKmskw_XMMi8_XMMi8_IMM8_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-  '''
-#k[MAX:16] := 0
-
-
-def test6():
-  return '''
-<intrinsic tech="AVX" name="_mm256_setr_m128i">
-	<type>Integer</type>
-	<CPUID>AVX</CPUID>
-	<category>Set</category>
-	<return type="__m256i" varname="dst" etype="M128"/>
-	<parameter type="__m128i" varname="lo" etype="M128"/>
-	<parameter type="__m128i" varname="hi" etype="M128"/>
-	<description>Set packed __m256i vector "dst" with the supplied values.</description>
-	<operation>
-dst[127:0] := lo[127:0]
-dst[255:128] := hi[127:0]
-	</operation>
-	<instruction name="VINSERTF128" form="ymm, ymm, xmm, imm8" xed="VINSERTF128_YMMqq_YMMqq_XMMdq_IMMb"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-#dst[MAX:256] := 0
-
-
-def test7():
-  return '''
-<intrinsic tech="AVX-512" name="_mm256_permutexvar_epi16">
-	<type>Integer</type>
-	<CPUID>AVX512VL</CPUID>
-	<CPUID>AVX512BW</CPUID>
-	<category>Miscellaneous</category>
-	<return type="__m256i" varname="dst" etype="UI16"/>
-	<parameter type="__m256i" varname="idx" etype="UI16"/>
-	<parameter type="__m256i" varname="a" etype="UI16"/>
-	<description>Shuffle 16-bit integers in "a" across lanes using the corresponding index in "idx", and store the results in "dst".</description>
-	<operation>
-FOR j := 0 to 15
-	i := j*16
-	id := idx[i+3:i]*16
-	dst[i+15:i] := a[id+15:id]
-ENDFOR
-	</operation>
-	<instruction name="VPERMW" form="ymm, ymm, ymm" xed="VPERMW_YMMu16_MASKmskw_YMMu16_YMMu16_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-#dst[MAX:256] := 0
-
-
-def test8():
-  return '''
-<intrinsic tech="AVX-512" name="_mm512_min_epi8">
-	<type>Integer</type>
-	<CPUID>AVX512BW</CPUID>
-	<category>Arithmetic</category>
-	<return type="__m512i" varname="dst" etype="UI8"/>
-	<parameter type="__m512i" varname="a" etype="SI8"/>
-	<parameter type="__m512i" varname="b" etype="SI8"/>
-	<description>Compare packed signed 8-bit integers in "a" and "b", and store packed minimum values in "dst".</description>
-	<operation>
-FOR j := 0 to 63
-	i := j*8
-	dst[i+7:i] := MIN(a[i+7:i], b[i+7:i])
-ENDFOR
-	</operation>
-	<instruction name="VPMINSB" form="zmm, zmm, zmm" xed="VPMINSB_ZMMi8_MASKmskw_ZMMi8_ZMMi8_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-#dst[MAX:512] := 0
-
-
-def test9():
-  return '''
-<intrinsic tech="AVX-512" name="_mm_dpwssds_epi32">
-	<type>Integer</type>
-	<CPUID>AVX512_VNNI</CPUID>
-	<CPUID>AVX512VL</CPUID>
-	<category>Arithmetic</category>
-	<return type="__m128i" varname="dst" etype="SI32"/>
-	<parameter type="__m128i" varname="src" etype="SI32"/>
-	<parameter type="__m128i" varname="a" etype="SI16"/>
-	<parameter type="__m128i" varname="b" etype="SI16"/>
-	<description>Multiply groups of 2 adjacent pairs of signed 16-bit integers in "a" with corresponding 16-bit integers in "b", producing 2 intermediate signed 32-bit results. Sum these 2 results with the corresponding 32-bit integer in "src" using signed saturation, and store the packed 32-bit results in "dst".</description>
-	<operation>
-FOR j := 0 to 3
-	tmp1.dword := SignExtend32(a.word[2*j]) * SignExtend32(b.word[2*j])
-	tmp2.dword := SignExtend32(a.word[2*j+1]) * SignExtend32(b.word[2*j+1])
-	dst.dword[j] := src.dword[j] + tmp1 + tmp2
-ENDFOR
-	</operation>
-	<instruction name="VPDPWSSDS" form="xmm, xmm, xmm" xed="VPDPWSSDS_XMMi32_MASKmskw_XMMi16_XMMu32_AVX512"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-#dst.dword[j] := Saturate32(src.dword[j] + tmp1 + tmp2)
-#dst[MAX:128] := 0
-
-
-def test10():
-  return '''
-;;<intrinsic tech="AVX-512/KNC" sequence="TRUE" name="_mm512_reduce_add_epi64">
-;;	<type>Integer</type>
-;;	<CPUID>AVX512F/KNCNI</CPUID>
-;;	<category>Arithmetic</category>
-;;	<return type="__int64" varname="dst" etype="UI64"/>
-;;	<parameter type="__m512i" varname="a" etype="UI64"/>
-;;	<description>Reduce the packed 64-bit integers in "a" by addition. Returns the sum of all elements in "a".</description>
-;;	<operation>
-;;dst[63:0] := 0
-;;FOR j := 0 to 7
-;;	i := j*64
-;;	dst[63:0] := dst[63:0] + a[i+63:i]
-;;ENDFOR
-;;	</operation>
-;;	<header>immintrin.h</header>
-;;</intrinsic>
-'''
-
-def test11():
-  return '''
-<intrinsic tech="Other" name="_bswap64">
-	<type>Integer</type>
-	<category>Bit Manipulation</category>
-	<return type="__int64" varname="dst" etype="UI64"/>
-	<parameter type="__int64" varname="a" etype="UI64"/>
-	<description>Reverse the byte order of 64-bit integer "a", and store the result in "dst". This intrinsic is provided for conversion between little and big endian values.</description>
-	<operation>
-dst[7:0] := a[63:56]
-dst[15:8] := a[55:48]
-dst[23:16] := a[47:40]
-dst[31:24] := a[39:32]
-dst[39:32] := a[31:24]
-dst[47:40] := a[23:16]
-dst[55:48] := a[15:8]
-dst[63:56] := a[7:0]
-	</operation>
-	<instruction name="BSWAP" form="r64" xed="BSWAP_GPRv"/>
-	<header>immintrin.h</header>
-</intrinsic>
-'''
-
-
-if __name__ == '__main__':
-  Compile()
 
 

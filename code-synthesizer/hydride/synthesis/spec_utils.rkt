@@ -100,6 +100,26 @@
    (string-append "[" args "]")
     )
 
+
+(define (get-expr-imms expr)
+  (define imms (halide:get-imm-values expr))
+  (define imm-ints (for/list ([v imms]) (bitvector->integer v) ))
+  (define val-strs 
+         (for/list ([i (range (length imm-ints))])
+            (define val (list-ref imm-ints i))
+            (define val-str (~s val))
+            (define sep
+              (if (equal? i (- (length imms) 1)) 
+                ""
+                ", "
+                )
+              )
+            (string-append val-str sep)
+            )
+         )
+  (string-append "[" (apply string-append val-strs) "]")
+  )
+
 (define (gen-synthesis-spec expr sub-expr-ls base_name)
   (define name (string-append "\"" base_name "\""))
   (define spec-name (get-spec-name base_name))
@@ -110,6 +130,7 @@
   (define output_precision (~s (halide:vec-precision expr)))
   (define args (get-args-str sub-expr-ls))
   (define spec_invoke "\"\"")
+  (define imm-ls (get-expr-imms expr))
   (string-append 
     "{ \n"
     "\"name\": " name " , \n"
@@ -119,7 +140,8 @@
     "\"input_precision\": " input_precision ", \n"
     "\"output_precision\": " output_precision ", \n"
     "\"args\": " args ", \n"
-    "\"spec_invokation\": " spec_invoke "\n" 
+    "\"spec_invokation\": " spec_invoke ",\n" 
+    "\"imms\": " imm-ls " \n"
     "}\n"
     )
   )

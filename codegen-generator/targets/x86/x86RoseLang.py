@@ -5,9 +5,36 @@
 #############################################################
 
 
-from PseudoCodeParser import GetSemaFromXML
+
+from PseudoCodeParser import ParseX86Intructions
 import xml.etree.ElementTree as ET
 from x86RoseCompiler import CompileSemantics, x86RoseContext
+
+def Compile():
+	SemaList = ParseX86Intructions("test.xml")
+	print("SemaList lngth:")
+	print(len(SemaList))
+	from RoseFunctionInfo import RoseFunctionInfo
+	FunctionInfoList = list()
+	for Index, Spec in enumerate(SemaList):
+		RootContext = x86RoseContext()
+		print("RootContext---:")
+		print(RootContext)
+		print("Spec:")
+		print(Spec)
+		FunctionInfo = RoseFunctionInfo()
+		CompiledFunction = CompileSemantics(Spec, RootContext)
+		FunctionInfo.addContext(RootContext)
+		FunctionInfo.addRawSemantics(Spec)
+		FunctionInfo.addFunctionAtNewStage(CompiledFunction)
+		print("Index*****")
+		print(Index)
+		print("CompiledFunction:")
+		CompiledFunction.print()
+		FunctionInfoList.append(FunctionInfo)
+	return FunctionInfoList
+
+
 
 def test1():
   return '''
@@ -5046,7 +5073,9 @@ def Compile_Tests():
 	#sema = test50()
 	#sema = test96()
 	print(sema)
+	from PseudoCodeParser import GetSemaFromXML, InitX86Parser
 	Node = ET.fromstring(sema)
+	InitX86Parser()
 	Spec = GetSemaFromXML(Node)
 	print(Spec)
 	RootContext = x86RoseContext()
@@ -5059,41 +5088,7 @@ def Compile_Tests():
 	return [FunctionInfo]
 
 
-
-from PseudoCodeParser import *
-
-def Compile():
-	SemaList = list()
-	DataRoot = ET.parse("test.xml")
-	for Node in DataRoot.iter('intrinsic'):
-		SemaList.append(GetSemaFromXML(Node))
-	print("SemaList lngth:")
-	print(len(SemaList))
-	from RoseFunctionInfo import RoseFunctionInfo
-	FunctionInfoList = list()
-	for Index, Spec in enumerate(SemaList):
-		RootContext = x86RoseContext()
-		print("RootContext---:")
-		print(RootContext)
-		print("Spec:")
-		print(Spec)
-		FunctionInfo = RoseFunctionInfo()
-		CompiledFunction = CompileSemantics(Spec, RootContext)
-		FunctionInfo.addContext(RootContext)
-		FunctionInfo.addRawSemantics(Spec)
-		FunctionInfo.addFunctionAtNewStage(CompiledFunction)
-		print("Index*****")
-		print(Index)
-		print("CompiledFunction:")
-		CompiledFunction.print()
-		FunctionInfoList.append(FunctionInfo)
-	return FunctionInfoList
-
-
-
 if __name__ == '__main__':
   Compile_Tests()
-
-
 
 

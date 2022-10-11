@@ -1368,6 +1368,7 @@
 
 
 (define id-map (make-hash))
+
 (define (get-buffer-ids expr)
   (hash-clear! id-map)
 
@@ -1407,6 +1408,26 @@
 
   (define hashed-expr (halide:visit expr visitor-fn))
   hashed-expr
+  )
+
+
+
+(define (get-imm-values expr)
+
+  (define imms-vals (list))
+  (define (visitor-fn e)
+    (destruct e
+              [(int-imm data signed?) 
+               (set! imms-vals (append imms-vals (list data)))
+               ]
+              [_ e]
+              )
+    )
+
+  (halide:visit expr visitor-fn)
+
+  (remove-duplicates imms-vals)
+
   )
 
 

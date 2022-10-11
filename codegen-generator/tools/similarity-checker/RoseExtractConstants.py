@@ -1241,7 +1241,7 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
   return
 
 
-def MapBVInsertsInCondBlocks(Function : RoseFunction):
+def MapBVInsertsInCondBlocks2(Function : RoseFunction):
   CondBlocksBVInsertsMap = dict()
 
   # Lambda function
@@ -1292,6 +1292,67 @@ def MapBVInsertsInCondBlocks(Function : RoseFunction):
       ThenBVInsertOp.print()
       ElseBVInsertOp.print()
 
+  CondRegions = Function.getRegionsOfType(RoseCond)
+  for CondRegion in CondRegions:
+    MapBVInsertsInCondRegion(CondRegion, CondBlocksBVInsertsMap)
+  return CondBlocksBVInsertsMap
+
+
+def MapBVInsertsInCondBlocks(Function : RoseFunction):
+  print("FUNCTION:")
+  Function.print()
+  print("MapBVInsertsInCondBlocks:")
+  CondBlocksBVInsertsMap = dict()
+
+  # Lambda function
+  def ExtractBVInsertsToRetVal(Regions : list):
+    OpList = list()
+    LocalCondBlocksBVInsertsMap = dict()
+    for Region in Regions:
+      if isinstance(Region, RoseBlock):
+        for Op in Region.getOperations():
+          if isinstance(Op, RoseBVInsertSliceOp):
+            if Op.getInputBitVector() == Function.getReturnValue():
+              OpList.append(Op)
+      elif isinstance(Region, RoseCond):
+        MapBVInsertsInCondRegion(Region, LocalCondBlocksBVInsertsMap)
+    for Op, ItemOps in LocalCondBlocksBVInsertsMap.items():
+      assert isinstance(ItemOps, list)
+      if Op not in OpList:
+        OpList.append(Op)
+      if Op not in CondBlocksBVInsertsMap:
+        CondBlocksBVInsertsMap[Op] = ItemOps
+      else:
+        CondBlocksBVInsertsMap[Op].extend(ItemOps)
+    return OpList
+  
+  def MapBVInsertsInCondRegion(CondRegion : RoseCond, LocalCondBlocksBVInsertsMap : dict):    
+    # Initialize the dictionary with a list for every keyed subregion
+    KeyedSubRegions = dict()
+    KeyedSubRegionsBVInsertOps = dict()
+    for Key in CondRegion.getKeys():
+      KeyedSubRegions[Key] = list()
+      KeyedSubRegions[Key].extend(CondRegion.getChildren(Key))
+      KeyedSubRegionsBVInsertOps[Key] = ExtractBVInsertsToRetVal(KeyedSubRegions[Key])
+    # Map all bvinserts to each other
+    for Key, BVInsertOps in KeyedSubRegionsBVInsertOps.items():
+      for CheckKey, CheckBVInsertOps in KeyedSubRegionsBVInsertOps.items():
+        if Key == CheckKey:
+          continue
+        for BVInsertOp in BVInsertOps:
+          for CheckBVInsertOp in CheckBVInsertOps:
+            if BVInsertOp not in LocalCondBlocksBVInsertsMap:
+              LocalCondBlocksBVInsertsMap[BVInsertOp] = [CheckBVInsertOp]
+            else:
+              LocalCondBlocksBVInsertsMap[BVInsertOp].append(CheckBVInsertOp)
+            if CheckBVInsertOp not in LocalCondBlocksBVInsertsMap:
+              LocalCondBlocksBVInsertsMap[CheckBVInsertOp] = [BVInsertOp]
+            else:
+              LocalCondBlocksBVInsertsMap[CheckBVInsertOp].append(BVInsertOp)
+            print("BVInsertOp <-> CheckBVInsertOp:")
+            BVInsertOp.print()
+            CheckBVInsertOp.print()
+    
   CondRegions = Function.getRegionsOfType(RoseCond)
   for CondRegion in CondRegions:
     MapBVInsertsInCondRegion(CondRegion, CondBlocksBVInsertsMap)
@@ -2209,6 +2270,7 @@ def ExtractConstantsFromMultipleBlocks(BlockList : RoseBlock, BVValToBitwidthVal
             Visited.add(Operation)
             continue
           if Operation in OpBitwidthEqLoopStepList:
+            print("FOUND OPERATIION IN OpBitwidthEqLoopStepList")
             Operation.setOperand(Operation.getBitwidthPos(), Loop.getStep())
             BVValToBitwidthVal[Operation] = Loop.getStep()
             if Operation in UnknownVal:

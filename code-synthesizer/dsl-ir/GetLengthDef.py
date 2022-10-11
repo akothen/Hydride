@@ -18,7 +18,7 @@ class GetLengthDef:
         defaults.append("[(dim-y id) 1]".format(env_name, env_name))
         defaults.append("[(idx-i id) 1]".format(env_name, env_name))
         defaults.append("[(idx-j id) 1]".format(env_name, env_name))
-        defaults.append("[(reg id) (bvlength (vector-ref-bv {} id))]".format(env_name))
+        defaults.append("[(reg id) (bvlength (vector-ref {} id))]".format(env_name))
 
         defaults.append("[(lit v) (bvlength v)]")
 

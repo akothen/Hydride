@@ -193,6 +193,7 @@ def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
 
 def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : set = None):
   print("ADD OUTER LOOP IN FUNCTION")
+  Function.print()
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
   # Get the op that we can use to canonicalize the loop bounds
@@ -202,17 +203,45 @@ def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : set = Non
     FunctionChildren.extend(Function.getChildren())
     for Index, Region in enumerate(FunctionChildren):
       if Region in InlinableRegions:
+        print("Region:")
+        Region.print()
         if not isinstance(Region, RoseForLoop):
-          assert isinstance(Region, RoseBlock)
-          #Index = Function.getPosOfChild(Region)
-          PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, [Region])
+          if isinstance(Region, RoseBlock):
+            #Index = Function.getPosOfChild(Region)
+            PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, [Region])
+            assert PrimaryOps != None
+            MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+            OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+            InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
+            OuterLoop.addRegion(InnerLoop)
+            Function.addRegionBefore(Index, OuterLoop)
+            Function.eraseChild(Region)
+            InnerLoop.addRegion(Region)
+            LoopList.append(OuterLoop)
+            continue
+          assert isinstance(Region, RoseCond)
+          BlockList = list()
+          for Key in Region.getKeys():
+            print("KEY:")
+            print(Key)
+            BlockList.extend(Region.getRegionsOfType(SubRegionType=RoseBlock, Key=Key))
+          PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, BlockList)
           assert PrimaryOps != None
           MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
           OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
           InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
           OuterLoop.addRegion(InnerLoop)
           Function.addRegionBefore(Index, OuterLoop)
+          ConditionalBlocks = list()
+          for Condition in Region.getConditions():
+            if isinstance(Condition, RoseOperation):
+              if Condition.getParent() not in ConditionalBlocks:
+                ConditionalBlocks.append(Condition.getParent())
+          for Block in ConditionalBlocks:
+            Function.eraseChild(Block)
           Function.eraseChild(Region)
+          for Block in ConditionalBlocks:
+            InnerLoop.addRegion(Block)
           InnerLoop.addRegion(Region)
           LoopList.append(OuterLoop)
           continue
@@ -282,60 +311,98 @@ def AddTwoNestedLoopsInFunction(Function : RoseFunction):
   # There are no loops in the code. Now we check if the code is all in one block
   # or there is some control flow (which we do not handle right now.)
   # TODO: Handle cases where control flow exists.
-  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
-  Blocks = Function.getRegionsOfType(RoseBlock, Level=0)
-  for Block in Blocks:
-    print("BLOCK IN FUNCTION:")
-    Block.print()
-  print("NumBlocksAtLevel0:")
-  print(NumBlocksAtLevel0)
-  print("Function:")
-  Function.print()
-  assert NumBlocksAtLevel0 == 1
-  [Block] = Function.getRegionsOfType(RoseBlock, 0)
-
-  # Split the block first to separate out the return operation.
-  # Look for the first bvinsert op from the bottom.
-  # Just as a sanity check the last op in the block must be a 
-  # return op.
-  assert isinstance(Block.getTailChild(), RoseReturnOp)
-  LastBVInsertOp = RoseUndefValue()
-  for Op in reversed(Block.getOperations()):
-    if isinstance(Op, RoseBVInsertSliceOp):
-      # Found a bvinsert op! Check to see that this inserts into the 
-      # function's return value.
-      assert Op.getInputBitVector() == Function.getReturnValue()
-      # Now split the block.
-      Pos = Block.getPosOfOperation(Op)
-      Block.splitAt(Pos + 1)
-      LastBVInsertOp = Op
-      break
-
-  # Now another sanity check to see if there are 2 blocks at level zero
-  assert not isinstance(LastBVInsertOp, RoseUndefValue)
-  NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
-  assert NumBlocksAtLevel0 == 2
-
-  # Now we add a loop around the first block
-  Block = LastBVInsertOp.getParent()
-  # Use the return value of the function as the end and step
-  Bitwidth = Function.getReturnValue().getType().getBitwidth()
-  #PrimaryOps = GetOpDeterminingLoopBounds(Loop)
-  PrimaryOps = GetOpDeterminingLoopBoundsInBlockList(Function, [Block])
-  if isinstance(PrimaryOps[0], RoseBVInsertSliceOp):
-    Bitwidth = PrimaryOps[0].getInsertValue().getType().getBitwidth()
+  if len(Function.getChildren()) != 1:
+    RegionList = list()
+    FunctionRegionList = Function.getChildren()
+    for Region in FunctionRegionList[:-1]:
+      RegionList.append(Region)
+    LastFunctionRegion = Function.getChild(len(FunctionRegionList) - 1)
+    assert isinstance(LastFunctionRegion, RoseBlock)
+    # Split the block first to separate out the return operation.
+    # Look for the first bvinsert op from the bottom.
+    # Just as a sanity check the last op in the block must be a 
+    # return op.
+    assert isinstance(LastFunctionRegion.getTailChild(), RoseReturnOp)
+    LastBVInsertOp = RoseUndefValue()
+    for Op in reversed(LastFunctionRegion.getOperations()):
+      if isinstance(Op, RoseBVInsertSliceOp):
+        # Found a bvinsert op! Check to see that this inserts into the 
+        # function's return value.
+        assert Op.getInputBitVector() == Function.getReturnValue()
+        # Now split the block.
+        Pos = LastFunctionRegion.getPosOfOperation(Op)
+        LastFunctionRegion.splitAt(Pos + 1)
+        LastBVInsertOp = Op
+        break
+    if not isinstance(LastBVInsertOp, RoseUndefValue):
+      # Last bvinsert found, so the block with this op must be in the
+      # new loop nest.
+      RegionList.append(LastBVInsertOp.getParent())
+    # Generate a new loop nest
+    Bitwidth = Function.getReturnValue().getType().getBitwidth()
+    InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
+    OuterLoop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
+    # Add the first block to the inner loop and remove it from the function
+    for Region in RegionList:
+      Function.eraseChild(Region)
+      InnerLoop.addRegion(Region)
+    OuterLoop.addRegion(InnerLoop)
+    # Now add the loop nest to the function
+    Function.addRegionBefore(0, OuterLoop)
   else:
-    Bitwidth = PrimaryOps[0].getType().getBitwidth()
-  # Create the inner loop
-  InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
-  # Add the first block to the inner loop and remove it from the function
-  Function.eraseChild(Block)
-  InnerLoop.addRegion(Block)
-  # Create the outer loop and add the inner loop into the outer loop
-  OuterLoop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
-  OuterLoop.addRegion(InnerLoop)
-  # Now add the loop to the function
-  Function.addRegionBefore(0, OuterLoop)
+    NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, Level=0)
+    Blocks = Function.getRegionsOfType(RoseBlock, Level=0)
+    for Block in Blocks:
+      print("BLOCK IN FUNCTION:")
+      Block.print()
+    print("NumBlocksAtLevel0:")
+    print(NumBlocksAtLevel0)
+    print("Function:")
+    Function.print()
+    assert NumBlocksAtLevel0 == 1
+    [Block] = Function.getRegionsOfType(RoseBlock, 0)
+    # Split the block first to separate out the return operation.
+    # Look for the first bvinsert op from the bottom.
+    # Just as a sanity check the last op in the block must be a 
+    # return op.
+    assert isinstance(Block.getTailChild(), RoseReturnOp)
+    LastBVInsertOp = RoseUndefValue()
+    for Op in reversed(Block.getOperations()):
+      if isinstance(Op, RoseBVInsertSliceOp):
+        # Found a bvinsert op! Check to see that this inserts into the 
+        # function's return value.
+        assert Op.getInputBitVector() == Function.getReturnValue()
+        # Now split the block.
+        Pos = Block.getPosOfOperation(Op)
+        Block.splitAt(Pos + 1)
+        LastBVInsertOp = Op
+        break
+
+    # Now another sanity check to see if there are 2 blocks at level zero
+    assert not isinstance(LastBVInsertOp, RoseUndefValue)
+    NumBlocksAtLevel0 = Function.numLevelsOfRegion(RoseBlock, 0)
+    assert NumBlocksAtLevel0 == 2
+
+    # Now we add a loop around the first block
+    Block = LastBVInsertOp.getParent()
+    # Use the return value of the function as the end and step
+    Bitwidth = Function.getReturnValue().getType().getBitwidth()
+    #PrimaryOps = GetOpDeterminingLoopBounds(Loop)
+    PrimaryOps = GetOpDeterminingLoopBoundsInBlockList(Function, [Block])
+    if isinstance(PrimaryOps[0], RoseBVInsertSliceOp):
+      Bitwidth = PrimaryOps[0].getInsertValue().getType().getBitwidth()
+    else:
+      Bitwidth = PrimaryOps[0].getType().getBitwidth()
+    # Create the inner loop
+    InnerLoop = RoseForLoop.create("%" + "inner.it", 0, Bitwidth, Bitwidth)
+    # Add the first block to the inner loop and remove it from the function
+    Function.eraseChild(Block)
+    InnerLoop.addRegion(Block)
+    # Create the outer loop and add the inner loop into the outer loop
+    OuterLoop = RoseForLoop.create("%" + "outer.it", 0, Bitwidth, Bitwidth)
+    OuterLoop.addRegion(InnerLoop)
+    # Now add the loop to the function
+    Function.addRegionBefore(0, OuterLoop)
 
 
 def FixLoopNestingInFunction(Function : RoseFunction, Context : RoseContext):

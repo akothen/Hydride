@@ -444,7 +444,7 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
 
@@ -493,7 +493,8 @@ class Synthesizer:
             top_level_grammar_args = top_level_grammar_args,
             lit_holes = lit_holes,
             return_type = self.output_slice_length,
-            input_sizes = self.input_sizes
+            input_sizes = self.input_sizes,
+            imms = self.spec.imms
         )
 
 

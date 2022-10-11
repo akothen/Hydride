@@ -1,10 +1,375 @@
+###################################################################
+#
+# Pseudocode Parser for Hexagon ISA semantics.
+#
+###################################################################
 
-import ply.yacc as yacc
-from lex import tokens
+
 from HexAST import *
-
 from RoseHexCommon import *
 
+
+def ParseHexagonSemantics(Semantics : dict):
+  # Intializing x86 parser
+  InitHexagonParser()
+  SemaList = list()
+  for Name, Dictionary in Semantics.items():
+    Pseudocode = Dictionary['spec']
+    Inst = Dictionary['hvx_intrinsic']
+    Sema = GetSemanticsFor(Name, Inst, Pseudocode)
+    SemaList.append(Sema)
+  return SemaList
+
+
+def GetSemanticsFor(Name : str, Inst : str, Pseudocode : str):
+  # Lambda functions
+  def GetVariableSize(Variable, Pseudocode):
+    if (Variable + ".v[") in Pseudocode:
+        return 2048
+    if "Q" in Variable:
+      return 128
+    elif "R" in Variable:
+      return 32
+    elif "V" in Variable:
+      return 1024
+
+  def IsVariableScalar(Variable):
+    if "Q" in Variable:
+      return True
+    return False
+
+  Inst_specs = Inst.split(':')
+  reg_Inst = Inst_specs[0]
+  ParsedInst = Parse(reg_Inst)
+  print("ParsedInst:")
+  print(ParsedInst)
+  if isinstance(ParsedInst, list):
+    assign = ParsedInst[0]
+    FirstStmt = ParsedInst[0]
+  if isinstance(assign, If):
+    assign = assign.then[0]
+
+  # This is either an if statement or standard function call then
+  print("assign:")
+  print(assign)
+  print("FirstStmt:")
+  print(FirstStmt)
+  if not isinstance(assign, Update):
+    if isinstance(assign, Call):
+      lhs = assign.args[0]
+      rhs = assign
+  else: 
+    lhs = assign.lhs
+    if isinstance(lhs, list): # some annoying Instructions return 2 things, TODO: ask Akash about this
+      lhs = lhs[0]
+    # += or *=
+    if isinstance(assign.rhs, BinaryExpr):
+      rhs = assign.rhs.b
+      # Extend args
+      tmp = [assign.rhs.a]
+      print(type(rhs))
+      if isinstance(rhs, Call):
+        tmp.extend(rhs.args)
+        if isinstance(FirstStmt, If):
+          tmp.append(FirstStmt.cond)
+        rhs = Call(rhs.funcname, tmp, rhs.special, rhs.id)
+      else:
+        tmp.append(assign.rhs.b)
+        if isinstance(FirstStmt, If):
+          tmp.append(FirstStmt.cond)
+        rhs = tmp
+    elif isinstance(assign.rhs, Call):
+      rhs = assign.rhs
+    elif isinstance(assign.rhs, BitExtend):
+      rhs = assign.rhs.hi
+      # Theere may be another level of bit indexing.
+      if isinstance(rhs, BitExtend):
+        rhs = rhs.hi
+      print("-rhs:")
+      print(rhs)
+    else:
+      rhs =  [assign.rhs]
+    
+  # SIMD Instruction
+  if isinstance(lhs, ElemTypeInfo):
+    var = lhs.obj
+    rettype = lhs.elemtype 
+    retname = var.name
+  elif isinstance(lhs, Var):
+    var = lhs
+    rettype = var.id.split(".")[1]
+    retname = var.name
+  else:
+    print("Unknown lhs:", lhs)
+    rettype = None
+    retname = None
+  
+  if isinstance(rhs, Call):
+    name = rhs.funcname
+    params = rhs.args
+  elif isinstance(rhs, list):
+    name = Name
+    params = rhs
+    print("params:")
+    print(params)
+  else:
+    name = Name
+    params = []
+  
+  param_sizes = []
+  param_args = []
+  scalarregs = []
+  for param in params:
+    print("param:")
+    print(param)
+    if isinstance(param, UnaryExpr):
+      param = param.a
+    if type(param) == Var:
+      param_sizes.append(GetVariableSize(param.name, Pseudocode))
+      if IsVariableScalar(param.name):
+        scalarregs.append(param.name)
+    elif type(param) == ElemTypeInfo:
+      assert type(param.obj) == Var
+      param_sizes.append(GetVariableSize(param.obj.name, Pseudocode))
+      if IsVariableScalar(param.obj.name):
+        scalarregs.append(param.obj.name)
+    param_args.append(param)
+
+  print("param_sizes:")
+  print(param_sizes)
+  retsize = GetVariableSize(retname, Pseudocode)
+  sema = Sema(intrin=Name, inst=name, params=param_args, spec=Parse(Pseudocode), \
+    retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
+  return sema
+
+
+
+#################### PSEUDOCODE PARSER
+
+
+import ply.lex as lex
+import ply.yacc as yacc
+
+
+lexer = None
+parser = None
+precedence = None
+binary_regexp = None
+tokens = None
+
+
+def InitHexagonParser():
+  global parser
+  global lexer
+  global precedence
+  global binary_regexp
+  global tokens
+  tokens = [
+      'ID', 'TYPE', 'COMMENT', 'NUMBER',
+      'LBRACE', 'RBRACE', 'COLON',
+      'UPDATE', 'SEMICOLON',
+      'LPAREN', 'RPAREN', 'COMMA',
+      'DOT',
+      'LBRACKET', 'RBRACKET',
+      'QUEST',
+      'MODULE',
+
+      # unary ops
+      'INC', 'DEC', 'NOT',
+
+      # pseudo token
+      'NEG'
+      ] + list(HexBinaryOps.values()) + list(HexReserved)
+  binary_regexp = r'|'.join(HexBinaryOps)
+  # in increasing order
+  precedence = (
+      ('right', 'UPDATE'),
+      ('right', 'QUEST'),
+      ('left', 'COLON'),
+      ('left', 'BITWISE_OR'),
+      ('left', 'BITWISE_AND'),
+      ('left', 'BITWISE_XOR'),
+      ('left', 'OR'),
+      ('left', 'AND'),
+      ('left', 'XOR'),
+      ('left', 'EQUAL', 'NOT_EQUAL'),
+      ('left', 'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL'),
+      ('left', 'LSHIFT', 'RSHIFT', 'LSHIFT_LOGICAL', 'RSHIFT_LOGICAL'),
+      ('left', 'PLUS', 'MINUS'),
+      ('left', 'TIMES', 'DIV', 'MOD'),
+      ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
+      ('left', 'DOT', 'LPAREN', 'RPAREN'),
+      ('left', 'LBRACE', 'RBRACE',),   
+  )
+  lexer = lex.lex()
+  parser = yacc.yacc()
+
+
+def ResetParser(parser):
+  parser.id_counter = 0
+  parser.binary_exprs = []
+
+def Parse(src):
+  ResetParser(parser)
+  AST = parser.parse(src, debug=True, tracking=True)
+  return AST
+
+
+
+########### LEXER
+
+
+HexReserved = {
+    'FOR',
+    'IF',
+    'ELSE',
+    'WHILE',
+    'BREAK',
+    'NOP', 'OP',
+    # 'AND', 'OR', 'XOR', 'NOT',
+    }
+
+HexBinaryOps = {
+    r'<<': 'LSHIFT',
+    r'>>' : 'RSHIFT',
+    r'<<=': 'LSHIFT_EQUAL',
+    r'>>=': 'RSHIFT_EQUAL',
+    r'<<<': 'LSHIFT_LOGICAL',
+    r'>>>' : 'RSHIFT_LOGICAL',
+    r'&&' : 'AND',
+    r'||' : 'OR',
+    r'\^' : 'XOR',
+
+
+    r'+':  'PLUS',
+    r'-':  'MINUS',
+
+    r'+=': 'PLUS_EQUAL',
+    r'-=': 'MINUS_EQUAL',
+    r'|=': 'OR_EQUAL',
+    r'&=': 'AND_EQUAL',
+    r'^=': 'XOR_EQUAL',
+
+    r'*':  'TIMES',
+    r'/':  'DIV',
+    r'%':  'MOD',
+
+    r'<': 'LESS',
+    r'>': 'GREATER',
+    r'<=': 'LESS_EQUAL',
+    r'>=': 'GREATER_EQUAL',
+
+    r'==': 'EQUAL',
+    r'!=': 'NOT_EQUAL',
+
+    r'~':  'BITWISE_NOT',
+
+    r'&':  'BITWISE_AND',
+    r'|':  'BITWISE_OR',
+    r'^': 'BITWISE_XOR'
+    }
+
+
+def t_inc(t):
+  r'\+\+'
+  t.type = 'INC'
+  return t
+  
+def t_dec(t):
+  r'--'
+  t.type = 'DEC'
+  return t
+
+def t_binary(t):
+  r'&=|\^=|\|=|-=|\+=|>>=|<<=|<<<?|>>>?|\+|\-|\*|/(?!/)|<=|>=|<|>|==|!=|%|~|&(?!&)|\|(?!\|)|\^|&&|\|\||\^'
+  t.type = HexBinaryOps[t.value]
+  return t
+
+def t_not(t):
+  r'!'
+  t.type = 'NOT'
+  return t
+
+def t_and(t):
+  r'&&'
+  t.type = 'AND'
+  return t
+
+def t_or(t):
+  r'\|\|'
+  t.type = 'OR'
+  return t
+
+# pseudo code
+def t_PSEUDO(t):
+  r'\*.*\*'
+  t.value = t.value[1:-1]
+  return t
+
+def t_NOP(t):
+  r'NOP'
+  t.type = 'NOP'
+  return t
+
+def t_MODULE(t):
+  r'vcmp'
+  t.type = 'MODULE'
+  return t
+
+def t_TYPE(t):
+  r'unsigned'
+  t.type = 'TYPE'
+  
+  return t
+
+def t_ID(t):
+  r'[a-zA-Z_#][a-zA-Z_0-9]*'
+  lexed = t.value.upper()
+  if lexed in HexReserved:
+    t.type = lexed
+    t.value = lexed
+  return t
+
+def t_COMMENT(t):
+  r'//.*'
+  pass
+
+# TODO: multiline comment?
+
+def t_NUMBER(t):
+  r'\d+\.\d*|0x[0-9a-fA-F]+|\d+'
+  base = 16 if t.value.startswith('0x') else 10
+  try:
+    t.value = int(t.value, base)
+  except:
+    t.value = float(t.value)
+  return t
+
+def t_newline(t):
+  r'\n|\\\n'
+  t.lexer.lineno += 1
+
+def t_error(t):
+  raise SyntaxError('Lexer error')
+
+
+t_LBRACE = r'\['
+t_RBRACE = r'\]'
+t_LBRACKET = r'{'
+t_RBRACKET = r'}'
+t_COLON = r':'
+t_UPDATE = r'←|=|:='
+t_SEMICOLON = r';'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_DOT = r'\.'
+t_COMMA = r','
+t_QUEST = r'\?'
+t_ignore  = ' \t'
+
+
+
+########## PARSING RULES
 
 # Expressions have unique IDs
 def GenUniqueID(parser):
@@ -423,177 +788,6 @@ def p_expr_num(p):
   p[0] = Number(p[1])
 
 
-# in increasing order
-precedence = (
-    ('right', 'UPDATE'),
-    ('right', 'QUEST'),
-    ('left', 'COLON'),
-    ('left', 'BITWISE_OR'),
-    ('left', 'BITWISE_AND'),
-    ('left', 'BITWISE_XOR'),
-    ('left', 'OR'),
-    ('left', 'AND'),
-    ('left', 'XOR'),
-    ('left', 'EQUAL', 'NOT_EQUAL'),
-    ('left', 'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL'),
-    ('left', 'LSHIFT', 'RSHIFT', 'LSHIFT_LOGICAL', 'RSHIFT_LOGICAL'),
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIV', 'MOD'),
-    ('right', 'NOT', 'NEG', 'BITWISE_NOT'),
-    ('left', 'DOT', 'LPAREN', 'RPAREN'),
-    ('left', 'LBRACE', 'RBRACE',),   
-)
-
-
-parser = None
-
-def ResetParser(parser):
-  parser.id_counter = 0
-  parser.binary_exprs = []
-
-def Parse(src):
-  global parser
-  parser = yacc.yacc()
-  ResetParser(parser)
-  AST = parser.parse(src, debug=True, tracking=True)
-  return AST
-
-
-def GetVariableSize(Variable, Pseudocode):
-  if ".v[" in Pseudocode:
-    if Variable == "Vdd" or Variable == "Vxx":
-      return 2048
-  if "Q" in Variable:
-    return 128
-  elif "R" in Variable:
-    return 32
-  elif "V" in Variable:
-    return 1024
-
-def IsVariableScalar(Variable):
-  if "Q" in Variable:
-    return True
-  return False
-
-
-def GetSpecFrom(Name : str, Inst : str, Pseudocode : str):
-  Inst_specs = Inst.split(':')
-  reg_Inst = Inst_specs[0]
-  ParsedInst = Parse(reg_Inst)
-  print("ParsedInst:")
-  print(ParsedInst)
-  if isinstance(ParsedInst, list):
-    assign = ParsedInst[0]
-    FirstStmt = ParsedInst[0]
-  if isinstance(assign, If):
-    assign = assign.then[0]
-
-  # This is either an if statement or standard function call then
-  print("assign:")
-  print(assign)
-  print("FirstStmt:")
-  print(FirstStmt)
-  if not isinstance(assign, Update):
-    if isinstance(assign, Call):
-      lhs = assign.args[0]
-      rhs = assign
-  else: 
-    lhs = assign.lhs
-    if isinstance(lhs, list): # some annoying Instructions return 2 things, TODO: ask Akash about this
-      lhs = lhs[0]
-    # += or *=
-    if isinstance(assign.rhs, BinaryExpr):
-      rhs = assign.rhs.b
-      # Extend args
-      tmp = [assign.rhs.a]
-      print(type(rhs))
-      if isinstance(rhs, Call):
-        tmp.extend(rhs.args)
-        if isinstance(FirstStmt, If):
-          tmp.append(FirstStmt.cond)
-        rhs = Call(rhs.funcname, tmp, rhs.special, rhs.id)
-      else:
-        tmp.append(assign.rhs.b)
-        if isinstance(FirstStmt, If):
-          tmp.append(FirstStmt.cond)
-        rhs = tmp
-    elif isinstance(assign.rhs, Call):
-      rhs = assign.rhs
-    elif isinstance(assign.rhs, BitExtend):
-      rhs = assign.rhs.hi
-      # Theere may be another level of bit indexing.
-      if isinstance(rhs, BitExtend):
-        rhs = rhs.hi
-      print("-rhs:")
-      print(rhs)
-    else:
-      rhs =  [assign.rhs]
-    
-  # SIMD Instruction
-  if isinstance(lhs, ElemTypeInfo):
-    var = lhs.obj
-    rettype = lhs.elemtype 
-    retname = var.name
-  elif isinstance(lhs, Var):
-    var = lhs
-    rettype = var.id.split(".")[1]
-    retname = var.name
-  else:
-    print("Unknown lhs:", lhs)
-    rettype = None
-    retname = None
-  
-  if isinstance(rhs, Call):
-    name = rhs.funcname
-    params = rhs.args
-  elif isinstance(rhs, list):
-    name = Name
-    params = rhs
-    print("params:")
-    print(params)
-  else:
-    name = Name
-    params = []
-  
-  param_sizes = []
-  param_args = []
-  scalarregs = []
-  for param in params:
-    print("param:")
-    print(param)
-    if isinstance(param, UnaryExpr):
-      param = param.a
-    if type(param) == Var:
-      param_sizes.append(GetVariableSize(param.name, Pseudocode))
-      if IsVariableScalar(param.name):
-        scalarregs.append(param.name)
-    elif type(param) == ElemTypeInfo:
-      assert type(param.obj) == Var
-      param_sizes.append(GetVariableSize(param.obj.name, Pseudocode))
-      if IsVariableScalar(param.obj.name):
-        scalarregs.append(param.obj.name)
-    param_args.append(param)
-
-  print("param_sizes:")
-  print(param_sizes)
-  retsize = GetVariableSize(retname, Pseudocode)
-  sema = Sema(intrin=Name, inst=name, params=param_args, spec=Parse(Pseudocode), \
-    retname =retname, retsize=retsize, paramsizes=param_sizes, scalarregs=scalarregs)
-  return sema
-
-
-def ParseHVXSemantics(Semantics):
-  for Inst, Pseudocode in Semantics.items():
-    # We currently ignore any Instructions that are just assembler syntactic sugar
-    if Pseudocode.startswith("Assembler mapped to"):
-      continue 
-    Sema = GetSpecFrom(Inst, Pseudocode)
-    print(Sema)
-
-
-if __name__ == '__main__':
-  from HexInsts import HexInsts
-  ParseHVXSemantics(HexInsts)
 
 
 

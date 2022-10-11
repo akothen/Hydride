@@ -16,6 +16,7 @@ from Specification import Specification, parse_spec
 from GrammarGenerator import GrammarGenerator
 
 from Synthesizer import Synthesizer
+from ConstFold import ConstFold
 
 dsl_list = parse_dict(semantcs)
 
@@ -32,6 +33,8 @@ gl = GetLengthDef(get_len_name = "get-length")
 gp = GetOutPrecDef(get_prec_name = "get-prec")
 ip = IRPrinter(printer_name = "hydride-printer")
 bd = BindDef()
+
+cf = ConstFold()
 
 
 hydride_header = """;#============================== Hydride File =================================
@@ -82,6 +85,8 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file(ip.emit_dsl_printer(dsl_list, sd, prog_name = "prog"))
 
     write_to_file(bd.emit_binder(dsl_list ,sd))
+
+    write_to_file(cf.emit_const_fold(dsl_list, sd))
 
 
 
