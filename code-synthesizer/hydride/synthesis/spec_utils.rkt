@@ -104,10 +104,12 @@
 (define (get-expr-imms expr)
   (define imms (halide:get-imm-values expr))
   (define imm-ints (for/list ([v imms]) (bitvector->integer v) ))
+  (define imm-precs (for/list ([v imms]) (bvlength v) ))
+
   (define val-strs 
          (for/list ([i (range (length imm-ints))])
             (define val (list-ref imm-ints i))
-            (define val-str (~s val))
+            (define val-str (string-append "[" (~s val) ", " (~s (list-ref imm-precs i) ) "]"))
             (define sep
               (if (equal? i (- (length imms) 1)) 
                 ""

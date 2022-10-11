@@ -86,7 +86,7 @@ class TypedSimpleGrammarGenerator:
         one = self.emit_lit_1(bv_size, prec)
         neg_one = self.emit_lit_neg_1(bv_size, prec)
 
-        imm_clauses = [self.emit_lit_imm(imm ,bv_size, prec) for imm in self.imms if imm not in [1,0,-1]]
+        imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [1,0,-1] ]
 
         zero_clause = "{}".format(zero)
         one_clause = "{}".format(one)
@@ -95,7 +95,7 @@ class TypedSimpleGrammarGenerator:
 
         close = ""
 
-        hole_clause =  "" # "\n\t".join([condition, hole, close])
+        hole_clause = "" # "\n\t".join([condition, hole, close])
 
         return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause] + imm_clauses)
 

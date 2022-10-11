@@ -3,9 +3,9 @@ from Instructions import *
 from PredefinedDSL import *
 import random
 
-DEBUG = False
-DEBUG_LIST = ["_m_paddd"]
-SKIP_LIST = ["pack", "mask"]
+DEBUG = True
+DEBUG_LIST = ["_mm256_cvtepi8_epi16", "_mm512_cvtusepi32_epi8" ]
+SKIP_LIST = ["pack" ]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
@@ -429,6 +429,7 @@ class Synthesizer:
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx for ctx in operator_contexts]
 
+
                 continue
 
             ## Including bitwise operations such as bitwise 'or',  'not', 'neg' & 'and'
@@ -444,9 +445,13 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
 
 
+        if DEBUG:
+            for idx, dsl_inst in enumerate(operation_dsl_insts):
+                #print(dsl_inst.name, "adding contexts ...")
+                print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]))
 
         top_level_grammar_args = self.get_top_level_grammar_args()
 
@@ -465,13 +470,16 @@ class Synthesizer:
                 if isinstance(ctx_arg, BitVector):
                     bitvector_sizes.append(ctx_arg.size)
 
+
+        bitvector_sizes.append(self.spec.get_output_size())
+
         bitvector_sizes = list(set(bitvector_sizes))
 
 
         lit_holes = self.get_lit_holes(use_lit_holes, bitvector_sizes)
 
         print("="*50)
-        print("Grammar Number of Load DSL Clauses:\t",len(memory_dsl_args_list)+len(lit_holes) + len(top_level_grammar_args))
+        print("Grammar Number of Load DSL Clauses:\t",len(memory_dsl_args_list)+len(lit_holes)*3 + len(top_level_grammar_args))
         print("Grammar Number of Shuffle DSL Clauses:\t",len(memory_shuffle_args_list))
         print("Grammar Number of DSL Compute Clauses:\t",len(operation_dsl_args_list))
 
@@ -524,9 +532,9 @@ class Synthesizer:
 
         names = []
 
-        # Higher scoring contexts for a given op would be at the end of
+        # Higher scoring contexts for a given op would be towards the beginning  of
         # the list
-        for i in reversed(range(0, len(operation_insts))):
+        for i in (range(0, len(operation_insts))):
             op = operation_insts[i]
             ctx = operation_contexts[i]
 
@@ -551,7 +559,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         print("Num Broadcasts:", num_broadcasts)
@@ -818,7 +826,7 @@ class Synthesizer:
 
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
-        print(dsl_inst.name,"is_broadcast_like:",is_broadcast_like)
+        #print(dsl_inst.name,"is_broadcast_like:",is_broadcast_like)
 
         for ctx in dsl_inst.contexts:
 
@@ -860,7 +868,7 @@ class Synthesizer:
             old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
             # Either can process the input or can produce output shape
-            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) and (not is_broadcast_like)
+            new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) # and (not is_broadcast_like)
             if new_condition or (is_broadcast_like and supports_input_length and supports_output_length):
                 if check:
                     ctx.print_context()
@@ -892,6 +900,8 @@ class Synthesizer:
                     previous_score = ctx_score
                     remaining -= 1
 
+                # Highest scoring contexts would
+                # be in the beginning
                 limited_context.append(ctx)
 
 
@@ -915,15 +925,23 @@ class Synthesizer:
     def score_context(self, dsl_inst ,  ctx):
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
         score = 0
-        score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True))
+        score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
         score += int(ctx.supports_output_precision(self.spec.output_precision))
         score += int(ctx.supports_output_size(self.output_slice_length))
-        score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True))
+        score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True) != 0)
+        #score = int("mask" in ctx.name)
+
+
 
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
         score += len(list (set(spec_ops) & set(dsl_ops)))
+
+
+        if "mask" in ctx.name:
+            score = int(0.5 * score)
+
 
         if is_broadcast_like:
             score = 0
