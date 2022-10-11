@@ -561,9 +561,28 @@ class RoseBVExtractSliceOp(RoseBitVectorOp):
       # DO NOT CHANGE THIS ORDER
       String += " " + ReverseIndexString + self.getLowIndex().getName() + ")"
       String += " " + ReverseIndexString + self.getHighIndex().getName() + ")"
-    String += " " + self.getInputBitVector().getName()
+    if not isinstance(self.getInputBitVector(), RoseConstant):
+      String += " " + self.getInputBitVector().getName()
+    else:
+      String += " " + self.getInputBitVector().to_rosette()
     String += "))\n"
     return String
+
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getInputBitVector(), RoseConstant):
+      return None
+    # If accessing a zero bitvector, the result is always zero.
+    if self.getInputBitVector().getValue() == 0:
+      return 0
+    return None
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseBVInsertSliceOp(RoseBitVectorOp):
@@ -639,6 +658,19 @@ class RoseBVNotOp(RoseBitVectorOp):
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.not_(Operand, self.getName())
 
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    return ~(self.getOperand(0).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
+
 
 class RoseBVAndOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -658,6 +690,38 @@ class RoseBVAndOp(RoseBitVectorOp):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.and_(Operand1, Operand2, self.getName())
+
+  def solve(self):
+    # First check if all the operands are constants
+    Result = None
+    for Index, Operand in enumerate(self.getOperands()):
+      if not isinstance(Operand, RoseConstant):
+        return None
+      if Index == 0:
+        Result = Operand.getValue()
+      else:
+        Result &= Operand.getValue()
+    return Result
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 0:
+          return RoseConstant(0, self.getType())
+        if Operand.getValue() != 1:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    return Result
 
 
 class RoseBVOrOp(RoseBitVectorOp):
@@ -679,6 +743,38 @@ class RoseBVOrOp(RoseBitVectorOp):
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.or_(Operand1, Operand2, self.getName())
 
+  def solve(self):
+    # First check if all the operands are constants
+    Result = None
+    for Index, Operand in enumerate(self.getOperands()):
+      if not isinstance(Operand, RoseConstant):
+        return None
+      if Index == 0:
+        Result = Operand.getValue()
+      else:
+        Result |= Operand.getValue()
+    return Result
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() == 1:
+          return RoseConstant(1, self.getType())
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    return Result
+
 
 class RoseBVXorOp(RoseBitVectorOp):
   def __init__(self, Name : str, Operands : list, ParentBlock):
@@ -698,6 +794,33 @@ class RoseBVXorOp(RoseBitVectorOp):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.xor(Operand1, Operand2, self.getName())
+
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    if not isinstance(self.getOperand(1), RoseConstant):
+      return None
+    return (self.getOperand(0).getValue() ^ self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if there is only one non-constant operand that we can return
+    Result = RoseUndefValue()
+    for Operand in self.getOperands():
+      if isinstance(Operand, RoseConstant):
+        if Operand.getValue() != 0:
+          return RoseUndefValue()
+        continue
+      if isinstance(Result, RoseUndefValue):
+        Result = Operand
+        continue
+      return RoseUndefValue()
+    # Not the final result
+    return Result
 
 
 class RoseBVShlOp(RoseBitVectorOp):
@@ -796,6 +919,19 @@ class RoseBVNegOp(RoseBitVectorOp):
     assert Operand != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.neg(Operand, self.getName())
+
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    return 0 - self.getOperand(0).getValue()
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseBVAddOp(RoseSaturableBitVectorOp):
@@ -1006,6 +1142,25 @@ class RoseBVSmodOp(RoseBitVectorOp):
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.srem(Operand1, Operand2, self.getName())
 
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    if not isinstance(self.getOperand(1), RoseConstant):
+      return None
+    return (self.getOperand(0).getValue() % self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    # See if the denominator is 1, the result is the numerator
+    if isinstance(self.getOperand(1), RoseConstant)  \
+      and self.getOperand(1).getValue() == 1:
+      return self.getOperand(0)
+    return RoseUndefValue()
+
 
 ############################# COMPARISON OPERATORS ###################################
 
@@ -1029,6 +1184,21 @@ class RoseBVEQOp(RoseBitVectorOp):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("==", Operand1, Operand2, self.getName())
+
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    if not isinstance(self.getOperand(1), RoseConstant):
+      return None
+    return (self.getOperand(0).getValue() == self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseBVNEQOp(RoseBitVectorOp):
@@ -1070,6 +1240,21 @@ class RoseBVNEQOp(RoseBitVectorOp):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.icmp_signed("!=", Operand1, Operand2, self.getName())
+
+  def solve(self):
+    # First check if the operand are constants
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    if not isinstance(self.getOperand(1), RoseConstant):
+      return None
+    return (self.getOperand(0).getValue() != self.getOperand(1).getValue())
+
+  def simplify(self):
+    # Try solving the operation
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
 
 class RoseBVSLTOp(RoseBitVectorOp):
@@ -1501,4 +1686,16 @@ class RoseBVAbsOp(RoseBitVectorOp):
     String += ")\n"
     return String
 
+  def solve(self):
+    # First check if all the operand is constant
+    if not isinstance(self.getOperand(0), RoseConstant):
+      return None
+    return abs(self.getOperand(0).getValue())
+
+  def simplify(self):
+    # Try solving the operation first
+    SolvedResult = self.solve()
+    if SolvedResult != None:
+      return RoseConstant(SolvedResult, self.getType())
+    return RoseUndefValue()
 
