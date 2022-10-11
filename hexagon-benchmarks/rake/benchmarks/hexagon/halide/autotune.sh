@@ -29,7 +29,10 @@ do
     rm -rf $b/samples
 done
 
+echo "Done deleting"
+
 # Make all
+make clean
 make -j
 
 BENCHMARK_ROOT=/home/sb54/Hydride/hexagon-benchmarks/rake/benchmarks/hexagon/halide
