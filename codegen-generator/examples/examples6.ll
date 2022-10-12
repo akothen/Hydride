@@ -96,3 +96,138 @@ function _m_packsswb ( bv64 a, bv64 b ) {
 
 
 
+
+
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ function INTERLEAVE_HIGH_WORDS ( bv128 src1, bv128 src2 ) {
+  %0 = bvextract bv128 src1, int32 64, int32 79, int32 16
+  bvinsert bv16 %0, bv128 %dst0, int32 0, int32 15, int32 16
+  %1 = bvextract bv128 src2, int32 64, int32 79, int32 16
+  bvinsert bv16 %1, bv128 %dst0, int32 16, int32 31, int32 16
+  %2 = bvextract bv128 src1, int32 80, int32 95, int32 16
+  bvinsert bv16 %2, bv128 %dst0, int32 32, int32 47, int32 16
+  %3 = bvextract bv128 src2, int32 80, int32 95, int32 16
+  bvinsert bv16 %3, bv128 %dst0, int32 48, int32 63, int32 16
+  %4 = bvextract bv128 src1, int32 96, int32 111, int32 16
+  bvinsert bv16 %4, bv128 %dst0, int32 64, int32 79, int32 16
+  %5 = bvextract bv128 src2, int32 96, int32 111, int32 16
+  bvinsert bv16 %5, bv128 %dst0, int32 80, int32 95, int32 16
+  %6 = bvextract bv128 src1, int32 112, int32 127, int32 16
+  bvinsert bv16 %6, bv128 %dst0, int32 96, int32 111, int32 16
+  %7 = bvextract bv128 src2, int32 112, int32 127, int32 16
+  bvinsert bv16 %7, bv128 %dst0, int32 112, int32 127, int32 16
+  ret bv128 %dst0
+ }
+ %0 = bvextract bv256 a, int32 0, int32 127, int32 128
+ %1 = bvextract bv256 b, int32 0, int32 127, int32 128
+ %2 = call INTERLEAVE_HIGH_WORDS( bv128 %0, bv128 %1 )
+ bvinsert bv128 %2, bv256 dst, int32 0, int32 127, int32 128
+ %3 = bvextract bv256 a, int32 128, int32 255, int32 128
+ %4 = bvextract bv256 b, int32 128, int32 255, int32 128
+ %5 = call INTERLEAVE_HIGH_WORDS( bv128 %3, bv128 %4 )
+ bvinsert bv128 %5, bv256 dst, int32 128, int32 255, int32 128
+ bvpadhighbits bv256 dst, int32 0
+ ret bv256 dst
+}
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ function INTERLEAVE_HIGH_WORDS ( bv128 src1, bv128 src2 ) {
+  for ([iterator.0 (range 0 128 32)]) {
+   %low.cofactor0 = div int32 iterator.0, int32 2
+   %low.offset0 = add int32 %low.cofactor0, int32 64
+   %high.offset0 = add int32 %low.offset0, int32 15
+   %0 = bvextract bv128 src1, int32 %low.offset0, int32 %high.offset0, int32 16
+   %high.offset1 = add int32 iterator.0, int32 15
+   bvinsert bv16 %0, bv128 %dst0, int32 iterator.0, int32 %high.offset1, int32 16
+   %low.cofactor1 = div int32 iterator.0, int32 2
+   %low.offset1 = add int32 %low.cofactor1, int32 64
+   %high.offset2 = add int32 %low.offset1, int32 15
+   %1 = bvextract bv128 src2, int32 %low.offset1, int32 %high.offset2, int32 16
+   %low.offset2 = add int32 iterator.0, int32 16
+   %high.offset3 = add int32 %low.offset2, int32 15
+   bvinsert bv16 %1, bv128 %dst0, int32 %low.offset2, int32 %high.offset3, int32 16
+  }
+  ret bv128 %dst0
+ }
+ for ([iterator.0 (range 0 256 128)]) {
+  %high.offset4 = add int32 iterator.0, int32 127
+  %0 = bvextract bv256 a, int32 iterator.0, int32 %high.offset4, int32 128
+  %high.offset5 = add int32 iterator.0, int32 127
+  %1 = bvextract bv256 b, int32 iterator.0, int32 %high.offset5, int32 128
+  %2 = call INTERLEAVE_HIGH_WORDS( bv128 %0, bv128 %1 )
+  %high.offset6 = add int32 iterator.0, int32 127
+  bvinsert bv128 %2, bv256 dst, int32 iterator.0, int32 %high.offset6, int32 128
+ }
+ bvpadhighbits bv256 dst, int32 0
+ ret bv256 dst
+}
+
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ for ([iterator.0 (range 0 256 128)]) {
+  %high.offset4 = add int32 iterator.0, int32 127
+  %0 = bvextract bv256 a, int32 iterator.0, int32 %high.offset4, int32 128
+  %1 = bvextract bv256 b, int32 iterator.0, int32 %high.offset4, int32 128
+  for ([iterator.0.site0 (range 0 128 32)]) {
+   %low.cofactor0.site0 = div int32 iterator.0.site0, int32 2
+   %low.offset0.site0 = add int32 %low.cofactor0.site0, int32 64
+   %high.offset0.site0 = add int32 %low.offset0.site0, int32 15
+   %0.copy.copy.0 = bvextract bv256 a, int32 iterator.0, int32 %high.offset4, int32 128
+   %0.site0 = bvextract bv128 %0.copy.copy.0, int32 %low.offset0.site0, int32 %high.offset0.site0, int32 16
+   %6 = add int32 iterator.0.site0, int32 15
+   %high.offset1.site0 = add int32 iterator.0.site0, int32 15
+   bvinsert bv16 %0.site0, bv256 dst, int32 iterator.0.site0, int32 %6, int32 16
+   %1.copy.copy.0 = bvextract bv256 b, int32 iterator.0, int32 %high.offset4, int32 128
+   %1.site0 = bvextract bv128 %1.copy.copy.0, int32 %low.offset0.site0, int32 %high.offset0.site0, int32 16
+   %7 = add int32 %low.offset2.site0, int32 iterator.0
+   %low.offset2.site0 = add int32 iterator.0.site0, int32 16
+   %8 = add int32 %7, int32 15
+   %high.offset3.site0 = add int32 %low.offset2.site0, int32 15
+   bvinsert bv16 %1.site0, bv256 dst, int32 %7, int32 %8, int32 16
+  }
+ }
+ bvpadhighbits bv256 dst, int32 0
+ ret bv256 dst
+}
+
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize0, int32 %outerlanesize0, int32 %innerlaneoffset0, int32 %innerlanesize0, int32 %elemsize0, int32 %arg0, int32 %alpha.arg0, int32 %arg1, int32 %arg2 ) {
+ for ([iterator.0 (range 0 %vectsize0 %outerlanesize0)]) {
+  for ([iterator.0.site0.new (range %innerlaneoffset0 %innerlanesize0 %elemsize0)]) {
+   %factor0 = div int32 %elemsize0, int32 %elemsize0
+   %factor1 = mul int32 %alpha.arg0, int32 %factor0
+   iterator.0.site0.new.mul = mul int32 iterator.0.site0.new, int32 %factor1
+   %low.offset0.site0 = add int32 iterator.0.site0.new, int32 %arg1
+   %0.site0.new.low.idx = add int32 iterator.0, int32 %low.offset0.site0
+   %lastidx1 = sub int32 %elemsize0, int32 1
+   %0.site0.new.high.idx0 = add int32 %0.site0.new.low.idx, int32 %lastidx1
+   %0.copy.copy.00.new = bvextract bv256 a, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 %elemsize0
+   %lastidx2 = sub int32 %elemsize0, int32 1
+   %6 = add int32 iterator.0.site0.new.mul, int32 %lastidx2
+   bvinsert bv %0.copy.copy.00.new, bv256 dst, int32 iterator.0.site0.new.mul, int32 %6, int32 %elemsize0
+   %1.copy.copy.00.new = bvextract bv256 b, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 %elemsize0
+   %7 = add int32 %low.offset2.site0, int32 iterator.0
+   %low.offset2.site0 = add int32 iterator.0.site0.new.mul, int32 %arg0
+   %lastidx0 = sub int32 %elemsize0, int32 1
+   %8 = add int32 %7, int32 %lastidx0
+   bvinsert bv %1.copy.copy.00.new, bv256 dst, int32 %7, int32 %8, int32 %elemsize0
+  }
+ }
+ bvpadhighbits bv256 dst, int32 %arg2
+ ret bv256 dst
+}
+
+
+
