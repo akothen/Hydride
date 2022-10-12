@@ -130,7 +130,6 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
  %4 = bvextract bv256 b, int32 128, int32 255, int32 128
  %5 = call INTERLEAVE_HIGH_WORDS( bv128 %3, bv128 %4 )
  bvinsert bv128 %5, bv256 dst, int32 128, int32 255, int32 128
- bvpadhighbits bv256 dst, int32 0
  ret bv256 dst
 }
 
@@ -144,16 +143,16 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
    %high.offset0 = add int32 %low.offset0, int32 15
    %0 = bvextract bv128 src1, int32 %low.offset0, int32 %high.offset0, int32 16
    %high.offset1 = add int32 iterator.0, int32 15
-   bvinsert bv16 %0, bv128 %dst0, int32 iterator.0, int32 %high.offset1, int32 16
+   bvinsert bv16 %0, bv128 %dst, int32 iterator.0, int32 %high.offset1, int32 16
    %low.cofactor1 = div int32 iterator.0, int32 2
    %low.offset1 = add int32 %low.cofactor1, int32 64
    %high.offset2 = add int32 %low.offset1, int32 15
    %1 = bvextract bv128 src2, int32 %low.offset1, int32 %high.offset2, int32 16
    %low.offset2 = add int32 iterator.0, int32 16
    %high.offset3 = add int32 %low.offset2, int32 15
-   bvinsert bv16 %1, bv128 %dst0, int32 %low.offset2, int32 %high.offset3, int32 16
+   bvinsert bv16 %1, bv128 %dst, int32 %low.offset2, int32 %high.offset3, int32 16
   }
-  ret bv128 %dst0
+  ret bv128 %dst
  }
  for ([iterator.0 (range 0 256 128)]) {
   %high.offset4 = add int32 iterator.0, int32 127
@@ -164,7 +163,6 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
   %high.offset6 = add int32 iterator.0, int32 127
   bvinsert bv128 %2, bv256 dst, int32 iterator.0, int32 %high.offset6, int32 128
  }
- bvpadhighbits bv256 dst, int32 0
  ret bv256 dst
 }
 
@@ -195,7 +193,6 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
    bvinsert bv16 %1.site0, bv256 dst, int32 %7, int32 %8, int32 16
   }
  }
- bvpadhighbits bv256 dst, int32 0
  ret bv256 dst
 }
 
@@ -203,7 +200,8 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
 
 
 
-function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize0, int32 %outerlanesize0, int32 %innerlaneoffset0, int32 %innerlanesize0, int32 %elemsize0, int32 %arg0, int32 %alpha.arg0, int32 %arg1, int32 %arg2 ) {
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize0, int32 %outerlanesize0, int32 %innerlaneoffset0, 
+                                 int32 %innerlanesize0, int32 %elemsize0, int32 %arg0, int32 %alpha.arg0, int32 %arg1 ) {
  for ([iterator.0 (range 0 %vectsize0 %outerlanesize0)]) {
   for ([iterator.0.site0.new (range %innerlaneoffset0 %innerlanesize0 %elemsize0)]) {
    %factor0 = div int32 %elemsize0, int32 %elemsize0
@@ -225,7 +223,6 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize0, int32 %oute
    bvinsert bv %1.copy.copy.00.new, bv256 dst, int32 %7, int32 %8, int32 %elemsize0
   }
  }
- bvpadhighbits bv256 dst, int32 %arg2
  ret bv256 dst
 }
 
