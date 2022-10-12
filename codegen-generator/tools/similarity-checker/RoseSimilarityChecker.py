@@ -634,9 +634,6 @@ class RoseSimilarityChecker():
     print("CREATING PERMUTATIONS OF:")
     Function.print()
     for Arg in BVArgs:
-      #print("AARG IN BVARGS:")
-      #Arg.print()
-      #print(Arg.ID)
       if Arg in MaskArgs:
         #print("ARG IN MASKARGS")
         continue
@@ -646,26 +643,6 @@ class RoseSimilarityChecker():
       RemainingBVArgs.append(Arg)
     FunctionList = list()
     ArgsPermuations = list()
-    #print("BVArgs:")
-    #for Arg in BVArgs:
-    #  Arg.print()
-    #  print(Arg.ID)
-    #print("^^^^^^^^^^^^^^")
-    #print("MaskArgs:")
-    #for Arg in MaskArgs:
-    #  Arg.print()
-    #  print(Arg.ID)
-    #print("+++++++++++++++")
-    #print("SelectArgs:")
-    #for Arg in SelectArgs:
-    #  Arg.print()
-    #  print(Arg.ID)
-    #print("===============")
-    #print("RemainingBVArgs:")
-    #for Arg in RemainingBVArgs:
-    #  Arg.print()
-    #  print(Arg.ID)
-    #print("****************")
      # Get permutations of arguments
     if len(MaskArgs) == 0 and len(SelectArgs) == 0:
       ArgsPermuations = Permutations(BVArgs)
@@ -712,15 +689,7 @@ class RoseSimilarityChecker():
     print("FUNCTION:")
     Function.print()
     MaskArgs = self.getMaskArgsInFunction(Function)
-    #print("MaskArgs:")
-    #for Arg in MaskArgs:
-    #  print("ARG:")
-    #  Arg.print()
     SelectArgs = self.getSelectArgsInFunction(Function)
-    #print("SelectArgs:")
-    #for Arg in SelectArgs:
-    #  print("ARG:")
-    #  Arg.print()
     RemainingBVArgs = list()
     RemainingArgs = list()
     for Arg in Function.getArgs():
@@ -732,21 +701,9 @@ class RoseSimilarityChecker():
         RemainingBVArgs.append(Arg)
         continue
       RemainingArgs.append(Arg)
-    #print("RemainingBVArgs:")
-    #for Arg in RemainingBVArgs:
-    #  print("ARG:")
-    #  Arg.print()
-    #print("RemainingArgs:")
-    #for Arg in RemainingArgs:
-    #  print("ARG:")
-    #  Arg.print()
     if len(MaskArgs) != 0 or len(SelectArgs) != 0:
       NewArgsList = MaskArgs + SelectArgs + RemainingBVArgs + RemainingArgs
       FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, "norm")
-      #print("FUNCTION:")
-      #Function.print()
-      print("FunctionCopy:")
-      FunctionCopy.print()
       self.CopyFunctionToOriginalMap[FunctionCopy] = Function
       ArgPermutation = list()
       for Arg in NewArgsList:
@@ -788,6 +745,7 @@ class RoseSimilarityChecker():
           self.FunctionToFunctionInfo[FunctionCopy] = FunctionCopyInfo
           self.FunctionToRosetteCodeMap[FunctionCopy] = RosetteGen.CodeGen(FunctionCopy)
           FunctionCopyInfo.addTargetAgnosticFunction(FunctionCopy)
+          FunctionCopyInfo.addTargetSpecificFunction(OrgFunctionInfo.getTargetSpecificFunction())
           FunctionCopyInfo.computeSemanticsInfo()
           #self.FunctionToCopies[Function] = [FunctionCopy]
 
@@ -925,7 +883,8 @@ class RoseSimilarityChecker():
                             CheckArgsToConcreteValMap, PermCheckFunction, ArgPermutation)
           PermCheckFunctionInfo.addArgsToConcreteMap(PermArgsToConcreteValMap)
           PermCheckFunctionInfo.addTargetAgnosticFunction(PermCheckFunction)
-          PermCheckFunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+          PermCheckFunctionInfo.addTargetSpecificFunction(CheckFunctionInfo.getTargetSpecificFunction())
+          PermCheckFunctionInfo.computeSemanticsInfo()
           # Perform verification
           Suffix += 1
           VerifyResult = self.verify(self.FunctionToFunctionInfo[Function], \
@@ -968,7 +927,8 @@ class RoseSimilarityChecker():
               self.FunctionToRosetteCodeMap[CopyFunction] = \
                                         RosetteGen.CodeGen(CopyFunction)
               CopyFunctionInfo.addTargetAgnosticFunction(CopyFunction)
-              CopyFunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+              CopyFunctionInfo.addTargetSpecificFunction(OrgFunctionInfo.getTargetSpecificFunction())
+              CopyFunctionInfo.computeSemanticsInfo()
             EquivalenceClass.extend(PermutedCheckFunctions, FunctionToArgsMapping)
             for EqFunction in PermutedCheckFunctions:
               self.FunctionToEquivalenceClassMap[EqFunction] = EquivalenceClass
@@ -1178,6 +1138,8 @@ class RoseSimilarityChecker():
               Op.setType(RoseIntegerType.create(NewVal.getType().getBitwidth()))
               BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
           else:
+            print("CHECK IF OP IN BitvectorToBitwidth:")
+            Op.print()
             if Op in BitvectorToBitwidth:
               for Operand in Op.getOperands():
                 if Operand not in BitvectorToBitwidth:
@@ -1258,7 +1220,54 @@ class RoseSimilarityChecker():
           BitvectorToBitwidth[Op] = Op.getOperand(0).getType().getBitwidth()
           continue
     
-  
+    # Perform some forward dataflow analysis to propagate types where the types
+    # can be determined.
+    for Block in BlockList:
+      for Op in Block.getOperations():
+        if isinstance(Op.getType(), RoseBitVectorType) \
+          or isinstance(Op.getType(), RoseIntegerType):
+          if not isinstance(Op.getType().getBitwidth(), int):
+            if Op.isSizeChangingOp():
+              if isinstance(Op.getOperand(1), RoseConstant):
+                Op.setType(Op.setType(RoseBitVectorType.create(Op.getOperand(1).getValue())))
+              continue
+            if Op.getOpcode().typesOfInputsAndOutputEqual():
+              Type = RoseUndefinedType()
+              for Operand in Op.getOperands():
+                if isinstance(Operand.getType().getBitwidth(), int):
+                  Type = Operand.getType()
+                  break
+              if not isinstance(Type, RoseUndefinedType):
+                # Propagate type info to other operands if necessary
+                for Operand in Op.getOperands():
+                  if not isinstance(Operand.getType().getBitwidth(), int):
+                    Operand.setType(Type)
+                Op.setType(Type)
+              continue
+            if isinstance(Op, RoseSelectOp):
+              if isinstance(Op.getThenValue().getType().getBitwidth(), int):
+                if not isinstance(Op.getElseValue().getType().getBitwidth(), int):
+                  Op.getElseValue().setType(Op.getThenValue().getType())
+                  Op.setType(Op.getThenValue().getType())
+              elif isinstance(Op.getElseValue().getType().getBitwidth(), int):
+                if not isinstance(Op.getThenValue().getType().getBitwidth(), int):
+                  Op.getThenValue().setType(Op.getElseValue().getType())
+                  Op.setType(Op.getElseValue().getType())
+              continue
+        if Op.getOpcode().typesOfOperandsAreEqual():
+          Type = RoseUndefinedType()
+          for Operand in Op.getOperands():
+            if isinstance(Operand.getType().getBitwidth(), int):
+              Type = Operand.getType()
+              break
+          if not isinstance(Type, RoseUndefinedType):
+            # Propagate type info to other operands if necessary
+            for Operand in Op.getOperands():
+              if not isinstance(Operand.getType().getBitwidth(), int):
+                Operand.setType(Type)
+          continue
+
+
   # This function is needed to avoid triggering some asserts in the API
   # that has similar functionality.
   def replaceUsesInRegion(self, Region, Abstraction, NewAbstraction):
@@ -1411,7 +1420,7 @@ class RoseSimilarityChecker():
             self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
             FunctionInfo.addFunctionAtNewStage(Function)
             FunctionInfo.addTargetAgnosticFunction(Function)
-            FunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+            FunctionInfo.computeSemanticsInfo()
             print("ROSETTE CODE:")
             print(self.FunctionToRosetteCodeMap[Function])
             print("++++REFERENCE FUNCTION:")
@@ -1420,6 +1429,14 @@ class RoseSimilarityChecker():
             FunctionInfo.getLatestFunction().print()
             Verifier = RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function], \
                                                   FunctionInfo)
+            assert Verifier.verifyEquivalence() == True
+            # Replace uses of concrete arguments and try verifying again
+            CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+            print("TARGET AGNOSTIC FUNCTION:")
+            FunctionInfo.getLatestFunction().print()
+            print("COPY TARGET AGNOSTIC FUNCTION:")
+            CopyFunctionInfo.getLatestFunction().print()
+            Verifier = RoseTransformationVerifier(CopyFunctionInfo, FunctionInfo)
             assert Verifier.verifyEquivalence() == True
       else:
         # Remove dead outer loops
@@ -1445,7 +1462,7 @@ class RoseSimilarityChecker():
         if len(DeadLoops) != 0 or ErasedArgs == True:
           self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
           FunctionInfo.addTargetAgnosticFunction(Function)
-          FunctionInfo.computeSemanticsInfoFromTargetAgnosticFunction()
+          FunctionInfo.computeSemanticsInfo()
           print("ROSETTE CODE:")
           print(self.FunctionToRosetteCodeMap[Function])
         print("--NEW FUNCTION:")
@@ -1456,6 +1473,14 @@ class RoseSimilarityChecker():
         FunctionInfo.getLatestFunction().print()
         Verifier = RoseTransformationVerifier(FunctionToClonedFunctionInfo[Function], \
                                       FunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        # Replace uses of concrete arguments and try verifying again
+        CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+        print("TARGET AGNOSTIC FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        print("COPY TARGET AGNOSTIC FUNCTION:")
+        CopyFunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(CopyFunctionInfo, FunctionInfo)
         assert Verifier.verifyEquivalence() == True
 
 
