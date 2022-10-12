@@ -53,6 +53,17 @@
   (build-vector num-bw helper)
   )
 
+;; Create a vector of concrete 0 bitvectors
+;; according to the bitwidths specified 
+;; in the list
+(define (create-0-bvs bw-list) 
+  (define num-bw (length bw-list))
+  (define (helper i)
+    (define conc-bv (integer->bitvector 0 (bitvector (list-ref bw-list i) )))
+    conc-bv
+    )
+  (build-vector num-bw helper)
+  )
 
 ;; Evaluate the symbol defined at index i
 ;; of symbols for the counter example in cex
@@ -423,7 +434,7 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list)  (create-concrete-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list)  (create-0-bvs bitwidth-list))
       cexs
       )
     )
@@ -432,7 +443,7 @@
   (define failing-ls
     (if
       (equal? (length failing-lanes) 0)
-      (list 0 0)
+      (list 0 1)
       failing-lanes
       )
     )
@@ -517,16 +528,22 @@
 
   (debug-log (format "Is this boolector optimization case ~a ?\n" boolector-opt-case))
 
-  (if 
-    satisfiable?
+  (define is-union (not (concrete? materialize)))
+
+  (cond 
+    [(and satisfiable? (not is-union))
 
     ;; If satisfiable, verify current solution and check
     ;; if it's true over ALL inputs
     (begin
 
-      (print-temp-result-on-cex materialize invoke_ref cex-ls)
+      ;(print-temp-result-on-cex materialize invoke_ref cex-ls)
       (debug-log "Unchecked solution:")
       (debug-log materialize)
+
+      (debug-log (format "Is concrete? ~a\n" (concrete? materialize)))
+
+      (debug-log (format "Is solution a union? ~a\n" is-union))
 
       (define-values 
         (verified? new-cex) 
@@ -583,9 +600,29 @@
                                       )
             )
         )
-      )
+      )]
 
-    (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
+    ;; Found a solution, but it contains a symbolic
+    ;; union term as one of the sub-trees. Add another
+    ;; counter example and re-attempt synthesis.
+    [satisfiable? 
+      (begin
+        (debug-log "Contains symbolic union, retry synthesis")
+        (debug-log "Union solution:")
+        (debug-log materialize)
+        (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
+                                      (append cex-ls (list (create-concrete-bvs bitwidth-list))) ;; Append new cex into accumulated inputs
+                                      (append failing-ls (list 1))
+                                      cost-bound
+                                      solver
+                                      (append failed-sols (list materialize))
+                                      )
+        
+        
+        )
+      ]
+    [else (values satisfiable? materialize elapsed_time) ;; If not satisfiable just return current state
+          ]
     )
 
 

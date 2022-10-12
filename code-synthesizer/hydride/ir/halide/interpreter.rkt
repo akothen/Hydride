@@ -363,7 +363,8 @@
            (cpp:type (intr-base 0))))])]
 
     [(load buf idxs alignment) (lambda (i) (buffer-ref (interpret buf) ((interpret idxs) i)))]
-    [(int-imm data signed?) (lambda (i) data)]
+    [(int-imm data signed?) 
+            (lambda (i) (imm-ref data signed?) )]
     [(buffer data elemT buffsize) (lambda (i) (buffer-ref p  i))]
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
@@ -665,11 +666,11 @@
 
     [(sca-abs v1) (append (list bvsge bvmul abs) (get-bv-ops v1)  )]
     [(sca-absd v1 v2) (append (list abs bvsub) (if (is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
-    [(sca-shl v1 v2) (append (list bvshl bvmul) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
+    [(sca-shl v1 v2) (append (list bvshl) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr bvsdiv sign-extend) (list bvlshr bvudiv zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
     [(sca-clz v1) (append empty-list (get-bv-ops v1) )]
 
-    [(sca-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(sca-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
     
     [(vec-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
@@ -685,12 +686,12 @@
     [(vec-le v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
-    [(vec-shl v1 v2) (append (list bvshl bvmul) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shl v1 v2) (append (list bvshl ) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr bvsdiv sign-extend) (list bvlshr bvudiv zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-absd v1 v2) (append (list abs bvsub) (if (is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 
-    [(vec-bwand v1 v2) (append (list bvand) (get-bv-ops v1) (get-bv-ops v2) )]
+    [(vec-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
 
     [(vector_reduce op width vec)
      (cond
@@ -748,6 +749,20 @@
                 )
       )
   )
+
+
+(define (imm-ref data signed?)
+  (define size (bvlength data))
+  (cond
+    [(and (eq? size 8) signed?) (int8_t data)]
+    [(and (eq? size 16) signed?) (int16_t data)]
+    [(and (eq? size 32) signed?) (int32_t data)]
+    [(and (eq? size 64) signed?) (int64_t data)]
+    [(and (eq? size 8)) (uint8_t data)]
+    [(and (eq? size 16)) (uint16_t data)]
+    [(and (eq? size 32)) (uint32_t data)]
+    [(and (eq? size 64)) (uint64_t data)]
+    [else (error "halide/interpreter.rkt: Unexpected imm-ref buffer type" data)]))
 
 (define (buffer-ref buffer idx)
   (define elemT (buffer-elemT buffer))
