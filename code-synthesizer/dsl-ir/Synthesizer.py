@@ -4,7 +4,7 @@ from PredefinedDSL import *
 import random
 
 DEBUG = True
-DEBUG_LIST = ["_mm256_cvtepi8_epi16", "_mm512_cvtusepi32_epi8" ]
+DEBUG_LIST = ["_mm512_and_si512" ]
 SKIP_LIST = ["pack" ]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -826,6 +826,7 @@ class Synthesizer:
 
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
+        is_logical_like = self.is_elementwise_logical_like_operation(dsl_inst)
         #print(dsl_inst.name,"is_broadcast_like:",is_broadcast_like)
 
         for ctx in dsl_inst.contexts:
@@ -869,7 +870,7 @@ class Synthesizer:
 
             # Either can process the input or can produce output shape
             new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) # and (not is_broadcast_like)
-            if new_condition or (is_broadcast_like and supports_input_length and supports_output_length):
+            if new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)):
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -1071,8 +1072,23 @@ class Synthesizer:
             new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
 
 
+            # for element wise operations, we really only need the sizes of the vectors to overlap
+            is_elem_logical = self.is_elementwise_logical_like_operation(dsl_inst) and (supports_input_length or supports_output_length)
 
-            return new_condition #new_condition
+
+            return new_condition or is_elem_logical #new_condition
+
+
+    def is_elementwise_logical_like_operation(self, dsl_inst):
+
+        if self.is_broadcast_like_operation(dsl_inst):
+            return False
+
+        ops = dsl_inst.get_semantics_ops_list()
+
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract"]
+
+        return all([ (op in bitwise_logical_ops) for op in ops ])
 
 
     def is_broadcast_like_operation(self, dsl_inst):
