@@ -6,7 +6,6 @@
 
 
 from copy import deepcopy
-from pyclbr import Function
 
 from RoseAbstractions import *
 from RoseContext import *
@@ -35,11 +34,21 @@ class RoseTransformationVerifier():
       # The symbolic arguments in each of the functions must map to each other
       RefIndex = 0
       for CheckArg in CheckFunction.getArgs():
-        if CheckFunctionInfo.argHasConcreteVal(CheckArg) == False:
+        if RefIndex < ReferenceFunction.getNumArgs():
           RefArg = ReferenceFunction.getArg(RefIndex)
+        if CheckFunctionInfo.argHasConcreteVal(CheckArg) == False:
+          print("RefArg:")
+          RefArg.print()
+          print("CheckArg:")
+          CheckArg.print()
           assert ReferenceFunctionInfo.argHasConcreteVal(RefArg) == False
           self.CheckArgToRefArg[CheckArg] = RefArg
           RefIndex += 1
+          continue
+        if RefIndex < ReferenceFunction.getNumArgs() \
+          and ReferenceFunctionInfo.argHasConcreteVal(RefArg) == True:
+          RefIndex += 1
+          continue
         
   
   def genSymbolicInput(self, Param : RoseArgument, NameSuffix : str, ArgToDefinitionMap : dict):
@@ -73,7 +82,7 @@ class RoseTransformationVerifier():
                                       CheckFunctionInfo : RoseFunctionInfo, NameSuffix : str, \
                                       RefArgToDefinitionMap : dict):
     Code = ""
-    assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
+    #assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
     CheckArgToDefinitionMap = dict()
     for Arg in  CheckFunction.getArgs():
       if Arg in self.CheckArgToRefArg:
@@ -92,7 +101,7 @@ class RoseTransformationVerifier():
   def emitVerificationCode(self):
     CheckFunction = self.CheckFunctionInfo.getLatestFunction()
     ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
-    assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
+    #assert CheckFunction.getNumArgs() >= ReferenceFunction.getNumArgs()
     # Rosette code headers
     Content = [
       "#lang rosette", "(require rosette/lib/synthax)", "(require rosette/lib/angelic)",
@@ -112,7 +121,6 @@ class RoseTransformationVerifier():
     Code, RefArgToDefinitionMap = self.emitDefinitionOfRefFunctionArgs(ReferenceFunction, \
                                         self.ReferenceFunctionInfo, NameSuffix1)
     Content.append(Code)
-    ArgNamesList = [Arg.getName() for Arg in ReferenceFunction.getArgs()]
     NameSuffix2 = "_2"
     Code, CheckArgToDefinitionMap = self.emitDefinitionOfCheckFunctionArgs(CheckFunction, \
                         ReferenceFunction, self.CheckFunctionInfo, NameSuffix2, RefArgToDefinitionMap)
@@ -133,6 +141,10 @@ class RoseTransformationVerifier():
     # Generate verification code
     Code = self.emitVerificationCode()
     Function = self.ReferenceFunctionInfo.getLatestFunction()
+    print("REFERENCE FUNCTION:")
+    self.ReferenceFunctionInfo.getLatestFunction().print()
+    print("CHECK FUNCTION:")
+    self.CheckFunctionInfo.getLatestFunction().print()
     FileName = "verify_" + Function.getName() + ".rkt"
     try:
       File = open(FileName, "w+")
