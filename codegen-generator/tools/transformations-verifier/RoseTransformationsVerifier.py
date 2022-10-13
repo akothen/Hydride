@@ -23,14 +23,20 @@ class RoseTransformationVerifier():
     self.CheckFunctionInfo = CheckFunctionInfo
     self.ReferenceFunctionInfo = ReferenceFunctionInfo
     self.CheckArgToRefArg = dict()
-    CheckFunction = self.CheckFunctionInfo.getLatestFunction()
-    ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
     if ArgsPermutation != None:
+      CheckFunction = self.CheckFunctionInfo.getLatestFunction()
+      ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
       assert len(ArgsPermutation) == ReferenceFunction.getNumArgs()
       for CheckArgIndex, RefArgIndex  in enumerate(ArgsPermutation):
         self.CheckArgToRefArg[CheckFunction.getArg(CheckArgIndex)] = \
                                 ReferenceFunction.getArg(RefArgIndex)
     else:
+      if self.CheckFunctionInfo.getLatestFunction().getNumArgs() \
+        < self.ReferenceFunctionInfo.getLatestFunction().getNumArgs():
+        self.CheckFunctionInfo = ReferenceFunctionInfo
+        self.ReferenceFunctionInfo = CheckFunctionInfo
+      CheckFunction = self.CheckFunctionInfo.getLatestFunction()
+      ReferenceFunction = self.ReferenceFunctionInfo.getLatestFunction()
       # The symbolic arguments in each of the functions must map to each other
       RefIndex = 0
       for CheckArg in CheckFunction.getArgs():
@@ -41,7 +47,14 @@ class RoseTransformationVerifier():
           RefArg.print()
           print("CheckArg:")
           CheckArg.print()
-          assert ReferenceFunctionInfo.argHasConcreteVal(RefArg) == False
+          if ReferenceFunctionInfo.argHasConcreteVal(RefArg) != False:
+            print("SKIP")
+            continue
+          print("---MAPPING")
+          print("RefArg:")
+          RefArg.print()
+          print("CheckArg:")
+          CheckArg.print()
           self.CheckArgToRefArg[CheckArg] = RefArg
           RefIndex += 1
           continue
