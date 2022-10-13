@@ -21,6 +21,8 @@ bin_dirs = $(addsuffix /bin,$(benchmarks))
 
 hannk = hannk/common_halide.cpp
 
+ENABLE_HYDRIDE=1
+
 .PHONY: clean all $(benchmarks)
 
 all: $(benchmarks)
@@ -36,7 +38,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) ./$@/bin/$@_generator \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
