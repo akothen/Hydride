@@ -14,6 +14,7 @@ from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
+from RoseComparisonBitVectorOp import RoseComparisonBitVectorOp
 from RoseSizeExtBitVectorOperation import RoseBVSizeExensionOp
 from RoseLLVMContext import *
 
@@ -468,7 +469,7 @@ class RoseBVTruncateHighOp(RoseBitVectorOp):
         String += Spaces + "(define " + HighIndexName \
                           + " (- " + InputValBitwidth.getName() + " 1))\n"
       else:
-        String += Spaces + "(define " + HighIndexName \
+        String += Spaces + "(define " + HighIndexName  + " " \
                           + str(InputValBitwidth - 1) + " )\n"
       String += Spaces + "(define " + LowIndexName \
                           + " (+ (- " + HighIndexName + " " + TruncateWidth + ") 1) )\n"
@@ -1164,12 +1165,11 @@ class RoseBVSmodOp(RoseBitVectorOp):
 
 ############################# COMPARISON OPERATORS ###################################
 
-class RoseBVEQOp(RoseBitVectorOp):
+class RoseBVEQOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bveq, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bveq, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1201,12 +1201,11 @@ class RoseBVEQOp(RoseBitVectorOp):
     return RoseUndefValue()
 
 
-class RoseBVNEQOp(RoseBitVectorOp):
+class RoseBVNEQOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvneq, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvneq, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1257,12 +1256,11 @@ class RoseBVNEQOp(RoseBitVectorOp):
     return RoseUndefValue()
 
 
-class RoseBVSLTOp(RoseBitVectorOp):
+class RoseBVSLTOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvslt, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvslt, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1279,12 +1277,11 @@ class RoseBVSLTOp(RoseBitVectorOp):
     return IRBuilder.icmp_signed("<", Operand1, Operand2, self.getName())
 
 
-class RoseBVULTOp(RoseBitVectorOp):
+class RoseBVULTOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvult, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvult, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1301,12 +1298,11 @@ class RoseBVULTOp(RoseBitVectorOp):
     return IRBuilder.icmp_unsigned("<", Operand1, Operand2, self.getName())
 
 
-class RoseBVSLEOp(RoseBitVectorOp):
+class RoseBVSLEOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvsle, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvsle, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1323,12 +1319,11 @@ class RoseBVSLEOp(RoseBitVectorOp):
     return IRBuilder.icmp_signed("<=", Operand1, Operand2, self.getName())
 
 
-class RoseBVULEOp(RoseBitVectorOp):
+class RoseBVULEOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvule, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvule, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1345,12 +1340,11 @@ class RoseBVULEOp(RoseBitVectorOp):
     return IRBuilder.icmp_unsigned("<=", Operand1, Operand2, self.getName())
 
 
-class RoseBVSGTOp(RoseBitVectorOp):
+class RoseBVSGTOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvsgt, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvsgt, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1367,12 +1361,11 @@ class RoseBVSGTOp(RoseBitVectorOp):
     return IRBuilder.icmp_signed(">", Operand1, Operand2, self.getName())
 
 
-class RoseBVUGTOp(RoseBitVectorOp):
+class RoseBVUGTOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvugt, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvugt, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1389,12 +1382,11 @@ class RoseBVUGTOp(RoseBitVectorOp):
     return IRBuilder.icmp_unsigned(">", Operand1, Operand2, self.getName())
 
 
-class RoseBVSGEOp(RoseBitVectorOp):
+class RoseBVSGEOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvsge, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvsge, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
@@ -1411,12 +1403,11 @@ class RoseBVSGEOp(RoseBitVectorOp):
     return IRBuilder.icmp_signed(">=", Operand1, Operand2, self.getName())
 
 
-class RoseBVUGEOp(RoseBitVectorOp):
+class RoseBVUGEOp(RoseComparisonBitVectorOp):
   def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    OperandList = [Operand1, Operand2]
-    super().__init__(RoseOpcode.bvuge, Name, OperandList, ParentBlock)
+    super().__init__(RoseOpcode.bvuge, Name, Operand1, Operand2, ParentBlock)
     
   @staticmethod
   def create(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, 
