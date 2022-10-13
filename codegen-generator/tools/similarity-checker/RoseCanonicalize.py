@@ -191,82 +191,137 @@ def AddOuterLoopAroundRegions(ParentRegion, RegionList : list, ParentKey):
   ParentRegion.getFunction().print()
 
 
-def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : set = None):
+def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : list = None):
   print("ADD OUTER LOOP IN FUNCTION")
   Function.print()
   # Use the return value of the function as the end and step
   #Bitwidth = Function.getReturnValue().getType().getBitwidth()
   # Get the op that we can use to canonicalize the loop bounds
-  LoopList = list()
+
+  def AddLoopAroundInlinableLoops(UndealtWithRegions : list):
+    print("AddLoopAroundInlinableLoops")
+    if len(UndealtWithRegions) == 0:
+      return
+    MaxBitwidth = -1
+    for Region in UndealtWithRegions:
+      print("Undealtwithregionn:")
+      Region.print()
+      assert isinstance(Region, RoseForLoop)
+      assert len(Region.getRegionsOfType(RoseForLoop)) == 0
+      PrimaryOps = GetOpDeterminingOuterLoopBounds(Region)
+      assert PrimaryOps != None
+      Bitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+      print("Bitwidth:")
+      print(Bitwidth)
+      if MaxBitwidth < Bitwidth:
+        MaxBitwidth = Bitwidth
+    # Add loops
+    OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+    Function.addRegionBefore(Function.getPosOfChild(UndealtWithRegions[0]), OuterLoop)
+    for Region in UndealtWithRegions:
+      Function.eraseChild(Region)
+      OuterLoop.addRegion(Region)
+    UndealtWithRegions.clear()
+    return
+  
   if InlinableRegions != None:
-    FunctionChildren = list()
-    FunctionChildren.extend(Function.getChildren())
-    for Index, Region in enumerate(FunctionChildren):
-      if Region in InlinableRegions:
-        print("Region:")
-        Region.print()
-        if not isinstance(Region, RoseForLoop):
-          if isinstance(Region, RoseBlock):
-            #Index = Function.getPosOfChild(Region)
-            PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, [Region])
-            assert PrimaryOps != None
-            MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
-            OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
-            InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
-            OuterLoop.addRegion(InnerLoop)
-            Function.addRegionBefore(Index, OuterLoop)
-            Function.eraseChild(Region)
-            InnerLoop.addRegion(Region)
-            LoopList.append(OuterLoop)
-            continue
-          assert isinstance(Region, RoseCond)
-          BlockList = list()
-          for Key in Region.getKeys():
-            print("KEY:")
-            print(Key)
-            BlockList.extend(Region.getRegionsOfType(SubRegionType=RoseBlock, Key=Key))
-          PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, BlockList)
-          assert PrimaryOps != None
-          MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
-          OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
-          InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
-          OuterLoop.addRegion(InnerLoop)
-          Function.addRegionBefore(Index, OuterLoop)
-          ConditionalBlocks = list()
-          for Condition in Region.getConditions():
-            if isinstance(Condition, RoseOperation):
-              if Condition.getParent() not in ConditionalBlocks:
-                ConditionalBlocks.append(Condition.getParent())
-          for Block in ConditionalBlocks:
-            Function.eraseChild(Block)
-          Function.eraseChild(Region)
-          for Block in ConditionalBlocks:
-            InnerLoop.addRegion(Block)
-          InnerLoop.addRegion(Region)
-          LoopList.append(OuterLoop)
-          continue
+    # The inlinable regions must be contiguous
+    Index = Function.getPosOfChild(InlinableRegions[0])
+    for Region in InlinableRegions:
+      assert Index == Function.getPosOfChild(Region)
+      Index += 1
+    UndealtWithRegions = list()
+    for Region in InlinableRegions:
+      print("Region:")
+      Region.print()
+      if isinstance(Region, RoseBlock):
+        AddLoopAroundInlinableLoops(UndealtWithRegions)
+        #Index = Function.getPosOfChild(Region)
+        PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, [Region])
+        assert PrimaryOps != None
+        MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+        OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+        InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
+        OuterLoop.addRegion(InnerLoop)
+        Function.addRegionBefore(Index, OuterLoop)
+        Function.eraseChild(Region)
+        InnerLoop.addRegion(Region)
+        #LoopList.append(OuterLoop)
+        continue
+      if isinstance(Region, RoseCond):
+        AddLoopAroundInlinableLoops(UndealtWithRegions)
+        #BlockList = list()
+        #for Key in Region.getKeys():
+        #  print("KEY:")
+        #  print(Key)
+        #  BlockList.extend(Region.getRegionsOfType(SubRegionType=RoseBlock, Key=Key))
+        ConditionalBlocks = list()
+        for Condition in Region.getConditions():
+          if isinstance(Condition, RoseOperation):
+            if Condition.getParent() not in ConditionalBlocks:
+              print("Condition:")
+              Condition.print()
+              print("Condition.getParent():")
+              Condition.getParent().print()
+              ConditionalBlocks.append(Condition.getParent())
+        RegionList = list()
+        RegionList.extend(ConditionalBlocks)
+        RegionList.append(Region)
+        print("******PRINTING RegionList:")
+        for R in RegionList:
+          print("R:")
+          R.print()
+        print("*********************")
+        PrimaryOps = GetOpDeterminingLoopBoundsFor(RegionList)
+        #PrimaryOps = GetOpDeterminingOuterLoopBoundsInBlockList(Function, BlockList)
+        assert PrimaryOps != None
+        MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+        OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+        InnerLoop = RoseForLoop.create("%" + "inner.it", 0, MaxBitwidth, MaxBitwidth)
+        OuterLoop.addRegion(InnerLoop)
+        Function.addRegionBefore(Index, OuterLoop)
+        for Block in ConditionalBlocks:
+          print("Block:")
+          Block.print()
+          Function.eraseChild(Block)
+        Function.eraseChild(Region)
+        for Block in ConditionalBlocks:
+          InnerLoop.addRegion(Block)
+        InnerLoop.addRegion(Region)
+        #LoopList.append(OuterLoop)
+        continue
       if isinstance(Region, RoseForLoop):
-        # If we have got another nested loop in the region, we have to do nothing
-        if len(Region.getRegionsOfType(RoseForLoop)) == 0:
-          PrimaryOps = GetOpDeterminingOuterLoopBounds(Region)
-          assert PrimaryOps != None
-          MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
-          OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
-          Function.addRegionBefore(Index, OuterLoop)
-          Function.eraseChild(Region)
-          OuterLoop.addRegion(Region)
-          LoopList.append(OuterLoop)
+        if len(Region.getRegionsOfType(RoseForLoop)) != 0:
+          AddLoopAroundInlinableLoops(UndealtWithRegions)
           continue
-        LoopList.append(Region)
-  else:
-    LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
+        UndealtWithRegions.append(Region)
+        continue
+    AddLoopAroundInlinableLoops(UndealtWithRegions)
+  LoopList = Function.getRegionsOfType(RoseForLoop, Level=0)
   assert len(LoopList) != 0
   MaxBitwidth = None
   InnerLoops = list()
   for Loop in LoopList:
     print("=====LOOP:")
     Loop.print()
+    if len(Loop.getRegionsOfType(RoseForLoop)) != 0:
+      print("NO INNER LOOPS")
+      print("MaxBitwidth:")
+      print(MaxBitwidth)
+      if MaxBitwidth != None:
+        OuterLoop = RoseForLoop.create("%" + "outer.it", 0, MaxBitwidth, MaxBitwidth)
+        Index = Function.getPosOfChild(InnerLoops[0])
+        for InnerLoop in InnerLoops:
+          Function.eraseChild(InnerLoop)
+          OuterLoop.addRegion(InnerLoop)
+        Function.addRegionBefore(Index, OuterLoop)
+        MaxBitwidth = None
+        InnerLoops = list()
+      continue
+    # Find the maximum bitwidth and use that
     PrimaryOps = GetOpDeterminingOuterLoopBounds(Loop)
+    print("PrimaryOps:")
+    print(PrimaryOps)
     if PrimaryOps == None:
       print("PrimaryOps is NONE")
       if MaxBitwidth != None:
@@ -279,9 +334,10 @@ def AddOuterLoopInFunction(Function : RoseFunction, InlinableRegions : set = Non
         MaxBitwidth = None
         InnerLoops = list()
       continue
-    # Find the maximum bitwidth and use that
     if MaxBitwidth == None:
       MaxBitwidth = PrimaryOps[0].getInputBitVector().getType().getBitwidth()
+      print("MaxBitwidth:")
+      print(MaxBitwidth)
       print("PrimaryOps[0]:")
       PrimaryOps[0].print()
       for Op in PrimaryOps[1:]:
