@@ -11,7 +11,7 @@ class StructDef:
         defaults = []
 
         defaults.append("(struct reg (id) #:transparent #:mutable)")
-        defaults.append("(struct lit (val) #:transparent #:mutable)")
+        defaults.append("(struct lit (val) #:transparent )")
         defaults.append("(struct idx-i (id) #:transparent #:mutable)")
         defaults.append("(struct idx-j (id) #:transparent #:mutable)")
         defaults.append("(struct dim-x (id) #:transparent #:mutable)")

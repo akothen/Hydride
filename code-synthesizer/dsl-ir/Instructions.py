@@ -110,6 +110,8 @@ class Context:
 
     def print_context(self, prefix = ""):
         print("{} {}".format(prefix, self.name))
+        print("In_vectsize: ",self.in_vectsize)
+        print("out_vectsize: ",self.out_vectsize)
 
         for arg in self.context_args:
             arg.print_operand(prefix = prefix+"------>")

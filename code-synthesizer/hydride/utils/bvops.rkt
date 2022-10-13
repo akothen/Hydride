@@ -108,7 +108,7 @@
       vect
       )
     (begin
-      (concat (bv 0 num_pad_bits) vect)
+      (concat (integer->bitvector 0 (bitvector num_pad_bits)) vect)
       )
     )
   )

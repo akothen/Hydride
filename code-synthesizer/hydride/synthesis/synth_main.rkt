@@ -28,10 +28,13 @@
     (<= depth depth-limit)
 
     (begin
+      (debug-log "True case!")
 
       (define grammar
         (grammar-fn depth)
         )
+
+      (debug-log "Fetched Grammar")
 
       (define-values 
         (satisfiable? materialize elapsed_time)

@@ -140,31 +140,11 @@
                )
 
              ]
-            [(_mm256_maskz_packus_epi16_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 256) (equal? num_6 128) (equal? num_7 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2) (equal? num_11 8) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                  ]
-               )
-
-             ]
-            [(_mm512_maskz_packus_epi32_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 128) (equal? num_6 128) (equal? num_7 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                ]
-               )
-
-             ]
             [(_mm512_maskz_srl_epi64_dsl vc_0 vc_1 v2 v3 v4 size_i_o lane_size num_7 num_8 num_9 vc_10 num_11 prec_i_o num_13 num_14)
              (cond 
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_7 512) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_7 256) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_7 128) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
-               )
-
-             ]
-            [(_mm_maskz_packus_epi32_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) 16]
                )
 
              ]
@@ -182,13 +162,6 @@
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 0) (equal? num_9 0)) 8]
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 0)) 16]
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 0)) 16]
-               )
-
-             ]
-            [(_mm512_maskz_packs_epi16_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 128) (equal? num_6 128) (equal? num_7 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                              ]
                )
 
              ]
@@ -261,19 +234,6 @@
              (cond 
                [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 32) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? num_11 2) (equal? num_12 96) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 32]
                [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? num_12 112) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
-               )
-
-             ]
-            [(_mm_maskz_packs_epi32_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) 16]
-               )
-
-             ]
-            [(_mm256_maskz_packus_epi32_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 256) (equal? num_6 128) (equal? num_7 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2) (equal? num_11 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                    ]
                )
 
              ]
@@ -485,9 +445,9 @@
                )
 
              ]
-            [(_mm512_mask3_fmadd_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
+            [(_mm512_mask3_fmadd_epi32_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 64) (equal? num_10 0)) 32]
+               [(and  (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 64) (equal? num_8 0)) 32]
                )
 
              ]
@@ -577,13 +537,6 @@
             [(_m_punpckhdq_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11)
              (cond 
                [(and  (equal? size_o 64) (equal? lane_size 64) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 32) (equal? num_8 32) (equal? num_9 0) (equal? num_10 32) (equal? num_11 0)) 32]
-               )
-
-             ]
-            [(_mm256_maskz_packs_epi16_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 256) (equal? num_6 128) (equal? num_7 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2) (equal? num_11 8) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                  ]
                )
 
              ]
@@ -787,9 +740,9 @@
                )
 
              ]
-            [(_mm256_hsubs_epi16_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 num_14 num_15)
+            [(_mm256_hsubs_epi16_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
              (cond 
-               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_i_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? num_12 112) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
+               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 0) (equal? num_5 64) (equal? num_6 16) (equal? num_7 64) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 16) (equal? num_11 2) (equal? num_12 112) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
                )
 
              ]
@@ -959,16 +912,9 @@
                )
 
              ]
-            [(_mm256_mask_packus_epi16_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12 num_13 num_14)
+            [(_mm512_fmadd_epi32_dsl v0 v1 v2 num_3 num_4 prec_i_o num_6 num_7)
              (cond 
-               [(and  (equal? size_i 512) (equal? num_5 256) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2) (equal? num_11 8) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                  ]
-               )
-
-             ]
-            [(_mm512_fmadd_epi32_dsl v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8 num_9)
-             (cond 
-               [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 0) (equal? num_8 64) (equal? num_9 0)) 32]
+               [(and  (equal? num_3 0) (equal? num_4 512) (equal? prec_i_o 32) (equal? num_6 64) (equal? num_7 0)) 32]
                )
 
              ]
@@ -1058,18 +1004,9 @@
                )
 
              ]
-            [(_m_packuswb_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12 num_13 num_14)
+            [(_mm_hsub_pi32_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8 num_9 num_10)
              (cond 
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 32) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 8]
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? prec_i 32) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) 16]
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) 8]
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 32) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 8]
-               )
-
-             ]
-            [(_mm_hsub_pi32_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13)
-             (cond 
-               [(and  (equal? size_o 64) (equal? lane_size 64) (equal? num_4 64) (equal? prec_i_o 64) (equal? num_6 0) (equal? num_7 32) (equal? num_8 32) (equal? num_9 0) (equal? num_10 0) (equal? num_11 32) (equal? num_12 0) (equal? num_13 0)) 32]
+               [(and  (equal? num_2 0) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 32) (equal? num_6 0) (equal? num_7 0) (equal? num_8 32) (equal? num_9 0) (equal? num_10 0)) 32]
                )
 
              ]
@@ -1160,12 +1097,6 @@
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_7 256) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_7 128) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_7 512) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
-               )
-
-             ]
-            [(_mm_maskz_packs_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) 8]
                )
 
              ]
@@ -1332,13 +1263,6 @@
                )
 
              ]
-            [(_mm256_mask_packs_epi16_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 256) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 2) (equal? num_11 8) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                  ]
-               )
-
-             ]
             [(_mm256_mask_srl_epi64_dsl vc_0 v1 v2 v3 v4 size_i_o lane_size num_7 num_8 num_9 vc_10 num_11 prec_i_o num_13 num_14)
              (cond 
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_7 256) (equal? num_8 64) (equal? num_9 0) (equal? num_11 0) (equal? prec_i_o 64) (equal? num_13 0) (equal? num_14 0)) 64]
@@ -1487,13 +1411,6 @@
                )
 
              ]
-            [(_mm512_mask_packus_epi16_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                              ]
-               )
-
-             ]
             [(_mm_mask_sub_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9)
              (cond 
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 0)) 32]
@@ -1523,12 +1440,6 @@
                )
 
              ]
-            [(_mm_mask_packs_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) 16]
-               )
-
-             ]
             [(_mm256_mask_cmplt_epu64_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12)
              (cond 
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_6 4) (equal? prec_o 1) (equal? num_8 0) (equal? prec_i 64) (equal? num_12 4)) 1]
@@ -1543,13 +1454,6 @@
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 8) (equal? prec_o 1) (equal? num_8 0) (equal? prec_i 64) (equal? num_12 0)) 1]
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_6 32) (equal? prec_o 1) (equal? num_8 0) (equal? prec_i 8) (equal? num_12 0)) 1]
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 32) (equal? prec_o 1) (equal? num_8 0) (equal? prec_i 16) (equal? num_12 0)) 1]
-               )
-
-             ]
-            [(_mm256_maskz_packs_epi32_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 256) (equal? num_6 128) (equal? num_7 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2) (equal? num_11 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                    ]
                )
 
              ]
@@ -1673,12 +1577,6 @@
                )
 
              ]
-            [(_mm_mask_packs_epi16_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) 8]
-               )
-
-             ]
             [(_mm512_mask_mulhi_epu32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 vc_9 num_10 num_11)
              (cond 
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_10 64) (equal? num_11 0)) 32]
@@ -1703,20 +1601,6 @@
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_3 256) (equal? prec_i_o 64) (equal? num_5 0) (equal? num_6 0)) 64]
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_3 256) (equal? prec_i_o 8) (equal? num_5 0) (equal? num_6 0)) 8]
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_3 256) (equal? prec_i_o 16) (equal? num_5 0) (equal? num_6 0)) 16]
-               )
-
-             ]
-            [(_mm512_mask_packus_epi32_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                ]
-               )
-
-             ]
-            [(_mm512_mask_packs_epi16_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                              ]
                )
 
              ]
@@ -2055,12 +1939,6 @@
                )
 
              ]
-            [(_mm_mask_packus_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) 16]
-               )
-
-             ]
             [(_mm256_rolv_epi32_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 vc_7 vc_8 num_9)
              (cond 
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_4 256) (equal? prec_i_o 32) (equal? num_6 0) (equal? num_9 0)) 32]
@@ -2182,17 +2060,6 @@
                )
 
              ]
-            [(_m_packsswb_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_o num_8 num_9 num_10 prec_i num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 32) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 8]
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 32) (equal? num_10 32) (equal? prec_i 32) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 16]
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? prec_i 32) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) 16]
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 32) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 8]
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? prec_i 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) 8]
-               [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 32) (equal? num_5 64) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 32) (equal? num_10 32) (equal? prec_i 32) (equal? num_12 64) (equal? num_13 2) (equal? num_14 0)) 16]
-               )
-
-             ]
             [(_mm512_broadcastd_epi32_dsl v0 size_o lane_size num_3 prec_i_o num_5 num_6 num_7)
              (cond 
                [(and  (equal? size_o 512) (equal? lane_size 512) (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 0) (equal? num_6 0) (equal? num_7 0)) 32]
@@ -2258,13 +2125,6 @@
                )
 
              ]
-            [(_mm256_mask_packus_epi32_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 256) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2) (equal? num_11 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                    ]
-               )
-
-             ]
             [(_mm_cmpneq_epi32_mask_dsl v0 v1 size_i_o lane_size num_4 prec_o num_6 vc_7 vc_8 prec_i num_10)
              (cond 
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_4 4) (equal? prec_o 1) (equal? num_6 0) (equal? prec_i 32) (equal? num_10 4)) 1]
@@ -2294,13 +2154,6 @@
                )
 
              ]
-            [(_mm256_mask_packs_epi32_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12 num_13 num_14)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 256) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 2) (equal? num_11 16) (equal? num_12 128) (equal? num_13 2) (equal? num_14 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                                                    ]
-               )
-
-             ]
             [(_mm_maskz_ror_epi32_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 num_7 num_8 prec_i_o vc_10 vc_11 num_12 num_13)
              (cond 
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 32) (equal? num_7 8) (equal? num_8 0) (equal? prec_i_o 32) (equal? num_12 0) (equal? num_13 0)) 32]
@@ -2315,13 +2168,6 @@
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 128) (equal? num_7 8) (equal? num_8 0) (equal? prec_i_o 32) (equal? num_12 0) (equal? num_13 0)) 32]
                [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 16) (equal? num_7 8) (equal? num_8 0) (equal? prec_i_o 64) (equal? num_12 0) (equal? num_13 0)) 64]
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_6 32) (equal? num_7 8) (equal? num_8 0) (equal? prec_i_o 64) (equal? num_12 0) (equal? num_13 0)) 64]
-               )
-
-             ]
-            [(_mm512_maskz_packs_epi32_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 128) (equal? num_6 128) (equal? num_7 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                ]
                )
 
              ]
@@ -2447,12 +2293,6 @@
                )
 
              ]
-            [(_mm_maskz_packus_epi16_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) 8]
-               )
-
-             ]
             [(_mm_avg_pu8_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 vc_7 vc_8 num_9)
              (cond 
                [(and  (equal? size_i_o 64) (equal? lane_size 64) (equal? num_4 64) (equal? prec_i_o 8) (equal? num_6 0) (equal? num_9 0)) 8]
@@ -2530,24 +2370,9 @@
                )
 
              ]
-            [(_mm256_packs_epi16_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 num_14 num_15)
+            [(_mm512_mask_fmadd_epi32_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
              (cond 
-               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? prec_i 16) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 8]
-               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? num_11 2) (equal? prec_i 32) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
-               [(and  (equal? size_i_o 512) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? prec_i 16) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 8]
-               [(and  (equal? size_i_o 512) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? num_11 2) (equal? prec_i 32) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
-               )
-
-             ]
-            [(_mm_mask_packus_epi16_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i_o 128) (equal? lane_size 128) (equal? num_6 128) (equal? prec_i 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) 8]
-               )
-
-             ]
-            [(_mm512_mask_fmadd_epi32_dsl v0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9 num_10)
-             (cond 
-               [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 0) (equal? num_9 64) (equal? num_10 0)) 32]
+               [(and  (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 64) (equal? num_8 0)) 32]
                )
 
              ]
@@ -2756,13 +2581,6 @@
                )
 
              ]
-            [(_mm512_mask_packs_epi32_dsl v0 v1 v2 v3 size_i num_5 num_6 prec_i num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? num_5 128) (equal? num_6 128) (equal? prec_i 32) (equal? num_8 0) (equal? num_9 16) (equal? num_10 16) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                                ]
-               )
-
-             ]
             [(_mm256_maskz_set1_epi16_dsl vc_0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8 num_9)
              (cond 
                [(and  (equal? size_i_o 256) (equal? lane_size 256) (equal? num_5 256) (equal? prec_i_o 16) (equal? num_7 0) (equal? num_8 0) (equal? num_9 0)) 16]
@@ -2831,13 +2649,6 @@
                )
 
              ]
-            [(_mm512_maskz_packus_epi16_dsl vc_0 v1 v2 v3 size_i prec_i num_6 num_7 num_8 num_9 num_10 num_11 num_12)
-             (cond 
-               [(and  (equal? size_i 512) (equal? prec_i 128) (equal? num_6 128) (equal? num_7 16) (equal? num_8 0) (equal? num_9 8) (equal? num_10 8) (equal? num_11 128) (equal? num_12 0)) -1 ; Unable to reason about precision
-                                                                                                                                                                                              ]
-               )
-
-             ]
             [(_mm512_mask_cmplt_epi8_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12)
              (cond 
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_6 64) (equal? prec_o 1) (equal? num_8 0) (equal? prec_i 8) (equal? num_12 0)) 1]
@@ -2883,12 +2694,791 @@
                )
 
              ]
-            [(_mm256_packus_epi32_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_o num_8 num_9 num_10 num_11 prec_i num_13 num_14 num_15)
+            [(_mm_unpackhi_epi8_dsl v0 v1 num_2 prec_i_o num_4 num_5)
              (cond 
-               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? num_11 2) (equal? prec_i 32) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
-               [(and  (equal? size_i_o 512) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? prec_i 16) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 8]
-               [(and  (equal? size_i_o 512) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 16) (equal? prec_o 16) (equal? num_8 0) (equal? num_9 64) (equal? num_10 32) (equal? num_11 2) (equal? prec_i 32) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 16]
-               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 64) (equal? num_5 128) (equal? num_6 8) (equal? prec_o 8) (equal? num_8 0) (equal? num_9 64) (equal? num_10 16) (equal? num_11 2) (equal? prec_i 16) (equal? num_13 128) (equal? num_14 2) (equal? num_15 0)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 64)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 0)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 0)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 32)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 64)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 32)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 0)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 0)) 8]
+               [(and  (equal? num_2 32) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 32)) 8]
+               [(and  (equal? num_2 32) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 0)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 32)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 0)) 32]
+               [(and  (equal? num_2 64) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 64)) 32]
+               [(and  (equal? num_2 32) (equal? prec_i_o 8) (equal? num_4 8) (equal? num_5 0)) 8]
+               )
+
+             ]
+            [(_mm512_broadcastw_epi16_dsl v0 num_1 prec_i_o)
+             (cond 
+               [(and  (equal? num_1 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 64) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_1 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 256) (equal? prec_i_o 128)) 128]
+               [(and  (equal? num_1 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 256) (equal? prec_i_o 128)) 128]
+               [(and  (equal? num_1 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 512) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_1 512) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_1 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_1 256) (equal? prec_i_o 8)) 8]
+               )
+
+             ]
+            [(_mm_hadds_pi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
+             (cond 
+               [(and  (equal? num_2 32) (equal? num_3 32) (equal? num_4 64) (equal? num_5 64) (equal? num_6 48)) 16]
+               [(and  (equal? num_2 64) (equal? num_3 64) (equal? num_4 128) (equal? num_5 128) (equal? num_6 112)) 16]
+               )
+
+             ]
+            [(_mm256_hadd_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+             (cond 
+               [(and  (equal? num_2 32) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 96)) 32]
+               [(and  (equal? num_2 16) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 112)) 16]
+               )
+
+             ]
+            [(_mm_cvtsepi64_epi16_dsl v0 num_1 prec_o prec_i num_4)
+             (cond 
+               [(and  (equal? num_1 32) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 96)) 16]
+               [(and  (equal? num_1 128) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 256) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 0)) 16]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 64)) 32]
+               [(and  (equal? num_1 128) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 32) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 96)) 8]
+               [(and  (equal? num_1 256) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 256) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 0)) 32]
+               [(and  (equal? num_1 64) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 64)) 16]
+               [(and  (equal? num_1 16) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 112)) 8]
+               [(and  (equal? num_1 128) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 0)) 32]
+               [(and  (equal? num_1 128) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 0)) 16]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 64)) 16]
+               [(and  (equal? num_1 32) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 96)) 8]
+               [(and  (equal? num_1 128) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 0)) 16]
+               )
+
+             ]
+            [(_mm256_maskz_madd52lo_epu64_dsl v0 vc_1 v2 v3 v4 num_5 num_6)
+             (cond 
+               [(and  (equal? num_5 208) (equal? num_6 0)) 64]
+               [(and  (equal? num_5 416) (equal? num_6 0)) 64]
+               [(and  (equal? num_5 104) (equal? num_6 52)) 64]
+               [(and  (equal? num_5 104) (equal? num_6 0)) 64]
+               [(and  (equal? num_5 416) (equal? num_6 52)) 64]
+               [(and  (equal? num_5 208) (equal? num_6 52)) 64]
+               )
+
+             ]
+            [(_mm256_mask_adds_epu8_dsl v0 v1 v2 v3 num_4 prec_i_o)
+             (cond 
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm512_mask_rem_epi32_dsl v0 v1 v2 v3)
+             (cond 
+               [(and ) 32]
+               [(and ) 32]
+               )
+
+             ]
+            [(_mm512_unpacklo_epi64_dsl v0 v1 num_2)
+             (cond 
+               [(and  (equal? num_2 0)) 64]
+               [(and  (equal? num_2 64)) 64]
+               )
+
+             ]
+            [(_mm256_dpbusds_epi32_dsl v0 v1 v2 size_i_o)
+             (cond 
+               [(and  (equal? size_i_o 256)) 32]
+               [(and  (equal? size_i_o 128)) 32]
+               [(and  (equal? size_i_o 512)) 32]
+               )
+
+             ]
+            [(_mm_unpackhi_epi64_dsl v0 v1 num_2 num_3)
+             (cond 
+               [(and  (equal? num_2 64) (equal? num_3 64)) 64]
+               [(and  (equal? num_2 0) (equal? num_3 0)) 64]
+               )
+
+             ]
+            [(_mm512_maskz_dpwssds_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
+             (cond 
+               [(and  (equal? size_i_o 512)) 32]
+               [(and  (equal? size_i_o 128)) 32]
+               [(and  (equal? size_i_o 256)) 32]
+               )
+
+             ]
+            [(_mm256_unpacklo_epi16_dsl v0 v1 size_i_o lane_size num_4 num_5 prec_i_o num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 2) (equal? num_9 0)) 16]
+               )
+
+             ]
+            [(_mm256_dpwssds_epi32_dsl v0 v1 v2 size_i_o)
+             (cond 
+               [(and  (equal? size_i_o 256)) 32]
+               [(and  (equal? size_i_o 512)) 32]
+               [(and  (equal? size_i_o 128)) 32]
+               )
+
+             ]
+            [(_mm_hadd_pi16_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? num_2 32) (equal? num_3 16) (equal? num_4 32) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 64) (equal? num_9 48)) 16]
+               [(and  (equal? num_2 64) (equal? num_3 16) (equal? num_4 64) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 128) (equal? num_9 112)) 16]
+               [(and  (equal? num_2 64) (equal? num_3 32) (equal? num_4 64) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 128) (equal? num_9 96)) 32]
+               )
+
+             ]
+            [(_mm_madd_pi16_dsl v0 v1 num_2)
+             (cond 
+               [(and  (equal? num_2 32)) 32]
+               [(and  (equal? num_2 64)) 32]
+               [(and  (equal? num_2 128)) 32]
+               [(and  (equal? num_2 32)) 32]
+               [(and  (equal? num_2 256)) 32]
+               )
+
+             ]
+            [(_mm512_mask_div_epi32_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
+             (cond 
+               [(and  (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 64) (equal? num_8 0)) 32]
+               )
+
+             ]
+            [(_mm256_subs_epi8_dsl v0 v1 num_2 prec_i_o)
+             (cond 
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm512_unpacklo_epi16_dsl v0 v1 prec_i_o num_3)
+             (cond 
+               [(and  (equal? prec_i_o 16) (equal? num_3 16)) 16]
+               [(and  (equal? prec_i_o 8) (equal? num_3 8)) 8]
+               [(and  (equal? prec_i_o 32) (equal? num_3 32)) 32]
+               )
+
+             ]
+            [(_mm256_maskz_broadcast_i32x2_dsl v0 vc_1 v2 num_3 prec_i_o num_5)
+             (cond 
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 4)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 4)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 64) (equal? num_5 2)) 64]
+               [(and  (equal? num_3 256) (equal? prec_i_o 64) (equal? num_5 2)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64) (equal? num_5 2)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 4)) 32]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64) (equal? num_5 4)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64) (equal? num_5 2)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 4)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64) (equal? num_5 4)) 64]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 8)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 2)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32) (equal? num_5 8)) 32]
+               )
+
+             ]
+            [(_mm512_mask_madd_epi16_dsl v0 v1 v2 v3 num_4)
+             (cond 
+               [(and  (equal? num_4 256)) 32]
+               [(and  (equal? num_4 64)) 32]
+               [(and  (equal? num_4 128)) 32]
+               [(and  (equal? num_4 128)) 32]
+               [(and  (equal? num_4 64)) 32]
+               [(and  (equal? num_4 256)) 32]
+               )
+
+             ]
+            [(_mm256_hadds_epi16_dsl v0 v1 size_i_o lane_size num_4 num_5 num_6 num_7 num_8 prec_i_o num_10 num_11 num_12 num_13 num_14 num_15)
+             (cond 
+               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 0) (equal? num_5 64) (equal? num_6 16) (equal? num_7 64) (equal? num_8 128) (equal? prec_i_o 16) (equal? num_10 16) (equal? num_11 2) (equal? num_12 128) (equal? num_13 112) (equal? num_14 2) (equal? num_15 0)) 16]
+               )
+
+             ]
+            [(_mm256_mask_maddubs_epi16_dsl v0 v1 v2 v3 num_4)
+             (cond 
+               [(and  (equal? num_4 128)) 16]
+               [(and  (equal? num_4 64)) 16]
+               [(and  (equal? num_4 256)) 16]
+               [(and  (equal? num_4 256)) 16]
+               [(and  (equal? num_4 128)) 16]
+               [(and  (equal? num_4 64)) 16]
+               )
+
+             ]
+            [(_mm_hsubs_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
+             (cond 
+               [(and  (equal? num_2 64) (equal? num_3 64) (equal? num_4 128) (equal? num_5 112) (equal? num_6 128)) 16]
+               [(and  (equal? num_2 32) (equal? num_3 32) (equal? num_4 64) (equal? num_5 48) (equal? num_6 64)) 16]
+               )
+
+             ]
+            [(_mm_rem_epi32_dsl v0 v1 num_2 prec_i_o)
+             (cond 
+               [(and  (equal? num_2 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_2 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_2 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_2 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_2 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               )
+
+             ]
+            [(_mm256_madd52hi_epu64_dsl v0 v1 v2 num_3 num_4)
+             (cond 
+               [(and  (equal? num_3 208) (equal? num_4 52)) 64]
+               [(and  (equal? num_3 104) (equal? num_4 52)) 64]
+               [(and  (equal? num_3 416) (equal? num_4 52)) 64]
+               [(and  (equal? num_3 208) (equal? num_4 0)) 64]
+               [(and  (equal? num_3 104) (equal? num_4 0)) 64]
+               [(and  (equal? num_3 416) (equal? num_4 0)) 64]
+               )
+
+             ]
+            [(_mm256_maskz_unpackhi_epi8_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+             (cond 
+               [(and  (equal? num_4 256) (equal? num_5 8) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 256) (equal? num_5 16) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 256) (equal? num_5 16) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 512) (equal? num_5 32) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 256) (equal? num_5 8) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 256) (equal? num_5 32) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 256) (equal? num_5 32) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 512) (equal? num_5 16) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 512) (equal? num_5 8) (equal? num_6 512) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 512) (equal? num_5 8) (equal? num_6 512) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 512) (equal? num_5 32) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 512) (equal? num_5 16) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               )
+
+             ]
+            [(_mm256_unpackhi_epi16_dsl v0 v1 size_i_o prec_i_o num_4)
+             (cond 
+               [(and  (equal? size_i_o 256) (equal? prec_i_o 16) (equal? num_4 16)) 16]
+               [(and  (equal? size_i_o 512) (equal? prec_i_o 32) (equal? num_4 32)) 32]
+               [(and  (equal? size_i_o 256) (equal? prec_i_o 32) (equal? num_4 32)) 32]
+               [(and  (equal? size_i_o 256) (equal? prec_i_o 8) (equal? num_4 8)) 8]
+               [(and  (equal? size_i_o 512) (equal? prec_i_o 8) (equal? num_4 8)) 8]
+               [(and  (equal? size_i_o 512) (equal? prec_i_o 16) (equal? num_4 16)) 16]
+               )
+
+             ]
+            [(_mm512_mask_div_epu32_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
+             (cond 
+               [(and  (equal? num_4 0) (equal? num_5 512) (equal? prec_i_o 32) (equal? num_7 64) (equal? num_8 0)) 32]
+               )
+
+             ]
+            [(_mm512_rem_epi8_dsl v0 v1 prec_i_o)
+             (cond 
+               [(and  (equal? prec_i_o 8)) 8]
+               [(and  (equal? prec_i_o 32)) 32]
+               [(and  (equal? prec_i_o 16)) 16]
+               [(and  (equal? prec_i_o 16)) 16]
+               [(and  (equal? prec_i_o 8)) 8]
+               [(and  (equal? prec_i_o 64)) 64]
+               [(and  (equal? prec_i_o 32)) 32]
+               [(and  (equal? prec_i_o 64)) 64]
+               )
+
+             ]
+            [(_mm_maskz_unpacklo_epi8_dsl v0 vc_1 v2 v3 num_4 prec_i_o num_6 num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 8) (equal? num_7 8) (equal? num_8 8) (equal? num_9 0)) 8]
+               [(and  (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 32) (equal? num_7 32) (equal? num_8 32) (equal? num_9 64)) 32]
+               [(and  (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 8) (equal? num_7 8) (equal? num_8 8) (equal? num_9 64)) 8]
+               [(and  (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 32) (equal? num_7 32) (equal? num_8 32) (equal? num_9 0)) 32]
+               [(and  (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 16) (equal? num_7 16) (equal? num_8 16) (equal? num_9 0)) 16]
+               [(and  (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 32) (equal? num_7 32) (equal? num_8 32) (equal? num_9 0)) 32]
+               [(and  (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 8) (equal? num_7 8) (equal? num_8 8) (equal? num_9 0)) 8]
+               [(and  (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 16) (equal? num_7 16) (equal? num_8 16) (equal? num_9 64)) 16]
+               [(and  (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 16) (equal? num_7 16) (equal? num_8 16) (equal? num_9 0)) 16]
+               [(and  (equal? num_4 16) (equal? prec_i_o 16) (equal? num_6 16) (equal? num_7 16) (equal? num_8 16) (equal? num_9 64)) 16]
+               [(and  (equal? num_4 32) (equal? prec_i_o 32) (equal? num_6 32) (equal? num_7 32) (equal? num_8 32) (equal? num_9 64)) 32]
+               [(and  (equal? num_4 8) (equal? prec_i_o 8) (equal? num_6 8) (equal? num_7 8) (equal? num_8 8) (equal? num_9 64)) 8]
+               )
+
+             ]
+            [(_mm256_hsub_epi16_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+             (cond 
+               [(and  (equal? num_2 16) (equal? prec_i_o 16) (equal? num_4 16) (equal? num_5 112)) 16]
+               [(and  (equal? num_2 32) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 96)) 32]
+               )
+
+             ]
+            [(_mm256_maskz_adds_epi8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+             (cond 
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm_div_epu64_dsl v0 v1 num_2 prec_i_o num_4)
+             (cond 
+               [(and  (equal? num_2 128) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               [(and  (equal? num_2 512) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 512) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               [(and  (equal? num_2 256) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               [(and  (equal? num_2 256) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               )
+
+             ]
+            [(_mm256_unpackhi_epi64_dsl v0 v1 num_2 num_3 prec_i_o num_5 num_6 num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? num_2 0) (equal? num_3 128) (equal? prec_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 64) (equal? num_8 2) (equal? num_9 0)) 64]
+               )
+
+             ]
+            [(_mm512_maskz_unpacklo_epi16_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+             (cond 
+               [(and  (equal? num_4 512) (equal? num_5 16) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 512) (equal? num_5 32) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 256) (equal? num_5 16) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 512) (equal? num_5 8) (equal? num_6 512) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 256) (equal? num_5 8) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 512) (equal? num_5 16) (equal? num_6 512) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 256) (equal? num_5 16) (equal? num_6 256) (equal? prec_i_o 16) (equal? num_8 16) (equal? num_9 16) (equal? num_10 16)) 16]
+               [(and  (equal? num_4 512) (equal? num_5 8) (equal? num_6 512) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 256) (equal? num_5 8) (equal? num_6 256) (equal? prec_i_o 8) (equal? num_8 8) (equal? num_9 8) (equal? num_10 8)) 8]
+               [(and  (equal? num_4 256) (equal? num_5 32) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 256) (equal? num_5 32) (equal? num_6 256) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               [(and  (equal? num_4 512) (equal? num_5 32) (equal? num_6 512) (equal? prec_i_o 32) (equal? num_8 32) (equal? num_9 32) (equal? num_10 32)) 32]
+               )
+
+             ]
+            [(_mm256_unpacklo_epi64_dsl v0 v1 num_2 num_3 prec_i_o num_5 num_6 num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? num_2 0) (equal? num_3 128) (equal? prec_i_o 64) (equal? num_5 64) (equal? num_6 0) (equal? num_7 0) (equal? num_8 2) (equal? num_9 0)) 64]
+               )
+
+             ]
+            [(_mm256_maskz_subs_epi8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+             (cond 
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm_adds_epi8_dsl v0 v1 num_2 prec_i_o)
+             (cond 
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 512) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm_mask_unpacklo_epi64_dsl v0 v1 v2 v3 num_4 num_5)
+             (cond 
+               [(and  (equal? num_4 0) (equal? num_5 0)) 64]
+               [(and  (equal? num_4 64) (equal? num_5 64)) 64]
+               [(and  (equal? num_4 64) (equal? num_5 64)) 64]
+               [(and  (equal? num_4 0) (equal? num_5 0)) 64]
+               )
+
+             ]
+            [(_mm512_mask_subs_epu16_dsl v0 v1 v2 v3 num_4 prec_i_o)
+             (cond 
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_4 256) (equal? prec_i_o 8)) 8]
+               )
+
+             ]
+            [(_mm_hsub_epi32_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? num_2 64) (equal? num_3 32) (equal? num_4 64) (equal? num_5 128) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 96) (equal? num_9 128)) 32]
+               [(and  (equal? num_2 64) (equal? num_3 16) (equal? num_4 64) (equal? num_5 128) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 112) (equal? num_9 128)) 16]
+               [(and  (equal? num_2 32) (equal? num_3 16) (equal? num_4 32) (equal? num_5 64) (equal? prec_i_o 16) (equal? num_7 16) (equal? num_8 48) (equal? num_9 64)) 16]
+               )
+
+             ]
+            [(_mm_subs_pu8_dsl v0 v1 num_2 prec_i_o)
+             (cond 
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 8)) 8]
+               )
+
+             ]
+            [(_mm256_mask_madd52hi_epu64_dsl v0 v1 v2 v3 num_4 num_5)
+             (cond 
+               [(and  (equal? num_4 208) (equal? num_5 52)) 64]
+               [(and  (equal? num_4 416) (equal? num_5 0)) 64]
+               [(and  (equal? num_4 104) (equal? num_5 0)) 64]
+               [(and  (equal? num_4 208) (equal? num_5 0)) 64]
+               [(and  (equal? num_4 104) (equal? num_5 52)) 64]
+               [(and  (equal? num_4 416) (equal? num_5 52)) 64]
+               )
+
+             ]
+            [(_mm512_adds_epu16_dsl v0 v1 num_2 prec_i_o)
+             (cond 
+               [(and  (equal? num_2 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_2 64) (equal? prec_i_o 16)) 16]
+               )
+
+             ]
+            [(_mm256_maskz_cvtusepi64_epi32_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
+             (cond 
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 64)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 16) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 112)) 8]
+               [(and  (equal? num_3 16) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 112)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 96)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 64)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 32) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 96)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               )
+
+             ]
+            [(_mm256_unpacklo_epi8_dsl v0 v1 size_i_o lane_size num_4 num_5 prec_i_o num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 8) (equal? num_7 8) (equal? num_8 2) (equal? num_9 0)) 8]
+               )
+
+             ]
+            [(_mm_broadcastmw_epi32_dsl v0 num_1 prec_i prec_o)
+             (cond 
+               [(and  (equal? num_1 64) (equal? prec_i 16) (equal? prec_o 32)) 32]
+               [(and  (equal? num_1 128) (equal? prec_i 16) (equal? prec_o 32)) 32]
+               [(and  (equal? num_1 256) (equal? prec_i 16) (equal? prec_o 32)) 32]
+               [(and  (equal? num_1 32) (equal? prec_i 8) (equal? prec_o 64)) 64]
+               [(and  (equal? num_1 16) (equal? prec_i 8) (equal? prec_o 64)) 64]
+               [(and  (equal? num_1 64) (equal? prec_i 8) (equal? prec_o 64)) 64]
+               )
+
+             ]
+            [(_mm256_maskz_broadcastq_epi64_dsl v0 vc_1 v2 num_3 prec_i_o)
+             (cond 
+               [(and  (equal? num_3 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 128) (equal? prec_i_o 64)) 64]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 32)) 32]
+               [(and  (equal? num_3 512) (equal? prec_i_o 16)) 16]
+               [(and  (equal? num_3 512) (equal? prec_i_o 64)) 64]
+               )
+
+             ]
+            [(_mm_cvtusepi64_epi8_dsl v0 num_1 prec_o prec_i num_4)
+             (cond 
+               [(and  (equal? num_1 16) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 112)) 8]
+               [(and  (equal? num_1 128) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 128) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 0)) 16]
+               [(and  (equal? num_1 32) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 96)) 8]
+               [(and  (equal? num_1 128) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 256) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 0)) 16]
+               [(and  (equal? num_1 128) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 0)) 16]
+               [(and  (equal? num_1 256) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 0)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 32) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 64)) 16]
+               [(and  (equal? num_1 32) (equal? prec_o 16) (equal? prec_i 64) (equal? num_4 96)) 16]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 16) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 32) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 96)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 16) (equal? prec_i 32) (equal? num_4 64)) 16]
+               [(and  (equal? num_1 128) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 0)) 32]
+               [(and  (equal? num_1 64) (equal? prec_o 8) (equal? prec_i 64) (equal? num_4 64)) 8]
+               [(and  (equal? num_1 64) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 64)) 32]
+               [(and  (equal? num_1 256) (equal? prec_o 32) (equal? prec_i 64) (equal? num_4 0)) 32]
+               )
+
+             ]
+            [(_mm256_broadcast_i32x4_dsl v0 num_1 prec_i_o num_3)
+             (cond 
+               [(and  (equal? num_1 256) (equal? prec_i_o 32) (equal? num_3 4)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 32) (equal? num_3 4)) 32]
+               [(and  (equal? num_1 256) (equal? prec_i_o 32) (equal? num_3 2)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 32) (equal? num_3 2)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 64) (equal? num_3 4)) 64]
+               [(and  (equal? num_1 512) (equal? prec_i_o 32) (equal? num_3 8)) 32]
+               [(and  (equal? num_1 512) (equal? prec_i_o 64) (equal? num_3 2)) 64]
+               [(and  (equal? num_1 128) (equal? prec_i_o 32) (equal? num_3 2)) 32]
+               [(and  (equal? num_1 256) (equal? prec_i_o 64) (equal? num_3 2)) 64]
+               )
+
+             ]
+            [(_mm256_unpacklo_epi32_dsl v0 v1 size_i_o lane_size num_4 num_5 prec_i_o num_7 num_8 num_9)
+             (cond 
+               [(and  (equal? size_i_o 256) (equal? lane_size 128) (equal? num_4 0) (equal? num_5 64) (equal? prec_i_o 32) (equal? num_7 32) (equal? num_8 2) (equal? num_9 0)) 32]
+               )
+
+             ]
+            [(_mm512_div_epi8_dsl v0 v1 num_2 prec_i_o num_4)
+             (cond 
+               [(and  (equal? num_2 512) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 512) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 256) (equal? prec_i_o 16) (equal? num_4 32)) 16]
+               [(and  (equal? num_2 128) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               [(and  (equal? num_2 256) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 256) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               [(and  (equal? num_2 512) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               [(and  (equal? num_2 128) (equal? prec_i_o 8) (equal? num_4 16)) 8]
+               [(and  (equal? num_2 128) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               [(and  (equal? num_2 512) (equal? prec_i_o 32) (equal? num_4 64)) 32]
+               [(and  (equal? num_2 256) (equal? prec_i_o 64) (equal? num_4 128)) 64]
+               )
+
+             ]
+            [(_mm256_maskz_unpacklo_epi64_dsl v0 vc_1 v2 v3 num_4 num_5 num_6)
+             (cond 
+               [(and  (equal? num_4 128) (equal? num_5 256) (equal? num_6 0)) 64]
+               [(and  (equal? num_4 128) (equal? num_5 256) (equal? num_6 0)) 64]
+               [(and  (equal? num_4 256) (equal? num_5 512) (equal? num_6 64)) 64]
+               [(and  (equal? num_4 256) (equal? num_5 512) (equal? num_6 0)) 64]
+               [(and  (equal? num_4 256) (equal? num_5 512) (equal? num_6 0)) 64]
+               [(and  (equal? num_4 128) (equal? num_5 256) (equal? num_6 64)) 64]
+               [(and  (equal? num_4 128) (equal? num_5 256) (equal? num_6 64)) 64]
+               [(and  (equal? num_4 256) (equal? num_5 512) (equal? num_6 64)) 64]
+               )
+
+             ]
+            [(_mm_hadd_pi32_dsl v0 v1 num_2 prec_i_o num_4 num_5 num_6 num_7 num_8 num_9 num_10)
+             (cond 
+               [(and  (equal? num_2 0) (equal? prec_i_o 32) (equal? num_4 32) (equal? num_5 0) (equal? num_6 32) (equal? num_7 0) (equal? num_8 0) (equal? num_9 32) (equal? num_10 0)) 32]
+               )
+
+             ]
+            [(_mm_maskz_cvtsepi64_epi32_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
+             (cond 
+               [(and  (equal? num_3 64) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 64)) 32]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 64)) 32]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 256) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 16) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 112)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 32) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 96)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 96)) 16]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 256) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 64) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 64)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 128) (equal? prec_i_o 32) (equal? num_5 64) (equal? num_6 0)) 32]
+               [(and  (equal? num_3 64) (equal? prec_i_o 16) (equal? num_5 32) (equal? num_6 64)) 16]
+               [(and  (equal? num_3 128) (equal? prec_i_o 16) (equal? num_5 64) (equal? num_6 0)) 16]
+               [(and  (equal? num_3 32) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 96)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 32) (equal? num_6 0)) 8]
+               [(and  (equal? num_3 16) (equal? prec_i_o 8) (equal? num_5 64) (equal? num_6 112)) 8]
+               [(and  (equal? num_3 128) (equal? prec_i_o 8) (equal? num_5 16) (equal? num_6 0)) 8]
+               )
+
+             ]
+            [(_mm_maddubs_pi16_dsl v0 v1 num_2)
+             (cond 
+               [(and  (equal? num_2 32)) 16]
+               [(and  (equal? num_2 64)) 16]
+               [(and  (equal? num_2 128)) 16]
+               [(and  (equal? num_2 256)) 16]
                )
 
              ]

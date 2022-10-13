@@ -121,6 +121,7 @@ class GetLengthDef:
 
         if size_expr == "" and ctx.out_vectsize == None:
             print("UNKNOWN SIZE for", ctx.name)
+            ctx.print_context()
             size_expr = "-1 ; Unable to reason about length\n"
 
         if ctx.name in ["_mm256_movm_epi64", "_mm_movm_epi16", "_mm512_movm_epi64"]:

@@ -99,7 +99,7 @@
   (define cex 
     (verify 
       (begin
-          (assert (bveq   (invoke_ref symbols) (hydride-interpret sol symbols)))
+          (assert (bveq   (invoke_ref symbols) (hydride:interpret sol symbols)))
           ;(assert (bveq (extract 31 0 synth-res) (extract 31 0 ref-result)))
 
            )
@@ -126,7 +126,7 @@
         (debug-log spec_res)
 
 
-        (define synth_res  (hydride-interpret sol new-bvs))
+        (define synth_res  (hydride:interpret sol new-bvs))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
@@ -355,7 +355,7 @@
 (define (print-temp-result-on-cex mat invoke_ref cex-ls)
   (for/list
     ([cex cex-ls])
-    (define hydride-result (hydride-interpret mat cex))
+    (define hydride-result (hydride:interpret mat cex))
     (define halide-result (invoke_ref cex))
     (displayln "Counter Example:")
     (println cex)
@@ -374,7 +374,7 @@
   (define difference-predicate
   (for/list ([cex cex-ls])
             (define spec-result (invoke_ref cex))
-            (define synth-result (hydride-interpret synth-sol cex))
+            (define synth-result (hydride:interpret synth-sol cex))
             (define size (bvlength spec-result))
             (define num-elems (/ size word-size))
 
@@ -470,7 +470,7 @@
     ;16
     ;32 - 1 = 32
 
-    (define full-interpret-res (hydride-interpret grammar env))
+    (define full-interpret-res (hydride:interpret grammar env))
     ;(define random-idx (random (- num-lanes 1)))
     (displayln "Random Index")
     (println random-idx)

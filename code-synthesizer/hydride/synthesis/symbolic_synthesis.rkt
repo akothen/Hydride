@@ -83,7 +83,7 @@
             ;(define symbols-new (create-symbolic-bvs bitwidth-list))
             (assert 
               (bveq ;equal? 
-                (hydride-interpret grammar symbols)  (invoke_ref symbols)
+                (hydride:interpret grammar symbols)  (invoke_ref symbols)
                 )
               )
             )
@@ -100,7 +100,7 @@
           (begin 
             (assert 
               (bveq ;equal? 
-                (hydride-interpret grammar symbols)  (invoke_ref symbols)
+                (hydride:interpret grammar symbols)  (invoke_ref symbols)
                 )
               )
             )

@@ -77,6 +77,7 @@
   (define sym-bvs (create-symbolic-bvs leaves-sizes))
 
 
+
   ;(clear-vc!)
   ;(clear-terms!)
 
@@ -97,6 +98,7 @@
                   (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args expr-depth))
                   (debug-log "HERE")
 
+                  (debug-log expr-extract)
                   (define base_name (string-append "base_" (~s (random 10000))))
 
                   ;(clear-vc!)
@@ -187,7 +189,7 @@
                         (debug-log "Beginning Synthesis")
 
                         (define-values (sat? mat el) 
-                                       (synthesize-sol-with-depth (max (+ -1 expr-depth) 1) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? cost symbolic? cost-bound solver) 
+                                       (synthesize-sol-with-depth (max (+ -1 expr-depth) 1) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
                                        )
 
                         (define test-end (current-seconds))
@@ -216,7 +218,7 @@
                   (println materialize)
 
                   (displayln "Cost")
-                  (println (cost materialize))
+                  (println (hydride:cost materialize))
 
 
                   (define synthesized-leaves 

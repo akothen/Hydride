@@ -4,7 +4,7 @@ from PredefinedDSL import *
 import random
 
 DEBUG = True
-DEBUG_LIST = ["_mm512_and_si512" ]
+DEBUG_LIST = ["_mm256_cvtepi8_epi16"]
 SKIP_LIST = ["pack" ]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -561,6 +561,14 @@ class Synthesizer:
 
         num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
+
+        # if allocated more rules than are actually
+        # present, then re-distribute to broadcast
+        # ops
+        if num_computes > len(compute_ops):
+            num_broadcasts = bound - len(compute_ops)
+            num_compute_ops = len(compute_ops)
+
 
         print("Num Broadcasts:", num_broadcasts)
         print("Num Computes:", num_computes)
