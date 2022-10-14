@@ -180,7 +180,27 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   if Low1 == Low2IndexValue and ConstantLow2Index.getValue() == Bitwidth:
     return True
   return False
-    
+
+
+def DoBitSlicesOverlap(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp):
+  # Some sanity checks
+  assert isinstance(BVOp1, RoseBVInsertSliceOp) or isinstance(BVOp1, RoseBVExtractSliceOp)
+  assert isinstance(BVOp2, RoseBVInsertSliceOp) or isinstance(BVOp2, RoseBVExtractSliceOp)
+  print("BVOp1:")
+  BVOp1.print()
+  print("BVOp2:")
+  BVOp2.print()
+  assert BVOp1.getInputBitVector() == BVOp2.getInputBitVector()
+  assert isinstance(BVOp1.getLowIndex(), RoseConstant) \
+    and isinstance(BVOp1.getHighIndex(), RoseConstant)
+  assert isinstance(BVOp2.getLowIndex(), RoseConstant) \
+    and isinstance(BVOp2.getHighIndex(), RoseConstant)
+  if BVOp1.getLowIndex().getValue() > BVOp2.getHighIndex().getValue():
+    return False
+  if BVOp1.getHighIndex().getValue() < BVOp2.getLowIndex().getValue():
+    return False
+  return True
+  
 
 def GetInvariantsInBlock(Block : RoseBlock, Invariants = dict()):
   assert not isinstance(Block, RoseUndefRegion)
