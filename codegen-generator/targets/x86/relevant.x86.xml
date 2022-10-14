@@ -1,4 +1,128 @@
 <intrinsics_list>
+<intrinsic name="_tile_dpbsud" tech="AMX">
+	<return type="void"/>
+	<parameter type="__tile" varname="dst"/>
+	<parameter type="__tile" varname="a"/>
+	<parameter type="__tile" varname="b"/>
+	<description>Compute dot-product of bytes in tiles with a source/destination accumulator. Multiply groups of 4 adjacent pairs of signed 8-bit integers in "a" with corresponding unsigned 8-bit integers in "b", producing 4 intermediate 32-bit results. Sum these 4 results with the corresponding 32-bit integer in "dst", and store the 32-bit result back to tile "dst".</description>
+	<operation>DEFINE DPBD(c, x, y) {
+	tmp1 := SignExtend32(x.byte[0]) * ZeroExtend32(y.byte[0])
+	tmp2 := SignExtend32(x.byte[1]) * ZeroExtend32(y.byte[1])
+	tmp3 := SignExtend32(x.byte[2]) * ZeroExtend32(y.byte[2])
+	tmp4 := SignExtend32(x.byte[3]) * ZeroExtend32(y.byte[3])
+
+	RETURN c + tmp1 + tmp2 + tmp3 + tmp4
+}
+FOR m := 0 TO dst.rows - 1
+	tmp := dst.row[m]
+	FOR k := 0 TO (a.colsb / 4) - 1
+		FOR n := 0 TO (dst.colsb / 4) - 1
+			tmp.dword[n] := DPBD(tmp.dword[n], a.row[m].dword[k], b.row[k].dword[n])
+		ENDFOR
+	ENDFOR
+	write_row_and_zero(dst, m, tmp, dst.colsb)
+ENDFOR
+zero_upper_rows(dst, dst.rows)
+zero_tileconfig_start()
+	</operation>
+	<instruction form="tmm, tmm, tmm" name="TDPBSUD" xed="TDPBSUD_TMMi32_TMMu32_TMMu32"/>
+	<CPUID>AMXINT8</CPUID>
+	<header>immintrin.h</header>
+	<category>Application-Targeted</category>
+</intrinsic>
+<intrinsic name="_tile_dpbusd" tech="AMX">
+	<return type="void"/>
+	<parameter type="__tile" varname="dst"/>
+	<parameter type="__tile" varname="a"/>
+	<parameter type="__tile" varname="b"/>
+	<description>Compute dot-product of bytes in tiles with a source/destination accumulator. Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate 32-bit results. Sum these 4 results with the corresponding 32-bit integer in "dst", and store the 32-bit result back to tile "dst".</description>
+	<operation>DEFINE DPBD(c, x, y) {
+	tmp1 := ZeroExtend32(x.byte[0]) * SignExtend32(y.byte[0])
+	tmp2 := ZeroExtend32(x.byte[1]) * SignExtend32(y.byte[1])
+	tmp3 := ZeroExtend32(x.byte[2]) * SignExtend32(y.byte[2])
+	tmp4 := ZeroExtend32(x.byte[3]) * SignExtend32(y.byte[3])
+
+	RETURN c + tmp1 + tmp2 + tmp3 + tmp4
+}
+FOR m := 0 TO dst.rows - 1
+	tmp := dst.row[m]
+	FOR k := 0 TO (a.colsb / 4) - 1
+		FOR n := 0 TO (dst.colsb / 4) - 1
+			tmp.dword[n] := DPBD(tmp.dword[n], a.row[m].dword[k], b.row[k].dword[n])
+		ENDFOR
+	ENDFOR
+	write_row_and_zero(dst, m, tmp, dst.colsb)
+ENDFOR
+zero_upper_rows(dst, dst.rows)
+zero_tileconfig_start()
+	</operation>
+	<instruction form="tmm, tmm, tmm" name="TDPBUSD" xed="TDPBUSD_TMMi32_TMMu32_TMMu32"/>
+	<CPUID>AMXINT8</CPUID>
+	<header>immintrin.h</header>
+	<category>Application-Targeted</category>
+</intrinsic>
+<intrinsic name="_tile_dpbuud" tech="AMX">
+	<return type="void"/>
+	<parameter type="__tile" varname="dst"/>
+	<parameter type="__tile" varname="a"/>
+	<parameter type="__tile" varname="b"/>
+	<description>Compute dot-product of bytes in tiles with a source/destination accumulator. Multiply groups of 4 adjacent pairs of unsigned 8-bit integers in "a" with corresponding unsigned 8-bit integers in "b", producing 4 intermediate 32-bit results. Sum these 4 results with the corresponding 32-bit integer in "dst", and store the 32-bit result back to tile "dst".</description>
+	<operation>DEFINE DPBD(c, x, y) {
+	tmp1 := ZeroExtend32(x.byte[0]) * ZeroExtend32(y.byte[0])
+	tmp2 := ZeroExtend32(x.byte[1]) * ZeroExtend32(y.byte[1])
+	tmp3 := ZeroExtend32(x.byte[2]) * ZeroExtend32(y.byte[2])
+	tmp4 := ZeroExtend32(x.byte[3]) * ZeroExtend32(y.byte[3])
+
+	RETURN c + tmp1 + tmp2 + tmp3 + tmp4
+}
+FOR m := 0 TO dst.rows - 1
+	tmp := dst.row[m]
+	FOR k := 0 TO (a.colsb / 4) - 1
+		FOR n := 0 TO (dst.colsb / 4) - 1
+			tmp.dword[n] := DPBD(tmp.dword[n], a.row[m].dword[k], b.row[k].dword[n])
+		ENDFOR
+	ENDFOR
+	write_row_and_zero(dst, m, tmp, dst.colsb)
+ENDFOR
+zero_upper_rows(dst, dst.rows)
+zero_tileconfig_start()
+	</operation>
+	<instruction form="tmm, tmm, tmm" name="TDPBUUD" xed="TDPBUUD_TMMu32_TMMu32_TMMu32"/>
+	<CPUID>AMXINT8</CPUID>
+	<header>immintrin.h</header>
+	<category>Application-Targeted</category>
+</intrinsic>
+<intrinsic name="_tile_dpbssd" tech="AMX">
+	<return type="void"/>
+	<parameter type="__tile" varname="dst"/>
+	<parameter type="__tile" varname="a"/>
+	<parameter type="__tile" varname="b"/>
+	<description>Compute dot-product of bytes in tiles with a source/destination accumulator. Multiply groups of 4 adjacent pairs of signed 8-bit integers in "a" with corresponding signed 8-bit integers in "b", producing 4 intermediate 32-bit results. Sum these 4 results with the corresponding 32-bit integer in "dst", and store the 32-bit result back to tile "dst".</description>
+	<operation>DEFINE DPBD(c, x, y) {
+	tmp1 := SignExtend32(x.byte[0]) * SignExtend32(y.byte[0])
+	tmp2 := SignExtend32(x.byte[1]) * SignExtend32(y.byte[1])
+	tmp3 := SignExtend32(x.byte[2]) * SignExtend32(y.byte[2])
+	tmp4 := SignExtend32(x.byte[3]) * SignExtend32(y.byte[3])
+
+	RETURN c + tmp1 + tmp2 + tmp3 + tmp4
+}
+FOR m := 0 TO dst.rows - 1
+	tmp := dst.row[m]
+	FOR k := 0 TO (a.colsb / 4) - 1
+		FOR n := 0 TO (dst.colsb / 4) - 1
+			tmp.dword[n] := DPBD(tmp.dword[n], a.row[m].dword[k], b.row[k].dword[n])
+		ENDFOR
+	ENDFOR
+	write_row_and_zero(dst, m, tmp, dst.colsb)
+ENDFOR
+zero_upper_rows(dst, dst.rows)
+zero_tileconfig_start()
+	</operation>
+	<instruction form="tmm, tmm, tmm" name="TDPBSSD" xed="TDPBSSD_TMMi32_TMMu32_TMMu32"/>
+	<CPUID>AMXINT8</CPUID>
+	<header>immintrin.h</header>
+	<category>Application-Targeted</category>
+</intrinsic>
 <intrinsic tech="AVX" name="_mm256_set_m128i">
 	<type>Integer</type>
 	<CPUID>AVX</CPUID>
