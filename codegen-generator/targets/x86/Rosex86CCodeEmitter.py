@@ -96,6 +96,7 @@ def GetVectorInitializer(Tuple):
     (16, 256) : "_mm256_set_epi16",
     (32, 256) : "_mm256_set_epi32",
     (64, 256) : "_mm256_set_epi64x",
+    (128, 256) : "_mm256_set_m128i",
     (8, 512) : "_mm512_set_epi8",
     (16, 512) : "_mm512_set_epi16",
     (32, 512) : "_mm512_set_epi32",
@@ -140,6 +141,8 @@ class CCodeEmitter(RoseCodeEmitter):
 }\n\n''')
     Content.append("int main() {")
     Sema = self.getFunctionInfo().getRawSemantics()
+    print("FUNCTION:")
+    self.getFunctionInfo().getLatestFunction()
 
     def GenMainFunction(Index, Param, ConcArgs):
       BinOut = []
@@ -228,11 +231,6 @@ class CCodeEmitter(RoseCodeEmitter):
             CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
           InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
                                       Initializer, ",".join(CastElemList))
-      Buf = " uint8_t _{}[{}] = LBRACK {} RBRACK;\n".format(Index, ParamBytes, ",".join(BinOut))
-      Buf = Buf.replace("LBRACK", "{")
-      Buf = Buf.replace("RBRACK", "}")
-      Var = " {} {};\n".format(x86ToC(Sema.params[Index].type), Param.getName())
-      Init = "  memcpy(&{}, _{}, {});\n".format(Param.getName(), Index, ParamBytes)
       return InitArg#Buf + Var + Init
     
     Function = self.getFunctionInfo().getLatestFunction()
@@ -243,11 +241,8 @@ class CCodeEmitter(RoseCodeEmitter):
       Params.append(Param.getName())
       Content.append(GenMainFunction(Index, Param, ConcArgs))
     RetBitwidth = Function.getReturnValue().getType().getBitwidth()
-    #Content.append("  uint8_t out[" + str(SizeInBytes(RetBitwidth)) + "] = {0};")
     Content.append("  {} ret = {}({});".format(x86ToC(Sema.rettype),
                                               Function.getName(), ", ".join(Params)))
-    #Content.append("  memcpy(out, &ret, {});".format(SizeInBytes(RetBitwidth)))
-    #Content.append("  hex_out(out, {});".format(SizeInBytes(RetBitwidth)))
     Content.append("  hex_out(&ret, {});".format(SizeInBytes(RetBitwidth)))
     Content.append("  return 0;")
     Content.append("}")
@@ -291,5 +286,4 @@ if __name__ == '__main__':
   FunctionInfoList = CodeGenerator.codeGen()
   CEmitter = CCodeEmitter(FunctionInfoList[0])
   CEmitter.test("test")
-
 
