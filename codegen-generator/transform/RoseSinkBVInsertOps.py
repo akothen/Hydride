@@ -119,10 +119,10 @@ def RunBVInsertOpSinkInFunction(Function : RoseFunction, Context : RoseContext):
                   BVInsertOp.getParent().addOperationBefore(NewBVInsertOp1, BVInsertOp)
                   LowIndex2 = RoseConstant.create(BVInsertOp.getHighIndex().getValue() \
                                   - Op.getLowIndex().getValue() + 1, Op.getLowIndex().getType())
-                  HighIndex2 = RoseConstant.create(Op.getOutputBitwidth() - Op.getLowIndex(), \
+                  HighIndex2 = RoseConstant.create(Op.getOutputBitwidth() - Op.getLowIndex().getValue() - 1, \
                                          Op.getHighIndex().getType())
                   Bitwidth2 = RoseConstant.create(Op.getOutputBitwidth() - BVInsertOp.getLowIndex().getValue() \
-                                        + Op.getLowIndex() - BVInsertOp.getOutputBitwidth(), \
+                                        + Op.getLowIndex().getValue() - BVInsertOp.getOutputBitwidth(), \
                                           Op.getLowIndex().getType())
                   NewBVExtractOp2 = RoseBVExtractSliceOp.create(Context.genName(Op.getInsertValue().getName()), \
                                           Op.getInsertValue(), LowIndex2, HighIndex2, Bitwidth2)
