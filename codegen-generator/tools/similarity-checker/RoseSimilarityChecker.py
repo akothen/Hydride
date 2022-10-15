@@ -91,20 +91,21 @@ class RoseSimilarityChecker():
         # Let's verify if our transformations are corect
         TargetSpecificFunction = FunctionInfo.getTargetSpecificFunction()
         print("TARGET SPECIFIC FUNCTION:")
-        TargetSpecificFunction.print()
         TargetSpecificInfo = RoseFunctionInfo()
         TargetSpecificInfo.addFunctionAtNewStage(TargetSpecificFunction)
+        TargetSpecificFunction.print()
+        print("COPY TARGET AGNOSTIC FUNCTION:")
+        FunctionInfo.getLatestFunction().print()
+        # Replace uses of concrete arguments and try verifying again
+        CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
+        CopyFunctionInfo.getLatestFunction().print()
+        Verifier = RoseTransformationVerifier(TargetSpecificInfo, CopyFunctionInfo)
+        assert Verifier.verifyEquivalence() == True
+        print("TARGET SPECIFIC FUNCTION:")
+        TargetSpecificFunction.print()
         print("TARGET AGNOSTIC FUNCTION:")
         FunctionInfo.getLatestFunction().print()
         Verifier = RoseTransformationVerifier(TargetSpecificInfo, FunctionInfo)
-        assert Verifier.verifyEquivalence() == True
-        # Replace uses of concrete arguments and try verifying again
-        CopyFunctionInfo = self.replaceUsesofConcreteArgsAndGetFunction(FunctionInfo)
-        print("TARGET SPECIFIC FUNCTION:")
-        TargetSpecificFunction.print()
-        print("COPY TARGET AGNOSTIC FUNCTION:")
-        CopyFunctionInfo.getLatestFunction().print()
-        Verifier = RoseTransformationVerifier(TargetSpecificInfo, CopyFunctionInfo)
         assert Verifier.verifyEquivalence() == True
       print("ALL VERIFICATION DONE")
 
@@ -532,9 +533,6 @@ class RoseSimilarityChecker():
       if isinstance(Condition, RoseOperation):
         if isinstance(Condition, RoseBVExtractSliceOp):
           if isinstance(Condition.getInputBitVector(), RoseArgument):
-            #print("Condition.getInputBitVector():")
-            #Condition.getInputBitVector().print()
-            #print(Condition.getInputBitVector().ID)
             MaskList.add(Condition.getInputBitVector())
           continue
         else:
@@ -546,9 +544,6 @@ class RoseSimilarityChecker():
               continue
             if isinstance(Operation, RoseBVExtractSliceOp):
               if isinstance(Operation.getInputBitVector(), RoseArgument):
-                #print("------Operation.getInputBitVector():")
-                #Operation.getInputBitVector().print()
-                #print(Operation.getInputBitVector().ID)
                 MaskList.add(Operation.getInputBitVector())
                 break
               Worklist.append(Operation.getInputBitVector())
@@ -556,18 +551,17 @@ class RoseSimilarityChecker():
     return list(MaskList)
             
 
-  def getSelectArgsInFunction(self, Function : RoseFunction):
-    #print("getSelectArgsInFunction")
+  def getConditionOpsArgsInFunction(self, Function : RoseFunction):
     BlockList = Function.getRegionsOfType(RoseBlock)
-    SelectArgs = set()
+    ArgsInConditionOps = set()
     for Block in BlockList:
       for Op in Block:
         if isinstance(Op, RoseSelectOp):
           if isinstance(Op.getThenValue(), RoseArgument):
-            SelectArgs.add(Op.getThenValue())
+            ArgsInConditionOps.add(Op.getThenValue())
           elif isinstance(Op.getThenValue(), RoseBVExtractSliceOp):
-            SelectArgs.add(Op.getThenValue().getInputBitVector())
-          else:
+            ArgsInConditionOps.add(Op.getThenValue().getInputBitVector())
+          elif isinstance(Op.getThenValue(), RoseOperation):
             Worklist = list()
             Worklist.extend(Op.getThenValue().getOperands())
             while len(Worklist) != 0:
@@ -576,15 +570,15 @@ class RoseSimilarityChecker():
                 continue
               if isinstance(Operation, RoseBVExtractSliceOp):
                 if isinstance(Operation.getInputBitVector(), RoseArgument):
-                  SelectArgs.add(Operation.getInputBitVector())
+                  ArgsInConditionOps.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
               Worklist.extend(Operation.getOperands())
           if isinstance(Op.getElseValue(), RoseArgument):
-            SelectArgs.add(Op.getElseValue())
+            ArgsInConditionOps.add(Op.getElseValue())
           elif isinstance(Op.getElseValue(), RoseBVExtractSliceOp):
-            SelectArgs.add(Op.getElseValue().getInputBitVector())
-          else:
+            ArgsInConditionOps.add(Op.getElseValue().getInputBitVector())
+          elif isinstance(Op.getElseValue(), RoseOperation):
             Worklist = list()
             Worklist.extend(Op.getElseValue().getOperands())
             while len(Worklist) != 0:
@@ -593,11 +587,30 @@ class RoseSimilarityChecker():
                 continue
               if isinstance(Operation, RoseBVExtractSliceOp):
                 if isinstance(Operation.getInputBitVector(), RoseArgument):
-                  SelectArgs.add(Operation.getInputBitVector())
+                  ArgsInConditionOps.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
               Worklist.extend(Operation.getOperands())
-    return list(SelectArgs)
+        if isinstance(Op, RoseComparisonBitVectorOp):
+          for Operand in Op.getOperands():
+            if isinstance(Operand, RoseArgument):
+              ArgsInConditionOps.add(Operand)
+            elif isinstance(Operand, RoseBVExtractSliceOp):
+              ArgsInConditionOps.add(Operand.getInputBitVector())
+            elif isinstance(Operand, RoseOperation):
+              Worklist = list()
+              Worklist.extend(Operand.getOperands())
+              while len(Worklist) != 0:
+                Operation = Worklist.pop()
+                if not isinstance(Operation, RoseOperation):
+                  continue
+                if isinstance(Operation, RoseBVExtractSliceOp):
+                  if isinstance(Operation.getInputBitVector(), RoseArgument):
+                    ArgsInConditionOps.add(Operation.getInputBitVector())
+                    break
+                  Worklist.append(Operation.getInputBitVector())
+                Worklist.extend(Operation.getOperands())
+    return list(ArgsInConditionOps)
 
 
   def generateFunctionPermutations(self, Function : RoseFunction):
@@ -629,7 +642,7 @@ class RoseSimilarityChecker():
       return PermResult
 
     MaskArgs = self.getMaskArgsInFunction(Function)
-    SelectArgs = self.getSelectArgsInFunction(Function)
+    ConditionalOpsArgs = self.getConditionOpsArgsInFunction(Function)
     RemainingBVArgs = list()
     print("CREATING PERMUTATIONS OF:")
     Function.print()
@@ -637,35 +650,35 @@ class RoseSimilarityChecker():
       if Arg in MaskArgs:
         #print("ARG IN MASKARGS")
         continue
-      if Arg in SelectArgs:
+      if Arg in ConditionalOpsArgs:
         #print("ARG IN SELECTARGS")
         continue
       RemainingBVArgs.append(Arg)
     FunctionList = list()
     ArgsPermuations = list()
      # Get permutations of arguments
-    if len(MaskArgs) == 0 and len(SelectArgs) == 0:
+    if len(MaskArgs) == 0 and len(ConditionalOpsArgs) == 0:
       ArgsPermuations = Permutations(BVArgs)
-    elif len(MaskArgs) != 0 and len(SelectArgs) == 0:
+    elif len(MaskArgs) != 0 and len(ConditionalOpsArgs) == 0:
       MaskArgsPermuations = Permutations(MaskArgs)
       RemainingBVArgsPermutations = Permutations(RemainingBVArgs)
       for MaskArgsPerm in MaskArgsPermuations:
         for RemainingBVArgPerm in RemainingBVArgsPermutations:
           ArgsPermuations.append(MaskArgsPerm + RemainingBVArgPerm)
-    elif len(MaskArgs) == 0 and len(SelectArgs) != 0:
-      SelectArgsPermuations = Permutations(SelectArgs)
+    elif len(MaskArgs) == 0 and len(ConditionalOpsArgs) != 0:
+      ConditionalOpsArgsPermuations = Permutations(ConditionalOpsArgs)
       RemainingBVArgsPermutations = Permutations(RemainingBVArgs)
-      for SelectArgsPerm in SelectArgsPermuations:
+      for ConditionalOpsArgsPerm in ConditionalOpsArgsPermuations:
         for RemainingBVArgPerm in RemainingBVArgsPermutations:
-          ArgsPermuations.append(SelectArgsPerm + RemainingBVArgPerm)
+          ArgsPermuations.append(ConditionalOpsArgsPerm + RemainingBVArgPerm)
     else:
       MaskArgsPermuations = Permutations(MaskArgs)
-      SelectArgsPermuations = Permutations(SelectArgs)
+      ConditionalOpsArgsPermuations = Permutations(ConditionalOpsArgs)
       RemainingBVArgsPermutations = Permutations(RemainingBVArgs)
       for MaskArgsPerm in MaskArgsPermuations:
-        for SelectArgsPerm in SelectArgsPermuations:
+        for ConditionalOpsArgsPerm in ConditionalOpsArgsPermuations:
           for RemainingBVArgPerm in RemainingBVArgsPermutations:
-            ArgsPermuations.append(MaskArgsPerm + SelectArgsPerm + RemainingBVArgPerm)
+            ArgsPermuations.append(MaskArgsPerm + ConditionalOpsArgsPerm + RemainingBVArgPerm)
     for Idx, ArgPerm in enumerate(ArgsPermuations):
       NewArgsList = ArgPerm + RemainingArgs
       assert len(NewArgsList) == Function.getNumArgs()
@@ -689,20 +702,20 @@ class RoseSimilarityChecker():
     print("FUNCTION:")
     Function.print()
     MaskArgs = self.getMaskArgsInFunction(Function)
-    SelectArgs = self.getSelectArgsInFunction(Function)
+    ConditionalOpsArgs = self.getConditionOpsArgsInFunction(Function)
     RemainingBVArgs = list()
     RemainingArgs = list()
     for Arg in Function.getArgs():
       if Arg in MaskArgs:
         continue
-      if Arg in SelectArgs:
+      if Arg in ConditionalOpsArgs:
         continue
       if isinstance(Arg.getType(), RoseBitVectorType):
         RemainingBVArgs.append(Arg)
         continue
       RemainingArgs.append(Arg)
-    if len(MaskArgs) != 0 or len(SelectArgs) != 0:
-      NewArgsList = MaskArgs + SelectArgs + RemainingBVArgs + RemainingArgs
+    if len(MaskArgs) != 0 or len(ConditionalOpsArgs) != 0:
+      NewArgsList = MaskArgs + ConditionalOpsArgs + RemainingBVArgs + RemainingArgs
       FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, "norm")
       self.CopyFunctionToOriginalMap[FunctionCopy] = Function
       ArgPermutation = list()
