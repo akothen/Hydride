@@ -49,13 +49,16 @@ class RoseCodeEmitter():
     # Compile test and handle any error associated with it
     SOut, SErr = self.compile(TestDirName)
     self.handleError(TestDirName, SErr)
-    # Execute test
-    SOut, SErr = self.execute(TestDirName)
-    print("++++SOut")
-    print(SOut)
-    SOut = self.extractAndFormatOutput(SOut)
-    print("----SOut")
-    print(SOut)
+    if self.isErrorFatal(SErr) == False:
+      # Execute test
+      SOut, SErr = self.execute(TestDirName)
+      self.handleError(TestDirName, SErr)
+      if self.isErrorFatal(SErr) == False:
+        print("++++SOut")
+        print(SOut)
+        SOut = self.extractAndFormatOutput(SOut)
+        print("----SOut")
+        print(SOut)
     return SOut, SErr
 
   def createFile(self, args):
@@ -94,7 +97,6 @@ class RoseCodeEmitter():
 
   def extractAndFormatOutput(self):
     NotImplemented
-
 
 
 
