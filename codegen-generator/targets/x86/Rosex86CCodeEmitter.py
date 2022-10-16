@@ -10,6 +10,7 @@ from x86Types import x86Types
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
+from RoseUtilities import *
 
 
 def x86ToC(T):
@@ -24,6 +25,7 @@ def x86ToC(T):
     "_MM_PERM_ENUM": "_MM_PERM_ENUM",
     "SI64": "int64_t",
     "__int64": "int64_t",
+    "__int32" : "int32_t",
     "UI8": "uint8_t",
     "UI16": "uint16_t",
     "unsigned short": "unsigned short",
@@ -96,7 +98,7 @@ def GetVectorInitializer(Tuple):
     (16, 256) : "_mm256_set_epi16",
     (32, 256) : "_mm256_set_epi32",
     (64, 256) : "_mm256_set_epi64x",
-    (128, 256) : "_mm256_set_m128i",
+    #(128, 256) : "_mm256_set_m128i",
     (8, 512) : "_mm512_set_epi8",
     (16, 512) : "_mm512_set_epi16",
     (32, 512) : "_mm512_set_epi32",
@@ -105,7 +107,7 @@ def GetVectorInitializer(Tuple):
   if Tuple in LookupTable:
     return LookupTable[Tuple]
   print(Tuple)
-  assert False
+  return None
 
 
 def GetMaskInitializer(Type):
@@ -143,6 +145,7 @@ class CCodeEmitter(RoseCodeEmitter):
     Sema = self.getFunctionInfo().getRawSemantics()
     print("FUNCTION:")
     self.getFunctionInfo().getLatestFunction()
+    Function = self.getFunctionInfo().getLatestFunction()
 
     def GenMainFunction(Index, Param, ConcArgs):
       BinOut = []
@@ -179,7 +182,17 @@ class CCodeEmitter(RoseCodeEmitter):
         print(Sema.elem_type)
         ElemNumBytes = None
         if Sema.elem_type != "MASK":
-          ElemNumBytes = SizeInBytes(x86Types[Sema.elem_type].getBitwidth())
+          ElemSize = GetElemSizeOfArg(Function, Param)
+          print("ElemSize:")
+          print(ElemSize)
+          Running = 1
+          while Running < ElemSize:
+            Running = Running * 2
+          if Running != ElemSize:
+            ElemSize = Running
+          print("--ElemSize:")
+          print(ElemSize)
+          ElemNumBytes = SizeInBytes(ElemSize)#x86Types[Sema.elem_type].getBitwidth())
         print("ElemNumBytes:")
         print(ElemNumBytes)
         print("ParamBytes:")
@@ -217,23 +230,32 @@ class CCodeEmitter(RoseCodeEmitter):
             ElemsList = BinOut
             if ElemNumBytes != None:
               Initializer = GetVectorInitializer((int((ParamBytes * 8) / ElemNumBytes), ParamBytes * 8))
+              print("Initializer:")
+              print(Initializer)
             else:
               Initializer = GetVectorInitializer((8, ParamBytes * 8))
-            #CastElemList = list()
-            #for Elem in ElemsList:
-            #  CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
+              print("---Initializer:")
+              print(Initializer)
             InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
                                         Initializer, ",".join(ElemsList))
         else:
           Initializer = GetVectorInitializer((ElemNumBytes * 8, ParamBytes * 8))
+          print("++=Initializer:")
+          print(Initializer)
+          if Initializer == None:
+            # Resort to fallback strategy.
+            ElemsList = BinOut
+            Initializer = GetVectorInitializer((8, ParamBytes * 8))
+            assert Initializer != None
+            print("++=NEW Initializer:")
+            print(Initializer)
           CastElemList = list()
           for Elem in ElemsList:
             CastElemList.append(("(" + SetterToElemType(Initializer) + ")") + Elem)
           InitArg = "{} {} = {}({});".format(x86ToC(Sema.params[Index].type), Param.getName(), 
                                       Initializer, ",".join(CastElemList))
-      return InitArg#Buf + Var + Init
+      return InitArg
     
-    Function = self.getFunctionInfo().getLatestFunction()
     Params = []
     print("INSTRUCTIONN NAME")
     print(self.getFunctionInfo().getLatestFunction().getName())
@@ -274,6 +296,8 @@ class CCodeEmitter(RoseCodeEmitter):
         #if ("error: call to undeclared function" in CErr \
           #and "ISO C99 and later do not support implicit function declarations" in CErr):
         return True
+      if "Illegal" in CErr:
+        return True
     return False
 
   def extractAndFormatOutput(self, Output):
@@ -286,4 +310,5 @@ if __name__ == '__main__':
   FunctionInfoList = CodeGenerator.codeGen()
   CEmitter = CCodeEmitter(FunctionInfoList[0])
   CEmitter.test("test")
+
 
