@@ -42,12 +42,12 @@ class RoseTransformationVerifier():
       for CheckArg in CheckFunction.getArgs():
         if RefIndex < ReferenceFunction.getNumArgs():
           RefArg = ReferenceFunction.getArg(RefIndex)
-        if CheckFunctionInfo.argHasConcreteVal(CheckArg) == False:
+        if self.CheckFunctionInfo.argHasConcreteVal(CheckArg) == False:
           print("RefArg:")
           RefArg.print()
           print("CheckArg:")
           CheckArg.print()
-          if ReferenceFunctionInfo.argHasConcreteVal(RefArg) != False:
+          if self.ReferenceFunctionInfo.argHasConcreteVal(RefArg) != False:
             print("SKIP")
             continue
           print("---MAPPING")
@@ -59,7 +59,7 @@ class RoseTransformationVerifier():
           RefIndex += 1
           continue
         if RefIndex < ReferenceFunction.getNumArgs() \
-          and ReferenceFunctionInfo.argHasConcreteVal(RefArg) == True:
+          and self.ReferenceFunctionInfo.argHasConcreteVal(RefArg) == True:
           RefIndex += 1
           continue
         
