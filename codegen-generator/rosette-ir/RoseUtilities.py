@@ -909,3 +909,17 @@ def MapIsomorphicDFGsOfBlocks(KeyBlock : RoseBlock, ValBlock : RoseBlock, \
 
   return MapBetweenValues
 
+
+
+def GetElemSizeOfArg(Function : RoseFunction, Arg : RoseArgument):
+  # Look for bvextract ops
+  BlockList = Function.getRegionsOfType(RoseBlock)
+  ElemSize = None
+  for Block in BlockList:
+    for Op in Block:
+      if isinstance(Op, RoseBVExtractSliceOp):
+        if Arg == Op.getInputBitVector():
+          ElemSize = Op.getOutputBitwidth()
+          return ElemSize
+  assert ElemSize != None
+
