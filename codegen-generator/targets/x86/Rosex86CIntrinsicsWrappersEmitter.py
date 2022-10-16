@@ -14,94 +14,114 @@ from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseSimilarityCheckerUtilities import *
-
-
-def x86ToC(T):
-  LookupTable = {
-    "SI8": "int8_t",
-    "char": "char",
-    "SI16": "int16_t",
-    "short": "short",
-    "SI32": "int32_t",
-    "int": "int",
-    "const int": "const int",
-    "_MM_PERM_ENUM": "_MM_PERM_ENUM",
-    "SI64": "int64_t",
-    "__int64": "int64_t",
-    "UI8": "uint8_t",
-    "UI16": "uint16_t",
-    "unsigned short": "unsigned short",
-    "UI32": "uint32_t",
-    "unsigned int": "unsigned int",
-    "UI64": "uint64_t",
-    "unsigned __int64": "uint64_t",
-    "unsigned long": "unsigned long",
-    "double": "float",
-    "float": "float",
-    "FP32": "float",
-    "FP64": "double",
-    "__mmask8": "__mmask8",
-    "__mmask16": "__mmask16",
-    "__mmask32": "__mmask32",
-    "__mmask64": "__mmask64",
-    "MASK": "__mmask64",
-    "M128": "__m128",
-    "M256": "__m256",
-    "M512": "__m512",
-    "__m64": "__m64",
-    "__m128": "__m128",
-    "__m128i": "__m128i",
-    "__m128d": "__m128d",
-    "__m256": "__m256",
-    "__m256d": "__m256d",
-    "__m256i": "__m256i",
-    "__m512": "__m512",
-    "__m512i": "__m512i",
-    "__m512d": "__m512d",
-  }
-  if T not in LookupTable:
-      return T
-  return LookupTable[T]
+import Rosex86CCodeEmitter
+import x86RoseLang
 
 
 class x86CIntrinsicsWrappersEmitter():
   def __init__(self):
     self.FunctionInfoList = list()
     # Generate code for all semantics first
+    #FunctionInfoList = x86RoseLang.Compile()
     CodeGenerator = RoseCodeGenerator("x86")
     FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False, JustGenRosette=False)
     self.FunctionInfoList.extend(FunctionInfoList)
+    # Some instruction names in the official documentation are
+    # repeated. We do not want to repeat them in our wrapper file.
+    self.AccountedForInsts = set()
+
+  def genRandomInputs(self, Function : RoseFunction):
+    FuncArgs = Function.getArgs()
+    ConcArgs = []
+    Counter = 0
+    for Index in range(len(FuncArgs)):
+      NewArg = []
+      for _ in range(SizeInBytes(FuncArgs[Index].getType().getBitwidth())):
+        NewArg.append(Counter)
+        Counter += 1
+      ConcArgs.append(deepcopy(NewArg))
+    return ConcArgs
 
   def genHeader(self):
     String = GenHeadersForAutoGenFiles("//")
     Content = ["#include <immintrin.h>", "#include <stdio.h>", \
                "#include <stdint.h>\n"]
-    return String + "\n".join(Content)
+    return String + "\n".join(Content)  
+
+  def createTestDir(self, DirName : str):
+    assert isinstance(DirName, str)
+    RunCommand("mkdir " + DirName)
+
+  def generateWrappers(self):
+    # We will emit C code with C builtins and try to compile
+    # and execute them, if we fail, we will not generate wrappers
+    # for those instructions.
+    TestDirName = "wrapper_test"
+    self.createTestDir(TestDirName)
+    Content = self.genHeader()
+    for FunctionInfo in self.FunctionInfoList:
+      assert isinstance(FunctionInfo, RoseFunctionInfo)
+      Content += self.generateWrapperForInstuction(TestDirName, FunctionInfo)
+    # Generate the file with wrappers
+    FileName = "x86_wrappers.c"
+    self.generateFileWithWrappers(Content, FileName)
+    # Compile the generated file with wrappers
+    self.compileFileWithWrappers(FileName)
+
+  def generateWrapperForInstuction(self, TestDirName : str, FunctionInfo : RoseFunctionInfo):
+    # Emit C code, compile and execute this instuction and check 
+    # if the error is fatal.
+    Function = FunctionInfo.getLatestFunction()
+    CEmitter = Rosex86CCodeEmitter.CCodeEmitter(FunctionInfo)
+    ConcArgs = self.genRandomInputs(Function)
+    _, CErr = CEmitter.test(TestDirName, ConcArgs)
+    if CEmitter.isErrorFatal(CErr) == True:
+      print("FATAL ERROR")
+      return ""
+    # Since the error is not fatal, let's generate C wrapper function
+    return self.genCWrapperFunction(FunctionInfo)
 
   def genCWrapperFunction(self, FunctionInfo : RoseFunctionInfo):
     assert isinstance(FunctionInfo, RoseFunctionInfo)
     Sema = FunctionInfo.getRawSemantics()
     Function = FunctionInfo.getLatestFunction()
+    if Function.getName() in self.AccountedForInsts:
+      return ""
+    self.AccountedForInsts.add(Function.getName())
     ParamsNames = list()
     TypedParams = list()
+    ImmWidth = None
     for Index, Param in enumerate(Function.getArgs()):
-      ParamsNames.append(Param.getName())
-      TypedParams.append(x86ToC(Sema.params[Index].type) + " " + Param.getName())
-    FuncSig = "{} {}_wrapper({})".format(x86ToC(Sema.rettype), \
-                        Function.getName(), ", ".join(TypedParams))
-    FuncSig += " {"
+      # If the parameter is an immediate value, that should not be an argument
+      # to the wrapper.
+      if Sema.params[Index].is_imm == False:
+        ParamsNames.append(Param.getName())
+        TypedParams.append(Rosex86CCodeEmitter.x86ToC(Sema.params[Index].type) + " " + Param.getName())
+      else:
+        ImmWidth = Sema.imm_width
+    if ImmWidth == None:
+      FuncSig = "{} {}_wrapper({})".format(Rosex86CCodeEmitter.x86ToC(Sema.rettype), \
+                          Function.getName(), ", ".join(TypedParams))
+      FuncSig += " {"
+      Content = list()
+      Content.append(FuncSig)
+      InvokedFunction = "{}({})".format(Function.getName(), ", ".join(ParamsNames))
+      Content.append("  return " + InvokedFunction + ";")
+      Content.append("}\n\n")
+      return "\n".join(Content)
+    # Now we will have to generate many versions of wrappers for this function.
     Content = list()
-    Content.append(FuncSig)
-    InvokedFunction = "{}({})".format(Function.getName(), ", ".join(ParamsNames))
-    Content.append("  return " + InvokedFunction + ";")
-    Content.append("}\n\n")
+    for Idx in range(2**ImmWidth):
+      FuncSig = "{} {}_wrapper_{}({})".format(Rosex86CCodeEmitter.x86ToC(Sema.rettype), \
+                          Function.getName(), Idx, ", ".join(TypedParams))
+      FuncSig += " {"
+      Content.append(FuncSig)
+      InvokedFunction = "{}({}, {})".format(Function.getName(), ", ".join(ParamsNames), Idx)
+      Content.append("  return " + InvokedFunction + ";")
+      Content.append("}\n\n")
     return "\n".join(Content)
-  
-  def genWrappers(self):
-    Content = self.genHeader()
-    for FunctionInfo in self.FunctionInfoList:
-      Content += self.genCWrapperFunction(FunctionInfo)
-    FileName = "x86_wrappers.c"
+
+  def generateFileWithWrappers(self, Content : str, FileName : str):
     try:
       File = open(FileName, "w+")
       File.write(Content)
@@ -112,11 +132,19 @@ class x86CIntrinsicsWrappersEmitter():
       print("Error making: {}".format(FileName))
       assert False
 
-    
+  def compileFileWithWrappers(self, FileName : str):
+    ExecName = FileName + ".bc"
+    SOut, SErr = RunCommand("clang -O0 -march=native -mavx512vl -mavx512ifma -c {} -emit-llvm -o {}"\
+                            .format(FileName, ExecName))
+    print("SOUT:")
+    print(SOut)
+    print("SErr:")
+    print(SErr)
+    return SOut, SErr
+
 
 if __name__ == '__main__':
   Emitter = x86CIntrinsicsWrappersEmitter()
-  Emitter.genWrappers()
-
+  Emitter.generateWrappers()
 
 
