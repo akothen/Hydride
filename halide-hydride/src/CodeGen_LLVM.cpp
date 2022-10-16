@@ -597,7 +597,7 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::compile(const Module &input) {
 
 
     const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
-    if(enable_hydride && enable_hydride[0] != '0')
+    if(enable_hydride && strcmp(enable_hydride, "0") != 0)
         add_hydride_code(input);
 
     debug(2) << "llvm::Module pointer: " << module.get() << "\n";
@@ -706,7 +706,7 @@ void CodeGen_LLVM::compile_func(const LoweredFunc &f, const std::string &simple_
 
     const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
 
-    if(enable_hydride && enable_hydride[0] != '0'){
+    if(enable_hydride && strcmp(enable_hydride, "0") != 0){
         if(target.arch == Target::X86){
             body = optimize_x86_instructions_synthesis(body, target, this->func_value_bounds);
         } else if(target.arch == Target::Hexagon){
