@@ -10,6 +10,7 @@ from RoseOpcode import RoseOpcode
 from RoseTypes import *
 from RoseAbstractions import RoseBlock
 from RoseBitVectorOperation import RoseBitVectorOp
+from RoseValues import *
 
 from enum import Enum, auto
 
@@ -71,9 +72,13 @@ class RoseSaturableBitVectorOp(RoseBitVectorOp):
     else:
       String += (self.Opcode.getRosetteOp() + " ")
     for Index, Operand in enumerate(self.getOperands()):
-        String += " " + Operand.getName() 
-        if Index != len(self.getOperands()) - 1:
-          String += " "
+      if isinstance(Operand, RoseConstant) \
+        and isinstance(Operand.getType(), RoseBitVectorType):
+        String += " " + Operand.to_rosette()
+      else:
+        String += " " + Operand.getName()
+      if Index != len(self.getOperands()) - 1:
+        String += " "
     if SatQualifier != None:
       String += " " + str(self.getOutputBitwidth())
     String += "))\n"
@@ -100,5 +105,26 @@ class RoseSaturableBitVectorOp(RoseBitVectorOp):
           String += ","
     print(String)
 
+  def __str__(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
+    SatQualifier = self.getSaturationQualifier()
+    if SatQualifier == None:
+      String += str(self.Opcode)
+    else:
+      String += str(self.Opcode) + " " + SatQualifier
+    for Index, Operand in enumerate(self.getOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getOperands()) - 1:
+          String += ","
+    String += "\n"
+    return String
 
 

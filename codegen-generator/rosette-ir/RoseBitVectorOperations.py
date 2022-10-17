@@ -1222,8 +1222,7 @@ class RoseBVNEQOp(RoseComparisonBitVectorOp):
     String += "not (bveq " 
     for Index, Operand in enumerate(self.getOperands()):
       if isinstance(Operand, RoseConstant):
-        String += " " + "(bv " + str(Operand.getValue()) + \
-                  " " + str(Operand.getType().getBitwidth()) + ")"
+        String += " " + Operand.to_rosette()
       else:
         String += " " + Operand.getName()
       if Index != len(self.getOperands()) - 1:
@@ -1689,4 +1688,5 @@ class RoseBVAbsOp(RoseBitVectorOp):
     if SolvedResult != None:
       return RoseConstant(SolvedResult, self.getType())
     return RoseUndefValue()
+
 

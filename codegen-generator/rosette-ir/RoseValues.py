@@ -444,8 +444,7 @@ class RoseOperation(RoseValue):
     for Index, Operand in enumerate(self.getOperands()):
       if isinstance(Operand, RoseConstant) \
         and isinstance(Operand.getType(), RoseBitVectorType):
-        String += " " + "(bv " + str(Operand.getValue()) + \
-                  " " + str(Operand.getType().getBitwidth()) + ")"
+        String += " " + Operand.to_rosette()
       else:
         String += " " + Operand.getName() 
       if Index != len(self.getOperands()) - 1:
@@ -487,3 +486,4 @@ class RoseOperation(RoseValue):
           String += ","
     String += "\n"
     return String
+
