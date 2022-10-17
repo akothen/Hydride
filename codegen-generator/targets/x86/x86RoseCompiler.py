@@ -1017,7 +1017,7 @@ def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
     and CallStmt.funcname not in ZeroExtendsSize:
     return RoseUndefValue()
   
-  if CallStmt.funcname != "REMAINDER":
+  if CallStmt.funcname == "REMAINDER":
     assert len(CallStmt.args) == 1
     DivExpr = CallStmt.args[0]
     assert DivExpr.op == "/"
@@ -1047,10 +1047,14 @@ def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
   
   # Now we deal with the case where we are performing a logical
   # right shift.
-  assert CallStmt.funcname not in ZeroExtendsSize
+  assert CallStmt.funcname in ZeroExtendsSize
   assert len(CallStmt.args) == 1
+  if type(CallStmt.args[0]) != BinaryExpr:
+    return RoseUndefValue()
   RightShiftExpr = CallStmt.args[0]
-  assert RightShiftExpr.op == ">>"
+  # Only support the right shift case.
+  if RightShiftExpr.op != ">>":
+    return RoseUndefValue()
   Expr1 = RightShiftExpr.a
   Expr2 = RightShiftExpr.b
 
@@ -1063,19 +1067,19 @@ def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
 
   assert isinstance(CompiledExpr1.getType(), RoseBitVectorType)
   assert isinstance(CompiledExpr2.getType(), RoseBitVectorType)
-  if CompiledExpr1.getType().getType().getBitwidth() \
-      > CompiledExpr2.getType().getType().getBitwidth():
+  if CompiledExpr1.getType().getBitwidth() \
+      > CompiledExpr2.getType().getBitwidth():
     CompiledExpr2 = RoseBVZeroExtendOp.create(Context.genName(), \
-            CompiledExpr2, CompiledExpr1.getType().getType().getBitwidth())
+            CompiledExpr2, CompiledExpr1.getType().getBitwidth())
     # Add signedness info
     Context.addSignednessInfoForValue(CompiledExpr2, IsSigned=False)
     # Add this operation to the IR and the context
     Context.addAbstractionToIR(CompiledExpr2)
     Context.addCompiledAbstraction(CompiledExpr2.getName(), CompiledExpr2)
-  elif CompiledExpr1.getType().getType().getBitwidth() \
-      < CompiledExpr2.getType().getType().getBitwidth():
+  elif CompiledExpr1.getType().getBitwidth() \
+      < CompiledExpr2.getType().getBitwidth():
     CompiledExpr1 = RoseBVZeroExtendOp.create(Context.genName(), \
-            CompiledExpr1, CompiledExpr1.getType().getType().getBitwidth())
+            CompiledExpr1, CompiledExpr2.getType().getBitwidth())
     # Add signedness info
     Context.addSignednessInfoForValue(CompiledExpr1, IsSigned=False)
     # Add this operation to the IR and the context
