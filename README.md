@@ -17,8 +17,16 @@ Hydride has two major components:
     - Linux example: `sudo apt-get install -y z3`
 
 ### LLVM
-- Install [LLVM](https://github.com/llvm/llvm-project.git):
-    - Source: `git clone -b release/13.x https://github.com/llvm/llvm-project.git`
+- Install [LLVM](https://github.com/llvm/llvm-project.git) >= 12.0:
+    - Source: `git clone -b release/12.x https://github.com/llvm/llvm-project.git`
+
+### Racket 
+- Install [Racket](https://download.racket-lang.org/)
+    - Linux example (works for all versions of Racket): 
+    ```bash
+    wget https://download.racket-lang.org/installers/8.6/racket-8.6-x86_64-linux-cs.sh
+    sh racket-8.6-x86_64-linux-cs.sh
+    ```
 
 ## Directory Structure (WIP)
 - `code-syntheizer` contains the experimental files for adding the notion of cost for different benchmark kernels and code for grammar generator.
