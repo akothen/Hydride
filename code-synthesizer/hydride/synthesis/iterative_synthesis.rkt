@@ -18,6 +18,23 @@
 
 (provide (all-defined-out))
 
+
+;; Controls whether synthesis should be performed
+;; by placing asserts on specific lanes of the 
+;; output vector or the input-vector
+(define synthesize-by-lane #t)
+
+
+(define (set-synthesize-full)
+  (set! synthesize-by-lane #f)
+  )
+
+
+(define (set-synthesize-by-lane)
+  (set! synthesize-by-lane #t)
+  )
+
+
 ;; Create random concrete bitvector
 ;; to use in iterative synthesis
 (define (create-concrete-bv bw) 
@@ -434,7 +451,7 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list)  (create-0-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list)  (create-concrete-bvs bitwidth-list) );(create-0-bvs bitwidth-list))
       cexs
       )
     )
@@ -470,9 +487,10 @@
     ;16
     ;32 - 1 = 32
 
+
     (define full-interpret-res (hydride:interpret grammar env))
     ;(define random-idx (random (- num-lanes 1)))
-    (displayln "Random Index")
+    (displayln "Lane Index")
     (println random-idx)
     (define low (* word-size random-idx))
     ;(define high (+ low word-size (- word-size 1)))
@@ -481,18 +499,18 @@
     (define interpret-res (extract high low full-interpret-res))
 
     (define halide-res 
-      ;(concat 
-       ; (invoke_ref_lane (+ random-idx 1) env) 
         (invoke_ref_lane (+ random-idx 0) env)
-       ; )
-       ;(invoke_ref env)
       )
 
-    (displayln "Halide Produced:")
+    (displayln "Spec Produced:")
     (println halide-res)
 
-    ;(define condition (equal? halide-res interpret-res)) ;; TEST WITH EQUAL?
-    (define condition (equal? halide-res interpret-res))
+    (define condition 
+      (if synthesize-by-lane
+        (equal? halide-res interpret-res)
+        (equal? (invoke_ref env) full-interpret-res)
+      )
+    )
     (assert condition)
     )
 

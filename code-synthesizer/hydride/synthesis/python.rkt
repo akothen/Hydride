@@ -26,10 +26,10 @@
 (define GEN-GRAMMAR-SCRIPT (string-append CODE-SYNTH-PATH GEN-GRAMMAR-SCRIPT-NAME))
 (define PYTHON "python3")
 
-(define (generate-grammar-file grammar-spec grammar-file-name base_name VF)
+(define (generate-grammar-file grammar-spec grammar-file-name base_name VF is_shuffle)
   (define spec-file-name (string-append "/tmp/" base_name "_spec.JSON"))
   (write-str-to-file grammar-spec spec-file-name)
-  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF)))
+  (define gen-grammar-cmd (string-append PYTHON " " GEN-GRAMMAR-SCRIPT " " spec-file-name " " (path->string grammar-file-name) " " (~s VF) " " (~s is_shuffle)))
   (debug-log gen-grammar-cmd)
   (system gen-grammar-cmd)
   )
@@ -48,7 +48,26 @@
   (debug-log grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))
   (debug-log mod-path)
-  (generate-grammar-file spec-contents mod-path base_name VF)
+  (generate-grammar-file spec-contents mod-path base_name VF 0)
+  (debug-log "Generated Grammar File")
+  (define (get-grammar mod name)
+    (debug-log (format "Dynamically importing from ~a ... \n" name))
+    (dynamic-require mod (string->symbol name))
+    )
+
+  (define grammar (get-grammar mod-path (string-append base_name "")));;(dynamic-require gen (string->symbol (string-append base_name "_grammar_operations"))))
+  grammar
+  )
+
+
+(define (get-swizzle-expr-grammar expr base_name VF)
+  (debug-log (format "get-swizzle-expr-grammar with base_name: ~a\n" base_name))
+  (define spec-contents (gen-swizzle-synthesis-spec expr  base_name))
+  (define grammar-file-name (string-append base_name "_grammar.rkt"))
+  (debug-log grammar-file-name)
+  (define mod-path (build-path gen (string->path grammar-file-name)))
+  (debug-log mod-path)
+  (generate-grammar-file spec-contents mod-path base_name VF 1) ;; IS_SHUFFLE = 1
   (debug-log "Generated Grammar File")
   (define (get-grammar mod name)
     (debug-log (format "Dynamically importing from ~a ... \n" name))
