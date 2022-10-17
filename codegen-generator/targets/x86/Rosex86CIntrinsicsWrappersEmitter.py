@@ -15,14 +15,12 @@ from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseSimilarityCheckerUtilities import *
 import Rosex86CCodeEmitter
-import x86RoseLang
 
 
 class x86CIntrinsicsWrappersEmitter():
   def __init__(self):
     self.FunctionInfoList = list()
     # Generate code for all semantics first
-    #FunctionInfoList = x86RoseLang.Compile()
     CodeGenerator = RoseCodeGenerator("x86")
     FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False, JustGenRosette=False)
     self.FunctionInfoList.extend(FunctionInfoList)
@@ -133,9 +131,16 @@ class x86CIntrinsicsWrappersEmitter():
       assert False
 
   def compileFileWithWrappers(self, FileName : str):
-    ExecName = FileName + ".bc"
+    BitcodeFile = FileName + ".bc"
     SOut, SErr = RunCommand("clang -O0 -march=native -mavx512vl -mavx512ifma -c {} -emit-llvm -o {}"\
-                            .format(FileName, ExecName))
+                            .format(FileName, BitcodeFile))
+    print("SOUT:")
+    print(SOut)
+    print("SErr:")
+    print(SErr)
+    ReadableBitcodeFile = FileName + ".ll"
+    SOut, SErr = RunCommand("llvm-dis {} -o {}"\
+                            .format(BitcodeFile, ReadableBitcodeFile))
     print("SOUT:")
     print(SOut)
     print("SErr:")
