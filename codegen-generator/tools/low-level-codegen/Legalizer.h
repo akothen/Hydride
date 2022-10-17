@@ -9,6 +9,15 @@
 #define HYDRIDE_LEGALIZER_H
 
 
+#include "llvm/ADT/PostOrderIterator.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Type.h"
+#include "llvm/ADT/SmallVector.h"
+#include "llvm/IR/CFG.h"
+#include "llvm/IR/Verifier.h"
+
+
 namespace llvm {
 
 class Legalizer {
@@ -28,7 +37,7 @@ public:
     ReversePostOrderTraversal<Function *> RPOT(&F);
     for(auto *BB : RPOT) {
       for(Instruction &I : *BB) {
-        auto *CI = dyn_cast<CallInst>(&I)
+        auto *CI = dyn_cast<CallInst>(&I);
         if(CI != nullptr)
           TargetAgnosticInstructions.push_back(CI);
       }
@@ -52,7 +61,25 @@ public:
       I->eraseFromParent();
     }
 
+    bool BrokenDebugInfo = true;
+    assert(verifyModule(BrokenDebugInfo, *(F.getParent()), errs()));
+
     return Changed;
+  }
+
+  Value *GetBitvectorOfRequiredType(Value *Bitvector, Type *RequiredType, Instruction *InsertBefore) {
+    errs() << "GetBitvectorOfRequiredType\n";
+    if (Bitvector->getType() != RequiredType) {
+      if (InstToInstMap[Bitvector] == nullptr) {
+        InstToInstMap[Bitvector] = new BitCastInst(Bitvector, RequiredType, "", InsertBefore);
+        errs() << "InstToInstMap[Bitvector]:" << *InstToInstMap[Bitvector] << "\n";
+        return InstToInstMap[Bitvector];
+      }
+      errs() << "--InstToInstMap[Bitvector]:" << *InstToInstMap[Bitvector] << "\n";
+      return InstToInstMap[Bitvector];
+    }
+    errs() << "Bitvector:" << *Bitvector << "\n";
+    return Bitvector;
   }
 
 };
