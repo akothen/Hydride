@@ -8,6 +8,9 @@
 
 from enum import Enum, auto
 
+from copy import deepcopy
+
+
 # Definition of concept of types in Rose IR
 class RoseType:
     # Rosette types we are concerned with
@@ -43,6 +46,6 @@ class RoseType:
     def getSubClassData(self):
         return self.SubClassData
 
-
-
+    def clone(self):
+        return deepcopy(self)
 
