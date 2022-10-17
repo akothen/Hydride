@@ -1013,34 +1013,87 @@ def BuiltinOpPerformed(CallStmt, ArgValuesList : list, Context : x86RoseContext)
 
 # Builtin computing remainder must be compiled fully on its own.
 def PreCompileBuiltin(CallStmt, Context : x86RoseContext):
-  if CallStmt.funcname != "REMAINDER":
+  if CallStmt.funcname != "REMAINDER" \
+    and CallStmt.funcname not in ZeroExtendsSize:
     return RoseUndefValue()
   
-  assert len(CallStmt.args) == 1
-  DivExpr = CallStmt.args[0]
-  assert DivExpr.op == "/"
-  NumeratorExpr = DivExpr.a 
-  DenominatorExpr = DivExpr.b
+  if CallStmt.funcname != "REMAINDER":
+    assert len(CallStmt.args) == 1
+    DivExpr = CallStmt.args[0]
+    assert DivExpr.op == "/"
+    NumeratorExpr = DivExpr.a 
+    DenominatorExpr = DivExpr.b
 
-  # Compile the numerator and denominator first
-  Numerator = CompileExpression(NumeratorExpr, Context)
-  Denominator = CompileExpression(DenominatorExpr, Context)
+    # Compile the numerator and denominator first
+    Numerator = CompileExpression(NumeratorExpr, Context)
+    Denominator = CompileExpression(DenominatorExpr, Context)
 
-  # Now compile the builtin
-  if isinstance(Numerator.getType(), RoseBitVectorType) \
-  and isinstance(Denominator.getType(), RoseBitVectorType):
-    Operation = RoseBVSremOp.create(Context.genName(), Numerator, Denominator)
-    Context.addSignednessInfoForValue(Operation, IsSigned=True)
-  else:
-    Operation = RoseRemOp.create(Context.genName(), [Numerator, Denominator])
+    # Now compile the builtin
+    if isinstance(Numerator.getType(), RoseBitVectorType) \
+    and isinstance(Denominator.getType(), RoseBitVectorType):
+      Operation = RoseBVSremOp.create(Context.genName(), Numerator, Denominator)
+      Context.addSignednessInfoForValue(Operation, IsSigned=True)
+    else:
+      Operation = RoseRemOp.create(Context.genName(), [Numerator, Denominator])
+    
+    # Add the operation to the IR
+    Context.addAbstractionToIR(Operation)
+    # Add the operation to the context
+    Context.addCompiledAbstraction(CallStmt.id, Operation)
+
+    # Add the division operation to the context as well
+    Context.addCompiledAbstraction(DivExpr.id, Operation)
+    return Operation
   
+  # Now we deal with the case where we are performing a logical
+  # right shift.
+  assert CallStmt.funcname not in ZeroExtendsSize
+  assert len(CallStmt.args) == 1
+  RightShiftExpr = CallStmt.args[0]
+  assert RightShiftExpr.op == ">>"
+  Expr1 = RightShiftExpr.a
+  Expr2 = RightShiftExpr.b
+
+  CompiledExpr1 = CompileExpression(Expr1, Context)
+  CompiledExpr2 = CompileExpression(Expr2, Context)
+
+  # Add signedness info
+  Context.addSignednessInfoForValue(CompiledExpr1, IsSigned=False)
+  Context.addSignednessInfoForValue(CompiledExpr2, IsSigned=False)
+
+  assert isinstance(CompiledExpr1.getType(), RoseBitVectorType)
+  assert isinstance(CompiledExpr2.getType(), RoseBitVectorType)
+  if CompiledExpr1.getType().getType().getBitwidth() \
+      > CompiledExpr2.getType().getType().getBitwidth():
+    CompiledExpr2 = RoseBVZeroExtendOp.create(Context.genName(), \
+            CompiledExpr2, CompiledExpr1.getType().getType().getBitwidth())
+    # Add signedness info
+    Context.addSignednessInfoForValue(CompiledExpr2, IsSigned=False)
+    # Add this operation to the IR and the context
+    Context.addAbstractionToIR(CompiledExpr2)
+    Context.addCompiledAbstraction(CompiledExpr2.getName(), CompiledExpr2)
+  elif CompiledExpr1.getType().getType().getBitwidth() \
+      < CompiledExpr2.getType().getType().getBitwidth():
+    CompiledExpr1 = RoseBVZeroExtendOp.create(Context.genName(), \
+            CompiledExpr1, CompiledExpr1.getType().getType().getBitwidth())
+    # Add signedness info
+    Context.addSignednessInfoForValue(CompiledExpr1, IsSigned=False)
+    # Add this operation to the IR and the context
+    Context.addAbstractionToIR(CompiledExpr1)
+    Context.addCompiledAbstraction(CompiledExpr1.getName(), CompiledExpr1)
+
+  assert isinstance(CompiledExpr1.getType(), RoseBitVectorType) == True
+  assert isinstance(CompiledExpr2.getType(), RoseBitVectorType) == True
+  Operation = RoseBVLshrOp.create(Context.genName(), CompiledExpr1, CompiledExpr2)
+  Context.addSignednessInfoForValue(Operation, IsSigned=False)
+
   # Add the operation to the IR
   Context.addAbstractionToIR(Operation)
   # Add the operation to the context
   Context.addCompiledAbstraction(CallStmt.id, Operation)
 
   # Add the division operation to the context as well
-  Context.addCompiledAbstraction(DivExpr.id, Operation)
+  Context.addCompiledAbstraction(RightShiftExpr.id, Operation)
   return Operation
 
 
@@ -2179,7 +2232,7 @@ BinaryOps = {
     '>=' : HandleToGreaterThanEqual,
     '==' : HandleToEqual,
     '!=' : HandleToNotEqual,
-    '>>' : HandleToLshr,
+    '>>' : HandleToAshr,
     '<<' : HandleToShl,
     '&' : HandleToAnd,
     '|' : HandleToOr,
@@ -2196,7 +2249,6 @@ def NeedToExtendOperandSize(Op):
 # These are binary ops whose output type is not the same
 # as the operand types.
 ComparisonOps = [ '<', '<=', '>', '>=', '==', '!=']
-
 
 
 
