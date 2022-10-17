@@ -4426,27 +4426,25 @@
   (bvpadhighbits  dst %arg0)
   )
 
-(define (_mm256_setr_m128i  lo hi %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg3 %arg4 )
+
+
+(define (_mm256_setr_m128i  lo hi )
   (define dst
     (apply
       concat
-      (for/list ([%outer.it (reverse (range 0 %vectsize %lanesize1))])
+      (for/list ([%outer.it (reverse (range 0 128 128))])
                 (apply
                   concat
-                  (for/list ([%inner.it (reverse (range %laneoffset %lanesize2 %elemsize))])
-                            (define %lastidx3 (-  %elemsize  1))
-                            (define %highidx3 (+  %lastidx3  %arg3))
-                            (define %0 (extract  %highidx3 %arg3 lo))
-                            (define %lastidx1 (-  %elemsize  1))
-                            (define %highidx1 (+  %lastidx1  %arg1))
-                            (define %1 (extract  %highidx1 %arg1 hi))
+                  (for/list ([%inner.it (reverse (range 0 128 128))])
+                            (define %0 (extract  127 0 lo))
+                            (define %1 (extract  127 0 hi))
                             (concat %1 %0)
                             )
                   )
                 )
       )
     )
-  (bvpadhighbits  dst %arg4)
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_mask_cmpneq_epi16_mask  %arg3 k1 a b %vectsize %lanesize1 %lanesize2 %elemsize %laneoffset %arg0 %arg1 %arg2 %arg4 )

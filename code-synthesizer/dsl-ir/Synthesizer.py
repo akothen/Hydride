@@ -4,8 +4,8 @@ from PredefinedDSL import *
 import random
 
 DEBUG = True
-DEBUG_LIST = ["_mm256_cvtepi8_epi16"]
-SKIP_LIST = ["pack" ]
+DEBUG_LIST = ["_mm_unpackhi_epi8", "_mm256_setr_m128i"]
+SKIP_LIST = []
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
@@ -23,7 +23,9 @@ class Synthesizer:
                  struct_definer = None, grammar_generator = None,
                  vectorization_factor = 8,
                  depth = 6,
-                 contexts_per_dsl_inst = None):
+                 contexts_per_dsl_inst = None,
+                 is_shuffle = False
+                 ):
 
         self.spec = spec
         self.dsl_operators = dsl_operators
@@ -33,6 +35,7 @@ class Synthesizer:
         self.depth = depth
         self.output_slice_length = self.spec.output_shape[0] * self.spec.output_shape[1] * self.spec.output_precision #self.VF * self.spec.output_precision
         self.contexts_per_dsl_inst = contexts_per_dsl_inst
+        self.is_shuffle = is_shuffle
         self.input_sizes = []
 
         for idx, shape in enumerate(self.spec.input_shapes):
@@ -413,6 +416,14 @@ class Synthesizer:
         memory_shuffle_insts += [spec_memory_shuffles] * len(spec_memory_shuffles.contexts)
         memory_shuffle_args_list += [ctx for ctx in spec_memory_shuffles.contexts]
 
+        # When legalizing target agnostic shuffle operations
+        # into target specific shuffles, we don't want to include
+        # target agnostic shuffles in the grammar
+        if self.is_shuffle:
+            memory_shuffle_insts = []
+            memory_shuffle_args_list = []
+
+
 
 
         ## Operation Layers
@@ -445,13 +456,13 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
         if DEBUG:
             for idx, dsl_inst in enumerate(operation_dsl_insts):
                 #print(dsl_inst.name, "adding contexts ...")
-                print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]))
+                print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
 
         top_level_grammar_args = self.get_top_level_grammar_args()
 
@@ -559,7 +570,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         # if allocated more rules than are actually
@@ -587,6 +598,10 @@ class Synthesizer:
                 globally_sorted_operation_contexts.append(ctxs[idx])
 
 
+            print("get top N:")
+            for o in globally_sorted_operation_contexts:
+                print(o.name)
+
 
             if  N < len(ops):
                 print(N , "<",  len(ops))
@@ -594,6 +609,8 @@ class Synthesizer:
             else:
                 return (globally_sorted_operation_insts, globally_sorted_operation_contexts)
 
+        for idx,ctx in enumerate(upcast_ctxs):
+            print(ctx.name, " with score ", self.score_context(upcast_ops[idx], ctx))
 
 
         computes = get_top_N_ops(compute_ops,compute_ctxs, num_computes)
@@ -1062,17 +1079,6 @@ class Synthesizer:
 
             supports_input_length = any([dsl_inst.supports_input_size(input_size) for input_size in self.input_sizes])
 
-            if UPCAST_OPERATIONS:
-                # One precision higher
-                supports_inputs_prec = supports_inputs_prec or  any([dsl_inst.supports_input_precision(2 * input_precision) for  input_precision in self.spec.input_precision])
-
-                # Twice vector size
-                supports_input_length = supports_input_length or any([dsl_inst.supports_input_size(2 * input_size) for  input_size in self.input_sizes])
-
-
-                supports_output_length = supports_output_length or dsl_inst.supports_output_size(2 * self.output_slice_length)
-
-                supports_outputs_prec = supports_outputs_prec or dsl_inst.supports_output_precision(2 * self.spec.output_precision)
 
 
             #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
@@ -1084,7 +1090,10 @@ class Synthesizer:
             is_elem_logical = self.is_elementwise_logical_like_operation(dsl_inst) and (supports_input_length or supports_output_length)
 
 
-            return new_condition or is_elem_logical #new_condition
+            is_broadcast_like = self.is_broadcast_like_operation(dsl_inst) and supports_input_length and supports_output_length
+
+
+            return new_condition or is_elem_logical or is_broadcast_like #new_condition
 
 
     def is_elementwise_logical_like_operation(self, dsl_inst):
@@ -1094,7 +1103,7 @@ class Synthesizer:
 
         ops = dsl_inst.get_semantics_ops_list()
 
-        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract"]
+        bitwise_logical_ops = ["bvor", "bvxor", "bvand", "bvnot", "bvneg", "extract", "concat"]
 
         return all([ (op in bitwise_logical_ops) for op in ops ])
 

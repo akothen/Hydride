@@ -24,10 +24,11 @@
 
 ;; Code here
 
-
+;; Utils
 (require hydride/utils/bvops)
 (require hydride/utils/misc)
 (require hydride/utils/debug)
+(require hydride/utils/llvm_impl)
 
 
 ;; Hydride IR
@@ -40,6 +41,7 @@
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/binder)
 (require hydride/ir/hydride/const_fold)
+(require hydride/ir/hydride/visitor)
 
 ;; CPP IR
 (require hydride/cpp)
@@ -55,6 +57,7 @@
 (require hydride/synthesis/python)
 (require hydride/synthesis/algorithm)
 (require hydride/synthesis/llvm_codegen)
+(require hydride/synthesis/lower_swizzle)
 
 
 
@@ -62,6 +65,7 @@
   (all-from-out hydride/utils/bvops)
   (all-from-out hydride/utils/misc)
   (all-from-out hydride/utils/debug)
+  (all-from-out hydride/utils/llvm_impl)
 
   (all-from-out hydride/ir/hydride/semantics)
   (all-from-out hydride/ir/hydride/definition)
@@ -72,6 +76,7 @@
   (all-from-out hydride/ir/hydride/interpreter)
   (all-from-out hydride/ir/hydride/binder)
   (all-from-out hydride/ir/hydride/const_fold)
+  (all-from-out hydride/ir/hydride/visitor)
 
 
   (all-from-out hydride/cpp)
@@ -88,5 +93,6 @@
   (all-from-out hydride/synthesis/algorithm)
   (all-from-out hydride/synthesis/python)
   (all-from-out hydride/synthesis/llvm_codegen)
+  (all-from-out hydride/synthesis/lower_swizzle)
   )
 

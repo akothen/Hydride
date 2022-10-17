@@ -23,6 +23,7 @@ from Synthesizer import Synthesizer
 INPUT_SPEC_NAME = sys.argv[1]
 OUTPUT_GRAMMAR_FILE = sys.argv[2]
 VF = int(sys.argv[3])
+IS_SHUFFLE = int(sys.argv[4]) == 1
 
 dsl_list = parse_dict(semantcs)
 
@@ -87,7 +88,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   struct_definer = sd, grammar_generator = gg,
                   contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
-                  depth = 3
+                  depth = 3,
+                  is_shuffle = IS_SHUFFLE
                   )
     grammar_name = spec['name']
     write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))
