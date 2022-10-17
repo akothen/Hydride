@@ -57,12 +57,55 @@
 
 
 
-;; Generate LLVM Permute with mask vector
+;; Generate LLVM Permute with mask vector. A quick way of 
+;; generating the masks is to generate a vector of indices
+;; in ascending order and simply apply the shuffle with
+;; 32 bit elements and just use that as a mask of the 
+;; original inputs.
 (define (lower-swizzle-to-llvm-shuffle swizzle)
+  (define mask
+    (destruct swizzle
+              [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+               (vector-two-input-swizzle (create-tensor 1 num_2 32) (create-tensor 1 num_2 32) num_2 32 num_4 lane_size num_6 num_7 num_8)
+               ]
+              [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
+               (interleave-vectors (create-tensor 1 (/ size_i_o prec_i_o) 32) (create-tensor 1 (/ size_i_o prec_i_o) 32)  (* 32 (/ size_i_o prec_i_o)) 32)
+               ]
+              [ (interleave-vector_dsl v0 size_i_o prec_i_o)
+               (interleave-vector (create-tensor 1 (/ size_i_o prec_i_o) 32)   (* 32 (/ size_i_o prec_i_o)) 32)
+               ]
+              [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
+               (deinterleave-vector (create-tensor 1 (/ size_i_o prec_i_o) 32)   (* 32 (/ size_i_o prec_i_o)) 32)
+               ]
+              [_ (error "unrecognized reference for swizzle")]
+          )
+    )
 
-  0
+  (define mask-size (bvlength mask))
+  (define num-mask-elems (/ mask-size 32))
 
-  )
+  (define llvm-shuffled
+        (destruct swizzle
+              [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+                (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o (lit mask) num-mask-elems)
+               ]
+              [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
+                (llvm:shuffle-vectors_dsl v0 v1 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               ]
+              [ (interleave-vector_dsl v0 size_i_o prec_i_o)
+                (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               ]
+              [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
+                (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               ]
+              [_ (error "unrecognized reference for swizzle")]
+          )
+
+    )
+
+  llvm-shuffled
+
+)
 
 
 

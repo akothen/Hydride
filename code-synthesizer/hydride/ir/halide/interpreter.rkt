@@ -687,7 +687,7 @@
 
     [(vec-abs v1) (append (list extract bvsge bvmul abs) (get-bv-ops v1)  )]
     [(vec-shl v1 v2) (append (list bvshl ) (if (is-signed-expr? v1 v2) (list  sign-extend ) (list zero-extend )) (get-bv-ops v1) (get-bv-ops v2))]
-    [(vec-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr bvsdiv sign-extend) (list bvlshr bvudiv zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
+    [(vec-shr v1 v2) (append  (if (is-signed-expr? v1 v2) (list bvashr  sign-extend) (list bvlshr  zero-extend)) (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-absd v1 v2) (append (list abs bvsub) (if (is-signed-expr? v1 v2) (list bvsge sign-extend bvsmax bvsmin) (list bvuge zero-extend bvumax bvumin ))  (get-bv-ops v1) (get-bv-ops v2))]
     [(vec-clz v1) (append empty-list (get-bv-ops v1) )]
 

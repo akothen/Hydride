@@ -2,7 +2,6 @@
 (require rosette/lib/synthax)
 (require rosette/lib/angelic)
 (require racket/pretty)
-(require data/bit-vector)
 (require rosette/lib/destruct)
 (require rosette/solver/smt/boolector)
 (require rosette/solver/smt/z3)
@@ -14,12 +13,14 @@
 (require hydride/synthesis/iterative_synthesis)
 (require hydride/synthesis/synth_main)
 (require hydride/synthesis/python)
+(require hydride/synthesis/lower_swizzle)
+
 (require hydride/halide)
 (require hydride/cpp)
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/cost_model)
+(require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/printer)
-; (require hydride/ir/halide/utils)
 
 (provide (all-defined-out))
 
@@ -56,12 +57,21 @@
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
   (displayln "Synthesis completed:")
-  ;;(pretty-print synthesized-sol)
+  
+  ;; Synthesis completed with Hydride Target Agnostic 
+  ;; Operations, check if further simplification can 
+  ;; be performed. E.g. if the bitvector operands of
+  ;; any operation are all literals then that operation
+  ;; can instead be replaced with it's result. Traverse
+  ;; bottom up and incrementally simplify operations.
+  (define folded (hydride:const-fold synthesized-sol))
+
+  ;; Lower target agnostic specialized shuffles to sequences
+  ;; of target specific shuffle operations.
+  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver hydride:cost #t #f))
   (pretty-print id-map)
   (displayln "========================================")
-  synthesized-sol
-
-
+  legalized-shuffles-expr
   )
 
 (define synth-log (make-hash))
