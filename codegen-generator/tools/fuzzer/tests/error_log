@@ -1,0 +1,2060 @@
+wrapper_test/_mm256_div_epi8.c:17:17: warning: implicit declaration of function '_mm256_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi8(a, b);
+                ^
+wrapper_test/_mm256_div_epi8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi16.c:17:17: warning: implicit declaration of function '_mm256_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi16(a, b);
+                ^
+wrapper_test/_mm256_div_epi16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi32.c:17:17: warning: implicit declaration of function '_mm256_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi32(a, b);
+                ^
+wrapper_test/_mm256_div_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi64.c:17:17: warning: implicit declaration of function '_mm256_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi64(a, b);
+                ^
+wrapper_test/_mm256_div_epi64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu8.c:17:17: warning: implicit declaration of function '_mm256_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu8(a, b);
+                ^
+wrapper_test/_mm256_div_epu8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu16.c:17:17: warning: implicit declaration of function '_mm256_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu16(a, b);
+                ^
+wrapper_test/_mm256_div_epu16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu32.c:17:17: warning: implicit declaration of function '_mm256_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu32(a, b);
+                ^
+wrapper_test/_mm256_div_epu32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu64.c:17:17: warning: implicit declaration of function '_mm256_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu64(a, b);
+                ^
+wrapper_test/_mm256_div_epu64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_idiv_epi32.c:17:17: warning: implicit declaration of function '_mm256_idiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_idiv_epi32(a, b);
+                ^
+wrapper_test/_mm256_idiv_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_idiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_idiv_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_idiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_irem_epi32.c:17:17: warning: implicit declaration of function '_mm256_irem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_irem_epi32(a, b);
+                ^
+wrapper_test/_mm256_irem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_irem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_irem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_irem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi8.c:17:17: warning: implicit declaration of function '_mm256_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi8(a, b);
+                ^
+wrapper_test/_mm256_rem_epi8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi16.c:17:17: warning: implicit declaration of function '_mm256_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi16(a, b);
+                ^
+wrapper_test/_mm256_rem_epi16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi32.c:17:17: warning: implicit declaration of function '_mm256_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi32(a, b);
+                ^
+wrapper_test/_mm256_rem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi64.c:17:17: warning: implicit declaration of function '_mm256_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi64(a, b);
+                ^
+wrapper_test/_mm256_rem_epi64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu8.c:17:17: warning: implicit declaration of function '_mm256_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu8(a, b);
+                ^
+wrapper_test/_mm256_rem_epu8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu16.c:17:17: warning: implicit declaration of function '_mm256_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu16(a, b);
+                ^
+wrapper_test/_mm256_rem_epu16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu32.c:17:17: warning: implicit declaration of function '_mm256_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu32(a, b);
+                ^
+wrapper_test/_mm256_rem_epu32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu64.c:17:17: warning: implicit declaration of function '_mm256_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu64(a, b);
+                ^
+wrapper_test/_mm256_rem_epu64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_udiv_epi32.c:17:17: warning: implicit declaration of function '_mm256_udiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_udiv_epi32(a, b);
+                ^
+wrapper_test/_mm256_udiv_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_udiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_udiv_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_udiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_urem_epi32.c:17:17: warning: implicit declaration of function '_mm256_urem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_urem_epi32(a, b);
+                ^
+wrapper_test/_mm256_urem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_urem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_urem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_urem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi32.c:17:17: warning: implicit declaration of function '_mm512_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi32(a, b);
+                ^
+wrapper_test/_mm512_div_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_div_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_div_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_div_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_div_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_div_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi8.c:17:17: warning: implicit declaration of function '_mm512_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi8(a, b);
+                ^
+wrapper_test/_mm512_div_epi8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi16.c:17:17: warning: implicit declaration of function '_mm512_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi16(a, b);
+                ^
+wrapper_test/_mm512_div_epi16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi64.c:17:17: warning: implicit declaration of function '_mm512_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi64(a, b);
+                ^
+wrapper_test/_mm512_div_epi64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi32.c:17:17: warning: implicit declaration of function '_mm512_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi32(a, b);
+                ^
+wrapper_test/_mm512_rem_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_rem_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_rem_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_rem_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_rem_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_rem_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi8.c:17:17: warning: implicit declaration of function '_mm512_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi8(a, b);
+                ^
+wrapper_test/_mm512_rem_epi8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi16.c:17:17: warning: implicit declaration of function '_mm512_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi16(a, b);
+                ^
+wrapper_test/_mm512_rem_epi16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi64.c:17:17: warning: implicit declaration of function '_mm512_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi64(a, b);
+                ^
+wrapper_test/_mm512_rem_epi64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu32.c:17:17: warning: implicit declaration of function '_mm512_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu32(a, b);
+                ^
+wrapper_test/_mm512_div_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_div_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_div_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_div_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_div_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_div_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu8.c:17:17: warning: implicit declaration of function '_mm512_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu8(a, b);
+                ^
+wrapper_test/_mm512_div_epu8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu16.c:17:17: warning: implicit declaration of function '_mm512_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu16(a, b);
+                ^
+wrapper_test/_mm512_div_epu16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu64.c:17:17: warning: implicit declaration of function '_mm512_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu64(a, b);
+                ^
+wrapper_test/_mm512_div_epu64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu32.c:17:17: warning: implicit declaration of function '_mm512_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu32(a, b);
+                ^
+wrapper_test/_mm512_rem_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_rem_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_rem_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_rem_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_rem_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_rem_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu8.c:17:17: warning: implicit declaration of function '_mm512_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu8(a, b);
+                ^
+wrapper_test/_mm512_rem_epu8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu16.c:17:17: warning: implicit declaration of function '_mm512_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu16(a, b);
+                ^
+wrapper_test/_mm512_rem_epu16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu64.c:17:17: warning: implicit declaration of function '_mm512_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu64(a, b);
+                ^
+wrapper_test/_mm512_rem_epu64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+wrapper_test/_mm512_subr_epi32.c:17:17: warning: implicit declaration of function '_mm512_subr_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_subr_epi32(v2, v3);
+                ^
+wrapper_test/_mm512_subr_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_subr_epi32(v2, v3);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_subr_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_subr_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_subr_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_subr_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_subr_epi32(src, k, v2, v3);
+                ^
+wrapper_test/_mm512_mask_subr_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_subr_epi32(src, k, v2, v3);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_subr_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_subr_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_fmadd_epi32.c:18:17: warning: implicit declaration of function '_mm512_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_fmadd_epi32(a, b, c);
+                ^
+wrapper_test/_mm512_fmadd_epi32.c:18:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_fmadd_epi32(a, b, c);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_fmadd_epi32.c:19:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_fmadd_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_fmadd_epi32(a, k, b, c);
+                ^
+wrapper_test/_mm512_mask_fmadd_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_fmadd_epi32(a, k, b, c);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_fmadd_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask3_fmadd_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask3_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask3_fmadd_epi32(a, b, c, k);
+                ^
+wrapper_test/_mm512_mask3_fmadd_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask3_fmadd_epi32(a, b, c, k);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask3_fmadd_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask3_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mulhi_epi32.c:17:17: warning: implicit declaration of function '_mm512_mulhi_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mulhi_epi32(a, b);
+                ^
+wrapper_test/_mm512_mulhi_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mulhi_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mulhi_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mulhi_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_mulhi_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_mulhi_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_mulhi_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_mulhi_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_mulhi_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_mulhi_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_mulhi_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mulhi_epu32.c:17:17: warning: implicit declaration of function '_mm512_mulhi_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mulhi_epu32(a, b);
+                ^
+wrapper_test/_mm512_mulhi_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mulhi_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mulhi_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mulhi_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_mulhi_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_mulhi_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_mulhi_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_mulhi_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_mulhi_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_mulhi_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_mulhi_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi8.c:17:17: warning: implicit declaration of function '_mm_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi8(a, b);
+                ^
+wrapper_test/_mm_div_epi8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi16.c:17:17: warning: implicit declaration of function '_mm_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi16(a, b);
+                ^
+wrapper_test/_mm_div_epi16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi32.c:17:17: warning: implicit declaration of function '_mm_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi32(a, b);
+                ^
+wrapper_test/_mm_div_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi64.c:17:17: warning: implicit declaration of function '_mm_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi64(a, b);
+                ^
+wrapper_test/_mm_div_epi64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu8.c:17:17: warning: implicit declaration of function '_mm_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu8(a, b);
+                ^
+wrapper_test/_mm_div_epu8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu16.c:17:17: warning: implicit declaration of function '_mm_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu16(a, b);
+                ^
+wrapper_test/_mm_div_epu16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu32.c:17:17: warning: implicit declaration of function '_mm_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu32(a, b);
+                ^
+wrapper_test/_mm_div_epu32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu64.c:17:17: warning: implicit declaration of function '_mm_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu64(a, b);
+                ^
+wrapper_test/_mm_div_epu64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_idiv_epi32.c:17:17: warning: implicit declaration of function '_mm_idiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_idiv_epi32(a, b);
+                ^
+wrapper_test/_mm_idiv_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_idiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_idiv_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_idiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_irem_epi32.c:17:17: warning: implicit declaration of function '_mm_irem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_irem_epi32(a, b);
+                ^
+wrapper_test/_mm_irem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_irem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_irem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_irem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi8.c:17:17: warning: implicit declaration of function '_mm_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi8(a, b);
+                ^
+wrapper_test/_mm_rem_epi8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi16.c:17:17: warning: implicit declaration of function '_mm_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi16(a, b);
+                ^
+wrapper_test/_mm_rem_epi16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi32.c:17:17: warning: implicit declaration of function '_mm_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi32(a, b);
+                ^
+wrapper_test/_mm_rem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi64.c:17:17: warning: implicit declaration of function '_mm_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi64(a, b);
+                ^
+wrapper_test/_mm_rem_epi64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu8.c:17:17: warning: implicit declaration of function '_mm_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu8(a, b);
+                ^
+wrapper_test/_mm_rem_epu8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu16.c:17:17: warning: implicit declaration of function '_mm_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu16(a, b);
+                ^
+wrapper_test/_mm_rem_epu16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu32.c:17:17: warning: implicit declaration of function '_mm_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu32(a, b);
+                ^
+wrapper_test/_mm_rem_epu32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu64.c:17:17: warning: implicit declaration of function '_mm_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu64(a, b);
+                ^
+wrapper_test/_mm_rem_epu64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_udiv_epi32.c:17:17: warning: implicit declaration of function '_mm_udiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_udiv_epi32(a, b);
+                ^
+wrapper_test/_mm_udiv_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_udiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_udiv_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_udiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_urem_epi32.c:17:17: warning: implicit declaration of function '_mm_urem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_urem_epi32(a, b);
+                ^
+wrapper_test/_mm_urem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_urem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_urem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_urem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_cvtsi64x_si128.c:16:17: warning: implicit declaration of function '_mm_cvtsi64x_si128' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_cvtsi64x_si128(a);
+                ^
+wrapper_test/_mm_cvtsi64x_si128.c:16:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_cvtsi64x_si128(a);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_cvtsi64x_si128.c:17:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_cvtsi64x_si128.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_cvtsi128_si64x.c:16:17: warning: implicit declaration of function '_mm_cvtsi128_si64x' is invalid in C99 [-Wimplicit-function-declaration]
+  int64_t ret = _mm_cvtsi128_si64x(a);
+                ^
+wrapper_test/_mm_cvtsi128_si64x.c:17:11: warning: incompatible pointer types passing 'int64_t *' (aka 'long *') to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 8);
+          ^~~~
+wrapper_test/_mm_cvtsi128_si64x.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings generated.
+/tmp/_mm_cvtsi128_si64x-143362.o: In function `main':
+_mm_cvtsi128_si64x.c:(.text+0xf7): undefined reference to `_mm_cvtsi128_si64x'
+clang-12: error: linker command failed with exit code 1 (use -v to see invocation)
+
+wrapper_test/_mm256_div_epi8.c:17:17: warning: implicit declaration of function '_mm256_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi8(a, b);
+                ^
+wrapper_test/_mm256_div_epi8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi16.c:17:17: warning: implicit declaration of function '_mm256_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi16(a, b);
+                ^
+wrapper_test/_mm256_div_epi16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi32.c:17:17: warning: implicit declaration of function '_mm256_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi32(a, b);
+                ^
+wrapper_test/_mm256_div_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epi64.c:17:17: warning: implicit declaration of function '_mm256_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epi64(a, b);
+                ^
+wrapper_test/_mm256_div_epi64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epi64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu8.c:17:17: warning: implicit declaration of function '_mm256_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu8(a, b);
+                ^
+wrapper_test/_mm256_div_epu8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu16.c:17:17: warning: implicit declaration of function '_mm256_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu16(a, b);
+                ^
+wrapper_test/_mm256_div_epu16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu32.c:17:17: warning: implicit declaration of function '_mm256_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu32(a, b);
+                ^
+wrapper_test/_mm256_div_epu32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_div_epu64.c:17:17: warning: implicit declaration of function '_mm256_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_div_epu64(a, b);
+                ^
+wrapper_test/_mm256_div_epu64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_div_epu64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_idiv_epi32.c:17:17: warning: implicit declaration of function '_mm256_idiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_idiv_epi32(a, b);
+                ^
+wrapper_test/_mm256_idiv_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_idiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_idiv_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_idiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_irem_epi32.c:17:17: warning: implicit declaration of function '_mm256_irem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_irem_epi32(a, b);
+                ^
+wrapper_test/_mm256_irem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_irem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_irem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_irem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi8.c:17:17: warning: implicit declaration of function '_mm256_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi8(a, b);
+                ^
+wrapper_test/_mm256_rem_epi8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi16.c:17:17: warning: implicit declaration of function '_mm256_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi16(a, b);
+                ^
+wrapper_test/_mm256_rem_epi16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi32.c:17:17: warning: implicit declaration of function '_mm256_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi32(a, b);
+                ^
+wrapper_test/_mm256_rem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epi64.c:17:17: warning: implicit declaration of function '_mm256_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epi64(a, b);
+                ^
+wrapper_test/_mm256_rem_epi64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu8.c:17:17: warning: implicit declaration of function '_mm256_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu8(a, b);
+                ^
+wrapper_test/_mm256_rem_epu8.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu16.c:17:17: warning: implicit declaration of function '_mm256_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu16(a, b);
+                ^
+wrapper_test/_mm256_rem_epu16.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu32.c:17:17: warning: implicit declaration of function '_mm256_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu32(a, b);
+                ^
+wrapper_test/_mm256_rem_epu32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_rem_epu64.c:17:17: warning: implicit declaration of function '_mm256_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_rem_epu64(a, b);
+                ^
+wrapper_test/_mm256_rem_epu64.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_udiv_epi32.c:17:17: warning: implicit declaration of function '_mm256_udiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_udiv_epi32(a, b);
+                ^
+wrapper_test/_mm256_udiv_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_udiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_udiv_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_udiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm256_urem_epi32.c:17:17: warning: implicit declaration of function '_mm256_urem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m256i ret = _mm256_urem_epi32(a, b);
+                ^
+wrapper_test/_mm256_urem_epi32.c:17:11: error: initializing '__m256i' (vector of 4 'long long' values) with an expression of incompatible type 'int'
+  __m256i ret = _mm256_urem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm256_urem_epi32.c:18:11: warning: incompatible pointer types passing '__m256i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 32);
+          ^~~~
+wrapper_test/_mm256_urem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi32.c:17:17: warning: implicit declaration of function '_mm512_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi32(a, b);
+                ^
+wrapper_test/_mm512_div_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_div_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_div_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_div_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_div_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_div_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi8.c:17:17: warning: implicit declaration of function '_mm512_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi8(a, b);
+                ^
+wrapper_test/_mm512_div_epi8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi16.c:17:17: warning: implicit declaration of function '_mm512_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi16(a, b);
+                ^
+wrapper_test/_mm512_div_epi16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epi64.c:17:17: warning: implicit declaration of function '_mm512_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epi64(a, b);
+                ^
+wrapper_test/_mm512_div_epi64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epi64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi32.c:17:17: warning: implicit declaration of function '_mm512_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi32(a, b);
+                ^
+wrapper_test/_mm512_rem_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_rem_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_rem_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_rem_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_rem_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_rem_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi8.c:17:17: warning: implicit declaration of function '_mm512_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi8(a, b);
+                ^
+wrapper_test/_mm512_rem_epi8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi16.c:17:17: warning: implicit declaration of function '_mm512_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi16(a, b);
+                ^
+wrapper_test/_mm512_rem_epi16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epi64.c:17:17: warning: implicit declaration of function '_mm512_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epi64(a, b);
+                ^
+wrapper_test/_mm512_rem_epi64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu32.c:17:17: warning: implicit declaration of function '_mm512_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu32(a, b);
+                ^
+wrapper_test/_mm512_div_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_div_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_div_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_div_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_div_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_div_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu8.c:17:17: warning: implicit declaration of function '_mm512_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu8(a, b);
+                ^
+wrapper_test/_mm512_div_epu8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu16.c:17:17: warning: implicit declaration of function '_mm512_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu16(a, b);
+                ^
+wrapper_test/_mm512_div_epu16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_div_epu64.c:17:17: warning: implicit declaration of function '_mm512_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_div_epu64(a, b);
+                ^
+wrapper_test/_mm512_div_epu64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_div_epu64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu32.c:17:17: warning: implicit declaration of function '_mm512_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu32(a, b);
+                ^
+wrapper_test/_mm512_rem_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_rem_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_rem_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_rem_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_rem_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_rem_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu8.c:17:17: warning: implicit declaration of function '_mm512_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu8(a, b);
+                ^
+wrapper_test/_mm512_rem_epu8.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu16.c:17:17: warning: implicit declaration of function '_mm512_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu16(a, b);
+                ^
+wrapper_test/_mm512_rem_epu16.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_rem_epu64.c:17:17: warning: implicit declaration of function '_mm512_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_rem_epu64(a, b);
+                ^
+wrapper_test/_mm512_rem_epu64.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+Illegal instruction
+
+wrapper_test/_mm512_subr_epi32.c:17:17: warning: implicit declaration of function '_mm512_subr_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_subr_epi32(v2, v3);
+                ^
+wrapper_test/_mm512_subr_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_subr_epi32(v2, v3);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_subr_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_subr_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_subr_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_subr_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_subr_epi32(src, k, v2, v3);
+                ^
+wrapper_test/_mm512_mask_subr_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_subr_epi32(src, k, v2, v3);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_subr_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_subr_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_fmadd_epi32.c:18:17: warning: implicit declaration of function '_mm512_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_fmadd_epi32(a, b, c);
+                ^
+wrapper_test/_mm512_fmadd_epi32.c:18:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_fmadd_epi32(a, b, c);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_fmadd_epi32.c:19:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_fmadd_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_fmadd_epi32(a, k, b, c);
+                ^
+wrapper_test/_mm512_mask_fmadd_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_fmadd_epi32(a, k, b, c);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_fmadd_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask3_fmadd_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask3_fmadd_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask3_fmadd_epi32(a, b, c, k);
+                ^
+wrapper_test/_mm512_mask3_fmadd_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask3_fmadd_epi32(a, b, c, k);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask3_fmadd_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask3_fmadd_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mulhi_epi32.c:17:17: warning: implicit declaration of function '_mm512_mulhi_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mulhi_epi32(a, b);
+                ^
+wrapper_test/_mm512_mulhi_epi32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mulhi_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mulhi_epi32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mulhi_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_mulhi_epi32.c:19:17: warning: implicit declaration of function '_mm512_mask_mulhi_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_mulhi_epi32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_mulhi_epi32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_mulhi_epi32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_mulhi_epi32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_mulhi_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mulhi_epu32.c:17:17: warning: implicit declaration of function '_mm512_mulhi_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mulhi_epu32(a, b);
+                ^
+wrapper_test/_mm512_mulhi_epu32.c:17:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mulhi_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mulhi_epu32.c:18:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mulhi_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm512_mask_mulhi_epu32.c:19:17: warning: implicit declaration of function '_mm512_mask_mulhi_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m512i ret = _mm512_mask_mulhi_epu32(src, k, a, b);
+                ^
+wrapper_test/_mm512_mask_mulhi_epu32.c:19:11: error: initializing '__m512i' (vector of 8 'long long' values) with an expression of incompatible type 'int'
+  __m512i ret = _mm512_mask_mulhi_epu32(src, k, a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm512_mask_mulhi_epu32.c:20:11: warning: incompatible pointer types passing '__m512i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 64);
+          ^~~~
+wrapper_test/_mm512_mask_mulhi_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi8.c:17:17: warning: implicit declaration of function '_mm_div_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi8(a, b);
+                ^
+wrapper_test/_mm_div_epi8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi16.c:17:17: warning: implicit declaration of function '_mm_div_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi16(a, b);
+                ^
+wrapper_test/_mm_div_epi16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi32.c:17:17: warning: implicit declaration of function '_mm_div_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi32(a, b);
+                ^
+wrapper_test/_mm_div_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epi64.c:17:17: warning: implicit declaration of function '_mm_div_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epi64(a, b);
+                ^
+wrapper_test/_mm_div_epi64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epi64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu8.c:17:17: warning: implicit declaration of function '_mm_div_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu8(a, b);
+                ^
+wrapper_test/_mm_div_epu8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu16.c:17:17: warning: implicit declaration of function '_mm_div_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu16(a, b);
+                ^
+wrapper_test/_mm_div_epu16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu32.c:17:17: warning: implicit declaration of function '_mm_div_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu32(a, b);
+                ^
+wrapper_test/_mm_div_epu32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_div_epu64.c:17:17: warning: implicit declaration of function '_mm_div_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_div_epu64(a, b);
+                ^
+wrapper_test/_mm_div_epu64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_div_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_div_epu64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_div_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_idiv_epi32.c:17:17: warning: implicit declaration of function '_mm_idiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_idiv_epi32(a, b);
+                ^
+wrapper_test/_mm_idiv_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_idiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_idiv_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_idiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_irem_epi32.c:17:17: warning: implicit declaration of function '_mm_irem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_irem_epi32(a, b);
+                ^
+wrapper_test/_mm_irem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_irem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_irem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_irem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi8.c:17:17: warning: implicit declaration of function '_mm_rem_epi8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi8(a, b);
+                ^
+wrapper_test/_mm_rem_epi8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi16.c:17:17: warning: implicit declaration of function '_mm_rem_epi16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi16(a, b);
+                ^
+wrapper_test/_mm_rem_epi16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi32.c:17:17: warning: implicit declaration of function '_mm_rem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi32(a, b);
+                ^
+wrapper_test/_mm_rem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epi64.c:17:17: warning: implicit declaration of function '_mm_rem_epi64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epi64(a, b);
+                ^
+wrapper_test/_mm_rem_epi64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epi64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epi64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epi64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu8.c:17:17: warning: implicit declaration of function '_mm_rem_epu8' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu8(a, b);
+                ^
+wrapper_test/_mm_rem_epu8.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu8(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu8.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu8.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu16.c:17:17: warning: implicit declaration of function '_mm_rem_epu16' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu16(a, b);
+                ^
+wrapper_test/_mm_rem_epu16.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu16(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu16.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu16.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu32.c:17:17: warning: implicit declaration of function '_mm_rem_epu32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu32(a, b);
+                ^
+wrapper_test/_mm_rem_epu32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_rem_epu64.c:17:17: warning: implicit declaration of function '_mm_rem_epu64' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_rem_epu64(a, b);
+                ^
+wrapper_test/_mm_rem_epu64.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_rem_epu64(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_rem_epu64.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_rem_epu64.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_udiv_epi32.c:17:17: warning: implicit declaration of function '_mm_udiv_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_udiv_epi32(a, b);
+                ^
+wrapper_test/_mm_udiv_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_udiv_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_udiv_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_udiv_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_urem_epi32.c:17:17: warning: implicit declaration of function '_mm_urem_epi32' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_urem_epi32(a, b);
+                ^
+wrapper_test/_mm_urem_epi32.c:17:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_urem_epi32(a, b);
+          ^     ~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_urem_epi32.c:18:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_urem_epi32.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_cvtsi64x_si128.c:16:17: warning: implicit declaration of function '_mm_cvtsi64x_si128' is invalid in C99 [-Wimplicit-function-declaration]
+  __m128i ret = _mm_cvtsi64x_si128(a);
+                ^
+wrapper_test/_mm_cvtsi64x_si128.c:16:11: error: initializing '__m128i' (vector of 2 'long long' values) with an expression of incompatible type 'int'
+  __m128i ret = _mm_cvtsi64x_si128(a);
+          ^     ~~~~~~~~~~~~~~~~~~~~~
+wrapper_test/_mm_cvtsi64x_si128.c:17:11: warning: incompatible pointer types passing '__m128i *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 16);
+          ^~~~
+wrapper_test/_mm_cvtsi64x_si128.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings and 1 error generated.
+
+wrapper_test/_mm_cvtsi128_si64x.c:16:17: warning: implicit declaration of function '_mm_cvtsi128_si64x' is invalid in C99 [-Wimplicit-function-declaration]
+  int64_t ret = _mm_cvtsi128_si64x(a);
+                ^
+wrapper_test/_mm_cvtsi128_si64x.c:17:11: warning: incompatible pointer types passing 'int64_t *' (aka 'long *') to parameter of type 'const uint8_t *' (aka 'const unsigned char *') [-Wincompatible-pointer-types]
+  hex_out(&ret, 8);
+          ^~~~
+wrapper_test/_mm_cvtsi128_si64x.c:6:30: note: passing argument to parameter 'buf' here
+void hex_out(const uint8_t * buf, ssize_t sz) {
+                             ^
+2 warnings generated.
+/tmp/_mm_cvtsi128_si64x-6cfde9.o: In function `main':
+_mm_cvtsi128_si64x.c:(.text+0xf7): undefined reference to `_mm_cvtsi128_si64x'
+clang-12: error: linker command failed with exit code 1 (use -v to see invocation)
+
