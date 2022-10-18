@@ -50,7 +50,8 @@ class RoseConstant(RoseValue):
           or isinstance(Type, RoseStringType) \
           or isinstance(Type, RoseBooleanType)
       if not isinstance(Type, RoseStringType):
-        assert Value.bit_length() <= Type.getBitwidth()
+        if isinstance(Type.getBitwidth(), int):
+          assert Value.bit_length() <= Type.getBitwidth()
     self.Val = Value
     if isinstance(Type, RoseStringType):
       assert type(Value) == str
@@ -486,4 +487,3 @@ class RoseOperation(RoseValue):
           String += ","
     String += "\n"
     return String
-
