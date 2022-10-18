@@ -86,6 +86,13 @@ class RoseSimilarityChecker():
         self.FunctionToFunctionInfo[Function] = FunctionInfo
         assert not isinstance(Function, RoseUndefRegion)
         self.FunctionToRosetteCodeMap[Function] = RosetteGen.CodeGen(Function)
+        print("FunctionInfo.ArgsToConcreteValMap:")
+        for Arg, Val in FunctionInfo.ArgsToConcreteValMap.items():
+          print("ARG:")
+          Arg.print()
+          print("VAL:")
+          Val.print()
+        print("________________________________________")
         print("self.FunctionToRosetteCodeMap[Function]:")
         print(self.FunctionToRosetteCodeMap[Function])
         # Let's verify if our transformations are corect
@@ -111,6 +118,15 @@ class RoseSimilarityChecker():
 
   
   def replaceUsesofConcreteArgsAndGetFunction(self, FunctionInfo : RoseFunctionInfo):
+    print("*****FunctionInfo.ArgsToConcreteValMap:")
+    for Arg, Val in FunctionInfo.ArgsToConcreteValMap.items():
+      print("ARG:")
+      Arg.print()
+      print(Arg.ID)
+      print("VAL:")
+      Val.print()
+      Arg.getType().print()
+    print("________________________________________")
     Function = FunctionInfo.getLatestFunction()
     CopyFunctionInfo = RoseFunctionInfo()
     CopyFunction = Function.clone()
@@ -119,16 +135,13 @@ class RoseSimilarityChecker():
     CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
     NumArgs = Function.getNumArgs()
     for Idx in range(NumArgs - 1, -1, -1):
-      Arg = CopyFunction.getArg(Idx)
-      if FunctionInfo.argHasConcreteVal(Arg) == True:
-        print("ARG:")
-        Arg.print()
-        print("FunctionInfo.getConcreteValFor(Arg):")
-        FunctionInfo.getConcreteValFor(Arg).print()
-        self.replaceUsesInRegion(CopyFunction, Arg, FunctionInfo.getConcreteValFor(Arg))
-        print("--CopyFunction:")
-        CopyFunction.print()
+      CopyArg = CopyFunction.getArg(Idx)
+      OriginalArg = Function.getArg(Idx)
+      if FunctionInfo.argHasConcreteVal(OriginalArg) == True:
+        self.replaceUsesInRegion(CopyFunction, CopyArg, FunctionInfo.getConcreteValFor(OriginalArg))
         CopyFunction.eraseArg(Idx)
+        print("------CopyFunction:")
+        CopyFunction.print()
     CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
     RoseOpSimplify.Run(CopyFunction, FunctionInfo.getContext())
     CopyFunctionInfo.addFunctionAtNewStage(CopyFunction)
@@ -573,6 +586,7 @@ class RoseSimilarityChecker():
                   ArgsInConditionOps.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
+                continue
               Worklist.extend(Operation.getOperands())
           if isinstance(Op.getElseValue(), RoseArgument):
             ArgsInConditionOps.add(Op.getElseValue())
@@ -590,7 +604,9 @@ class RoseSimilarityChecker():
                   ArgsInConditionOps.add(Operation.getInputBitVector())
                   break
                 Worklist.append(Operation.getInputBitVector())
+                continue
               Worklist.extend(Operation.getOperands())
+          continue
         if isinstance(Op, RoseComparisonBitVectorOp):
           for Operand in Op.getOperands():
             if isinstance(Operand, RoseArgument):
@@ -609,6 +625,7 @@ class RoseSimilarityChecker():
                     ArgsInConditionOps.add(Operation.getInputBitVector())
                     break
                   Worklist.append(Operation.getInputBitVector())
+                  continue
                 Worklist.extend(Operation.getOperands())
     return list(ArgsInConditionOps)
 
@@ -642,16 +659,31 @@ class RoseSimilarityChecker():
       return PermResult
 
     MaskArgs = self.getMaskArgsInFunction(Function)
+    print("len(MaskArgs):")
+    print(len(MaskArgs))
     ConditionalOpsArgs = self.getConditionOpsArgsInFunction(Function)
+    # Remove any common arguments between maskargs and ConditionalOpsArgs from
+    # ConditionalOpsArgs.
+    TempList = list()
+    TempList.extend(ConditionalOpsArgs)
+    for Arg in TempList:
+      if Arg in MaskArgs:
+        print("COMMON ARG:")
+        Arg.print()
+        ConditionalOpsArgs.remove(Arg)
+    print("len(ConditionalOpsArgs):")
+    print(len(ConditionalOpsArgs))
     RemainingBVArgs = list()
     print("CREATING PERMUTATIONS OF:")
     Function.print()
     for Arg in BVArgs:
       if Arg in MaskArgs:
-        #print("ARG IN MASKARGS")
+        print("ARG IN MASKARGS")
+        Arg.print()
         continue
       if Arg in ConditionalOpsArgs:
-        #print("ARG IN SELECTARGS")
+        print("ARG IN ConditionalOpsArgs")
+        Arg.print()
         continue
       RemainingBVArgs.append(Arg)
     FunctionList = list()
@@ -681,6 +713,10 @@ class RoseSimilarityChecker():
             ArgsPermuations.append(MaskArgsPerm + ConditionalOpsArgsPerm + RemainingBVArgPerm)
     for Idx, ArgPerm in enumerate(ArgsPermuations):
       NewArgsList = ArgPerm + RemainingArgs
+      print("len(NewArgsList):")
+      print(len(NewArgsList))
+      print("Function.getNumArgs():")
+      print(Function.getNumArgs())
       assert len(NewArgsList) == Function.getNumArgs()
       if Function.getArgs() != NewArgsList:
         FunctionCopy = self.createNewFunctionCopy(Function, NewArgsList, str(Idx))
@@ -703,6 +739,13 @@ class RoseSimilarityChecker():
     Function.print()
     MaskArgs = self.getMaskArgsInFunction(Function)
     ConditionalOpsArgs = self.getConditionOpsArgsInFunction(Function)
+    # Remove any common arguments between maskargs and ConditionalOpsArgs from
+    # ConditionalOpsArgs.
+    TempList = list()
+    TempList.extend(ConditionalOpsArgs)
+    for Arg in TempList:
+      if Arg in MaskArgs:
+        ConditionalOpsArgs.remove(Arg)
     RemainingBVArgs = list()
     RemainingArgs = list()
     for Arg in Function.getArgs():
@@ -1085,6 +1128,14 @@ class RoseSimilarityChecker():
   def replaceUsesAndPropagateTypes(self, Region : RoseRegion, Arg : RoseArgument, NewVal : RoseConstant):
     assert isinstance(NewVal, RoseConstant)
     BitvectorToBitwidth = dict()
+    print("ARG:")
+    Arg.print()
+    print("NEW VAL:")
+    NewVal.print()
+    print("++++=Region FUNCTION:")
+    Region.getFunction().print()
+    print("Region:")
+    Region.print()
     # Iterate over all blocks and all operations to propagate type information
     if not isinstance(Region, RoseBlock):
       BlockList = Region.getRegionsOfType(RoseBlock)
@@ -1095,23 +1146,24 @@ class RoseSimilarityChecker():
         print("LOOKINNG AT OP:")
         Op.print()
         if isinstance(Op, RoseBVExtractSliceOp):
-          if isinstance(Op.getType().getBitwidth(), RoseArgument):
-            if Op.getOutputBitwidth() == Arg:
-              BitvectorToBitwidth[Op] = NewVal.getValue()
-              Op.setOperand(Op.getBitwidthPos(), NewVal)
-              Op.setType(RoseBitVectorType.create(NewVal.getValue()))
-              continue
+          #if isinstance(Op.getType().getBitwidth(), RoseArgument):
+          if Op.getOperand(Op.getBitwidthPos()) == Arg:
+            Op.setOperand(Op.getBitwidthPos(), NewVal)
+            Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+            BitvectorToBitwidth[Op] = NewVal.getValue()
+          if Op.getType().getBitwidth() == Arg:
+            Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+            BitvectorToBitwidth[Op] = NewVal.getValue()
           Op.replaceUsesWith(Arg, NewVal)
           continue
         if isinstance(Op, RoseBVInsertSliceOp):
-          if isinstance(Op.getOutputBitwidth(), RoseArgument):
-            if Op.getOperand(Op.getBitwidthPos()) == Arg:
-              BitvectorToBitwidth[Op] = NewVal.getValue()
-              BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getValue()
-              Op.getInsertValue().setType(RoseBitVectorType.create(NewVal.getValue()))
-              Op.setOperand(Op.getBitwidthPos(), NewVal)
-              continue
-          elif Op.getInputBitVector() == Arg:
+          #if isinstance(Op.getOutputBitwidth(), RoseArgument):
+          if Op.getOperand(Op.getBitwidthPos()) == Arg:
+            Op.setOperand(Op.getBitwidthPos(), NewVal)
+            Op.getInsertValue().setType(RoseBitVectorType.create(NewVal.getValue()))
+            BitvectorToBitwidth[Op.getInsertValue()] = NewVal.getValue()
+            BitvectorToBitwidth[Op] = NewVal.getValue()
+          if Op.getInputBitVector() == Arg:
             assert isinstance(NewVal.getType().getBitwidth(), int)
             Op.setOperand(Op.getBitwidthPos(), RoseConstant(NewVal.getType().getBitwidth(), \
                             Op.getOperand(Op.getBitwidthPos()).getType()))
@@ -1122,7 +1174,13 @@ class RoseSimilarityChecker():
           Op.replaceUsesWith(Arg, NewVal)
           continue
         if Op.isSizeChangingOp():
+          print("OP TYPE:")
+          Op.getType().print()
           assert isinstance(Op.getType(), RoseBitVectorType)
+          if isinstance(Op.getType().getBitwidth(), RoseArgument) \
+            and Op.getType().getBitwidth() == Arg:
+            Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+            BitvectorToBitwidth[Op] = NewVal.getValue()
           if Op.getOperand(1) == Arg:
             Op.setOperand(1, NewVal)
             Op.setType(RoseBitVectorType.create(NewVal.getValue()))
@@ -1132,58 +1190,32 @@ class RoseSimilarityChecker():
             BitvectorToBitwidth[Op.getInputBitVector()] = NewVal.getType().getBitwidth()
           continue
         if Op.getOpcode().typesOfInputsAndOutputEqual():
-          if Arg in Op.getOperands():
-            for Idx, Operand in enumerate(Op.getOperands()):
-              if Operand == Arg:
-                Op.setOperand(Idx, NewVal)
-                BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
-                continue
-              if isinstance(Operand.getType(), RoseBitVectorType):
-                Operand.setType(RoseBitVectorType.create(NewVal.getType().getBitwidth()))
+          for Idx, Operand in enumerate(Op.getOperands()):
+            if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
+              and Operand.getType().getBitwidth() == Arg:
+              if isinstance(Op.getType(), RoseBitVectorType):
+                Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
               else:
-                assert isinstance(Operand.getType(), RoseIntegerType)
-                Operand.setType(RoseIntegerType.create(NewVal.getType().getBitwidth()))
+                assert isinstance(Op.getType(), RoseIntegerType)
+                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+              BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+              BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
+              continue
+            if Operand == Arg:
+              Op.setOperand(Idx, NewVal)
+              Op.setType(Op.getOperand(Idx).getType())
               BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
-            if isinstance(Operand.getType(), RoseBitVectorType):
-              Op.setType(RoseBitVectorType.create(NewVal.getType().getBitwidth()))
-            else:
-              assert isinstance(Operand.getType(), RoseIntegerType)
-              Op.setType(RoseIntegerType.create(NewVal.getType().getBitwidth()))
               BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
-          else:
-            print("CHECK IF OP IN BitvectorToBitwidth:")
-            Op.print()
-            if Op in BitvectorToBitwidth:
-              for Operand in Op.getOperands():
-                if Operand not in BitvectorToBitwidth:
-                  Operand.setType(Op.getType())
-                  BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
-            else:
-              Type = RoseUndefinedType()
-              for Operand in Op.getOperands():
-                if Operand in BitvectorToBitwidth:
-                  Type = Operand.getType()
-                  break
-              if not isinstance(Type, RoseUndefinedType):
-                Op.setType(Type)
-                BitvectorToBitwidth[Op] = Type.getBitwidth()
-                for Operand in Op.getOperands():
-                  Operand.setType(Type)
-                  BitvectorToBitwidth[Operand] = Type.getBitwidth()
-          continue
-        if Op.getOpcode().typesOfOperandsAreEqual():
-          if Arg in Op.getOperands():
-            for Idx, Operand in enumerate(Op.getOperands()):
-              if Operand == Arg:
-                Op.setOperand(Idx, NewVal)
-                BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
-                continue
-              if isinstance(Operand.getType(), RoseBitVectorType):
-                Operand.setType(RoseBitVectorType.create(NewVal.getType().getBitwidth()))
-              else:
-                assert isinstance(Operand.getType(), RoseIntegerType)
-                Operand.setType(RoseIntegerType.create(NewVal.getType().getBitwidth()))
-              BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+              continue
+          print("PROPAGATE TYPE INFO HORIZONTALLY")
+          Op.print()
+          if Op in BitvectorToBitwidth:
+            for Operand in Op.getOperands():
+              if Operand not in BitvectorToBitwidth:
+                Operand.setType(Op.getType())
+                BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
           else:
             Type = RoseUndefinedType()
             for Operand in Op.getOperands():
@@ -1191,42 +1223,83 @@ class RoseSimilarityChecker():
                 Type = Operand.getType()
                 break
             if not isinstance(Type, RoseUndefinedType):
+              Op.setType(Type)
+              BitvectorToBitwidth[Op] = Type.getBitwidth()
               for Operand in Op.getOperands():
                 Operand.setType(Type)
                 BitvectorToBitwidth[Operand] = Type.getBitwidth()
           continue
+        if Op.getOpcode().typesOfOperandsAreEqual():
+          for Idx, Operand in enumerate(Op.getOperands()):
+            if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
+              and Operand.getType().getBitwidth() == Arg:
+              if isinstance(Operand.getType(), RoseBitVectorType):
+                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
+              else:
+                assert isinstance(Operand.getType(), RoseIntegerType)
+                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+              BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+              continue
+            if Operand == Arg:
+              Op.setOperand(Idx, NewVal)
+              BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+              continue
+          print("PROPAGATE TYPE INFO HORIZONTALLY")
+          Type = RoseUndefinedType()
+          for Operand in Op.getOperands():
+            if Operand in BitvectorToBitwidth:
+              Type = Operand.getType()
+              break
+          if not isinstance(Type, RoseUndefinedType):
+            for Operand in Op.getOperands():
+              Operand.setType(Type)
+              BitvectorToBitwidth[Operand] = Type.getBitwidth()
+          continue
         if isinstance(Op, RoseSelectOp):
+          print("BitvectorToBitwidth:")
+          print(len(BitvectorToBitwidth))
+          #if Op in BitvectorToBitwidth:
+          #  continue
+          for OperandIndex, Operand in enumerate(Op.getOperands()):
+            print("OPERAND:")
+            Operand.print()
+            Operand.getType().print()
+            print("ARG:")
+            Arg.print()
+            Arg.getType().print()
+            if isinstance(Operand.getType().getBitwidth(), RoseArgument) \
+              and Operand.getType().getBitwidth() == Arg:
+              if isinstance(Op.getType(), RoseBitVectorType):
+                Op.setType(RoseBitVectorType.create(NewVal.getValue()))
+                Operand.setType(RoseBitVectorType.create(NewVal.getValue()))
+              else:
+                assert isinstance(Op.getType(), RoseIntegerType)
+                Op.setType(RoseIntegerType.create(NewVal.getValue()))
+                Operand.setType(RoseIntegerType.create(NewVal.getValue()))
+              BitvectorToBitwidth[Operand] = Operand.getType().getBitwidth()
+              BitvectorToBitwidth[Op] = Op.getType().getBitwidth()
+              continue
+            if Operand == Arg:
+              Op.setOperand(OperandIndex, NewVal)
+              BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
+              Op.setType(Operand.getType())
+              BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
+          print("PROPAGATE TYPE INFORMATION HORIZONTALLY")
           if Op in BitvectorToBitwidth:
-            continue
-          if Op.getThenValue() in BitvectorToBitwidth:
+            Op.getThenValue().setType(Op.getType())
+            Op.getElseValue().setType(Op.getType())
+          elif Op.getThenValue() in BitvectorToBitwidth:
             if Op.getElseValue() not in BitvectorToBitwidth:
               Op.getElseValue().setType(Op.getThenValue().getType())
               BitvectorToBitwidth[Op.getElseValue()] = Op.getThenValue().getType().getBitwidth()
             Op.setType(Op.getThenValue().getType())
             BitvectorToBitwidth[Op] = Op.getThenValue().getType().getBitwidth()
-            continue
           elif Op.getElseValue() in BitvectorToBitwidth:
             if Op.getThenValue() not in BitvectorToBitwidth:
               Op.getThenValue().setType(Op.getElseValue().getType())
               BitvectorToBitwidth[Op.getThenValue()] = Op.getElseValue().getType().getBitwidth()
             Op.setType(Op.getThenValue().getType())
             BitvectorToBitwidth[Op] = Op.getThenValue().getType().getBitwidth()
-            continue
-          for OperandIndex, Operand in enumerate(Op.getOperands()):
-            if OperandIndex == 0:
-              continue
-            if Operand == Arg:
-              Op.setOperand(OperandIndex, NewVal)
-              BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
-              continue
-            if isinstance(Operand.getType(), RoseBitVectorType):
-              Operand.setType(RoseBitVectorType.create(NewVal.getType().getBitwidth()))
-            else:
-              assert isinstance(Operand.getType(), RoseIntegerType)
-              Operand.setType(RoseIntegerType.create(NewVal.getType().getBitwidth()))
-            BitvectorToBitwidth[Operand] = NewVal.getType().getBitwidth()
-          Op.setType(Op.getOperand(1).getType())
-          BitvectorToBitwidth[Op] = NewVal.getType().getBitwidth()
           continue
         if isinstance(Op, RoseBVPadHighBitsOp):
           Op.replaceUsesWith(Arg, NewVal)
@@ -1235,6 +1308,8 @@ class RoseSimilarityChecker():
     
     # Perform some forward dataflow analysis to propagate types where the types
     # can be determined.
+    print("Region FUNCTION:")
+    Region.getFunction().print()
     for Block in BlockList:
       for Op in Block.getOperations():
         if isinstance(Op.getType(), RoseBitVectorType) \
@@ -1279,6 +1354,9 @@ class RoseSimilarityChecker():
               if not isinstance(Operand.getType().getBitwidth(), int):
                 Operand.setType(Type)
           continue
+    print("----Region FUNCTION:")
+    Region.getFunction().print()
+    return
 
 
   # This function is needed to avoid triggering some asserts in the API
