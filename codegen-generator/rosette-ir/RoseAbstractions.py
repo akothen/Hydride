@@ -101,7 +101,8 @@ class RoseFunction(RoseValue, RoseRegion):
   
   # Make rose functions hashable
   def __hash__(self):
-    return hash((self.getName(), self.getType(), self.getRegionID()))
+    return hash(self.getRegionID())
+    #return hash((self.getName(), self.getType(), self.getRegionID()))
   
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
     if Suffix == "" and ChangeID == False:
@@ -299,8 +300,7 @@ class RoseBlock(RoseRegion):
 
   # Make rose blocks hashable
   def __hash__(self):
-    #return hash((tuple(self.getOperations()), self.getRegionID()))
-    return hash(self.getRegionID())
+    return super().__hash__()
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
     if Suffix == "" and ChangeID == False:
@@ -478,7 +478,7 @@ class RoseForLoop(RoseRegion):
 
   # Make rose loops hashable
   def __hash__(self):
-    return hash((self.Iterator, self.Start, self.End, self.Step, self.getRegionID()))
+    return super().__hash__()
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(),  ChangeID : bool = False):
     if Suffix == "" and ChangeID == False:
@@ -699,9 +699,9 @@ class RoseCond(RoseRegion):
     assert isinstance(Other, RoseCond)
     return self.Conditions != Other.Conditions or super().__ne__(Other)
 
-  # Make rose loops hashable
+  # Make rose cond regions hashable
   def __hash__(self):
-    return hash(self.getRegionID())
+    return super().__hash__()
 
   def clone(self, Suffix : str = "", ValueToValueMap : dict = dict(), ChangeID : bool = False):
     if Suffix == "" and ChangeID == False:
