@@ -58,7 +58,7 @@
     (begin
       (debug-log "Found previous hash!\n")
       (define prev-hash (import-synth-map prev-hash-file prev-hash-name))
-      (set! synth-log prev-hash)
+      (set! synth-log (hash-copy prev-hash))
       (debug-log synth-log)
 
       )

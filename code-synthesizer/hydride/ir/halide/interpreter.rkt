@@ -29,7 +29,7 @@
     [(eq? elemT 'uint16) 16]
     [(eq? elemT 'uint32) 32]
     [(eq? elemT 'uint64) 64]
-    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" )])
+    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type in intr-elemT-size" elemT )])
 )
 
 (define (is-signed-expr? e1 e2)
@@ -726,7 +726,7 @@
         [(eq? elemT 'uint16) 16]
         [(eq? elemT 'uint32) 32]
         [(eq? elemT 'uint64) 64]
-        [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" buffer)])
+        [else (error "halide/ir/interpreter.rkt: Unexpected buffer type in create-buffer" elemT)])
     )
   (define buffer-size (bvlength data))
   (define buffer-num-elem (/ buffer-size step-size))
@@ -777,7 +777,7 @@
     [(eq? elemT 'uint16) (uint16_t (data idx))]
     [(eq? elemT 'uint32) (uint32_t (data idx))]
     [(eq? elemT 'uint64) (uint64_t (data idx))]
-    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" buffer)]))
+    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type in buffer-ref" buffer)]))
 
 ;; Model basic arithmetic
 (define (infer-out-type lhs rhs)

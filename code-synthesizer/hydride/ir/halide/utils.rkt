@@ -1166,7 +1166,7 @@
         [(eq? elemT 'uint16) 16]
         [(eq? elemT 'uint32) 32]
         [(eq? elemT 'uint64) 64]
-        [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" buff)])
+        [else (error "halide/utils.rkt: Unexpected buffer type in print-buffer-type-info" buff)])
     )
   (define buffer-size (vec-size buff))
   (define buffer-num-elem (/ buffer-size step-size))
@@ -1255,7 +1255,7 @@
     [(x256 sca) (* 256 (vec-size sca))]
     [(x512 sca) (* 512 (vec-size sca))]
 
-    [(ramp base stride len) len]
+    [(ramp base stride len) (* len (vec-size base))]
     [(load buf idxs alignment) (vec-size idxs)]
     [(load-sca buf idx) 1]
     [(int-imm data signed?) (bvlength data)]
@@ -1465,7 +1465,7 @@
     [(eq? elemT 'uint16) 16]
     [(eq? elemT 'uint32) 32]
     [(eq? elemT 'uint64) 64]
-    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" )])
+    [else (error "halide/utils.rkt: Unexpected buffer type in elemT-size" elemT )])
 )
 
 
@@ -1475,7 +1475,7 @@
     [(eq? size 16) 'uint16]
     [(eq? size 32) 'uint32]
     [(eq? size 64) 'uint64]
-    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" )])
+    [else (error "halide/utils.rkt: Unexpected buffer type in size-to-elemT" size )])
 )
 
 
@@ -1489,7 +1489,7 @@
     [(eq? size 16) 'uint16]
     [(eq? size 32) 'uint32]
     [(eq? size 64) 'uint64]
-    [else (error "halide/ir/interpreter.rkt: Unexpected buffer type" )])
+    [else (error "halide/utils.rkt: Unexpected buffer type in size-to-elemT-signed" size )])
 )
 
 
@@ -1508,7 +1508,7 @@
     [(x256 sca)  (get-elemT sca)]
     [(x512 sca)  (get-elemT sca)]
 
-    [(ramp base stride len) (size-to-elemT base)]
+    [(ramp base stride len) (get-elemT base)]
     [(load buf idxs alignment) (size-to-elemT (vec-precision idxs))]
     [(load-sca buf idx) 'int8]
     [(int-imm data signed?) (size-to-elemT-signed (bvlength data) signed?)]
