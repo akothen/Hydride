@@ -258,3 +258,56 @@ function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
 
 
 
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ for ([iterator.0 (range 0 256 128)]) {
+  for ([iterator.0.site0 (range 0 128 32)]) {
+   %low.cofactor0.site0 = div int32 iterator.0.site0, int32 2
+   %low.offset0.site0 = add int32 %low.cofactor0.site0, int32 64
+   %0.site0.new.low.idx = add int32 iterator.0, int32 %low.offset0.site0
+   %0.site0.new.high.idx0 = add int32 %0.site0.new.low.idx, int32 15
+   %0.copy.copy.00.new = bvextract bv256 a, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 16
+   %6 = add int32 iterator.0.site0, int32 15
+   bvinsert bv16 %0.copy.copy.00.new, bv256 dst, int32 iterator.0.site0, int32 %6, int32 16
+   %1.copy.copy.00.new = bvextract bv256 b, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 16
+   %7 = add int32 %low.offset2.site0, int32 iterator.0
+   %low.offset2.site0 = add int32 iterator.0.site0, int32 16
+   %8 = add int32 %7, int32 15
+   bvinsert bv16 %1.copy.copy.00.new, bv256 dst, int32 %7, int32 %8, int32 16
+  }
+ }
+ bvpadhighbits bv256 dst, int32 0
+ ret bv256 dst
+}
+
+
+function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
+ for ([iterator.0 (range 0 512 128)]) {
+  for ([iterator.0.site0 (range 0 128 16)]) {
+   %low.cofactor0.site0 = div int32 iterator.0.site0, int32 2
+   %0.site0.new.low.idx = add int32 iterator.0, int32 %low.cofactor0.site0
+   %0.site0.new.high.idx0 = add int32 %0.site0.new.low.idx, int32 7
+   %0.copy.copy.00.new = bvextract bv512 a, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 8
+   %12 = add int32 iterator.0.site0, int32 7
+   bvinsert bv8 %0.copy.copy.00.new, bv512 dst, int32 iterator.0.site0, int32 %12, int32 8
+   %1.copy.copy.00.new = bvextract bv512 b, int32 %0.site0.new.low.idx, int32 %0.site0.new.high.idx0, int32 8
+   %13 = add int32 %low.offset0.site0, int32 iterator.0
+   %low.offset0.site0 = add int32 iterator.0.site0, int32 8
+   %14 = add int32 %13, int32 7
+   bvinsert bv8 %1.copy.copy.00.new, bv512 dst, int32 %13, int32 %14, int32 8
+  }
+ }
+ bvpadhighbits bv512 dst, int32 0
+ ret bv512 dst
+}
+
+
+
+
+
+
+
+
