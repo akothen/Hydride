@@ -22,6 +22,7 @@ bin_dirs = $(addsuffix /bin,$(benchmarks))
 hannk = hannk/common_halide.cpp
 
 ENABLE_HYDRIDE=1
+EXPR_DEPTH ?=2
 
 .PHONY: clean all $(benchmarks)
 
@@ -38,11 +39,15 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) ./$@/bin/$@_generator \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) ./$@/bin/$@_generator \
+		-t 0 \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
-		-f $@ target=host-noos-no_bounds_query-no_asserts
+		-f $@ target=host
+	
+	
+#-noos-no_bounds_query-no_asserts
 
 # Make the bin dirs if needed
 $(bin_dirs): %:

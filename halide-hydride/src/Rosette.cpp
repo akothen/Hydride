@@ -1574,6 +1574,7 @@ namespace Halide {
                                 return IRMutator::mutate(expr);
                             }
 
+                            std::cout << "Starting synthesis for expr: "<< expr_id <<"\n";
 
 
                             std::cout << "Expression before lower intrinsic: "<< expr <<"\n";
@@ -1607,14 +1608,15 @@ namespace Halide {
                             Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr, abstractions);
 
 
+                            std::cout << "Ending synthesis for expr: "<< expr_id <<"\n";
+
+
                             expr_id++;
 
 
                             // Register that this node has been optimzied
                             mutated_exprs.insert(call_expr.get());
 
-                            // Clear out any abstractions generated for this expression
-                            abstractions.clear();
 
                             debug(0) << "\nOptimized expression: " << call_expr << "\n";
 
@@ -2282,8 +2284,17 @@ namespace Halide {
                 std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
                 std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
 
+                const char* expr_depth_var = getenv("HL_EXPR_DEPTH");
 
-                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 2, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
+                int expr_depth = 2;
+
+                if(expr_depth_var){
+                    expr_depth = (*expr_depth_var) - '0';
+                }
+
+
+
+                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ expr_depth, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
                             /* Previous hash file path */ prev_hash_path,
                             /* Previous hash  name */ prev_hash_name 
                             ) << ")" <<"\n";
