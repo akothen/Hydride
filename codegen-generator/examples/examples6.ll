@@ -228,3 +228,33 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize0, int32 %oute
 
 
 
+
+function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
+ for ([iterator.0 (range 0 512 128)]) {
+  %high.offset4 = add int32 iterator.0, int32 127
+  %0 = bvextract bv512 a, int32 iterator.0, int32 %high.offset4, int32 128
+  %1 = bvextract bv512 b, int32 iterator.0, int32 %high.offset4, int32 128
+  for ([iterator.0.site0 (range 0 128 16)]) {
+   %low.cofactor0.site0 = div int32 iterator.0.site0, int32 2
+   %high.offset0.site0 = add int32 %low.cofactor0.site0, int32 7
+   %0.copy.copy.0 = bvextract bv512 a, int32 iterator.0, int32 %high.offset4, int32 128
+   %0.site0 = bvextract bv128 %0.copy.copy.0, int32 %low.cofactor0.site0, int32 %high.offset0.site0, int32 8
+   %12 = add int32 iterator.0.site0, int32 7
+   %high.offset1.site0 = add int32 iterator.0.site0, int32 7
+   bvinsert bv8 %0.site0, bv512 dst, int32 iterator.0.site0, int32 %12, int32 8
+   %1.copy.copy.0 = bvextract bv512 b, int32 iterator.0, int32 %high.offset4, int32 128
+   %1.site0 = bvextract bv128 %1.copy.copy.0, int32 %low.cofactor0.site0, int32 %high.offset0.site0, int32 8
+   %13 = add int32 %low.offset0.site0, int32 iterator.0
+   %low.offset0.site0 = add int32 iterator.0.site0, int32 8
+   %14 = add int32 %13, int32 7
+   %high.offset3.site0 = add int32 %low.offset0.site0, int32 7
+   bvinsert bv8 %1.site0, bv512 dst, int32 %13, int32 %14, int32 8
+  }
+ }
+ bvpadhighbits bv512 dst, int32 0
+ ret bv512 dst
+}
+
+
+
+
