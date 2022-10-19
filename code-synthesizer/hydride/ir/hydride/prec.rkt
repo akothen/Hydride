@@ -35,6 +35,8 @@
             [(interleave-vectors_dsl v0 v1 size_i_o prec_i_o) prec_i_o]
             [(interleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
             [(deinterleave-vector_dsl v0 size_i_o prec_i_o) prec_i_o]
+
+            [(llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5) prec_i_o]
             [(_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (cond 
                [(and  (equal? size_i_o 512) (equal? lane_size 512) (equal? num_4 512) (equal? prec_i_o 16) (equal? num_6 0) (equal? num_7 16) (equal? num_8 32) (equal? num_9 0)) 16]
@@ -1957,9 +1959,10 @@
                )
 
              ]
-            [(_mm256_setr_m128i_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11)
+            [(_mm256_setr_m128i_dsl v0 v1)
              (cond 
-               [(and  (equal? size_o 256) (equal? lane_size 256) (equal? num_4 256) (equal? prec_i_o 256) (equal? num_6 0) (equal? num_7 128) (equal? num_8 0) (equal? num_9 0) (equal? num_10 0) (equal? num_11 0)) 128]
+               [(and ) 128]
+               [(and ) 128]
                )
 
              ]

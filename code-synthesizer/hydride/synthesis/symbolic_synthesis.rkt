@@ -73,8 +73,6 @@
     (if optimize?
       ;; Use Z3 for optimization
       (begin 
-        ;(current-solver (z3))
-        ;(current-bitwidth #f) 
 
         (optimize 
           #:minimize (list (cost-fn grammar))

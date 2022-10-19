@@ -286,6 +286,11 @@
             [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
              (+ 2 (* 1 (hydride:cost  v0)) )
              ]
+
+            [ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+             (+ 5 (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1))  
+                (* 5 (hydride:cost  v4)) )
+             ]
             [ (_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (+ cost__mm512_mulhi_epi16_dsl (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1))  
 
@@ -1075,11 +1080,8 @@
 
                 )
              ]
-            [ (_mm256_setr_m128i_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11)
-             (+ cost__mm256_setr_m128i_dsl (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1))  
-
-
-                )
+            [ (_mm256_setr_m128i_dsl v0 v1)
+             (+ cost__mm256_setr_m128i_dsl (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1)) )
              ]
             [ (_mm256_mask_cmpneq_epi16_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12)
              (+ cost__mm256_mask_cmpneq_epi16_mask_dsl (* 1 (hydride:cost  vc_0))  (* 2 (hydride:cost  v1))  (* 3 (hydride:cost  v2))  

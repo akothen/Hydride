@@ -11,17 +11,17 @@ class IRPrinter:
     def emit_default_def(self, struct_definer ):
         defaults = []
 
-        defaults.append("[(dim-x id) (string-append \"(dim-x \" (~s id) \")\\n\")]")
-        defaults.append("[(dim-y id) (string-append \"(dim-y \" (~s id) \")\\n\")]")
-        defaults.append("[(idx-i id) (string-append \"(idx-i \" (~s id) \")\\n\")]")
-        defaults.append("[(idx-j id) (string-append \"(idx-j \" (~s id) \")\\n\")]")
-        defaults.append("[(reg id) (string-append  \"(reg \" (~s  id) \")\\n\")]")
+        defaults.append("[(dim-x id) (string-append \"\\n\"  \"(dim-x \" (~s id) \")\")]")
+        defaults.append("[(dim-y id) (string-append \"\\n\" \"(dim-y \" (~s id) \")\")]")
+        defaults.append("[(idx-i id) (string-append \"\\n\" \"(idx-i \" (~s id) \")\")]")
+        defaults.append("[(idx-j id) (string-append \"\\n\" \"(idx-j \" (~s id) \")\")]")
+        defaults.append("[(reg id) (string-append  \"\\n\" \"(reg \" (~s  id) \")\")]")
 
-        defaults.append("[(lit v) (string-append  \"(lit \" (~s v) \")\")]")
+        defaults.append("[(lit v) (string-append   \"(lit \" (~s v) \")\")]")
 
-        defaults.append("[(nop v1) (string-append \"(nop \" ({} v1) \")\\n\")]".format( self.printer_name))
-        defaults.append("[(idx-add i1 i2) (string-append \"(idx-add \" (~s i1) (~s i2) \")\\n\" )]")
-        defaults.append("[(idx-mul i1 i2) (string-append \"(idx-mul \" (~s i1) (~s i2) \")\\n\" )]")
+        defaults.append("[(nop v1) (string-append \"\\n\" \"(nop \" ({} v1) \")\")]".format( self.printer_name))
+        defaults.append("[(idx-add i1 i2) (string-append \"\\n\" \"(idx-add \" (~s i1) (~s i2) \")\" )]")
+        defaults.append("[(idx-mul i1 i2) (string-append \"\\n\" \"(idx-mul \" (~s i1) (~s i2) \")\" )]")
 
         #defaults.append(self.emit_get_len_def(dummy_vector_load_dsl, struct_definer)[1:])
 
@@ -48,7 +48,7 @@ class IRPrinter:
         return ["\t{}".format(d) for d in defaults]
 
     def emit_print_clause(self, dsl_inst, struct_definer):
-        return "[{} \n\t(string-append \n\t{}\n\t{} \"\\n\")]".format(struct_definer.emit_dsl_struct_use(dsl_inst),
+        return "[{} \n\t(string-append \"\\n\" \n\t{}\n\t{} \"\\n\")]".format(struct_definer.emit_dsl_struct_use(dsl_inst),
                                                    self.emit_base_print_expr(dsl_inst),
                                                    self.emit_output_type_str(dsl_inst, struct_definer))
 

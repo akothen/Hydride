@@ -73,6 +73,17 @@
                [else ( deinterleave-vector_dsl v0-folded size_i_o prec_i_o )]
                )
              ]
+            [ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+             (define v0-folded (hydride:const-fold v0))
+             (define v1-folded (hydride:const-fold v1))
+             (define v4-folded (hydride:const-fold v4))
+             (cond
+               [(and (lit? v0-folded) (lit? v1-folded) (lit? v4-folded))
+                (lit (hydride:interpret ( llvm:shuffle-vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 ) (vector)))
+                ]
+               [else ( llvm:shuffle-vectors_dsl v0-folded v1-folded num_2 prec_i_o v4-folded num_5 )]
+               )
+             ]
             [ (_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (define v0-folded (hydride:const-fold v0))
              (define v1-folded (hydride:const-fold v1))
@@ -1566,14 +1577,14 @@
                [else ( _mm_blendv_epi8_dsl v0-folded v1-folded v2-folded size_i_o lane_size num_5 prec_i_o num_7 num_8 )]
                )
              ]
-            [ (_mm256_setr_m128i_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11)
+            [ (_mm256_setr_m128i_dsl v0 v1)
              (define v0-folded (hydride:const-fold v0))
              (define v1-folded (hydride:const-fold v1))
              (cond
                [(and (lit? v0-folded) (lit? v1-folded))
-                (lit (hydride:interpret ( _mm256_setr_m128i_dsl v0-folded v1-folded size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11 ) (vector)))
+                (lit (hydride:interpret ( _mm256_setr_m128i_dsl v0-folded v1-folded ) (vector)))
                 ]
-               [else ( _mm256_setr_m128i_dsl v0-folded v1-folded size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11 )]
+               [else ( _mm256_setr_m128i_dsl v0-folded v1-folded )]
                )
              ]
             [ (_mm256_mask_cmpneq_epi16_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12)

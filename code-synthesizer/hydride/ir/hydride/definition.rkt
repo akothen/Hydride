@@ -19,7 +19,7 @@
 ;; ================================================================================
 
 (struct reg (id) #:transparent #:mutable)
-(struct lit (val) #:transparent )
+(struct lit (val) #:transparent #:mutable)
 (struct idx-i (id) #:transparent #:mutable)
 (struct idx-j (id) #:transparent #:mutable)
 (struct dim-x (id) #:transparent #:mutable)
@@ -32,6 +32,7 @@
 (struct interleave-vectors_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct interleave-vector_dsl (v0 size_i_o prec_i_o) #:transparent #:mutable)
 (struct deinterleave-vector_dsl (v0 size_i_o prec_i_o) #:transparent #:mutable)
+(struct llvm:shuffle-vectors_dsl (v0 v1 num_2 prec_i_o v4 num_5) #:transparent #:mutable)
 (struct _mm512_mulhi_epi16_dsl (v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9) #:transparent #:mutable)
 (struct _m_from_int_dsl (v0 size_o lane_size num_3 prec_i_o num_5 num_6 num_7 num_8) #:transparent #:mutable)
 (struct _mm_hsubs_pi16_dsl (v0 v1 size_i_o lane_size num_4 num_5 num_6 prec_i_o num_8 num_9 num_10 num_11 num_12 num_13 num_14) #:transparent #:mutable)
@@ -160,7 +161,7 @@
 (struct _mm256_maskz_or_epi32_dsl (vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_i_o num_8 num_9) #:transparent #:mutable)
 (struct _mm256_rolv_epi32_dsl (v0 v1 size_i_o lane_size num_4 prec_i_o num_6 vc_7 vc_8 num_9) #:transparent #:mutable)
 (struct _mm_blendv_epi8_dsl (v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8) #:transparent #:mutable)
-(struct _mm256_setr_m128i_dsl (v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11) #:transparent #:mutable)
+(struct _mm256_setr_m128i_dsl (v0 v1) #:transparent #:mutable)
 (struct _mm256_mask_cmpneq_epi16_mask_dsl (vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12) #:transparent #:mutable)
 (struct _mm256_testn_epi32_mask_dsl (v0 v1 size_i_o lane_size num_4 prec_o num_6 vc_7 vc_8 vc_9 prec_i num_11) #:transparent #:mutable)
 (struct _mm256_blend_epi16_dsl (v0 v1 v2 size_i_o lane_size num_5 prec_i_o num_7 num_8 num_9) #:transparent #:mutable)

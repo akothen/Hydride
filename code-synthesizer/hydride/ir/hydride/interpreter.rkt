@@ -8,6 +8,7 @@
 
 (require hydride/utils/bvops)
 (require hydride/utils/misc)
+(require hydride/utils/llvm_impl)
 
 
 (require hydride/ir/hydride/semantics)
@@ -50,6 +51,10 @@
              ]
             [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
              (deinterleave-vector (hydride:interpret v0 env) size_i_o prec_i_o)
+             ]
+            [ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+             (llvm:shuffle-vectors (hydride:interpret v0 env) (hydride:interpret v1 env) num_2 
+                                   prec_i_o (hydride:interpret v4 env) num_5)
              ]
             [ (_mm512_mulhi_epi16_dsl v0 v1 size_i_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9)
              (_mm512_mulhi_epi16 (hydride:interpret v0 env) (hydride:interpret v1 env) size_i_o 
@@ -840,11 +845,8 @@
                               size_i_o lane_size num_5 
                               prec_i_o num_7 num_8)
              ]
-            [ (_mm256_setr_m128i_dsl v0 v1 size_o lane_size num_4 prec_i_o num_6 num_7 num_8 num_9 num_10 num_11)
-             (_mm256_setr_m128i (hydride:interpret v0 env) (hydride:interpret v1 env) size_o 
-                                lane_size num_4 prec_i_o 
-                                num_6 num_7 num_8 
-                                num_9 num_10 num_11)
+            [ (_mm256_setr_m128i_dsl v0 v1)
+             (_mm256_setr_m128i (hydride:interpret v0 env) (hydride:interpret v1 env))
              ]
             [ (_mm256_mask_cmpneq_epi16_mask_dsl vc_0 v1 v2 v3 size_i_o lane_size num_6 prec_o num_8 vc_9 vc_10 prec_i num_12)
              (_mm256_mask_cmpneq_epi16_mask (hydride:interpret vc_0 env) (hydride:interpret v1 env) (hydride:interpret v2 env) 

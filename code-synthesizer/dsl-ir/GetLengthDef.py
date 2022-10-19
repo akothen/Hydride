@@ -69,6 +69,13 @@ class GetLengthDef:
         len_expr = "{}".format(args[1].name)
         defaults.append("[{} {}]".format(dsl_use, len_expr))
 
+        # Special case handling for llvm vector shuffle
+
+        dsl_use = struct_definer.emit_dsl_struct_use(dummy_llvm_shuffle_dsl)
+        args = dummy_llvm_shuffle_dsl.get_sample_context().context_args
+        len_expr = "(* {} {}) ".format(args[5].name, args[3].name) # mask-len * prec
+        defaults.append("[{} {}]".format(dsl_use, len_expr))
+
 
         return ["\t{}".format(d) for d in defaults]
 

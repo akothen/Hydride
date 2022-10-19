@@ -289,6 +289,74 @@ def create_deinterleave_dsl(input_vector_sizes = [],
 
     return vec_deinterleave_dsl
 
+llvm_shufflevector_sema = [
+    " (define (llvm:shuffle-vectors  v1 v2 len prec  permute-mask mask-len) ",
+    "   (define result ",
+    "     (apply  ",
+    "       concat  ",
+    "       (for/list ([i  (range mask-len)]) ",
+    "                 ;; Get mask index at index i ",
+    "                 (define index-from-right (- mask-len 1 i)) ",
+    "                 (define mask-low (* index-from-right 32)) ",
+    "                 (define mask-high (+ mask-low 31)) ",
+    "                 (define mask-idx-bv (extract mask-high mask-low permute-mask)) ",
+    "  ",
+    "                 (define mask-idx-val (bitvector->integer mask-idx-bv)) ",
+    "  ",
+    "                 ;; Identify whether to index into v1 or v2 ",
+    "                 (define-values (vec adjusted-idx) ",
+    "                                (if (>= mask-idx-val  len) ",
+    "  ",
+    "                                  ;; Index into v2 ",
+    "                                  (values v2 (- mask-idx-val len)) ",
+    "  ",
+    "  ",
+    "                                  ;; Index into v1 ",
+    "                                  (values v1 mask-idx-val) ",
+    "                                  ) ",
+    "                                ) ",
+    "  ",
+    "  ",
+    "                 (define vec-index-from-right (- len 1 adjusted-idx)) ",
+    "                 (define vec-low (* vec-index-from-right prec)) ",
+    "                 (define vec-high (+ vec-low (- prec 1))) ",
+    "                 (extract vec-high vec-low vec) ",
+    "                 ) ",
+    "       ) ",
+    "     ) ",
+    "   result ",
+    "   ) "
+]
+
+
+def create_llvm_shufflevector_dsl(input_vector_sizes = [],
+                                  precisions = [],
+                                  mask_sizes = []
+                                  ):
+    vec_llvm_shuffle_dsl = DSLInstruction(name = "llvm:shuffle-vectors", simd = False,
+                                          operation = False, semantics = llvm_shufflevector_sema)
+
+
+    for i in range(0, len(input_vector_sizes)):
+        vec_llvm_shuffle_dsl.add_context(
+            name = "shuffle-vector-{}-{}-{}".format(input_vector_sizes[i], precisions[i], mask_sizes[i]),
+            in_vectsize = input_vector_sizes[i],
+            out_vectsize = (mask_sizes[i]/32) * precisions[i],
+            lane_size = input_vector_sizes[i],
+            in_precision = precisions[i],
+            out_precision = precisions[i],
+            SIMD = "False",
+            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]),  "SYMBOLIC_BV_{}".format(input_vector_sizes[i]), str(input_vector_sizes[i]// precisions[i]),
+                    str(precisions[i]), "SYMBOLIC_BV_{}".format(mask_sizes[i]), str(mask_sizes[i] // 32 )],
+            in_vectsize_index = 1,
+            out_vectsize_index = 1,
+            lanesize_index = 1,
+            in_precision_index = 3,
+            out_precision_index = 3,
+            cost = "5",
+        )
+
+    return vec_llvm_shuffle_dsl
 
 # Placeholder instruction definition to faciliate other classes
 # emitting racket code for interpreter
@@ -329,6 +397,12 @@ dummy_vector_deinterleave_dsl = create_deinterleave_dsl(
     precisions = [16]
 )
 
+dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(
+    input_vector_sizes = [128],
+    precisions = [16],
+    mask_sizes = [32*4]
+)
+
 
 default_structs = [
     dummy_vector_load_dsl,
@@ -336,4 +410,5 @@ default_structs = [
     dummy_vector_two_interleave_dsl,
     dummy_vector_interleave_dsl,
     dummy_vector_deinterleave_dsl,
+    dummy_llvm_shuffle_dsl
 ]

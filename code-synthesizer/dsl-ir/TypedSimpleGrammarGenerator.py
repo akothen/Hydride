@@ -104,7 +104,7 @@ class TypedSimpleGrammarGenerator:
 
         hole_clause = "" # "\n\t".join([condition, hole, close])
 
-        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses)
+        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause] + imm_clauses)
 
 
     def is_broadcast_like_operation(self, dsl_inst):

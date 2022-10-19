@@ -23,11 +23,9 @@ class BindDef:
         defaults.append("[(idx-add i1 i2) (idx-add i1 i2)]")
         defaults.append("[(idx-mul i1 i2) (idx-mul i1 i2)]")
 
-        defaults.append(self.emit_bind_def(dummy_vector_load_dsl, struct_definer)[1:])
-        defaults.append(self.emit_bind_def(dummy_vector_swizzle_dsl, struct_definer)[1:])
-        defaults.append(self.emit_bind_def(dummy_vector_two_interleave_dsl, struct_definer)[1:])
-        defaults.append(self.emit_bind_def(dummy_vector_interleave_dsl, struct_definer)[1:])
-        defaults.append(self.emit_bind_def(dummy_vector_deinterleave_dsl, struct_definer)[1:])
+
+        for default in default_structs:
+            defaults.append(self.emit_bind_def(default, struct_definer)[1:])
 
         return ["\t{}".format(d) for d in defaults]
 

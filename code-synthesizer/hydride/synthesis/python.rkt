@@ -40,6 +40,69 @@
 (define-runtime-path gen "/tmp/")
 
 
+;; During synthesis often identical sub-expressions are encountered.
+;; To reduce compilation time, we can maintain a memo table of
+;; previously synthesized expressions and their corresponding 
+;; specification. These utilities enable reading this hash-map
+;; from file and writing the hash map to file.
+(define (import-synth-map filename map_name)
+  (debug-log (format "Importing synth log map ~a from ~a ... \n" map_name filename))
+
+  (cond 
+    ;; First file we're synthesizing in this batch, return empty
+    ;; map
+    [(equal? filename "") 
+     (make-hash)
+     ]
+    [else
+      (define mod-path (build-path gen (string->path filename)))
+      (dynamic-require mod-path (string->symbol map_name))
+      ]
+    )
+  )
+
+(define hydride-import-header
+  "#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  "
+  )
+
+(define (convert-hash-map-to-str hmap)
+  (define str "")
+
+
+  (define (hash-helper k v)
+    (define serialized (format "~a ~a" (~v k) (~v v) ))
+    (set! str (string-append str "\n" serialized))
+    v
+    )
+
+  (hash-map hmap hash-helper)
+
+  (string-append "(hash " str ")")
+
+
+  )
+
+
+(define (save-synth-map filename map_name map-obj)
+  (debug-log (format "Storing synth log map ~a to ~a ... \n" map_name filename))
+  (define def-hash-str (format "(define ~a ~a)\n" map_name  (convert-hash-map-to-str map-obj)))
+
+  (define file_contents (string-append hydride-import-header "\n" def-hash-str))
+
+
+  (write-str-to-file file_contents filename)
+  )
+
 
 (define (get-expr-grammar expr sub-expr-ls base_name VF)
   (debug-log (format "get-expr-grammar with base_name: ~a\n" base_name))
@@ -48,14 +111,14 @@
   (debug-log grammar-file-name)
   (define mod-path (build-path gen (string->path grammar-file-name)))
   (debug-log mod-path)
-  (generate-grammar-file spec-contents mod-path base_name VF 0)
+  (generate-grammar-file spec-contents mod-path base_name VF 0) ;; IS_SHUFFLE = 0
   (debug-log "Generated Grammar File")
   (define (get-grammar mod name)
     (debug-log (format "Dynamically importing from ~a ... \n" name))
     (dynamic-require mod (string->symbol name))
     )
 
-  (define grammar (get-grammar mod-path (string-append base_name "")));;(dynamic-require gen (string->symbol (string-append base_name "_grammar_operations"))))
+  (define grammar (get-grammar mod-path (string-append base_name "")))
   grammar
   )
 
@@ -74,7 +137,7 @@
     (dynamic-require mod (string->symbol name))
     )
 
-  (define grammar (get-grammar mod-path (string-append base_name "")));;(dynamic-require gen (string->symbol (string-append base_name "_grammar_operations"))))
+  (define grammar (get-grammar mod-path (string-append base_name "")))
   grammar
   )
 

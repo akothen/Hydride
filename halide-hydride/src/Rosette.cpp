@@ -25,6 +25,11 @@ namespace Halide {
 
     int expr_id = 0;
 
+    // ABSD is a complex operation which is represented as
+    // a call node in Halide. Optionally decompose absd into
+    // sequence of arithmetic op.
+    bool SIMPLIFY_ABSD = true;
+
     namespace Internal {
 
         namespace {
@@ -583,7 +588,7 @@ namespace Halide {
 
                         if(elemT == "'") return "";
 
-                        std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
+                        std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
                         return define_bitvector_str + "\n" + define_buffer_str;
@@ -1582,8 +1587,11 @@ namespace Halide {
                             spec_expr = AbstractUnsupportedNodes(arch, abstractions).mutate(spec_expr);
 
 
+
+
                             // Lift cse for more readable specs
-                            spec_expr = common_subexpression_elimination(spec_expr);
+                            //spec_expr = common_subexpression_elimination(spec_expr);
+
 
                             // Re-write expression using synthesis
                             Expr optimized_expr = synthesize_impl(spec_expr, expr);
@@ -1592,16 +1600,21 @@ namespace Halide {
                             Expr final_expr = ReplaceAbstractedNodes(abstractions, let_vars).mutate(optimized_expr);
 
 
+                            std::cout << "Expression after replacae abstraction: "<< final_expr <<"\n";
 
 
                             std::string fn_name = "hydride.node." + std::to_string(expr_id);
-                            Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr);
+                            Expr call_expr = ExtractIntoCall().generate_call(fn_name, final_expr, abstractions);
+
 
                             expr_id++;
 
 
                             // Register that this node has been optimzied
                             mutated_exprs.insert(call_expr.get());
+
+                            // Clear out any abstractions generated for this expression
+                            abstractions.clear();
 
                             debug(0) << "\nOptimized expression: " << call_expr << "\n";
 
@@ -1668,6 +1681,17 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::sorted_avg)) {
                             lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
                         } 
+                        else if (SIMPLIFY_ABSD && op->is_intrinsic(Call::absd)) {
+                            lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
+                        } 
+                        /*
+                        else if (op->is_intrinsic(Call::rounding_shift_right)){
+                            
+                            auto sat_add_arg_0 = op->args[0];
+                            auto sat_add_arg_1 = (1 << max(0,op->args[1])) / 2;
+                            lowered = (narrow(clamp(widen(sat_add_arg_0) - widen(sat_add_arg_1),
+                                        sat_add_arg_0.type().min(), sat_add_arg_0.type().max()))) >> op->args[1];
+                        } 
                         else if (op->is_intrinsic(Call::widening_mul)) {
                             debug(0) << "Lowering widening mul" << "\n";
                             lowered = (widen(op->args[0]) * widen(op->args[1]));
@@ -1675,6 +1699,7 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::widening_add)) {
                             lowered = (widen(op->args[0]) + widen(op->args[1]));
                         } 
+                        */
                         else {
                             lowered = lower_intrinsic(op);
                         }
@@ -1736,6 +1761,65 @@ namespace Halide {
                             return IRMutator::visit(op);
                     }
 
+                    Expr visit(const Add *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const Mul *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const Sub *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const Div *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
 
                     Expr visit(const Shuffle *op) override{
                         if (op->is_concat()){
@@ -1769,6 +1853,7 @@ namespace Halide {
                                 supported_input_sizes.push_back(128);
                                 supported_input_sizes.push_back(64);
                                 supported_input_sizes.push_back(32);
+                                supported_input_sizes.push_back(16);
                         };
 
                         Expr v = op->value;
@@ -1858,28 +1943,33 @@ namespace Halide {
                     // Populate a std::vector with Halide expressions  correpsonding to load instructions
                     // and Variable instructions. The index into the vector is determined by the
                     // unsigned value attached to each argument type.
-                    void get_call_args(const Expr &x, std::vector<Expr>& args){
+                    void get_call_args(const Expr &x, std::vector<Expr>& args,  std::map<std::string, Expr> & abstractions){
 
+                        std::map<std::string, Expr> let_vars;
+                        auto RAN = ReplaceAbstractedNodes(abstractions, let_vars);
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             const Load* op = bi->first;
                             unsigned idx = bi->second;
-                            args[idx] = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment);
+                            Expr OriginalLoad = Load::make(op->type, op->name, op->index, op->image, op->param, op->predicate, op->alignment);
+                            args[idx] = RAN.mutate(OriginalLoad);
                         }
 
                         for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
+                            // For variables we may have abstracted out the calculation before synthesis, 
+                            // so we need to account for any variable mapping.
                             const Variable* op = bi->first;
                             unsigned idx = bi->second;
-                            args[idx] = Variable::make(op->type, op->name, op->image, op->param, op->reduction_domain);
+                            Expr OriginalVar = Variable::make(op->type, op->name, op->image, op->param, op->reduction_domain);
+                            args[idx] = RAN.mutate(OriginalVar);
                         }
-
                     }
 
-                    Expr generate_call(std::string function_name, const Expr &x){
+                    Expr generate_call(std::string function_name, const Expr &x, std::map<std::string, Expr> & abstractions){
                         size_t num_arguments = LoadToRegMap.size() + VariableToRegMap.size();
                         std::vector<Expr> args(num_arguments);
 
 
-                        get_call_args(x, args);
+                        get_call_args(x, args, abstractions);
 
                         std::cout << "Generating Call with type: "<< x.type() << " and lanes "<< x.type().lanes()<<"\n";
                         return Call::make(x.type(), function_name, args, Call::Extern);
@@ -1897,44 +1987,10 @@ namespace Halide {
                     Expr visit(const Variable *v) override {
                         if (abstractions.count(v->name) == 0)
                             return IRMutator::visit(v);
-                        return abstractions[v->name];
+                        return mutate(abstractions[v->name]);
                     }
 
                     Expr visit(const Load *v) override {
-                        //debug(0) << "LOAD NAME: " << v->name << "\n";
-                        if (v->name.length() > 4) {
-                            // Trim the "-buf" suffix generated by rake
-                            std::string vname = v->name.substr(0, v->name.length() - 4);
-                            //debug(0) << vname << abstractions.count(vname) << "\n ";
-                            if (abstractions.count(vname) > 0) {
-                                if (const Ramp *ramp = v->index.as<Ramp>()) {
-                                    return Shuffle::make_slice(
-                                            abstractions[vname],
-                                            ((ramp->base).as<IntImm>())->value,
-                                            ((ramp->stride).as<IntImm>())->value,
-                                            ramp->lanes
-                                            );
-                                } else
-                                    return abstractions[vname];
-                            } else if (letvars.count(vname)) {
-                                if (const Ramp *ramp = v->index.as<Ramp>()) {
-                                    return Shuffle::make_slice(
-                                            Variable::make(letvars[vname].type(), vname),
-                                            ((ramp->base).as<IntImm>())->value,
-                                            ((ramp->stride).as<IntImm>())->value,
-                                            ramp->lanes);
-                                }
-                            } else if (v->name.substr(v->name.length() - 4, 4) == std::string("-buf")) {
-                                if (const Ramp *ramp = v->index.as<Ramp>()) {
-                                    return Shuffle::make_slice(
-                                            // Todo: look for the actual variable, this type could be wrong
-                                            Variable::make(v->type, vname),
-                                            ((ramp->base).as<IntImm>())->value,
-                                            ((ramp->stride).as<IntImm>())->value,
-                                            ramp->lanes);
-                                }
-                            }
-                        }
                         return IRMutator::visit(v);
                     }
 
@@ -2005,6 +2061,27 @@ namespace Halide {
                     HydrideSynthEmitter() {};
 
 
+                    std::string get_synthlog_hash_filepath(int id){
+
+                        if(id < 0){
+                            return "";
+                        } else {
+                            return "hydride_hash_" + std::to_string(id) + ".rkt";
+                        }
+
+                    }
+
+
+                    std::string get_synthlog_hash_name(int id){
+
+                        if(id < 0){
+                            return "";
+                        } else {
+                            return "synth_hash_" + std::to_string(id);
+                        }
+
+                    }
+
                     std::string define_load_buffer(const Load *op){
                         std::string reg_name = "reg_"+ std::to_string(LoadToRegMap[op]);
                         size_t bitwidth = op->type.bits() * op->type.lanes();
@@ -2013,7 +2090,6 @@ namespace Halide {
 
                         if(elemT == "'") return "";
 
-                        //std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
                         std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
 
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
@@ -2032,7 +2108,6 @@ namespace Halide {
 
                         if(elemT == "'") return "";
 
-                        //std::string define_bitvector_str = "(define-symbolic "+reg_name+"_bitvector"+" "+ "(bitvector "+std::to_string(bitwidth)+")" +")";
                         std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
 
@@ -2125,8 +2200,8 @@ namespace Halide {
                         return "(custodian-limit-memory (current-custodian) (* " +std::to_string(MB)+" 1024 1024))";
                     }
 
-                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name){
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " 'z3 )";
+                    std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name, std::string synth_log_path, std::string synth_log_name){
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " 'z3 \"" + synth_log_path + "\"  \"" + synth_log_name + "\" )";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -2136,6 +2211,10 @@ namespace Halide {
 
                     std::string emit_assemble_result(std::string result_name , std::string expr_name,  size_t lanes){
                         return "(define "+ result_name +" (halide:assemble-bitvector "+emit_interpret_expr(expr_name) + " "+ std::to_string(lanes)+")"+")";
+                    }
+
+                    std::string emit_write_synth_log_to_file(std::string fpath , std::string hash_name){
+                        return "(save-synth-map \"" + fpath + "\" \"" +hash_name + "\" synth-log)";
                     }
 
 
@@ -2150,7 +2229,7 @@ namespace Halide {
 
             Expr IROptimizer::synthesize_impl(Expr spec_expr, Expr orig_expr) {
 
-                std::cout << "Input expression to synthesize: "<< orig_expr <<"\n";
+                std::cout << "Input expression to synthesize: "<< spec_expr <<"\n";
 
 
 
@@ -2198,12 +2277,27 @@ namespace Halide {
                 rkt << ")\n\n";
 
                 rkt << "(clear-vc!)" << "\n";
-                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 1, /* VF*/ orig_expr.type().lanes(), /* Hash map name */  "id-map") << ")" <<"\n";
+
+
+                std::string prev_hash_path = HSE.get_synthlog_hash_filepath(expr_id - 1);
+                std::string prev_hash_name = HSE.get_synthlog_hash_name(expr_id - 1);
+
+
+                rkt << "(define synth-res "+HSE.emit_hydride_synthesis("halide-expr", /* expr depth */ 2, /* VF*/ orig_expr.type().lanes(), /* Reg Hash map name */  "id-map",
+                            /* Previous hash file path */ prev_hash_path,
+                            /* Previous hash  name */ prev_hash_name 
+                            ) << ")" <<"\n";
                 rkt << "(dump-synth-res-with-typeinfo synth-res id-map)"<<"\n";
 
 
                 std::string fn_name = "hydride.node." + std::to_string(expr_id);
                 rkt << HSE.emit_compile_to_llvm("synth-res", "id-map", fn_name , "/tmp/test.ll");
+
+
+                std::string cur_hash_path = HSE.get_synthlog_hash_filepath(expr_id);
+                std::string cur_hash_name = HSE.get_synthlog_hash_name(expr_id );
+
+                rkt << HSE.emit_write_synth_log_to_file( "/tmp/"+cur_hash_path, cur_hash_name);
 
                 rkt.close();
 

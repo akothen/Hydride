@@ -38,8 +38,6 @@
 ;; Create random concrete bitvector
 ;; to use in iterative synthesis
 (define (create-concrete-bv bw) 
-  ;(random-bv (/ bw 8))
-  ;(define cur_time (current-seconds))
   (if 
     (<= bw 16)
     (begin
@@ -99,25 +97,16 @@
 ;; which it failed on
 (define (verify-synth-sol  sol bw-list invoke_ref solver)
 
-  ;;; Clear any previous terms and collect garbage
-  ;(clear-vc!)
-  ;(clear-terms!)
-  ;(collect-garbage)
 
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
   (define symbols (create-symbolic-bvs bw-list))
   (debug-log (format "Symbols: ~a\n" symbols))
-  ;(define ref-result (invoke_ref symbols))
-  ;(define synth-res (hydride-interpret sol symbols))
-  ;(println ref-result)
-  ;(println synth-res)
   (define cex 
     (verify 
       (begin
           (assert (bveq   (invoke_ref symbols) (hydride:interpret sol symbols)))
-          ;(assert (bveq (extract 31 0 synth-res) (extract 31 0 ref-result)))
 
            )
       )
@@ -164,7 +153,6 @@
   (define symbols (create-symbolic-bvs bw-list))
   (define cex 
     (verify 
-        ;(equal? (interpret sol symbols) (invoke_ref symbols) )
         (assert-query-fn symbols)
         )
     )
@@ -219,7 +207,6 @@
 
 
 (define (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-  ;(debug-log "- Generating concrete asserts ...")
 
 
   (define (helper i)
@@ -234,7 +221,6 @@
 
 
 (define (get-concrete-asserts-grammar assert-query-fn grammar cex-ls)
-  ;(debug-log "- Generating concrete asserts ...")
   (define (helper i)
     (assert-query-fn grammar (list-ref cex-ls i))
     )
@@ -264,7 +250,6 @@
       (begin 
         ;; loop over inputs and add asserts
         (get-concrete-asserts assert-query-fn cex-ls failing-ls) 
-        ;(get-concrete-noteq-asserts grammar failed-sols)
         )
       ) 
     )
@@ -272,7 +257,6 @@
 
 (define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
   (begin 
-    ;(current-solver (z3))
     (debug-log "*********** z3-optimize *****************")
 
     (define sol?
@@ -281,15 +265,8 @@
               #:guarantee 
                 ;; loop over inputs and add asserts
                 (begin 
-                      ;(forall (list cex-ls)
                         (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-                        ;(get-concrete-asserts assert-query-fn cex-ls)
-                        ;(andmap (lambda (v) (assert-query-fn grammar v)) cex-ls)
-                        ;(assert-query-fn grammar (list-ref cex-ls 0))
-
-                      ;)
                   )
-                ;(get-concrete-noteq-asserts grammar failed-sols)
 
                 )
               )
@@ -319,7 +296,6 @@
         (begin 
           ;; loop over inputs and add asserts
           (get-concrete-asserts assert-query-fn cex-ls failing-ls)
-          ;(get-concrete-noteq-asserts grammar failed-sols)
           (assert (< (cost-fn grammar) cost-bound))
           )
         ) 
@@ -363,11 +339,6 @@
   )
 
 
-;; fn1 with holes, and invoke_ref: fn2  -> iterative synthesis with concrete/symbolic vectors
-;; (fn1 -> int depth -> fn1 with specific depth)
-
-;; invoke_ref :: (vector symb_bv1 symb_bv2 1 2)
-;; generate-params :: (vector symbolic-bvs) -> (vector sym-bv1 symbv2 16 23)
 
 (define (print-temp-result-on-cex mat invoke_ref cex-ls)
   (for/list
@@ -435,10 +406,6 @@
   ;; Clear the verification condition up till this point
   (clear-vc!)
 
-  ;; Save current solver environment and restore 
-  ;; after synthesis step
-  ;; (define curr-bw (current-bitwidth))
-  ;; (define curr-solver (current-solver))
   
 
 
@@ -451,7 +418,7 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list)  (create-concrete-bvs bitwidth-list) );(create-0-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list)  (create-concrete-bvs bitwidth-list) )
       cexs
       )
     )
@@ -482,18 +449,12 @@
   ;; in the assertion. We'll verify over all
   ;; lanes
   (define (assert-query-synth-fn env random-idx)
-    ;; FIXME: Hacky way to get extraction limits
-    ;(define extraction-limits (- (bvlength (invoke_ref_lane env)) 1))
-    ;16
-    ;32 - 1 = 32
 
 
     (define full-interpret-res (hydride:interpret grammar env))
-    ;(define random-idx (random (- num-lanes 1)))
     (displayln "Lane Index")
     (println random-idx)
     (define low (* word-size random-idx))
-    ;(define high (+ low word-size (- word-size 1)))
     (define high (+ low  (- word-size 1)))
 
     (define interpret-res (extract high low full-interpret-res))
@@ -555,7 +516,6 @@
     ;; if it's true over ALL inputs
     (begin
 
-      ;(print-temp-result-on-cex materialize invoke_ref cex-ls)
       (debug-log "Unchecked solution:")
       (debug-log materialize)
 
@@ -668,7 +628,7 @@
   (define cex-ls
     (if
       (equal? (length cexs) 0)
-      (list (create-concrete-bvs bitwidth-list) );;(create-concrete-bvs bitwidth-list))
+      (list (create-concrete-bvs bitwidth-list) )
       cexs
       )
     )
@@ -700,7 +660,6 @@
 
   (define materialize 
     (if satisfiable? 
-      ;(generate-forms sol?)
       (evaluate invoke_f1 sol?)
       '()
       )

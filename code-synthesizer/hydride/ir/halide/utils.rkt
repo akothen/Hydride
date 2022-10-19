@@ -39,7 +39,6 @@
 
 ;; Binds
 (define (bind-expr-args expr args depth)
-  ;(debug-log (format "Bind-expr-args with expr ~a\n args: ~a\n depth: ~a\n\n" expr args depth))
   (define (arg i) (vector-ref args i))
   (define is-leaf-depth (eq? depth 1))
   (define (broadcast-helper broad-ty val)
@@ -1094,8 +1093,9 @@
     [(equal? expr '())
      expr
      ]
-
-
+    [(<= depth 0)
+     (list )
+     ]
     [(equal? depth 1)
         (list expr)
      ]
@@ -1104,7 +1104,16 @@
       (define imm-sub-exprs (halide:sub-exprs expr))
       (apply append
              (for/list ([i (range (length imm-sub-exprs))])
-                       (get-sub-exprs (list-ref imm-sub-exprs i) (- depth 1))
+                       ;; Vector absd is a complex operation and should
+                       ;; count as a sequence of 3 computations (depth 2)
+                       (define imm-sub-expr (list-ref imm-sub-exprs i))
+                       (define decremented-depth 
+                         (cond 
+                           [(and (vec-absd? imm-sub-expr) (>= depth 2))  (- depth 1)]
+                           [else (- depth 1)]
+                           )
+                         )
+                       (get-sub-exprs (list-ref imm-sub-exprs i) decremented-depth)
                        )
              )
      ]
@@ -1170,7 +1179,6 @@
 
 
 (define (get-expr-precisions expr-list)
-  ;(debug-log "get-expr-precisions ")
   (for/list ([i (range (length expr-list))])
             (define expr (list-ref expr-list i))
             (vec-precision expr)

@@ -12,6 +12,7 @@ from GetOutPrecDef import GetOutPrecDef
 from IRPrinter import IRPrinter
 from BindDef import BindDef
 from Specification import Specification, parse_spec
+from VisitorDef import VisitorDef
 
 from GrammarGenerator import GrammarGenerator
 
@@ -33,6 +34,7 @@ gl = GetLengthDef(get_len_name = "get-length")
 gp = GetOutPrecDef(get_prec_name = "get-prec")
 ip = IRPrinter(printer_name = "hydride-printer")
 bd = BindDef()
+vd = VisitorDef()
 
 cf = ConstFold()
 
@@ -87,6 +89,8 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file(bd.emit_binder(dsl_list ,sd))
 
     write_to_file(cf.emit_const_fold(dsl_list, sd))
+
+    write_to_file(vd.emit_visitor(dsl_list, sd))
 
 
 

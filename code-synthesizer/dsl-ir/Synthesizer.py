@@ -2,6 +2,7 @@ from Types import *
 from Instructions import *
 from PredefinedDSL import *
 import random
+from ShuffleList import ShuffleList
 
 DEBUG = True
 DEBUG_LIST = ["_mm_unpackhi_epi8", "_mm256_setr_m128i"]
@@ -81,7 +82,7 @@ class Synthesizer:
             for input_size in self.input_sizes:
                 for of in offset_exprs:
                     num_elem = int(lf * self.VF)
-                    offset =  of #create_affine_index_expr("dim-y", 1, None ) #"IDX_IJ"
+                    offset =  of
                     precision = self.spec.input_precision[0]
 
                     input_vector_sizes.append(input_size)
@@ -361,7 +362,6 @@ class Synthesizer:
         holes = []
 
         if use_lit_holes:
-            #holes = [int(lf * self.VF * self.spec.input_precision) for lf in load_factors]
             holes += bitvector_sizes
             # remove duplicates
             holes = list(set(holes))
@@ -435,6 +435,10 @@ class Synthesizer:
 
 
             if self.consider_dsl_inst(dsl_inst):
+
+                if (not self.is_shuffle) and dsl_inst.name in ShuffleList:
+                    continue
+
                 operator_contexts = self.get_supported_context_for_dsl(dsl_inst, limit = self.contexts_per_dsl_inst)
 
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
@@ -446,9 +450,7 @@ class Synthesizer:
             ## Including bitwise operations such as bitwise 'or',  'not', 'neg' & 'and'
             ## may enable more novel arithemetic results
             if  USE_BW_ALGO and  self.consider_bitwise_heuristic(dsl_inst):
-                #print("BITWISE OPERATIONS INCLUDED")
                 operator_contexts = self.get_supported_bitwise_context_for_dsl(dsl_inst, limit = 1) # All elementwise operations of same total length are equivlanet
-                #print("#bitwise contexts: ", len(operator_contexts))
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx for ctx in operator_contexts]
 
@@ -456,12 +458,11 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
 
 
         if DEBUG:
             for idx, dsl_inst in enumerate(operation_dsl_insts):
-                #print(dsl_inst.name, "adding contexts ...")
                 print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
 
         top_level_grammar_args = self.get_top_level_grammar_args()
@@ -570,7 +571,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         # if allocated more rules than are actually
@@ -593,7 +594,18 @@ class Synthesizer:
             globally_sorted_operation_insts = []
             globally_sorted_operation_contexts = []
 
+            inserted_names = []
+
             for idx in sorted_indices:
+                # TEMP: Dictionary created by merging old and missing ops
+                # hence contains duplications. Remove once new dictionary
+                # available.
+
+                if ctxs[idx].name in inserted_names:
+                    continue
+
+                inserted_names.append(ctxs[idx].name)
+
                 globally_sorted_operation_insts.append(ops[idx])
                 globally_sorted_operation_contexts.append(ctxs[idx])
 
@@ -852,7 +864,6 @@ class Synthesizer:
         is_broadcast_like = self.is_broadcast_like_operation(dsl_inst)
 
         is_logical_like = self.is_elementwise_logical_like_operation(dsl_inst)
-        #print(dsl_inst.name,"is_broadcast_like:",is_broadcast_like)
 
         for ctx in dsl_inst.contexts:
 
@@ -866,7 +877,6 @@ class Synthesizer:
             supports_inputs_prec = any([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
             supports_outputs_prec = ctx.supports_output_precision(self.spec.output_precision)
             supports_output_length = ctx.supports_output_size(self.output_slice_length)
-            #supports_input_length = ctx.get_max_arg_size() < (int((self.VF * self.spec.input_precision * 1.5)))
             supports_input_length = any([ctx.supports_input_size(input_size) for input_size in self.input_sizes])
 
             if UPCAST_OPERATIONS:
@@ -890,7 +900,6 @@ class Synthesizer:
                 print("-"*50)
 
 
-            #if (supports_inputs_prec or supports_outputs_prec or supports_output_length) or supports_input_length :
             old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
             # Either can process the input or can produce output shape
@@ -955,7 +964,6 @@ class Synthesizer:
         score += int(ctx.supports_output_precision(self.spec.output_precision))
         score += int(ctx.supports_output_size(self.output_slice_length))
         score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True) != 0)
-        #score = int("mask" in ctx.name)
 
 
 
@@ -1081,7 +1089,6 @@ class Synthesizer:
 
 
 
-            #return (supports_inputs_prec or supports_outputs_prec) and (supports_output_length  or supports_input_length)
             old_condition = (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
             new_condition = (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length)
 
@@ -1112,7 +1119,6 @@ class Synthesizer:
         ops = dsl_inst.get_semantics_ops_list()
 
         return all([op in ["sign-extend", "zero-extend", "extract", "concat"] for op in ops])
-        #return dsl_inst.get_semantics_ops_list() == []
 
 
     # Is the operation either a broadcast operation or an

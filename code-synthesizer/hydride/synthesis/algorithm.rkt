@@ -27,6 +27,7 @@
 
 ;; Defines the utilitie to perform synthesis on Halide IR expressions
 
+(define synth-log (make-hash))
 
 (define (create-n-reg n)
   (for/list ([i (range n)])
@@ -50,14 +51,26 @@
   )
 
 
-(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver)
+(define (synthesize-halide-expr halide-expr id-map expr-depth VF solver prev-hash-file prev-hash-name)
   (debug-log id-map)
+  (if (equal? prev-hash-file "")
+    '()
+    (begin
+      (debug-log "Found previous hash!\n")
+      (define prev-hash (import-synth-map prev-hash-file prev-hash-name))
+      (set! synth-log prev-hash)
+      (debug-log synth-log)
+
+      )
+
+    )
+
   (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
   (pretty-print halide-expr)
   (displayln "Synthesis completed:")
-  
+
   ;; Synthesis completed with Hydride Target Agnostic 
   ;; Operations, check if further simplification can 
   ;; be performed. E.g. if the bitvector operands of
@@ -74,7 +87,6 @@
   legalized-shuffles-expr
   )
 
-(define synth-log (make-hash))
 
 (define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver)
 
@@ -82,9 +94,14 @@
 
   (debug-log "=======================================")
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
+  (printf "leaves: ~a\n" leaves)
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
   (define sym-bvs (create-symbolic-bvs leaves-sizes))
+
+  (println "here")
+
+
 
 
 
@@ -106,37 +123,16 @@
                 (begin
 
                   (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args expr-depth))
-                  (debug-log "HERE")
 
                   (debug-log expr-extract)
                   (define base_name (string-append "base_" (~s (random 10000))))
 
-                  ;(clear-vc!)
-                  ;(clear-terms!)
-                  ;(collect-garbage)
 
 
                   (define expr-VF (halide:vec-len expr-extract))
 
                   (debug-log (format "Vectorization factor for sub expression ~a\n" expr-VF))
 
-                  (define grammar (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
-                  (debug-log "Grammar:")
-                  (debug-log grammar)
-
-
-                  (define regs (create-n-reg (length leaves)))
-                  (debug-log regs)
-                  (define (grammar-fn i)
-                    ;(clear-vc!)
-                    ;(clear-terms!)
-                    ;(collect-garbage)
-                    (define use-simple-grammar #t)
-                    (if use-simple-grammar
-                      (grammar i)
-                      (grammar regs #:depth i)
-                      )
-                    )
 
                   (define (invoke-spec env-full)
                     (printf "invoke-spec with env: ~a\n" env-full)
@@ -153,7 +149,6 @@
                     (define _result_full (halide:assemble-bitvector (halide:interpret _expr-extract-full) expr-VF))
                     (displayln "Spec result")
                     (println _result_full)
-                    ;;(define _result (cpp:eval ((halide:interpret _expr-extract) (- VF 1))))
                     _result_full
                     )
 
@@ -173,10 +168,7 @@
                   (define optimize? #t)
                   (define symbolic? #f)
                   (define cost-bound 40)
-                  ;(define solver ')
 
-                  ;(clear-vc!)
-                  ;(clear-terms!)
                   (displayln "Synthesizing sub-expression")
                   (pretty-print expr-extract)
 
@@ -195,6 +187,22 @@
                         (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
                         )
                       (begin
+
+
+                        (define grammar (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
+                        (debug-log "Grammar:")
+                        (debug-log grammar)
+
+
+                        (define regs (create-n-reg (length leaves)))
+                        (debug-log regs)
+                        (define (grammar-fn i)
+                          (define use-simple-grammar #t)
+                          (if use-simple-grammar
+                            (grammar i)
+                            (grammar regs #:depth i)
+                            )
+                          )
                         (define test-start (current-seconds))
                         (debug-log "Beginning Synthesis")
 

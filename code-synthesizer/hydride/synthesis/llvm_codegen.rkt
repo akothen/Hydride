@@ -61,9 +61,11 @@
       )
     )
 
-  (write-str-to-file serialized-method "/tmp/method.rkt")
+  (define dump_file_name (string-append "/tmp/" method-name ".rkt"))
 
-  (invoke-code-generator "/tmp/method.rkt" bitcode-path)
+  (write-str-to-file serialized-method dump_file_name)
+
+  (invoke-code-generator dump_file_name bitcode-path)
 
   
   )
