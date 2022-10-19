@@ -251,7 +251,6 @@ function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
    bvinsert bv8 %1.site0, bv512 dst, int32 %13, int32 %14, int32 8
   }
  }
- bvpadhighbits bv512 dst, int32 0
  ret bv512 dst
 }
 
@@ -279,7 +278,6 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
    bvinsert bv16 %1.copy.copy.00.new, bv256 dst, int32 %7, int32 %8, int32 16
   }
  }
- bvpadhighbits bv256 dst, int32 0
  ret bv256 dst
 }
 
@@ -300,12 +298,44 @@ function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
    bvinsert bv8 %1.copy.copy.00.new, bv512 dst, int32 %13, int32 %14, int32 8
   }
  }
- bvpadhighbits bv512 dst, int32 0
  ret bv512 dst
 }
 
 
 
+function _mm512_mask_mov_epi8 ( bv512 src, bv64 k, bv512 a ) {
+ for ([j0 (range 0 64 1)]) {
+  %0 = mul int32 j0, int32 8
+  %1 = bvextract bv64 k, int32 j0, int32 j0, int32 1
+  if (bv1 %1) {
+   %3 = add int32 %0, int32 7
+   %4 = bvextract bv512 a, int32 %0, int32 %3, int32 8
+   bvinsert bv8 %4, bv512 dst, int32 %0, int32 %3, int32 8
+  } else {
+   %7 = add int32 %0, int32 7
+   %8 = bvextract bv512 src, int32 %0, int32 %7, int32 8
+   bvinsert bv8 %8, bv512 dst, int32 %0, int32 %7, int32 8
+  }
+ }
+ ret bv512 dst
+}
+
+function _mm512_mask_blend_epi8 ( bv64 k, bv512 a, bv512 b ) {
+ for ([j0 (range 0 64 1)]) {
+  %0 = mul int32 j0, int32 8
+  %1 = bvextract bv64 k, int32 j0, int32 j0, int32 1
+  if (bv1 %1) {
+   %3 = add int32 %0, int32 7
+   %4 = bvextract bv512 b, int32 %0, int32 %3, int32 8
+   bvinsert bv8 %4, bv512 dst, int32 %0, int32 %3, int32 8
+  } else {
+   %7 = add int32 %0, int32 7
+   %8 = bvextract bv512 a, int32 %0, int32 %7, int32 8
+   bvinsert bv8 %8, bv512 dst, int32 %0, int32 %7, int32 8
+  }
+ }
+ ret bv512 dst
+}
 
 
 
