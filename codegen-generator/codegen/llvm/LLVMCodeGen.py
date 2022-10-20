@@ -53,15 +53,12 @@ def CreateFunctionTypeForOp(RoseOp : RoseOpaqueCallOp, LLVMContext : RoseLLVMCon
   return LLVMFunctionType(OutType, OperandTypes)
 
 
-def get_function(builder, fn_name, ret_type, tys):
-    fnty = LLVMFunctionType(ret_type, tys)
-    #suffixes = [t.intrinsic_name for t in tys]
-    fn_name = '.'.join([fn_name] + [])
-    if fn_name in builder.module.globals:
-        fn = builder.module.globals[fn_name]
-    else:
-        fn = LLVMFunction(builder.module, fnty, name=fn_name)
-    return fn
+def GetFunction(Builder, FunctionName, RetType, ArgTys):
+    fnty = LLVMFunctionType(RetType, ArgTys)
+    FunctionName = '.'.join([FunctionName])
+    if FunctionName in Builder.module.globals:
+      return Builder.module.globals[FunctionName]
+    return LLVMFunction(Builder.module, fnty, name=FunctionName)
 
 
 def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
@@ -97,8 +94,11 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
           Args.append(LLVMContext.getLLVMValueFor(Operand))
       print("OperandTypes:")
       print(OperandTypes)
-      Intrinsic = get_function(LLVMContext.getLLVMBuilder(), LLVMIntrinsicName, RetType, OperandTypes)
-      CallInst = LLVMContext.getLLVMBuilder().call(Intrinsic, Args, Op.getName())
+      Intrinsic = GetFunction(LLVMContext.getLLVMBuilder(), LLVMIntrinsicName, RetType, OperandTypes)
+      InstName = Op.getName()
+      if InstName[0] == "%":
+        InstName = InstName[1:]
+      CallInst = LLVMContext.getLLVMBuilder().call(Intrinsic, Args, InstName)
       print("CallInst:")
       print(CallInst)
       LLVMContext.mapRoseValToLLVMVal(Op, CallInst)
@@ -121,30 +121,36 @@ def GenerateRegion(LLVMIRFunction : LLVMFunction, Region : RoseRegion,
     assert(False and "Attempting to generate LLVM IR for unsupported Rose Region.")
 
 
-def GenerateLLVMIR(RoseIRFunction : RoseFunction, RoseLLVMCxt : RoseLLVMContext):
+def GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx : dict):
   # Create an empty module and function.
   LLVMIRModule = LLVMModule(name = RoseIRFunction.getName() + ".module")
-  print("RoseIRFunction:")
-  RoseIRFunction.print()
-  LLVMFunctionType = CreateFunctionTypeForFunction(RoseIRFunction, RoseLLVMCxt)
-  print("LLVMFunctionType:")
-  print(LLVMFunctionType)
-  LLVMIRFunction = LLVMFunction(LLVMIRModule, LLVMFunctionType, name=RoseIRFunction.getName())
-  # Map LLVM function arguments to the Rose function arguments
-  for Idx, Arg in enumerate(LLVMIRFunction.args):
-    RoseLLVMCxt.mapRoseValToLLVMVal(RoseIRFunction.getArg(Idx), Arg)
-    print(RoseLLVMCxt.getLLVMValueFor(RoseIRFunction.getArg(Idx)))
-    print("RoseIRFunction.getArg(Idx)")
-    print(id(RoseIRFunction.getArg(Idx)))
-  GenerateRegion(LLVMIRFunction, RoseIRFunction, RoseLLVMCxt)
+  for RoseIRFunction, RoseLLVMCxt in RoseIRFunctionToRoseLLVMCtx.items():
+    assert isinstance(RoseIRFunction, RoseFunction)
+    assert isinstance(RoseLLVMCxt, RoseLLVMContext)
+    print("RoseIRFunction:")
+    RoseIRFunction.print()
+    LLVMFunctionType = CreateFunctionTypeForFunction(RoseIRFunction, RoseLLVMCxt)
+    print("LLVMFunctionType:")
+    print(LLVMFunctionType)
+    LLVMIRFunction = LLVMFunction(LLVMIRModule, LLVMFunctionType, name=RoseIRFunction.getName())
+    # Map LLVM function arguments to the Rose function arguments
+    for Idx, Arg in enumerate(LLVMIRFunction.args):
+      RoseLLVMCxt.mapRoseValToLLVMVal(RoseIRFunction.getArg(Idx), Arg)
+      print(RoseLLVMCxt.getLLVMValueFor(RoseIRFunction.getArg(Idx)))
+      print("RoseIRFunction.getArg(Idx)")
+      print(id(RoseIRFunction.getArg(Idx)))
+    GenerateRegion(LLVMIRFunction, RoseIRFunction, RoseLLVMCxt)
   return LLVMIRModule
 
 
 # Converts the given Rose IR function into Rosette
-def LLVMCodeGen(Function : RoseFunction, RoseLLVMCxt : RoseLLVMContext):
-  LLVMIRModule = GenerateLLVMIR(Function, RoseLLVMCxt)
+def LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx : dict):
+  LLVMIRModule = GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx)
   print("---\n\n\n\n\n")
-  Function.print()
+  print("ROSE IR FUNCTIONS")
+  for RoseIRFunction, _ in RoseIRFunctionToRoseLLVMCtx.items():
+    print("ROSE FUNCTION:")
+    RoseIRFunction.print()
   print("LLVM Module")
   print(LLVMIRModule)
   print("---\n\n\n\n\n")
