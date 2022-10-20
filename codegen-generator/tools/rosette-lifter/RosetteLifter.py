@@ -29,29 +29,32 @@ class RosetteLifter:
     self.ID += 1
     return self.ID
 
-  def lift(self, FunctionName : str, RosetteCode : str):
+  def lift(self, RosetteCode : str):
     # Parse the Roseete file to get an AST
-    RosetteAST = RosetteParser.parse(RosetteCode)
-    RetValue = self.liftRosetteAST(RosetteAST)
-    print("self.RoseValToLLVMType of Retun value:")
-    print(self.RoseValToLLVMType[RetValue])
-    LLVMRetType = self.RoseValToLLVMType[RetValue]
-    # Generate a Rosette function
-    Function = RoseFunction.create(FunctionName, self.Params, RetValue.getType())
-    # Add the lifted ops to the function
-    for Op in self.OpList:
-      Function.addAbstraction(Op)
-    # Add a return op
-    RetOp = RoseReturnOp.create(RetValue)
-    Function.addAbstraction(RetOp)
-    Function.setRetValName(RetValue.getName())
-    self.RoseValToLLVMType[Function.getReturnValue()] = LLVMRetType
-    Function.print()
-    # Build the Rose LLVM context
-    RoseLLVMCtx = RoseLLVMContext.create()
-    for OpTypeInfo in self.RoseValToLLVMType.items():
-      RoseLLVMCtx.setLLVMTypeFor(OpTypeInfo[0], OpTypeInfo[1])
-    return Function, RoseLLVMCtx
+    FunctionToRosetteAST = RosetteParser.parse(RosetteCode)
+    RoseIRFunctionToRoseLLVMCtx = dict()
+    for FunctionName, RosetteAST in FunctionToRosetteAST.items():
+      RetValue = self.liftRosetteAST(RosetteAST)
+      print("self.RoseValToLLVMType of Retun value:")
+      print(self.RoseValToLLVMType[RetValue])
+      LLVMRetType = self.RoseValToLLVMType[RetValue]
+      # Generate a Rosette function
+      Function = RoseFunction.create(FunctionName, self.Params, RetValue.getType())
+      # Add the lifted ops to the function
+      for Op in self.OpList:
+        Function.addAbstraction(Op)
+      # Add a return op
+      RetOp = RoseReturnOp.create(RetValue)
+      Function.addAbstraction(RetOp)
+      Function.setRetValName(RetValue.getName())
+      self.RoseValToLLVMType[Function.getReturnValue()] = LLVMRetType
+      Function.print()
+      # Build the Rose LLVM context
+      RoseLLVMCtx = RoseLLVMContext.create()
+      for OpTypeInfo in self.RoseValToLLVMType.items():
+        RoseLLVMCtx.setLLVMTypeFor(OpTypeInfo[0], OpTypeInfo[1])
+      RoseIRFunctionToRoseLLVMCtx[Function] = RoseLLVMCtx
+    return RoseIRFunctionToRoseLLVMCtx
 
   def getRoseType(self, Type : str):
     Type = Type.strip()
@@ -181,19 +184,4 @@ class RosetteLifter:
         self.RoseValToLLVMType[CallOp] = self.getLLVMType(OutputType[1:])
         return CallOp
   
-
-
-if __name__ == '__main__':
-  RosetteFileName = "test.rkt"
-  FunctionName = "kernel"
-  RosetteFile = open(RosetteFileName, "r")
-  RosetteFunctionBody = list()
-  Line = RosetteFile.readline()
-  while Line != "":
-    RosetteFunctionBody.append(Line)
-    Line = RosetteFile.readline()
-  Lifter = RosetteLifter()
-  Lifter.lift(FunctionName, RosetteFunctionBody)
-
-
 
