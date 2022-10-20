@@ -64,8 +64,9 @@
   (define dump_file_name (string-append "/tmp/" method-name ".rkt"))
 
   (write-str-to-file serialized-method dump_file_name)
-
+  (append-str-to-file serialized-method "/tmp/hydride_exprs.rkt")
   (invoke-code-generator dump_file_name bitcode-path)
-
   
   )
+
+

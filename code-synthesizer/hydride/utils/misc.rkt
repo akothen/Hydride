@@ -212,3 +212,13 @@
   (close-output-port out)
   (debug-log "Completed writing to file ...")
   )
+
+
+
+(define (append-str-to-file str file)
+  (debug-log (format "Append [~a] to file ~a\n" str file))
+  (define out (open-output-file file #:exists 'append))
+  (fprintf out str)
+  (close-output-port out)
+  (debug-log "Completed writing to file ...")
+  )
