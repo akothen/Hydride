@@ -7,6 +7,8 @@
 
 import re
 
+TokenDenotingFunctionStart = "FUNCTION:"
+
 
 class RosetteParser:
   # Tokenizer for Rosette
@@ -40,7 +42,7 @@ class RosetteParser:
           print("--")
           return Token
       return None
-  
+
   def tokenize(self, Code):
     Lexer = self.RosetteTokenizer(Code)
     Token = Lexer.nextToken()
@@ -100,12 +102,34 @@ class RosetteParser:
     else:
       return self.transformType(Token)
 
+  # Get Rosette code for each function
+  def getRosetteCodeForEachFunction(self, Code):
+    CodeLines = Code.split("\n")
+    FunctionToRosetteCode = dict()
+    FunctionCode = ""
+    FunctionName = ""
+    for CodeLine in CodeLines:
+      if TokenDenotingFunctionStart in CodeLine:
+        if FunctionCode != "":
+          FunctionToRosetteCode[FunctionName] = FunctionCode
+        FunctionName = CodeLine.strip().replace(";" + TokenDenotingFunctionStart, "")
+        FunctionCode = ""
+        continue
+      FunctionCode = FunctionCode + CodeLine + "\n"
+    assert FunctionCode != "" and FunctionName != ""
+    FunctionToRosetteCode[FunctionName] = FunctionCode
+    return FunctionToRosetteCode
+  
   @staticmethod
   def parse(Code):
     Parser = RosetteParser()
-    TokenLists = Parser.tokenize(Code)
-    ParsedExpr = Parser.readExpressions(TokenLists)
-    print("ParsedExpr:")
-    print(ParsedExpr)
-    return ParsedExpr
+    FunctionToRosetteCode = Parser.getRosetteCodeForEachFunction(Code)
+    FunctionToAST = dict()
+    for FunctionName, FunctionCode in FunctionToRosetteCode.items():
+      TokenLists = Parser.tokenize(FunctionCode)
+      ParsedExpr = Parser.readExpressions(TokenLists)
+      print("ParsedExpr:")
+      print(ParsedExpr)
+      FunctionToAST[FunctionName] = ParsedExpr
+    return FunctionToAST
 
