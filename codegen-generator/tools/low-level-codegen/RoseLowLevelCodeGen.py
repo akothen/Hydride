@@ -10,7 +10,7 @@ from RoseLLVMCodeGen import LLVMCodeGen
 
 
 
-def HandleLowLevelCodeGen(RosetteFileName, KernelName):
+def HandleLowLevelCodeGen(RosetteFileName):
   # Build the Rose IR function and Rose LLVM context from Rosette code
   RosetteFile = open(RosetteFileName, "r")
   RosetteCode = list()
@@ -20,10 +20,11 @@ def HandleLowLevelCodeGen(RosetteFileName, KernelName):
     Line = RosetteFile.readline()
   RosetteFile.close()
   Lifter = RosetteLifter()
-  RoseIRFunction, RoseLLVMCtx = Lifter.lift(KernelName, RosetteCode)
+  RoseIRFunctionToRoseLLVMCtx = Lifter.lift(RosetteCode)
+  assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
 
-  # Now generate LLVM module with the function in it
-  LLVMIRModule = LLVMCodeGen(RoseIRFunction, RoseLLVMCtx)
+  # Now generate LLVM module with the functions in it
+  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx)
   print("LLVM MODULE")
   print(LLVMIRModule)
   Module = open(LLVMIRModule.name + ".ll", "a")
@@ -34,7 +35,5 @@ def HandleLowLevelCodeGen(RosetteFileName, KernelName):
 
 if __name__ == '__main__':
   RosetteFileName = "test.rkt"
-  FunctionName = "kernel"
-  HandleLowLevelCodeGen(RosetteFileName, FunctionName)
-
+  HandleLowLevelCodeGen(RosetteFileName)
 
