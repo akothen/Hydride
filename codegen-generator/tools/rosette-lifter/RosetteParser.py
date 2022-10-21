@@ -7,7 +7,7 @@
 
 import re
 
-TokenDenotingFunctionStart = "FUNCTION:"
+TokenDenotingFunctionStart = "hydride.node"
 
 
 class RosetteParser:
@@ -103,30 +103,38 @@ class RosetteParser:
       return self.transformType(Token)
 
   # Get Rosette code for each function
-  def getRosetteCodeForEachFunction(self, Code):
-    CodeLines = Code.split("\n")
+  def getRosetteCodeForEachFunction(self, CodeLines):
     FunctionToRosetteCode = dict()
-    FunctionCode = ""
+    FunctionCode = []
     FunctionName = ""
     for CodeLine in CodeLines:
       if TokenDenotingFunctionStart in CodeLine:
-        if FunctionCode != "":
+        if len(FunctionCode) != 0:
+          print("\n\n\nFUNCTION:")
+          print(FunctionName)
+          print(FunctionCode)
           FunctionToRosetteCode[FunctionName] = FunctionCode
-        FunctionName = CodeLine.strip().replace(";" + TokenDenotingFunctionStart, "")
-        FunctionCode = ""
+        FunctionName = CodeLine.strip().replace(";", "")
+        FunctionCode = []
         continue
-      FunctionCode = FunctionCode + CodeLine + "\n"
-    assert FunctionCode != "" and FunctionName != ""
+      FunctionCode.append(CodeLine)
+    assert len(FunctionCode) != 0 and FunctionName != ""
     FunctionToRosetteCode[FunctionName] = FunctionCode
+    print("\n\n\nFUNCTION:")
+    print(FunctionName)
+    print(FunctionCode)
     return FunctionToRosetteCode
   
   @staticmethod
   def parse(Code):
     Parser = RosetteParser()
+    print("PARSING CODE:")
+    print(Code)
+    print("\n\n\n\n\n\n")
     FunctionToRosetteCode = Parser.getRosetteCodeForEachFunction(Code)
     FunctionToAST = dict()
-    for FunctionName, FunctionCode in FunctionToRosetteCode.items():
-      TokenLists = Parser.tokenize(FunctionCode)
+    for FunctionName, FunctionCodeLines in FunctionToRosetteCode.items():
+      TokenLists = Parser.tokenize(FunctionCodeLines)
       ParsedExpr = Parser.readExpressions(TokenLists)
       print("ParsedExpr:")
       print(ParsedExpr)
