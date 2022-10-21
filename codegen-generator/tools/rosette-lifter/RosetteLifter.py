@@ -24,6 +24,14 @@ class RosetteLifter:
     self.ParamToType = dict()
     self.Params = list()
     self.NameToRoseVal = dict()
+
+  def reset(self):
+    self.ID = -1
+    self.RoseValToLLVMType = dict()
+    self.OpList = list()
+    self.ParamToType = dict()
+    self.Params = list()
+    self.NameToRoseVal = dict()
   
   def genUniqueID(self):
     self.ID += 1
@@ -34,11 +42,20 @@ class RosetteLifter:
     FunctionToRosetteAST = RosetteParser.parse(RosetteCode)
     RoseIRFunctionToRoseLLVMCtx = dict()
     for FunctionName, RosetteAST in FunctionToRosetteAST.items():
+      print("\n\n\nLIFTING FUNCTION:")
+      print(FunctionName)
+      print("RosetteAST:")
+      print(RosetteAST)
       RetValue = self.liftRosetteAST(RosetteAST)
       print("self.RoseValToLLVMType of Retun value:")
       print(self.RoseValToLLVMType[RetValue])
       LLVMRetType = self.RoseValToLLVMType[RetValue]
       # Generate a Rosette function
+      print("self.Params:")
+      print(self.Params)
+      for Param in self.Params:
+        print("PARM:")
+        Param.print()
       Function = RoseFunction.create(FunctionName, self.Params, RetValue.getType())
       # Add the lifted ops to the function
       for Op in self.OpList:
@@ -54,6 +71,7 @@ class RosetteLifter:
       for OpTypeInfo in self.RoseValToLLVMType.items():
         RoseLLVMCtx.setLLVMTypeFor(OpTypeInfo[0], OpTypeInfo[1])
       RoseIRFunctionToRoseLLVMCtx[Function] = RoseLLVMCtx
+      self.reset()
     return RoseIRFunctionToRoseLLVMCtx
 
   def getRoseType(self, Type : str):
