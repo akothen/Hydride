@@ -120,7 +120,7 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
       print("---OperandTypes:")
       print(OperandTypes)
       Intrinsic = GetFunction(LLVMContext.getLLVMBuilder(), LLVMIntrinsicName, RetType, OperandTypes)
-      InstName = Op.getCallee().getName()
+      InstName = Op.getName()
       if InstName[0] == "%":
         InstName = InstName[1:]
       print("OP:")
@@ -154,12 +154,15 @@ def GenerateRegion(LLVMIRFunction : LLVMFunction, Region : RoseRegion,
     assert(False and "Attempting to generate LLVM IR for unsupported Rose Region.")
 
 
-def GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx : dict):
+def GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx : dict, ModuleName : str):
   # Create an empty module and function.
   LLVMIRModule = None
   for RoseIRFunction, RoseLLVMCxt in RoseIRFunctionToRoseLLVMCtx.items():
     if LLVMIRModule == None:
-      LLVMIRModule = LLVMModule(name = RoseIRFunction.getName() + ".module")
+      if ModuleName == None:
+        LLVMIRModule = LLVMModule(name = RoseIRFunction.getName() + ".module")
+      else:
+        LLVMIRModule = LLVMModule(name = ModuleName)
     assert isinstance(RoseIRFunction, RoseFunction)
     assert isinstance(RoseLLVMCxt, RoseLLVMContext)
     print("RoseIRFunction:")
@@ -179,8 +182,8 @@ def GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx : dict):
 
 
 # Converts the given Rose IR function into Rosette
-def LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx : dict):
-  LLVMIRModule = GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx)
+def LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx : dict, ModuleName : str = None):
+  LLVMIRModule = GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx, ModuleName)
   print("---\n\n\n\n\n")
   print("ROSE IR FUNCTIONS")
   for RoseIRFunction, _ in RoseIRFunctionToRoseLLVMCtx.items():
