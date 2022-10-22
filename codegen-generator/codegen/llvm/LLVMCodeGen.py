@@ -20,6 +20,7 @@ from llvmlite.ir.builder import IRBuilder as LLVMIRBuilder
 
 
 def CreateFunctionTypeForFunction(RoseIRFunction : RoseFunction, LLVMContext : RoseLLVMContext):
+  print("CreateFunctionTypeForFunction")
   RetVal = RoseIRFunction.getReturnValue()
   RetType = LLVMContext.getLLVMTypeFor(RetVal)
   print("RetType:")
@@ -28,6 +29,7 @@ def CreateFunctionTypeForFunction(RoseIRFunction : RoseFunction, LLVMContext : R
   for Arg in RoseIRFunction.getArgs():
     print("Arg:")
     Arg.print()
+    Arg.getType().print()
     print("LLVMContext.getLLVMTypeFor(Arg):")
     print(LLVMContext.getLLVMTypeFor(Arg))
     InputArgTypes.append(LLVMContext.getLLVMTypeFor(Arg))
@@ -53,12 +55,25 @@ def CreateFunctionTypeForOp(RoseOp : RoseOpaqueCallOp, LLVMContext : RoseLLVMCon
   return LLVMFunctionType(OutType, OperandTypes)
 
 
+#Function = Builder.module.globals[FunctionName]
 def GetFunction(Builder, FunctionName, RetType, ArgTys):
-    fnty = LLVMFunctionType(RetType, ArgTys)
-    FunctionName = '.'.join([FunctionName])
-    if FunctionName in Builder.module.globals:
-      return Builder.module.globals[FunctionName]
-    return LLVMFunction(Builder.module, fnty, name=FunctionName)
+  FunctionName = '.'.join([FunctionName])
+  FunctionList = list()
+  for Function in Builder.module.functions:
+    print("FUNCTION ALREDY IN MODULE GLOBALS")
+    if FunctionName in Function.name:
+      FunctionList.append(Function)
+  for Function in FunctionList:
+    assert len(ArgTys) == len(Function.args)
+    FunctionNotFound = True
+    for Idx, ArgTy in enumerate(ArgTys):
+      if Function.args[Idx].type != ArgTy:
+        FunctionNotFound = False
+        break
+    if FunctionNotFound == True and Function.return_value.type == RetType:
+      return Function
+  FunctionTy = LLVMFunctionType(RetType, ArgTys)
+  return LLVMFunction(Builder.module, FunctionTy, name=Builder.module.get_unique_name(FunctionName))
 
 
 def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
@@ -69,14 +84,20 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
     # There should be no call operation except opaque calls
     assert not isinstance(Op, RoseCallOp)
     if isinstance(Op, RoseOpaqueCallOp):
+      print("Op.getCallee().getName():")
+      print(Op.getCallee().getName())
+      Op.print()
       # Get the name of the LLVM intrinsic
       LLVMIntrinsicName = "llvm.hydride." + Op.getCallee().getName()
       RetType = LLVMContext.getLLVMTypeFor(Op)
       OperandTypes = list()
       Args = list()
-      for Operand in Op.getCallOperands():
+      for OperandIndex, Operand in enumerate(Op.getCallOperands()):
         print("Operand:")
         Operand.print()
+        Operand.getType().print()
+        print("OperandIndex:")
+        print(OperandIndex)
         if isinstance(Operand, RoseConstant):
           if isinstance(Operand.getType(), RoseIntegerType):
             OperandTypes.append(LLVMIntType(Operand.getType().getBitwidth()))
@@ -89,15 +110,27 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
           print("Operand.to_llvm_ir(LLVMContext):")
           print(Operand.to_llvm_ir(LLVMContext))
           Args.append(Operand.to_llvm_ir(LLVMContext))
+          print("---OperandType[-1]:")
+          print(OperandTypes[-1])
         else:
           OperandTypes.append(LLVMContext.getLLVMTypeFor(Operand))
           Args.append(LLVMContext.getLLVMValueFor(Operand))
-      print("OperandTypes:")
+          print("---OperandType[-1]:")
+          print(OperandTypes[-1])
+      print("---OperandTypes:")
       print(OperandTypes)
       Intrinsic = GetFunction(LLVMContext.getLLVMBuilder(), LLVMIntrinsicName, RetType, OperandTypes)
-      InstName = Op.getName()
+      InstName = Op.getCallee().getName()
       if InstName[0] == "%":
         InstName = InstName[1:]
+      print("OP:")
+      Op.print()
+      print("InstName:")
+      print(InstName)
+      print("Args:")
+      print(Args)
+      print("Intrinsic:")
+      print(Intrinsic)
       CallInst = LLVMContext.getLLVMBuilder().call(Intrinsic, Args, InstName)
       print("CallInst:")
       print(CallInst)
@@ -123,8 +156,10 @@ def GenerateRegion(LLVMIRFunction : LLVMFunction, Region : RoseRegion,
 
 def GenerateLLVMIR(RoseIRFunctionToRoseLLVMCtx : dict):
   # Create an empty module and function.
-  LLVMIRModule = LLVMModule(name = RoseIRFunction.getName() + ".module")
+  LLVMIRModule = None
   for RoseIRFunction, RoseLLVMCxt in RoseIRFunctionToRoseLLVMCtx.items():
+    if LLVMIRModule == None:
+      LLVMIRModule = LLVMModule(name = RoseIRFunction.getName() + ".module")
     assert isinstance(RoseIRFunction, RoseFunction)
     assert isinstance(RoseLLVMCxt, RoseLLVMContext)
     print("RoseIRFunction:")
