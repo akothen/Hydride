@@ -8,9 +8,10 @@
 from RosetteLifter import RosetteLifter
 from RoseLLVMCodeGen import LLVMCodeGen
 
+import sys
 
 
-def HandleLowLevelCodeGen(RosetteFileName):
+def HandleLowLevelCodeGen(RosetteFileName : str, LLVMModuleName : str = None):
   # Build the Rose IR function and Rose LLVM context from Rosette code
   RosetteFile = open(RosetteFileName, "r")
   RosetteCode = list()
@@ -24,16 +25,20 @@ def HandleLowLevelCodeGen(RosetteFileName):
   assert isinstance(RoseIRFunctionToRoseLLVMCtx, dict)
 
   # Now generate LLVM module with the functions in it
-  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx)
+  LLVMIRModule = LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx, LLVMModuleName)
   print("LLVM MODULE")
   print(LLVMIRModule)
-  Module = open(LLVMIRModule.name + ".ll", "a")
+  Module = open(LLVMIRModule.name + ".ll", "w")
   Module.write(LLVMIRModule.__repr__())
   Module.close()
 
 
-
 if __name__ == '__main__':
-  RosetteFileName = "test.rkt"
-  HandleLowLevelCodeGen(RosetteFileName)
+  assert len(sys.argv[1:]) > 0
+  RosetteFileName = sys.argv[1]
+  if len(sys.argv[1:]) == 1:
+    HandleLowLevelCodeGen(RosetteFileName)
+  else:
+    LLVMModuleName = sys.argv[2]
+    HandleLowLevelCodeGen(RosetteFileName, LLVMModuleName)
 
