@@ -114,7 +114,7 @@ class RosetteParser:
           print(FunctionName)
           print(FunctionCode)
           FunctionToRosetteCode[FunctionName] = FunctionCode
-        FunctionName = CodeLine.strip().replace(";", "")
+        FunctionName = CodeLine.strip().replace(";", "").strip()
         FunctionCode = []
         continue
       FunctionCode.append(CodeLine)
