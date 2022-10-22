@@ -28,7 +28,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -45,7 +45,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -62,7 +62,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -79,7 +79,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -96,7 +96,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -113,7 +113,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -130,7 +130,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -147,7 +147,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -164,7 +164,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -181,7 +181,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -198,7 +198,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -215,7 +215,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -232,7 +232,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -249,7 +249,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -266,7 +266,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -283,7 +283,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -300,7 +300,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -317,7 +317,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -334,7 +334,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -351,7 +351,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -373,7 +373,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,3,0,2,-1]
+                  "arg_permute_map" : [1,3,0,2,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -390,7 +390,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,3,0,2,-1]
+                  "arg_permute_map" : [1,3,0,2,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -407,7 +407,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,2,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -424,7 +424,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,2,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -446,7 +446,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -463,7 +463,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -480,7 +480,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -497,7 +497,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -514,7 +514,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -531,7 +531,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -548,7 +548,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -565,7 +565,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -582,7 +582,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -599,7 +599,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -616,7 +616,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -633,7 +633,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -650,7 +650,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -667,7 +667,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -684,7 +684,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -701,7 +701,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -718,7 +718,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -735,7 +735,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -757,7 +757,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -774,7 +774,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -791,7 +791,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -808,7 +808,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -825,7 +825,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -842,7 +842,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -859,7 +859,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -876,7 +876,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -893,7 +893,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -910,7 +910,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -927,7 +927,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -944,7 +944,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -966,7 +966,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -983,7 +983,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1000,7 +1000,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1017,7 +1017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1034,7 +1034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1051,7 +1051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1068,7 +1068,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1085,7 +1085,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1102,7 +1102,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -1119,7 +1119,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1136,7 +1136,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1153,7 +1153,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1170,7 +1170,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1187,7 +1187,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1204,7 +1204,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1221,7 +1221,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1238,7 +1238,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1255,7 +1255,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1272,7 +1272,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1289,7 +1289,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1306,7 +1306,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1323,7 +1323,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1340,7 +1340,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1357,7 +1357,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1374,7 +1374,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1391,7 +1391,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1408,7 +1408,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1425,7 +1425,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1442,7 +1442,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1459,7 +1459,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1476,7 +1476,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1493,7 +1493,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1510,7 +1510,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1527,7 +1527,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1544,7 +1544,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1561,7 +1561,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1578,7 +1578,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1595,7 +1595,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1612,7 +1612,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1629,7 +1629,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1646,7 +1646,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1663,7 +1663,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1680,7 +1680,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1697,7 +1697,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1714,7 +1714,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1731,7 +1731,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1748,7 +1748,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1765,7 +1765,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1782,7 +1782,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1804,7 +1804,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1821,7 +1821,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1838,7 +1838,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1855,7 +1855,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1872,7 +1872,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1889,7 +1889,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -1911,7 +1911,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1928,7 +1928,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1945,7 +1945,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1962,7 +1962,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1979,7 +1979,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -1996,7 +1996,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2013,7 +2013,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2030,7 +2030,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2047,7 +2047,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2064,7 +2064,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2081,7 +2081,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2098,7 +2098,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2115,7 +2115,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2132,7 +2132,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2149,7 +2149,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2171,7 +2171,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2188,7 +2188,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2205,7 +2205,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2222,7 +2222,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2239,7 +2239,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -2256,7 +2256,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2273,7 +2273,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2290,7 +2290,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2307,7 +2307,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -2329,7 +2329,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2346,7 +2346,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2363,7 +2363,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2380,7 +2380,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2397,7 +2397,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2414,7 +2414,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2431,7 +2431,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2448,7 +2448,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2465,7 +2465,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2482,7 +2482,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2499,7 +2499,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2516,7 +2516,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2533,7 +2533,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2550,7 +2550,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2567,7 +2567,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2584,7 +2584,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2601,7 +2601,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2618,7 +2618,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2635,7 +2635,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2652,7 +2652,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2669,7 +2669,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2686,7 +2686,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2703,7 +2703,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2720,7 +2720,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2737,7 +2737,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2754,7 +2754,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2771,7 +2771,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2788,7 +2788,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2805,7 +2805,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2822,7 +2822,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2839,7 +2839,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2856,7 +2856,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2873,7 +2873,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2890,7 +2890,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2907,7 +2907,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2924,7 +2924,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -2946,7 +2946,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -2963,7 +2963,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -2980,7 +2980,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3002,7 +3002,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3019,7 +3019,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3041,7 +3041,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3058,7 +3058,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3075,7 +3075,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3092,7 +3092,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3109,7 +3109,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3126,7 +3126,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3143,7 +3143,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3160,7 +3160,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3182,7 +3182,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1]
+                  "arg_permute_map" : [1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3199,7 +3199,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1]
+                  "arg_permute_map" : [1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3216,7 +3216,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1]
+                  "arg_permute_map" : [1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3238,7 +3238,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3255,7 +3255,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3272,7 +3272,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3289,7 +3289,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3306,7 +3306,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3323,7 +3323,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3340,7 +3340,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3357,7 +3357,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3374,7 +3374,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3391,7 +3391,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3408,7 +3408,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3425,7 +3425,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -3447,7 +3447,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3464,7 +3464,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3481,7 +3481,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3498,7 +3498,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3515,7 +3515,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3532,7 +3532,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3549,7 +3549,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3566,7 +3566,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3583,7 +3583,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3600,7 +3600,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3617,7 +3617,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3634,7 +3634,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3656,7 +3656,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3678,7 +3678,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3695,7 +3695,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3717,7 +3717,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3734,7 +3734,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3751,7 +3751,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3768,7 +3768,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3785,7 +3785,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3802,7 +3802,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -3824,7 +3824,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3841,7 +3841,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3858,7 +3858,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3875,7 +3875,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3892,7 +3892,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3909,7 +3909,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3926,7 +3926,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3943,7 +3943,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,3,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -3965,7 +3965,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3982,7 +3982,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -3999,7 +3999,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4016,7 +4016,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4033,7 +4033,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4050,7 +4050,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4067,7 +4067,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4084,7 +4084,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4101,7 +4101,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4118,7 +4118,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4135,7 +4135,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4152,7 +4152,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4169,7 +4169,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4186,7 +4186,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4203,7 +4203,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4220,7 +4220,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4237,7 +4237,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4254,7 +4254,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4271,7 +4271,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4288,7 +4288,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4305,7 +4305,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4322,7 +4322,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4339,7 +4339,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4356,7 +4356,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4373,7 +4373,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4390,7 +4390,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4407,7 +4407,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4424,7 +4424,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4441,7 +4441,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4458,7 +4458,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4475,7 +4475,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4492,7 +4492,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4509,7 +4509,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4526,7 +4526,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4543,7 +4543,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4560,7 +4560,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4582,7 +4582,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -4604,7 +4604,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4621,7 +4621,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4638,7 +4638,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4655,7 +4655,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4672,7 +4672,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4689,7 +4689,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4706,7 +4706,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4723,7 +4723,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4740,7 +4740,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4757,7 +4757,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4774,7 +4774,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4791,7 +4791,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4808,7 +4808,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4825,7 +4825,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4842,7 +4842,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4859,7 +4859,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4876,7 +4876,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4893,7 +4893,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4910,7 +4910,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4927,7 +4927,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4944,7 +4944,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4961,7 +4961,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -4978,7 +4978,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -4995,7 +4995,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5017,7 +5017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,-1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5034,7 +5034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,-1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5051,7 +5051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,-1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5073,7 +5073,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5090,7 +5090,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5107,7 +5107,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5124,7 +5124,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5141,7 +5141,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5158,7 +5158,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5175,7 +5175,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5192,7 +5192,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5209,7 +5209,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5226,7 +5226,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5243,7 +5243,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5260,7 +5260,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5277,7 +5277,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -5299,7 +5299,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5316,7 +5316,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5333,7 +5333,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5350,7 +5350,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5367,7 +5367,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5384,7 +5384,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5401,7 +5401,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5418,7 +5418,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5435,7 +5435,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5452,7 +5452,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5469,7 +5469,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5486,7 +5486,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5508,7 +5508,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5525,7 +5525,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5542,7 +5542,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5559,7 +5559,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5576,7 +5576,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5593,7 +5593,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5610,7 +5610,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5627,7 +5627,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5644,7 +5644,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5661,7 +5661,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5678,7 +5678,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5695,7 +5695,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "None",
       },
@@ -5717,7 +5717,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5734,7 +5734,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5751,7 +5751,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5768,7 +5768,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5785,7 +5785,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5802,7 +5802,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5819,7 +5819,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5836,7 +5836,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5853,7 +5853,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5870,7 +5870,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5887,7 +5887,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5904,7 +5904,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5921,7 +5921,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5938,7 +5938,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5955,7 +5955,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5972,7 +5972,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -5989,7 +5989,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6006,7 +6006,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6023,7 +6023,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6040,7 +6040,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6057,7 +6057,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6074,7 +6074,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6091,7 +6091,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6108,7 +6108,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6130,7 +6130,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6147,7 +6147,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6164,7 +6164,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6181,7 +6181,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6198,7 +6198,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6215,7 +6215,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6232,7 +6232,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6249,7 +6249,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6266,7 +6266,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6288,7 +6288,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6305,7 +6305,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6322,7 +6322,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6339,7 +6339,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6356,7 +6356,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6373,7 +6373,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6395,7 +6395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6412,7 +6412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6429,7 +6429,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6446,7 +6446,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6463,7 +6463,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6480,7 +6480,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6497,7 +6497,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6514,7 +6514,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6531,7 +6531,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6548,7 +6548,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6565,7 +6565,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6582,7 +6582,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6599,7 +6599,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6616,7 +6616,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6633,7 +6633,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6650,7 +6650,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6667,7 +6667,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6684,7 +6684,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6701,7 +6701,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6718,7 +6718,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6735,7 +6735,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6752,7 +6752,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6769,7 +6769,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6786,7 +6786,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6808,7 +6808,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6825,7 +6825,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6842,7 +6842,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6859,7 +6859,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6881,7 +6881,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6898,7 +6898,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6915,7 +6915,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6932,7 +6932,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -6949,7 +6949,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6966,7 +6966,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -6983,7 +6983,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7000,7 +7000,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7017,7 +7017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7034,7 +7034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7051,7 +7051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7068,7 +7068,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7085,7 +7085,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7102,7 +7102,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7124,7 +7124,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7141,7 +7141,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7158,7 +7158,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7175,7 +7175,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7192,7 +7192,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7209,7 +7209,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7231,7 +7231,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7248,7 +7248,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7265,7 +7265,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7282,7 +7282,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7299,7 +7299,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7316,7 +7316,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7333,7 +7333,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7350,7 +7350,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7367,7 +7367,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7384,7 +7384,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7401,7 +7401,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -7423,7 +7423,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7440,7 +7440,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7457,7 +7457,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7474,7 +7474,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7491,7 +7491,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7508,7 +7508,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7525,7 +7525,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7547,7 +7547,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7564,7 +7564,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7581,7 +7581,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7598,7 +7598,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7615,7 +7615,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7632,7 +7632,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7654,7 +7654,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7671,7 +7671,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7688,7 +7688,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7705,7 +7705,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7722,7 +7722,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7739,7 +7739,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7756,7 +7756,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7773,7 +7773,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7790,7 +7790,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7807,7 +7807,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7824,7 +7824,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7841,7 +7841,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7863,7 +7863,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7880,7 +7880,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7897,7 +7897,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -7919,7 +7919,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7936,7 +7936,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7953,7 +7953,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7970,7 +7970,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -7992,7 +7992,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8009,7 +8009,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8026,7 +8026,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8043,7 +8043,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8060,7 +8060,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8077,7 +8077,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8094,7 +8094,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8111,7 +8111,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8128,7 +8128,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8150,7 +8150,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8167,7 +8167,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8184,7 +8184,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8206,7 +8206,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -8223,7 +8223,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -8240,7 +8240,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -8262,7 +8262,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8279,7 +8279,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8296,7 +8296,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8313,7 +8313,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8330,7 +8330,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8347,7 +8347,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8364,7 +8364,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8381,7 +8381,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8398,7 +8398,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8415,7 +8415,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -8437,7 +8437,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8454,7 +8454,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8471,7 +8471,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8488,7 +8488,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8505,7 +8505,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8522,7 +8522,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8539,7 +8539,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8556,7 +8556,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8573,7 +8573,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8590,7 +8590,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8607,7 +8607,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8624,7 +8624,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8641,7 +8641,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8658,7 +8658,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8675,7 +8675,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8692,7 +8692,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8709,7 +8709,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8726,7 +8726,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -8748,7 +8748,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8765,7 +8765,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8782,7 +8782,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8799,7 +8799,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8816,7 +8816,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8833,7 +8833,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8850,7 +8850,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8867,7 +8867,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8884,7 +8884,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8901,7 +8901,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8918,7 +8918,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8935,7 +8935,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8952,7 +8952,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8969,7 +8969,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -8986,7 +8986,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9003,7 +9003,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9020,7 +9020,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9037,7 +9037,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9054,7 +9054,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9071,7 +9071,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9088,7 +9088,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9105,7 +9105,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9122,7 +9122,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9139,7 +9139,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,2,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9161,7 +9161,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9178,7 +9178,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9195,7 +9195,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9212,7 +9212,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9229,7 +9229,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9246,7 +9246,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9263,7 +9263,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9280,7 +9280,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9297,7 +9297,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9314,7 +9314,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9331,7 +9331,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9348,7 +9348,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9365,7 +9365,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9382,7 +9382,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9404,7 +9404,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9421,7 +9421,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9438,7 +9438,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9460,7 +9460,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9477,7 +9477,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9494,7 +9494,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9511,7 +9511,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9528,7 +9528,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9545,7 +9545,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9562,7 +9562,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9579,7 +9579,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9596,7 +9596,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9618,7 +9618,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9635,7 +9635,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9652,7 +9652,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9669,7 +9669,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9686,7 +9686,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9703,7 +9703,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9720,7 +9720,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9737,7 +9737,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9754,7 +9754,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9776,7 +9776,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9793,7 +9793,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9810,7 +9810,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9827,7 +9827,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9844,7 +9844,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9861,7 +9861,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9878,7 +9878,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9895,7 +9895,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9912,7 +9912,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9929,7 +9929,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9946,7 +9946,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9963,7 +9963,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -9980,7 +9980,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -9997,7 +9997,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10014,7 +10014,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10031,7 +10031,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10048,7 +10048,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10065,7 +10065,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10087,7 +10087,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10104,7 +10104,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10121,7 +10121,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10138,7 +10138,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10155,7 +10155,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10172,7 +10172,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '3'}}, {'Skylake': {'l': '5', 't': '1.5'}}]",
                   "SIMD" : "True",
       },
@@ -10189,7 +10189,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10206,7 +10206,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10223,7 +10223,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10240,7 +10240,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10257,7 +10257,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -10274,7 +10274,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10296,7 +10296,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10313,7 +10313,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10330,7 +10330,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10347,7 +10347,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10364,7 +10364,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10381,7 +10381,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10398,7 +10398,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10415,7 +10415,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10432,7 +10432,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10449,7 +10449,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10466,7 +10466,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -10483,7 +10483,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10505,7 +10505,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10522,7 +10522,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10539,7 +10539,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10556,7 +10556,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10573,7 +10573,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10590,7 +10590,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10607,7 +10607,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10624,7 +10624,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10641,7 +10641,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10658,7 +10658,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10675,7 +10675,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10692,7 +10692,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10709,7 +10709,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10726,7 +10726,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10743,7 +10743,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10760,7 +10760,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10777,7 +10777,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10794,7 +10794,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10811,7 +10811,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10828,7 +10828,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10845,7 +10845,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10862,7 +10862,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10879,7 +10879,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10896,7 +10896,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10913,7 +10913,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10930,7 +10930,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10947,7 +10947,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10964,7 +10964,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10981,7 +10981,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -10998,7 +10998,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11015,7 +11015,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11032,7 +11032,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11049,7 +11049,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11066,7 +11066,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11083,7 +11083,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11100,7 +11100,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11117,7 +11117,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11134,7 +11134,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11151,7 +11151,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11168,7 +11168,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11185,7 +11185,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11202,7 +11202,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11219,7 +11219,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11236,7 +11236,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11253,7 +11253,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11270,7 +11270,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11287,7 +11287,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11304,7 +11304,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11326,7 +11326,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11343,7 +11343,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11360,7 +11360,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11377,7 +11377,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11394,7 +11394,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11411,7 +11411,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11433,7 +11433,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11450,7 +11450,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11467,7 +11467,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11484,7 +11484,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11501,7 +11501,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11518,7 +11518,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11535,7 +11535,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11552,7 +11552,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11569,7 +11569,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11586,7 +11586,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11603,7 +11603,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11620,7 +11620,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11642,7 +11642,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11659,7 +11659,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11676,7 +11676,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11693,7 +11693,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11710,7 +11710,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11727,7 +11727,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11744,7 +11744,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11761,7 +11761,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11778,7 +11778,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -11800,7 +11800,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11817,7 +11817,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11834,7 +11834,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11851,7 +11851,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11868,7 +11868,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11885,7 +11885,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11902,7 +11902,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11919,7 +11919,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11936,7 +11936,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11953,7 +11953,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11970,7 +11970,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -11987,7 +11987,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12004,7 +12004,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12021,7 +12021,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12038,7 +12038,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12055,7 +12055,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12072,7 +12072,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12089,7 +12089,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12106,7 +12106,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12123,7 +12123,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12140,7 +12140,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12157,7 +12157,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12174,7 +12174,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12191,7 +12191,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12208,7 +12208,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12225,7 +12225,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12242,7 +12242,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12259,7 +12259,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12276,7 +12276,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12293,7 +12293,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12310,7 +12310,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12327,7 +12327,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12344,7 +12344,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12361,7 +12361,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12378,7 +12378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12395,7 +12395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12412,7 +12412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12429,7 +12429,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12446,7 +12446,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12463,7 +12463,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12480,7 +12480,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12497,7 +12497,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12514,7 +12514,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12531,7 +12531,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12548,7 +12548,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12565,7 +12565,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12582,7 +12582,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12599,7 +12599,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12621,7 +12621,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -12643,7 +12643,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12660,7 +12660,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12677,7 +12677,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12694,7 +12694,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12711,7 +12711,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12728,7 +12728,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12745,7 +12745,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12762,7 +12762,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12779,7 +12779,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12796,7 +12796,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12818,7 +12818,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12835,7 +12835,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12852,7 +12852,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12869,7 +12869,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12886,7 +12886,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12903,7 +12903,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12920,7 +12920,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12937,7 +12937,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12954,7 +12954,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -12971,7 +12971,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -12988,7 +12988,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13005,7 +13005,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13022,7 +13022,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13039,7 +13039,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13056,7 +13056,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13073,7 +13073,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13090,7 +13090,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13107,7 +13107,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13124,7 +13124,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13141,7 +13141,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13158,7 +13158,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13175,7 +13175,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13192,7 +13192,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13209,7 +13209,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13231,7 +13231,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13248,7 +13248,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13265,7 +13265,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13282,7 +13282,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13299,7 +13299,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13316,7 +13316,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13333,7 +13333,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13350,7 +13350,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13367,7 +13367,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13384,7 +13384,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13401,7 +13401,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13418,7 +13418,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13435,7 +13435,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13452,7 +13452,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13469,7 +13469,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13486,7 +13486,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13503,7 +13503,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13520,7 +13520,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -13542,7 +13542,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13559,7 +13559,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13576,7 +13576,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13593,7 +13593,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13610,7 +13610,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13627,7 +13627,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13644,7 +13644,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13661,7 +13661,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13678,7 +13678,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13695,7 +13695,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13712,7 +13712,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13729,7 +13729,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13746,7 +13746,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13763,7 +13763,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13785,7 +13785,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -13802,7 +13802,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -13819,7 +13819,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -13841,7 +13841,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13858,7 +13858,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13875,7 +13875,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13892,7 +13892,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13909,7 +13909,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13926,7 +13926,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13943,7 +13943,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13960,7 +13960,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -13977,7 +13977,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -13994,7 +13994,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14011,7 +14011,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14028,7 +14028,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14045,7 +14045,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14062,7 +14062,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14079,7 +14079,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14096,7 +14096,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14113,7 +14113,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14130,7 +14130,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14147,7 +14147,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14164,7 +14164,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14181,7 +14181,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14198,7 +14198,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14215,7 +14215,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14232,7 +14232,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14254,7 +14254,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14271,7 +14271,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14288,7 +14288,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14305,7 +14305,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14322,7 +14322,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14339,7 +14339,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14361,7 +14361,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14378,7 +14378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14395,7 +14395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14412,7 +14412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -14434,7 +14434,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14451,7 +14451,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14468,7 +14468,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14485,7 +14485,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14502,7 +14502,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14519,7 +14519,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14536,7 +14536,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14553,7 +14553,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14570,7 +14570,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14587,7 +14587,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14604,7 +14604,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14621,7 +14621,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14638,7 +14638,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14655,7 +14655,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14672,7 +14672,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14689,7 +14689,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14706,7 +14706,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14723,7 +14723,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14740,7 +14740,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14757,7 +14757,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14774,7 +14774,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14791,7 +14791,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -14808,7 +14808,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14825,7 +14825,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14842,7 +14842,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,3,2,-1,-1]
+                  "arg_permute_map" : [1,0,3,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14864,7 +14864,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14881,7 +14881,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14898,7 +14898,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14915,7 +14915,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14932,7 +14932,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14949,7 +14949,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -14966,7 +14966,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -14983,7 +14983,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15000,7 +15000,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15017,7 +15017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15034,7 +15034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15056,7 +15056,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1,-1]
+                  "arg_permute_map" : [2,0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -15073,7 +15073,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1,-1]
+                  "arg_permute_map" : [2,0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -15095,7 +15095,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15112,7 +15112,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15129,7 +15129,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15146,7 +15146,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15163,7 +15163,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15180,7 +15180,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15197,7 +15197,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15214,7 +15214,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15231,7 +15231,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15248,7 +15248,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -15265,7 +15265,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15282,7 +15282,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15299,7 +15299,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15316,7 +15316,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15333,7 +15333,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15350,7 +15350,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15367,7 +15367,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15384,7 +15384,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15401,7 +15401,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -15423,7 +15423,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15440,7 +15440,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15457,7 +15457,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15474,7 +15474,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15491,7 +15491,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15508,7 +15508,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15525,7 +15525,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15542,7 +15542,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15559,7 +15559,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15576,7 +15576,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15593,7 +15593,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15610,7 +15610,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15627,7 +15627,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15644,7 +15644,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15661,7 +15661,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15678,7 +15678,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15695,7 +15695,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15712,7 +15712,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15729,7 +15729,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15746,7 +15746,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15763,7 +15763,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15780,7 +15780,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15797,7 +15797,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15814,7 +15814,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15831,7 +15831,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15848,7 +15848,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15865,7 +15865,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15882,7 +15882,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15899,7 +15899,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -15916,7 +15916,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15933,7 +15933,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -15950,7 +15950,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15967,7 +15967,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -15984,7 +15984,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -16001,7 +16001,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16018,7 +16018,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -16035,7 +16035,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16052,7 +16052,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16069,7 +16069,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16086,7 +16086,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16103,7 +16103,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16120,7 +16120,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16137,7 +16137,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,2,-1,-1]
+                  "arg_permute_map" : [0,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16154,7 +16154,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -16171,7 +16171,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -16188,7 +16188,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16205,7 +16205,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16222,7 +16222,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16239,7 +16239,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16256,7 +16256,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "None",
       },
@@ -16273,7 +16273,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -16295,7 +16295,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16312,7 +16312,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16329,7 +16329,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16346,7 +16346,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16363,7 +16363,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16380,7 +16380,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16397,7 +16397,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16414,7 +16414,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16431,7 +16431,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,-1,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -16453,7 +16453,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16470,7 +16470,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16487,7 +16487,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16504,7 +16504,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16521,7 +16521,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16538,7 +16538,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16555,7 +16555,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16572,7 +16572,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16589,7 +16589,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16606,7 +16606,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16623,7 +16623,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16640,7 +16640,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16657,7 +16657,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16674,7 +16674,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16691,7 +16691,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16708,7 +16708,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16725,7 +16725,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16742,7 +16742,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16759,7 +16759,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16776,7 +16776,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16793,7 +16793,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16810,7 +16810,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16827,7 +16827,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16844,7 +16844,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16861,7 +16861,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16878,7 +16878,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16895,7 +16895,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16912,7 +16912,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16929,7 +16929,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16946,7 +16946,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16963,7 +16963,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16980,7 +16980,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -16997,7 +16997,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17014,7 +17014,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17031,7 +17031,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17048,7 +17048,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17070,7 +17070,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17087,7 +17087,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17104,7 +17104,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17121,7 +17121,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -17143,7 +17143,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17160,7 +17160,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17177,7 +17177,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17194,7 +17194,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17211,7 +17211,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17228,7 +17228,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17245,7 +17245,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17262,7 +17262,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17279,7 +17279,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17296,7 +17296,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17313,7 +17313,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17330,7 +17330,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17347,7 +17347,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17364,7 +17364,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17386,7 +17386,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17403,7 +17403,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17420,7 +17420,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17437,7 +17437,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17454,7 +17454,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17471,7 +17471,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17488,7 +17488,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17505,7 +17505,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17522,7 +17522,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17539,7 +17539,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17556,7 +17556,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17573,7 +17573,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17595,7 +17595,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17612,7 +17612,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17629,7 +17629,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17646,7 +17646,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17663,7 +17663,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17680,7 +17680,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17702,7 +17702,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17719,7 +17719,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17736,7 +17736,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17753,7 +17753,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17770,7 +17770,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17787,7 +17787,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17804,7 +17804,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17821,7 +17821,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17838,7 +17838,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17855,7 +17855,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17872,7 +17872,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17889,7 +17889,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17906,7 +17906,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17923,7 +17923,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17940,7 +17940,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17962,7 +17962,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -17979,7 +17979,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -17996,7 +17996,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18013,7 +18013,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18030,7 +18030,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18047,7 +18047,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18064,7 +18064,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18081,7 +18081,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18098,7 +18098,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18115,7 +18115,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18132,7 +18132,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18149,7 +18149,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18166,7 +18166,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18183,7 +18183,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18200,7 +18200,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18217,7 +18217,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18234,7 +18234,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18251,7 +18251,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18268,7 +18268,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18285,7 +18285,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18302,7 +18302,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18319,7 +18319,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18336,7 +18336,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18353,7 +18353,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18375,7 +18375,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -18392,7 +18392,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -18414,7 +18414,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18431,7 +18431,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18448,7 +18448,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,-1,0,-1]
+                  "arg_permute_map" : [1,-1,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18470,7 +18470,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18487,7 +18487,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18509,7 +18509,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18526,7 +18526,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18543,7 +18543,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18560,7 +18560,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18577,7 +18577,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18594,7 +18594,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18611,7 +18611,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18628,7 +18628,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18645,7 +18645,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18662,7 +18662,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18679,7 +18679,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18696,7 +18696,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18718,7 +18718,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18735,7 +18735,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18752,7 +18752,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18774,7 +18774,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -18796,7 +18796,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -18813,7 +18813,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -18830,7 +18830,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -18852,7 +18852,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18869,7 +18869,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18886,7 +18886,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18903,7 +18903,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -18925,7 +18925,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0]
+                  "arg_permute_map" : [1,0],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18942,7 +18942,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0]
+                  "arg_permute_map" : [1,0],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18964,7 +18964,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18981,7 +18981,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -18998,7 +18998,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19015,7 +19015,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19032,7 +19032,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19049,7 +19049,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19066,7 +19066,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19083,7 +19083,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19100,7 +19100,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19117,7 +19117,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19134,7 +19134,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19151,7 +19151,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19168,7 +19168,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19185,7 +19185,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19202,7 +19202,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19219,7 +19219,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19236,7 +19236,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19253,7 +19253,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,0,-1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19275,7 +19275,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19292,7 +19292,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19309,7 +19309,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19326,7 +19326,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19343,7 +19343,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19360,7 +19360,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19377,7 +19377,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19394,7 +19394,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19411,7 +19411,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19428,7 +19428,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19445,7 +19445,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19462,7 +19462,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19479,7 +19479,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19496,7 +19496,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19513,7 +19513,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19530,7 +19530,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19552,7 +19552,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [3,0,1,2]
+                  "arg_permute_map" : [3,0,1,2],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -19574,7 +19574,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -19591,7 +19591,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -19608,7 +19608,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -19630,7 +19630,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19647,7 +19647,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19664,7 +19664,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19681,7 +19681,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19698,7 +19698,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19715,7 +19715,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19732,7 +19732,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19749,7 +19749,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19766,7 +19766,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19783,7 +19783,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19800,7 +19800,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19817,7 +19817,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19834,7 +19834,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19851,7 +19851,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19868,7 +19868,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19885,7 +19885,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19902,7 +19902,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19919,7 +19919,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -19941,7 +19941,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -19958,7 +19958,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -19975,7 +19975,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -19992,7 +19992,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20009,7 +20009,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20026,7 +20026,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20043,7 +20043,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20060,7 +20060,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20077,7 +20077,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20094,7 +20094,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20111,7 +20111,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -20128,7 +20128,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20150,7 +20150,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20167,7 +20167,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20184,7 +20184,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20201,7 +20201,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20218,7 +20218,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20235,7 +20235,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20252,7 +20252,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20269,7 +20269,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20286,7 +20286,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20303,7 +20303,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20320,7 +20320,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20337,7 +20337,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20359,7 +20359,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -20376,7 +20376,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -20398,7 +20398,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20415,7 +20415,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20432,7 +20432,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20454,7 +20454,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -20471,7 +20471,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -20493,7 +20493,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20510,7 +20510,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20527,7 +20527,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20544,7 +20544,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20561,7 +20561,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20578,7 +20578,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20600,7 +20600,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -20617,7 +20617,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -20634,7 +20634,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -20656,7 +20656,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20673,7 +20673,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20690,7 +20690,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20707,7 +20707,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20724,7 +20724,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20741,7 +20741,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20758,7 +20758,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20775,7 +20775,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20792,7 +20792,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20809,7 +20809,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20826,7 +20826,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20843,7 +20843,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20860,7 +20860,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20882,7 +20882,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20899,7 +20899,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20916,7 +20916,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20933,7 +20933,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20950,7 +20950,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -20967,7 +20967,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -20984,7 +20984,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21001,7 +21001,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21018,7 +21018,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21035,7 +21035,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21052,7 +21052,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21069,7 +21069,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21091,7 +21091,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21108,7 +21108,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21125,7 +21125,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21142,7 +21142,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21159,7 +21159,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21176,7 +21176,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21193,7 +21193,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21210,7 +21210,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21227,7 +21227,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21244,7 +21244,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21261,7 +21261,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21278,7 +21278,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21295,7 +21295,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21312,7 +21312,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21334,7 +21334,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21351,7 +21351,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21368,7 +21368,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21390,7 +21390,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21407,7 +21407,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21424,7 +21424,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21441,7 +21441,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21458,7 +21458,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21475,7 +21475,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21492,7 +21492,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21509,7 +21509,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21526,7 +21526,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21543,7 +21543,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -21565,7 +21565,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21582,7 +21582,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [3,1,2,0,-1]
+                  "arg_permute_map" : [3,1,2,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21599,7 +21599,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21616,7 +21616,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [3,1,2,0,-1]
+                  "arg_permute_map" : [3,1,2,0,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21633,7 +21633,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1,-1,-1]
+                  "arg_permute_map" : [2,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21650,7 +21650,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [3,1,2,0,-1]
+                  "arg_permute_map" : [3,1,2,0,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21672,7 +21672,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21689,7 +21689,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21706,7 +21706,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21723,7 +21723,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21740,7 +21740,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21757,7 +21757,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21774,7 +21774,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21791,7 +21791,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21808,7 +21808,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21825,7 +21825,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21842,7 +21842,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21859,7 +21859,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21876,7 +21876,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21893,7 +21893,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21910,7 +21910,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21927,7 +21927,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21944,7 +21944,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21961,7 +21961,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21978,7 +21978,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -21995,7 +21995,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22017,7 +22017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22034,7 +22034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22051,7 +22051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22068,7 +22068,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22085,7 +22085,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22102,7 +22102,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22119,7 +22119,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22136,7 +22136,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22153,7 +22153,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22170,7 +22170,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22187,7 +22187,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22204,7 +22204,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22226,7 +22226,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22243,7 +22243,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22260,7 +22260,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22277,7 +22277,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22294,7 +22294,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22311,7 +22311,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22328,7 +22328,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22350,7 +22350,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -22367,7 +22367,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -22389,7 +22389,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22406,7 +22406,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22423,7 +22423,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22440,7 +22440,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22457,7 +22457,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22474,7 +22474,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22496,7 +22496,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22513,7 +22513,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22530,7 +22530,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22547,7 +22547,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22564,7 +22564,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -22581,7 +22581,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22598,7 +22598,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22615,7 +22615,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22632,7 +22632,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22649,7 +22649,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22666,7 +22666,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22683,7 +22683,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -22705,7 +22705,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22727,7 +22727,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22744,7 +22744,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22761,7 +22761,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22778,7 +22778,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22795,7 +22795,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22812,7 +22812,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22829,7 +22829,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22846,7 +22846,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22863,7 +22863,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22880,7 +22880,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22897,7 +22897,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22914,7 +22914,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22936,7 +22936,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -22953,7 +22953,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22970,7 +22970,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -22987,7 +22987,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23004,7 +23004,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23021,7 +23021,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23038,7 +23038,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23055,7 +23055,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23072,7 +23072,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '7', 't': '0.5'}}, {'Skylake': {'l': '7', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23089,7 +23089,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23106,7 +23106,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23123,7 +23123,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23140,7 +23140,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23157,7 +23157,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23174,7 +23174,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23191,7 +23191,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23208,7 +23208,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23225,7 +23225,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23242,7 +23242,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23259,7 +23259,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23276,7 +23276,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23293,7 +23293,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23310,7 +23310,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '7', 't': '0.5'}}, {'Skylake': {'l': '7', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23327,7 +23327,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23344,7 +23344,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23361,7 +23361,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23378,7 +23378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23395,7 +23395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23412,7 +23412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -23429,7 +23429,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23451,7 +23451,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23468,7 +23468,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23490,7 +23490,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23507,7 +23507,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23524,7 +23524,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23541,7 +23541,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23558,7 +23558,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23575,7 +23575,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23592,7 +23592,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23609,7 +23609,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23626,7 +23626,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23643,7 +23643,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23660,7 +23660,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23677,7 +23677,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23694,7 +23694,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23711,7 +23711,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23728,7 +23728,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23745,7 +23745,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23762,7 +23762,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,-1,-1,2,0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23779,7 +23779,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,-1,-1,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -23801,7 +23801,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23818,7 +23818,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23835,7 +23835,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23852,7 +23852,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23869,7 +23869,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23886,7 +23886,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23903,7 +23903,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23920,7 +23920,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23937,7 +23937,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23954,7 +23954,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23971,7 +23971,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -23988,7 +23988,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24010,7 +24010,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24027,7 +24027,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24044,7 +24044,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24061,7 +24061,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24078,7 +24078,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24095,7 +24095,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24112,7 +24112,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24129,7 +24129,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24146,7 +24146,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24163,7 +24163,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24180,7 +24180,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24197,7 +24197,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24214,7 +24214,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24231,7 +24231,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '8', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24248,7 +24248,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24265,7 +24265,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '8', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24282,7 +24282,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24299,7 +24299,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24321,7 +24321,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24338,7 +24338,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24355,7 +24355,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24372,7 +24372,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24389,7 +24389,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24406,7 +24406,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24428,7 +24428,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24445,7 +24445,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24462,7 +24462,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24479,7 +24479,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24496,7 +24496,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24513,7 +24513,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24530,7 +24530,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24547,7 +24547,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24569,7 +24569,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24586,7 +24586,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24603,7 +24603,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24620,7 +24620,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24637,7 +24637,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24654,7 +24654,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24671,7 +24671,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24688,7 +24688,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24705,7 +24705,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24722,7 +24722,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24739,7 +24739,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24756,7 +24756,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,-1,2,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24778,7 +24778,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2]
+                  "arg_permute_map" : [0,1,2],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -24800,7 +24800,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24817,7 +24817,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24834,7 +24834,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24851,7 +24851,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24868,7 +24868,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24885,7 +24885,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -24907,7 +24907,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -24924,7 +24924,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24941,7 +24941,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24958,7 +24958,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24975,7 +24975,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -24992,7 +24992,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25009,7 +25009,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -25031,7 +25031,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '3'}}, {'Skylake': {'l': '5', 't': '1.5'}}]",
                   "SIMD" : "True",
       },
@@ -25048,7 +25048,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25065,7 +25065,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25082,7 +25082,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -25099,7 +25099,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25116,7 +25116,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25133,7 +25133,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25150,7 +25150,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25167,7 +25167,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25184,7 +25184,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -25201,7 +25201,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -25218,7 +25218,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25235,7 +25235,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25252,7 +25252,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -25269,7 +25269,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '10', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25286,7 +25286,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '10', 't': '0.66'}}]",
                   "SIMD" : "True",
       },
@@ -25303,7 +25303,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1.5'}}, {'Skylake': {'l': '5', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25320,7 +25320,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '3'}}, {'Skylake': {'l': '5', 't': '1.5'}}]",
                   "SIMD" : "True",
       },
@@ -25342,7 +25342,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -25359,7 +25359,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -25381,7 +25381,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25398,7 +25398,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25415,7 +25415,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25432,7 +25432,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25449,7 +25449,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25466,7 +25466,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25483,7 +25483,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25505,7 +25505,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25522,7 +25522,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25539,7 +25539,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25556,7 +25556,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25573,7 +25573,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25590,7 +25590,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25607,7 +25607,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25624,7 +25624,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25641,7 +25641,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25658,7 +25658,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25675,7 +25675,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25692,7 +25692,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25709,7 +25709,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25726,7 +25726,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25743,7 +25743,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25760,7 +25760,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25777,7 +25777,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25794,7 +25794,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25811,7 +25811,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25828,7 +25828,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25845,7 +25845,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25862,7 +25862,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25879,7 +25879,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25896,7 +25896,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -25918,7 +25918,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -25935,7 +25935,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -25952,7 +25952,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -25969,7 +25969,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -25986,7 +25986,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26003,7 +26003,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26020,7 +26020,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26037,7 +26037,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26054,7 +26054,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26071,7 +26071,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26088,7 +26088,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26105,7 +26105,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26122,7 +26122,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26139,7 +26139,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26156,7 +26156,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26173,7 +26173,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26190,7 +26190,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26207,7 +26207,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26224,7 +26224,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26241,7 +26241,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26258,7 +26258,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26275,7 +26275,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26292,7 +26292,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26309,7 +26309,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26326,7 +26326,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26343,7 +26343,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26360,7 +26360,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26377,7 +26377,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -26399,7 +26399,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26416,7 +26416,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26433,7 +26433,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26450,7 +26450,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26467,7 +26467,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26484,7 +26484,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26501,7 +26501,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26518,7 +26518,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26535,7 +26535,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26552,7 +26552,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26569,7 +26569,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26586,7 +26586,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26603,7 +26603,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26620,7 +26620,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26637,7 +26637,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26654,7 +26654,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26671,7 +26671,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26688,7 +26688,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [0,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -26710,7 +26710,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26727,7 +26727,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26744,7 +26744,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26761,7 +26761,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26778,7 +26778,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26795,7 +26795,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26812,7 +26812,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26829,7 +26829,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26846,7 +26846,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26863,7 +26863,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26885,7 +26885,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -26902,7 +26902,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -26919,7 +26919,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -26941,7 +26941,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26958,7 +26958,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -26975,7 +26975,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -26997,7 +26997,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -27014,7 +27014,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -27031,7 +27031,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -27048,7 +27048,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27065,7 +27065,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27082,7 +27082,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -27104,7 +27104,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27121,7 +27121,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27138,7 +27138,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27155,7 +27155,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27177,7 +27177,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27194,7 +27194,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27211,7 +27211,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27228,7 +27228,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27245,7 +27245,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27262,7 +27262,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27279,7 +27279,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27296,7 +27296,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27313,7 +27313,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27330,7 +27330,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27347,7 +27347,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27364,7 +27364,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27381,7 +27381,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27398,7 +27398,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27420,7 +27420,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27437,7 +27437,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27454,7 +27454,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27471,7 +27471,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27488,7 +27488,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27505,7 +27505,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27527,7 +27527,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3]
+                  "arg_permute_map" : [1,0,2,3],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27549,7 +27549,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27566,7 +27566,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27583,7 +27583,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27600,7 +27600,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27617,7 +27617,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27634,7 +27634,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27651,7 +27651,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27668,7 +27668,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27685,7 +27685,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -27702,7 +27702,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27719,7 +27719,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27736,7 +27736,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27753,7 +27753,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,-1,-1,0,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27775,7 +27775,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27792,7 +27792,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27809,7 +27809,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27826,7 +27826,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27843,7 +27843,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27860,7 +27860,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -27882,7 +27882,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -27899,7 +27899,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -27916,7 +27916,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27933,7 +27933,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -27950,7 +27950,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -27967,7 +27967,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -27984,7 +27984,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28001,7 +28001,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28018,7 +28018,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28035,7 +28035,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28052,7 +28052,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28069,7 +28069,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28091,7 +28091,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28108,7 +28108,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28125,7 +28125,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28142,7 +28142,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28159,7 +28159,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28176,7 +28176,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28193,7 +28193,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28210,7 +28210,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28227,7 +28227,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28244,7 +28244,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28261,7 +28261,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28278,7 +28278,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28295,7 +28295,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28312,7 +28312,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28329,7 +28329,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28346,7 +28346,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28363,7 +28363,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28380,7 +28380,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28397,7 +28397,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28414,7 +28414,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28431,7 +28431,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -28448,7 +28448,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28465,7 +28465,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28482,7 +28482,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28504,7 +28504,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -28521,7 +28521,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -28538,7 +28538,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -28560,7 +28560,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28577,7 +28577,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28594,7 +28594,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28611,7 +28611,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28628,7 +28628,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28645,7 +28645,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28662,7 +28662,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28679,7 +28679,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28696,7 +28696,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28713,7 +28713,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28730,7 +28730,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28747,7 +28747,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28769,7 +28769,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28786,7 +28786,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28803,7 +28803,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28820,7 +28820,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28837,7 +28837,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': ''}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28854,7 +28854,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28876,7 +28876,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28893,7 +28893,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28910,7 +28910,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28927,7 +28927,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '5', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -28944,7 +28944,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1]
+                  "arg_permute_map" : [0,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28966,7 +28966,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -28983,7 +28983,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29000,7 +29000,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29017,7 +29017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29034,7 +29034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29051,7 +29051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29068,7 +29068,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29085,7 +29085,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29102,7 +29102,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29119,7 +29119,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29136,7 +29136,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29153,7 +29153,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29170,7 +29170,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29187,7 +29187,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29204,7 +29204,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29221,7 +29221,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29238,7 +29238,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29255,7 +29255,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29272,7 +29272,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29289,7 +29289,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': ''}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29306,7 +29306,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29323,7 +29323,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29340,7 +29340,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29357,7 +29357,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29374,7 +29374,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29391,7 +29391,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29408,7 +29408,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29425,7 +29425,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29442,7 +29442,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29459,7 +29459,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29476,7 +29476,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29493,7 +29493,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29510,7 +29510,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29527,7 +29527,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29544,7 +29544,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29561,7 +29561,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29583,7 +29583,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29600,7 +29600,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29617,7 +29617,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29634,7 +29634,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29651,7 +29651,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29668,7 +29668,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29685,7 +29685,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29702,7 +29702,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29724,7 +29724,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29741,7 +29741,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29758,7 +29758,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29775,7 +29775,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29797,7 +29797,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29814,7 +29814,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29831,7 +29831,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29848,7 +29848,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29865,7 +29865,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29882,7 +29882,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29899,7 +29899,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29916,7 +29916,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29933,7 +29933,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29950,7 +29950,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29967,7 +29967,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -29984,7 +29984,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30006,7 +30006,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30023,7 +30023,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30040,7 +30040,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30057,7 +30057,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30074,7 +30074,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30091,7 +30091,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30108,7 +30108,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30125,7 +30125,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30142,7 +30142,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30159,7 +30159,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30176,7 +30176,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30193,7 +30193,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,-1,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30215,7 +30215,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30232,7 +30232,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.66'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30249,7 +30249,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30266,7 +30266,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30283,7 +30283,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,2,-1,-1,1,-1]
+                  "arg_permute_map" : [0,2,-1,-1,1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30300,7 +30300,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,3,0,-1,2,-1]
+                  "arg_permute_map" : [1,3,0,-1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30322,7 +30322,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -30339,7 +30339,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -30356,7 +30356,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,3,-1]
+                  "arg_permute_map" : [0,-1,1,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -30378,7 +30378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30395,7 +30395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30412,7 +30412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30434,7 +30434,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -30451,7 +30451,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "False",
       },
@@ -30468,7 +30468,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,2,-1]
+                  "arg_permute_map" : [0,1,2,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "False",
       },
@@ -30490,7 +30490,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30507,7 +30507,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30524,7 +30524,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30541,7 +30541,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30558,7 +30558,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30575,7 +30575,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30592,7 +30592,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30609,7 +30609,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30626,7 +30626,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30643,7 +30643,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30660,7 +30660,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30677,7 +30677,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30694,7 +30694,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30711,7 +30711,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30728,7 +30728,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30745,7 +30745,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30762,7 +30762,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30779,7 +30779,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30796,7 +30796,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30813,7 +30813,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30830,7 +30830,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30847,7 +30847,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30864,7 +30864,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30881,7 +30881,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30898,7 +30898,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30915,7 +30915,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30932,7 +30932,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30949,7 +30949,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30966,7 +30966,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -30983,7 +30983,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31000,7 +31000,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31017,7 +31017,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31034,7 +31034,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31051,7 +31051,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31068,7 +31068,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31085,7 +31085,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31102,7 +31102,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31119,7 +31119,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31136,7 +31136,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31153,7 +31153,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31170,7 +31170,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31187,7 +31187,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31204,7 +31204,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31221,7 +31221,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31238,7 +31238,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31255,7 +31255,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31272,7 +31272,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31289,7 +31289,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,2,1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31311,7 +31311,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31328,7 +31328,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31345,7 +31345,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31362,7 +31362,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31384,7 +31384,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31401,7 +31401,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31418,7 +31418,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31435,7 +31435,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31452,7 +31452,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31469,7 +31469,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31486,7 +31486,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31503,7 +31503,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31520,7 +31520,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31537,7 +31537,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31554,7 +31554,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -31571,7 +31571,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31593,7 +31593,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31610,7 +31610,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31627,7 +31627,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31644,7 +31644,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31661,7 +31661,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31678,7 +31678,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31695,7 +31695,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31712,7 +31712,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31729,7 +31729,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31746,7 +31746,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31763,7 +31763,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31780,7 +31780,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31797,7 +31797,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31814,7 +31814,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31831,7 +31831,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31848,7 +31848,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31865,7 +31865,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31882,7 +31882,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31904,7 +31904,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31921,7 +31921,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31938,7 +31938,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31955,7 +31955,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31972,7 +31972,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -31989,7 +31989,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32011,7 +32011,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32028,7 +32028,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32045,7 +32045,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32062,7 +32062,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,-1]
+                  "arg_permute_map" : [0,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32084,7 +32084,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32101,7 +32101,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32118,7 +32118,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32135,7 +32135,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32157,7 +32157,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32174,7 +32174,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32191,7 +32191,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32208,7 +32208,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32225,7 +32225,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32242,7 +32242,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32259,7 +32259,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32276,7 +32276,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32293,7 +32293,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32310,7 +32310,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32327,7 +32327,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32344,7 +32344,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32361,7 +32361,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32378,7 +32378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [3,-1,1,2,-1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32395,7 +32395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32412,7 +32412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32429,7 +32429,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32446,7 +32446,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 8,
                   "out_precision_index" : 8,
-                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1]
+                  "arg_permute_map" : [2,-1,0,1,-1,-1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32468,7 +32468,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32485,7 +32485,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32502,7 +32502,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32519,7 +32519,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32536,7 +32536,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32553,7 +32553,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32570,7 +32570,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -32587,7 +32587,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32604,7 +32604,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32621,7 +32621,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32638,7 +32638,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,-1,-1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32655,7 +32655,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32677,7 +32677,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '2'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -32699,7 +32699,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32716,7 +32716,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32733,7 +32733,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32750,7 +32750,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32767,7 +32767,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32784,7 +32784,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32801,7 +32801,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32818,7 +32818,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32835,7 +32835,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32852,7 +32852,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32869,7 +32869,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32886,7 +32886,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32903,7 +32903,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32920,7 +32920,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -32937,7 +32937,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32954,7 +32954,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32971,7 +32971,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -32988,7 +32988,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33005,7 +33005,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33027,7 +33027,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33044,7 +33044,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33061,7 +33061,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33078,7 +33078,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33095,7 +33095,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33112,7 +33112,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33129,7 +33129,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,-1,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33146,7 +33146,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33163,7 +33163,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33180,7 +33180,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33197,7 +33197,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33214,7 +33214,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33236,7 +33236,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33253,7 +33253,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33270,7 +33270,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33287,7 +33287,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33309,7 +33309,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -33326,7 +33326,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [-1,0,1,-1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33348,7 +33348,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33365,7 +33365,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33382,7 +33382,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33399,7 +33399,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33416,7 +33416,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33433,7 +33433,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33450,7 +33450,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33467,7 +33467,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33484,7 +33484,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33501,7 +33501,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33518,7 +33518,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33535,7 +33535,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33552,7 +33552,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33569,7 +33569,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33586,7 +33586,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33603,7 +33603,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33620,7 +33620,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33637,7 +33637,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33654,7 +33654,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33671,7 +33671,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33688,7 +33688,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33705,7 +33705,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33722,7 +33722,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33739,7 +33739,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -33761,7 +33761,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33778,7 +33778,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33795,7 +33795,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33812,7 +33812,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33829,7 +33829,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33846,7 +33846,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33863,7 +33863,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33880,7 +33880,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33897,7 +33897,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '2', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33914,7 +33914,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 6,
                   "out_precision_index" : 6,
-                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1]
+                  "arg_permute_map" : [-1,1,-1,0,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -33936,7 +33936,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -33953,7 +33953,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -33970,7 +33970,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -33987,7 +33987,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34004,7 +34004,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34021,7 +34021,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34038,7 +34038,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34055,7 +34055,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34072,7 +34072,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34089,7 +34089,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34106,7 +34106,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34123,7 +34123,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34140,7 +34140,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34157,7 +34157,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34174,7 +34174,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34191,7 +34191,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34208,7 +34208,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34225,7 +34225,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34242,7 +34242,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34259,7 +34259,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34276,7 +34276,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34293,7 +34293,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34310,7 +34310,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34327,7 +34327,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34344,7 +34344,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34361,7 +34361,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34378,7 +34378,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34395,7 +34395,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34412,7 +34412,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34429,7 +34429,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34446,7 +34446,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34463,7 +34463,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34480,7 +34480,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '2'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34497,7 +34497,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34514,7 +34514,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1]
+                  "arg_permute_map" : [0,-1,1,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '4', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34531,7 +34531,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 4,
                   "out_precision_index" : 4,
-                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1]
+                  "arg_permute_map" : [1,0,2,-1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '4', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -34553,7 +34553,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34570,7 +34570,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34587,7 +34587,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -34604,7 +34604,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34621,7 +34621,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34638,7 +34638,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -34660,7 +34660,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34677,7 +34677,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34694,7 +34694,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [1,0,2,3,-1]
+                  "arg_permute_map" : [1,0,2,3,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -34716,7 +34716,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34733,7 +34733,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -34750,7 +34750,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34767,7 +34767,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34784,7 +34784,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -34801,7 +34801,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [-1,-1,0,1,-1,-1]
+                  "arg_permute_map" : [-1,-1,0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34823,7 +34823,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34840,7 +34840,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34857,7 +34857,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34874,7 +34874,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34891,7 +34891,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34908,7 +34908,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -34925,7 +34925,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34942,7 +34942,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34959,7 +34959,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34976,7 +34976,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -34993,7 +34993,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [1,0,2,3,-1,-1]
+                  "arg_permute_map" : [1,0,2,3,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35010,7 +35010,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 5,
                   "out_precision_index" : 5,
-                  "arg_permute_map" : [0,-1,1,2,-1,-1]
+                  "arg_permute_map" : [0,-1,1,2,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.33'}}, {'Skylake': {'l': '1', 't': '0.33'}}]",
                   "SIMD" : "True",
       },
@@ -35032,7 +35032,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35049,7 +35049,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35066,7 +35066,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35083,7 +35083,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35100,7 +35100,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35117,7 +35117,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35134,7 +35134,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35151,7 +35151,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "None",
                   "SIMD" : "True",
       },
@@ -35168,7 +35168,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35185,7 +35185,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35202,7 +35202,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35219,7 +35219,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35236,7 +35236,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1,-1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35258,7 +35258,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [2,0,1]
+                  "arg_permute_map" : [2,0,1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35280,7 +35280,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : None,
                   "out_precision_index" : None,
-                  "arg_permute_map" : [0,1]
+                  "arg_permute_map" : [0,1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '3', 't': '2'}}]",
                   "SIMD" : "True",
       },
@@ -35302,7 +35302,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35319,7 +35319,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35336,7 +35336,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35353,7 +35353,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35370,7 +35370,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35387,7 +35387,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 2,
                   "out_precision_index" : 2,
-                  "arg_permute_map" : [1,0,-1,-1]
+                  "arg_permute_map" : [1,0,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '3', 't': '1'}}, {'Skylake': {'l': '3', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35409,7 +35409,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35426,7 +35426,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35443,7 +35443,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35460,7 +35460,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35477,7 +35477,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35494,7 +35494,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35511,7 +35511,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35528,7 +35528,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35545,7 +35545,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35562,7 +35562,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 3,
                   "out_precision_index" : 3,
-                  "arg_permute_map" : [0,1,-1,-1]
+                  "arg_permute_map" : [0,1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35584,7 +35584,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35601,7 +35601,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35618,7 +35618,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35635,7 +35635,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35652,7 +35652,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35669,7 +35669,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35686,7 +35686,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35703,7 +35703,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35720,7 +35720,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35737,7 +35737,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35754,7 +35754,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35771,7 +35771,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35788,7 +35788,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35805,7 +35805,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35822,7 +35822,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35839,7 +35839,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '', 't': '0.5'}}, {'Skylake': {'l': '1', 't': '0.5'}}]",
                   "SIMD" : "True",
       },
@@ -35856,7 +35856,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1]
+                  "arg_permute_map" : [-1,3,1,-1,0,2,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35873,7 +35873,7 @@ semantcs = {
                   "lanesize_index" : None,
                   "in_precision_index" : 7,
                   "out_precision_index" : 7,
-                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1]
+                  "arg_permute_map" : [-1,2,0,-1,-1,1,-1,-1,-1],
                   "Cost" : "[{'Icelake': {'l': '1', 't': '1'}}, {'Skylake': {'l': '1', 't': '1'}}]",
                   "SIMD" : "True",
       },
@@ -35881,3 +35881,4 @@ semantcs = {
             "semantics" : ['"(define (_mm512_mask_srli_epi64  %arg2.norm imm8.norm k.norm %arg6.norm src.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )"', '"(define dst.norm"', '"(apply"', '"concat"', '"(for/list ([%outer.it.norm (reverse (range 0 1 1))])"', '" (apply"', '" concat"', '" (for/list ([j0.new.norm (reverse (range 0 %innerlanesize0.norm %elemsize0.norm))])"', '"  (define j0.new.div.norm (/  j0.new.norm  %elemsize0.norm))"', '"  (define %1.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))"', '"  (define %cond0.norm (bveq  %1.norm  (bv 1 1)))"', '"  (cond"', '"  [(equal? %cond0.norm #t)"', '"   (begin"', '"   (define %2.norm (extract  7 0 imm8.norm))"', '"   (define %3.norm (bvugt  %2.norm  %arg2.norm))"', '"   (cond"', '"   [(equal? %3.norm #t)"', '"    (begin"', '"    (define %lastidx2.norm (-  %arg5.norm  1))"', '"    (define %5.norm (+  j0.new.norm  %lastidx2.norm))"', '"    (define %16.norm (extract  %5.norm j0.new.norm %arg6.norm))"', '"    %16.norm"', '"    )]"', '"   [else (begin"', '"    (define %lastidx3.norm (-  %arg5.norm  1))"', '"    (define %6.norm (+  j0.new.norm  %lastidx3.norm))"', '"    (define %7.norm (extract  %6.norm j0.new.norm a.norm))"', '"    (define %8.norm (extract  7 0 imm8.norm))"', '"    (define %9.norm (zero-extend  %8.norm (bitvector %arg5.norm)))"', '"    (define %10.norm (bvlshr  %7.norm  %9.norm))"', '"    %10.norm"', '"    )]"', '"   )"', '"   )]"', '"  [else (begin"', '"   (define %lastidx5.norm (-  %elemsize0.norm  1))"', '"   (define %13.norm (+  j0.new.norm  %lastidx5.norm))"', '"   (define %14.norm (extract  %13.norm j0.new.norm src.norm))"', '"   %14.norm"', '"   )]"', '"  )"', '" )"', '" )"', '")"', '")"', '")"', '"(bvpadhighbits  dst.norm 0)"', '")"', '""'], 
       },
         }
+
