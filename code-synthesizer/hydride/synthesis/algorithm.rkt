@@ -94,12 +94,10 @@
 
   (debug-log "=======================================")
   (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
-  (printf "leaves: ~a\n" leaves)
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
   (define sym-bvs (create-symbolic-bvs leaves-sizes))
 
-  (println "here")
 
 
 
@@ -215,6 +213,8 @@
                         (debug-log "Test elapsed time: ")
                         (debug-log (- test-end test-start))
 
+                        (debug-log hashed-expr)
+                        (debug-log (vector sat? mat el))
                         (hash-set! synth-log hashed-expr (vector sat? mat el) )
 
 

@@ -33,7 +33,6 @@
                      (define expr (list-ref input-list i))
                      (define rows 1)
                      (define cols (halide:vec-len expr))
-                     (debug-log (format "Expr ~a has vec-len ~a \n" expr cols))
                      (define sep 
                        (if (equal? i (- num-inputs 1))
                          ""

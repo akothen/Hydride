@@ -4,8 +4,8 @@ from PredefinedDSL import *
 import random
 from ShuffleList import ShuffleList
 
-DEBUG = True
-DEBUG_LIST = ["_mm_unpackhi_epi8", "_mm256_setr_m128i"]
+DEBUG = False
+DEBUG_LIST = ["_mm_dpwssd_epi32"]
 SKIP_LIST = []
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -458,7 +458,7 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
         if DEBUG:
@@ -610,9 +610,10 @@ class Synthesizer:
                 globally_sorted_operation_contexts.append(ctxs[idx])
 
 
-            print("get top N:")
-            for o in globally_sorted_operation_contexts:
-                print(o.name)
+           # print("get top N:")
+            for i, o in enumerate(globally_sorted_operation_contexts):
+                #print(o.name, "score: ", self.score_context(globally_sorted_operation_insts[i], o))
+                pass
 
 
             if  N < len(ops):
@@ -621,8 +622,6 @@ class Synthesizer:
             else:
                 return (globally_sorted_operation_insts, globally_sorted_operation_contexts)
 
-        for idx,ctx in enumerate(upcast_ctxs):
-            print(ctx.name, " with score ", self.score_context(upcast_ops[idx], ctx))
 
 
         computes = get_top_N_ops(compute_ops,compute_ctxs, num_computes)
