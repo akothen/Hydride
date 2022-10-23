@@ -1,0 +1,178 @@
+#############################################################
+#
+# Target-specific Instruction Selection Generator
+#
+#############################################################
+
+
+from RoseCodeEmitter import *
+from RoseAbstractions import *
+from RoseContext import *
+from RosetteCodeEmitter import *
+from RoseFunctionInfo import *
+from RoseCodeGenerator import *
+from RoseToolsUtils import *
+from RoseSimilarityCheckerUtilities import *
+
+
+
+class RoseInstSelectorGenerator():
+  def __init__(self, ISASemantics : dict):
+    self.ISASemantics = ISASemantics
+
+  def genHeader(self):
+    String = GenHeadersForAutoGenFiles("//")
+    Content = [
+      "#include \"llvm/IR/Function.h\"",
+      "#include \"llvm/IR/LLVMContext.h\"",
+      "#include \"llvm/IR/Module.h\"",
+      "#include \"llvm/IR/Instructions.h\"",
+      "#include \"llvm/IR/IntrinsicInst.h\"",
+      "#include \"llvm/IR/Type.h\"",
+      "#include \"llvm/InitializePasses.h\"",
+      "#include \"llvm/Pass.h\"",
+      "#include \"llvm/Support/CommandLine.h\"",
+      "#include \"llvm/Support/Debug.h\"",
+      "#include \"llvm/Transforms/Scalar.h\"",
+      "#include \"Legalizer.h\"",
+    ]
+    return String + "\n".join(Content)
+  
+  def generateLegalizerPassDeclaration(self):
+    String = '''
+      namespace llvm {
+
+      class X86LegalizationPass : public FunctionPass {
+      public:
+          static char ID;
+
+          X86LegalizationPass() : FunctionPass(ID) {}
+
+          bool runOnFunction(Function &F);
+
+          void getAnalysisUsage(AnalysisUsage &AU) const {}
+      };
+
+      }
+    '''
+    return String
+
+  def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
+    String = ""
+    for InstName, InstInfo in InstDict.items():
+      Content = list()
+      for Idx, ArgVal in enumerate(InstInfo["args"]):
+        if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
+          if len(Content) == 0:
+            Content.append(
+            '''dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal))
+          else:
+            Content.append(
+            '''       && dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal)) 
+      Permutation = list()
+      for Val in InstInfo["arg_permute_map"]:
+        Permutation.append(str(Val))
+      print("Content:")
+      print(Content)
+      Pattern = '''
+        if({}) {{ 
+          auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
+          std::vector<int> &Permutation = {{{}}}; 
+          std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+          auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
+          errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
+          InstToInstMap[CI] = NewCallInst; 
+          ToBeRemoved.insert(CI); 
+          return true; 
+        }} 
+      '''.format("\n".join(Content), InstName + "_wrapper", ",".join(Permutation))
+      String += Pattern
+    FinalPattern = '''
+      if(CI->getCalledFunction()->getName() == \"{}\") {{ 
+        {} 
+      }} 
+    '''.format(TargetAgnosticInst, String)
+    print("FinalPattern:")
+    print(FinalPattern)
+    return FinalPattern
+
+  def generateInstSelectorForAllInsts(self):
+    Content = list()
+    for TargetAgnosticInst, InstList in self.ISASemantics.items():
+      #print("TargetAgnosticInst:")
+      #print(TargetAgnosticInst)
+      #print("InstList:")
+      #print(InstList)
+      Content.append(self.generateAPattern(TargetAgnosticInst, InstList["target_instructions"]))
+    return "\n".join(Content)
+
+  def generateInstSelector(self):
+    Content = '''
+    virtual bool legalize(Instruction *I) {{
+      auto *CI = dyn_cast<CallInst>(I);
+      if (CI == nullptr)
+        return false;
+      if (InstToInstMap[CI] != nullptr)
+        return false;
+      {}
+    }}
+    '''.format(self.generateInstSelectorForAllInsts())
+    return Content
+    
+  def generatePassToRunOnFunction(self):
+    String = '''
+    bool X86LegalizationPass::runOnFunction(Function &F) {
+      if (F.getName().contains("hydride") == false)
+        return false;
+      // Initialize the legalizer
+      errs() << "LEGALIZATION BEGIN\n";
+      Legalizer *L = new X86Legalizer();
+      return L->legalize(F);
+    }
+    '''
+    return String
+
+  def generateLegalizerPassDefinition(self):
+    String = '''
+    using namespace llvm;
+
+    class X86Legalizer : public Legalizer {{
+    public:
+    {}
+
+    {}
+    }};
+    '''.format(self.generateInstSelector(), self.generatePassToRunOnFunction())
+    return String
+
+  def generateCodeForRegisteringPass(self):
+    String = '''
+    char X86LegalizationPass::ID = 0;
+    static RegisterPass<X86LegalizationPass> X("x86-hydride-legalize", 
+                                              "Pass to legalize tensor intrinsics");
+    '''
+    return String
+
+  def generateFileWithInstSelector(self):
+    Content = self.genHeader()
+    Content += self.generateLegalizerPassDeclaration()
+    Content += self.generateLegalizerPassDefinition()
+    Content += self.generateCodeForRegisteringPass()
+    FileName = "x86_isel.cpp"
+    try:
+      File = open(FileName, "w+")
+      File.write(Content)
+      print("Content:")
+      print(Content)
+      File.close()
+    except IOError:
+      print("Error making: {}".format(FileName))
+      assert False
+
+    
+
+if __name__ == '__main__':
+  from semantics import semantics
+  InstSelectorGenerator = RoseInstSelectorGenerator(semantics)
+  InstSelectorGenerator.generateFileWithInstSelector()
+
