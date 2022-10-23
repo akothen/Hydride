@@ -56,36 +56,64 @@ class RoseInstSelectorGenerator():
       }
     '''
     return String
+  
 
   def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
     String = ""
     for InstName, InstInfo in InstDict.items():
-      Content = list()
+      Checks = list()
       for Idx, ArgVal in enumerate(InstInfo["args"]):
         if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
-          if len(Content) == 0:
-            Content.append(
+          # If the argument value is a constant bitvectoer, convert it into an integer
+          if "bv" in ArgVal:
+            ArgVal = ArgVal.replace("(bv #", "").strip()
+            ArgVal = ArgVal[:ArgVal.index(" ")]
+            ArgVal = "0" + ArgVal
+            print("ArgVal hex string:")
+            print(ArgVal)
+            ArgVal = int(ArgVal, 16)
+            print("ArgVal hex:")
+            print(ArgVal)
+            ArgVal = int(ArgVal)
+            print("ArgVal:")
+            print(ArgVal)
+          if len(Checks) == 0:
+            Checks.append(
             '''dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal))
           else:
-            Content.append(
+            Checks.append(
             '''       && dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal)) 
       Permutation = list()
       for Val in InstInfo["arg_permute_map"]:
         Permutation.append(str(Val))
       print("Content:")
-      print(Content)
-      Pattern = '''
-        if({}) {{ 
-          auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
-          std::vector<int> &Permutation = {{{}}}; 
-          std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-          auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
-          errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
-          InstToInstMap[CI] = NewCallInst; 
-          ToBeRemoved.insert(CI); 
-          return true; 
-        }} 
-      '''.format("\n".join(Content), InstName + "_wrapper", ",".join(Permutation))
+      print(Checks)
+      if len(Checks) != 0:
+        Pattern = '''
+          if({}) {{ 
+            auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
+            std::vector<int> Permutation = {{{}}}; 
+            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+            auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
+            errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
+            InstToInstMap[CI] = NewCallInst; 
+            ToBeRemoved.insert(CI); 
+            return true; 
+          }} 
+        '''.format("\n".join(Checks), InstName + "_wrapper", ",".join(Permutation))
+      else:
+        Pattern = '''
+          {{ 
+            auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
+            std::vector<int> Permutation = {{{}}}; 
+            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+            auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
+            errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
+            InstToInstMap[CI] = NewCallInst; 
+            ToBeRemoved.insert(CI); 
+            return true; 
+          }} 
+        '''.format(InstName + "_wrapper", ",".join(Permutation))
       String += Pattern
     FinalPattern = '''
       if(CI->getCalledFunction()->getName() == \"{}\") {{ 
@@ -125,7 +153,7 @@ class RoseInstSelectorGenerator():
       if (F.getName().contains("hydride") == false)
         return false;
       // Initialize the legalizer
-      errs() << "LEGALIZATION BEGIN\n";
+      errs() << "LEGALIZATION BEGIN\\n";
       Legalizer *L = new X86Legalizer();
       return L->legalize(F);
     }
@@ -140,8 +168,9 @@ class RoseInstSelectorGenerator():
     public:
     {}
 
-    {}
     }};
+
+    {}
     '''.format(self.generateInstSelector(), self.generatePassToRunOnFunction())
     return String
 
@@ -160,7 +189,7 @@ class RoseInstSelectorGenerator():
     Content += self.generateCodeForRegisteringPass()
     FileName = "x86_isel.cpp"
     try:
-      File = open(FileName, "w+")
+      File = open(FileName, "w")
       File.write(Content)
       print("Content:")
       print(Content)
