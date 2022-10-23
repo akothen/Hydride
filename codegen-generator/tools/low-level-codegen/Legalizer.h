@@ -82,8 +82,8 @@ public:
     return Bitvector;
   }
 
-  std:vector<Value *> getArgsAfterPermutation(CallInst *OriginalInst,
-                            CallInst *InstFunction, std::vector<int> &Permutation, 
+  std::vector<Value *> getArgsAfterPermutation(CallInst *OriginalInst,
+                            Function *InstFunction, std::vector<int> &Permutation, 
                             Instruction *InsertBefore) {
     // Get bitvector list
     std::vector<Value *> BitvectorList;
@@ -100,10 +100,10 @@ public:
           && "Error: BitvectorList.size() != RequiredTypes.size()");
     // Generate some new args
     std::vector<Value *> NewArgs;
-    NewArgs.reserve(len(RequiredTypes))
+    NewArgs.reserve(RequiredTypes.size());
     for (unsigned Idx = 0; Idx < BitvectorList.size(); Idx++) {
       if(Permutation[Idx] != -1) {
-        PermIdx = Permutation[Idx];
+        auto PermIdx = Permutation[Idx];
         NewArgs[PermIdx] = getBitvectorOfRequiredType(BitvectorList[Idx], 
                                       RequiredTypes[PermIdx], InsertBefore);
       }
