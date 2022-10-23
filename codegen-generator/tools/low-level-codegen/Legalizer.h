@@ -83,27 +83,29 @@ public:
   }
 
   std:vector<Value *> getArgsAfterPermutation(CallInst *OriginalInst,
-                            CallInst *InstFunction , std::vector<int> &Permutation, 
+                            CallInst *InstFunction, std::vector<int> &Permutation, 
                             Instruction *InsertBefore) {
     // Get bitvector list
     std::vector<Value *> BitvectorList;
     for (unsigned I = 0, E = OriginalInst->getNumOperands(); I != E; ++I)
-      BitvectorList.push_back(OriginalInst->getOperand(I))
+      BitvectorList.push_back(OriginalInst->getOperand(I));
     // Get the required types
     std::vector<Type *> RequiredTypes;
     for (auto &Arg : InstFunction->args())
-      RequiredTypes.push_back(Arg.getType())
+      RequiredTypes.push_back(Arg.getType());
+    // Some sanity checks
     assert(BitvectorList.size() == RequiredTypes.size() 
           && "Error: BitvectorList.size() != RequiredTypes.size()");
     assert(BitvectorList.size() == Permutation.size() 
           && "Error: BitvectorList.size() != RequiredTypes.size()");
+    // Generate some new args
     std::vector<Value *> NewArgs;
     NewArgs.reserve(len(RequiredTypes))
     for (unsigned Idx = 0; Idx < BitvectorList.size(); Idx++) {
       if(Permutation[Idx] != -1) {
         PermIdx = Permutation[Idx];
         NewArgs[PermIdx] = getBitvectorOfRequiredType(BitvectorList[Idx], 
-                                                    RequiredTypes[PermIdx], InsertBefore);
+                                      RequiredTypes[PermIdx], InsertBefore);
       }
     }
     return NewArgs;
