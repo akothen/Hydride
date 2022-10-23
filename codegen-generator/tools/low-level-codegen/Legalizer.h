@@ -67,8 +67,8 @@ public:
     return Changed;
   }
 
-  Value *GetBitvectorOfRequiredType(Value *Bitvector, Type *RequiredType, Instruction *InsertBefore) {
-    errs() << "GetBitvectorOfRequiredType\n";
+  Value *getBitvectorOfRequiredType(Value *Bitvector, Type *RequiredType, Instruction *InsertBefore) {
+    errs() << "getBitvectorOfRequiredType\n";
     if (Bitvector->getType() != RequiredType) {
       if (InstToInstMap[Bitvector] == nullptr) {
         InstToInstMap[Bitvector] = new BitCastInst(Bitvector, RequiredType, "", InsertBefore);
@@ -80,6 +80,33 @@ public:
     }
     errs() << "Bitvector:" << *Bitvector << "\n";
     return Bitvector;
+  }
+
+  std:vector<Value *> getArgsAfterPermutation(CallInst *OriginalInst,
+                            CallInst *InstFunction , std::vector<int> &Permutation, 
+                            Instruction *InsertBefore) {
+    // Get bitvector list
+    std::vector<Value *> BitvectorList;
+    for (unsigned I = 0, E = OriginalInst->getNumOperands(); I != E; ++I)
+      BitvectorList.push_back(OriginalInst->getOperand(I))
+    // Get the required types
+    std::vector<Type *> RequiredTypes;
+    for (auto &Arg : InstFunction->args())
+      RequiredTypes.push_back(Arg.getType())
+    assert(BitvectorList.size() == RequiredTypes.size() 
+          && "Error: BitvectorList.size() != RequiredTypes.size()");
+    assert(BitvectorList.size() == Permutation.size() 
+          && "Error: BitvectorList.size() != RequiredTypes.size()");
+    std::vector<Value *> NewArgs;
+    NewArgs.reserve(len(RequiredTypes))
+    for (unsigned Idx = 0; Idx < BitvectorList.size(); Idx++) {
+      if(Permutation[Idx] != -1) {
+        PermIdx = Permutation[Idx];
+        NewArgs[PermIdx] = getBitvectorOfRequiredType(BitvectorList[Idx], 
+                                                    RequiredTypes[PermIdx], InsertBefore);
+      }
+    }
+    return NewArgs;
   }
 
 };
