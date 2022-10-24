@@ -225,7 +225,7 @@
                 )
              ]
             [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-             (+ 2 (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1))  
+             (+ 4 (* 1 (hydride:cost  v0))  (* 2 (hydride:cost  v1))  
                 )
              ]
             [ (interleave-vector_dsl v0 size_i_o prec_i_o)

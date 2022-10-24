@@ -57,6 +57,7 @@
       )
 
     (begin
+      (debug-log "Depth Quota exceed, unsynthesizable")
       (values #f '() 0)
       )
     )

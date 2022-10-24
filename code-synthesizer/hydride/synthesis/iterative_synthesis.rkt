@@ -88,6 +88,39 @@
   )
 
 
+
+;; Verify that the spec is equivalent to the synthesized results over all lanes by verifying 
+;; each lane independently over symbolic bitvectors.
+(define (verify-across-lanes bw-list invoke_ref_lane invoke_sol_lane solver lane-size output_size)
+
+  (define num-lanes (/ output_size lane-size))
+
+  (define num-bw (length bw-list))
+  (define symbols (create-symbolic-bvs bw-list))
+  (debug-log (format "Symbols: ~a\n" symbols))
+
+  (define (test-lane lane-idx)
+    (define cex 
+      (verify 
+        (begin
+          (assert (bveq   (invoke_ref_lane lane-idx symbols) (invoke_sol_lane lane-idx symbols)))
+          )
+        )
+      )
+    (not (sat? cex)) ;; True i verified equal on lane-idx
+    )
+
+
+  (define apply-test-lane (build-list num-lanes test-lane))
+
+  ;; Returns true if all lanes verified equal
+  ;; else returns false
+  (define result (fold-and apply-test-lane))
+  (debug-log (format "verify-across-lanes returned ~a ... \n" result))
+  result
+
+  )
+
 ;; Solution 'sol' was synthesized using
 ;; concrete values and hence may not be 
 ;; correct for all possible values, hence
@@ -97,7 +130,9 @@
 ;; which it failed on
 (define (verify-synth-sol  sol bw-list invoke_ref solver)
 
+  (clear-vc!)
 
+  (current-solver (z3)) ;; timeout verification after 5 mins
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
@@ -114,11 +149,15 @@
   (define end (current-seconds))
   (debug-log (format "Verification took ~a seconds\n" (- end start)))
   (debug-log cex)
+
+  ;; Restore solver state
+  (if (equal? solver 'boolector)
+    (current-solver (boolector))
+    (current-solver (z3))
+    )
   (begin
-    (if
-      (sat? cex) ;; If there exists some cex for which it is not equal
-
-
+    (cond
+      [(sat? cex) ;; If there exists some cex for which it is not equal
       (begin
         (define complete-sol (complete-solution cex (vector->list symbols)))
         (define (helper i)
@@ -136,9 +175,17 @@
         (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
-        )
+        )]
 
-      (values #t '()) ;; No cex exists => Verified solution
+      [(unknown? cex)
+       (debug-log "Unknown result, unsoundly assuming solution is equivalent\n")
+       (values #t '())
+        ]
+      [else
+        (values #t '()) ;; No cex exists => Verified solution
+        ]
+
+
 
       )
     )
@@ -427,7 +474,7 @@
   (define failing-ls
     (if
       (equal? (length failing-lanes) 0)
-      (list 0 1)
+      (list 0 0)
       failing-lanes
       )
     )
@@ -465,6 +512,11 @@
 
     (displayln "Spec Produced:")
     (println halide-res)
+
+    (if synthesize-by-lane
+      (debug-log "Synthesize by lane...")
+      (debug-log "Synthesize by entire vector size...")
+      )
 
     (define condition 
       (if synthesize-by-lane
@@ -523,9 +575,34 @@
 
       (debug-log (format "Is solution a union? ~a\n" is-union))
 
+      (define (invoke_sol_lane lane-idx env)
+        (define intermediate-result (hydride:interpret materialize env))
+        (define low (* word-size lane-idx))
+        (define high (+ low  (- word-size 1)))
+        (extract high low intermediate-result)
+        )
+
       (define-values 
         (verified? new-cex) 
+        (cond
+          [synthesize-by-lane
+            ;; For operations involving division the solver
+            ;; often get's stuck when verifying a correct
+            ;; solution. Hence we first do a quick verification
+            ;; across lanes individually and only execute full verification
+            ;; when there exists some lane which failed.
+            (begin
+              (define verify-individual-lanes (verify-across-lanes bitwidth-list invoke_ref_lane invoke_sol_lane solver word-size output-size))
+              (if verify-individual-lanes
+                (values #t '())
+                (verify-synth-sol  materialize bitwidth-list invoke_ref solver)
+                )
+              )
+            ]
+          [else 
             (verify-synth-sol  materialize bitwidth-list invoke_ref solver)
+            ]
+          )
         )
 
 

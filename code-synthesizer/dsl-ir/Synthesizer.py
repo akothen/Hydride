@@ -6,7 +6,7 @@ from ShuffleList import ShuffleList
 
 DEBUG = False
 DEBUG_LIST = ["_mm_dpwssd_epi32"]
-SKIP_LIST = []
+SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
@@ -461,9 +461,15 @@ class Synthesizer:
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
-        if DEBUG:
-            for idx, dsl_inst in enumerate(operation_dsl_insts):
-                print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+        for idx, dsl_inst in enumerate(operation_dsl_insts):
+            print("Adding: ",operation_dsl_args_list[idx].name, "with score:", self.score_context(operation_dsl_insts[idx], operation_dsl_args_list[idx]), "belonging to target agnostic class", dsl_inst.name )
+
+
+        # Sort the operations such that the higher scoring operations are
+        # visited first in the grammar
+        (operation_dsl_insts, operation_dsl_args_list) = self.sort_operations(operation_dsl_insts, operation_dsl_args_list)
+
+
 
         top_level_grammar_args = self.get_top_level_grammar_args()
 
@@ -517,12 +523,35 @@ class Synthesizer:
             imms = self.spec.imms
         )
 
+    # Sort the operations and contexts together such that
+    # higher scoring contexts have a lower index
+    def sort_operations(self, ops, ctxs):
+        indices = range(0,len(ops))
+        sorted_indices = sorted(indices, key = lambda i : self.score_context(ops[i] , ctxs[i]) )
+
+        sorted_ops = []
+        sorted_ctxs = []
+
+        for idx in reversed(sorted_indices):
+            sorted_ops.append(ops[idx])
+            sorted_ctxs.append(ctxs[idx])
+
+
+        return (sorted_ops,sorted_ctxs)
+
+
+    def prune_low_score_ops(self, ops, ctxs, score = 2):
+        indices = [i for i in range(len(ops)) if self.score_context(ops[i], ctxs[i]) > score ]
+        pruned_ops = [ops[i] for i in indices]
+        pruned_ctxs = [ctxs[i] for i in indices]
+
+        return (pruned_ops, pruned_ctxs)
 
     def reduce_operations(self, operation_insts, operation_contexts, bound = None):
 
         if bound == None or bound > len(operation_insts):
             print("EARLY RETURN FROM REDUCE")
-            return (operation_insts, operation_contexts)
+            return self.prune_low_score_ops(operation_insts, operation_contexts, score = 2) #(operation_insts, operation_contexts)
 
         # Filter broadcast like operations seperately from compute/shuffle operations
         # Hence we limit the % of broadcast like operationsto be 25% and 75% of the operations
@@ -540,7 +569,7 @@ class Synthesizer:
         compute_ops = []
         compute_ctxs = []
 
-        MAX_OCCURANCES = 3
+        MAX_OCCURANCES = 2
 
         names = []
 
@@ -571,7 +600,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         # if allocated more rules than are actually
@@ -602,6 +631,14 @@ class Synthesizer:
                 # available.
 
                 if ctxs[idx].name in inserted_names:
+                    continue
+
+
+                # Operations with score less than 2 are more likely to
+                # add complexity to the synthesis without really
+                # improving the types of expressions which can be
+                # synthesized
+                if self.score_context(ops[idx], ctxs[idx]) <= 2:
                     continue
 
                 inserted_names.append(ctxs[idx].name)

@@ -330,7 +330,23 @@ class DSLInstruction(InstructionType):
                 if bvop == "extract" and exclude_extract:
                     continue
 
-                if bvop in line:
+                # only include bvmul when
+                # bvmul is in the line
+                # but the other saturating operations
+                # arent
+                if bvop == "bvmul" and bvop in line:
+                    insert_bvmul = all([suffix not in line for suffix in ["bvmulnsw", "bvmulnuw"]])
+                    if insert_bvmul:
+                        operations.append(bvop)
+                elif bvop == "bvadd" and bvop in line:
+                    insert_bvadd = all([suffix not in line for suffix in ["bvaddnsw", "bvaddnuw"]])
+                    if insert_bvadd:
+                        operations.append(bvop)
+                elif bvop == "bvsub" and bvop in line:
+                    insert_bvsub = all([suffix not in line for suffix in ["bvsubnsw", "bvsubnuw"]])
+                    if insert_bvsub:
+                        operations.append(bvop)
+                elif bvop in line:
                     operations.append(bvop)
 
         return operations

@@ -31,7 +31,7 @@
 
 (define (create-n-reg n)
   (for/list ([i (range n)])
-            (reg i )
+            (reg (bv i 4))
             )
   )
 
@@ -237,6 +237,11 @@
 
                   (displayln "Cost")
                   (println (hydride:cost materialize))
+
+                  ;; Now that we've synthesized the sub-expression
+                  ;; we can clear the symbolic heap
+                  (clear-terms!)
+                  (collect-garbage)
 
 
                   (define synthesized-leaves 

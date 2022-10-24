@@ -15,7 +15,7 @@ class IRPrinter:
         defaults.append("[(dim-y id) (string-append \"\\n\" \"(dim-y \" (~s id) \")\")]")
         defaults.append("[(idx-i id) (string-append \"\\n\" \"(idx-i \" (~s id) \")\")]")
         defaults.append("[(idx-j id) (string-append \"\\n\" \"(idx-j \" (~s id) \")\")]")
-        defaults.append("[(reg id) (string-append  \"\\n\" \"(reg \" (~s  id) \")\")]")
+        defaults.append("[(reg id) (string-append  \"\\n\" \"(reg \" (~s  (bitvector->natural id)) \")\")]")
 
         defaults.append("[(lit v) (string-append   \"(lit \" (~s v) \")\")]")
 

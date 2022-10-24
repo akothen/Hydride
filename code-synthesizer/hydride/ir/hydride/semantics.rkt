@@ -3563,7 +3563,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  ;(bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_hsub_epi32  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -3870,7 +3871,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  ;(bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_cmpge_epu64_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -5046,7 +5048,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  ;(bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_m_psllwi  imm8.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %arg3.norm )
@@ -5433,7 +5436,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  ;(bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_cmpgt_epu8_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -6059,7 +6063,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  ;(bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_maskz_rorv_epi64  k.norm %arg4.norm %arg3.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -6317,7 +6322,8 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  ;(bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_mask_dpbusds_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )

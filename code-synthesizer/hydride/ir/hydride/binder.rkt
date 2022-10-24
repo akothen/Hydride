@@ -27,7 +27,7 @@
             [(dim-y id) (dim-y id)]
             [(idx-i id) (idx-i id)]
             [(idx-j id) (idx-j id)]
-            [(reg id) (vector-ref env id)]
+            [(reg id) (vector-ref-bv env id)]
             [(lit v) (lit v)]
             [(nop v1) (nop (bind-expr v1 env))]
             [(idx-add i1 i2) (idx-add i1 i2)]

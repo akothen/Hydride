@@ -45,8 +45,6 @@ class TypedGrammarGenerator:
 
     def emit_lit_hole(self, bv_size, prec):
         splat_factor = bv_size // prec
-        #return "(lit (create-symbolic-bv {}))".format(bv_size)
-        #return "(lit (?? (bitvector {})))".format(bv_size)
         return "(lit (create-splat-bv (?? (bitvector {})) {}))".format(prec, splat_factor)
 
 
@@ -62,6 +60,16 @@ class TypedGrammarGenerator:
         return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
 
+    def emit_lit_imm(self, imm, bv_size, prec):
+        splat_factor = bv_size // prec
+        return "(lit (create-splat-bv (integer->bitvector {} (bitvector {})) {}))".format(imm, prec, splat_factor)
+
+    def emit_lit_ramp(self, bv_size, prec):
+        splat_factor = bv_size // prec
+        create_ramp = "(create-tensor 1 {} {})".format(splat_factor, prec)
+        return "(lit {})".format(create_ramp)
+
+
 
     def emit_lit_hole_clause(self, bv_size, prec, last_clause = False):
         condition = None
@@ -75,17 +83,24 @@ class TypedGrammarGenerator:
         zero = self.emit_lit_0(bv_size, prec)
         one = self.emit_lit_1(bv_size, prec)
         neg_one = self.emit_lit_neg_1(bv_size, prec)
+        ramp = self.emit_lit_ramp(bv_size, prec)
+
+        imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [1,0,-1] ]
 
         zero_clause = "[(choose* #t #f) {}]".format(zero)
         one_clause = "[(choose* #t #f) {}]".format(one)
 
         neg_one_clause = "[(choose* #t #f) {}]".format(neg_one)
 
+        ramp_clause = "[(choose* #t #f) {}]".format(ramp)
+
         close = "]"
 
         hole_clause =  "\n\t".join([condition, hole, close])
 
-        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause])
+        imm_clause = ["[(choose* #t #f) {}]".format(imm) for imm in imm_clauses]
+
+        return "\n".join([zero_clause, one_clause, neg_one_clause] + imm_clause)
 
 
     def is_broadcast_like_operation(self, dsl_inst):
@@ -195,7 +210,8 @@ class TypedGrammarGenerator:
                     if ga.size != input_size:
                         use_clause = False
                         break
-                    clause.append("(reg {})".format(idx) +" "+ga.get_rkt_comment())
+                    reg_idx = "(bv {} (bitvector 4))".format(idx)
+                    clause.append("(reg {})".format(reg_idx) +" "+ga.get_rkt_comment())
                 else:
                     clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
             if use_clause:
@@ -215,7 +231,8 @@ class TypedGrammarGenerator:
 
 
     def emit_choose_reg(self, reg_id):
-        return "[(choose* #t #f) (reg  {})]".format(reg_id)
+        reg_idx = "(bv {} (bitvector 4))".format(reg_id)
+        return "[(choose* #t #f) (reg  {})]".format(reg_idx)
 
     def emit_choose_lit(self, bv_size, prec):
         return self.emit_lit_hole_clause(bv_size,prec)
@@ -308,12 +325,14 @@ class TypedGrammarGenerator:
                      depth = 6,
                      return_type = 256,
                      lit_holes = [],
-                     input_sizes = []
+                     input_sizes = [],
+                     imms = []
                      ):
 
         self.return_type = return_type
         self.operation_layer_name = operation_layer_name
         self.input_sizes = input_sizes
+        self.imms = imms
 
         # Sort grammar operations into buckets identified by the return type
         # of the operation contexts

@@ -25,7 +25,7 @@
             [(dim-y id) 1]
             [(idx-i id) 1]
             [(idx-j id) 1]
-            [(reg id) (bvlength (vector-ref env id))]
+            [(reg id) (bvlength (vector-ref-bv env id))]
             [(lit v) (bvlength v)]
             [(nop v1) (get-length v1 env)]
             [(idx-add i1 i2) 1]

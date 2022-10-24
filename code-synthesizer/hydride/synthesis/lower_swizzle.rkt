@@ -63,6 +63,7 @@
 ;; 32 bit elements and just use that as a mask of the 
 ;; original inputs.
 (define (lower-swizzle-to-llvm-shuffle swizzle)
+  (debug-log "lower-swizzle-to-llvm-shuffle ...")
   (define mask
     (destruct swizzle
               [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
@@ -78,36 +79,39 @@
                (deinterleave-vector (create-tensor 1 (/ size_i_o prec_i_o) 32)   (* 32 (/ size_i_o prec_i_o)) 32)
                ]
               [_ (error "unrecognized reference for swizzle")]
-          )
+              )
     )
 
   (define mask-size (bvlength mask))
   (define num-mask-elems (/ mask-size 32))
 
   (define llvm-shuffled
-        (destruct swizzle
+    (destruct swizzle
               [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-                (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o (lit mask) num-mask-elems)
+               (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o (lit mask) num-mask-elems)
                ]
               [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-                (llvm:shuffle-vectors_dsl v0 v1 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm:shuffle-vectors_dsl v0 v1 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-                (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-                (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
+               (llvm:shuffle-vectors_dsl v0 v0 (/ size_i_o prec_i_o) prec_i_o (lit mask) num-mask-elems)
                ]
               [_ (error "unrecognized reference for swizzle")]
-          )
+              )
 
     )
 
+  (debug-log (format "Generated llvm-shuffle ~a\n" llvm-shuffled))
   llvm-shuffled
 
-)
+  )
 
 
+;; Memoize synthesis of swizzles
+(define swizzle-synth-log (make-hash))
 
 (define (lower-swizzle swizzle-expr solver cost-fn optimize? symbolic?)
   (debug-log (format "lower-swizzle on expression: ~a \n" swizzle-expr))
@@ -138,6 +142,24 @@
               )
     )
 
+  (define swizzle-hash
+    (destruct swizzle-expr
+              [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+               (vector-two-input-swizzle_dsl 'arg0 'arg1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+               ]
+              [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
+               (interleave-vectors_dsl 'arg0 'arg1 size_i_o prec_i_o)
+               ]
+              [ (interleave-vector_dsl v0 size_i_o prec_i_o)
+               (interleave-vector_dsl 'arg0 size_i_o prec_i_o)
+               ]
+              [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
+               (deinterleave-vector_dsl 'arg0 size_i_o prec_i_o)
+               ]
+              [_ (error "unrecognized reference for swizzle")]
+              )
+    )
+
 
 
   (define original-args 
@@ -149,10 +171,10 @@
                (vector v0 v1)
                ]
               [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-               (vector v0)
+               (vector v0 v0)
                ]
               [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-               (vector v0)
+               (vector v0 v0)
                ]
               [_ (error "unrecognized reference for swizzle")]
               )
@@ -161,22 +183,22 @@
   (define (invoke_ref env)
     (debug-log (format "invoke_ref for swizzles on input ~a \n" env ))
     (define result 
-    (destruct swizzle-expr
-              [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-               (vector-two-input-swizzle (vector-ref env 0) (vector-ref env 1) num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-               ]
-              [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-               (interleave-vectors (vector-ref env 0) (vector-ref env 1) size_i_o prec_i_o)
-               ]
-              [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-               (interleave-vector (vector-ref env 0) size_i_o prec_i_o)
-               ]
-              [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-               (deinterleave-vector (vector-ref env 1) size_i_o prec_i_o)
-               ]
-              [_ (error "unrecognized reference for swizzle")]
-              )
-    )
+      (destruct swizzle-expr
+                [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+                 (vector-two-input-swizzle (vector-ref env 0) (vector-ref env 1) num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+                 ]
+                [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
+                 (interleave-vectors (vector-ref env 0) (vector-ref env 1) size_i_o prec_i_o)
+                 ]
+                [ (interleave-vector_dsl v0 size_i_o prec_i_o)
+                 (interleave-vector (vector-ref env 0) size_i_o prec_i_o)
+                 ]
+                [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
+                 (deinterleave-vector (vector-ref env 1) size_i_o prec_i_o)
+                 ]
+                [_ (error "unrecognized reference for swizzle")]
+                )
+      )
     (debug-log (format "spec produced: ~a\n" result))
     result
     )
@@ -218,7 +240,13 @@
 
   (define-values 
     (satisfiable? materialize elapsed)
-    (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+    (if (hash-has-key? swizzle-synth-log swizzle-hash)
+      (begin
+        (define memo-result (hash-ref swizzle-synth-log swizzle-hash))
+        (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
+        )
+      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+      )
     )
 
   (define lowered-expression
@@ -235,12 +263,27 @@
   ;; to original value
   (set-synthesize-by-lane)
 
+  ;; Add entry to hash
+  (hash-set! swizzle-synth-log swizzle-hash (vector satisfiable? lowered-expression elapsed))
 
   ;; Bind the original operands of the shuffle back
   ;; into the synthesized shuffle
 
 
-  (bind-expr lowered-expression original-args)
+  (define bound-expr
+    (destruct lowered-expression
+              [(llvm:shuffle-vectors_dsl v0 v1 len prec_i_o mask num-mask-elems)  
+               (llvm:shuffle-vectors_dsl (vector-ref original-args 0) (vector-ref original-args 1) len prec_i_o mask num-mask-elems)
+               ]
+              [v 
+                (bind-expr v original-args)
+                ]
+
+
+              )
+    )
+
+  bound-expr
 
 
   )

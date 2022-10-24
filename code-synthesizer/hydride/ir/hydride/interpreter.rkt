@@ -28,7 +28,7 @@
             [(dim-y id) (vector-ref env (- (vector-length env) 1))]
             [(idx-i id) (vector-ref env (- (vector-length env) 4))]
             [(idx-j id) (vector-ref env (- (vector-length env) 3))]
-            [(reg id) (vector-ref env id)]
+            [(reg id) (vector-ref-bv env id)]
             [(lit v) v]
             [(nop v1) (hydride:interpret v1 env)]
             [(idx-add i1 i2) (+ (hydride:interpret i1 env) (hydride:interpret i2 env))]

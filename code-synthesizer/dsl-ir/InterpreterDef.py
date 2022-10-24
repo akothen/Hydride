@@ -16,7 +16,7 @@ class InterpreterDef:
         defaults.append("[(dim-y id) (vector-ref {} (- (vector-length {}) 1))]".format(env_name, env_name))
         defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 4))]".format(env_name, env_name))
         defaults.append("[(idx-j id) (vector-ref {} (- (vector-length {}) 3))]".format(env_name, env_name))
-        defaults.append("[(reg id) (vector-ref {} id)]".format(env_name))
+        defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 

@@ -605,16 +605,16 @@
 
 
 
-    [(int16x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int16x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int16x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x16 vec) (append (list  extract sign-extend zero-extend ) (get-bv-ops vec))]
+    [(int16x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int16x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
     
 
-    [(uint32x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
+    [(uint32x8 vec) (append (list  extract  zero-extend ) (get-bv-ops vec))]
     [(uint32x16 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
     [(uint32x32 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
     [(uint32x64 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
@@ -623,13 +623,13 @@
     [(uint32x512 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
 
 
-    [(int32x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x512 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x8 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x16 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x32 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x64 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x128 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x256 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
+    [(int32x512 vec) (append (list  extract sign-extend zero-extend) (get-bv-ops vec))]
     
 
     [(uint64x8 vec) (append (list  extract  zero-extend) (get-bv-ops vec))]
@@ -819,6 +819,14 @@
   ;   ])
 )
 
+(define (widening-div a b)
+  (define bvlen (bvlength a))
+  (define a-double (sign-extend a (bitvector (* 2 bvlen))))
+  (define b-double (sign-extend b (bitvector (* 2 bvlen))))
+  (define widen-div (bvsdiv a-double b-double))
+  (extract (- bvlen 1) 0 widen-div)
+  )
+
 (define (do-div lhs rhs)
   ;(cond
   ;  [(and (integer? lhs) (integer? rhs))
@@ -827,9 +835,17 @@
      (define outT (infer-out-type lhs rhs))
      (cond
        [(cpp:signed-type? outT)
-        ;(cpp:euclidean-div lhs rhs outT)]
-        (mk-cpp-expr (bvsdiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
+
+        ;(assume (not (bvzero? (cpp:eval rhs))))
+        ;(cpp:euclidean-div lhs rhs outT)
+
+        (mk-cpp-expr 
+          ;(bvsdiv (cpp:eval lhs) (cpp:eval rhs))
+          (widening-div (cpp:eval lhs) (cpp:eval rhs))
+          outT)
+        ]
        [else
+        ;(assume (not (bvzero? (cpp:eval rhs))))
         (mk-cpp-expr (bvudiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
        )
      ;])

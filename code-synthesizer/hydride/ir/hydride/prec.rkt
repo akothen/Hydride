@@ -25,7 +25,7 @@
             [(dim-y id) 1]
             [(idx-i id) 1]
             [(idx-j id) 1]
-            [(reg id) (bvlength (vector-ref env id))] ;; FIX-ME NOTE: DO NOT USE THIS METHOD FOR PREC
+            [(reg id) (bvlength (vector-ref-bv env id))] ;; FIX-ME NOTE: DO NOT USE THIS METHOD FOR PREC
             [(lit v) (bvlength v)]
             [(nop v1) (get-prec v1 env)]
             [(idx-add i1 i2) 1]

@@ -19,7 +19,7 @@
 ;; ================================================================================
 
 (struct reg (id) #:transparent #:mutable)
-(struct lit (val) #:transparent #:mutable)
+(struct lit (val) #:transparent)
 (struct idx-i (id) #:transparent #:mutable)
 (struct idx-j (id) #:transparent #:mutable)
 (struct dim-x (id) #:transparent #:mutable)

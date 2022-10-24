@@ -17,6 +17,8 @@
 #include <set>
 #include <map>
 
+#include <chrono>
+
 using namespace std;
 
 
@@ -454,7 +456,7 @@ namespace Halide {
                         indent.push(0);
                         std::string rkt_type = std::to_string(op->lanes);
                         std::string rkt_val = dispatch(op->value);
-                        std::cout << "Broadcast "<<rkt_val << "to x"<<rkt_type <<"\n";
+                        //std::cout << "Broadcast "<<rkt_val << "to x"<<rkt_type <<"\n";
                         indent.pop();
                         return tabs() + "(x" + rkt_type + " " + rkt_val + ")";
                     }
@@ -2116,21 +2118,27 @@ namespace Halide {
                         return define_bitvector_str + "\n" + define_buffer_str;
                     }
 
+                    std::string get_reg_id(int reg_id){
+                        return "(bv "+ std::to_string(reg_id) +" (bitvector 8))";
+                    }
+
+
                     std::string emit_buffer_id_map(std::string map_name){
                         std::string comment = "; Creating a map between buffers and halide call node arguments\n";
                         std::string define_buff_map = "(define "+map_name+" (make-hash))" +"\n";
                         std::string add_entry = "";
 
+
                         for(auto bi = LoadToRegMap.begin(); bi != LoadToRegMap.end(); bi++){
                             unsigned id = bi->second;
-                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" " +  std::to_string(id) + ")"+"\n";
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" " +  get_reg_id(id) + ")"+"\n";
 
 
                         }
 
                         for(auto bi = VariableToRegMap.begin(); bi != VariableToRegMap.end(); bi++){
                             unsigned id = bi->second;
-                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+  std::to_string(id)  + ")"+"\n";
+                            add_entry += "(hash-set! "+ map_name+" "+"reg_"+std::to_string(id)+" "+  get_reg_id(id)  + ")"+"\n";
                         }
 
                         return comment + define_buff_map + add_entry;
@@ -2314,8 +2322,16 @@ namespace Halide {
 
                 std::string cmd = "racket " + file_name;
 
+
+                auto start = std::chrono::system_clock::now();
                 int ret_code = system(cmd.c_str());
+                auto end = std::chrono::system_clock::now();
                 std::cout << "Synthesis completed with return code:\t"<< ret_code <<"\n";
+                
+                std::chrono::duration<double> elapsed_seconds = end - start;
+
+                std::cout << "Synthesis took "<< elapsed_seconds.count() << "seconds ..."<<"\n";
+
                 
 
 
@@ -2335,14 +2351,14 @@ namespace Halide {
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
-            debug(0) << "Printing Folded Stmt:\n";
-            debug(0) << folded <<"\n";
+            debug(1) << "Printing Folded Stmt:\n";
+            debug(1) << folded <<"\n";
 
-            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+            debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(0) << "Printing Pruned Stmt:\n";
-            debug(0) << pruned <<"\n";
+            debug(1) << "Printing Pruned Stmt:\n";
+            debug(1) << pruned <<"\n";
             return Hydride::IROptimizer(fvb, Hydride::IROptimizer::HVX, mutated_exprs).mutate(pruned);
         }
 
@@ -2352,14 +2368,14 @@ namespace Halide {
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
-            debug(0) << "Printing Folded Stmt:\n";
-            debug(0) << folded <<"\n";
+            debug(1) << "Printing Folded Stmt:\n";
+            debug(1) << folded <<"\n";
 
-            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+            debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(0) << "Printing Pruned Stmt:\n";
-            debug(0) << pruned <<"\n";
+            debug(1) << "Printing Pruned Stmt:\n";
+            debug(1) << pruned <<"\n";
             return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
         }
 

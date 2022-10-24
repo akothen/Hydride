@@ -215,7 +215,9 @@ class TypedSimpleGrammarGenerator:
                         if ga.size != input_size:
                             use_clause = False
                             break
-                        clause.append("(reg {})".format(idx) +" "+ga.get_rkt_comment())
+
+                        reg_idx = "(bv {} (bitvector 4))".format(idx)
+                        clause.append("(reg {})".format(reg_idx) +" "+ga.get_rkt_comment())
                     else:
                         clause.append(ga.get_dsl_value() +"\t\t\t\t"+ga.get_rkt_comment())
                 if use_clause:
@@ -235,7 +237,8 @@ class TypedSimpleGrammarGenerator:
 
 
     def emit_choose_reg(self, reg_id):
-        return "(reg  {})".format(reg_id)
+        reg_bv = "(bv {} (bitvector 4))".format(reg_id)
+        return "(reg  {})".format(reg_bv)
 
     def emit_choose_lit(self, bv_size, prec):
         return self.emit_lit_hole_clause(bv_size,prec)

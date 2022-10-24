@@ -28,7 +28,7 @@
             [(dim-y id) (string-append "\n" "(dim-y " (~s id) ")")]
             [(idx-i id) (string-append "\n" "(idx-i " (~s id) ")")]
             [(idx-j id) (string-append "\n" "(idx-j " (~s id) ")")]
-            [(reg id) (string-append  "\n" "(reg " (~s  id) ")")]
+            [(reg id) (string-append  "\n" "(reg " (~s  (bitvector->natural id)) ")")]
             [(lit v) (string-append   "(lit " (~s v) ")")]
             [(nop v1) (string-append "\n" "(nop " (hydride-printer v1) ")")]
             [(idx-add i1 i2) (string-append "\n" "(idx-add " (~s i1) (~s i2) ")" )]
