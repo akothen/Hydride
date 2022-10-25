@@ -1,5 +1,6 @@
 #include "Halide.h"
 #include "../../common_params.h"
+#include "gaussian5x5_batch_0080_sample_0000.schedule.h"
 
 using namespace Halide;
 
@@ -21,6 +22,9 @@ public:
         cols(x, y) = rows(x - 2, y) + 4 * rows(x - 1, y) + 6 * rows(x, y) + 4 * rows(x + 1, y) + rows(x + 2, y);
 
         output(x, y) = cast<uint8_t>(cols(x, y) >> 8);
+
+        Pipeline p(output);
+        apply_schedule_gaussian5x5_batch_0080_sample_0000(p, target);
     }
 
     void schedule() {
