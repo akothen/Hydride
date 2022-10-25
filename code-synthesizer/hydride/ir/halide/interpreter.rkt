@@ -200,7 +200,7 @@
     [(ramp base stride len) (list base stride)]
     [(load buf idxs alignment) (list buf)]
     [(load-sca buf idx) (list)]
-    [(int-imm data signed?) (list)]
+    [(int-imm data signed?) (list )]
     [(buffer data elemT buffsize) (list expr)]
 
     ;; Type Casts

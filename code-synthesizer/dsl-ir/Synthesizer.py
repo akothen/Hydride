@@ -4,8 +4,8 @@ from PredefinedDSL import *
 import random
 from ShuffleList import ShuffleList
 
-DEBUG = False
-DEBUG_LIST = ["_mm_dpwssd_epi32"]
+DEBUG = True
+DEBUG_LIST = []
 SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -458,7 +458,18 @@ class Synthesizer:
         ## Due to the volume of instructions available, selecting contexts
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
+
+        # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
+        (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
+
+
+        # When immediates are present in the specification, they are likely to be used in either broadcast operations or compute operations
+        # hence including operations relying on casting these constants to larger bitwidth is necessary. However, when there are no immediates
+        # it is unlikely that operations casting a bitvector smaller than the smallest input (or output if output is smallest) would be used.
+        (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
+
+
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 25)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
@@ -547,6 +558,40 @@ class Synthesizer:
 
         return (pruned_ops, pruned_ctxs)
 
+
+    def prune_ops_relying_on_imm(self, ops, ctxs):
+        # Imms used in specification, conservatively keep
+        # all operations
+        if self.spec.imms != []:
+            return (ops, ctxs)
+
+        smallest_input = min(self.input_sizes)
+        smallest_output = self.output_slice_length
+
+        smallest_bv_size = min(smallest_input, smallest_output)
+
+        pruned_ops = []
+        pruned_ctxs = []
+
+        for i in range(len(ops)):
+            op_i = ops[i]
+            ctx_i = ctxs[i]
+
+            min_ctx_bvs = min(ctx_i.get_output_size(), ctx_i.get_min_arg_size())
+
+            if min_ctx_bvs < smallest_bv_size:
+                if DEBUG:
+                    print("Pruning", ctx_i.name, "as it has an argument of size",min_ctx_bvs, "which is smaller than", smallest_bv_size)
+                continue
+            else:
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+
+        print("Prunning Based of non-immediate usage pruned", len(ops) - len(pruned_ops), "instructions ... ")
+        return (pruned_ops, pruned_ctxs)
+
+
+
     def reduce_operations(self, operation_insts, operation_contexts, bound = None):
 
         if bound == None or bound > len(operation_insts):
@@ -600,7 +645,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         # if allocated more rules than are actually

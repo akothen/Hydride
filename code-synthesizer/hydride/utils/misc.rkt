@@ -215,6 +215,50 @@
 
 
 
+;; Create random concrete bitvector
+;; to use in iterative synthesis
+(define (create-concrete-bv bw) 
+  (if 
+    (<= bw 16)
+    (begin
+      (define max-val (expt 2 bw))
+      (define rand-val (random max-val))
+      (integer->bitvector rand-val (bitvector bw))
+      )
+    (concat
+      (create-concrete-bv (/ bw 2))
+      (create-concrete-bv (/ bw 2))
+      )
+
+    )
+  )
+
+
+;; Create a vector of concrete bitvectors
+;; according to the bitwidths specified 
+;; in the list
+(define (create-concrete-bvs bw-list) 
+  (define num-bw (length bw-list))
+  (define (helper i)
+    (define conc-bv (create-concrete-bv (list-ref bw-list i)))
+    conc-bv
+    )
+  (build-vector num-bw helper)
+  )
+
+;; Create a vector of concrete 0 bitvectors
+;; according to the bitwidths specified 
+;; in the list
+(define (create-0-bvs bw-list) 
+  (define num-bw (length bw-list))
+  (define (helper i)
+    (define conc-bv (integer->bitvector 0 (bitvector (list-ref bw-list i) )))
+    conc-bv
+    )
+  (build-vector num-bw helper)
+  )
+
+
 (define (append-str-to-file str file)
   (debug-log (format "Append [~a] to file ~a\n" str file))
   (define out (open-output-file file #:exists 'append))

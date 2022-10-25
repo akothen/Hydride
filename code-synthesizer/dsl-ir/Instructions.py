@@ -90,6 +90,16 @@ class Context:
 
         return max_arg_size
 
+
+    def get_min_arg_size(self):
+        min_arg_size = self.get_max_arg_size()
+        for arg in self.context_args:
+            if isinstance(arg, BitVector):
+                if arg.size <= min_arg_size:
+                    min_arg_size = arg.size
+
+        return min_arg_size
+
     def supports_input_size(self, input_size):
         for arg in self.context_args:
             if isBitVectorType(arg):

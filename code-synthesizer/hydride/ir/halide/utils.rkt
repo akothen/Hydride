@@ -12,6 +12,7 @@
   hydride/ir/halide/interpreter
   hydride/ir/halide/visitor
   hydride/utils/debug
+  hydride/utils/misc
   )
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -1108,10 +1109,7 @@
                        ;; count as a sequence of 3 computations (depth 2)
                        (define imm-sub-expr (list-ref imm-sub-exprs i))
                        (define decremented-depth 
-                         (cond 
-                           [(and (vec-absd? imm-sub-expr) (>= depth 2))  (- depth 1)]
-                           [else (- depth 1)]
-                           )
+                         (- depth 1)
                          )
                        (get-sub-exprs (list-ref imm-sub-exprs i) decremented-depth)
                        )
@@ -1416,6 +1414,42 @@
   (halide:visit expr visitor-fn)
   id-map
   
+  )
+
+
+(define (contains-complex-op-in-subexpr expr expr-depth)
+
+  (define leaves (get-sub-exprs expr (+ expr-depth 1)))
+  (define leaves-sizes (get-expr-bv-sizes leaves))
+  (define leaves-elemT (get-expr-elemT leaves))
+  (define sym-bvs (create-concrete-bvs leaves-sizes))
+
+  (define dummy-args (create-buffers leaves sym-bvs))
+
+  (define-values (expr-extract num-used) (bind-expr-args expr dummy-args expr-depth))
+
+  (contains-complex-op expr-extract)
+  )
+
+
+;; Checks if the expression contains a complex operation
+;; such as Ramp which performs broadcasts multiplication
+;; and add. 
+
+(define (contains-complex-op expr)
+
+  (define flag #f)
+  (define (visitor-fn e)
+    (destruct e
+              [(ramp base stride len) 
+               (set! flag #t)
+               ]
+              [_ e]
+              )
+    )
+  (halide:visit expr visitor-fn)
+
+  flag
   )
 
 

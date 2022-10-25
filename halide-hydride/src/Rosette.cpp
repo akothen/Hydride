@@ -32,6 +32,9 @@ namespace Halide {
     // sequence of arithmetic op.
     bool SIMPLIFY_ABSD = true;
 
+
+    bool SIMPLIFY_RAMP = true;
+
     namespace Internal {
 
         namespace {
@@ -1654,8 +1657,35 @@ namespace Halide {
                         return Cast::make(result_type, std::move(a));
                     }
 
+                    Expr visit(const Ramp *op) override {
+                        Expr lowered;
+                        if(SIMPLIFY_RAMP){
+
+                            // If either the stride or the base are constant
+                            // we can simplify the operations and hence keep
+                            // the original operation. Otherwise we decompose the
+                            // operation into it's consituent operations.
+                            if(!is_const(op->stride) && !is_const(op->base)){
+                                Expr broadcast_base = Broadcast::make(op->base, op->lanes);
+                                Expr broadcast_stride = Broadcast::make(op->stride, op->lanes);
+                                Expr ramp = Ramp::make(make_zero(op->base.type()), make_one(op->base.type()), op->lanes);
+                                lowered = broadcast_base + broadcast_stride * ramp;
+                            }
+
+
+
+                        }
+
+                        if (lowered.defined()) {
+                            return mutate(lowered);
+                        }
+                        return IRMutator::visit(op);
+
+
+                    }
+
                     Expr visit(const Call *op) override {
-                        //std::cout << "Lower Intrinsic on call: "<< op->name << "\n";
+                        std::cout << "Lower Intrinsic on call: "<< op->name << "\n";
                         Expr lowered;
                         // Generate cleaner specs. Since performance is not a concern, we can freely
                         // use widening casts etc.
@@ -1688,26 +1718,21 @@ namespace Halide {
                         else if (SIMPLIFY_ABSD && op->is_intrinsic(Call::absd)) {
                             lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                         } 
-                        /*
                         else if (op->is_intrinsic(Call::rounding_shift_right)){
-                            
-                            auto sat_add_arg_0 = op->args[0];
-                            auto sat_add_arg_1 = (1 << max(0,op->args[1])) / 2;
-                            lowered = (narrow(clamp(widen(sat_add_arg_0) - widen(sat_add_arg_1),
-                                        sat_add_arg_0.type().min(), sat_add_arg_0.type().max()))) >> op->args[1];
+                            lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
                         } 
                         else if (op->is_intrinsic(Call::widening_mul)) {
-                            debug(0) << "Lowering widening mul" << "\n";
                             lowered = (widen(op->args[0]) * widen(op->args[1]));
                         } 
                         else if (op->is_intrinsic(Call::widening_add)) {
                             lowered = (widen(op->args[0]) + widen(op->args[1]));
                         } 
-                        */
                         else {
                             lowered = lower_intrinsic(op);
                         }
+
                         if (lowered.defined()) {
+                            debug(0) << "Lowered Expression: "<<lowered <<"\n";
                             return mutate(lowered);
                         }
                         return IRMutator::visit(op);

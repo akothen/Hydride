@@ -9,6 +9,7 @@
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
+(require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
@@ -35,50 +36,10 @@
   )
 
 
-;; Create random concrete bitvector
-;; to use in iterative synthesis
-(define (create-concrete-bv bw) 
-  (if 
-    (<= bw 16)
-    (begin
-      (define max-val (expt 2 bw))
-      (define rand-val (random max-val))
-      (integer->bitvector rand-val (bitvector bw))
-      )
-    (concat
-      (create-concrete-bv (/ bw 2))
-      (create-concrete-bv (/ bw 2))
-      )
-
-    )
-  )
 
 
 
 
-;; Create a vector of concrete bitvectors
-;; according to the bitwidths specified 
-;; in the list
-(define (create-concrete-bvs bw-list) 
-  (define num-bw (length bw-list))
-  (define (helper i)
-    (define conc-bv (create-concrete-bv (list-ref bw-list i)))
-    conc-bv
-    )
-  (build-vector num-bw helper)
-  )
-
-;; Create a vector of concrete 0 bitvectors
-;; according to the bitwidths specified 
-;; in the list
-(define (create-0-bvs bw-list) 
-  (define num-bw (length bw-list))
-  (define (helper i)
-    (define conc-bv (integer->bitvector 0 (bitvector (list-ref bw-list i) )))
-    conc-bv
-    )
-  (build-vector num-bw helper)
-  )
 
 ;; Evaluate the symbol defined at index i
 ;; of symbols for the counter example in cex

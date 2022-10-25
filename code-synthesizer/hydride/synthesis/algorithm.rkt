@@ -7,6 +7,7 @@
 (require rosette/solver/smt/z3)
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
+(require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/binder)
 (require hydride/synthesis/symbolic_synthesis)
@@ -91,12 +92,24 @@
 (define (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver)
 
 
+  (define actual-expr-depth 
+    (cond
+      [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
+       (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n" expr-depth (max 1 (- expr-depth 1))))
+       (max 1 (- expr-depth 1))
+       ]
+      [else
+        expr-depth
+        ]
+      )
+
+    )
 
   (debug-log "=======================================")
-  (define leaves (halide:get-sub-exprs halide-expr (+ expr-depth 1)))
+  (define leaves (halide:get-sub-exprs halide-expr (+ actual-expr-depth 1)))
   (define leaves-sizes (halide:get-expr-bv-sizes leaves))
   (define leaves-elemT (halide:get-expr-elemT leaves))
-  (define sym-bvs (create-symbolic-bvs leaves-sizes))
+  (define sym-bvs (create-concrete-bvs leaves-sizes)) ;; Can this be concrete
 
 
 
@@ -120,7 +133,7 @@
               [_ 
                 (begin
 
-                  (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args expr-depth))
+                  (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
 
                   (debug-log expr-extract)
                   (define base_name (string-append "base_" (~s (random 10000))))
@@ -139,7 +152,7 @@
 
 
 
-                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args halide-expr synth-buffers-full expr-depth))
+                    (define-values (_expr-extract-full _num-used) (halide:bind-expr-args halide-expr synth-buffers-full actual-expr-depth))
 
                     (println _expr-extract-full)
 
@@ -155,7 +168,7 @@
                   (define (invoke-spec-lane lane-idx env-lane)
                     (printf "invoke-spec-lane with env: ~a\n" env-lane)
                     (define synth-buffers-lane (halide:create-buffers leaves env-lane))
-                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers-lane expr-depth))
+                    (define-values (_expr-extract _num-used) (halide:bind-expr-args halide-expr synth-buffers-lane actual-expr-depth))
                     (define output-idx (- expr-VF 1 lane-idx))
                     (define _result_lane (cpp:eval ((halide:interpret _expr-extract) output-idx)))
                     _result_lane
@@ -205,7 +218,7 @@
                         (debug-log "Beginning Synthesis")
 
                         (define-values (sat? mat el) 
-                                       (synthesize-sol-with-depth (max (+ -1 expr-depth) 1) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
+                                       (synthesize-sol-with-depth (max (+ -1 actual-expr-depth) 1) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
                                        )
 
                         (define test-end (current-seconds))

@@ -67,10 +67,17 @@
   (define mask
     (destruct swizzle
               [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-               (vector-two-input-swizzle (create-tensor 1 num_2 32) (create-tensor 1 num_2 32) num_2 32 num_4 lane_size num_6 num_7 num_8)
+               (define full-tensor (create-tensor 1 (* 2 num_2) 32))
+               (define tensor1 (extract (- (* 2 num_2) 1)  num_2 full-tensor))
+               (define tensor2 (extract (- (* 1 num_2) 1)  0 full-tensor))
+               (vector-two-input-swizzle tensor1 tensor2  num_2 32 num_4 lane_size num_6 num_7 num_8)
                ]
               [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-               (interleave-vectors (create-tensor 1 (/ size_i_o prec_i_o) 32) (create-tensor 1 (/ size_i_o prec_i_o) 32)  (* 32 (/ size_i_o prec_i_o)) 32)
+               (define num-elems (/ size_i_o prec_i_o))
+               (define full-tensor (create-tensor 1 (* 2 num-elems) 32))
+               (define tensor1 (extract (- (* 2 num-elems) 1)  num-elems full-tensor))
+               (define tensor2 (extract (- (* 1 num-elems) 1)  0 full-tensor))
+               (interleave-vectors tensor1 tensor2  (* 32 (/ size_i_o prec_i_o)) 32)
                ]
               [ (interleave-vector_dsl v0 size_i_o prec_i_o)
                (interleave-vector (create-tensor 1 (/ size_i_o prec_i_o) 32)   (* 32 (/ size_i_o prec_i_o)) 32)

@@ -13509,7 +13509,7 @@ semantcs = {
       },
 
               "_mm256_cvtepi64_epi8" : {
-                  "args" : ["SYMBOLIC_BV_256","32","8","64","0"],
+                  "args" : ["SYMBOLIC_BV_256","32","8","64","104"],
                   "in_vectsize" : 256,
                   "out_vectsize" : 128,
                   "lanesize" : 128,
