@@ -1,4 +1,3 @@
-
 ###################################################################
 #
 # Support compilation of HVX pseudocode to Rosette IR.
@@ -1780,6 +1779,9 @@ def FixFunctionsWithReductionPattern(Function : RoseFunction, Context : HexRoseC
           if User.getInputBitVector() == Arg:
             User.setOperand(1, NewReturnValue)
           continue
+        if isinstance(User, RoseBVPadHighBitsOp):
+          User.setOperand(0, NewReturnValue)
+          continue
         if isinstance(User, RoseReturnOp):
           User.setOperand(0, NewReturnValue)
           Function.setRetVal(NewReturnValue)
@@ -1868,13 +1870,13 @@ def CompileSemantics(Sema):
   for Stmt in Sema.spec:
     CompileStatement(Stmt, RootContext)
 
-  # Add padding instruction
-  NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
-  Operation = RoseBVPadHighBitsOp.create(RootFunction.getReturnValue(), NumPadBits)
-  RootContext.addAbstractionToIR(Operation)
-
   # Get the compiled function
   CompiledFunction = RootContext.getRootAbstraction()
+
+  # Add padding instruction
+  NumPadBits = RoseConstant.create(0, RoseIntegerType.create(32))
+  Operation = RoseBVPadHighBitsOp.create(RetValue, NumPadBits)
+  RootContext.addAbstractionToIR(Operation)
 
   # Generate return op
   Op = RoseReturnOp.create(RetValue)
