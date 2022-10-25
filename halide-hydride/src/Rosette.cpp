@@ -50,7 +50,6 @@ namespace Halide {
 
 
 
-            std::map<const IRNode*, std::string> SynthLog;
             std::map<unsigned, const Load*> RegToLoadMap; // Map racket register expressions to Halide Load Instructions
             std::map<const Load*, unsigned> LoadToRegMap; // Map racket register expressions to Halide Load Instructions
 
@@ -276,8 +275,6 @@ namespace Halide {
 
                     std::string visit(const Add *op) {
 
-                        std::string expr_exists = check_expr_in_log(op);
-                        if(expr_exists != "") return expr_exists;
 
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
@@ -299,8 +296,6 @@ namespace Halide {
 
                     std::string visit(const Mul *op) {
 
-                        std::string expr_exists = check_expr_in_log(op);
-                        if(expr_exists != "") return expr_exists;
 
                         if(SkipNodes.find((const IRNode*) op) != SkipNodes.end()){
                             SkipNodes.insert(op->a.get());
@@ -585,40 +580,13 @@ namespace Halide {
                         }
                     }
 
-                    std::string define_load_buffer(const Load *op){
-                        std::string reg_name = "reg_" + std::to_string(LoadToRegMap[op]);
-                        size_t bitwidth = op->type.bits() * op->type.lanes();
 
-                        std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); // TODO
-
-                        if(elemT == "'") return "";
-
-                        std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
-                        std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
-
-                        return define_bitvector_str + "\n" + define_buffer_str;
-                    }
-
-                    std::string check_expr_in_log(const IRNode* op){
-
-
-                        if(SynthLog.find(op)
-                                != SynthLog.end()){
-                            std::cout << "expression was previously defined as: " << SynthLog[op] << "\n";
-                            return SynthLog[op];
-                        }
-
-                        return "";
-
-                    }
 
 
                     std::string visit(const Load *op) {
                         indent.push(0);
 
 
-                        std::string expr_exists = check_expr_in_log(op);
-                        if(expr_exists != "") return expr_exists;
 
 
 
@@ -650,7 +618,7 @@ namespace Halide {
                             std::string reg_name = "reg_"+std::to_string(reg_counter);
                             RegToLoadMap[reg_counter] = op;
                             LoadToRegMap[op] = reg_counter;
-                            std::string load_buff = define_load_buffer(op);
+                            //std::string load_buff = define_load_buffer(op);
                             return tabs() +   reg_name; //" (?? (bitvector "+ std::to_string(op->type.bits())+")"+")";
                             //return tabs() + "(load-sca " + op->name + " " + rkt_idx + ")";
                             }
@@ -660,7 +628,7 @@ namespace Halide {
                             std::string reg_name = "reg_"+std::to_string(reg_counter);
                             RegToLoadMap[reg_counter] = op;
                             LoadToRegMap[op] = reg_counter;
-                            std::string load_buff = define_load_buffer(op);
+                            //std::string load_buff = define_load_buffer(op);
                             return tabs()   + reg_name; //+ load_buff + "\n"+ "(load " + reg_name + " " + rkt_idx + " " + alignment + ")";
                             //return tabs() + "(load " + op->name + " " + rkt_idx + " " + alignment + ")";
                         }
@@ -1935,6 +1903,7 @@ namespace Halide {
                                 supported_input_sizes.push_back(64);
                                 supported_input_sizes.push_back(32);
                                 supported_input_sizes.push_back(16);
+                                supported_input_sizes.push_back(8);
                         };
 
                         Expr v = op->value;
@@ -2169,7 +2138,10 @@ namespace Halide {
 
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
 
-                        if(elemT == "'") return "";
+                        if(elemT == "'") {
+                            debug(0) << "Define_load_buffer escaping early for "<< reg_name << "of bitwidth "<<bitwidth<<"\n";
+                            return "";
+                        }
 
                         std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
 
@@ -2187,7 +2159,10 @@ namespace Halide {
                         std::string elemT = "'"+type_to_rake_elem_type(op->type, false, true); 
 
 
-                        if(elemT == "'") return "";
+                        if(elemT == "'") {
+                            debug(0) << "Define_variable_buffer escaping early for "<< reg_name << "of bitwidth "<<bitwidth<<"\n";
+                            return "";
+                        }
 
                         std::string define_bitvector_str = "(define "+reg_name+"_bitvector"+" "+ "(bv 0 (bitvector "+std::to_string(bitwidth)+")" +"))";
                         std::string define_buffer_str = "(define "+reg_name+" (halide:create-buffer "+ reg_name+"_bitvector "+elemT +")"+")";
@@ -2356,8 +2331,6 @@ namespace Halide {
                 //rkt << axioms.str() << "\n";
                 //rkt << let_stmts.str() << "\n";
 
-                SynthLog[orig_expr.get()] = expr;
-                SynthLog[spec_expr.get()] = expr;
 
                 rkt << "(define halide-expr \n";
                 rkt << expr << "\n";
@@ -2445,14 +2418,14 @@ namespace Halide {
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
-            debug(0) << "Printing Folded Stmt:\n";
-            debug(0) << folded <<"\n";
+            debug(1) << "Printing Folded Stmt:\n";
+            debug(1) << folded <<"\n";
 
-            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+            debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(0) << "Printing Pruned Stmt:\n";
-            debug(0) << pruned <<"\n";
+            debug(1) << "Printing Pruned Stmt:\n";
+            debug(1) << pruned <<"\n";
             return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
         }
 
