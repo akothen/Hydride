@@ -1335,6 +1335,58 @@ namespace Halide {
                                 
                             }
 
+
+                            // Start a new scope for Let
+                            if(stmt.node_type() == IRNodeType::LetStmt){
+                                const LetStmt* l = stmt.as<LetStmt>();
+                                debug(1) << "Let  Instruction: "<< stmt <<"\n";
+                                std::map<const Store*, Expr> scoped_map;
+
+                                scope_name.push(l->name);
+                                
+                                debug(1) << "Pushing scope_name: "<< scope_name.top() << "\n";
+                                MemMap.push(scope_name.top(), scoped_map);
+                                auto new_stmt = mutate(l->body);
+                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                MemMap.pop(scope_name.top());
+                                scope_name.pop();
+
+
+                                Stmt NewLet =  LetStmt::make(l->name, l->value,  new_stmt);
+                                return  NewLet;
+                                
+                            }
+
+
+                            // Start a new scope for IfThenElse 
+                            if(stmt.node_type() == IRNodeType::IfThenElse){
+                                const IfThenElse* ite = stmt.as<IfThenElse>();
+                                debug(1) << "If then else  Instruction: "<< stmt <<"\n";
+
+                                std::map<const Store*, Expr> scoped_map;
+                                scope_name.push("ite_then");
+                                debug(1) << "Pushing scope_name: "<< scope_name.top() << "\n";
+                                MemMap.push(scope_name.top(), scoped_map);
+                                auto new_stmt_then = mutate(ite->then_case);
+                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                MemMap.pop(scope_name.top());
+                                scope_name.pop();
+
+                                std::map<const Store*, Expr> scoped_map_else;
+                                scope_name.push("ite_else");
+                                debug(1) << "Pushing scope_name: "<< scope_name.top() << "\n";
+                                MemMap.push(scope_name.top(), scoped_map_else);
+                                auto new_stmt_else = mutate(ite->else_case);
+                                debug(1) << "Popping scope_name: "<< scope_name.top() << "\n";
+                                MemMap.pop(scope_name.top());
+                                scope_name.pop();
+
+
+                                Stmt NewITE =  IfThenElse::make(ite->condition, new_stmt_then, new_stmt_else);
+                                return  NewITE;
+                                
+                            }
+
                         return IRMutator::mutate(stmt);
                     }
 
@@ -2393,14 +2445,14 @@ namespace Halide {
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
-            debug(1) << "Printing Folded Stmt:\n";
-            debug(1) << folded <<"\n";
+            debug(0) << "Printing Folded Stmt:\n";
+            debug(0) << folded <<"\n";
 
-            debug(1) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
+            debug(0) << "DEAD STMT SIZE: "<<DeadStmts.size() << "\n";
 
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
-            debug(1) << "Printing Pruned Stmt:\n";
-            debug(1) << pruned <<"\n";
+            debug(0) << "Printing Pruned Stmt:\n";
+            debug(0) << pruned <<"\n";
             return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
         }
 
