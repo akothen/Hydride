@@ -21,7 +21,7 @@ bin_dirs = $(addsuffix /bin,$(benchmarks))
 
 hannk = hannk/common_halide.cpp
 
-ENABLE_HYDRIDE=1
+ENABLE_HYDRIDE ?= 1
 EXPR_DEPTH ?=2
 
 .PHONY: clean all $(benchmarks)
@@ -55,3 +55,5 @@ $(bin_dirs): %:
 
 clean:
 	rm -rf $(bin_dirs)
+	rm -rf halide_expr_*
+	rm /tmp/hydride_exprs.rkt
