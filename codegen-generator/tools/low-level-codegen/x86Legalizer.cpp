@@ -49,7 +49,7 @@
       if (InstToInstMap[CI] != nullptr)
         return false;
       
-      if(CI->getCalledFunction()->getName() == "_mm_sub_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_sub_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -294,7 +294,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_extracti32x4_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_extracti32x4_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 32) { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_extracti32x4_epi32_wrapper"); 
@@ -345,7 +345,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_sllv_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_sllv_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -647,7 +647,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_adds_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_adds_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16) { 
@@ -802,7 +802,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_cmplt_epi16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_cmplt_epi16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 177
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 176
@@ -1575,7 +1575,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_madd_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_madd_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 64) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mask_madd_epi16_wrapper"); 
@@ -1649,7 +1649,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_srl_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_srl_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -1882,7 +1882,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mulhi_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mulhi_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -2013,7 +2013,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_cvtepu8_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_cvtepu8_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -2504,7 +2504,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hadd_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hadd_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -2563,7 +2563,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hsubs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hsubs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -2598,7 +2598,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_extract_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_extract_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 4
@@ -2739,7 +2739,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_sra_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_sra_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_sra_epi64_wrapper"); 
@@ -2777,7 +2777,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_div_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_div_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -2938,7 +2938,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_subs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_subs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16) { 
@@ -3093,7 +3093,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_hadds_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_hadds_epi16_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_hadds_epi16_wrapper"); 
@@ -3109,7 +3109,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_hsub_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_hsub_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -3142,7 +3142,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_madd52lo_epu64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_madd52lo_epu64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 416
@@ -3225,7 +3225,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_extracti64x2_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_extracti64x2_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128
@@ -3346,7 +3346,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_cvtepi16_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_cvtepi16_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -3873,7 +3873,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hsub_pi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hsub_pi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm_hsub_pi32_wrapper"); 
@@ -3889,7 +3889,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_max_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_max_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 32) { 
@@ -4194,7 +4194,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmplt_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmplt_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 65535
@@ -4238,7 +4238,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_srli_pi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_srli_pi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 31
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -4425,7 +4425,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmple_epu16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmple_epu16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -4586,7 +4586,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_movepi64_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_movepi64_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 255
@@ -4783,7 +4783,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_testn_epi16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_testn_epi16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 176
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -5172,7 +5172,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_sll_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_sll_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 31
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -5321,7 +5321,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_mul_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_mul_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_mask_mul_epi32_wrapper"); 
@@ -5395,7 +5395,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_cmpneq_epi8_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_cmpneq_epi8_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -5712,7 +5712,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mulhrs_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mulhrs_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mulhrs_pi16_wrapper"); 
@@ -5761,7 +5761,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_max_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_max_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -5934,7 +5934,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_madd52lo_epu64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_madd52lo_epu64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 416
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 0) { 
@@ -6011,7 +6011,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_por") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_por_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64) { 
@@ -6148,7 +6148,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_unpackhi_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_unpackhi_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -6251,7 +6251,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_mul_epu32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_mul_epu32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_mask_mul_epu32_wrapper"); 
@@ -6325,7 +6325,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_mulhi_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_mulhi_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -6480,7 +6480,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mul_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mul_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mul_epi32_wrapper"); 
@@ -6518,7 +6518,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_packus_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_packus_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -6583,7 +6583,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_sllv_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_sllv_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -6723,7 +6723,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_unpacklo_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_unpacklo_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -6767,7 +6767,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_dpbusds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_dpbusds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 128) { 
@@ -6808,7 +6808,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_paddsb") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_paddsb_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8) { 
@@ -6933,7 +6933,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cvtsepi64_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cvtsepi64_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 16
@@ -7190,7 +7190,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_testn_epi32_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_testn_epi32_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 177
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -7603,7 +7603,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_pminub") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_pminub_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8) { 
@@ -7776,7 +7776,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_srl_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_srl_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 256) { 
@@ -7817,7 +7817,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_srlv_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_srlv_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -7957,7 +7957,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_srav_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_srav_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 18446744073709551615
@@ -8106,7 +8106,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_slli_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_slli_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -8390,7 +8390,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mulhi_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mulhi_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -8563,7 +8563,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_adds_epu8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_adds_epu8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -8718,7 +8718,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_cmplt_epu16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_cmplt_epu16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 176
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 177
@@ -9491,7 +9491,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_maddubs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_maddubs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_mask_maddubs_epi16_wrapper"); 
@@ -9565,7 +9565,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_ror_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_ror_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
@@ -9744,7 +9744,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_broadcast_i64x4") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_broadcast_i64x4_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
@@ -9866,7 +9866,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_broadcastq_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_broadcastq_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128
@@ -10471,7 +10471,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_fmadd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_fmadd_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_fmadd_epi32_wrapper"); 
@@ -10487,7 +10487,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_avg_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_avg_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 1
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 1
@@ -10632,7 +10632,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_min_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_min_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16) { 
@@ -10937,7 +10937,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cvtepi64_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cvtepi64_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
@@ -11194,7 +11194,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmpgt_pi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmpgt_pi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 4294967295
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -11395,7 +11395,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_dpbusd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_dpbusd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 512) { 
@@ -11436,7 +11436,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_abs_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_abs_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 64) { 
@@ -11741,7 +11741,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_sll_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_sll_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 256) { 
@@ -11821,7 +11821,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_unpackhi_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_unpackhi_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 64
@@ -11876,7 +11876,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_sub_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_sub_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 32) { 
@@ -12193,7 +12193,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_xor_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_xor_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32) { 
@@ -12330,7 +12330,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_blendv_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_blendv_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_blendv_epi8_wrapper"); 
@@ -12357,7 +12357,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_movepi64_pi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_movepi64_pi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
@@ -12609,7 +12609,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_movm_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_movm_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 115792089237316195423570985008687907853269984665640564039457584007913129639935
@@ -13262,7 +13262,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_sign_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_sign_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -13420,7 +13420,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_cvtusepi64_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_cvtusepi64_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -13947,7 +13947,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_packus_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_packus_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -14024,7 +14024,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_max_epu64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_max_epu64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64) { 
@@ -14197,7 +14197,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_subs_epu8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_subs_epu8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
@@ -14352,7 +14352,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_ror_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_ror_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
@@ -14441,7 +14441,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_abs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_abs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 16) { 
@@ -14626,7 +14626,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_min_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_min_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128
@@ -14931,7 +14931,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_mulhi_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_mulhi_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_mulhi_epi32_wrapper"); 
@@ -14958,7 +14958,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_sll_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_sll_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128) { 
@@ -14999,7 +14999,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_unpacklo_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_unpacklo_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_unpacklo_epi64_wrapper"); 
@@ -15026,7 +15026,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_cmpgt_epi16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_cmpgt_epi16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -15187,7 +15187,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mul_epu32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mul_epu32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256) { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mul_epu32_wrapper"); 
@@ -15225,7 +15225,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_div_epu32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_div_epu32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_div_epu32_wrapper"); 
@@ -15241,7 +15241,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_dpbusds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_dpbusds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_dpbusds_epi32_wrapper"); 
@@ -15279,7 +15279,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maddubs_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maddubs_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_maddubs_pi16_wrapper"); 
@@ -15328,7 +15328,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_extracti32x4_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_extracti32x4_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_extracti32x4_epi32_wrapper"); 
@@ -15355,7 +15355,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_srlv_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_srlv_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -15657,7 +15657,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_div_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_div_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -15870,7 +15870,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask3_fmadd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask3_fmadd_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask3_fmadd_epi32_wrapper"); 
@@ -15886,7 +15886,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_dpwssds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_dpwssds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 256) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_dpwssds_epi32_wrapper"); 
@@ -15924,7 +15924,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_cvtepi8_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_cvtepi8_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
@@ -16163,7 +16163,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_or_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_or_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128
@@ -16318,7 +16318,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmplt_epu16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmplt_epu16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -16479,7 +16479,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_rem_epu32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_rem_epu32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_rem_epu32_wrapper"); 
@@ -16506,7 +16506,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_dpwssds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_dpwssds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512) { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_dpwssds_epi32_wrapper"); 
@@ -16544,7 +16544,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_hadd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_hadd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -16577,7 +16577,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_rorv_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_rorv_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 32
@@ -16666,7 +16666,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hsub_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hsub_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -16725,7 +16725,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_srai_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_srai_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 31
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -16925,7 +16925,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_avg_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_avg_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 1
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 1
@@ -17104,7 +17104,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmpeq_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmpeq_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 4294967295
@@ -17305,7 +17305,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_dpwssd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_dpwssd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mask_dpwssd_epi32_wrapper"); 
@@ -17343,7 +17343,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_subs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_subs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -17468,7 +17468,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_sra_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_sra_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
@@ -17542,7 +17542,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_sll_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_sll_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -17827,7 +17827,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmpge_epu64_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmpge_epu64_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 2
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -17988,7 +17988,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_andnot_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_andnot_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32) { 
@@ -18077,7 +18077,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mulhi_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mulhi_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mulhi_epi32_wrapper"); 
@@ -18104,7 +18104,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_unpacklo_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_unpacklo_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -18187,7 +18187,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_xor_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_xor_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
@@ -18342,7 +18342,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mul_su32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mul_su32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mul_su32_wrapper"); 
@@ -18358,7 +18358,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_unpackhi_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_unpackhi_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 8
@@ -18573,7 +18573,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_set1_pi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_set1_pi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8) { 
@@ -18938,7 +18938,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_unpackhi_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_unpackhi_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256) { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_unpackhi_epi64_wrapper"); 
@@ -18965,7 +18965,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_srav_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_srav_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 65535
@@ -19285,7 +19285,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_unpacklo_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_unpacklo_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -19500,7 +19500,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_broadcast_i32x2") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_broadcast_i32x2_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128
@@ -19748,7 +19748,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_mulhrs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_mulhrs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256) { 
@@ -19822,7 +19822,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_packs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_packs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
@@ -19967,7 +19967,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_sra_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_sra_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 65535
@@ -20170,7 +20170,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_fmadd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_fmadd_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_fmadd_epi32_wrapper"); 
@@ -20186,7 +20186,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_unpackhi_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_unpackhi_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 32
@@ -20284,7 +20284,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_and_si256") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_and_si256_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 256) { 
@@ -20373,7 +20373,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_mullo_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_mullo_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 64
@@ -20639,7 +20639,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hadds_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hadds_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -20674,7 +20674,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_unpacklo_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_unpacklo_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -20770,7 +20770,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmpeq_epi64_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmpeq_epi64_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 2
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -21087,7 +21087,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_rem_epu16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_rem_epu16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 512
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -21428,7 +21428,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cvtusepi64_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cvtusepi64_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
@@ -21685,7 +21685,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_paddusw") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_paddusw_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -21810,7 +21810,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_dpwssd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_dpwssd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 512) { 
@@ -21851,7 +21851,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_dpbusd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_dpbusd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_mask_dpbusd_epi32_wrapper"); 
@@ -21889,7 +21889,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_packsswb") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_packsswb_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -22002,7 +22002,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_packus_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_packus_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16
@@ -22069,7 +22069,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_min_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_min_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16) { 
@@ -22242,7 +22242,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_madd52hi_epu64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_madd52hi_epu64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 104
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 52) { 
@@ -22319,7 +22319,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_div_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_div_epi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm512_mask_div_epi32_wrapper"); 
@@ -22335,7 +22335,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_psllwi") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_psllwi_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -22522,7 +22522,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_broadcastmw_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_broadcastmw_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 16
@@ -22605,7 +22605,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_andnot_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_andnot_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 32) { 
@@ -22760,7 +22760,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_add_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_add_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 8) { 
@@ -23065,7 +23065,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_dpwssd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_dpwssd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_dpwssd_epi32_wrapper"); 
@@ -23103,7 +23103,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_cmple_epi32_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_cmple_epi32_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -23264,7 +23264,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_unpackhi_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_unpackhi_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -23347,7 +23347,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_madd_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_madd_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32) { 
             auto *InstFunction = I->getModule()->getFunction("_mm_madd_pi16_wrapper"); 
@@ -23407,7 +23407,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_cvtepi8_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_cvtepi8_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 8
@@ -23898,7 +23898,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_packus_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_packus_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16
@@ -24043,7 +24043,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_packs_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_packs_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -24108,7 +24108,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmpgt_epu8_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmpgt_epu8_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8
@@ -24269,7 +24269,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_cmpge_epi64_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_cmpge_epi64_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 4
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -24430,7 +24430,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_srl_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_srl_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -24510,7 +24510,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_dpwssds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_dpwssds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 256) { 
@@ -24551,7 +24551,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_m_punpckhdq") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._m_punpckhdq_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 32
@@ -24595,7 +24595,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_dpbusd_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_dpbusd_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 256) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_dpbusd_epi32_wrapper"); 
@@ -24633,7 +24633,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_cmpneq_epu16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_cmpneq_epu16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 176
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 177
@@ -25406,7 +25406,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_packs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_packs_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16
@@ -25473,7 +25473,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_rol_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_rol_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 64
@@ -25652,7 +25652,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_cvtepu16_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_cvtepu16_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 16
@@ -25891,7 +25891,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_mask_unpacklo_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_mask_unpacklo_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 16
        && dyn_cast<ConstantInt>(CI->getOperand(5))->getZExtValue() == 16
@@ -25989,7 +25989,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_movemask_pi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_movemask_pi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 24) { 
@@ -26042,7 +26042,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_unpacklo_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_unpacklo_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -26097,7 +26097,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_maskz_srai_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_maskz_srai_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 63
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 0
@@ -26399,7 +26399,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_rolv_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_rolv_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
@@ -26578,7 +26578,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_hadd_pi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_hadd_pi32_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm_hadd_pi32_wrapper"); 
@@ -26594,7 +26594,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_add_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_add_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 256
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8) { 
@@ -26827,7 +26827,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_rorv_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_rorv_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 64
@@ -27006,7 +27006,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_unpackhi_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_unpackhi_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -27061,7 +27061,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_extract_epi8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_extract_epi8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 5
@@ -27096,7 +27096,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_maskz_max_epu8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_maskz_max_epu8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256
@@ -27401,7 +27401,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_sra_pi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_sra_pi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 15
        && dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 0
@@ -27556,7 +27556,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_cvtsepi32_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_cvtsepi32_epi16_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 16
@@ -28083,7 +28083,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_rolv_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_rolv_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 32
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 32
@@ -28172,7 +28172,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_mask_dpbusds_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_mask_dpbusds_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 256) { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_mask_dpbusds_epi32_wrapper"); 
@@ -28210,7 +28210,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_rol_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_rol_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 64
        && dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 64
@@ -28299,7 +28299,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_maskz_and_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_maskz_and_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(1))->getZExtValue() == 0
        && dyn_cast<ConstantInt>(CI->getOperand(4))->getZExtValue() == 512
@@ -28454,7 +28454,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_cmplt_epi16_mask") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_cmplt_epi16_mask_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 8
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 16
@@ -28615,7 +28615,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_blend_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_blend_epi16_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_blend_epi16_wrapper"); 
@@ -28631,7 +28631,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_hsubs_epi16") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_hsubs_epi16_dsl") { 
         
           { 
             auto *InstFunction = I->getModule()->getFunction("_mm256_hsubs_epi16_wrapper"); 
@@ -28647,7 +28647,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm256_extracti32x4_epi32") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm256_extracti32x4_epi32_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 128) { 
@@ -28724,7 +28724,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm_subs_epu8") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm_subs_epu8_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(2))->getZExtValue() == 128
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 8) { 
@@ -28849,7 +28849,7 @@
       } 
     
 
-      if(CI->getCalledFunction()->getName() == "_mm512_mask_srli_epi64") { 
+      if(CI->getCalledFunction()->getName() == "llvm.hydride._mm512_mask_srli_epi64_dsl") { 
         
           if(dyn_cast<ConstantInt>(CI->getOperand(0))->getZExtValue() == 63
        && dyn_cast<ConstantInt>(CI->getOperand(3))->getZExtValue() == 0
@@ -29141,6 +29141,7 @@
     bool X86LegalizationPass::runOnFunction(Function &F) {
       if (F.getName().contains("hydride") == false)
         return false;
+    
       // Initialize the legalizer
       errs() << "LEGALIZATION BEGIN\n";
       Legalizer *L = new X86Legalizer();
