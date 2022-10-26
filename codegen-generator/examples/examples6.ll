@@ -382,13 +382,16 @@ function _mm512_mask_blend_epi8 ( bv64 k, bv512 a, bv512 b ) {
 
 
 
+
+
+
 function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize, int32 %outerlanesize, int32 %laneoffset, 
                                     int32 %innerlanesize, int32 %elemsize, int32 %arg0, int32 %alpha.arg0) {
   for ([outer.it (range 0 %vectsize %outerlanesize)]) {
     for ([inner.it (range %laneoffset %innerlanesize %elemsize)]) {
       %factor0 = div int32 %elemsize, int32 %elemsize
       %factor1 = mul int32 %alpha.arg0, int32 %factor0
-      inner.it.mul = mul int32 inner.it, int32 %factor1
+      inner.it.factor1 = mul int32 inner.it, int32 %factor1
       %low.offset0 = add int32 inner.it, int32 %arg1
       %0.low.idx = add int32 outer.it, int32 %low.offset0
       %hole = call @hole.grammar(int32 outer.it, int32 inner.it, int32 %0.low.idx)
@@ -396,10 +399,10 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize, int32 %outer
       %0.high.idx = add int32 %hole , int32 %lastidx1
       %0 = bvextract bv256 a, int32 %hole, int32 %0.high.idx, int32 %elemsize
       %lastidx2 = sub int32 %elemsize, int32 1
-      %6 = add int32 inner.it.mul, int32 %lastidx2
-      bvinsert bv %0, bv256 dst, int32 inner.it.mul, int32 %6, int32 %elemsize
+      %6 = add int32 inner.it.factor1, int32 %lastidx2
+      bvinsert bv %0, bv256 dst, int32 inner.it.factor1, int32 %6, int32 %elemsize
       %1 = bvextract bv256 b, int32 %hole, int32 %0.high.idx, int32 %elemsize
-      %low.offset1 = add int32 inner.it.mul, int32 %arg0
+      %low.offset1 = add int32 inner.it.factor1, int32 %arg0
       %7 = add int32 %low.offset1, int32 outer.it
       %lastidx0 = sub int32 %elemsize, int32 1
       %8 = add int32 %7, int32 %lastidx0
@@ -408,6 +411,7 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b, int32 %vectsize, int32 %outer
   }
   ret bv256 dst
 }
+
 
 
 
