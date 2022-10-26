@@ -1,0 +1,735 @@
+mkdir blur3x3/bin
+g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
+	-I /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//include -I /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//tools \
+	-g blur3x3/src/blur3x3_generator.cpp /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//tools/GenGen.cpp \
+	hannk/common_halide.cpp \
+	-o blur3x3/bin/blur3x3_generator \
+	-L /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//lib -lHalide -lrt -ldl -lpthread -lm -lz -lxml2
+export LD_LIBRARY_PATH=/home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//lib; HL_EXPR_DEPTH=2 HL_ENABLE_HYDRIDE=1 ./blur3x3/bin/blur3x3_generator \
+	-t 0 \
+	-o blur3x3/bin \
+	-g blur3x3 \
+	-e static_library,stmt,h,llvm_assembly,assembly \
+	-f blur3x3 target=host-noos-no_bounds_query-no_asserts
+Target has Saphire Rapids Support: 0
+Hydride Optimize X86
+rm: cannot remove '/tmp/base_2017_spec.JSON': No such file or directory
+EARLY RETURN FROM REDUCE
+Adding:  _mm256_srli_epi16 with score: 6 belonging to target agnostic class _mm_srli_pi32
+Adding:  _mm512_cvtsepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtsepi64_epi16
+Adding:  _mm256_srlv_epi16 with score: 5 belonging to target agnostic class _mm_srlv_epi32
+Adding:  _mm256_avg_epu16 with score: 5 belonging to target agnostic class _mm256_avg_epu16
+Adding:  _mm512_cvtepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtepi64_epi32
+Adding:  _mm256_div_epu16 with score: 6 belonging to target agnostic class _mm512_div_epu16
+Adding:  _mm256_hadd_epi16 with score: 5 belonging to target agnostic class _mm256_hadd_epi32
+Adding:  _mm256_set1_epi16 with score: 3 belonging to target agnostic class _mm_set1_pi8
+Adding:  _mm256_broadcastw_epi16 with score: 3 belonging to target agnostic class _mm_set1_pi8
+Adding:  _mm512_cvtusepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtusepi64_epi8
+Adding:  _mm256_cvtepu8_epi16 with score: 3 belonging to target agnostic class _mm256_cvtepu16_epi32
+Adding:  _mm256_add_epi16 with score: 5 belonging to target agnostic class _mm256_add_epi8
+==================================================
+Grammar Number of Load DSL Clauses:	 17
+Grammar Number of Shuffle DSL Clauses:	 7
+Grammar Number of DSL Compute Clauses:	 12
+#hash((#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x01 8)))
+=======================================
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (buffer #<procedure:buffer-fn> 'uint16 256))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Vectorization factor for sub expression 16
+
+Synthesizing sub-expression
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (buffer #<procedure:buffer-fn> 'uint16 256))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Hashed expression
+(vec-div (vec-add '(buf uint16 256) '(buf uint16 256)) (x16 (int-imm (bv #x0003 16) #f)))
+Leaves are bitvectors of sizes:
+(256 256)
+get-expr-grammar with base_name: base_2017
+
+base_2017_grammar.rkt
+/tmp/base_2017_grammar.rkt
+Writing [{ 
+"name": "base_2017" , 
+"semantics": [ "(extract zero-extend bvudiv bvlshr bvadd)"] , 
+"input_shapes": [[1,16], [1,16]], 
+"output_shape": [1 , 16], 
+"input_precision": [16, 16], 
+"output_precision": 16, 
+"args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256"], 
+"spec_invokation": "",
+"imms": [[3, 16]] 
+}
+] to file /tmp/base_2017_spec.JSON
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-synthesizer/dsl-ir/emit_grammar.py /tmp/base_2017_spec.JSON /tmp/base_2017_grammar.rkt 16 0
+Generated Grammar File
+Dynamically importing from base_2017 ... 
+
+Grammar:
+#<procedure:base_2017>
+(#(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)))
+Beginning Synthesis
+Synthesizing solution with depth 1, depth-limit 5, and cost-bound 40 ...
+
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #xdaa8dece6b640cc5a9e25e0f3ab98de282e811cc217df114fb79daa111658876 256) (bv #x9f43e93b80b4d90974cb29b24354b9dcb8e1ef1f88c83be753815bd272e1cb43 256))
+(vec-div (vec-add (buffer #<procedure:buffer-fn> 'uint16 256) (buffer #<procedure:buffer-fn> 'uint16 256)) (x16 (int-imm (bv #x0003 16) #f)))
+Spec result
+(bv #x28a342ad4eb24c9a0a392d402a0417ea13ed004e38c10efe1a5312262c171be8 256)
+invoke-spec-lane with env: #((bv #xdaa8dece6b640cc5a9e25e0f3ab98de282e811cc217df114fb79daa111658876 256) (bv #x9f43e93b80b4d90974cb29b24354b9dcb8e1ef1f88c83be753815bd272e1cb43 256))
+Concrete counter examples:
+(#((bv #xdaa8dece6b640cc5a9e25e0f3ab98de282e811cc217df114fb79daa111658876 256) (bv #x9f43e93b80b4d90974cb29b24354b9dcb8e1ef1f88c83be753815bd272e1cb43 256)) #((bv #x88d4457c8d0786bd25e799ddd3cf8a31293a113a21522ecd7bfe22c42e2106c1 256) (bv #x510e4722d21333a2f14bb9f3b07c5c3c3147a2d038cbfd326b1e7c669aff6489 256)))
+Failing lanes examples:
+(0 0)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #xdaa8dece6b640cc5a9e25e0f3ab98de282e811cc217df114fb79daa111658876 256) (bv #x9f43e93b80b4d90974cb29b24354b9dcb8e1ef1f88c83be753815bd272e1cb43 256))
+Spec Produced:
+(bv #x1be8 16)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x88d4457c8d0786bd25e799ddd3cf8a31293a113a21522ecd7bfe22c42e2106c1 256) (bv #x510e4722d21333a2f14bb9f3b07c5c3c3147a2d038cbfd326b1e7c669aff6489 256))
+Spec Produced:
+(bv #x23c3 16)
+Synthesize by lane...
+#f
+Is this boolector optimization case #f ?
+
+Synthesizing solution with depth 2, depth-limit 5, and cost-bound 40 ...
+
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x62da3755a1ade92b578941d5e0901b5a5911a820fd93c4d3ae4b4cefd910cb52 256) (bv #xa2be243f771e00d9a99f1a62d361682d544f0e801f305e65192558a1c80269e4 256))
+(vec-div (vec-add (buffer #<procedure:buffer-fn> 'uint16 256) (buffer #<procedure:buffer-fn> 'uint16 256)) (x16 (int-imm (bv #x0003 16) #f)))
+Spec result
+(bv #x01dd1e8608434e0100621ebd3bfb2bd739ca3ce009960bbd427a373035b011bc 256)
+invoke-spec-lane with env: #((bv #x62da3755a1ade92b578941d5e0901b5a5911a820fd93c4d3ae4b4cefd910cb52 256) (bv #xa2be243f771e00d9a99f1a62d361682d544f0e801f305e65192558a1c80269e4 256))
+Concrete counter examples:
+(#((bv #x62da3755a1ade92b578941d5e0901b5a5911a820fd93c4d3ae4b4cefd910cb52 256) (bv #xa2be243f771e00d9a99f1a62d361682d544f0e801f305e65192558a1c80269e4rm: cannot remove '/tmp/base_714_spec.JSON': No such file or directory
+ 256)) #((bv #x0f6e461a2b17bbf028980c13d919d5538829254aa4cc68ab2abd61bffa4369e0 256) (bv #x6b00fd38c43601e8854e413cd9707ce55dc54109edf778a82a6009b9b029581d 256)))
+Failing lanes examples:
+(0 0)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x62da3755a1ade92b578941d5e0901b5a5911a820fd93c4d3ae4b4cefd910cb52 256) (bv #xa2be243f771e00d9a99f1a62d361682d544f0e801f305e65192558a1c80269e4 256))
+Spec Produced:
+(bv #x11bc 16)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x0f6e461a2b17bbf028980c13d919d5538829254aa4cc68ab2abd61bffa4369e0 256) (bv #x6b00fd38c43601e8854e413cd9707ce55dc54109edf778a82a6009b9b029581d 256))
+Spec Produced:
+(bv #x40a9 16)
+Synthesize by lane...
+Z3 Synthesized Solution
+(_mm512_div_epu16_dsl (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32)
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(_mm512_div_epu16_dsl
+ (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+ (lit
+  (bv #x0003000300030003000300030003000300030003000300030003000300030003 256))
+ 256
+ 16
+ 32)
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$0 sym_bv$1)
+
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+verify-across-lanes returned #t ... 
+
+Test elapsed time: 
+18
+(vec-div
+ (vec-add '(buf uint16 256) '(buf uint16 256))
+ (x16 (int-imm (bv #x0003 16) #f)))
+#(#t #(struct:_mm512_div_epu16_dsl #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 16) #(struct:lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32) 13)
+Synthesis step completed!
+Solution
+(_mm512_div_epu16_dsl
+ (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+ (lit
+  (bv #x0003000300030003000300030003000300030003000300030003000300030003 256))
+ 256
+ 16
+ 32)
+(_mm512_div_epu16_dsl (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32)
+Cost
+10
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+=======================================
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Vectorization factor for sub expression 16
+
+Synthesizing sub-expression
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Hashed expression
+(vec-add '(buf uint16 256) '(buf uint16 256))
+Leaves are bitvectors of sizes:
+(256 256)
+get-expr-grammar with base_name: base_714
+
+base_714_grammar.rkt
+/tmp/base_714_grammar.rkt
+Writing [{ 
+"name": "base_714" , 
+"semantics": [ "(extract bvadd zero-extend)"] , 
+"input_shapes": [[1,16], [1,16]], 
+"output_shape": [1 , 16], 
+"input_precision": [16, 16], 
+"output_precision": 16, 
+"args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256"], 
+"spec_invokation": "",
+"imms": [] 
+}
+] to file /tmp/base_714_spec.JSON
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-synthesizer/dsl-ir/emit_grammar.py /tmp/base_714_spec.JSON /tmp/base_714_grammar.rkt 16 0Pruning _mm256_set1_epi16 as it has an argument of size 16 which is smaller than 256
+Pruning _mm256_broadcastw_epi16 as it has an argument of size 128 which is smaller than 256
+Pruning _mm256_cvtepu8_epi16 as it has an argument of size 128 which is smaller than 256
+Prunning Based of non-immediate usage pruned 3 instructions ... 
+EARLY RETURN FROM REDUCE
+Adding:  _mm512_cvtsepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtsepi64_epi16
+Adding:  _mm256_avg_epu16 with score: 5 belonging to target agnostic class _mm256_avg_epu16
+Adding:  _mm512_cvtepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtepi64_epi32
+Adding:  _mm256_hadd_epi16 with score: 5 belonging to target agnostic class _mm256_hadd_epi32
+Adding:  _mm512_cvtusepi32_epi16 with score: 3 belonging to target agnostic class _mm_cvtusepi64_epi8
+Adding:  _mm256_add_epi16 with score: 5 belonging to target agnostic class _mm256_add_epi8
+==================================================
+Grammar Number of Load DSL Clauses:	 8
+Grammar Number of Shuffle DSL Clauses:	 7
+Grammar Number of DSL Compute Clauses:	 6
+
+Generated Grammar File
+Dynamically importing from base_714 ... 
+
+Grammar:
+#<procedure:base_714>
+(#(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)))
+Beginning Synthesis
+Synthesizing solution with depth 1, depth-limit 5, and cost-bound 40 ...
+
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x4825953dc33b1eaea0eee6aa0434d829b8b480439d7ccc123f2858708b0a5d26 256) (bv #xed5a6bd9c246440f2b1753071b2632b8a032aa3734492c2330e0ec03f3349d6a 256))
+(vec-add (buffer #<procedure:buffer-fn> 'uint16 256) (buffer #<procedure:buffer-fn> 'uint16 256))
+Spec result
+(bv #x357f0116858162bdcc0539b11f5a0ae158e62a7ad1c5f835700844737e3efa90 256)
+invoke-spec-lane with env: #((bv #x4825953dc33b1eaea0eee6aa0434d829b8b480439d7ccc123f2858708b0a5d26 256) (bv #xed5a6bd9c246440f2b1753071b2632b8a032aa3734492c2330e0ec03f3349d6a 256))
+Concrete counter examples:
+(#((bv #x4825953dc33b1eaea0eee6aa0434d829b8b480439d7ccc123f2858708b0a5d26 256) (bv #xed5a6bd9c246440f2b1753071b2632b8a032aa3734492c2330e0ec03f3349d6a 256)) #((bv #x159ac46ba37b23b2e500482ba8c56e1944a704319adeb29fece3d62be2fe8d79 256) (bv #x175a3ecc3fd7bb52f8ded92cd20daa1d54e174f7984243d024c211b6ee237e9d 256)))
+Failing lanes examples:
+(0 0)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x4825953dc33b1eaea0eee6aa0434d829b8b480439d7ccc123f2858708b0a5d26 256) (bv #xed5a6bd9c246440f2b1753071b2632b8a032aa3734492c2330e0ec03f3349d6a 256))
+Spec Produced:
+(bv #xfa90 16)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x159ac46ba37b23b2e500482ba8c56e1944a704319adeb29fece3d62be2fe8d79 256) (bv #x175a3ecc3fd7bb52f8ded92cd20daa1d54e174f7984243d024c211b6ee237e9d 256))
+Spec Produced:
+(bv #x0c16 16)
+Synthesize by lane...
+Z3 Synthesized Solution
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$2 sym_bv$3)
+
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+invoke-spec-lane with env: #(sym_bv$2 sym_bv$3)
+verify-across-lanes returned #t ... 
+
+Test elapsed time: 
+0
+(vec-add '(buf uint16 256) '(buf uint16 256))
+#(#t #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 16) 0)
+Synthesis step completed!
+Solution
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+Cost
+4
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Sub-expression Synthesis completed:
+(_mm256_add_epi8_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 16)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 16))
+========================================
+Original Halide Sub-Expression:
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (vec-add
+   (buffer #<procedure:buffer-fn> 'uint16 256)
+   (buffer #<procedure:buffer-fn> 'uint16 256)))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Sub-expression Synthesis completed:
+(_mm512_div_epu16_dsl
+ (_mm256_add_epi8_dsl
+  (reg (bv #x00 8))
+  (_mm256_add_epi8_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 16)
+  256
+  16)
+ (lit
+  (bv #x0003000300030003000300030003000300030003000300030003000300030003 256))
+ 256
+ 16
+ 32)
+========================================
+========================================
+Original Halide Expression:
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (vec-add
+   (buffer #<procedure:buffer-fn> 'uint16 256)
+   (buffer #<procedure:buffer-fn> 'uint16 256)))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x00 8)) <16 x i16>
+; (reg (bv #x02 8)) <16 x i16>
+; (reg (bv #x01 8)) <16 x i16>
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+Writing [; hydride.node.0
+; (reg 0) <16 x i16>
+; (reg 2) <16 x i16>
+; (reg 1) <16 x i16>
+
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+] to file /tmp/hydride.node.0.rkt
+
+Completed writing to file ...
+Append [; hydride.node.0
+; (reg 0) <16 x i16>
+; (reg 2) <16 x i16>
+; (reg 1) <16 x i16>
+
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.0.rkt /tmp/test.ll
+Storing synth log map synth_hash_0 to /tmp/hydride_hash_0.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_0 (hash 
+(vec-add '(buf uint16 256) '(buf uint16 256)) (vector #t (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) 0)
+(vec-div (vec-add '(buf uint16 256) '(buf uint16 256)) (x16 (int-imm (bv #x0003 16) #f))) (vector #t (_mm512_div_epu16_dsl (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32) 13)))
+] to file /tmp/hydride_hash_0.rkt
+
+Completed writing to file ...
+Lower Intrinsic on call: make_struct
+Lower Intrinsic on call: reinterpret
+Lower Intrinsic on call: reinterpret
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Starting synthesis for expr: 0
+Expression before lower intrinsic: (((uint16x16)input[ramp(t9 + 1, 1, 16)] + ((uint16x16)input[ramp(t9 + 2, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Expression before InlineLets: (((uint16x16)input[ramp(t9 + 1, 1, 16)] + ((uint16x16)input[ramp(t9 + 2, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Expression after InlineLets: (((uint16x16)input[ramp(t9 + 1, 1, 16)] + ((uint16x16)input[ramp(t9 + 2, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Expression before abstraction: (((uint16x16)input[ramp(t9 + 1, 1, 16)] + ((uint16x16)input[ramp(t9 + 2, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Input expression to synthesize: (((uint16x16)input[ramp(t53, 1, 16)] + ((uint16x16)input[ramp(t54, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Synthesis completed with return code:	0
+Synthesis took 23.245627seconds ...
+Expression after replacae abstraction: (((uint16x16)input[ramp(t9 + 1, 1, 16)] + ((uint16x16)input[ramp(t9 + 2, 1, 16)] + (uint16x16)input[ramp(t9, 1, 16)]))/x16((uint16)3))
+Generating Call with type: uint16x16 and lanes 16
+Ending synthesis for expr: 0
+
+Optimized expression: (uint16x16)hydride.node.0((uint16x16)input[ramp(t9 + 1, 1, 16)], (uint16x16)input[ramp(t9 + 2, 1, 16)], (uint16x16)input[ramp(t9, 1, 16)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint16 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_0 from hydride_hash_0.rkt ... 
+
+#hash((#(struct:vec-add (buf uint16 256) (buf uint16 256)) . #(#t #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 16) 0)) (#(struct:vec-div #(struct:vec-add (buf uint16 256) (buf uint16 256)) #(struct:x16 #(struct:int-imm (bv #x0003 16) #f))) . #(#t #(struct:_mm512_div_epu16_dsl #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 16) #(struct:lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32) 13)))
+=======================================
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (buffer #<procedure:buffer-fn> 'uint16 256))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Vectorization factor for sub expression 16
+
+Synthesizing sub-expression
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (buffer #<procedure:buffer-fn> 'uint16 256))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Hashed expression
+(vec-div (vec-add '(buf uint16 256) '(buf uint16 256)) (x16 (int-imm (bv #x0003 16) #f)))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_div_epu16_dsl
+ (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+ (lit
+  (bv #x0003000300030003000300030003000300030003000300030003000300030003 256))
+ 256
+ 16
+ 32)
+(_mm512_div_epu16_dsl (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32)
+Cost
+10
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+=======================================
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Vectorization factor for sub expression 16
+
+Synthesizing sub-expression
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Hashed expression
+(vec-add '(buf uint16 256) '(buf uint16 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+(_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16)
+Cost
+4
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint16 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-add
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (buffer #<procedure:buffer-fn> 'uint16 256))
+Sub-expression Synthesis completed:
+(_mm256_add_epi8_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 16)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm256_add_epi8_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 16))
+========================================
+Original Halide Sub-Expression:
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (vec-add
+   (buffer #<procedure:buffer-fn> 'uint16 256)
+   (buffer #<procedure:buffer-fn> 'uint16 256)))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Sub-expression Synthesis completed:
+(_mm512_div_epu16_dsl
+ (_mm256_add_epi8_dsl
+  (reg (bv #x00 8))
+  (_mm256_add_epi8_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 16)
+  256
+  16)
+ (lit
+  (bv #x0003000300030003000300030003000300030003000300030003000300030003 256))
+ 256
+ 16
+ 32)
+========================================
+========================================
+Original Halide Expression:
+(vec-div
+ (vec-add
+  (buffer #<procedure:buffer-fn> 'uint16 256)
+  (vec-add
+   (buffer #<procedure:buffer-fn> 'uint16 256)
+   (buffer #<procedure:buffer-fn> 'uint16 256)))
+ (x16 (int-imm (bv #x0003 16) #f)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint16 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x00 8)) <16 x i16>
+; (reg (bv #x02 8)) <16 x i16>
+; (reg (bv #x01 8)) <16 x i16>
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+Writing [; hydride.node.1
+; (reg 0) <16 x i16>
+; (reg 2) <16 x i16>
+; (reg 1) <16 x i16>
+
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+] to file /tmp/hydride.node.1.rkt
+
+Completed writing to file ...
+Append [; hydride.node.1
+; (reg 0) <16 x i16>
+; (reg 2) <16 x i16>
+; (reg 1) <16 x i16>
+
+
+(_mm512_div_epu16_dsl 
+(_mm256_add_epi8_dsl 
+(reg 0)  
+(_mm256_add_epi8_dsl 
+(reg 1)  
+(reg 2)  256  16  );<16 x i16>
+  256  16  );<16 x i16>
+  (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) ; <16 x i16>
+  256  16  32  );<16 x i16>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.1.rkt /tmp/test.ll
+Storing synth log map synth_hash_1 to /tmp/hydride_hash_1.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_1 (hash 
+(vec-add '(buf uint16 256) '(buf uint16 256)) (vector #t (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) 0)
+(vec-div (vec-add '(buf uint16 256) '(buf uint16 256)) (x16 (int-imm (bv #x0003 16) #f))) (vector #t (_mm512_div_epu16_dsl (_mm256_add_epi8_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 16) (lit (bv #x0003000300030003000300030003000300030003000300030003000300030003 256)) 256 16 32) 13)))
+] to file /tmp/hydride_hash_1.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 1
+Expression before lower intrinsic: (((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Expression before InlineLets: (((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Expression after InlineLets: (((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Expression before abstraction: (((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Input expression to synthesize: (((uint16x16)blur_x[ramp(t61, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp(t63, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t65, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Synthesis completed with return code:	0
+Synthesis took 2.778727seconds ...
+Expression after replacae abstraction: (((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + ((uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3))
+Generating Call with type: uint16x16 and lanes 16
+Ending synthesis for expr: 1
+
+Optimized expression: (uint16x16)hydride.node.1((uint16x16)blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)], (uint16x16)blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)], (uint16x16)blur_x[ramp(t11*16, 1, 16) aligned(16, 0)])
+Hydride Function: declare <16 x i16> @hydride.node.0(<16 x i16>, <16 x i16>, <16 x i16>)
+
+Generating Hydride Call:   %184 = call <16 x i16> @hydride.node.0(<16 x i16> %172, <16 x i16> %178, <16 x i16> %183) #17
+Hydride Function: declare <16 x i16> @hydride.node.1(<16 x i16>, <16 x i16>, <16 x i16>)
+
+Generating Hydride Call:   %214 = call <16 x i16> @hydride.node.1(<16 x i16> %202, <16 x i16> %208, <16 x i16> %213) #17
+Hydride Optimize X86
+warning: Linking two modules of different data layouts: '/tmp/hydride.ll' is '' whereas 'blur3x3' is 'e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128'
+
+Lower Intrinsic on call: _halide_buffer_get_host
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_host
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: make_struct
+Lower Intrinsic on call: halide_do_par_for
+Linking Hydride module!

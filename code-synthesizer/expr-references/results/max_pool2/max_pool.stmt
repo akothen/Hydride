@@ -1,0 +1,226 @@
+module name=max_pool, target=x86-64-noos-avx-avx2-avx512-avx512_skylake-f16c-fma-no_asserts-no_bounds_query-sse41
+external func max_pool_par_for_output_s0_x_x_x (__user_context, output.s0.x.x.x, closure_arg) {
+let closure_prototype = (void *)make_struct((void *)reinterpret((uint64)0), (void *)reinterpret((uint64)0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (uint8)0, (uint8)0, (uint1)0)
+let input = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 0)
+let output = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 1)
+let filter_height = load_typed_struct_member((void *)closure_arg, closure_prototype, 2)
+let filter_width = load_typed_struct_member((void *)closure_arg, closure_prototype, 3)
+let input.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 4)
+let input.min.2 = load_typed_struct_member((void *)closure_arg, closure_prototype, 5)
+let input.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 6)
+let input.stride.2 = load_typed_struct_member((void *)closure_arg, closure_prototype, 7)
+let output.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 8)
+let output.extent.2 = load_typed_struct_member((void *)closure_arg, closure_prototype, 9)
+let output.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 10)
+let output.min.2 = load_typed_struct_member((void *)closure_arg, closure_prototype, 11)
+let output.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 12)
+let output.stride.2 = load_typed_struct_member((void *)closure_arg, closure_prototype, 13)
+let stride_x = load_typed_struct_member((void *)closure_arg, closure_prototype, 14)
+let stride_y = load_typed_struct_member((void *)closure_arg, closure_prototype, 15)
+let t494 = load_typed_struct_member((void *)closure_arg, closure_prototype, 16)
+let t496 = load_typed_struct_member((void *)closure_arg, closure_prototype, 17)
+let t498 = load_typed_struct_member((void *)closure_arg, closure_prototype, 18)
+let t499 = load_typed_struct_member((void *)closure_arg, closure_prototype, 19)
+let t500 = load_typed_struct_member((void *)closure_arg, closure_prototype, 20)
+let t501 = load_typed_struct_member((void *)closure_arg, closure_prototype, 21)
+let t506 = load_typed_struct_member((void *)closure_arg, closure_prototype, 22)
+let t510 = load_typed_struct_member((void *)closure_arg, closure_prototype, 23)
+let t515 = load_typed_struct_member((void *)closure_arg, closure_prototype, 24)
+let t520 = load_typed_struct_member((void *)closure_arg, closure_prototype, 25)
+let t521 = load_typed_struct_member((void *)closure_arg, closure_prototype, 26)
+let t522 = load_typed_struct_member((void *)closure_arg, closure_prototype, 27)
+let t523 = load_typed_struct_member((void *)closure_arg, closure_prototype, 28)
+let t524 = load_typed_struct_member((void *)closure_arg, closure_prototype, 29)
+let t525 = load_typed_struct_member((void *)closure_arg, closure_prototype, 30)
+let t526 = load_typed_struct_member((void *)closure_arg, closure_prototype, 31)
+let t527 = load_typed_struct_member((void *)closure_arg, closure_prototype, 32)
+let t528 = load_typed_struct_member((void *)closure_arg, closure_prototype, 33)
+let t529 = load_typed_struct_member((void *)closure_arg, closure_prototype, 34)
+let t530 = load_typed_struct_member((void *)closure_arg, closure_prototype, 35)
+let output_max = (uint8)load_typed_struct_member((void *)closure_arg, closure_prototype, 36)
+let output_min = (uint8)load_typed_struct_member((void *)closure_arg, closure_prototype, 37)
+let t504 = (uint1)load_typed_struct_member((void *)closure_arg, closure_prototype, 38)
+let output.s0.x.xi.base.s = min((output.s0.x.x.x % t494)*2, output.extent.1 + -2)
+let output.s0.y.yi.base.s = min((output.s0.x.x.x/t494)*11, output.extent.2 + -11)
+let input_bounded.y.min_realized = let t583 = ((output.s0.y.yi.base.s + t522)*stride_y) in min(max(t583, input.min.2), max(input.min.2 - ((output.s0.y.yi.base.s + t523)*stride_y), 0) + t583)
+let input_bounded.y.extent_realized = let t584 = ((output.s0.y.yi.base.s + t522)*stride_y) in (let t585 = ((output.s0.y.yi.base.s + t523)*stride_y) in ((min(t496 - t584, filter_height) + t585) - min(max(t584, input.min.2), max(input.min.2 - t585, 0) + t584)))
+let input_bounded.x.min_realized = max(input.min.1 - ((output.s0.x.xi.base.s + t524)*stride_x), 0) + ((output.s0.x.xi.base.s + t525)*stride_x)
+let input_bounded.x.extent_realized = let t586 = ((output.s0.x.xi.base.s + t524)*stride_x) in (let t587 = ((output.s0.x.xi.base.s + t525)*stride_x) in ((min(t586 - input.min.1, 0) + (min(t498 - t587, filter_width) + t586)) - t587))
+allocate input_bounded[uint8 * (t499 + 32) * input_bounded.x.extent_realized * input_bounded.y.extent_realized * 1]
+let t539 = (output.s0.x.xi.base.s + t525)*stride_x
+let t540 = (output.s0.x.xi.base.s + t524)*stride_x
+let t537 = (t527 + 32)*input_bounded.x.extent_realized
+let t536 = max(input.min.1 - t540, 0) + t539
+let t535 = min(t498 - t539, filter_width) + t540
+let t534 = output.min.2 + output.s0.y.yi.base.s
+let t538 = output.min.1 + output.s0.x.xi.base.s
+for (output.s0.y.yi, 0, 11) {
+ let input_bounded.s0.y.max_2.s = min(((output.s0.y.yi + t534)*stride_y) + filter_height, t496)
+ let input_bounded.s0.y.min_2 = max((output.s0.y.yi + t534)*stride_y, input.min.2)
+ produce input_bounded {
+  let t544 = t536 - input_bounded.x.min_realized
+  let t542 = t535 - t536
+  let t543 = input_bounded.s0.y.min_2 - input_bounded.y.min_realized
+  let t541 = input_bounded.s0.y.max_2.s - input_bounded.s0.y.min_2
+  for (input_bounded.s0.y.rebased, 0, t541) {
+   let t549 = (input_bounded.s0.y.rebased + t543)*t537
+   let t550 = max(min(t496 + -1, input_bounded.s0.y.min_2 + input_bounded.s0.y.rebased), input.min.2)*input.stride.2
+   let t546 = t549 - t501
+   let t547 = t528 + t550
+   let t545 = t526 + t550
+   let t548 = t521 + t549
+   for (input_bounded.s0.x.rebased, 0, t542) {
+    let t551 = (max(min(t498 + -1, input_bounded.s0.x.rebased + t536), input.min.1)*input.stride.1) + t545
+    let t552 = ((input_bounded.s0.x.rebased + t544)*(t527 + 32)) + t546
+    for (input_bounded.s0.c.c, 0, t500) {
+     let input_bounded.s0.c.ci.base.s = (input_bounded.s0.c.c*32) + t501
+     input_bounded[ramp(input_bounded.s0.c.ci.base.s + t552, 1, 32)] = input[ramp((input_bounded.s0.c.ci.base.s + t551) + -32, 1, 32)]
+    }
+    if (t504) {
+     input_bounded[ramp((((input_bounded.s0.x.rebased + t544)*(t527 + 32)) + t548) + -32, 1, 32)] = input[ramp(((max(min(t498 + -1, input_bounded.s0.x.rebased + t536), input.min.1)*input.stride.1) + t547) + -32, 1, 32)]
+    }
+   }
+  }
+ }
+ allocate maximum[uint8 * (t499 + 32) * 2 * 1 * 1] in Stack
+ produce maximum {
+  for (maximum.s0.x.rebased, 0, 2) {
+   let t553 = ((t499 + 32)*maximum.s0.x.rebased) - t501
+   for (maximum.s0.c.c, 0, t506) {
+    let maximum.s0.c.ci.base.s = (maximum.s0.c.c*32) + t501
+    maximum[ramp(maximum.s0.c.ci.base.s + t553, 1, 32)] = x32(output_min)
+   }
+  }
+  consume input_bounded {
+   let t557 = (output.s0.y.yi + t534)*stride_y
+   let t555 = min(t496 - t557, filter_height)
+   let t554 = min(input.min.2 - t557, filter_height)
+   let t556 = t557 - input_bounded.y.min_realized
+   for (maximum.s1.x.rebased, 0, 2) {
+    let t565 = max(t554, 0)
+    let t566 = (maximum.s1.x.rebased + t538)*stride_x
+    let t558 = max(t554, t555)
+    let t561 = min(t498 - t566, filter_width)
+    let t560 = min(input.min.1 - t566, filter_width)
+    let t562 = (t527 + 32)*maximum.s1.x.rebased
+    let t564 = t566 - input_bounded.x.min_realized
+    let t563 = t556 + t565
+    for (maximum.s1.c.c, 0, t506) {
+     let maximum.s1.c.ci.base.s = (maximum.s1.c.c*32) + t501
+     let t572 = max(t560, 0)
+     let t568 = max(t560, t561)
+     let t567 = max(t558, 0) - t565
+     let t570 = maximum.s1.c.ci.base.s - t501
+     let t571 = t564 + t572
+     for (maximum.s1.r12$y.rebased, 0, t567) {
+      let t573 = max(t568, 0) - t572
+      let t575 = ((maximum.s1.r12$y.rebased + t563)*t537) + t570
+      let t574 = t562 + t570
+      for (maximum.s1.r12$x.rebased, 0, t573) {
+       maximum[ramp(t574, 1, 32)] = max(maximum[ramp(t574, 1, 32)], input_bounded[ramp(((maximum.s1.r12$x.rebased + t571)*(t527 + 32)) + t575, 1, 32)])
+      }
+     }
+    }
+   }
+  }
+ }
+ consume maximum {
+  let t578 = (output.s0.y.yi + t534)*output.stride.2
+  let t577 = t530 + t578
+  let t576 = t529 + t578
+  for (output.s0.x.xi, 0, 2) {
+   let t579 = ((t499 + 32)*output.s0.x.xi) - t515
+   let t580 = ((output.s0.x.xi + t538)*output.stride.1) + t576
+   for (output.s0.c.c, 0, t520) {
+    output[ramp((output.s0.c.c*32) + t580, 1, 32)] = min(maximum[ramp(((output.s0.c.c*32) + t579) + 32, 1, 32)], x32(output_max))
+   }
+   let t581 = ((t527 + 32)*output.s0.x.xi) + t521
+   let t582 = ((output.s0.x.xi + t538)*output.stride.1) + t577
+   for (output.s0.c.c, 0, t510) {
+    output[ramp(t582 + -32, 1, 32)] = min(maximum[ramp(t581 + -32, 1, 32)], x32(output_max))
+   }
+  }
+ }
+ free maximum
+}
+free input_bounded
+}
+
+
+external_plus_metadata func max_pool (input, stride_x, stride_y, filter_width, filter_height, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let input.min.2 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 2)
+let input.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 2)
+let input.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 2)
+let input.min.3 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 3)
+let input.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 3)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+let output.min.3 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 3)
+let output.extent.3 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 3)
+let output.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 3)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+let output.s0.x.x.x.loop_extent = ((output.extent.1 + 1)/2)*((output.extent.2 + 10)/11)
+produce output {
+ let t512 = input.min.1*input.stride.1
+ let t513 = input.min.3*input.stride.3
+ let t514 = input.min.2*input.stride.2
+ let t515 = min(output.extent.0, 32)
+ let t516 = output.min.3*output.stride.3
+ let t517 = output.min.2*output.stride.2
+ let t518 = output.min.1*output.stride.1
+ let t519 = output.extent.0 + output.min.0
+ let t520 = max(output.extent.0/32, 0)
+ let t521 = max(output.extent.0, 32)
+ let t495 = stride_y < 0
+ let t497 = stride_x < 0
+ let t504 = (t521 % 32) != 0
+ let t500 = t521/32
+ let t506 = (t521 + 31)/32
+ let t494 = (output.extent.1 + 1)/2
+ let t499 = ((t521 + -1)/32)*32
+ let t510 = ((output.extent.0 + 31)/32) - t520
+ let t511 = (((t519 - t516) - t517) - t518) - output.min.0
+ let t505 = (((t519 - t513) - t514) - t512) - input.min.0
+ let t509 = (((output.min.0 - t516) - t517) - t518) - output.min.0
+ let t501 = output.min.0 + t515
+ let t503 = ((t513 + t514) + t512) + input.min.0
+ let t496 = input.extent.2 + input.min.2
+ let t498 = input.extent.1 + input.min.1
+ for (output.s0.b.rebased, 0, output.extent.3) {
+  let t531 = output.min.3 + output.s0.b.rebased
+  let t532 = input.stride.3*t531
+  let t533 = output.stride.3*t531
+  let t527 = ((t521 + -1)/32)*32
+  let t526 = t532 - t503
+  let t525 = select(t497, 1, 0) + output.min.1
+  let t524 = select(t497, 0, 1) + output.min.1
+  let t522 = select(t495, 10, 0) + output.min.2
+  let t523 = select(t495, 0, 10) + output.min.2
+  let t530 = t511 + t533
+  let t529 = t509 + t533
+  let t528 = t505 + t532
+  let parallel_closure = (void *)make_struct(input, output, filter_height, filter_width, input.min.1, input.min.2, input.stride.1, input.stride.2, output.extent.1, output.extent.2, output.min.1, output.min.2, output.stride.1, output.stride.2, stride_x, stride_y, t494, t496, t498, t499, t500, t501, t506, t510, t515, t520, t521, t522, t523, t524, t525, t526, t527, t528, t529, t530, (uint8)output_max, (uint8)output_min, t504)
+  let closure_result = halide_do_par_for((void *)::max_pool_par_for_output_s0_x_x_x, 0, output.s0.x.x.x.loop_extent, (uint8_t *)(parallel_closure))
+  assert(closure_result == 0, closure_result)
+ }
+}
+}
+
+

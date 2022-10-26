@@ -1,0 +1,173 @@
+module name=dilate3x3, target=x86-64-noos-avx-avx2-avx512-avx512_skylake-f16c-fma-no_asserts-no_bounds_query-sse41
+external func dilate3x3_par_for_output_s0_y_y (__user_context, output.s0.y.y, closure_arg) {
+let closure_prototype = (void *)make_struct((void *)reinterpret((uint64)0), (void *)reinterpret((uint64)0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+let input = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 0)
+let output = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 1)
+let input.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 2)
+let input.min.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 3)
+let input.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 4)
+let output.extent.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 5)
+let output.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 6)
+let output.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 7)
+let output.s0.y.y.epilogue = load_typed_struct_member((void *)closure_arg, closure_prototype, 8)
+let output.s0.y.y.prologue = load_typed_struct_member((void *)closure_arg, closure_prototype, 9)
+let output.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 10)
+let t128 = load_typed_struct_member((void *)closure_arg, closure_prototype, 11)
+let t130 = load_typed_struct_member((void *)closure_arg, closure_prototype, 12)
+let t131 = load_typed_struct_member((void *)closure_arg, closure_prototype, 13)
+let t133 = load_typed_struct_member((void *)closure_arg, closure_prototype, 14)
+let t139 = load_typed_struct_member((void *)closure_arg, closure_prototype, 15)
+let t141 = load_typed_struct_member((void *)closure_arg, closure_prototype, 16)
+let t143 = load_typed_struct_member((void *)closure_arg, closure_prototype, 17)
+let t144 = load_typed_struct_member((void *)closure_arg, closure_prototype, 18)
+let t145 = load_typed_struct_member((void *)closure_arg, closure_prototype, 19)
+let t147 = load_typed_struct_member((void *)closure_arg, closure_prototype, 20)
+let t148 = load_typed_struct_member((void *)closure_arg, closure_prototype, 21)
+let t149 = load_typed_struct_member((void *)closure_arg, closure_prototype, 22)
+let t150 = load_typed_struct_member((void *)closure_arg, closure_prototype, 23)
+let t151 = load_typed_struct_member((void *)closure_arg, closure_prototype, 24)
+if ((output.s0.y.y.prologue <= output.s0.y.y) && (output.s0.y.y < output.s0.y.y.epilogue)) {
+ let output.s0.y.yi.base.s = min(output.s0.y.y*34, output.extent.1 + -34)
+ allocate repeat_edge[uint8 * (t128 + 32) * 4] in Stack
+ let t156 = ((t149 + 1)/32)*32
+ let t157 = t147 - t148
+ let t152 = output.s0.y.yi.base.s + t133
+ let t153 = output.min.1 + output.s0.y.yi.base.s
+ for (output.s0.y.yi.$n.rebased, 0, 36) {
+  produce repeat_edge {
+   let t159 = ((((output.s0.y.yi.$n.rebased + t153) + 3) % 4)*(t128 + 32)) - t131
+   let t158 = (((output.s0.y.yi.$n.rebased + t152) + -1)*input.stride.1) - input.min.0
+   for (repeat_edge.s0._0._0, 0, t151) {
+    let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + t131, t144 + 2)
+    repeat_edge[ramp(repeat_edge.s0._0._0i.base.s + t159, 1, 32)] = input[max(min(ramp(repeat_edge.s0._0._0i.base.s + -33, 1, 32), x32(t143 + -1)), x32(input.min.0)) + x32(t158)]
+   }
+   let t162 = ((((output.s0.y.yi.$n.rebased + t153) + 3) % 4)*(t128 + 32)) - t131
+   let t161 = (((output.s0.y.yi.$n.rebased + t152) + -1)*input.stride.1) - input.min.0
+   let t160 = t130 - t151
+   for (repeat_edge.s0._0._0.rebased, 0, t160) {
+    let repeat_edge.s0._0._0i.base.s = ((repeat_edge.s0._0._0.rebased + t151)*32) + t131
+    repeat_edge[ramp(repeat_edge.s0._0._0i.base.s + t162, 1, 32)] = input[ramp((repeat_edge.s0._0._0i.base.s + t161) + -33, 1, 32)]
+   }
+   let t165 = ((((output.s0.y.yi.$n.rebased + t153) + 3) % 4)*(t128 + 32)) - t131
+   let t164 = (((output.s0.y.yi.$n.rebased + t152) + -1)*input.stride.1) - input.min.0
+   let t163 = t150 - t130
+   for (repeat_edge.s0._0._0.rebased, 0, t163) {
+    let repeat_edge.s0._0._0i.base.s = min(((repeat_edge.s0._0._0.rebased + t130)*32) + t131, t144 + 2)
+    repeat_edge[ramp(repeat_edge.s0._0._0i.base.s + t165, 1, 32)] = input[max(min(ramp(repeat_edge.s0._0._0i.base.s + -33, 1, 32), x32(t143 + -1)), x32(input.min.0)) + x32(t164)]
+   }
+  }
+  if (2 <= output.s0.y.yi.$n.rebased) {
+   consume repeat_edge {
+    allocate max_y[uint8 * (t128 + 32) * 1] in Stack
+    produce max_y {
+     let t166 = output.s0.y.yi.$n.rebased + t153
+     for (max_y.s0.x.x, 0, t150) {
+      let max_y.s0.x.xi.base.s = (max_y.s0.x.x*32) + t131
+      let t96 = max_y.s0.x.xi.base.s - t131
+      max_y[ramp(t96, 1, 32)] = max(repeat_edge[ramp((((t166 + 1) % 4)*(t156 + 32)) + t96, 1, 32)], max(repeat_edge[ramp((((t166 + 2) % 4)*(t156 + 32)) + t96, 1, 32)], repeat_edge[ramp((((t166 + 3) % 4)*(t156 + 32)) + t96, 1, 32)]))
+     }
+    }
+    consume max_y {
+     let t167 = (((output.s0.y.yi.$n.rebased + t153) + -2)*output.stride.1) + t139
+     for (output.s0.x.x, 0, t148) {
+      let t97 = (output.s0.x.x*32) - t145
+      output[ramp((output.s0.x.x*32) + t167, 1, 32)] = max(max_y[ramp(t97 + 32, 1, 32)], max(max_y[ramp(t97 + 33, 1, 32)], max_y[ramp(t97 + 34, 1, 32)]))
+     }
+     let t168 = (((output.s0.y.yi.$n.rebased + t153) + -2)*output.stride.1) + t141
+     for (output.s0.x.x, 0, t157) {
+      output[ramp(t168 + -32, 1, 32)] = max(max_y[ramp(t149 + -32, 1, 32)], max(max_y[ramp(t149 + -31, 1, 32)], max_y[ramp(t149 + -30, 1, 32)]))
+     }
+     free max_y
+    }
+   }
+  }
+ }
+ free repeat_edge
+} else {
+ let output.s0.y.yi.base.s = min(output.s0.y.y*34, output.extent.1 + -34)
+ allocate repeat_edge[uint8 * (t128 + 32) * 4] in Stack
+ let t171 = ((t149 + 1)/32)*32
+ let t169 = output.s0.y.yi.base.s + t133
+ let t170 = output.min.1 + output.s0.y.yi.base.s
+ for (output.s0.y.yi.$n.rebased, 0, 36) {
+  produce repeat_edge {
+   let t173 = ((((output.s0.y.yi.$n.rebased + t170) + 3) % 4)*(t128 + 32)) - t131
+   let t172 = ((max(min(output.s0.y.yi.$n.rebased + t169, input.extent.1), 1) + -1)*input.stride.1) - input.min.0
+   for (repeat_edge.s0._0._0, 0, t150) {
+    let repeat_edge.s0._0._0i.base.s = min((repeat_edge.s0._0._0*32) + t131, t144 + 2)
+    repeat_edge[ramp(repeat_edge.s0._0._0i.base.s + t173, 1, 32)] = input[max(min(ramp(repeat_edge.s0._0._0i.base.s + -33, 1, 32), x32(t143 + -1)), x32(input.min.0)) + x32(t172)]
+   }
+  }
+  if (2 <= output.s0.y.yi.$n.rebased) {
+   consume repeat_edge {
+    allocate max_y[uint8 * (t128 + 32) * 1] in Stack
+    produce max_y {
+     let t174 = output.s0.y.yi.$n.rebased + t170
+     for (max_y.s0.x.x, 0, t150) {
+      let max_y.s0.x.xi.base.s = (max_y.s0.x.x*32) + t131
+      let t102 = max_y.s0.x.xi.base.s - t131
+      max_y[ramp(t102, 1, 32)] = max(repeat_edge[ramp((((t174 + 1) % 4)*(t171 + 32)) + t102, 1, 32)], max(repeat_edge[ramp((((t174 + 2) % 4)*(t171 + 32)) + t102, 1, 32)], repeat_edge[ramp((((t174 + 3) % 4)*(t171 + 32)) + t102, 1, 32)]))
+     }
+    }
+    consume max_y {
+     let t175 = (((output.s0.y.yi.$n.rebased + t170) + -2)*output.stride.1) + t139
+     for (output.s0.x.x, 0, t147) {
+      let output.s0.x.xi.base.s = min(output.s0.x.x*32, output.extent.0 + -32)
+      let t103 = output.s0.x.xi.base.s - t145
+      output[ramp(output.s0.x.xi.base.s + t175, 1, 32)] = max(max_y[ramp(t103 + 32, 1, 32)], max(max_y[ramp(t103 + 33, 1, 32)], max_y[ramp(t103 + 34, 1, 32)]))
+     }
+    }
+    free max_y
+   }
+  }
+ }
+ free repeat_edge
+}
+}
+
+
+external_plus_metadata func dilate3x3 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let output.s0.y.y.prologue = min((output.extent.1 + 33)/34, max((input.min.1 - output.min.1)/34, -1) + 1)
+ let output.s0.y.y.epilogue = max(min((output.extent.1 + 33)/34, max((input.min.1 - output.min.1)/34, -1) + 1), min(((input.extent.1 + input.min.1) - output.min.1) + -1, output.extent.1)/34)
+ let t143 = input.extent.0 + input.min.0
+ let t144 = output.extent.0 + output.min.0
+ let t145 = min(output.extent.0, 32)
+ let t146 = output.min.1*output.stride.1
+ let t147 = (output.extent.0 + 31)/32
+ let t148 = max(output.extent.0/32, 0)
+ let t149 = max(output.extent.0, 32)
+ let t150 = (t149 + 33)/32
+ let t151 = min(max(((input.min.0 - t145) - output.min.0)/32, -2) + 2, t150)
+ let t130 = max((min(((min(min(t143 + 30, t144) + 1, t143) - t145) - output.min.0) + 31, t149) + 2)/32, t151)
+ let t127 = (output.extent.1 + 33)/34
+ let t128 = ((t149 + 1)/32)*32
+ let t133 = output.min.1 - input.min.1
+ let t141 = output.extent.0 - t146
+ let t139 = 0 - t146
+ let t131 = output.min.0 + t145
+ let parallel_closure = (void *)make_struct(input, output, input.extent.1, input.min.0, input.stride.1, output.extent.0, output.extent.1, output.min.1, output.s0.y.y.epilogue, output.s0.y.y.prologue, output.stride.1, t128, t130, t131, t133, t139, t141, t143, t144, t145, t147, t148, t149, t150, t151)
+ let closure_result = halide_do_par_for((void *)::dilate3x3_par_for_output_s0_y_y, 0, t127, (uint8_t *)(parallel_closure))
+ assert(closure_result == 0, closure_result)
+}
+}
+
+
