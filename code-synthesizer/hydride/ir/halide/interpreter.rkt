@@ -207,15 +207,15 @@
     [(buffer data elemT buffsize) (list expr)]
 
     ;; Type Casts
-    [(uint8x1 sca) (list)]
-    [(uint16x1 sca) (list)]
-    [(uint32x1 sca) (list)]
-    [(uint64x1 sca) (list)]
+    [(uint8x1 sca) (list sca)]
+    [(uint16x1 sca) (list sca)]
+    [(uint32x1 sca) (list sca)]
+    [(uint64x1 sca) (list sca)]
     
-    [(int8x1 sca) (list)]
-    [(int16x1 sca) (list)]
-    [(int32x1 sca) (list)]
-    [(int64x1 sca) (list)]
+    [(int8x1 sca) (list sca)]
+    [(int16x1 sca) (list sca)]
+    [(int32x1 sca) (list sca)]
+    [(int64x1 sca) (list sca)]
 
     [(uint1x32 vec) (list vec)]
     [(uint1x64 vec) (list vec)]
@@ -374,15 +374,17 @@
     [(load-sca buf idx) (buffer-ref (interpret buf) (interpret idx))]
 
     ;; Type Casts
-    [(uint8x1 sca) (cpp:cast (interpret sca) 'uint8)]
-    [(uint16x1 sca) (cpp:cast (interpret sca) 'uint16)]    
-    [(uint32x1 sca) (cpp:cast (interpret sca) 'uint32)]
-    [(uint64x1 sca) (cpp:cast (interpret sca) 'uint64)]
+    [(uint8x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint8))]
+    [(uint16x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint16))]    
+    [(uint32x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint32))]
+    [(uint64x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'uint64))]
 
-    [(int8x1 sca) (cpp:cast (interpret sca) 'int8)]
-    [(int16x1 sca) (cpp:cast (interpret sca) 'int16)]
-    [(int32x1 sca) (cpp:cast (interpret sca) 'int32)]
-    [(int64x1 sca) (cpp:cast (interpret sca) 'int64)]
+
+    [(int8x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'int8))]
+    [(int16x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'int16))]    
+    [(int32x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'int32))]
+    [(int64x1 sca) (lambda (i) (cpp:cast ((interpret sca) 0) 'int64))]
+
 
     ;[(uint1x32 vec) NYI: Not sure what would be casted into uint1?]
     ;[(uint1x64 vec) NYI: Not sure what would be casted into uint1?]
@@ -682,7 +684,7 @@
     
     [(vec-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
 
-    [(vec-sat-add v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvaddnsw) (list zero-extend bvaddnuw)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sat-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend bvaddnsw bvsmax) (list zero-extend bvaddnuw bvumax)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsubnsw) (list zero-extend bvsubnuw)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
