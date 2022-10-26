@@ -116,7 +116,7 @@ class RoseInstSelectorGenerator():
         '''.format(InstName + "_wrapper", ",".join(Permutation))
       String += Pattern
     FinalPattern = '''
-      if(CI->getCalledFunction()->getName() == \"{}\") {{ 
+      if(CI->getCalledFunction()->getName() == \"llvm.hydride.{}_dsl\") {{ 
         {} 
       }} 
     '''.format(TargetAgnosticInst, String)
