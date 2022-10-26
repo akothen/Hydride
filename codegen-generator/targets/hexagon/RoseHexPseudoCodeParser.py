@@ -26,6 +26,8 @@ def GetSemanticsFor(Name : str, Inst : str, Pseudocode : str):
   def GetVariableSize(Variable, Pseudocode):
     if (Variable + ".v[") in Pseudocode:
         return 2048
+    if "Vxx" in Variable:
+      return 2048
     if "Q" in Variable:
       return 128
     elif "R" in Variable:
@@ -125,11 +127,17 @@ def GetSemanticsFor(Name : str, Inst : str, Pseudocode : str):
     if isinstance(param, UnaryExpr):
       param = param.a
     if type(param) == Var:
+      # Ignore parameters that contain "#"
+      if "#" in param.name:
+        continue
       param_sizes.append(GetVariableSize(param.name, Pseudocode))
       if IsVariableScalar(param.name):
         scalarregs.append(param.name)
     elif type(param) == ElemTypeInfo:
       assert type(param.obj) == Var
+      # Ignore parameters that contain "#"
+      if "#" in param.obj.name:
+        continue
       param_sizes.append(GetVariableSize(param.obj.name, Pseudocode))
       if IsVariableScalar(param.obj.name):
         scalarregs.append(param.obj.name)
