@@ -122,7 +122,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (handler (vec-add (visit v1 handler) (visit v2 handler)))]
+    [(vec-sat-add v1 v2) (handler (vec-sat-add (visit v1 handler) (visit v2 handler)))]
     [(vec-sub v1 v2) (handler (vec-sub (visit v1 handler) (visit v2 handler)))]
+    [(vec-sat-sub v1 v2) (handler (vec-sat-sub (visit v1 handler) (visit v2 handler)))]
     [(vec-mul v1 v2) (handler (vec-mul (visit v1 handler) (visit v2 handler)))]
     [(vec-div v1 v2) (handler (vec-div (visit v1 handler) (visit v2 handler)))]
     [(vec-mod v1 v2) (handler (vec-mod (visit v1 handler) (visit v2 handler)))]

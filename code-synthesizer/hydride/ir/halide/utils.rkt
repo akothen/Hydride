@@ -782,6 +782,22 @@
         )
         )
      ]
+    ;; Operations
+    [(vec-sat-add v1 v2) 
+       (if is-leaf-depth
+        (values (vec-sat-add (arg 0) (arg 1)) 2)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (define remaining-values (- (vector-length args) args-used1))
+          (define remaining-args (vector-take-right args remaining-values))
+
+          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+
+          (values (vec-sat-add leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+        )
+        )
+     ]
     [(vec-sub v1 v2) 
        (if is-leaf-depth
         (values (vec-sub (arg 0) (arg 1)) 2)
@@ -792,6 +808,19 @@
           (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
 
           (values (vec-sub leaf1-sol leaf2-sol) (+ args-used1 args-used2))
+        )
+        )
+     ]
+    [(vec-sat-sub v1 v2) 
+       (if is-leaf-depth
+        (values (vec-sat-sub (arg 0) (arg 1)) 2)
+        (begin
+          (define-values (leaf1-sol args-used1) (bind-expr-args v1 args (- depth 1)))
+          (define remaining-values (- (vector-length args) args-used1))
+          (define remaining-args (vector-take-right args remaining-values))
+          (define-values (leaf2-sol args-used2) (bind-expr-args v2 remaining-args (- depth 1)))
+
+          (values (vec-sat-sub leaf1-sol leaf2-sol) (+ args-used1 args-used2))
         )
         )
      ]
@@ -1352,7 +1381,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (vec-size v1)]
+    [(vec-sat-add v1 v2) (vec-size v1)]
     [(vec-sub v1 v2) (vec-size v1)]
+    [(vec-sat-sub v1 v2) (vec-size v1)]
     [(vec-mul v1 v2) (vec-size v1)]
     [(vec-div v1 v2) (vec-size v1)]
     [(vec-mod v1 v2) (vec-size v1)]
@@ -1639,7 +1670,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (get-elemT v1)]
+    [(vec-sat-add v1 v2) (get-elemT v1)]
     [(vec-sub v1 v2) (get-elemT v1)]
+    [(vec-sat-sub v1 v2) (get-elemT v1)]
     [(vec-mul v1 v2) (get-elemT v1)]
     [(vec-div v1 v2) (get-elemT v1)]
     [(vec-mod v1 v2) (get-elemT v1)]
@@ -1700,14 +1733,14 @@
 
     ;; Type Casts
     [(uint8x1 sca) 8]
-    [(uint16x1 sca) 8]
-    [(uint32x1 sca) 8]
-    [(uint64x1 sca) 8]
+    [(uint16x1 sca) 16]
+    [(uint32x1 sca) 32]
+    [(uint64x1 sca) 64]
     
     [(int8x1 sca) 8]
-    [(int16x1 sca) 8]
-    [(int32x1 sca) 8]
-    [(int64x1 sca) 8]
+    [(int16x1 sca) 16]
+    [(int32x1 sca) 32]
+    [(int64x1 sca) 64]
 
     [(uint1x32 vec) 1]
     [(uint1x64 vec) 1]
@@ -1791,7 +1824,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (vec-precision v1)]
+    [(vec-sat-add v1 v2) (vec-precision v1)]
     [(vec-sub v1 v2) (vec-precision v1)]
+    [(vec-sat-sub v1 v2) (vec-precision v1)]
     [(vec-mul v1 v2) (vec-precision v1)]
     [(vec-div v1 v2) (vec-precision v1)]
     [(vec-mod v1 v2) (vec-precision v1)]

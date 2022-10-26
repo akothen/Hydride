@@ -159,9 +159,11 @@
 (struct sca-bwand (v1 v2) #:transparent)
 
 (struct vec-add (v1 v2 ) #:transparent)
+(struct vec-sat-add (v1 v2 ) #:transparent)
 (struct vec-sub (v1 v2) #:transparent)
+(struct vec-sat-sub (v1 v2 ) #:transparent)
 (struct vec-mul (v1 v2) #:transparent)
-(struct vec-div (v1 v2) #:transparent)
+(struct vec-div (v1 v2) #:transparent #:mutable)
 (struct vec-mod (v1 v2) #:transparent)
 (struct vec-max (v1 v2) #:transparent)
 (struct vec-min (v1 v2) #:transparent)

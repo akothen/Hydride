@@ -8,6 +8,7 @@
   (only-in racket/base error bitwise-and)
   rosette/lib/destruct
   hydride/cpp
+  hydride/utils/bvops
   hydride/ir/halide/types)
 
 (provide (prefix-out halide: (all-defined-out)))
@@ -150,7 +151,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (vec-len v1)]
+    [(vec-sat-add v1 v2) (vec-len v1)]
     [(vec-sub v1 v2) (vec-len v1)]
+    [(vec-sat-sub v1 v2) (vec-len v1)]
     [(vec-mul v1 v2) (vec-len v1)]
     [(vec-div v1 v2) (vec-len v1)]
     [(vec-mod v1 v2) (vec-len v1)]
@@ -296,7 +299,9 @@
 
     ;; Operations
     [(vec-add v1 v2) (list v1 v2)]
+    [(vec-sat-add v1 v2) (list v1 v2)]
     [(vec-sub v1 v2) (list v1 v2)]
+    [(vec-sat-sub v1 v2) (list v1 v2)]
     [(vec-mul v1 v2) (list v1 v2)]
     [(vec-div v1 v2) (list v1 v2)]
     [(vec-mod v1 v2) (list v1 v2)]
@@ -482,7 +487,10 @@
     [(sca-bwand v1 v2) (do-bwand (interpret v1) (interpret v2))]
     
     [(vec-add v1 v2) (lambda (i) (do-add ((interpret v1) i) ((interpret v2) i)))]
+
+    [(vec-sat-add v1 v2) (lambda (i) (do-sat-add ((interpret v1) i) ((interpret v2) i)))]
     [(vec-sub v1 v2) (lambda (i) (do-sub ((interpret v1) i) ((interpret v2) i)))]
+    [(vec-sat-sub v1 v2) (lambda (i) (do-sat-sub ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mul v1 v2) (lambda (i) (do-mul ((interpret v1) i) ((interpret v2) i)))]
     [(vec-div v1 v2) (lambda (i) (do-div ((interpret v1) i) ((interpret v2) i)))]
     [(vec-mod v1 v2) (lambda (i) (do-mod ((interpret v1) i) ((interpret v2) i)))]
@@ -673,7 +681,10 @@
     [(sca-bwand v1 v2) (append (list extract bvand) (get-bv-ops v1) (get-bv-ops v2) )]
     
     [(vec-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+
+    [(vec-sat-add v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvaddnsw) (list zero-extend bvaddnuw)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsubnsw) (list zero-extend bvsubnuw)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsrem bvsmod) (list zero-extend bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
@@ -797,6 +808,35 @@
        res
    ;    ])
    )
+
+
+(define (do-sat-add lhs rhs)
+  (define outT (infer-out-type lhs rhs))
+   (define bitwidth (bvlength (cpp:eval lhs)))
+  (cond
+    [(cpp:signed-type? outT)
+      (mk-cpp-expr (bvaddnsw (cpp:eval lhs) (cpp:eval rhs) bitwidth) outT)
+     ]
+    [else
+      (mk-cpp-expr (bvaddnuw (cpp:eval lhs) (cpp:eval rhs) bitwidth) outT)
+      ]
+    )
+  )
+
+
+(define (do-sat-sub lhs rhs)
+  (define outT (infer-out-type lhs rhs))
+   (define bitwidth (bvlength (cpp:eval lhs)))
+
+  (cond
+    [(cpp:signed-type? outT)
+      (mk-cpp-expr (bvsubnsw (cpp:eval lhs) (cpp:eval rhs) bitwidth) outT)
+     ]
+    [else
+      (mk-cpp-expr (bvsubnuw (cpp:eval lhs) (cpp:eval rhs) bitwidth) outT)
+      ]
+    )
+  )
   
 
 (define (do-sub lhs rhs)

@@ -540,8 +540,13 @@ namespace Halide {
 
                             return tabs() + "(" + op->name + rkt_args + ")";
                         } 
+                        else if (op->is_intrinsic(Call::saturating_add)){
+                            return print_intrinsic("sat-add", op->args, op->type.is_scalar());
+                        }
+                        else if (op->is_intrinsic(Call::saturating_sub)){
+                            return print_intrinsic("sat-sub", op->args, op->type.is_scalar());
+                        }
                         else if (op->is_intrinsic(Call::shift_right)) {
-
                             return print_intrinsic("shr", op->args, op->type.is_scalar());
                         } 
                         else if (op->is_intrinsic(Call::shift_left)) {
@@ -1250,7 +1255,6 @@ namespace Halide {
                     }
 
                     Stmt mutate(const Stmt &stmt) override {
-                        debug(0) << "Mutating: "<< stmt << "\n";
                         
                         // Undefined statements may arise in the case
                         // of if-then-else blocks where the else case
@@ -1607,10 +1611,20 @@ namespace Halide {
                             // Lower intrinsics
                             Expr spec_expr = LowerIntrinsics().mutate(expr);
 
+
+                            std::cout << "Expression before InlineLets: "<< spec_expr <<"\n";
+
+                            spec_expr = InlineLets().mutate(spec_expr);
+
+
+                            std::cout << "Expression after InlineLets: "<< spec_expr <<"\n";
+
                             std::cout << "Expression before abstraction: "<< spec_expr <<"\n";
 
                             // Abstract out unsupported nodes if they appear as sub-expressions
                             spec_expr = AbstractUnsupportedNodes(arch, abstractions).mutate(spec_expr);
+
+
 
 
 
@@ -1710,12 +1724,19 @@ namespace Halide {
                         // Generate cleaner specs. Since performance is not a concern, we can freely
                         // use widening casts etc.
                         if (op->is_intrinsic(Call::saturating_add)) {
+                            /*
                             lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
                                         op->args[0].type().min(), op->args[0].type().max()));
+                                        */
+                            // Map Saturating add to saturating add in Rosette.
                         } 
                         else if (op->is_intrinsic(Call::saturating_sub)) {
+                            /*
                             lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
                                         op->args[0].type().min(), op->args[0].type().max()));
+                                    */
+
+                            // Map Saturating sub to saturating sub in Rosette.
                         } 
                         else if (op->is_intrinsic(Call::halving_add)) {
                             lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
@@ -1808,6 +1829,166 @@ namespace Halide {
                         } 
                         else
                             return IRMutator::visit(op);
+                    }
+
+                    Expr visit(const LT *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const LE *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+
+                    Expr visit(const NE *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const EQ *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const GT *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const GE *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+
+                    Expr visit(const Not *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Or *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const And *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Min *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
+                    Expr visit(const Max *op) override {
+
+                        // Abstract scalar arithmetic 
+                        // operations.
+                        if(!op->type.is_vector()){
+                            std::string uname = unique_name('t');
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        }
+
+                        return IRMutator::visit(op);
+
                     }
 
                     Expr visit(const Add *op) override {
@@ -2047,6 +2228,33 @@ namespace Halide {
                     public:
                     ReplaceAbstractedNodes(std::map<std::string, Expr> &abstrs, std::map<std::string, Expr> &lvs)
                         : abstractions(abstrs), letvars(lvs) {}
+                };
+
+
+                // Replace Let expressions (not stmt with side effects)
+                // with the value of the let replaced in the expression.
+                class InlineLets : public IRMutator {
+                    using IRMutator::visit;
+
+                    std::map<std::string, Expr> VariableNameToExpr;
+
+
+                    Expr visit(const Variable *v) override {
+                        if (VariableNameToExpr.count(v->name) == 0)
+                            return IRMutator::visit(v);
+                        return mutate(VariableNameToExpr[v->name]);
+                    }
+
+                    Expr visit(const Let *op) override {
+                        VariableNameToExpr[op->name] = op->value;
+                        // All nested let statements should be inlined
+                        Expr simplified_body = mutate(op->body);
+
+                        return simplified_body;
+                    }
+
+                    public:
+                    InlineLets(){}
                 };
 
                 bool containsFloat(const Expr &e) {
@@ -2415,6 +2623,7 @@ namespace Halide {
 
         Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
             debug(0) << "Hydride Optimize X86" <<"\n";
+            /*
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
@@ -2426,7 +2635,8 @@ namespace Halide {
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
-            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
+            */
+            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
         }
 
         Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {
