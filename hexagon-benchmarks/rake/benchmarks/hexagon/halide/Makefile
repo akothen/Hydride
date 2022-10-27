@@ -19,7 +19,8 @@ benchmarks = gaussian3x3 \
 			 max_pool \
 			 average_pool \
 			 conv_nn \
-			 fully_connected
+			 fully_connected \
+			 camera_pipe
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 
