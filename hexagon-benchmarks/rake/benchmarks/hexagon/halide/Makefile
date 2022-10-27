@@ -19,7 +19,8 @@ benchmarks = gaussian3x3 \
 			 average_pool \
 			 conv_nn \
 			 fully_connected \
-			 camera_pipe
+			 camera_pipe \
+			 fft
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 
@@ -43,14 +44,19 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
-		-o $@/bin \
-		-g $@ \
-		-e static_library,stmt,h,llvm_assembly,assembly \
-		-f $@ target=host
-	
-	
-#-noos-no_bounds_query-no_asserts
+#	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
+#		-o $@/bin \
+#		-g $@ \
+#		-e static_library,stmt,h,llvm_assembly,assembly \
+#		-f $@ target=host
+
+fft:
+# 	Compile the generator
+	g++ -std=c++11 -fno-rtti -O3 \
+		-I $(HALIDE_DISTRIB)/include -I $(HALIDE_DISTRIB)/tools \
+		-g -Wall $@/src/$@_generator.cpp $@/src/fft.cpp $(HALIDE_DISTRIB)/tools/GenGen.cpp \
+		-o $@/bin/$@_generator \
+		-L $(HALIDE_DISTRIB)/lib -lHalide $(shell $(LLVM_ROOT)/bin/llvm-config --system-libs --link-static)
 
 # Make the bin dirs if needed
 $(bin_dirs): %:
