@@ -36,6 +36,14 @@ class MatrixMultiply1024 : public Generator<MatrixMultiply1024> {
 
         }
 
+        void schedule() {
+            if (auto_schedule) {
+                A.set_estimates({{0, 1024}, {0, 1024}});
+                B.set_estimates({{0, 1024}, {0, 1024}});
+                res.set_estimates({{0, 1024}, {0, 1024}});
+            }
+        }
+
 };
 
 HALIDE_REGISTER_GENERATOR(MatrixMultiply1024, matmul_1024)

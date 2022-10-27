@@ -36,6 +36,14 @@ class MatrixMultiply512 : public Generator<MatrixMultiply512> {
 
         }
 
+        void schedule() {
+            if (auto_schedule) {
+                A.set_estimates({{0, 512}, {0, 512}});
+                B.set_estimates({{0, 512}, {0, 512}});
+                res.set_estimates({{0, 512}, {0, 512}});
+            }
+        }
+
 };
 
 HALIDE_REGISTER_GENERATOR(MatrixMultiply512, matmul_512)

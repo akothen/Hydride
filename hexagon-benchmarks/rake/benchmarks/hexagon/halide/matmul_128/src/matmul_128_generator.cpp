@@ -36,6 +36,14 @@ class MatrixMultiply128 : public Generator<MatrixMultiply128> {
 
         }
 
+        void schedule() {
+            if (auto_schedule) {
+                A.set_estimates({{0, 128}, {0, 128}});
+                B.set_estimates({{0, 128}, {0, 128}});
+                res.set_estimates({{0, 128}, {0, 128}});
+            }
+        }
+
 };
 
 HALIDE_REGISTER_GENERATOR(MatrixMultiply128, matmul_128)

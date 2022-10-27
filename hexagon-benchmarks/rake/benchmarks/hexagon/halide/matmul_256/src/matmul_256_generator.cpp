@@ -36,6 +36,14 @@ class MatrixMultiply256 : public Generator<MatrixMultiply256> {
 
         }
 
+        void schedule() {
+            if (auto_schedule) {
+                A.set_estimates({{0, 256}, {0, 256}});
+                B.set_estimates({{0, 256}, {0, 256}});
+                res.set_estimates({{0, 256}, {0, 256}});
+            }
+        }
+
 };
 
 HALIDE_REGISTER_GENERATOR(MatrixMultiply256, matmul_256)
