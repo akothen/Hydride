@@ -143,6 +143,11 @@ namespace {
         }
 
         void schedule() {
+            if (auto_schedule) {
+                // Do nothing. For some reason they don't provide estimates here. See:
+                // - Rake: https://github.com/uwplse/rake/blob/master/benchmarks/hexagon/halide/camera_pipe/src/camera_pipe_generator.cpp#L155
+                // - Halide upstream: https://github.com/halide/Halide/blob/da87cb28ac40be4752cbc119aac7253726dc3baa/apps/camera_pipe/camera_pipe_generator.cpp#L158
+            }
         }
     };
 
@@ -332,6 +337,11 @@ namespace {
         blackLevel.set_estimate(25);
         whiteLevel.set_estimate(1023);
         processed.set_estimates({ {0, 2592}, {0, 1968}, {0, 3} });
+
+        // Schedule
+        if (auto_schedule) {
+            // They put this inside generate() for some reason.
+        }
     };
 
 }  // namespace
