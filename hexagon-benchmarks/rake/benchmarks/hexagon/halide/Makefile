@@ -8,7 +8,6 @@ benchmarks = gaussian3x3 \
 			 sobel3x3 \
 			 blur3x3 \
 			 matmul \
-			 matmul_simple \
 			 matmul_128 \
 			 matmul_256 \
 			 matmul_512 \
