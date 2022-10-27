@@ -9,6 +9,10 @@ benchmarks = gaussian3x3 \
 			 blur3x3 \
 			 matmul \
 			 matmul_simple \
+			 matmul_128 \
+			 matmul_256 \
+			 matmul_512 \
+			 matmul_1024 \
 			 add \
 			 mul \
 			 l2norm \
@@ -39,8 +43,7 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; HL_EXPR_DEPTH=$(EXPR_DEPTH) HL_ENABLE_HYDRIDE=$(ENABLE_HYDRIDE) ./$@/bin/$@_generator \
-		-t 0 \
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
 		-o $@/bin \
 		-g $@ \
 		-e static_library,stmt,h,llvm_assembly,assembly \
@@ -55,5 +58,3 @@ $(bin_dirs): %:
 
 clean:
 	rm -rf $(bin_dirs)
-	rm -rf halide_expr_*
-	rm /tmp/hydride_exprs.rkt
