@@ -126,7 +126,7 @@ def create_two_input_swizzle(input_vector_sizes = [],
                 rotate_sizes[i]
             ),
             in_vectsize = input_vector_sizes[i],
-            out_vectsize = (num_elem_sizes[i] / lane_sizes[i])  * (2 * group_sizes[i]) * precisions[i],
+            out_vectsize = precisions[i] * max(1, num_elem_sizes[i] // lane_sizes[i]) * ((2 * group_sizes[i]) + lane_offsets[i]),
             lane_size = lane_sizes[i],
             in_precision = precisions[i],
             out_precision = precisions[i],

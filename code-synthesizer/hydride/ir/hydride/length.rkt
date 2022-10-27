@@ -31,7 +31,7 @@
             [(idx-add i1 i2) 1]
             [(idx-mul i1 i2) 1]
             [(vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o) (* num_3 prec_i_o)]
-            [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8) (* (/ num_2 lane_size) (* 2 num_6) prec_i_o)]
+            [(vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8) (* (max 1 (/ num_2 lane_size)) (+ num_4 (* 2 num_6)) prec_i_o)]
             [(interleave-vectors_dsl v0 v1 size_i_o prec_i_o) (* 2 size_i_o)]
             [(interleave-vector_dsl v0 size_i_o prec_i_o) size_i_o]
             [(deinterleave-vector_dsl v0 size_i_o prec_i_o) size_i_o]

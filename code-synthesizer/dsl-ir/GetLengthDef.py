@@ -40,9 +40,10 @@ class GetLengthDef:
 
         swizzle_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_swizzle_dsl)
         swizzle_args = dummy_vector_swizzle_dsl.get_sample_context().context_args
-        swizzle_len_expr = "(* (/ {} {}) (* 2 {}) {})".format(
-            swizzle_args[2].name, swizzle_args[5].name, swizzle_args[6].name, swizzle_args[3].name
-        )
+        #swizzle_len_expr = "(* (/ {} {}) (* 2 {}) {})".format(
+        #swizzle_args[2].name, swizzle_args[5].name, swizzle_args[6].name, swizzle_args[3].name
+        #)
+        swizzle_len_expr = "(* (max 1 (/ {} {})) (+ {} (* 2 {})) {})".format(swizzle_args[2].name, swizzle_args[5].name, swizzle_args[4].name, swizzle_args[6].name, swizzle_args[3].name)
         defaults.append("[{} {}]".format(swizzle_dsl_use, swizzle_len_expr))
 
 

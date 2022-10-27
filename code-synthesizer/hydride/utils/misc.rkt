@@ -61,16 +61,23 @@
   
   )
 
+
+
+;; Expression for length of result of swizzle is:
+;; = max(1, num_elems / lane_size) * [(2 * (group_size + lane_offset) - lane_offset)]  * type_size
+;; = max(1, num_elems / lane_size) * [ 2* group_size + lane_offset ] * type_size
+
 ;; General version of swizzle with two input vectors
+;;                                        8         16         0          16         8           8       0
 (define (vector-two-input-swizzle v1 v2 num_elems type_size lane_offset lane_size group_size dis_size rot_factor)
-  (define high_lane_offset (+ group_size lane_offset))
+  (define high_lane_offset (+ group_size lane_offset)) ;; 8 + 0 = 8
   (define result
     (apply
       concat
-      (for/list ([i (range 0 num_elems lane_size)])
+      (for/list ([i (range 0 num_elems lane_size)]) ;; 0 -> 8 step 16 -> only runs once hence min(1, num_elems / lane_size)
                 (apply
                   concat
-                  (for/list ([j (range lane_offset (* 2 high_lane_offset))])
+                  (for/list ([j (range lane_offset (* 2 high_lane_offset))]) ;; 0 -> 16 step one -> (2 * (group_size + lane_offset))
                             (define raw-index (- j lane_offset))
                             (define swizzled-index (swizzle raw-index (* 2 group_size) dis_size rot_factor))
                             (if (< swizzled-index group_size)
