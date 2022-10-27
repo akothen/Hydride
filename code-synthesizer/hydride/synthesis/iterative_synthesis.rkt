@@ -606,9 +606,12 @@
         ;; If not verified then attempt synthesizing with appended counter example
         (begin
           (define new-failing-cex 
-            (if (eq? (memq new-cex cex-ls) #f)
+            (if (member new-cex cex-ls)
+              (begin
+                (debug-log "Returned a counter example which was previously seen, generating different cex")
+                (create-concrete-bvs bitwidth-list)
+              )
               new-cex
-              (create-concrete-bvs bitwidth-list)
               )
             )
           (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-failing-cex) word-size))

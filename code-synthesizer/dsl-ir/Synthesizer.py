@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["_mm256_movm_epi64"]
+DEBUG_LIST = []
 SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -226,8 +226,8 @@ class Synthesizer:
             else:
                 first_half_memo.append(datum)
 
-            input_vector_sizes.append(input_size)
-            num_elem_sizes.append(num_elems)
+            input_vector_sizes.append(input_size) #256
+            num_elem_sizes.append(num_elems) # 256 / 16 = 16
             precisions.append(type_size)
             lane_offsets.append(0)
             lane_sizes.append(num_elems)
@@ -295,7 +295,13 @@ class Synthesizer:
         for idx, input_size in enumerate(self.input_sizes):
             if not ENABLE_SHUFFLE:
                 continue
+
+            # input_size = 16
+
+            # 16, 16
             precision = self.spec.input_precision[idx]
+
+            # 16, 16
             number_elems = self.spec.input_shapes[idx][1]
 
             # Scalar case, no need to shuffle
@@ -469,7 +475,7 @@ class Synthesizer:
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 25)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
@@ -562,13 +568,14 @@ class Synthesizer:
     def prune_ops_relying_on_imm(self, ops, ctxs):
         # Imms used in specification, conservatively keep
         # all operations
-        if self.spec.imms != []:
-            return (ops, ctxs)
+        #if self.spec.imms != []:
+        #    return (ops, ctxs)
 
+        smallest_imm = min([imm[1] for imm in self.spec.imms], default = self.output_slice_length)
         smallest_input = min(self.input_sizes)
         smallest_output = self.output_slice_length
 
-        smallest_bv_size = min(smallest_input, smallest_output)
+        smallest_bv_size = min(smallest_input, smallest_output, smallest_imm)
 
         pruned_ops = []
         pruned_ctxs = []
@@ -659,6 +666,8 @@ class Synthesizer:
         print("Num Broadcasts:", num_broadcasts)
         print("Num Computes:", num_computes)
 
+        inserted_names = []
+
         def get_top_N_ops(ops, ctxs, N):
 
             indices = range(0,len(ops))
@@ -668,7 +677,6 @@ class Synthesizer:
             globally_sorted_operation_insts = []
             globally_sorted_operation_contexts = []
 
-            inserted_names = []
 
             for idx in sorted_indices:
                 # TEMP: Dictionary created by merging old and missing ops
@@ -678,6 +686,8 @@ class Synthesizer:
                 if ctxs[idx].name in inserted_names:
                     continue
 
+                inserted_names.append(ctxs[idx].name)
+
 
                 # Operations with score less than 2 are more likely to
                 # add complexity to the synthesis without really
@@ -686,7 +696,6 @@ class Synthesizer:
                 if self.score_context(ops[idx], ctxs[idx]) <= 2:
                     continue
 
-                inserted_names.append(ctxs[idx].name)
 
                 globally_sorted_operation_insts.append(ops[idx])
                 globally_sorted_operation_contexts.append(ctxs[idx])

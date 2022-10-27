@@ -687,7 +687,7 @@
     [(vec-sat-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend bvaddnsw bvsmax) (list zero-extend bvaddnuw bvumax)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub) (if (is-signed-expr? v1 v2) (list sign-extend) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsubnsw) (list zero-extend bvsubnuw)) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsrem bvsmod) (list zero-extend bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsmin) (list zero-extend bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]

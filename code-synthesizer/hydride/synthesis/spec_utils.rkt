@@ -157,7 +157,7 @@
 ;; Spec generation for swizzles
 
 (define (get-swizzle-expr-sema)
-  "\"(list extract concat)\""
+  "\"(list extract concat sign-extend zero-extend)\""
   )
 
 

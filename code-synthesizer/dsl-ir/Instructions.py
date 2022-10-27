@@ -22,7 +22,7 @@ BV_OPS = [
     "bvuminval", "bvsminval",
     #"bvssat", "bvusat",
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
-    "bvmulnsw", "bvmulnuw","if", "abs", "cond"
+    "bvmulnsw", "bvmulnuw","if", "abs", "cond",
     "bvsmax", "bvumax", "bvsmin", "bvumin",
     "bvrol", "bvror"
 ]
@@ -360,6 +360,7 @@ class DSLInstruction(InstructionType):
                         operations.append(bvop)
                 elif bvop in line:
                     operations.append(bvop)
+
 
         return operations
 
