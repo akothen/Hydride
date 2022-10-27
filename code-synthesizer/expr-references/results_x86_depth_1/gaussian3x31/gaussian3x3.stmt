@@ -1,0 +1,156 @@
+module name=gaussian3x3, target=x86-64-noos-avx-avx2-avx512-avx512_skylake-f16c-fma-no_asserts-no_bounds_query-sse41
+external func gaussian3x3_par_for_output_s0_y_y (__user_context, output.s0.y.y, closure_arg) {
+let closure_prototype = (void *)make_struct((void *)reinterpret((uint64)0), (void *)reinterpret((uint64)0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (uint1)0)
+let input = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 0)
+let output = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 1)
+let input.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 2)
+let output.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 3)
+let output.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 4)
+let output.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 5)
+let t136 = load_typed_struct_member((void *)closure_arg, closure_prototype, 6)
+let t137 = load_typed_struct_member((void *)closure_arg, closure_prototype, 7)
+let t138 = load_typed_struct_member((void *)closure_arg, closure_prototype, 8)
+let t139 = load_typed_struct_member((void *)closure_arg, closure_prototype, 9)
+let t142 = load_typed_struct_member((void *)closure_arg, closure_prototype, 10)
+let t143 = load_typed_struct_member((void *)closure_arg, closure_prototype, 11)
+let t146 = load_typed_struct_member((void *)closure_arg, closure_prototype, 12)
+let t147 = load_typed_struct_member((void *)closure_arg, closure_prototype, 13)
+let t148 = load_typed_struct_member((void *)closure_arg, closure_prototype, 14)
+let t150 = load_typed_struct_member((void *)closure_arg, closure_prototype, 15)
+let t152 = load_typed_struct_member((void *)closure_arg, closure_prototype, 16)
+let t153 = load_typed_struct_member((void *)closure_arg, closure_prototype, 17)
+let t140 = (uint1)load_typed_struct_member((void *)closure_arg, closure_prototype, 18)
+let output.s0.y.yi.base.s = min(output.s0.y.y*36, output.extent.1 + -36)
+allocate input_16[int16 * (t136 + 16) * 16] in Stack
+let t156 = ((t153 + 1)/16)*16
+let t155 = output.min.1 + output.s0.y.yi.base.s
+for (output.s0.y.yi.yi.$n.rebased, 0, 5) {
+ produce input_16 {
+  let t159 = output.s0.y.yi.yi.$n.rebased*9
+  let t157 = min(t159, 7)
+  let t158 = max(t159, 7) + t155
+  for (input_16.s0.y.rebased, 0, t157 + 2) {
+   let t160 = input_16.s0.y.rebased + t158
+   for (input_16.s0.x.x, 0, t137) {
+    let input_16.s0.x.xi.base.s = (input_16.s0.x.x*32) + t138
+    input_16[ramp(((((t160 + 8) % 16)*(t136 + 16)) - t138) + input_16.s0.x.xi.base.s, 1, 32)] = int16x32(input[ramp(((((t160 + -8)*input.stride.1) - t139) + input_16.s0.x.xi.base.s) + -129, 1, 32)])
+   }
+   if (t140) {
+    let t123 = input_16.s0.y.rebased + t158
+    input_16[ramp(((((t123 + 8) % 16)*(t156 + 16)) + t153) + -30, 1, 32)] = int16x32(input[ramp((((t123 + -8)*input.stride.1) + t142) + -31, 1, 32)])
+   }
+  }
+ }
+ if (1 <= output.s0.y.yi.yi.$n.rebased) {
+  consume input_16 {
+   let t161 = output.s0.y.yi.yi.$n.rebased*9
+   for (output.s0.y.yi.yii.yii, 0, 3) {
+    allocate rows[int16 * (t136 + 16) * 1] in Stack
+    let t162 = (output.s0.y.yi.yii.yii*3) + t161
+    for (output.s0.y.yi.yii.yiii, 0, 3) {
+     let output.s0.y.yi.s = output.s0.y.yi.yii.yiii + t162
+     produce rows {
+      let t163 = output.s0.y.yi.s + t155
+      for (rows.s0.x.x, 0, t143) {
+       let rows.s0.x.xi.base.s = (rows.s0.x.x*16) + t138
+       let t98 = rows.s0.x.xi.base.s - t138
+       rows[ramp(t98, 1, 16)] = (int16x16)shift_left(input_16[ramp((((t163 + 7) % 16)*(t156 + 16)) + t98, 1, 16)], x16((uint16)1)) + (input_16[ramp((((t163 + 8) % 16)*(t156 + 16)) + t98, 1, 16)] + input_16[ramp((((t163 + 6) % 16)*(t156 + 16)) + t98, 1, 16)])
+      }
+     }
+     consume rows {
+      let t164 = (((output.s0.y.yi.s + t155) + -9)*output.stride.1) + t146
+      for (output.s0.x.x, 0, t152) {
+       allocate cols[int16 * 128] in Stack
+       produce cols {
+        let t121 = (output.s0.x.x*128) - t150
+        cols[ramp(0, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 129, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 130, 1, 16)] + rows[ramp(t121 + 128, 1, 16)])
+        cols[ramp(16, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 145, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 146, 1, 16)] + rows[ramp(t121 + 144, 1, 16)])
+        cols[ramp(32, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 161, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 162, 1, 16)] + rows[ramp(t121 + 160, 1, 16)])
+        cols[ramp(48, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 177, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 178, 1, 16)] + rows[ramp(t121 + 176, 1, 16)])
+        cols[ramp(64, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 193, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 194, 1, 16)] + rows[ramp(t121 + 192, 1, 16)])
+        cols[ramp(80, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 209, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 210, 1, 16)] + rows[ramp(t121 + 208, 1, 16)])
+        cols[ramp(96, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 225, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 226, 1, 16)] + rows[ramp(t121 + 224, 1, 16)])
+        cols[ramp(112, 1, 16)] = (int16x16)shift_left(rows[ramp(t121 + 241, 1, 16)], x16((uint16)1)) + (rows[ramp(t121 + 242, 1, 16)] + rows[ramp(t121 + 240, 1, 16)])
+       }
+       consume cols {
+        output[ramp((output.s0.x.x*128) + t164, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(0, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(((output.s0.x.x*128) + t164) + 32, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(32, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(((output.s0.x.x*128) + t164) + 64, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(64, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(((output.s0.x.x*128) + t164) + 96, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(96, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        free cols
+       }
+      }
+      let t165 = (((output.s0.y.yi.s + t155) + -9)*output.stride.1) + t148
+      for (output.s0.x.x, 0, t147) {
+       allocate cols[int16 * 128] in Stack
+       produce cols {
+        cols[ramp(0, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -127, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -126, 1, 16)] + rows[ramp(t153 + -128, 1, 16)])
+        cols[ramp(16, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -111, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -110, 1, 16)] + rows[ramp(t153 + -112, 1, 16)])
+        cols[ramp(32, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -95, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -94, 1, 16)] + rows[ramp(t153 + -96, 1, 16)])
+        cols[ramp(48, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -79, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -78, 1, 16)] + rows[ramp(t153 + -80, 1, 16)])
+        cols[ramp(64, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -63, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -62, 1, 16)] + rows[ramp(t153 + -64, 1, 16)])
+        cols[ramp(80, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -47, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -46, 1, 16)] + rows[ramp(t153 + -48, 1, 16)])
+        cols[ramp(96, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -31, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -30, 1, 16)] + rows[ramp(t153 + -32, 1, 16)])
+        cols[ramp(112, 1, 16)] = (int16x16)shift_left(rows[ramp(t153 + -15, 1, 16)], x16((uint16)1)) + (rows[ramp(t153 + -14, 1, 16)] + rows[ramp(t153 + -16, 1, 16)])
+       }
+       consume cols {
+        output[ramp(t165 + -128, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(0, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(t165 + -96, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(32, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(t165 + -64, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(64, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        output[ramp(t165 + -32, 1, 32)] = uint8x32((int16x32)shift_right(cols[ramp(96, 1, 32)] + x32((int16)8), x32((uint16)4)))
+        free cols
+       }
+      }
+     }
+    }
+    free rows
+   }
+  }
+ }
+}
+free input_16
+}
+
+
+external_plus_metadata func gaussian3x3 (input, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+assert(input.stride.0 == 1, 0)
+assert(output.stride.0 == 1, 0)
+produce output {
+ let t149 = input.min.1*input.stride.1
+ let t150 = min(output.extent.0, 128)
+ let t151 = output.min.1*output.stride.1
+ let t152 = max(output.extent.0/128, 0)
+ let t153 = max(output.extent.0, 128)
+ let t154 = t153 + 2
+ let t140 = (t154 % 32) != 0
+ let t143 = (t153 + 17)/16
+ let t137 = t154/32
+ let t135 = (output.extent.1 + 35)/36
+ let t136 = ((t153 + 1)/16)*16
+ let t147 = ((output.extent.0 + 127)/128) - t152
+ let t142 = ((output.extent.0 + output.min.0) - t149) - input.min.0
+ let t148 = output.extent.0 - t151
+ let t146 = 0 - t151
+ let t138 = output.min.0 + t150
+ let t139 = input.min.0 + t149
+ let parallel_closure = (void *)make_struct(input, output, input.stride.1, output.extent.1, output.min.1, output.stride.1, t136, t137, t138, t139, t142, t143, t146, t147, t148, t150, t152, t153, t140)
+ let closure_result = halide_do_par_for((void *)::gaussian3x3_par_for_output_s0_y_y, 0, t135, (uint8_t *)(parallel_closure))
+ assert(closure_result == 0, closure_result)
+}
+}
+
+

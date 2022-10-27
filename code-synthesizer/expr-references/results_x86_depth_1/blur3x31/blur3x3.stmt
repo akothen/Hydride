@@ -1,0 +1,79 @@
+module name=blur3x3, target=x86-64-noos-avx-avx2-avx512-avx512_skylake-f16c-fma-no_asserts-no_bounds_query-sse41
+external func blur3x3_par_for_blur_y_s0_y_y (__user_context, blur_y.s0.y.y, closure_arg) {
+let closure_prototype = (void *)make_struct((void *)reinterpret((uint64)0), (void *)reinterpret((uint64)0), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+let blur_y = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 0)
+let input = (void *)load_typed_struct_member((void *)closure_arg, closure_prototype, 1)
+let blur_y.extent.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 2)
+let blur_y.extent.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 3)
+let blur_y.min.0 = load_typed_struct_member((void *)closure_arg, closure_prototype, 4)
+let blur_y.min.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 5)
+let blur_y.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 6)
+let input.stride.1 = load_typed_struct_member((void *)closure_arg, closure_prototype, 7)
+let t13 = load_typed_struct_member((void *)closure_arg, closure_prototype, 8)
+let t14 = load_typed_struct_member((void *)closure_arg, closure_prototype, 9)
+let t15 = load_typed_struct_member((void *)closure_arg, closure_prototype, 10)
+let blur_y.s0.y.yi.base.s = min(blur_y.s0.y.y*34, blur_y.extent.1 + -34)
+let t16 = blur_y.min.1 + blur_y.s0.y.yi.base.s
+for (blur_y.s0.y.yi.yi, 0, 2) {
+ let t17 = (blur_y.s0.y.yi.yi*17) + t16
+ for (blur_y.s0.x.x, 0, t13) {
+  let blur_y.s0.x.xi.base.s = min(blur_y.s0.x.x*480, blur_y.extent.0 + -480)
+  allocate blur_x[uint16 * 9120] in Stack
+  produce blur_x {
+   let t18 = blur_y.min.0 + blur_y.s0.x.xi.base.s
+   for (blur_x.s0.y.rebased, 0, 19) {
+    let t20 = blur_x.s0.y.rebased*30
+    let t19 = ((blur_x.s0.y.rebased + t17)*input.stride.1) - t14
+    for (blur_x.s0.x.x, 0, 30) {
+     let blur_x.s0.x.xi.base = (blur_x.s0.x.x*16) + t18
+     let t9 = blur_x.s0.x.xi.base + t19
+     blur_x[ramp((blur_x.s0.x.x + t20)*16, 1, 16) aligned(16, 0)] = (input[ramp(t9 + 1, 1, 16)] + (input[ramp(t9 + 2, 1, 16)] + input[ramp(t9, 1, 16)]))/x16((uint16)3)
+    }
+   }
+  }
+  consume blur_x {
+   let t21 = blur_y.s0.x.xi.base.s + t15
+   for (blur_y.s0.y.yi.yii, 0, 17) {
+    let t22 = blur_y.s0.y.yi.yii*30
+    let t23 = ((blur_y.s0.y.yi.yii + t17)*blur_y.stride.1) + t21
+    for (blur_y.s0.x.xi.xi, 0, 30) {
+     let t11 = blur_y.s0.x.xi.xi + t22
+     blur_y[ramp((blur_y.s0.x.xi.xi*16) + t23, 1, 16)] = (blur_x[ramp((t11*16) + 480, 1, 16) aligned(16, 0)] + (blur_x[ramp((t11*16) + 960, 1, 16) aligned(16, 0)] + blur_x[ramp(t11*16, 1, 16) aligned(16, 0)]))/x16((uint16)3)
+    }
+   }
+  }
+  free blur_x
+ }
+}
+}
+
+
+external_plus_metadata func blur3x3 (input, blur_y) {
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+assert((uint64)reinterpret((halide_buffer_t *)blur_y.buffer) != (uint64)0, halide_error_buffer_argument_is_null("blur_y"))
+let blur_y = (void *)_halide_buffer_get_host((halide_buffer_t *)blur_y.buffer)
+let blur_y.min.0 = _halide_buffer_get_min((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)blur_y.buffer, 0)
+let blur_y.min.1 = _halide_buffer_get_min((halide_buffer_t *)blur_y.buffer, 1)
+let blur_y.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)blur_y.buffer, 1)
+let blur_y.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)blur_y.buffer, 1)
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+assert(blur_y.stride.0 == 1, 0)
+assert(input.stride.0 == 1, 0)
+produce blur_y {
+ let t12 = (blur_y.extent.1 + 33)/34
+ let t13 = (blur_y.extent.0 + 479)/480
+ let t15 = 0 - (blur_y.min.1*blur_y.stride.1)
+ let t14 = (input.min.1*input.stride.1) + input.min.0
+ let parallel_closure = (void *)make_struct(blur_y, input, blur_y.extent.0, blur_y.extent.1, blur_y.min.0, blur_y.min.1, blur_y.stride.1, input.stride.1, t13, t14, t15)
+ let closure_result = halide_do_par_for((void *)::blur3x3_par_for_blur_y_s0_y_y, 0, t12, (uint8_t *)(parallel_closure))
+ assert(closure_result == 0, closure_result)
+}
+}
+
+

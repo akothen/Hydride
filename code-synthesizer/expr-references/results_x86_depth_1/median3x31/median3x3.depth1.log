@@ -1,0 +1,4891 @@
+mkdir median3x3/bin
+g++ --std=c++17 -fno-rtti -O3 -DLOG2VLEN=7 \
+	-I /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//include -I /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//tools \
+	-g median3x3/src/median3x3_generator.cpp /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//tools/GenGen.cpp \
+	hannk/common_halide.cpp \
+	-o median3x3/bin/median3x3_generator \
+	-L /home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//lib -lHalide -lrt -ldl -lpthread -lm -lz -lxml2
+export LD_LIBRARY_PATH=/home/arnoor2/Racket/TensorSynth/Rosette-experiments/halide-hydride/distrib//lib; HL_EXPR_DEPTH=1 HL_ENABLE_HYDRIDE=1 ./median3x3/bin/median3x3_generator \
+	-t 0 \
+	-o median3x3/bin \
+	-g median3x3 \
+	-e static_library,stmt,h,llvm_assembly,assembly \
+	-f median3x3 target=host-noos-no_bounds_query-no_asserts
+Target has Saphire Rapids Support: 0
+Hydride Optimize X86
+rm: cannot remove '/tmp/base_2382_spec.JSON': No such file or directory
+Pruning _mm256_broadcastb_epi8 as it has an argument of size 128 which is smaller than 256
+Pruning _mm256_set1_epi8 as it has an argument of size 8 which is smaller than 256
+Prunning Based of non-immediate usage pruned 2 instructions ... 
+EARLY RETURN FROM REDUCE
+Adding:  _mm512_cvtsepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtsepi64_epi16
+Adding:  _mm512_cvtepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtepi64_epi32
+Adding:  _mm256_max_epu8 with score: 5 belonging to target agnostic class _mm512_max_epu64
+Adding:  _mm512_cvtusepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtusepi64_epi8
+==================================================
+Grammar Number of Load DSL Clauses:	 8
+Grammar Number of Shuffle DSL Clauses:	 7
+Grammar Number of DSL Compute Clauses:	 4
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+get-expr-grammar with base_name: base_2382
+
+base_2382_grammar.rkt
+/tmp/base_2382_grammar.rkt
+Writing [{ 
+"name": "base_2382" , 
+"semantics": [ "(extract #<procedure:bvumax>)"] , 
+"input_shapes": [[1,32], [1,32]], 
+"output_shape": [1 , 32], 
+"input_precision": [8, 8], 
+"output_precision": 8, 
+"args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256"], 
+"spec_invokation": "",
+"imms": [] 
+}
+] to file /tmp/base_2382_spec.JSON
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-synthesizer/dsl-ir/emit_grammar.py /tmp/base_2382_spec.JSON /tmp/base_2382_grammar.rkt 32 0
+Generated Grammar File
+Dynamically importing from base_2382 ... 
+
+Grammar:
+#<procedure:base_2382>
+(#(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)))
+Beginning Synthesis
+Synthesizing solution with depth 1, depth-limit 5, and cost-bound 40 ...
+
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+(vec-max (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #xa84fa645cef2969c9ff6a4eb97eb67da81a0ede9eb88ddc79a5291c3cdb370f9 256)
+invoke-spec-lane with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+Concrete counter examples:
+(#((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256)) #((bv #xdbee7272b4c75df90cb9faa8bf7f12ecf8dcbfd4f4b1214c6c4afca2b44a68d4 256) (bv #x267a60f089fd9e1c4c1b5118b44bd8f3fd2276dfe4077f4346fb3b70b61bac85 256)))
+Failing lanes examples:
+(0 0)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+Spec Produced:
+(bv #xf9 8)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #xdbee7272b4c75df90cb9faa8bf7f12ecf8dcbfd4f4b1214c6c4afca2b44a68d4 256) (bv #x267a60f089fd9e1c4c1b5118b44bd8f3fd2276dfe4077f4346fb3b70b61bac85 256))
+Spec Produced:
+(bv #xd4 8)
+Synthesize by lane...
+Z3 Synthesized Solution
+(reg (bv #x0 4))
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(reg (bv #x0 4))
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$0 sym_bv$1)
+
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+verify-across-lanes returned #f ... 
+
+Attempting to verify synthesized solution
+Symbols: #(sym_bv$2 sym_bv$3)
+
+invoke-spec with env: #(sym_bv$2 sym_bv$3)
+(vec-max (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (ite (bvule (extract 255 248 sym_bv$3) (extract ...)) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...)
+Verification took 0 seconds
+
+(model
+ [sym_bv$2 (bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256)]
+ [sym_bv$3 (bv #x014d010100000000000000000000000040000000000000000000000000000000 256)])
+Verification failed :(
+#((bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) (bv #x014d010100000000000000000000000040000000000000000000000000000000 256))
+invoke-spec with env: #((bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) (bv #x014d010100000000000000000000000040000000000000000000000000000000 256))
+(vec-max (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x344d808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256)
+(bv #x344d808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256)
+Verification failed ...
+	spec produced: (bv #x344d808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) 256 
+	synthesized result produced: (bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) 256
+
+invoke-spec with env: #((bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) (bv #x014d010100000000000000000000000040000000000000000000000000000000 256))
+(vec-max (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x344d808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256)
+Difference  Predicate
+'((0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0))
+differing-lanes
+'(30)
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+(vec-max (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #xa84fa645cef2969c9ff6a4eb97eb67da81a0ede9eb88ddc79a5291c3cdb370f9 256)
+invoke-spec-lane with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+Concrete counter examples:
+(#((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256)) #((bv #xdbee7272b4c75df90cb9faa8bf7f12ecf8dcbfd4f4b1214c6c4afca2b44a68d4 256) (bv #x267a60f089fd9e1c4c1b5118b44bd8f3fd2276dfe4077f4346fb3b70b61bac85 256)) #((bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) (bv #x014d010100000000000000000000000040000000000000000000000000000000 256)))
+Failing lanes examples:
+(0 0 30)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x9b4fa62da1f2038f97f6a4eb97cd67b58162ede9eb4fddc73c0f91c3cd3e25f9 256) (bv #xa8349d45ce28969c9fd1665e2ceb1eda73a0a0dea188926f9a52271b93b3706e 256))
+Spec Produced:
+(bv #xf9 8)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #xdbee7272b4c75df90cb9faa8bf7f12ecf8dcbfd4f4b1214c6c4afca2b44a68d4 256) (bv #x267a60f089fd9e1c4c1b5118b44bd8f3fd2276dfe4077f4346fb3b70b61bac85 256))
+Spec Produced:
+(bv #xd4 8)
+Synthesize by lane...
+Lane Index
+30
+invoke-spec-lane with env: #((bv #x344c808082828282e2e2e2e2e2e2e2f480000000000000000000000000000000 256) (bv #x014d010100000000000000000000000040000000000000000000000000000000 256))
+Spec Produced:
+(bv #x4d 8)
+Synthesize by lane...
+Z3 Synthesized Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$4 sym_bv$5)
+
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+verify-across-lanes returned #t ... 
+
+Test elapsed time: 
+2
+(vec-max '(buf uint8 256) '(buf uint8 256))
+#(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)
+Synthesis step completed!
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.0
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.0.rkt
+
+Completed writing to file ...
+Append [; hydride.node.0
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.0.rkt /tmp/test.ll
+Storing synth log map synth_hash_0 to /tmp/hydride_hash_0.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_0 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_0.rkt
+
+Completed writing to file ...
+Lower Intrinsic on call: make_struct
+Lower Intrinsic on call: reinterpret
+Lower Intrinsic on call: reinterpret
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Lower Intrinsic on call: load_typed_struct_member
+Starting synthesis for expr: 0
+Expression before lower intrinsic: max((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], max((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)]))
+Expression before InlineLets: max((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], max((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)]))
+Expression after InlineLets: max((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], max((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)]))
+Expression before abstraction: max((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], max((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)]))
+Input expression to synthesize: max((uint8x32)bounded_input[ramp(t957, 1, 32)], max((uint8x32)bounded_input[ramp(t965, 1, 32)], (uint8x32)bounded_input[ramp(t972, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 10.817807seconds ...
+Expression after replacae abstraction: max((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], max((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 0
+
+Optimized expression: (uint8x32)hydride.node.0((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t710), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)], (uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t710), 0) - t707)*(t650 + 34)) + t559, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t710 + 2, input.extent.1), 1) - t707)*(t650 + 34)) - t650) + t559) + -34, 1, 32)])
+rm: cannot remove '/tmp/base_1926_spec.JSON': No such file or directory
+Pruning _mm256_broadcastb_epi8 as it has an argument of size 128 which is smaller than 256
+Pruning _mm256_set1_epi8 as it has an argument of size 8 which is smaller than 256
+Prunning Based of non-immediate usage pruned 2 instructions ... 
+EARLY RETURN FROM REDUCE
+Adding:  _mm512_cvtsepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtsepi64_epi16
+Adding:  _mm256_min_epu8 with score: 5 belonging to target agnostic class _m_pminub
+Adding:  _mm512_cvtepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtepi64_epi32
+Adding:  _mm512_cvtusepi16_epi8 with score: 3 belonging to target agnostic class _mm_cvtusepi64_epi8
+==================================================
+Grammar Number of Load DSL Clauses:	 8
+Grammar Number of Shuffle DSL Clauses:	 7
+Grammar Number of DSL Compute Clauses:	 4
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_0 from hydride_hash_0.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+get-expr-grammar with base_name: base_1926
+
+base_1926_grammar.rkt
+/tmp/base_1926_grammar.rkt
+Writing [{ 
+"name": "base_1926" , 
+"semantics": [ "(extract zero-extend #<procedure:bvumin>)"] , 
+"input_shapes": [[1,32], [1,32]], 
+"output_shape": [1 , 32], 
+"input_precision": [8, 8], 
+"output_precision": 8, 
+"args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256"], 
+"spec_invokation": "",
+"imms": [] 
+}
+] to file /tmp/base_1926_spec.JSON
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-synthesizer/dsl-ir/emit_grammar.py /tmp/base_1926_spec.JSON /tmp/base_1926_grammar.rkt 32 0
+Generated Grammar File
+Dynamically importing from base_1926 ... 
+
+Grammar:
+#<procedure:base_1926>
+(#(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)))
+Beginning Synthesis
+Synthesizing solution with depth 1, depth-limit 5, and cost-bound 40 ...
+
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+(vec-min (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x1130400997d1777e180f164b6eae940490c3ac33c249001bc4ae984d2f13090c 256)
+invoke-spec-lane with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+Concrete counter examples:
+(#((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256)) #((bv #xb780266fc7221c955ff25aebe5750a8ea30993c0c09dcbfe3799d371e8d0938e 256) (bv #xdc024ae544c353b025c8214c94ec5f95730de798f9f7cd48966b88aa6c6f3b97 256)))
+Failing lanes examples:
+(0 0)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+Spec Produced:
+(bv #x0c 8)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #xb780266fc7221c955ff25aebe5750a8ea30993c0c09dcbfe3799d371e8d0938e 256) (bv #xdc024ae544c353b025c8214c94ec5f95730de798f9f7cd48966b88aa6c6f3b97 256))
+Spec Produced:
+(bv #x8e 8)
+Synthesize by lane...
+Z3 Synthesized Solution
+(reg (bv #x0 4))
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(reg (bv #x0 4))
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$0 sym_bv$1)
+
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+invoke-spec-lane with env: #(sym_bv$0 sym_bv$1)
+verify-across-lanes returned #f ... 
+
+Attempting to verify synthesized solution
+Symbols: #(sym_bv$2 sym_bv$3)
+
+invoke-spec with env: #(sym_bv$2 sym_bv$3)
+(vec-min (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (concat (ite (bvule (extract 255 248 sym_bv$2) (extract ...)) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...) ...)
+Verification took 0 seconds
+
+(model
+ [sym_bv$2 (bv #x2000a00000000000000000000000000000000004000000000000000000000000 256)]
+ [sym_bv$3 (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256)])
+Verification failed :(
+#((bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256))
+invoke-spec with env: #((bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256))
+(vec-min (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x2000200000000000000000000000000000000004000000000000000000000000 256)
+(bv #x2000200000000000000000000000000000000004000000000000000000000000 256)
+Verification failed ...
+	spec produced: (bv #x2000200000000000000000000000000000000004000000000000000000000000 256) 256 
+	synthesized result produced: (bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) 256
+
+invoke-spec with env: #((bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256))
+(vec-min (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x2000200000000000000000000000000000000004000000000000000000000000 256)
+Difference  Predicate
+'((0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0))
+differing-lanes
+'(29)
+synthesize-sol-iterative
+Garbage collected
+invoke-spec with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+(vec-min (buffer #<procedure:buffer-fn> 'uint8 256) (buffer #<procedure:buffer-fn> 'uint8 256))
+Spec result
+(bv #x1130400997d1777e180f164b6eae940490c3ac33c249001bc4ae984d2f13090c 256)
+invoke-spec-lane with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+Concrete counter examples:
+(#((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256)) #((bv #xb780266fc7221c955ff25aebe5750a8ea30993c0c09dcbfe3799d371e8d0938e 256) (bv #xdc024ae544c353b025c8214c94ec5f95730de798f9f7cd48966b88aa6c6f3b97 256)) #((bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256)))
+Failing lanes examples:
+(0 0 29)
+*********** z3-optimize *****************
+Lane Index
+0
+invoke-spec-lane with env: #((bv #x8ca97b09fad177fbbc5bd97b6eae9442e9f8bb33f4e908d0c4faef4d2f7a090c 256) (bv #x113040f297da887e180f164b8fdab30490c3ace5c249001be3ae98a931133a11 256))
+Spec Produced:
+(bv #x0c 8)
+Synthesize by lane...
+Lane Index
+0
+invoke-spec-lane with env: #((bv #xb780266fc7221c955ff25aebe5750a8ea30993c0c09dcbfe3799d371e8d0938e 256) (bv #xdc024ae544c353b025c8214c94ec5f95730de798f9f7cd48966b88aa6c6f3b97 256))
+Spec Produced:
+(bv #x8e 8)
+Synthesize by lane...
+Lane Index
+29
+invoke-spec-lane with env: #((bv #x2000a00000000000000000000000000000000004000000000000000000000000 256) (bv #xfafe20fefefefefefefefefefefefefefefefefafefefefefefefefefefefefe 256))
+Spec Produced:
+(bv #x20 8)
+Synthesize by lane...
+Z3 Synthesized Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+#t
+Is this boolector optimization case #f ?
+
+Unchecked solution:
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Is concrete? #t
+
+Is solution a union? #f
+
+Symbols: #(sym_bv$4 sym_bv$5)
+
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+invoke-spec-lane with env: #(sym_bv$4 sym_bv$5)
+verify-across-lanes returned #t ... 
+
+Test elapsed time: 
+1
+(vec-min '(buf uint8 256) '(buf uint8 256))
+#(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)
+Synthesis step completed!
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.1
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.1.rkt
+
+Completed writing to file ...
+Append [; hydride.node.1
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.1.rkt /tmp/test.ll
+Storing synth log map synth_hash_1 to /tmp/hydride_hash_1.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_1 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_1.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 1
+Expression before lower intrinsic: min((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], min((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)]))
+Expression before InlineLets: min((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], min((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)]))
+Expression after InlineLets: min((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], min((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)]))
+Expression before abstraction: min((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], min((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)]))
+Input expression to synthesize: min((uint8x32)bounded_input[ramp(t1012, 1, 32)], min((uint8x32)bounded_input[ramp(t1020, 1, 32)], (uint8x32)bounded_input[ramp(t1027, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 10.258566seconds ...
+Expression after replacae abstraction: min((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], min((uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 1
+
+Optimized expression: (uint8x32)hydride.node.1((uint8x32)bounded_input[ramp(((((max(min(input.extent.1, t720), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)], (uint8x32)bounded_input[ramp(((max(min(input.extent.1 + -1, t720), 0) - t713)*(t650 + 34)) + t564, 1, 32)], (uint8x32)bounded_input[ramp(((((max(min(t720 + 2, input.extent.1), 1) - t713)*(t650 + 34)) - t650) + t564) + -34, 1, 32)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_1 from hydride_hash_1.rkt ... 
+
+#hash((#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.2
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.2.rkt
+
+Completed writing to file ...
+Append [; hydride.node.2
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.2.rkt /tmp/test.ll
+Storing synth log map synth_hash_2 to /tmp/hydride_hash_2.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_2 (hash 
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_2.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 2
+Expression before lower intrinsic: min((uint8x32)max_y[ramp(t565 + 32, 1, 32)], min((uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)]))
+Expression before InlineLets: min((uint8x32)max_y[ramp(t565 + 32, 1, 32)], min((uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)]))
+Expression after InlineLets: min((uint8x32)max_y[ramp(t565 + 32, 1, 32)], min((uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)]))
+Expression before abstraction: min((uint8x32)max_y[ramp(t565 + 32, 1, 32)], min((uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)]))
+Input expression to synthesize: min((uint8x32)max_y[ramp(t1081, 1, 32)], min((uint8x32)max_y[ramp(t1082, 1, 32)], (uint8x32)max_y[ramp(t1083, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 7.870837seconds ...
+Expression after replacae abstraction: min((uint8x32)max_y[ramp(t565 + 32, 1, 32)], min((uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 2
+
+Optimized expression: (uint8x32)hydride.node.2((uint8x32)max_y[ramp(t565 + 32, 1, 32)], (uint8x32)max_y[ramp(t565 + 33, 1, 32)], (uint8x32)max_y[ramp(t565 + 34, 1, 32)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_2 from hydride_hash_2.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.3
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.3.rkt
+
+Completed writing to file ...
+Append [; hydride.node.3
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.3.rkt /tmp/test.ll
+Storing synth log map synth_hash_3 to /tmp/hydride_hash_3.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_3 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_3.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 3
+Expression before lower intrinsic: (let t760 = (t567 + t727) in max((uint8x32)min_y[ramp(t760 + 32, 1, 32)], max((uint8x32)min_y[ramp(t760 + 33, 1, 32)], (uint8x32)min_y[ramp(t760 + 34, 1, 32)])))
+Expression before InlineLets: (let t760 = (t567 + t727) in max((uint8x32)min_y[ramp(t760 + 32, 1, 32)], max((uint8x32)min_y[ramp(t760 + 33, 1, 32)], (uint8x32)min_y[ramp(t760 + 34, 1, 32)])))
+Expression after InlineLets: max((uint8x32)min_y[ramp((t567 + t727) + 32, 1, 32)], max((uint8x32)min_y[ramp((t567 + t727) + 33, 1, 32)], (uint8x32)min_y[ramp((t567 + t727) + 34, 1, 32)]))
+Expression before abstraction: max((uint8x32)min_y[ramp((t567 + t727) + 32, 1, 32)], max((uint8x32)min_y[ramp((t567 + t727) + 33, 1, 32)], (uint8x32)min_y[ramp((t567 + t727) + 34, 1, 32)]))
+Input expression to synthesize: max((uint8x32)min_y[ramp(t1096, 1, 32)], max((uint8x32)min_y[ramp(t1098, 1, 32)], (uint8x32)min_y[ramp(t1100, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 7.654908seconds ...
+Expression after replacae abstraction: max((uint8x32)min_y[ramp((t567 + t727) + 32, 1, 32)], max((uint8x32)min_y[ramp((t567 + t727) + 33, 1, 32)], (uint8x32)min_y[ramp((t567 + t727) + 34, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 3
+
+Optimized expression: (uint8x32)hydride.node.3((uint8x32)min_y[ramp((t567 + t727) + 32, 1, 32)], (uint8x32)min_y[ramp((t567 + t727) + 33, 1, 32)], (uint8x32)min_y[ramp((t567 + t727) + 34, 1, 32)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_3 from hydride_hash_3.rkt ... 
+
+#hash((#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x00 8))
+  (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.4
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.4.rkt
+
+Completed writing to file ...
+Append [; hydride.node.4
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.4.rkt /tmp/test.ll
+Storing synth log map synth_hash_4 to /tmp/hydride_hash_4.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_4 (hash 
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_4.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 4
+Expression before lower intrinsic: max(min((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+Expression before InlineLets: max(min((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+Expression after InlineLets: max(min((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+Expression before abstraction: max(min((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+Input expression to synthesize: max(min((uint8x32)bounded_input[ramp(t1114, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+t575 maps to reg_1
+t576 maps to reg_2
+Synthesis completed with return code:	0
+Synthesis took 7.997685seconds ...
+Expression after replacae abstraction: max(min((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], max((uint8x32)t575, (uint8x32)t576)), min((uint8x32)t575, (uint8x32)t576))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 4
+
+Optimized expression: (uint8x32)hydride.node.4((uint8x32)bounded_input[ramp((t567 + t730) + -2, 1, 32)], (uint8x32)t575, (uint8x32)t576)
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_4 from hydride_hash_4.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x00 8))
+  (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.5
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.5.rkt
+
+Completed writing to file ...
+Append [; hydride.node.5
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.5.rkt /tmp/test.ll
+Storing synth log map synth_hash_5 to /tmp/hydride_hash_5.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_5 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_5.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 5
+Expression before lower intrinsic: max(min((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+Expression before InlineLets: max(min((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+Expression after InlineLets: max(min((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+Expression before abstraction: max(min((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+Input expression to synthesize: max(min((uint8x32)bounded_input[ramp(t1130, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+t581 maps to reg_1
+t583 maps to reg_2
+Synthesis completed with return code:	0
+Synthesis took 7.787877seconds ...
+Expression after replacae abstraction: max(min((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], max((uint8x32)t581, (uint8x32)t583)), min((uint8x32)t581, (uint8x32)t583))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 5
+
+Optimized expression: (uint8x32)hydride.node.5((uint8x32)bounded_input[ramp(((t731 - t650) + t567) + -1, 1, 32)], (uint8x32)t581, (uint8x32)t583)
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x06 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x03 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x04 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x05 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_5 from hydride_hash_5.rkt ... 
+
+#hash((#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+========================================
+here
+(#(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x03 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+========================================
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x04 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x05 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x06 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x04 8))
+ (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x05 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x06 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x04 8))
+  (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+ 256
+ 8)
+========================================
+Synthesized-leaves
+(#(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256))
+ (vec-max
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (vec-max
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256)))
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+ (_mm512_max_epu64_dsl
+  (_m_pminub_dsl
+   (reg (bv #x04 8))
+   (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+   256
+   8)
+  (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+  256
+  8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x03 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256)))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+  (_mm512_max_epu64_dsl
+   (_m_pminub_dsl
+    (reg (bv #x04 8))
+    (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+    256
+    8)
+   (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+   256
+   8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+ 256
+ 8)
+========================================
+Synthesized-leaves
+(#(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256))
+ (vec-max
+  (vec-min
+   (vec-max
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))
+   (vec-max
+    (vec-min
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (vec-max
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256)))
+    (vec-min
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))))
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+ (_mm512_max_epu64_dsl
+  (_m_pminub_dsl
+   (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+   (_mm512_max_epu64_dsl
+    (_m_pminub_dsl
+     (reg (bv #x04 8))
+     (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+     256
+     8)
+    (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+    256
+    8)
+   256
+   8)
+  (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+  256
+  8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))
+    (vec-max
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (vec-max
+       (buffer #<procedure:buffer-fn> 'uint8 256)
+       (buffer #<procedure:buffer-fn> 'uint8 256)))
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256))))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+  (_mm512_max_epu64_dsl
+   (_m_pminub_dsl
+    (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+    (_mm512_max_epu64_dsl
+     (_m_pminub_dsl
+      (reg (bv #x04 8))
+      (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+      256
+      8)
+     (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+     256
+     8)
+    256
+    8)
+   (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+   256
+   8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))
+    (vec-max
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (vec-max
+       (buffer #<procedure:buffer-fn> 'uint8 256)
+       (buffer #<procedure:buffer-fn> 'uint8 256)))
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256))))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x06 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x03 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x04 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x05 8))
+========================================
+; (reg (bv #x06 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x03 8)) <32 x i8>
+; (reg (bv #x04 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x05 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.6
+; (reg 6) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 3) <32 x i8>
+; (reg 4) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 2) <32 x i8>
+; (reg 5) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.6.rkt
+
+Completed writing to file ...
+Append [; hydride.node.6
+; (reg 6) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 3) <32 x i8>
+; (reg 4) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 2) <32 x i8>
+; (reg 5) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.6.rkt /tmp/test.ll
+Storing synth log map synth_hash_6 to /tmp/hydride_hash_6.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_6 (hash 
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_6.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 6
+Expression before lower intrinsic: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+Expression before InlineLets: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+Expression after InlineLets: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+Expression before abstraction: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+Input expression to synthesize: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp(t1141, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+t566 maps to reg_0
+t569 maps to reg_1
+t577 maps to reg_2
+t584 maps to reg_3
+t585 maps to reg_5
+t586 maps to reg_6
+Synthesis completed with return code:	0
+Synthesis took 9.068815seconds ...
+Expression after replacae abstraction: max(min(max((uint8x32)t566, (uint8x32)t569), max(min(max((uint8x32)t577, (uint8x32)t584), max(min((uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], max((uint8x32)t585, (uint8x32)t586)), min((uint8x32)t585, (uint8x32)t586))), min((uint8x32)t577, (uint8x32)t584))), min((uint8x32)t566, (uint8x32)t569))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 6
+
+Optimized expression: (uint8x32)hydride.node.6((uint8x32)t566, (uint8x32)t569, (uint8x32)t577, (uint8x32)t584, (uint8x32)bounded_input[ramp((t731 - t650) + t567, 1, 32)], (uint8x32)t585, (uint8x32)t586)
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_6 from hydride_hash_6.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.7
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.7.rkt
+
+Completed writing to file ...
+Append [; hydride.node.7
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_m_pminub_dsl 
+(reg 0)  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.7.rkt /tmp/test.ll
+Storing synth log map synth_hash_7 to /tmp/hydride_hash_7.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_7 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_7.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 7
+Expression before lower intrinsic: min((uint8x32)max_y[ramp(t740 + -32, 1, 32)], min((uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)]))
+Expression before InlineLets: min((uint8x32)max_y[ramp(t740 + -32, 1, 32)], min((uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)]))
+Expression after InlineLets: min((uint8x32)max_y[ramp(t740 + -32, 1, 32)], min((uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)]))
+Expression before abstraction: min((uint8x32)max_y[ramp(t740 + -32, 1, 32)], min((uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)]))
+Input expression to synthesize: min((uint8x32)max_y[ramp(t1188, 1, 32)], min((uint8x32)max_y[ramp(t1189, 1, 32)], (uint8x32)max_y[ramp(t1190, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 7.692592seconds ...
+Expression after replacae abstraction: min((uint8x32)max_y[ramp(t740 + -32, 1, 32)], min((uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 7
+
+Optimized expression: (uint8x32)hydride.node.7((uint8x32)max_y[ramp(t740 + -32, 1, 32)], (uint8x32)max_y[ramp(t740 + -31, 1, 32)], (uint8x32)max_y[ramp(t740 + -30, 1, 32)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_7 from hydride_hash_7.rkt ... 
+
+#hash((#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.8
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.8.rkt
+
+Completed writing to file ...
+Append [; hydride.node.8
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.8.rkt /tmp/test.ll
+Storing synth log map synth_hash_8 to /tmp/hydride_hash_8.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_8 (hash 
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_8.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 8
+Expression before lower intrinsic: max((uint8x32)min_y[ramp(t741 + -32, 1, 32)], max((uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)]))
+Expression before InlineLets: max((uint8x32)min_y[ramp(t741 + -32, 1, 32)], max((uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)]))
+Expression after InlineLets: max((uint8x32)min_y[ramp(t741 + -32, 1, 32)], max((uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)]))
+Expression before abstraction: max((uint8x32)min_y[ramp(t741 + -32, 1, 32)], max((uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)]))
+Input expression to synthesize: max((uint8x32)min_y[ramp(t1202, 1, 32)], max((uint8x32)min_y[ramp(t1203, 1, 32)], (uint8x32)min_y[ramp(t1204, 1, 32)]))
+Synthesis completed with return code:	0
+Synthesis took 7.888426seconds ...
+Expression after replacae abstraction: max((uint8x32)min_y[ramp(t741 + -32, 1, 32)], max((uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)]))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 8
+
+Optimized expression: (uint8x32)hydride.node.8((uint8x32)min_y[ramp(t741 + -32, 1, 32)], (uint8x32)min_y[ramp(t741 + -31, 1, 32)], (uint8x32)min_y[ramp(t741 + -30, 1, 32)])
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_8 from hydride_hash_8.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x00 8))
+  (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.9
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.9.rkt
+
+Completed writing to file ...
+Append [; hydride.node.9
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.9.rkt /tmp/test.ll
+Storing synth log map synth_hash_9 to /tmp/hydride_hash_9.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_9 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_9.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 9
+Expression before lower intrinsic: max(min((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+Expression before InlineLets: max(min((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+Expression after InlineLets: max(min((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+Expression before abstraction: max(min((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+Input expression to synthesize: max(min((uint8x32)bounded_input[ramp(t1214, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+t598 maps to reg_1
+t599 maps to reg_2
+Synthesis completed with return code:	0
+Synthesis took 7.780418seconds ...
+Expression after replacae abstraction: max(min((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], max((uint8x32)t598, (uint8x32)t599)), min((uint8x32)t598, (uint8x32)t599))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 9
+
+Optimized expression: (uint8x32)hydride.node.9((uint8x32)bounded_input[ramp(t744 + -66, 1, 32)], (uint8x32)t598, (uint8x32)t599)
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_9 from hydride_hash_9.rkt ... 
+
+#hash((#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x00 8))
+ (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x01 8)) #(struct:reg (bv #x02 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x00 8))
+  (_mm512_max_epu64_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x01 8)) (reg (bv #x02 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8))
+========================================
+; (reg (bv #x02 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x01 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.10
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.10.rkt
+
+Completed writing to file ...
+Append [; hydride.node.10
+; (reg 2) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 1) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 0)  
+(_mm512_max_epu64_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 1)  
+(reg 2)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.10.rkt /tmp/test.ll
+Storing synth log map synth_hash_10 to /tmp/hydride_hash_10.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_10 (hash 
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_10.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 10
+Expression before lower intrinsic: max(min((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+Expression before InlineLets: max(min((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+Expression after InlineLets: max(min((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+Expression before abstraction: max(min((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+Input expression to synthesize: max(min((uint8x32)bounded_input[ramp(t1226, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+t604 maps to reg_1
+t606 maps to reg_2
+Synthesis completed with return code:	0
+Synthesis took 8.350481seconds ...
+Expression after replacae abstraction: max(min((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], max((uint8x32)t604, (uint8x32)t606)), min((uint8x32)t604, (uint8x32)t606))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 10
+
+Optimized expression: (uint8x32)hydride.node.10((uint8x32)bounded_input[ramp((t745 - t650) + -65, 1, 32)], (uint8x32)t604, (uint8x32)t606)
+#hash((#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x01 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x06 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x03 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x04 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x05 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x00 8)) (#(struct:buffer #<procedure:buffer-fn> uint8 256) . (bv #x02 8)))
+Found previous hash!
+
+Importing synth log map synth_hash_10 from hydride_hash_10.rkt ... 
+
+#hash((#(struct:vec-max (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)) (#(struct:vec-min (buf uint8 256) (buf uint8 256)) . #(#t #(struct:_m_pminub_dsl #(struct:reg (bv #x0 4)) #(struct:reg (bv #x1 4)) 256 8) 0)))
+here
+(#(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+========================================
+here
+(#(struct:vec-min #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)) #(struct:vec-max #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x03 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+========================================
+here
+(#(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))) #(struct:vec-min #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:vec-max #(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256)))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x04 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-max '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+6
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x05 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x06 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (reg (bv #x04 8))
+ (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x05 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x06 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256)))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (reg (bv #x04 8))
+  (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+ 256
+ 8)
+========================================
+Synthesized-leaves
+(#(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256))
+ (vec-max
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (vec-max
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256)))
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+ (_mm512_max_epu64_dsl
+  (_m_pminub_dsl
+   (reg (bv #x04 8))
+   (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+   256
+   8)
+  (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+  256
+  8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x02 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x03 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256)))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+  (_mm512_max_epu64_dsl
+   (_m_pminub_dsl
+    (reg (bv #x04 8))
+    (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+    256
+    8)
+   (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+   256
+   8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+ 256
+ 8)
+========================================
+Synthesized-leaves
+(#(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (vec-max
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256))
+ (vec-max
+  (vec-min
+   (vec-max
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))
+   (vec-max
+    (vec-min
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (vec-max
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256)))
+    (vec-min
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))))
+  (vec-min
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl
+ (_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+ (_mm512_max_epu64_dsl
+  (_m_pminub_dsl
+   (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+   (_mm512_max_epu64_dsl
+    (_m_pminub_dsl
+     (reg (bv #x04 8))
+     (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+     256
+     8)
+    (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+    256
+    8)
+   256
+   8)
+  (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+  256
+  8)
+ 256
+ 8)
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256) #(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Vectorization factor for sub expression 32
+
+Synthesizing sub-expression
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Hashed expression
+(vec-min '(buf uint8 256) '(buf uint8 256))
+Leaves are bitvectors of sizes:
+(256 256)
+Equivalent expression synthesized before, returned stored solution
+Solution
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+(_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8)
+Cost
+4
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x00 8))
+========================================
+here
+(#(struct:buffer #<procedure:buffer-fn> uint8 256))
+=======================================
+Leaf buffer:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+========================================
+Original Halide Sub-Expression:
+(buffer #<procedure:buffer-fn> 'uint8 256)
+Sub-expression Synthesis completed:
+(reg (bv #x01 8))
+========================================
+Synthesized-leaves
+(#(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)))
+========================================
+Original Halide Sub-Expression:
+(vec-min
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (buffer #<procedure:buffer-fn> 'uint8 256))
+Sub-expression Synthesis completed:
+(_m_pminub_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+========================================
+Synthesized-leaves
+(#(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) #(struct:_mm512_max_epu64_dsl #(struct:_m_pminub_dsl #(struct:reg (bv #x04 8)) #(struct:_mm512_max_epu64_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x05 8)) #(struct:reg (bv #x06 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x02 8)) #(struct:reg (bv #x03 8)) 256 8) 256 8) 256 8) #(struct:_m_pminub_dsl #(struct:reg (bv #x00 8)) #(struct:reg (bv #x01 8)) 256 8))
+========================================
+Original Halide Sub-Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))
+    (vec-max
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (vec-max
+       (buffer #<procedure:buffer-fn> 'uint8 256)
+       (buffer #<procedure:buffer-fn> 'uint8 256)))
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256))))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Sub-expression Synthesis completed:
+(_mm512_max_epu64_dsl
+ (_m_pminub_dsl
+  (_mm512_max_epu64_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+  (_mm512_max_epu64_dsl
+   (_m_pminub_dsl
+    (_mm512_max_epu64_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+    (_mm512_max_epu64_dsl
+     (_m_pminub_dsl
+      (reg (bv #x04 8))
+      (_mm512_max_epu64_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+      256
+      8)
+     (_m_pminub_dsl (reg (bv #x05 8)) (reg (bv #x06 8)) 256 8)
+     256
+     8)
+    256
+    8)
+   (_m_pminub_dsl (reg (bv #x02 8)) (reg (bv #x03 8)) 256 8)
+   256
+   8)
+  256
+  8)
+ (_m_pminub_dsl (reg (bv #x00 8)) (reg (bv #x01 8)) 256 8)
+ 256
+ 8)
+========================================
+========================================
+Original Halide Expression:
+(vec-max
+ (vec-min
+  (vec-max
+   (buffer #<procedure:buffer-fn> 'uint8 256)
+   (buffer #<procedure:buffer-fn> 'uint8 256))
+  (vec-max
+   (vec-min
+    (vec-max
+     (buffer #<procedure:buffer-fn> 'uint8 256)
+     (buffer #<procedure:buffer-fn> 'uint8 256))
+    (vec-max
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (vec-max
+       (buffer #<procedure:buffer-fn> 'uint8 256)
+       (buffer #<procedure:buffer-fn> 'uint8 256)))
+     (vec-min
+      (buffer #<procedure:buffer-fn> 'uint8 256)
+      (buffer #<procedure:buffer-fn> 'uint8 256))))
+   (vec-min
+    (buffer #<procedure:buffer-fn> 'uint8 256)
+    (buffer #<procedure:buffer-fn> 'uint8 256))))
+ (vec-min
+  (buffer #<procedure:buffer-fn> 'uint8 256)
+  (buffer #<procedure:buffer-fn> 'uint8 256)))
+Synthesis completed:
+Legalize Expression Swizzle!
+(hash
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x01 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x06 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x03 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x04 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x05 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x00 8)
+ (buffer #<procedure:buffer-fn> 'uint8 256)
+ (bv #x02 8))
+========================================
+; (reg (bv #x01 8)) <32 x i8>
+; (reg (bv #x06 8)) <32 x i8>
+; (reg (bv #x03 8)) <32 x i8>
+; (reg (bv #x04 8)) <32 x i8>
+; (reg (bv #x05 8)) <32 x i8>
+; (reg (bv #x00 8)) <32 x i8>
+; (reg (bv #x02 8)) <32 x i8>
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+Writing [; hydride.node.11
+; (reg 1) <32 x i8>
+; (reg 6) <32 x i8>
+; (reg 3) <32 x i8>
+; (reg 4) <32 x i8>
+; (reg 5) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride.node.11.rkt
+
+Completed writing to file ...
+Append [; hydride.node.11
+; (reg 1) <32 x i8>
+; (reg 6) <32 x i8>
+; (reg 3) <32 x i8>
+; (reg 4) <32 x i8>
+; (reg 5) <32 x i8>
+; (reg 0) <32 x i8>
+; (reg 2) <32 x i8>
+
+
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(_mm512_max_epu64_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  
+(_mm512_max_epu64_dsl 
+(_m_pminub_dsl 
+(reg 4)  
+(_mm512_max_epu64_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 5)  
+(reg 6)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 2)  
+(reg 3)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+  
+(_m_pminub_dsl 
+(reg 0)  
+(reg 1)  256  8  );<32 x i8>
+  256  8  );<32 x i8>
+
+] to file /tmp/hydride_exprs.rkt
+
+Completed writing to file ...
+python3 /home/arnoor2/Racket/TensorSynth/Rosette-experiments//code-generator//<path>/<to>/<script>.py /tmp/hydride.node.11.rkt /tmp/test.ll
+Storing synth log map synth_hash_11 to /tmp/hydride_hash_11.rkt ... 
+
+Writing [#lang rosette
+  (require rosette/lib/synthax)
+  (require rosette/lib/angelic)
+  (require rosette/lib/destruct)
+  (require rosette/solver/smt/boolector)
+  (require hydride)
+
+
+
+  (provide (all-defined-out))
+  
+(define synth_hash_11 (hash 
+(vec-max '(buf uint8 256) '(buf uint8 256)) (vector #t (_mm512_max_epu64_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)
+(vec-min '(buf uint8 256) '(buf uint8 256)) (vector #t (_m_pminub_dsl (reg (bv #x0 4)) (reg (bv #x1 4)) 256 8) 0)))
+] to file /tmp/hydride_hash_11.rkt
+
+Completed writing to file ...
+Starting synthesis for expr: 11
+Expression before lower intrinsic: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+Expression before InlineLets: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+Expression after InlineLets: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+Expression before abstraction: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+Input expression to synthesize: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp(t1235, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+t589 maps to reg_0
+t592 maps to reg_1
+t600 maps to reg_2
+t607 maps to reg_3
+t608 maps to reg_5
+t609 maps to reg_6
+Synthesis completed with return code:	0
+Synthesis took 9.894855seconds ...
+Expression after replacae abstraction: max(min(max((uint8x32)t589, (uint8x32)t592), max(min(max((uint8x32)t600, (uint8x32)t607), max(min((uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], max((uint8x32)t608, (uint8x32)t609)), min((uint8x32)t608, (uint8x32)t609))), min((uint8x32)t600, (uint8x32)t607))), min((uint8x32)t589, (uint8x32)t592))
+Generating Call with type: uint8x32 and lanes 32
+Ending synthesis for expr: 11
+
+Optimized expression: (uint8x32)hydride.node.11((uint8x32)t589, (uint8x32)t592, (uint8x32)t600, (uint8x32)t607, (uint8x32)bounded_input[ramp((t745 - t650) + -64, 1, 32)], (uint8x32)t608, (uint8x32)t609)
+Hydride Function: declare <32 x i8> @hydride.node.0(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2045 = call <32 x i8> @hydride.node.0(<32 x i8> %2013, <32 x i8> %2027, <32 x i8> %2044) #17
+Hydride Function: declare <32 x i8> @hydride.node.1(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2162 = call <32 x i8> @hydride.node.1(<32 x i8> %2130, <32 x i8> %2144, <32 x i8> %2161) #17
+Hydride Function: declare <32 x i8> @hydride.node.2(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2220 = call <32 x i8> @hydride.node.2(<32 x i8> %2209, <32 x i8> %2214, <32 x i8> %2219) #17
+Hydride Function: declare <32 x i8> @hydride.node.3(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2245 = call <32 x i8> @hydride.node.3(<32 x i8> %2230, <32 x i8> %2237, <32 x i8> %2244) #17
+Hydride Function: declare <32 x i8> @hydride.node.4(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2264 = call <32 x i8> @hydride.node.4(<32 x i8> %2263, <32 x i8> %t575, <32 x i8> %t576) #17
+Hydride Function: declare <32 x i8> @hydride.node.5(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2287 = call <32 x i8> @hydride.node.5(<32 x i8> %2286, <32 x i8> %t581, <32 x i8> %t583) #17
+Hydride Function: declare <32 x i8> @hydride.node.6(<32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2308 = call <32 x i8> @hydride.node.6(<32 x i8> %t566, <32 x i8> %t569, <32 x i8> %t577, <32 x i8> %t584, <32 x i8> %2307, <32 x i8> %t585, <32 x i8> %t586) #17
+Hydride Function: declare <32 x i8> @hydride.node.7(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2368 = call <32 x i8> @hydride.node.7(<32 x i8> %2357, <32 x i8> %2362, <32 x i8> %2367) #17
+Hydride Function: declare <32 x i8> @hydride.node.8(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2386 = call <32 x i8> @hydride.node.8(<32 x i8> %2375, <32 x i8> %2380, <32 x i8> %2385) #17
+Hydride Function: declare <32 x i8> @hydride.node.9(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2399 = call <32 x i8> @hydride.node.9(<32 x i8> %2398, <32 x i8> %t598, <32 x i8> %t599) #17
+Hydride Function: declare <32 x i8> @hydride.node.10(<32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2416 = call <32 x i8> @hydride.node.10(<32 x i8> %2415, <32 x i8> %t604, <32 x i8> %t606) #17
+Hydride Function: declare <32 x i8> @hydride.node.11(<32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>, <32 x i8>)
+
+Generating Hydride Call:   %2433 = call <32 x i8> @hydride.node.11(<32 x i8> %t589, <32 x i8> %t592, <32 x i8> %t600, <32 x i8> %t607, <32 x i8> %2432, <32 x i8> %t608, <32 x i8> %t609) #17
+Hydride Optimize X86
+warning: Linking two modules of different data layouts: '/tmp/hydride.ll' is '' whereas 'median3x3' is 'e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128'
+
+Lower Intrinsic on call: _halide_buffer_get_host
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_host
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: _halide_buffer_get_min
+Lower Intrinsic on call: _halide_buffer_get_extent
+Lower Intrinsic on call: _halide_buffer_get_stride
+Lower Intrinsic on call: make_struct
+Lower Intrinsic on call: halide_do_par_for
+Linking Hydride module!
