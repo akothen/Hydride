@@ -605,10 +605,16 @@
 
         ;; If not verified then attempt synthesizing with appended counter example
         (begin
-          (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-cex) word-size))
+          (define new-failing-cex 
+            (if (eq? (memq new-cex cex-ls) #f)
+              new-cex
+              (create-concrete-bvs bitwidth-list)
+              )
+            )
+          (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-failing-cex) word-size))
 
             (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
-                                      (append cex-ls (list new-cex)) ;; Append new cex into accumulated inputs
+                                      (append cex-ls (list new-failing-cex)) ;; Append new cex into accumulated inputs
                                       (append failing-ls new-failing-lane)
                                       cost-bound
                                       solver

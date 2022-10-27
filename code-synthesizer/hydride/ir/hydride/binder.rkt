@@ -831,6 +831,10 @@
                                          (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
                                          (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
              ]
+            [ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+             (_mm256_set_m128i_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+                                   (bind-expr prec_i_o env) (bind-expr num_4 env))
+             ]
             [v v]
             )
   )

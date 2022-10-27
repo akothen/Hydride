@@ -216,4 +216,5 @@
 (struct _mm256_extracti32x4_epi32_dsl (v0 v1 prec_i_o num_3) #:transparent #:mutable)
 (struct _mm_subs_epu8_dsl (v0 v1 num_2 prec_i_o) #:transparent #:mutable)
 (struct _mm512_mask_srli_epi64_dsl (vc_0 v1 v2 vc_3 v4 v5 num_6 prec_i_o num_8) #:transparent #:mutable)
+(struct _mm256_set_m128i_dsl (v0 v1 num_2 prec_i_o num_4) #:transparent #:mutable)
 ;; ================================================================================

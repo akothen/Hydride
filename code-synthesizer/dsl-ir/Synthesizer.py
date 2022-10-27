@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = []
+DEBUG_LIST = ["_mm256_movm_epi64"]
 SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -1159,6 +1159,9 @@ class Synthesizer:
 
             if not dsl_inst.has_input_sizes_defined():
                 return False
+
+            if dsl_inst.name in DEBUG_LIST and DEBUG:
+                print("Has inputs and outputs defined")
 
             supports_inputs_prec = any([dsl_inst.supports_input_precision(input_precision) for input_precision in self.spec.input_precision])
 

@@ -1013,15 +1013,18 @@ namespace Halide {
                     }
                 } else {
                     switch (type.bits()) {
+                        /*
                         case 1:
                             // bool vectors are always emitted as uint8 in the C++ backend
                             if (type.is_vector()) {
-                                //oss << "uint8x" << type.lanes() << "_t";
+                                //oss << "uint1x" << type.lanes() << "_t";
+
 
                             } else {
                                 oss << "uint1";
                             }
                             break;
+                            */
                         default:
                             if (type.is_uint()) {
                                 oss << "u";
@@ -1718,6 +1721,28 @@ namespace Halide {
 
                     }
 
+                    // Lower a i1 selecting all lanes
+                    // to Broadcast i1 to number of lanes
+                    // for vector selection.
+                    Expr visit(const Select *op) override{
+
+                        if(op->type.is_vector() && op->condition.type().is_scalar()) {
+                            std::cout << "Potentially new select lowering" <<"\n";
+                            Expr cond = (op->condition.type().is_scalar() ?
+                                    Broadcast::make(op->condition, op->true_value.type().lanes()) :
+                                    op->condition);
+
+                            Expr Sel = Select::make(cond, op->true_value, op->false_value);
+
+                            debug(0) << "New select instruction: "<< Sel << "\n";
+
+                            return mutate(Sel);
+                        }
+
+                        return IRMutator::visit(op);
+
+                    }
+
                     Expr visit(const Call *op) override {
                         std::cout << "Lower Intrinsic on call: "<< op->name << "\n";
                         Expr lowered;
@@ -2110,7 +2135,7 @@ namespace Halide {
                         for(int input_size : supported_input_sizes){
                             debug(1) << "Testing for vector input length: "<<input_size <<"\n";
                             if ((v.type().bits() * v.type().lanes() % input_size != 0) && (v.type().bits() > 1)) {
-                            } else {
+                            } else if(v.type().bits() > 1) {
                                 supported = true;
                             }
 
@@ -2155,7 +2180,7 @@ namespace Halide {
                         for(int vec_len : vec_lens){
                             debug(1) << "Testing for vector length: "<<vec_len <<"\n";
                             if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
-                            } else if (v.type().is_vector()) {
+                            } else if (v.type().is_vector() && (v.type().bits() > 1)) {
                                 debug(1) << "True!"<<"\n";
                                 debug(1) << "v.bits(): "<<v.type().bits() << "\n";
                                 debug(1) << "v.lanes(): "<<v.type().lanes() << "\n";
@@ -2478,8 +2503,17 @@ namespace Halide {
                             (enable-debug)\n"; 
                     }
 
-                    std::string emit_set_current_bitwidth(size_t bw){
-                        return "(current-bitwidth "+ std::to_string(bw)+")";
+                    std::string emit_set_current_bitwidth(){
+                        const char* bitwidth = getenv("HL_SYNTH_BW");
+                        std::string str = bitwidth;
+                        if(bitwidth){
+                            int bw = stoi(str);
+
+                            if(bw > 0){
+                                return "(current-bitwidth "+ std::to_string(bw)+")";
+                            }
+                        }
+                        return "";
                     }
 
                     std::string emit_set_memory_limit(size_t MB){
@@ -2545,7 +2579,7 @@ namespace Halide {
                 HydrideSynthEmitter HSE;
                 rkt << HSE.emit_racket_imports() << "\n";
                 rkt << HSE.emit_racket_debug() << "\n";
-                rkt << HSE.emit_set_current_bitwidth(16) << "\n";
+                rkt << HSE.emit_set_current_bitwidth() << "\n";
                 rkt << HSE.emit_set_memory_limit(20000) << "\n";
                 rkt << HSE.emit_symbolic_buffers() << "\n";
                 rkt << HSE.emit_buffer_id_map("id-map") << "\n";

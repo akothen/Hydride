@@ -22,7 +22,7 @@ BV_OPS = [
     "bvuminval", "bvsminval",
     #"bvssat", "bvusat",
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
-    "bvmulnsw", "bvmulnuw","if", "abs",
+    "bvmulnsw", "bvmulnuw","if", "abs", "cond"
     "bvsmax", "bvumax", "bvsmin", "bvumin",
     "bvrol", "bvror"
 ]
@@ -111,6 +111,8 @@ class Context:
 
     def supports_output_size(self, output_size):
         #print("check if outvectsize for {} : {} supports {}".format(self.name, self.get_output_size(), output_size))
+        if self.out_vectsize == None:
+            return False
         return self.get_output_size() == output_size
 
 
@@ -375,10 +377,10 @@ class DSLInstruction(InstructionType):
 
 
     def has_output_sizes_defined(self):
-        return all([ctx.has_output_size() for ctx in self.contexts])
+        return any([ctx.has_output_size() for ctx in self.contexts])
 
     def has_input_sizes_defined(self):
-        return all([ctx.has_input_size() for ctx in self.contexts])
+        return any([ctx.has_input_size() for ctx in self.contexts])
 
 
 

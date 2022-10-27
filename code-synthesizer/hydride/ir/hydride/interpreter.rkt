@@ -832,6 +832,10 @@
                                      (hydride:interpret vc_3 env) (hydride:interpret v4 env) (hydride:interpret v5 env) 
                                      num_6 prec_i_o num_8)
              ]
+            [ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+             (_mm256_set_m128i (hydride:interpret v0 env) (hydride:interpret v1 env) num_2 
+                               prec_i_o num_4)
+             ]
             [v v]
             )
   )

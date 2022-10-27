@@ -1209,6 +1209,11 @@
              (define v5-visited (hydride:visitor v5 fn))
              (fn ( _mm512_mask_srli_epi64_dsl vc_0-visited v1-visited v2-visited vc_3-visited v4-visited v5-visited num_6 prec_i_o num_8 ))
              ]
+            [ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+             (define v0-visited (hydride:visitor v0 fn))
+             (define v1-visited (hydride:visitor v1 fn))
+             (fn ( _mm256_set_m128i_dsl v0-visited v1-visited num_2 prec_i_o num_4 ))
+             ]
             [_ (error "Unrecognized expression")]
             )
   )

@@ -3029,6 +3029,16 @@
                )
 
              ]
+            [(_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+             (cond 
+               [(and  (equal? num_2 128) (equal? prec_i_o 128) (equal? num_4 128)) 256]
+               [(and  (equal? num_2 64) (equal? prec_i_o 64) (equal? num_4 64)) 128]
+               [(and  (equal? num_2 32) (equal? prec_i_o 32) (equal? num_4 32)) 64]
+               [(and  (equal? num_2 32) (equal? prec_i_o 32) (equal? num_4 32)) 64]
+               [(and  (equal? num_2 128) (equal? prec_i_o 128) (equal? num_4 128)) 256]
+               )
+
+             ]
             )
   )
 ;; ================================================================================

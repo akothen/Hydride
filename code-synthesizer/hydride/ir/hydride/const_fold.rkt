@@ -2155,6 +2155,16 @@
                [else ( _mm512_mask_srli_epi64_dsl vc_0-folded v1-folded v2-folded vc_3-folded v4-folded v5-folded num_6 prec_i_o num_8 )]
                )
              ]
+            [ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+             (define v0-folded (hydride:const-fold v0))
+             (define v1-folded (hydride:const-fold v1))
+             (cond
+               [(and (lit? v0-folded) (lit? v1-folded))
+                (lit (hydride:interpret ( _mm256_set_m128i_dsl v0-folded v1-folded num_2 prec_i_o num_4 ) (vector)))
+                ]
+               [else ( _mm256_set_m128i_dsl v0-folded v1-folded num_2 prec_i_o num_4 )]
+               )
+             ]
             [_ (error "Unrecognized expression")]
             )
   )

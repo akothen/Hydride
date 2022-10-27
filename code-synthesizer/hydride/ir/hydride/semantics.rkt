@@ -32,7 +32,26 @@
   result
   )
 
-
+(define (_mm256_set_m128i  lo.1 hi.1 %innerlanesize0.1 %elemsize0.1 %arg0.1 )
+  (define dst.1
+    (apply
+      concat
+      (for/list ([%outer.it.1 (reverse (range 0 1 1))])
+                (apply
+                  concat
+                  (for/list ([%inner.it.1 (reverse (range 0 %innerlanesize0.1 %elemsize0.1))])
+                            (define %lastidx1.1 (-  %elemsize0.1  1))
+                            (define %3.1 (+  %inner.it.1  %lastidx1.1))
+                            (define %0.1 (extract  %3.1 %inner.it.1 lo.1))
+                            (define %1.1 (extract  %3.1 %inner.it.1 hi.1))
+                            (concat %1.1 %0.1)
+                            )
+                  )
+                )
+      )
+    )
+  (bvpadhighbits  dst.1 0)
+  )
 
 (define (_mm_sub_pi16  a b %innerlanesize0 %elemsize0 )
   (define dst

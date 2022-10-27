@@ -693,7 +693,7 @@
     [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list sign-extend bvsmin) (list zero-extend bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-max v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
 
-    [(vec-if v1 v2 v3) (append (list ) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
+    [(vec-if v1 v2 v3) (append (list bveq 'if 'cond) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
     [(vec-lt v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvslt) (list zero-extend bvult))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-le v1 v2) (append  (if (is-signed-expr? v1 v2) (list sign-extend bvsle) (list zero-extend bvule))  (get-bv-ops v1)  (get-bv-ops v2))]
@@ -979,7 +979,8 @@
      (if condition lhs rhs)]
     [else
      (define outT (infer-out-type lhs rhs))
-     (mk-cpp-expr (if (cpp:eval condition) (cpp:eval lhs) (cpp:eval rhs)) outT)]))
+     (define eval-condition (bveq (cpp:eval condition) (bv #b1 1)))
+     (mk-cpp-expr (if eval-condition (cpp:eval lhs) (cpp:eval rhs)) outT)]))
 
 (define (do-eq lhs rhs)
   (cond
