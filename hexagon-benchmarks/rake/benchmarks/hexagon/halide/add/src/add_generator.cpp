@@ -3,6 +3,7 @@
 #include "../../hannk/constants.h"
 #include "../../hannk/interpreter/elementwise_program.h"
 #include "../../common_params.h"
+#include "../samples/batch_64_0/13/add_batch_0064_sample_0013.schedule.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -38,6 +39,8 @@ public:
 
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
+
+        apply_schedule_add_batch_0064_sample_0013(Pipeline(output_), target);
 
         if (auto_schedule) {
             // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L161

@@ -25,13 +25,15 @@ inline void apply_schedule_fully_connected_batch_0029_sample_0031(
     Var c(output.get_schedule().dims()[0].var);
     Var ci("ci");
     Var cii("cii");
+
+    // Added vectorization factors
     RVar r9_x(multiplied.update(0).get_schedule().dims()[0].var);
     output
         .split(c, c, ci, 480, TailStrategy::ShiftInwards)
         .split(b, b, bi, 9, TailStrategy::ShiftInwards)
         .split(ci, ci, cii, 32, TailStrategy::ShiftInwards)
         .unroll(bi)
-        .vectorize(cii)
+        .vectorize(cii, 512/ 64)
         .compute_root()
         .reorder({cii, bi, ci, c, b})
         .fuse(c, b, c)
@@ -39,12 +41,12 @@ inline void apply_schedule_fully_connected_batch_0029_sample_0031(
     multiplied.update(0)
         .split(c, c, ci, 32, TailStrategy::GuardWithIf)
         .unroll(b)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64)
         .reorder({ci, c, b, r9_x});
     multiplied
         .store_in(MemoryType::Stack)
         .split(c, c, ci, 8, TailStrategy::ShiftInwards)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64)
         .compute_at(output, ci)
         .reorder({ci, c, b});
 

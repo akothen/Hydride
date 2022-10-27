@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "utils.h"
 #include "../../common_params.h"
+#include "../samples/batch_56_0/26/median3x3_batch_0056_sample_0026.schedule.h"
 
 using namespace Halide;
 
@@ -37,6 +38,8 @@ public:
         midmid_x(x,y) = mid(mid_y(x-1, y), mid_y(x, y), mid_y(x+1, y));
 
         output(x,y) = mid(minmax_x(x, y), maxmin_x(x, y), midmid_x(x, y));
+        Pipeline p(output);
+        apply_schedule_median3x3_batch_0056_sample_0026(p, target);
     }
 
     void schedule() {

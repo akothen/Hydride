@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
+#include "../samples/batch_3_0/31/l2norm_batch_0003_sample_0031.schedule.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -35,6 +36,8 @@ public:
         Expr output = i32(input_zeroed(x, y)) * i32(inv_sqrt(y));
         output = i16_sat(rounding_shift_right(output, q - 7));
         output_(x, y) = u8_sat(saturating_add(output, i16(128)));
+        Pipeline p(output_);
+        apply_schedule_l2norm_batch_0003_sample_0031(p, target);
     }
 
     void schedule() {

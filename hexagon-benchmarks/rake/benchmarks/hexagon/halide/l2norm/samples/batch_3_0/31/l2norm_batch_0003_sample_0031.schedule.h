@@ -27,28 +27,29 @@ inline void apply_schedule_l2norm_batch_0003_sample_0031(
     Var y(output.get_schedule().dims()[1].var);
     Var yi("yi");
     RVar r8_x(sum_input_sq.update(0).get_schedule().dims()[0].var);
+    //Added vectorization factor
     output
         .split(y, y, yi, 34, TailStrategy::ShiftInwards)
         .split(x, x, xi, 32, TailStrategy::ShiftInwards)
-        .vectorize(xi)
+        .vectorize(xi, 512 /64)
         .compute_root()
         .reorder({xi, x, yi, y})
         .parallel(y);
     inv_sqrt
         .split(y, y, yi, 16, TailStrategy::RoundUp)
         .unroll(y)
-        .vectorize(yi)
+        .vectorize(yi, 512/ 64)
         .compute_at(output, y)
         .reorder({yi, y});
     sum_input_sq.update(0)
         .split(y, y, yi, 16, TailStrategy::GuardWithIf)
         .unroll(y)
-        .vectorize(yi)
+        .vectorize(yi, 512/ 64)
         .reorder({yi, y, r8_x});
     sum_input_sq
         .split(y, y, yi, 8, TailStrategy::RoundUp)
         .unroll(y)
-        .vectorize(yi)
+        .vectorize(yi, 512 / 64)
         .compute_at(output, y)
         .reorder({yi, y});
 

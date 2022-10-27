@@ -2,6 +2,7 @@
 #include "../../hannk/common_halide.h"
 #include "../../hannk/constants.h"
 #include "../../common_params.h"
+#include "../samples/batch_94_0/19/mul_batch_0094_sample_0019.schedule.h"
 
 using namespace Halide;
 using namespace Halide::ConciseCasts;
@@ -34,6 +35,10 @@ public:
         output = i16_sat(rounding_shift_right(output, min(15, output_shift_)));
         output = u8_sat(saturating_add(output, output_zero_));
         output_(x, y) = clamp(output, output_min_, output_max_);
+
+        Pipeline p(output_);
+        apply_schedule_mul_batch_0094_sample_0019(p, target);
+
     }
 
     void schedule() {

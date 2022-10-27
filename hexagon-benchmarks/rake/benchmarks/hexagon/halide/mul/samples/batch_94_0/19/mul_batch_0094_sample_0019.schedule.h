@@ -28,7 +28,7 @@ inline void apply_schedule_mul_batch_0094_sample_0019(
         .split(x, x, xi, 960, TailStrategy::ShiftInwards)
         .split(y, y, yi, 68, TailStrategy::ShiftInwards)
         .split(xi, xi, xii, 32, TailStrategy::ShiftInwards)
-        .vectorize(xii)
+        .vectorize(xii, 512 / 64) // Added Vectorization factor
         .compute_root()
         .reorder({xii, xi, yi, x, y})
         .fuse(x, y, x)

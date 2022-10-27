@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
+#include "../samples/batch_86_0/2/max_pool_batch_0086_sample_0002.schedule.h"
 
 using namespace Halide;
 using namespace Halide::BoundaryConditions;
@@ -50,6 +51,9 @@ public:
         maximum(c, x, y, b) = max(maximum(c, x, y, b), input_bounded(c, x_rx, y_ry, b));
 
         output_(c, x, y, b) = min(maximum(c, x, y, b), output_max_);
+
+        Pipeline p(output_);
+        apply_schedule_max_pool_batch_0086_sample_0002(p, target);
     }
 
     void schedule() {

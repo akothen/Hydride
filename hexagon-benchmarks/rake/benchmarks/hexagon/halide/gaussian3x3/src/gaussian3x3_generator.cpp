@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "utils.h"
 #include "../../common_params.h"
+#include "..//samples/batch_64_0/13/gaussian3x3_batch_0064_sample_0013.schedule.h"
 
 using namespace Halide;
 
@@ -11,6 +12,7 @@ public:
 
     GeneratorParam<bool> use_prefetch_sched{"use_prefetch_sched", true};
 
+
     void generate() {
         input_16(x, y) = cast<int16_t>(input(x, y));
 
@@ -18,6 +20,11 @@ public:
         cols(x,y) =  rows(x-1, y) + 2 * rows(x, y) + rows(x+1, y);
 
         output(x, y)  = cast<uint8_t> ((cols(x, y) + 8) >> 4);
+
+        Pipeline p(output);
+        apply_schedule_gaussian3x3_batch_0064_sample_0013(
+                p, target
+                );
     }
 
     void schedule() {

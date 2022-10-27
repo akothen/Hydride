@@ -31,30 +31,31 @@ inline void apply_schedule_average_pool_batch_0009_sample_0025(
     Var yi("yi");
     RVar r12_x(sum.update(0).get_schedule().dims()[0].var);
     RVar r12_y(sum.update(0).get_schedule().dims()[1].var);
+    // Added vectorization factors
     output
-        .split(c, c, ci, 512, TailStrategy::ShiftInwards)
+        .split(c, c, ci, 512, TailStrategy::ShiftInwards)  
         .split(x, x, xi, 4, TailStrategy::ShiftInwards)
         .split(y, y, yi, 9, TailStrategy::ShiftInwards)
-        .split(ci, ci, cii, 32, TailStrategy::ShiftInwards)
-        .vectorize(cii)
+        .split(ci, ci, cii, 32, TailStrategy::ShiftInwards) 
+        .vectorize(cii, 512 / 32) 
         .compute_root()
         .reorder({cii, ci, yi, xi, y, c, x, b})
         .fuse(c, x, c)
         .parallel(c);
     sum.update(0)
-        .split(c, c, ci, 32, TailStrategy::RoundUp)
-        .vectorize(ci)
+        .split(c, c, ci, 32, TailStrategy::RoundUp) 
+        .vectorize(ci, 512 / 32)
         .reorder({ci, c, x, y, b, r12_x, r12_y});
     sum
         .store_in(MemoryType::Stack)
         .split(c, c, ci, 16, TailStrategy::RoundUp)
         .unroll(c)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 32)
         .compute_at(output, ci)
         .reorder({ci, c, x, y, b});
     input_bounded
-        .split(c, c, ci, 32, TailStrategy::ShiftInwards)
-        .vectorize(ci)
+        .split(c, c, ci, 32, TailStrategy::ShiftInwards) 
+        .vectorize(ci, 512 / 32)
         .compute_at(output, xi)
         .store_at(output, c)
         .reorder({ci, c, x, y, b});

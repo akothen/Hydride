@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
+#include "../samples/batch_9_0/25/average_pool_batch_0009_sample_0025.schedule.h"
 
 using namespace Halide;
 using namespace Halide::BoundaryConditions;
@@ -25,6 +26,7 @@ public:
     Input<uint8_t> output_max_{ "output_max" };
 
     Output<Buffer<uint8_t>> output_{ "output", 4 };
+
 
     void generate() {
         // The algorithm.
@@ -73,6 +75,9 @@ public:
 
         output_(c, x, y, b) = clamp(u8_sat(average), output_min_, output_max_);
 
+        Pipeline p(output_);
+        apply_schedule_average_pool_batch_0009_sample_0025(p, target);
+
         if (auto_schedule) {
             // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L228
             input_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
@@ -87,6 +92,7 @@ public:
 
             output_.set_estimates({{0, 1024}, {0, stef_width/32}, {0, stef_height/32}, {0, 1}});
         }
+
     }
 };
 

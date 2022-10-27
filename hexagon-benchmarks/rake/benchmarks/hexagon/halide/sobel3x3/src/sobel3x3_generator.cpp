@@ -1,5 +1,6 @@
 #include "Halide.h"
 #include "../../common_params.h"
+#include "../samples/batch_58_0/15/sobel3x3_batch_0058_sample_0015.schedule.h"
 
 using namespace Halide;
 
@@ -11,8 +12,11 @@ public:
     GeneratorParam<bool> use_parallel_sched{ "use_parallel_sched", true };
     GeneratorParam<bool> use_prefetch_sched{ "use_prefetch_sched", true };
 
+
     void generate() {
-        bounded_input(x, y) = BoundaryConditions::repeat_edge(input)(x, y);
+        bounded_input(x, y) =  
+        //    input(x,y);  
+         BoundaryConditions::repeat_edge(input)(x, y);
 
         Func input_16{ "input_16" };
         input_16(x, y) = cast<uint16_t>(bounded_input(x, y));
@@ -26,6 +30,7 @@ public:
         // This sobel implementation is non-standard in that it doesn't take the square root
         // of the gradient.
         output(x, y) = cast<uint8_t>(clamp(sobel_x(x, y) + sobel_y(x, y), 0, 255));
+        apply_schedule_sobel3x3_batch_0058_sample_0015(Pipeline(output), target);
     }
 
     void schedule() {
