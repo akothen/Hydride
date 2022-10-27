@@ -23,7 +23,7 @@ class MatrixMultiply1024 : public Generator<MatrixMultiply1024> {
             Func matrix_mul("matrix_mul");
 
             RDom k(0, matrix_size);
-            RVar ki;
+            Var x("x"), y("y");
 
             matrix_mul(x, y) += A(k, y) * B(x,k);
 
