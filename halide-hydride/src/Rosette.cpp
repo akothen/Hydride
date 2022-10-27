@@ -1724,20 +1724,29 @@ namespace Halide {
                         // Generate cleaner specs. Since performance is not a concern, we can freely
                         // use widening casts etc.
                         if (op->is_intrinsic(Call::saturating_add)) {
-                            /*
-                            lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
-                                        op->args[0].type().min(), op->args[0].type().max()));
-                                        */
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits >= 32 && element_bits < 64){
+                                lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
+                                            op->args[0].type().min(), op->args[0].type().max()));
+                            } else if (element_bits >= 64){
+                                lowered = lower_intrinsic(op);
+                            }
+
                             // Map Saturating add to saturating add in Rosette.
                         } 
                         else if (op->is_intrinsic(Call::saturating_sub)) {
-                            /*
-                            lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
-                                        op->args[0].type().min(), op->args[0].type().max()));
-                                    */
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits >= 32 && element_bits < 64){
+                                lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
+                                            op->args[0].type().min(), op->args[0].type().max()));
+                            } else if (element_bits >= 64){
+                                lowered = lower_intrinsic(op);
+                            }
 
                             // Map Saturating sub to saturating sub in Rosette.
                         } 
+                        /*
                         else if (op->is_intrinsic(Call::halving_add)) {
                             lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
                         } 
@@ -1755,10 +1764,11 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::sorted_avg)) {
                             lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
-                        } 
+                        }*/ 
                         else if (SIMPLIFY_ABSD && op->is_intrinsic(Call::absd)) {
                             lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                         } 
+                        /*
                         else if (op->is_intrinsic(Call::rounding_shift_right)){
                             lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
                         } 
@@ -1768,6 +1778,10 @@ namespace Halide {
                         else if (op->is_intrinsic(Call::widening_add)) {
                             lowered = (widen(op->args[0]) + widen(op->args[1]));
                         } 
+                        else if (op->is_intrinsic(Call::widening_sub)) {
+                            lowered = (widen(op->args[0]) - widen(op->args[1]));
+                        } 
+                        */
                         else {
                             lowered = lower_intrinsic(op);
                         }
@@ -1820,10 +1834,13 @@ namespace Halide {
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
-                        else if (op->is_intrinsic(Call::if_then_else)) {
-                            //debug(0) << "ITE found: " << op << "\n";
+                        else if (op->is_intrinsic(Call::count_leading_zeros)) {
                             std::string uname = unique_name('t');
-                            //debug(0) << "Replaced with: " << uname << "\n";
+                            abstractions[uname] = IRMutator::visit(op);
+                            return Variable::make(op->type, uname);
+                        } 
+                        else if (op->is_intrinsic(Call::if_then_else)) {
+                            std::string uname = unique_name('t');
                             abstractions[uname] = IRMutator::visit(op);
                             return Variable::make(op->type, uname);
                         } 
@@ -2126,7 +2143,6 @@ namespace Halide {
                             case Architecture::X86:
                                 debug(1) << "Abstraction vector sizes for X86 "<<"\n";
                                 // Push in vector register sizes in descending order
-                                vec_lens.push_back(1024);
                                 vec_lens.push_back(512);
                                 vec_lens.push_back(256);
                                 vec_lens.push_back(128);
@@ -2139,7 +2155,7 @@ namespace Halide {
                         for(int vec_len : vec_lens){
                             debug(1) << "Testing for vector length: "<<vec_len <<"\n";
                             if (v.type().is_vector() && (v.type().bits() * v.type().lanes() % vec_len != 0) && (v.type().bits() > 1)) {
-                            } else {
+                            } else if (v.type().is_vector()) {
                                 debug(1) << "True!"<<"\n";
                                 debug(1) << "v.bits(): "<<v.type().bits() << "\n";
                                 debug(1) << "v.lanes(): "<<v.type().lanes() << "\n";
