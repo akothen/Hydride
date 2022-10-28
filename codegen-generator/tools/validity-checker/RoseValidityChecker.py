@@ -1,38 +1,36 @@
 #############################################################
 #
-# This is used to test if a target instruction compiles
-# and executes on a given target -- this checks the validity
-# of a given target instruction.
+# This helps check if an instuction is valid on the given 
+# target.
 #
 #############################################################
 
 
-from copy import deepcopy
-
-from RoseAbstractions import RoseFunction
+from RoseCodeEmitter import *
+from x86Types import *
+from RoseAbstractions import *
 from RoseContext import *
+from RosetteCodeEmitter import *
 from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
+from RoseSimilarityCheckerUtilities import *
 import Rosex86CCodeEmitter
 
 
-class RoseValidityChecker():
+class RoseISAValidityChecker:
   # Keep a record of all target-specific APIs here
   TargetAPI = {
-    "x86" : Rosex86CCodeEmitter
+    "x86" : x86RoseLang,
+    #"Hexagon" : HexRoseLang,
   }
-
-  def __init__(self, Target : str):
-    # Save target 
-    self.Target = Target
 
   def genRandomInputs(self, Function : RoseFunction):
     FuncArgs = Function.getArgs()
-    ConcArgs = list()
+    ConcArgs = []
     Counter = 0
     for Index in range(len(FuncArgs)):
-      NewArg = list()
+      NewArg = []
       for _ in range(SizeInBytes(FuncArgs[Index].getType().getBitwidth())):
         NewArg.append(Counter)
         Counter += 1
@@ -43,17 +41,40 @@ class RoseValidityChecker():
     assert isinstance(DirName, str)
     RunCommand("mkdir " + DirName)
 
-  def isValid(self, FunctionInfo : RoseFunctionInfo):
-    assert isinstance(FunctionInfo, RoseFunctionInfo)
-    TestDirName = "test"
+  def checkValidityOnTarget(self, InstName : str, TargetName : str):
+    # We will emit C code with C builtins and try to compile
+    # and execute them, if we fail, we will not generate wrappers
+    # for those instructions.
+    [FunctionInfo] = self.TargetAPI[TargetName].Compile(InstName)
+    if FunctionInfo == None:
+      print("INVALID INSTRUCTION")
+      return False
+    TestDirName = InstName + "_test"
     self.createTestDir(TestDirName)
-    Context = FunctionInfo.getContext()
+    assert isinstance(FunctionInfo, RoseFunctionInfo)
+    return self.isInstValid(TestDirName, FunctionInfo)
+
+  def isInstValid(self, TestDirName : str, FunctionInfo : RoseFunctionInfo):
+    # Emit C code, compile and execute this instuction and check 
+    # if the error is fatal.
     Function = FunctionInfo.getLatestFunction()
-    assert isinstance(Context, RoseContext)
-    CEmitter = self.TargetAPI[self.Target].CCodeEmitter(FunctionInfo)
+    CEmitter = Rosex86CCodeEmitter.CCodeEmitter(FunctionInfo)
     ConcArgs = self.genRandomInputs(Function)
     _, CErr = CEmitter.test(TestDirName, ConcArgs)
-    return not CEmitter.isErrorFatal(CErr)
+    if CEmitter.isErrorFatal(CErr) == True:
+      print("FATAL ERROR")
+      print("INVALID INSTRUCTION")
+      return False
+    print("VALID instruction")
+    return True
 
+if __name__ == '__main__':
+  Checker = RoseISAValidityChecker()
+  Result = Checker.checkValidityOnTarget("_mm_movepi64_pi64", "x86")
+  print("RESULT:")
+  print(Result)
+  Result = Checker.checkValidityOnTarget("_mm_cvtsi128_si64x", "x86")
+  print("RESULT:")
+  print(Result)
 
 
