@@ -6,15 +6,24 @@
 
 
 
-from PseudoCodeParser import ParseX86Intructions
-import xml.etree.ElementTree as ET
+from PseudoCodeParser import ParseX86Intructions, ParseX86Instruction
 from x86RoseCompiler import CompileSemantics, x86RoseContext
 
-def Compile():
-	SemaList = ParseX86Intructions("test.xml")
-	print("SemaList lngth:")
-	print(len(SemaList))
+
+
+def Compile(InstName : str = None):
 	from RoseFunctionInfo import RoseFunctionInfo
+	if InstName == None:
+		SemaList = ParseX86Intructions("test.xml")
+		print("SemaList lngth:")
+		print(len(SemaList))
+	else:
+		print("PARSING INSTRUCTION")
+		SemaList = ParseX86Instruction(InstName, "test.xml")
+		print("SemaList lngth:")
+		print(len(SemaList))
+	if SemaList == None:
+		return [None]
 	FunctionInfoList = list()
 	for Index, Spec in enumerate(SemaList):
 		RootContext = x86RoseContext()
@@ -32,8 +41,8 @@ def Compile():
 		print("CompiledFunction:")
 		CompiledFunction.print()
 		FunctionInfoList.append(FunctionInfo)
-	return FunctionInfoList
 
+	return FunctionInfoList
 
 
 def test1():
