@@ -90,6 +90,7 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
       # Get the name of the LLVM intrinsic
       LLVMIntrinsicName = "llvm.hydride." + Op.getCallee().getName()
       RetType = LLVMContext.getLLVMTypeFor(Op)
+      Builder = LLVMContext.getLLVMBuilder()
       OperandTypes = list()
       Args = list()
       for OperandIndex, Operand in enumerate(Op.getCallOperands()):
@@ -119,7 +120,12 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
           print(OperandTypes[-1])
       print("---OperandTypes:")
       print(OperandTypes)
-      Intrinsic = GetFunction(LLVMContext.getLLVMBuilder(), LLVMIntrinsicName, RetType, OperandTypes)
+      print("len(OperandTypes):")
+      print(len(OperandTypes))
+      Intrinsic = GetFunction(Builder, LLVMIntrinsicName, RetType, OperandTypes)
+      for Arg in Intrinsic.args:
+        print("CHECKING ARG:")
+        print(Arg)
       InstName = Op.getName()
       if InstName[0] == "%":
         InstName = InstName[1:]
@@ -129,11 +135,16 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
       print(InstName)
       print("Args:")
       print(Args)
+      print("len(Args):")
+      print(len(Args))
       print("Intrinsic:")
       print(Intrinsic)
-      CallInst = LLVMContext.getLLVMBuilder().call(Intrinsic, Args, InstName)
+      CallInst = Builder.call(Intrinsic, Args, InstName)
       print("CallInst:")
       print(CallInst)
+      for Arg in Intrinsic.args:
+        print("CHECKING ARG:")
+        print(Arg)
       LLVMContext.mapRoseValToLLVMVal(Op, CallInst)
       continue
     print("OP:")
