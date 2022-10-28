@@ -88,14 +88,58 @@ public:
 
   Value *getBitvectorOfRequiredType(Value *Bitvector, Type *RequiredType, Instruction *InsertBefore) {
     errs() << "getBitvectorOfRequiredType\n";
+    errs() << "Bitvector:" << *Bitvector << "\n";
+    errs() << "RequiredVectoType:" << *RequiredType << "\n";
     if (Bitvector->getType() != RequiredType) {
       if (InstToInstMap[Bitvector] == nullptr) {
+        // Check if the required bitwidth and the bitwidth of given vector are the same.
+        unsigned BitvectorTypeSize = 0;
+        if (auto *BitvectorType = dyn_cast<VectorType>(Bitvector->getType())) {
+          unsigned BitvectorElemSize = BitvectorType->getElementType()->getScalarSizeInBits();
+          unsigned BitvectorNumElems = BitvectorType->getElementCount().getKnownMinValue();
+          BitvectorTypeSize = BitvectorElemSize * BitvectorNumElems;
+        } else {
+          BitvectorTypeSize = Bitvector->getType()->getScalarSizeInBits();
+        }
+        unsigned RequiredTypeSize = 0;
+        if (auto *RequiredVectoType = dyn_cast<VectorType>(RequiredType)) {
+          unsigned RequiredTypeElemSize = RequiredVectoType->getElementType()->getScalarSizeInBits();
+          unsigned RequiredTypeNumElems = RequiredVectoType->getElementCount().getKnownMinValue();
+          RequiredTypeSize = RequiredTypeElemSize * RequiredTypeNumElems;
+        } else {
+          RequiredTypeSize = RequiredType->getScalarSizeInBits();
+        }
+        if (RequiredTypeSize != BitvectorTypeSize)
+          return nullptr;
         InstToInstMap[Bitvector] = new BitCastInst(Bitvector, RequiredType, "", InsertBefore);
         errs() << "InstToInstMap[Bitvector]:" << *InstToInstMap[Bitvector] << "\n";
         return InstToInstMap[Bitvector];
       }
       errs() << "--InstToInstMap[Bitvector]:" << *InstToInstMap[Bitvector] << "\n";
-      return InstToInstMap[Bitvector];
+      // Check if the required bitwidth and the bitwidth of given vector are the same.
+      unsigned BitvectorTypeSize = 0;
+      if (auto *BitvectorType = dyn_cast<VectorType>(InstToInstMap[Bitvector]->getType())) {
+        unsigned BitvectorElemSize = BitvectorType->getElementType()->getScalarSizeInBits();
+        unsigned BitvectorNumElems = BitvectorType->getElementCount().getKnownMinValue();
+        BitvectorTypeSize = BitvectorElemSize * BitvectorNumElems;
+      } else {
+        BitvectorTypeSize = InstToInstMap[Bitvector]->getType()->getScalarSizeInBits();
+      }
+      unsigned RequiredTypeSize = 0;
+      if (auto *RequiredVectoType = dyn_cast<VectorType>(RequiredType)) {
+        unsigned RequiredTypeElemSize = RequiredVectoType->getElementType()->getScalarSizeInBits();
+        unsigned RequiredTypeNumElems = RequiredVectoType->getElementCount().getKnownMinValue();
+        RequiredTypeSize = RequiredTypeElemSize * RequiredTypeNumElems;
+      } else {
+        RequiredTypeSize = RequiredType->getScalarSizeInBits();
+      }
+      if (RequiredTypeSize != BitvectorTypeSize)
+        return nullptr;
+      if (RequiredType == InstToInstMap[Bitvector]->getType()) {
+          return InstToInstMap[Bitvector];
+      } else {
+        return new BitCastInst(InstToInstMap[Bitvector], RequiredType, "", InsertBefore);
+      }
     }
     errs() << "Bitvector:" << *Bitvector << "\n";
     return Bitvector;
@@ -141,8 +185,11 @@ public:
         errs() << "IDX:" << Idx << "\n";
         int PermIdx = Permutation[Idx];
         errs() << "PERM IDX:" << PermIdx << "\n";
-        NewArgs[PermIdx] = getBitvectorOfRequiredType(BitvectorList[Idx], 
+        auto *Bitvector = getBitvectorOfRequiredType(BitvectorList[Idx], 
                                       RequiredTypes[PermIdx], InsertBefore);
+        if (Bitvector == nullptr)
+          return std::vector<Value *>();
+        NewArgs[PermIdx] = Bitvector;
         errs() << "NewArgs[PermIdx]:" << *NewArgs[PermIdx] << "\n";
         errs() << "----NewArgs.size(): " << NewArgs.size() << "\n";
       }
