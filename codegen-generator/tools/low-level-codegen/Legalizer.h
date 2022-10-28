@@ -154,10 +154,6 @@ public:
     // Get bitvector list
     std::vector<Value *> BitvectorList;
     errs() << "OriginalInst->getNumOperands():" << OriginalInst->getNumOperands() << "\n";
-    //for (unsigned I = 0; I < OriginalInst->getNumOperands(); ++I) {
-    //  errs() << "OriginalInst->getOperand(I):" << *(OriginalInst->getOperand(I)) << "\n";
-    //  BitvectorList.push_back(OriginalInst->getOperand(I));
-    //}
     for (auto &Operand : OriginalInst->args()) {
       errs() << "OriginalInst->getOperand(I):" << *Operand << "\n";
       BitvectorList.push_back(Operand);
@@ -167,10 +163,10 @@ public:
     for (auto &Arg : InstFunction->args())
       RequiredTypes.push_back(Arg.getType());
     // Some sanity checks
-    assert(BitvectorList.size() == RequiredTypes.size() 
-          && "Error: BitvectorList.size() != RequiredTypes.size()");
-    assert(BitvectorList.size() == Permutation.size() 
-          && "Error: BitvectorList.size() != RequiredTypes.size()");
+    //assert(BitvectorList.size() == RequiredTypes.size() 
+    //      && "Error: BitvectorList.size() != RequiredTypes.size()");
+    //assert(BitvectorList.size() == Permutation.size() 
+    //      && "Error: BitvectorList.size() != RequiredTypes.size()");
     // Generate some new args
     std::vector<Value *> NewArgs;
     for (unsigned I = 0; I < RequiredTypes.size(); ++I)
@@ -195,6 +191,35 @@ public:
       }
     }
     errs() << "NewArgs.size(): " << NewArgs.size() << "\n";
+    return NewArgs;
+  }
+
+  std::vector<Value *> getArgsAfterPermutationForSpecialCases(CallInst *OriginalInst, 
+                                                              std::vector<int> &Permutation) {
+    // Get bitvector list
+    std::vector<Value *> BitvectorList;
+    errs() << "OriginalInst->getNumOperands():" << OriginalInst->getNumOperands() << "\n";
+    for (auto &Operand : OriginalInst->args()) {
+      errs() << "OriginalInst->getOperand(I):" << *Operand << "\n";
+      BitvectorList.push_back(Operand);
+    }
+    // Generate some new args
+    std::vector<Value *> NewArgs;
+    for (unsigned I = 0; I < BitvectorList.size(); ++I)
+      NewArgs.push_back(nullptr);
+    for (unsigned Idx = 0; Idx < BitvectorList.size(); Idx++) {
+      if(Permutation[Idx] != -1) {
+        errs() << "IDX:" << Idx << "\n";
+        int PermIdx = Permutation[Idx];
+        errs() << "PERM IDX:" << PermIdx << "\n";
+        auto *Bitvector = BitvectorList[Idx];
+        if (Bitvector == nullptr)
+          return std::vector<Value *>();
+        NewArgs[PermIdx] = Bitvector;
+        errs() << "NewArgs[PermIdx]:" << *NewArgs[PermIdx] << "\n";
+        errs() << "----NewArgs.size(): " << NewArgs.size() << "\n";
+      }
+    }
     return NewArgs;
   }
 
