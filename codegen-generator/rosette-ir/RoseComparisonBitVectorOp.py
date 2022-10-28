@@ -20,3 +20,4 @@ class RoseComparisonBitVectorOp(RoseBitVectorOp):
     OperandList = [Operand1, Operand2]
     super().__init__(Opcode, Name, OperandList, ParentBlock)
 
+

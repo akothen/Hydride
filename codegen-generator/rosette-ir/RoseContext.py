@@ -68,8 +68,8 @@ class RoseContext:
     self.CompiledAbstractionsKeys[Abstraction] = Key
     
   def updateCompiledAbstraction(self, ID : str, NewAbstraction):
-    assert ID in self.CompiledAbstractions
-    self.CompiledAbstractions[ID] = NewAbstraction
+      assert ID in self.CompiledAbstractions
+      self.CompiledAbstractions[ID] = NewAbstraction
 
   def getCompiledAbstractionForID(self, ID : str):
     assert ID in self.CompiledAbstractions
@@ -210,6 +210,7 @@ class RoseContext:
       self.ParentContext.updateCompiledAbstraction(ID, Abstraction)
     # Copy over the name generator to the parent
     self.NameGenerator = self.ParentContext.getNameGenerator()
+
 
 
 

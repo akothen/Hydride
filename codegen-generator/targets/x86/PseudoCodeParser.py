@@ -34,6 +34,9 @@ def ParseX86Instruction(InstName : str, XMLFileName : str):
     if Sema == None:
       continue
     SemaList.append(Sema)
+    break
+  print("InstName:")
+  print(InstName)
   print("SemaList lngth:")
   print(len(SemaList))
   if len(SemaList) == 1:
@@ -612,4 +615,5 @@ def p_expr_var(p):
 def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
+
 

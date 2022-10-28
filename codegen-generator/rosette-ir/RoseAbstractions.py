@@ -645,7 +645,8 @@ class RoseCond(RoseRegion):
     for Condition in Conditions:
       assert isinstance(Condition.getType(), RoseBitVectorType) \
         or isinstance(Condition.getType(), RoseBooleanType)
-      if isinstance(Condition.getType(), RoseBitVectorType):
+      if isinstance(Condition.getType(), RoseBitVectorType) \
+              and isinstance(Condition.getType().getBitwidth(), int):
         assert Condition.getType().getBitwidth() == 1
       assert Condition not in ConditionsSet
       ConditionsSet.add(Condition)
@@ -721,6 +722,11 @@ class RoseCond(RoseRegion):
   
   def getConditions(self):
     return self.Conditions
+  
+  def setCondition(self, Idx, NewCondition):
+    assert isinstance(NewCondition.getType(), RoseBitVectorType) \
+      or isinstance(NewCondition.getType(), RoseBooleanType)
+    self.Conditions[Idx] = NewCondition
   
   def getThenRegions(self):
     return self.getChildren(self.getKeyForThenRegion())
@@ -858,6 +864,7 @@ class RoseCond(RoseRegion):
           String += Region.__str__(NumSpace + 1)
     String += Spaces + "}\n"
     return String
+
 
 
 

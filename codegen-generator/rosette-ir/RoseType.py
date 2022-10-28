@@ -49,3 +49,4 @@ class RoseType:
     def clone(self):
         return deepcopy(self)
 
+

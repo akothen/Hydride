@@ -4,6 +4,67 @@
 (provide (all-defined-out))
 
 
+(define (swizzle idx group_size dis_size rot_factor)
+  (define (rotate rot_fact n i)
+      ;; Note that Rosette's notation of indexing bitvectors is from right to left
+     (modulo (- i rot_fact) n)
+  )
+  (define (displace dis_factor n i)
+       (modulo (+ (* i dis_factor) (floor (/ i (/ n (gcd dis_factor n))))) n)
+  )
+  (define (group gs group_idx i)
+      (+ (* (floor (/ i gs)) gs) group_idx)
+  )
+  (define result (group group_size (rotate rot_factor group_size (displace dis_size group_size (modulo idx group_size))) idx))
+
+  result
+ )
+
+
+;; General version of swizzle with single input vector
+(define (vector-single-input-swizzle v num_elems type_size group_size dis_size rot_factor)
+(define result
+       (apply
+        concat
+        (for/list ([i (reverse (range num_elems))])
+          (define swizzled-index (swizzle (- (- num_elems 1) i) group_size dis_size rot_factor))
+          (ext-bv v (- (- num_elems 1) swizzled-index) type_size)
+         )
+        )
+    )
+    result
+)
+
+;; General version of swizzle with two input vectors
+(define (vector-two-input-swizzle v1 v2 num_elems type_size lane_offset lane_size group_size dis_size rot_factor)
+  (define high_lane_offset (+ group_size lane_offset))
+  (define result
+    (apply
+     concat
+     (for/list ([i (range 0 num_elems lane_size)])
+        (apply
+          concat
+          (for/list ([j (range lane_offset (* 2 high_lane_offset))])
+            (define raw-index (- j lane_offset))
+            (define swizzled-index (swizzle raw-index (* 2 group_size) dis_size rot_factor))
+            (if (< swizzled-index group_size)
+             (begin
+              (define adjusted-swizzled-index (- (- num_elems  1) (+ i lane_offset swizzled-index)))
+              (ext-bv v1 adjusted-swizzled-index type_size)
+             )
+             (begin
+              (define adjusted-swizzled-index (- (- num_elems  1) (- (+ i lane_offset swizzled-index) group_size)))
+              (ext-bv v2 adjusted-swizzled-index type_size)
+             )
+            )
+          )
+        )
+      )
+     )
+    )
+  result
+)
+
 (define (bvumaxval bitwidth)
   (apply 
   concat
@@ -12,7 +73,6 @@
     )
   )
 )
-
 
 (define (bvsmaxval bitwidth)
   (define end (- bitwidth 1))
@@ -27,7 +87,6 @@
   (concat (bv #b0 1) res)
 )
 
-
 (define (bvuminval bitwidth)
   (apply 
   concat
@@ -36,7 +95,6 @@
     )
   )
 )
-
 
 (define (bvsminval bitwidth)
   (define end (- bitwidth 1))
@@ -51,88 +109,92 @@
   (concat (bv #b1 1) res)
 )
 
-
 (define (bvssat vect bitwidth sat_size)
   (if (> bitwidth sat_size)
   (begin
     (cond
-    [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
-    [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
+    [(bvslt vect (bvsminval bitwidth)) (bvsminval sat_size)]
+    [(bvsgt vect (bvsmaxval bitwidth)) (bvsmaxval bitwidth)]
     [else (extract (- sat_size 1) 0 vect)])
   )
   (begin
    vect
   )
  )
+ ;;(bvsmin (bvsmax vect (bvsminval bitwidth)) (bvsmaxval bitwidth))
 )
 
-
 (define (bvusat vect bitwidth sat_size)
-  (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
+  (if (bvugt vect (bvumaxval bitwidth)) 
     (begin
-      (bvumaxval sat_size)
+      (bvumaxval bitwidth)
     )
     (begin
       (extract (- sat_size 1) 0 vect)
     )
   )
+  ;;(bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
 )
-
-
-(define (bvpadhighbits vect num_pad_bits)
-  (if (equal? num_pad_bits 0)
-    (begin
-      vect
-    )
-    (begin
-      (concat (bv 0 num_pad_bits) vect)
-    )
-  )
-)
-
 
 (define (bvaddnsw a b bitwidth)
-  (define c (bvadd a b))
+  (define zerobv (bv 0 (bitvector bitwidth)))
   (define result
   (cond
-    [(and (> (bitvector->integer a) 0) (> (bitvector->integer b) 0)
-          (< (bitvector->integer c) 0))
+    [(and (bvsgt a zerobv) (bvsgt b zerobv) 
+          (bvsgt a (bvsub (bvsmaxval bitwidth) b))) 
           (bvsmaxval bitwidth)]
-    [(and (< (bitvector->integer a) 0) (< (bitvector->integer b) 0)
-          (> (bitvector->integer c) 0))
-          (bvsminval bitwidth)]
+    [(and (bvslt a zerobv) (bvslt b zerobv) 
+          (bvslt a (bvsub (bvsminval bitwidth) b))) 
+          (bvsmaxval bitwidth)]
     [else (bvadd a b)]
   )
   )
   result
 )
 
-
 (define (bvaddnuw a b bitwidth)
-  (bvadd a (bvumin (bvsub (bvumaxval bitwidth) a) b))
-)
-
-
-(define (bvsubnsw a b bitwidth)
-  (define result
-  (cond
-     [(and (> (bitvector->integer b) 0)
-           (< (bitvector->integer a) (bitvector->integer (bvadd (bvsminval bitwidth) b))))
-            (bvsminval bitwidth)]
-     [(and (< (bitvector->integer b) 0)
-           (> (bitvector->integer a) (bitvector->integer (bvadd (bvsmaxval bitwidth) b))))
-            (bvsmaxval bitwidth)]
-      [else (bvsub a b)]
+  (define result 
+  (if (bvugt a (bvsub (bvumaxval bitwidth) b))
+    (begin 
+      (bvumaxval bitwidth)
+    )
+    (begin
+      (bvadd a b)
+    )
   )
   )
   result
 )
 
-
-(define (bvsubnuw a b bitwidth)
-  (bvsub a (bvumin a b))
+(define (bvsubnsw a b bitwidth)
+  (define zerobv (bv 0 (bitvector bitwidth)))
+  (define result
+  (cond
+    [(and (bvsgt a zerobv) (bvsgt (bvneg b) zerobv) 
+          (bvsgt a (bvsub (bvsmaxval bitwidth) (bvneg b)))) 
+          (bvsmaxval bitwidth)]
+    [(and (bvslt a zerobv) (bvslt (bvneg b) zerobv) 
+          (bvslt a (bvsub (bvsminval bitwidth) (bvneg b)))) 
+          (bvsmaxval bitwidth)]
+    [else (bvsub a b)]
+  )
+  )
+  result
 )
 
+(define (bvsubnuw a b bitwidth)
+  (define result 
+  (if (bvugt a (bvsub (bvumaxval bitwidth) (bvneg b)))
+    (begin 
+      (bvumaxval bitwidth)
+    )
+    (begin
+      (bvsub a b)
+    )
+  )
+  )
+  result
+)
 
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
@@ -151,7 +213,6 @@
   )
   result
 )
-
 
 (define (bvmulnuw a b bitwidth)
   (define result 

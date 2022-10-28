@@ -114,6 +114,25 @@ class RoseCallOp(RoseOperation):
           String += ","
     String += " )"
     print(String)
+
+  def __str__(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
+    String += str(self.Opcode)
+    String += " " + self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getCallOperands()) - 1:
+          String += ","
+    String += " )\n"
+    return String
   
   def solve(self):
     # Cannot solve calls
@@ -177,6 +196,25 @@ class RoseOpaqueCallOp(RoseOperation):
           String += ","
     String += " )"
     print(String)
+
+  def __str__(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = ""
+    if Name != "":
+        String = Spaces + Name + " = "
+    else:
+      String = Spaces
+    String += str(self.Opcode)
+    String += " " + self.getCallee().getName() + "("
+    for Index, Operand in enumerate(self.getCallOperands()):
+        String += " " + str(Operand.getType()) + " " + Operand.getName() 
+        if Index != len(self.getCallOperands()) - 1:
+          String += ","
+    String += " )\n"
+    return String
   
   def solve(self):
     # Cannot solve calls
@@ -322,6 +360,19 @@ class RoseCastOp(RoseOperation):
     String += " " + str(Operand.getType()) + " " + Operand.getName() \
               + ", " + str(self.getOperand(1))
     print(String)
+  
+  def __str__(self, NumSpace = 0):
+    Spaces = ""
+    for _ in range(NumSpace):
+      Spaces += " "
+    Name = super().getName()
+    String = Spaces + Name + " = "
+    String += str(self.Opcode)
+    Operand = self.getOperand(0)
+    String += " " + str(Operand.getType()) + " " + Operand.getName() \
+              + ", " + str(self.getOperand(1))
+    String += "\n"
+    return String
 
 
 class RoseAbsOp(RoseOperation):
@@ -1293,6 +1344,7 @@ class RoseXorOp(RoseOperation):
     assert Operand2 != LLVMUndefined
     IRBuilder = Context.getLLVMBuilder()
     return IRBuilder.xor(Operand1, Operand2, self.getName())
+
 
 
 

@@ -487,3 +487,4 @@ class RoseOperation(RoseValue):
           String += ","
     String += "\n"
     return String
+

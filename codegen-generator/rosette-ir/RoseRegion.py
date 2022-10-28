@@ -49,7 +49,10 @@ class RoseRegion:
   def __ne__(self, Other):
     assert isinstance(Other, RoseRegion)
     return self.ID != Other.ID #self.Children != Other.Children or self.Parent != Other.Parent
-  
+
+  def __hash__(self):
+    return hash(self.getRegionID())
+
   def __iter__(self):
     # Undef region is not iterable
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
@@ -71,8 +74,6 @@ class RoseRegion:
     else:
       if self.ChildIndex == self.getNumChildren():
         raise StopIteration
-      print("self.ChildIndex:")
-      print(self.ChildIndex)
       return self.getChild(self.ChildIndex)
   
   def areChildrenValid(self):
@@ -144,11 +145,6 @@ class RoseRegion:
     if Key == None:
       assert Index < len(self.Children)
       Child = self.Children[Index]
-      print("CHILD:")
-      Child.print()
-      print("Child.getParent():")
-      print(type(Child.getParent()))
-      print(type(self))
       assert Child.getParent() == self
       return Child
     else:
@@ -185,8 +181,6 @@ class RoseRegion:
   def getTailChild(self, Key = None):
     # Sanity check
     assert not isinstance(self, RoseAbstractions.RoseUndefRegion)
-    print("KEY:")
-    print(Key)
     if self.isEmpty(Key):
       return RoseAbstractions.RoseUndefRegion()
     if Key == None:
@@ -431,14 +425,11 @@ class RoseRegion:
     if isinstance(self, RoseAbstractions.RoseBlock):
       assert SubRegionType != RoseAbstractions.RoseBlock
       return []
-    print(type(self))
+    print("SubRegionType:")
+    print(SubRegionType)
     if self.getKeys() == None:
       assert Key == None
     else:
-      print("self.getKeys():")
-      print(self.getKeys())
-      print("Key:")
-      print(Key)
       assert Key in self.getKeys()
     RegionList = list()
     for SubRegion in self.getChildren(Key):
@@ -597,12 +588,6 @@ class RoseRegion:
       assert Key in self.Keys
     else:
       assert self.Keys == None
-    print("ADD ABSTRACTION SELF:")
-    self.print()
-    print("+++Key:")
-    print(Key)
-    print("Abstraction:")
-    Abstraction.print()
     if isinstance(Abstraction, RoseRegion):
       self.addRegion(Abstraction, Key)
       return
@@ -611,17 +596,11 @@ class RoseRegion:
       TailRegion = self.getTailChild(Key)
       if not isinstance(TailRegion, RoseAbstractions.RoseBlock) \
       or isinstance(TailRegion, RoseAbstractions.RoseUndefRegion):
-        print("CREATING A NEW BLOCK")
         # Add a new block first
         Block = RoseAbstractions.RoseBlock.create([])
         Block.addRegion(Abstraction)
-        print("--BLOCK:")
-        Block.print()
         self.addRegion(Block, Key)
-        print("--self:")
-        self.print()
       else:
-        print("ADDING TO TAIL REGION")
         TailRegion.addRegion(Abstraction)
         self.updateTailChild(TailRegion, Key)
       return
@@ -661,8 +640,15 @@ class RoseRegion:
 
   def print(self, NumSpace = 0):
     for Child in self.Children:
-      Child.getParent() 
       assert Child.getParent() == self
       Child.print(NumSpace)
+  
+  def __str__(self, NumSpace = 0):
+    String = ""
+    for Child in self.Children:
+      assert Child.getParent() == self
+      String += Child.__str__(NumSpace)
+    return String
+
 
 

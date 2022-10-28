@@ -142,8 +142,8 @@ def GenerateLLVMBlock(LLVMIRFunction : LLVMFunction, RoseIRBlock : RoseBlock, \
       CallInst = Builder.call(Intrinsic, Args, InstName)
       print("CallInst:")
       print(CallInst)
-      for Arg in Intrinsic.args:
-        print("CHECKING ARG:")
+      for Arg in CallInst.args:
+        print("--CHECKING ARG:")
         print(Arg)
       LLVMContext.mapRoseValToLLVMVal(Op, CallInst)
       continue
@@ -204,5 +204,6 @@ def LLVMCodeGen(RoseIRFunctionToRoseLLVMCtx : dict, ModuleName : str = None):
   print(LLVMIRModule)
   print("---\n\n\n\n\n")
   return LLVMIRModule
+
 
 

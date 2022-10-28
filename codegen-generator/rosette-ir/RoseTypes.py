@@ -27,6 +27,9 @@ class RoseUndefinedType(RoseType):
     def print(self):
         print("undefined")
 
+    def __str__(self):
+        return "undefined"
+
     def to_llvm_ir(self):
       assert False, "Rose IR to LLVM IR type conversion not supported."
 
@@ -42,6 +45,9 @@ class RoseVoidType(RoseType):
     
     def print(self):
         print("void")
+
+    def __str__(self):
+        return "void"
 
     def to_llvm_ir(self):
       return LLVMVoidType()
@@ -262,6 +268,9 @@ class RoseVectorType(RoseType):
     def print(self):
         print("vector")
 
+    def __str__(self):
+        return "vector"
+
     def to_llvm_ir(self):
       assert False, "Rose IR to LLVM IR type conversion not supported."
 
@@ -291,6 +300,9 @@ class RoseListType(RoseType):
     
     def print(self):
         print("list")
+
+    def __str__(self):
+        return "list"
 
     def to_llvm_ir(self):
       assert False, "Rose IR to LLVM IR type conversion not supported."
@@ -340,4 +352,5 @@ if __name__ == '__main__':
     print(BVType)
 
  
+
 

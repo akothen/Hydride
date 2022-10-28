@@ -923,3 +923,4 @@ def GetElemSizeOfArg(Function : RoseFunction, Arg : RoseArgument):
           return ElemSize
   assert ElemSize != None
 
+
