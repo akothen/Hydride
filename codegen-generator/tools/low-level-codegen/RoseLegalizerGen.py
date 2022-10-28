@@ -79,10 +79,10 @@ class RoseInstSelectorGenerator():
             print(ArgVal)
           if len(Checks) == 0:
             Checks.append(
-            '''dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal))
+            '''isAMatch(CI, {}, {})'''.format(str(Idx), ArgVal))
           else:
             Checks.append(
-            '''       && dyn_cast<ConstantInt>(CI->getOperand({}))->getZExtValue() == {}'''.format(str(Idx), ArgVal)) 
+            '''       && isAMatch(CI, {}, {})'''.format(str(Idx), ArgVal)) 
       Permutation = list()
       for Val in InstInfo["arg_permute_map"]:
         Permutation.append(str(Val))
@@ -116,7 +116,7 @@ class RoseInstSelectorGenerator():
         '''.format(InstName + "_wrapper", ",".join(Permutation))
       String += Pattern
     FinalPattern = '''
-      if(CI->getCalledFunction()->getName() == \"llvm.hydride.{}_dsl\") {{ 
+      if(CI->getCalledFunction()->getName().contains(\"llvm.hydride.{}_dsl\")) {{ 
         {} 
       }} 
     '''.format(TargetAgnosticInst, String)
