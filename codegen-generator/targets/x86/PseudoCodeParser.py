@@ -23,7 +23,26 @@ def ParseX86Intructions(XMLFileName : str):
   return SemaList
 
 
-def GetSemaFromXML(node):
+def ParseX86Instruction(InstName : str, XMLFileName : str):
+  # Intializing x86 parser
+  InitX86Parser()
+  # Collect all x86 instuctions semantics
+  SemaList = list()
+  DataRoot = ET.parse(XMLFileName)
+  for Node in DataRoot.iter('intrinsic'):
+    Sema = GetSemaFromXML(Node, InstName)
+    if Sema == None:
+      continue
+    SemaList.append(Sema)
+  print("SemaList lngth:")
+  print(len(SemaList))
+  if len(SemaList) == 1:
+    return SemaList
+  assert len(SemaList) == 0
+  return None
+
+
+def GetSemaFromXML(node, InstName : str = None):
   Params = []
   imm_width = None
   ID = 0
@@ -31,7 +50,7 @@ def GetSemaFromXML(node):
     name = param_node.attrib.get('varname', '')
     type = param_node.attrib['type']
     if name == '':
-        continue
+      continue
     is_signed = param_node.attrib.get('etype', '').startswith('SI')
     is_imm = param_node.attrib.get('etype') == 'IMM'
     if is_imm:
@@ -50,9 +69,15 @@ def GetSemaFromXML(node):
         return CPUID.split('/')[0]
     return CPUID
   
+  CheckInstName = node.attrib['name']
+  if InstName != None:
+    if CheckInstName == None:
+      return None
+    if InstName != CheckInstName:
+      return None
   CPUIDs = [ParseCpuId(cpuid) for cpuid in node.findall('CPUID')]
-  inst = node.find('instruction')
   #assert (inst is not None)
+  inst = node.find('instruction')
   operation = node.find('operation')
   assert (operation is not None)
   spec = Parse(operation.text)
@@ -588,6 +613,3 @@ def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
 
-
-  
-  
