@@ -13,9 +13,20 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Type.h"
+#include "llvm/IR/DerivedTypes.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/IR/CFG.h"
+#include "llvm/IR/Constants.h"
 #include "llvm/IR/Verifier.h"
+
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <string>
+
+#include <boost/multiprecision/cpp_int.hpp>
+
+using namespace boost::multiprecision;
 
 
 namespace llvm {
@@ -57,12 +68,20 @@ public:
 
     // Remove all the target-agnostic intrinsics / function calls
     for(auto *I : ToBeRemoved) {
-      I->replaceAllUsesWith(UndefValue::get(I->getType()));
+      if (InstToInstMap[I]->getType() == I->getType()) {
+        I->replaceAllUsesWith(InstToInstMap[I]);//UndefValue::get(I->getType()));
+      } else {
+        I->replaceAllUsesWith(new BitCastInst(InstToInstMap[I], I->getType(), "", I));
+      }
       I->eraseFromParent();
     }
 
-    bool BrokenDebugInfo = true;
-    assert(verifyModule(BrokenDebugInfo, *(F.getParent()), errs()));
+    //bool BrokenDebugInfo = true;
+    //if (verifyModule(*(F.getParent()), errs(), &BrokenDebugInfo) == false):
+    //  errs() << "BROKEN MODULE!!!!!!!\n";
+
+    errs() << "FINAL FUNCTION:\n";
+    errs() << F << "\n";
 
     return Changed;
   }
@@ -85,10 +104,20 @@ public:
   std::vector<Value *> getArgsAfterPermutation(CallInst *OriginalInst,
                             Function *InstFunction, std::vector<int> &Permutation, 
                             Instruction *InsertBefore) {
+    errs() << "getArgsAfterPermutation:" << "\n";
+    errs() << "OriginalInst:" << *OriginalInst << "\n";
+    errs() << "InstFunction" << *InstFunction << "\n";
     // Get bitvector list
     std::vector<Value *> BitvectorList;
-    for (unsigned I = 0, E = OriginalInst->getNumOperands(); I != E; ++I)
-      BitvectorList.push_back(OriginalInst->getOperand(I));
+    errs() << "OriginalInst->getNumOperands():" << OriginalInst->getNumOperands() << "\n";
+    //for (unsigned I = 0; I < OriginalInst->getNumOperands(); ++I) {
+    //  errs() << "OriginalInst->getOperand(I):" << *(OriginalInst->getOperand(I)) << "\n";
+    //  BitvectorList.push_back(OriginalInst->getOperand(I));
+    //}
+    for (auto &Operand : OriginalInst->args()) {
+      errs() << "OriginalInst->getOperand(I):" << *Operand << "\n";
+      BitvectorList.push_back(Operand);
+    }
     // Get the required types
     std::vector<Type *> RequiredTypes;
     for (auto &Arg : InstFunction->args())
@@ -100,15 +129,95 @@ public:
           && "Error: BitvectorList.size() != RequiredTypes.size()");
     // Generate some new args
     std::vector<Value *> NewArgs;
-    NewArgs.reserve(RequiredTypes.size());
+    for (unsigned I = 0; I < RequiredTypes.size(); ++I)
+      NewArgs.push_back(nullptr);
+    //NewArgs.reserve(RequiredTypes.size());
+    errs() << "RequiredTypes size:" << RequiredTypes.size() << "\n"; 
+    errs() << "BitvectorList size:" << BitvectorList.size() << "\n";
+    for (int PermIdx : Permutation)
+      errs() << "Permutation Idx:" << PermIdx << "\n";
     for (unsigned Idx = 0; Idx < BitvectorList.size(); Idx++) {
       if(Permutation[Idx] != -1) {
-        auto PermIdx = Permutation[Idx];
+        errs() << "IDX:" << Idx << "\n";
+        int PermIdx = Permutation[Idx];
+        errs() << "PERM IDX:" << PermIdx << "\n";
         NewArgs[PermIdx] = getBitvectorOfRequiredType(BitvectorList[Idx], 
                                       RequiredTypes[PermIdx], InsertBefore);
+        errs() << "NewArgs[PermIdx]:" << *NewArgs[PermIdx] << "\n";
+        errs() << "----NewArgs.size(): " << NewArgs.size() << "\n";
       }
     }
+    errs() << "NewArgs.size(): " << NewArgs.size() << "\n";
     return NewArgs;
+  }
+
+  std::string intToHex(int512_t IntegerVal, unsigned Bitwidth, bool IgnorePrefix = false) {
+    std::stringstream Stream;
+    if (IgnorePrefix == false) {
+      if (IntegerVal >= 0) {
+        Stream << "0x" 
+              << std::setfill ('0') << std::setw(Bitwidth * 2) 
+              << std::hex << IntegerVal;
+      } else {
+        Stream << "0x" 
+              << std::setfill ('f') << std::setw(Bitwidth * 2) 
+              << std::hex << IntegerVal;
+      }
+    } else {
+      if (IntegerVal >= 0) {
+        Stream << std::setfill ('0') << std::setw(Bitwidth * 2) 
+              << std::hex << IntegerVal;
+      } else {
+        Stream << std::setfill ('f') << std::setw(Bitwidth * 2) 
+              << std::hex << IntegerVal;
+      }
+    }
+    return Stream.str();
+  }
+
+  bool isAMatch(CallInst *OriginalInst, unsigned Idx, int512_t OperandValue) {
+    errs() << "MATCHING INST:" << *OriginalInst << "\n";
+    errs() << "Idx:" << Idx << "\n";
+    errs() << "OriginalInst->getOperand(Idx):" << *(OriginalInst->getOperand(Idx)) << "\n";
+    if (dyn_cast<Constant>(OriginalInst->getOperand(Idx)) == nullptr)
+      return false;
+    auto *OperandVectorType = dyn_cast<VectorType>(OriginalInst->getOperand(Idx)->getType());
+    if (OperandVectorType) {
+      // Get full bitwidth of the vector
+      unsigned ElemSize = OperandVectorType->getElementType()->getScalarSizeInBits();
+      unsigned NumElems = OperandVectorType->getElementCount().getKnownMinValue();
+      errs() << "ElemSize:" << ElemSize << "\n";
+      errs() << "NumElems:" << NumElems << "\n";
+      unsigned TotalBitwidth = ElemSize * NumElems;
+      errs() << "TotalBitwidth:" << TotalBitwidth << "\n";
+      std::string CheckHexVal = intToHex(OperandValue, TotalBitwidth);
+      errs() << "CheckHexVal:" << CheckHexVal << "\n";
+      std::string ActualHexVal = "0x";
+      auto *ConstantAggZeroArray = dyn_cast<ConstantAggregateZero>(OriginalInst->getOperand(Idx));
+      if (ConstantAggZeroArray == nullptr) {
+        auto *ConstantVectorVal = dyn_cast<ConstantDataVector>(OriginalInst->getOperand(Idx));
+        errs() << "ConstantVectorVal:" << *ConstantVectorVal << "\n";
+        for (unsigned I = 0; I < NumElems; I++) {
+          errs() << "ConstantVectorVal->getElementAsAPInt(Idx):" << *(ConstantVectorVal->getElementAsConstant(I)) << "\n";
+          ActualHexVal += intToHex(dyn_cast<ConstantInt>(ConstantVectorVal->getElementAsConstant(I))->getZExtValue(), ElemSize, true);
+        }
+      } else {
+        ActualHexVal += intToHex(0, TotalBitwidth, true);
+      }
+      errs() << "ActualHexVal:" << ActualHexVal << "\n";
+      if (CheckHexVal == ActualHexVal) {
+        errs() << "CheckHexVal == ActualHexVal\n";
+        errs() << "MATCH FOUND\n";
+        return true;
+      }
+      errs() << "CheckHexVal != ActualHexVal\n";
+      return false;
+    }
+    if (dyn_cast<ConstantInt>(OriginalInst->getOperand(Idx))->getZExtValue() == OperandValue) {
+      errs() << "MATCH FOUND\n";
+      return true;
+    }
+    return false;
   }
 
 };
