@@ -13,6 +13,7 @@ from RoseFunctionInfo import *
 from RoseCodeGenerator import *
 from RoseToolsUtils import *
 from RoseSimilarityCheckerUtilities import *
+from RoseISAValidityChecker import *
 
 
 
@@ -61,6 +62,10 @@ class RoseInstSelectorGenerator():
   def generateAPattern(self, TargetAgnosticInst : str, InstDict : dict):
     String = ""
     for InstName, InstInfo in InstDict.items():
+      ValidityChecker = RoseISAValidityChecker()
+      if ValidityChecker.checkValidityOnTarget(InstName, "x86") == False:
+        if "div" not in InstName and "rem" not in InstName:
+          continue
       Checks = list()
       for Idx, ArgVal in enumerate(InstInfo["args"]):
         if "SYMBOLIC_BV" not in ArgVal and InstInfo["arg_permute_map"][Idx] == -1:
@@ -88,32 +93,138 @@ class RoseInstSelectorGenerator():
         Permutation.append(str(Val))
       print("Content:")
       print(Checks)
-      if len(Checks) != 0:
-        Pattern = '''
-          if({}) {{ 
-            auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
-            std::vector<int> Permutation = {{{}}}; 
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-            auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
-            errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
-            InstToInstMap[CI] = NewCallInst; 
-            ToBeRemoved.insert(CI); 
-            return true; 
-          }} 
-        '''.format("\n".join(Checks), InstName + "_wrapper", ",".join(Permutation))
+      if "div" in InstName and "epi" in InstName:
+        if len(Checks) != 0:
+          Pattern = '''
+            if({}) {{
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::SDiv, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }}
+          '''.format("\n".join(Checks), ",".join(Permutation))
+        else:
+          Pattern = '''
+            {{ 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::SDiv, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }} 
+          '''.format(",".join(Permutation))
+      elif "div" in InstName and "epu" in InstName:
+        if len(Checks) != 0:
+          Pattern = '''
+            if({}) {{
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::UDiv, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }}
+          '''.format("\n".join(Checks), ",".join(Permutation))
+        else:
+          Pattern = '''
+            {{ 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::UDiv, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }} 
+          '''.format(",".join(Permutation))
+      elif "rem" in InstName and "epi" in InstName:
+        if len(Checks) != 0:
+          Pattern = '''
+            if({}) {{
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::SRem, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }}
+          '''.format("\n".join(Checks), ",".join(Permutation))
+        else:
+          Pattern = '''
+            {{ 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::SRem, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }} 
+          '''.format(",".join(Permutation))
+      elif "rem" in InstName and "epu" in InstName:
+        if len(Checks) != 0:
+          Pattern = '''
+            if({}) {{
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::URem, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }}
+          '''.format("\n".join(Checks), ",".join(Permutation))
+        else:
+          Pattern = '''
+            {{ 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutationForSpecialCases(CI, Permutation);    
+              auto *NewInst = BinaryOperator::Create(Instruction::URem, Args[0], Args[1], "", CI);
+              errs() << \"NEW INSTUCTION:\" << *NewInst << \"\\n\"; 
+              InstToInstMap[CI] = NewInst; 
+              ToBeRemoved.insert(CI); 
+              return true; 
+            }} 
+          '''.format(",".join(Permutation))
       else:
-        Pattern = '''
-          {{ 
-            auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
-            std::vector<int> Permutation = {{{}}}; 
-            std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-            auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
-            errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
-            InstToInstMap[CI] = NewCallInst; 
-            ToBeRemoved.insert(CI); 
-            return true; 
-          }} 
-        '''.format(InstName + "_wrapper", ",".join(Permutation))
+        if len(Checks) != 0:
+          Pattern = '''
+            if({}) {{
+              auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
+              errs() << "INST FUNCTION NAME: " << \"{}\" << \"\\n\"; 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {{
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
+                errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }}
+            }} 
+          '''.format("\n".join(Checks), InstName + "_wrapper", InstName + "_wrapper", ",".join(Permutation))
+        else:
+          Pattern = '''
+            {{ 
+              auto *InstFunction = I->getModule()->getFunction(\"{}\"); 
+              std::vector<int> Permutation = {{{}}}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {{
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, \"\", CI); 
+                errs() << \"NEW INSTUCTION:\" << *NewCallInst << \"\\n\"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }}
+            }} 
+          '''.format(InstName + "_wrapper", ",".join(Permutation))
       String += Pattern
     FinalPattern = '''
       if(CI->getCalledFunction()->getName().contains(\"llvm.hydride.{}_dsl\")) {{ 
@@ -187,7 +298,7 @@ class RoseInstSelectorGenerator():
     Content += self.generateLegalizerPassDeclaration()
     Content += self.generateLegalizerPassDefinition()
     Content += self.generateCodeForRegisteringPass()
-    FileName = "x86_isel.cpp"
+    FileName = "x86Legalizer.cpp"
     try:
       File = open(FileName, "w")
       File.write(Content)
