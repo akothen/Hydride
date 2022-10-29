@@ -42,7 +42,7 @@
 ;; LLVM-IR.
 (define (invoke-code-generator hydride-file bitcode-file)
   (define CODE-GEN-PATH (string-append HYDRIDE_SRC "/code-generator/"))
-  (define CODE-GEN-SCRIPT (string-append CODE-GEN-PATH "/<path>/<to>/<script>.py"))
+  (define CODE-GEN-SCRIPT (string-append CODE-GEN-PATH "/tools/low-level-codegen/RoseLowLevelCodeGen.py"))
   (define CMD (string-append PYTHON " " CODE-GEN-SCRIPT " " hydride-file " " bitcode-file))
   (debug-log CMD)
   ; (system CMD)

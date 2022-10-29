@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = []
+DEBUG_LIST = ["_mm_sub_pi16"]
 SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -25,10 +25,13 @@ class Synthesizer:
                  vectorization_factor = 8,
                  depth = 6,
                  contexts_per_dsl_inst = None,
-                 is_shuffle = False
+                 is_shuffle = False,
+                 target = "x86",
+                 legal_map = {}
                  ):
 
         self.spec = spec
+        self.target = target
         self.dsl_operators = dsl_operators
         self.struct_definer = struct_definer
         self.grammar_generator = grammar_generator
@@ -39,6 +42,7 @@ class Synthesizer:
         self.is_shuffle = is_shuffle
         self.input_sizes = []
 
+
         for idx, shape in enumerate(self.spec.input_shapes):
             self.input_sizes.append(
                 shape[0] * shape[1] * self.spec.input_precision[idx]
@@ -46,7 +50,16 @@ class Synthesizer:
             )
 
         self.output_size = self.spec.get_output_size()
+        self.legal_map = legal_map
 
+
+    def is_instruction_legal(self, name):
+        SPECIAL_CASE = ["div", "rem"]
+        for sc in SPECIAL_CASE:
+            if sc in name:
+                return True
+
+        return (self.legal_map[name] == 1)
 
     def get_memory_loads(self):
 
@@ -475,7 +488,7 @@ class Synthesizer:
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
@@ -572,7 +585,7 @@ class Synthesizer:
         #    return (ops, ctxs)
 
         smallest_imm = min([imm[1] for imm in self.spec.imms], default = self.output_slice_length)
-        smallest_input = min(self.input_sizes)
+        smallest_input = min(self.input_sizes, default = self.output_slice_length)
         smallest_output = self.output_slice_length
 
         smallest_bv_size = min(smallest_input, smallest_output, smallest_imm)
@@ -621,7 +634,7 @@ class Synthesizer:
         compute_ops = []
         compute_ctxs = []
 
-        MAX_OCCURANCES = 2
+        MAX_OCCURANCES = 3
 
         names = []
 
@@ -957,6 +970,15 @@ class Synthesizer:
 
         for ctx in dsl_inst.contexts:
 
+            # We only include those instructions in the grammar
+            # that we know can be generated for a given
+            # target
+            if not self.is_instruction_legal(ctx.name):
+                print(ctx.name, "is not supported on the current target", self.target)
+                continue
+
+
+
 
             if not ctx.has_output_size():
                 continue
@@ -1072,6 +1094,7 @@ class Synthesizer:
             score +=  int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
+            score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
             score += int(ctx.supports_output_size(self.output_slice_length))
 
 
@@ -1113,24 +1136,21 @@ class Synthesizer:
 
 
             ## Multiplication and division operations can make the
-            ## Synthesis more complex and hence any dsl operations
+            ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            if "bvmul" in dsl_ops and "bvmul" not in spec_ops:
-                return False
+            EXPENSIVE_OPS = ["bvmul", "bvsdiv", "bvudiv", "bvssat", "bvusat", "sign-extend", "zero-extend", "bvaddnsw", "bvaddnuw"]
 
-            if "bvsdiv" in dsl_ops and "bvsdiv" not in spec_ops:
-                return False
+            # Including dot-products type operations is only required
+            # when there is some form of accumulation with multiplication
+            # hence, we limit dot-product operations to be included
+            # only in such cases
+            # EXPENSIVE_OPS += ["bvadd"]
 
-            if "bvudiv" in dsl_ops and "bvudiv" not in spec_ops:
-                return False
+            for expensive_op in EXPENSIVE_OPS:
+                if expensive_op in dsl_ops and expensive_op not in spec_ops:
+                    return False
 
-
-            if "sign-extend" in dsl_ops and "sign-extend" not in spec_ops:
-                return False
-
-            if "zero-extend" in dsl_ops and "zero-extend" not in spec_ops:
-                return False
 
 
             # Match in any order
@@ -1211,7 +1231,7 @@ class Synthesizer:
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
 
-        return all([op in ["sign-extend", "zero-extend", "extract", "concat"] for op in ops])
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat"] for op in ops])
 
 
     # Is the operation either a broadcast operation or an

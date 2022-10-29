@@ -20,7 +20,7 @@ BV_OPS = [
     # "bitvector->integer", "bitvector->natural", "integer->bitvector",
     "bvumaxval", "bvsmaxval",
     "bvuminval", "bvsminval",
-    #"bvssat", "bvusat",
+    "bvssat", "bvusat",
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
     "bvmulnsw", "bvmulnuw","if", "abs", "cond",
     "bvsmax", "bvumax", "bvsmin", "bvumin",

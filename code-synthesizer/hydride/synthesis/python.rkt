@@ -21,6 +21,7 @@
 (provide (all-defined-out))
 
 (define HYDRIDE_SRC (getenv "HYDRIDE_ROOT"))
+(define X86_LEGALIZER (getenv "X86_LEGALIZER"))
 (define CODE-SYNTH-PATH (string-append HYDRIDE_SRC "/code-synthesizer/dsl-ir/" ))
 (define GEN-GRAMMAR-SCRIPT-NAME "emit_grammar.py")
 (define GEN-GRAMMAR-SCRIPT (string-append CODE-SYNTH-PATH GEN-GRAMMAR-SCRIPT-NAME))

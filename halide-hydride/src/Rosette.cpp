@@ -2363,7 +2363,15 @@ namespace Halide {
                     std::string get_synthlog_hash_filepath(int id){
 
                         if(id < 0){
-                            return "";
+                            const char* initial_hash = getenv("HYDRIDE_INITIAL_HASH");
+                            if(initial_hash){
+                                return std::string(initial_hash) + ".rkt";
+
+                            } else {
+                                return "";
+                            }
+
+
                         } else {
                             return "hydride_hash_" + std::to_string(id) + ".rkt";
                         }
@@ -2374,7 +2382,12 @@ namespace Halide {
                     std::string get_synthlog_hash_name(int id){
 
                         if(id < 0){
-                            return "";
+                            const char* initial_hash = getenv("HYDRIDE_INITIAL_HASH");
+                            if(initial_hash){
+                                return std::string(initial_hash);
+                            } else {
+                                return "";
+                            }
                         } else {
                             return "synth_hash_" + std::to_string(id);
                         }
@@ -2651,6 +2664,53 @@ namespace Halide {
 
         } // namespace Hydride
 
+        void hydride_generate_llvm_bitcode(Target::Arch t, std::string input_file, std::string output_file){
+
+            std::string target_flag = "";
+
+            switch(t){
+                case Target::X86:
+                    target_flag = "-x86-hydride-legalize";
+                    break;
+                case Target::Hexagon:
+                    target_flag = "-hvx-hydride-legalize";
+                    break;
+                default:
+                    assert(false && "Unsupported target for hydride code-generation");
+                    break;
+            };
+
+            const char* hydride_src = getenv("HYDRIDE_ROOT");
+            assert(hydride_src && "HYDRIDE_ROOT environment variable needs to be defined for codegen");
+
+
+            const char* legalizer_so = getenv("LEGALIZER_PATH");
+            assert(legalizer_so && "LEGALIZER_PATH environment variable must be defined for hydride codegen");
+
+
+            const char* intrin_wrapper = getenv("INTRINSICS_LL");
+            assert(intrin_wrapper && "INTRINSICS_LL must be defined for hydride llvm code-gen");
+
+            std::string codegen_script_path = std::string(hydride_src) + "/codegen-generator/tools/low-level-codegen/RoseLowLevelCodeGen.py";
+
+
+            std::string cmd = "python " + codegen_script_path + " " + input_file + " " + std::string(legalizer_so) + " " + std::string(intrin_wrapper) +" "+ target_flag + " " + output_file;
+            debug(0) << cmd << "\n";
+
+            int ret_code = system(cmd.c_str());
+
+            debug(0) << "Returned with return code: "<<ret_code <<"\n";
+
+            // TEMP CMD
+            std::string temp_cmd = "cp /tmp/hydride.ll.legalize.ll  " + output_file;
+
+            ret_code = system(temp_cmd.c_str());
+
+            debug(0) << "Returned with return code: "<<ret_code <<"\n";
+
+
+
+        }
 
         Stmt hydride_optimize_hvx(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
 
@@ -2671,6 +2731,7 @@ namespace Halide {
         }
 
 
+
         Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
             debug(0) << "Hydride Optimize X86" <<"\n";
             /*
@@ -2686,7 +2747,13 @@ namespace Halide {
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
             */
-            return Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
+
+            if(mutated_exprs.size()){
+               // hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
+            }
+
+            return Result;
         }
 
         Stmt optimize_x86_instructions_synthesis(Stmt s, const Target &t, FuncValueBounds fvb) {

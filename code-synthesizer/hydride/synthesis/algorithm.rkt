@@ -175,12 +175,12 @@
                     )
 
 
-                  (define depth-limit 5)
+                  (define depth-limit 4)
                   (define optimize? #t)
                   (define symbolic? #f)
                   (define cost-bound 40)
 
-                  (displayln "Synthesizing sub-expression")
+                  (displayln (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
                   (pretty-print expr-extract)
 
                   (define hashed-expr (halide:hash-expr expr-extract))
@@ -228,7 +228,14 @@
 
                         (debug-log hashed-expr)
                         (debug-log (vector sat? mat el))
-                        (hash-set! synth-log hashed-expr (vector sat? mat el) )
+
+                        ;; Only memoize succesful entries
+                        (if sat? 
+                            (hash-set! synth-log hashed-expr (vector sat? mat el) )
+                            '()
+                          )
+
+                        
 
 
 
@@ -243,7 +250,35 @@
                       (displayln "Solution")
                       (pretty-print materialize)
                       )
-                    (debug-log "Unsatisfiable")
+                    (begin
+                      (debug-log "Unsatisfiable, try smaller window within given sub-expression")
+                      (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
+                      (define expr-VF (halide:vec-len expr-extract))
+
+                      ;; The extracted sub-expression is to be treated
+                      ;; as synthesis of some un-seen new expression
+                      ;; and so we must create a new id-map for the registers to bind to
+                      (define sub-id-map (make-hash))
+                      (for/list ([i (range (vector-length dummy-args))])
+                                (define dummy-buf (vector-ref dummy-args i))
+                                (hash-set! sub-id-map dummy-buf (bv i (bitvector 8)) )
+
+                                )
+                      (if (eq? actual-expr-depth 1)
+                        (begin
+                          (debug-log "Error unable to synthesize expression even with depth 1")
+                          (exit)
+                          )
+                        '()
+                        )
+                      (define recalculate (synthesize-halide-expr-step expr-extract (max 1 (- actual-expr-depth 1))  VF sub-id-map solver))
+                      (debug-log "Smaller window synthesis returned:")
+                      (debug-log recalculate)
+                      (set! satisfiable? #t)
+                      (set! materialize recalculate)
+
+                      (hash-set! synth-log hashed-expr (vector satisfiable? materialize 0))
+                      )
                     )
 
                   (println materialize)
