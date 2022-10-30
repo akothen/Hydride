@@ -2648,6 +2648,7 @@ namespace Halide {
                 int ret_code = system(cmd.c_str());
                 auto end = std::chrono::system_clock::now();
                 std::cout << "Synthesis completed with return code:\t"<< ret_code <<"\n";
+                internal_assert(ret_code == 0) << "Synthesis crashed, exiting ..."<<"\n";
                 
                 std::chrono::duration<double> elapsed_seconds = end - start;
 
@@ -2699,7 +2700,7 @@ namespace Halide {
 
             int ret_code = system(cmd.c_str());
 
-            debug(0) << "Returned with return code: "<<ret_code <<"\n";
+            internal_assert(ret_code == 0) << "Codegeneration crashed, exiting ..."<<"\n";
 
             // TEMP CMD
             std::string temp_cmd = "cp /tmp/hydride.ll.legalize.ll  " + output_file;

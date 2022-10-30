@@ -46,6 +46,15 @@ extern "C" {
     ssize_t      write(int, const void *, size_t);
 }
 
+
+void *aligned_malloc(size_t size, unsigned alignment) {
+  void *result = NULL;
+  int rc;
+  rc = posix_memalign(&result, alignment, size);
+  return result;
+}
+
+
 int write_file(int fp, unsigned char *src, int height, int width, int border_width) {
     int i;
     for(i = 0; i < height; i++) {
@@ -125,8 +134,8 @@ int main(int argc, char **argv) {
     /*  Allocate memory for input/output                    */
     /* -----------------------------------------------------*/
 
-    unsigned char *input  = (unsigned char *) malloc(width*height*sizeof(unsigned char)); //memalign(1 << LOG2VLEN, width*height*sizeof(unsigned char));
-    unsigned char *output = (unsigned char *) malloc(width*height*4*sizeof(unsigned char)); //memalign(1 << LOG2VLEN, width*height*4*sizeof(unsigned char));
+    unsigned char *input  = (unsigned char *) aligned_malloc(width*height*sizeof(unsigned char), 1 << LOG2VLEN); //memalign(1 << LOG2VLEN, width*height*sizeof(unsigned char));
+    unsigned char *output = (unsigned char *) aligned_malloc(width*height*4*sizeof(unsigned char),1 << LOG2VLEN ); //memalign(1 << LOG2VLEN, width*height*4*sizeof(unsigned char));
 
     if ( input == NULL || output == NULL ) {
         printf("Error: Could not allocate Memory for image\n");
@@ -250,7 +259,7 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if l2norm
+#if benchmark_l2norm
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -265,16 +274,18 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - l2norm(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 
-#if fully_connected
-    int* bias = (int*)memalign(1 << LOG2VLEN, width * height * sizeof(int));
+#if benchmark_fully_connected
+    int* bias = (int*) aligned_malloc(width * height * sizeof(int), 1 << LOG2VLEN); //(int*)memalign(1 << LOG2VLEN, width * height * sizeof(int));
     for (int i = 0; i < (width * height); i++)
         bias[i] = 10000;
 
@@ -287,19 +298,23 @@ int main(int argc, char **argv) {
 
     Halide::Runtime::Buffer<uint8_t> mat_a_(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> mat_b_(input, dims, shape);
-    Halide::Runtime::Buffer<int32_t> bias_((long*)bias, 1, b_shape);
+    Halide::Runtime::Buffer<int32_t> bias_((int*)bias, 1, b_shape);
     Halide::Runtime::Buffer<uint8_t> output_(output, dims, shape);
 
     cycles = benchmark([&]() {
-            int error = fully_connected(mat_a_, 3, mat_b_, 5, bias_, 7, 32767, 1, 5, 250, output_);
+            int error = fully_connected(/* _input_buffer */ mat_a_, /* _input_zero */  3, /*_filter_buffer */  mat_b_,/* _filter_zero */ 5, 
+                    /*_bias_buffer */ bias_,/* _output_zero */  7, /* _output_multiplier */  32767, /* _output_shift */ 1, /* _output_min */  
+                    5, /* _output_max */ 250, /* _output_buffer */output_);
             if (error != 0) {
             printf("fully_connected pipeline failed: %d\n", error);
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, mat_a_(x, y), output_(x, y));
+#endif
 
     printf("AppReported (HVX128B-mode): Image %dx%d - fully_connected(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
@@ -351,7 +366,7 @@ int main(int argc, char **argv) {
 #endif
 
 
-#if blur3x3
+#if benchmark_blur3x3
     halide_dimension_t x_dim{ 0, width/2, 1 };
     halide_dimension_t y_dim{ 0, height, width/2 };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -366,14 +381,17 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
 
+#endif
+
     printf("AppReported (): Image %dx%d - blur3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if dilate3x3
+#if benchmark_dilate3x3
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -388,9 +406,11 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - dilate3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
@@ -448,7 +468,7 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - gaussian3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if gaussian5x5
+#if benchmark_gaussian5x5
     halide_dimension_t x_dim{0, width, 1};
     halide_dimension_t y_dim{0, height, width};
     halide_dimension_t shape[2] = {x_dim, y_dim};
@@ -464,9 +484,11 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x=0; x<10; x++)
         for (int y=0; y<10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - gaussian5x5(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles/(width*height));
 #endif

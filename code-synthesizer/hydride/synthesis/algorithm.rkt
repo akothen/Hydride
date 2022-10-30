@@ -26,7 +26,7 @@
 (provide (all-defined-out))
 
 
-;; Defines the utilitie to perform synthesis on Halide IR expressions
+;; Defines the utilities to perform synthesis on Halide IR expressions
 
 (define synth-log (make-hash))
 
@@ -82,7 +82,7 @@
 
   ;; Lower target agnostic specialized shuffles to sequences
   ;; of target specific shuffle operations.
-  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver hydride:cost #t #f))
+  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log hydride:cost #t #f))
   (pretty-print id-map)
   (displayln "========================================")
   legalized-shuffles-expr

@@ -26,7 +26,7 @@
 
 
 
-(define (legalize-expr-swizzles hydride-expr solver cost-fn optimize? symbolic?)
+(define (legalize-expr-swizzles hydride-expr solver swizzle-synth-log cost-fn optimize? symbolic?)
   (debug-log "Legalize Expression Swizzle!")
 
 
@@ -36,16 +36,16 @@
   (define (swizzle-visitor expr)
     (destruct expr
               [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-               (lower-swizzle expr solver cost-fn optimize? symbolic?)
+               (lower-swizzle expr solver swizzle-synth-log cost-fn optimize? symbolic?)
                ]
               [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-               (lower-swizzle expr solver cost-fn optimize? symbolic?)
+               (lower-swizzle expr solver swizzle-synth-log cost-fn optimize? symbolic?)
                ]
               [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-               (lower-swizzle expr solver cost-fn optimize? symbolic?)
+               (lower-swizzle expr solver swizzle-synth-log cost-fn optimize? symbolic?)
                ]
               [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-               (lower-swizzle expr solver cost-fn optimize? symbolic?)
+               (lower-swizzle expr solver swizzle-synth-log cost-fn optimize? symbolic?)
                ]
               [_ expr]
               )
@@ -119,9 +119,9 @@
 
 
 ;; Memoize synthesis of swizzles
-(define swizzle-synth-log (make-hash))
+;(define swizzle-synth-log (make-hash))
 
-(define (lower-swizzle swizzle-expr solver cost-fn optimize? symbolic?)
+(define (lower-swizzle swizzle-expr solver swizzle-synth-log cost-fn optimize? symbolic?)
   (debug-log (format "lower-swizzle on expression: ~a \n" swizzle-expr))
 
   ;; Synthesize all lanes together instead of lane by lane

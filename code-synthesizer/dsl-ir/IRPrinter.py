@@ -1,6 +1,7 @@
 from Instructions import DSLInstruction
 from Types import *
 from PredefinedDSL import *
+import sys
 
 class IRPrinter:
 
@@ -68,6 +69,19 @@ class IRPrinter:
             if isinstance(ir_arg, LaneSize) and ir_arg.input_precision:
                 input_prec_arg = ir_arg
                 break
+
+
+        # Similarity checking may have folded
+        # the argument when all are the same
+        if input_prec_arg == None:
+            input_precisions = [ctx.in_precision for ctx in dsl_inst.contexts]
+            ip_0 = input_precisions[0]
+            all_same = all([(ip == ip_0) and (ip != None) for ip in input_precisions])
+
+            if all_same:
+                input_prec_arg = Integer(str(ip_0), value = ip_0)
+
+
 
 
         #assert input_prec_arg != None, "DSL Inst must contain input precision argument "+dsl_inst.name
