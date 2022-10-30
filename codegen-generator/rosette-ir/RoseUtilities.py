@@ -89,6 +89,7 @@ def ComputeBitSliceWidth(Low : RoseValue, High : RoseValue, TotalBitwidth : int 
 
 # Assumption here is that BVOp1 accesses lower indices than BVOp2
 def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> bool:
+  print("CHECK IF BIT SLICES ARE CONTIGUOUS")
   # Some sanity checks
   assert isinstance(BVOp1, RoseBVInsertSliceOp) or isinstance(BVOp1, RoseBVExtractSliceOp)
   assert isinstance(BVOp2, RoseBVInsertSliceOp) or isinstance(BVOp2, RoseBVExtractSliceOp)
@@ -128,57 +129,152 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
   assert not isinstance(Low1, RoseConstant)
   assert not isinstance(Low2, RoseConstant)
 
-  # Just handle one _very_ common case where low2 = i + some_constant
-  # Strip away any cast first
-  #assert isinstance(Low2, RoseAddOp)
-  if not isinstance(Low2, RoseAddOp):
-    return False
-  if isinstance(Low2.getOperand(0), RoseConstant):
-    Low2IndexValue = Low2.getOperand(1)
-    ConstantLow2Index = Low2.getOperand(0)
-  else:
-    assert isinstance(Low2.getOperand(1), RoseConstant)
-    Low2IndexValue = Low2.getOperand(0)
-    ConstantLow2Index = Low2.getOperand(1)
-  # Strip any casts away
-  Low2IndexValue = StripCastsAndSizeExtension(Low2IndexValue)
-  # High index is expressed in terms of low index
-  # TODO: Make this more general.
-  print("Low2IndexValue:")
-  Low2IndexValue.print()
-  Low2IndexValue.getType().print()
-  print("Low1:")
-  Low1.print()
-  Low1.getType().print()
+  if isinstance(Low2.getOperand(0), RoseConstant) \
+    or isinstance(Low2.getOperand(1), RoseConstant):
+    # Just handle one _very_ common case where low2 = i + some_constant
+    # Strip away any cast first
+    #assert isinstance(Low2, RoseAddOp)
+    if not isinstance(Low2, RoseAddOp):
+      return False
+    print("LOW1:")
+    Low1.print()
+    print("LOW2:")
+    Low2.print()
+    if isinstance(Low2.getOperand(0), RoseConstant):
+      Low2IndexValue = Low2.getOperand(1)
+      ConstantLow2Index = Low2.getOperand(0)
+    else:
+      assert isinstance(Low2.getOperand(1), RoseConstant)
+      Low2IndexValue = Low2.getOperand(0)
+      ConstantLow2Index = Low2.getOperand(1)
+    # Strip any casts away
+    Low2IndexValue = StripCastsAndSizeExtension(Low2IndexValue)
+    # High index is expressed in terms of low index
+    # TODO: Make this more general.
+    print("Low2IndexValue:")
+    Low2IndexValue.print()
+    Low2IndexValue.getType().print()
+    print("Low1:")
+    Low1.print()
+    Low1.getType().print()
 
-  # Just handle one _very_ common case where low1 = i
-  if isinstance(Low2IndexValue, RoseOperation) and isinstance(Low1, RoseOperation):
-    if Low1.isSameAs(Low2IndexValue):
-      if ConstantLow2Index.getValue() == Bitwidth:
+    # Just handle one _very_ common case where low1 = i
+    if isinstance(Low2IndexValue, RoseOperation) and isinstance(Low1, RoseOperation):
+      if Low1.isSameAs(Low2IndexValue):
+        if ConstantLow2Index.getValue() == Bitwidth:
+          return True
+        return False
+      # Now handle a rare case where low1 = i + some_constant
+      #assert isinstance(Low1, RoseAddOp)
+      if not isinstance(Low1, RoseAddOp):
+        return False
+      if isinstance(Low1.getOperand(0), RoseConstant):
+        Low1IndexValue = Low1.getOperand(1)
+        ConstantLow1Index = Low1.getOperand(0)
+      else:
+        assert isinstance(Low1.getOperand(1), RoseConstant)
+        Low1IndexValue = Low1.getOperand(0)
+        ConstantLow1Index = Low1.getOperand(1) 
+      # Strip any casts away
+      Low1IndexValue = StripCastsAndSizeExtension(Low1IndexValue)
+      assert Low1IndexValue.isSameAs(Low2IndexValue)
+      assert ConstantLow2Index.getValue() >= ConstantLow1Index.getValue()
+      if (ConstantLow2Index.getValue() - ConstantLow1Index.getValue()) == Bitwidth:
         return True
       return False
-    # Now handle a rare case where low1 = i + some_constant
-    #assert isinstance(Low1, RoseAddOp)
-    if not isinstance(Low1, RoseAddOp):
-      return False
-    if isinstance(Low1.getOperand(0), RoseConstant):
-      Low1IndexValue = Low1.getOperand(1)
-      ConstantLow1Index = Low1.getOperand(0)
-    else:
-      assert isinstance(Low1.getOperand(1), RoseConstant)
-      Low1IndexValue = Low1.getOperand(0)
-      ConstantLow1Index = Low1.getOperand(1) 
-    # Strip any casts away
-    Low1IndexValue = StripCastsAndSizeExtension(Low1IndexValue)
-    assert Low1IndexValue.isSameAs(Low2IndexValue)
-    assert ConstantLow2Index.getValue() >= ConstantLow1Index.getValue()
-    if (ConstantLow2Index.getValue() - ConstantLow1Index.getValue()) == Bitwidth:
+    
+    # Check if Low2IndexValue and low1 are equal
+    if Low1 == Low2IndexValue and ConstantLow2Index.getValue() == Bitwidth:
       return True
     return False
   
-  # Check if Low2IndexValue and low1 are equal
-  if Low1 == Low2IndexValue and ConstantLow2Index.getValue() == Bitwidth:
-    return True
+  # Now trace back to see if the operations in both cases match
+  FullTrace1 = list()
+  FullTrace2 = list()
+  OpTrace1 = [Low1]
+  OpTrace2 = [Low2]
+  while len(OpTrace1) != 0 and len(OpTrace2) != 0:
+    assert len(OpTrace1) == len(OpTrace2)
+    Trace1Op = OpTrace1.pop()
+    Trace2Op = OpTrace2.pop()
+    print("Trace1Op:")
+    Trace1Op.print()
+    print("Trace2Op:")
+    Trace2Op.print()
+    FullTrace1.append(Trace1Op)
+    FullTrace2.append(Trace2Op)
+    if type(Trace1Op) != type(Trace2Op):
+      return False
+    # The types of the operands of these ops must be the same too
+    assert Trace1Op.getOpcode().typesOfInputsAndOutputEqual() \
+      or Trace1Op.getOpcode().typesOfOperandsAreEqual()
+    assert Trace2Op.getOpcode().typesOfInputsAndOutputEqual() \
+        or Trace2Op.getOpcode().typesOfOperandsAreEqual()
+    assert len(Trace1Op.getOperands()) == len(Trace2Op.getOperands())
+    assert len(Trace1Op.getOperands()) == 2
+    if type(Trace1Op.getOperand(0)) != type(Trace2Op.getOperand(0)):
+      # Try again
+      if type(Trace1Op.getOperand(0)) != type(Trace2Op.getOperand(1)):
+        return False
+      if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(2)):
+        return False
+      if isinstance(Trace1Op.getOperand(0), RoseOperation):
+        assert isinstance(Trace2Op.getOperand(1), RoseOperation)
+        OpTrace1.append(Trace1Op.getOperand(0))
+        OpTrace2.append(Trace2Op.getOperand(1))
+      if isinstance(Trace1Op.getOperand(1), RoseOperation):
+        assert isinstance(Trace2Op.getOperand(0), RoseOperation)
+        OpTrace1.append(Trace1Op.getOperand(1))
+        OpTrace2.append(Trace2Op.getOperand(0))
+    else:
+      if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(1)):
+        return False
+      if isinstance(Trace1Op.getOperand(0), RoseOperation):
+        assert isinstance(Trace2Op.getOperand(0), RoseOperation)
+        OpTrace1.append(Trace1Op.getOperand(0))
+        OpTrace2.append(Trace2Op.getOperand(0))
+      if isinstance(Trace1Op.getOperand(1), RoseOperation):
+        assert isinstance(Trace2Op.getOperand(1), RoseOperation)
+        OpTrace1.append(Trace1Op.getOperand(1))
+        OpTrace2.append(Trace2Op.getOperand(1))
+    # Now check if these operationns are same as each other or not
+    if Trace1Op.isSameAs(Trace2Op):
+      # These ops must have one use in add op.
+      AptUserFound = False
+      for User in Trace1Op.getUsers():
+        if isinstance(User, RoseAddOp):
+          if User in FullTrace1:
+            AptUserFound = True
+            break
+      if AptUserFound == False:
+        continue
+      AptUserFound = False
+      for User in Trace2Op.getUsers():
+        if isinstance(User, RoseAddOp):
+          if User in FullTrace2:
+            AptUserFound = True
+            break
+      if AptUserFound == False:
+        continue
+      # Now see if, after simplifying these ops, we get
+      # a difference of values that is equivalent to the 
+      # bitwidth of the operation(s) for which these ops
+      # serve as indexing ops.
+      ClonedTrace1Op = Trace1Op.cloneOperation()
+      ClonedTrace2Op = Trace2Op.cloneOperation()
+      SimplifiedClonedTrace1Op = ClonedTrace1Op.simplify()
+      SimplifiedClonedTrace2Op = ClonedTrace2Op.simplify()
+      if not isinstance(SimplifiedClonedTrace1Op, RoseConstant) \
+        or not isinstance(SimplifiedClonedTrace2Op, RoseConstant):
+        continue
+      if SimplifiedClonedTrace1Op.getValue() > SimplifiedClonedTrace2Op.getValue():
+        if SimplifiedClonedTrace1Op.getValue() \
+            - SimplifiedClonedTrace2Op.getValue() == BVOp2.getOutputBitwidth():
+          return True
+      if SimplifiedClonedTrace1Op.getValue() < SimplifiedClonedTrace2Op.getValue():
+        if SimplifiedClonedTrace2Op.getValue() \
+              - SimplifiedClonedTrace1Op.getValue() == BVOp2.getOutputBitwidth():
+          return True
   return False
 
 
@@ -922,5 +1018,4 @@ def GetElemSizeOfArg(Function : RoseFunction, Arg : RoseArgument):
           ElemSize = Op.getOutputBitwidth()
           return ElemSize
   assert ElemSize != None
-
 
