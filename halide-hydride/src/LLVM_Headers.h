@@ -93,6 +93,7 @@
 #include <llvm/Transforms/Instrumentation/SanitizerCoverage.h>
 #include <llvm/Transforms/Instrumentation/ThreadSanitizer.h>
 #include <llvm/Transforms/Scalar/GVN.h>
+#include <llvm/Transforms/Utils/Cloning.h>
 #include <llvm/Transforms/Utils/ModuleUtils.h>
 #include <llvm/Transforms/Utils/SymbolRewriter.h>
 

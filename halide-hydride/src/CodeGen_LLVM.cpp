@@ -28,6 +28,7 @@
 #include "Simplify.h"
 #include "Util.h"
 #include "Rosette.h"
+#include "LLVM_Runtime_Linker.h"
 
 // MSVC won't set __cplusplus correctly unless certain compiler flags are set
 // (and CMake doesn't set those flags for you even if you specify C++17),
@@ -365,9 +366,53 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
     llvm::SMDiagnostic error;
     std::unique_ptr<llvm::Module> hydride_module = llvm::parseIRFile(sb, error, *context);
 
+    // Set it to the linked hydride module has the same target information
+    // has the currently compiled module
+    hydride_module->setDataLayout(module->getDataLayout());
+    hydride_module->setTargetTriple(module->getTargetTriple());
+
+
     bool failed = llvm::Linker::linkModules(*module, std::move(hydride_module));
     if (failed) {
         internal_error << "Failure linking in additional module: " << hydride_bitcode_name<< "\n";
+    }
+
+
+    // Now that the hydride methods have been linked into the main module. We can inline the definition
+    // of these calls.
+    llvm::InlineFunctionInfo ifi;
+
+    for(llvm::Function& Fn : *module){
+        std::vector<llvm::CallInst*> ToInline;
+        for(auto& BB : Fn){
+            for(llvm::Instruction &I : BB){
+                llvm::CallInst* CI = llvm::dyn_cast<llvm::CallInst>(&I);
+
+                if(!CI) continue;
+
+                llvm::Function* CF = CI->getCalledFunction();
+                if(!CF) continue;
+
+                std::string fn_name = CF->getName().str();
+
+                if(fn_name.rfind("hydride", 0) == 0){
+                    debug(0) << "Found hydride node call, inlining..."<<"\n";
+                    llvm::errs() << *CI << "\n";
+                    llvm::errs() << *CF << "\n";
+
+                    internal_assert(!CF->isDeclaration()) << "Function to inline must be defined";
+
+                    ToInline.push_back(CI);
+                }
+
+                
+            }
+        }
+
+        for(llvm::CallInst* CI : ToInline){
+            llvm::InlineFunction(*CI, ifi);
+        }
+
     }
 
 }
@@ -3541,7 +3586,8 @@ void CodeGen_LLVM::visit(const Call *op) {
                 call->setDoesNotThrow();
                 value = call;
 
-                llvm::errs() << "Generating Hydride Call: "<< *value << "\n";
+                llvm::errs() << "Generating Hydride Call: "<< *value << "in parent function "<<call->getFunction()->getName()<<"\n";
+                
 
 
 

@@ -25,6 +25,7 @@ namespace {
 // existing flags, so that instruction patterns can just check for the
 // oldest feature flag that supports an instruction.
 Target complete_x86_target(Target t) {
+    debug(0) << "Target has Saphire Rapids Support: " << t.has_feature(Target::AVX512_SapphireRapids) << "\n";
     if (t.has_feature(Target::AVX512_SapphireRapids)) {
         t.set_feature(Target::AVX512_Cannonlake);
     }
@@ -289,6 +290,7 @@ bool should_use_dot_product(const Expr &a, const Expr &b, vector<Expr> &result) 
         if (a1.defined() && b1.defined()) {
             std::vector<Expr> args = {a0, a1, b0, b1};
             result.swap(args);
+            debug(0) << "Should Use Dot Product returning True!\n" << "\n";
             return true;
         }
     }

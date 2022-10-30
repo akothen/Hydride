@@ -165,7 +165,7 @@ Target calculate_host_target() {
         if ((info2[1] & avx512) == avx512) {
             // TEMP: 
             initial_features.push_back(Target::AVX512);
-            initial_features.push_back(Target::AVX512_SapphireRapids);
+            //initial_features.push_back(Target::AVX512_SapphireRapids);
             if ((info2[1] & avx512_knl) == avx512_knl) {
                 initial_features.push_back(Target::AVX512_KNL);
             }
@@ -182,7 +182,6 @@ Target calculate_host_target() {
                 cpuid(info3, 7, 1);
                 if ((info2[2] & avx512vnni) == avx512vnni &&
                     (info3[0] & avx512bf16) == avx512bf16) {
-                    // TEMP:
                     initial_features.push_back(Target::AVX512_SapphireRapids);
                 }
             }
@@ -916,7 +915,7 @@ int Target::natural_vector_size(const Halide::Type &t) const {
         }
     } else if (arch == Target::X86) {
         // TEMP :
-        return 64 / data_size;
+        //return 64 / data_size;
         if (is_integer && (has_feature(Halide::Target::AVX512_Skylake) ||
                            has_feature(Halide::Target::AVX512_Cannonlake))) {
             // AVX512BW exists on Skylake and Cannonlake

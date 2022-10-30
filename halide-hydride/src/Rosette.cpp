@@ -2750,7 +2750,7 @@ namespace Halide {
             auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
 
             if(mutated_exprs.size()){
-               // hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
+               hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");
             }
 
             return Result;

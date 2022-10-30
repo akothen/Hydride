@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <time.h>
+#include <chrono>
 
 
 #include "HalideBuffer.h"
@@ -59,14 +60,24 @@ template<typename F>
 long long benchmark(F op) {
     //long long start_time = q6sim_read_pcycles();
 
-    clock_t start_time = clock();
+    clock_t start_cycle = clock();
+
+    auto start_time = std::chrono::high_resolution_clock::now();
 
     op();
 
-    clock_t end_time = clock();
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    clock_t end_cycle = clock();
+
+    std::chrono::duration<double> duration = end_time - start_time;
 
 
-    long long total_cycles =  (long long) (end_time - start_time);
+    printf("Execution took %0.4f s\n", duration.count());
+
+
+    long long total_cycles =  (long long) (end_cycle - start_cycle);
 
     //long long total_cycles = q6sim_read_pcycles() - start_time;
     return total_cycles;
@@ -477,10 +488,12 @@ int main(int argc, char **argv) {
             printf("median3x3 pipeline failed: %d\n", error);
             }
             });
+#if DEBUG
 
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - median3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / width / height);
 #endif
