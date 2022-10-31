@@ -21,7 +21,7 @@ bin_dirs = $(addsuffix /bin,$(benchmarks))
 
 hannk = hannk/common_halide.cpp
 
-ENABLE_HYDRIDE ?= 1
+ENABLE_HYDRIDE ?= 0
 EXPR_DEPTH ?=2
 SYNTH_BITWIDTH ?= 16 
 

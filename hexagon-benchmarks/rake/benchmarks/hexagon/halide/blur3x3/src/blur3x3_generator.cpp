@@ -13,11 +13,17 @@ public:
     Output<Buffer<uint16_t>> blur_y{"blur_y", 2};
 
     void generate() {
-        blur_x(x, y) = (input(x, y) + input(x+1, y) + input(x+2, y))/3;
+
+        Func read_input("read_input");
+        read_input = Halide::BoundaryConditions::repeat_edge(input,
+                {{input.dim(0).min(), input.dim(0).extent()},
+                {input.dim(1).min(), input.dim(1).extent()}}
+                );
+        blur_x(x, y) = (read_input(x, y) + read_input(x+1, y) + read_input(x+2, y))/3;
         blur_y(x, y) = (blur_x(x, y) + blur_x(x, y+1) + blur_x(x, y+2))/3;
 
         Pipeline p(blur_y);
-        apply_schedule_blur3x3_batch_0064_sample_0024(p, target);
+        //apply_schedule_blur3x3_batch_0064_sample_0024(p, target);
     }
 
     void schedule() {

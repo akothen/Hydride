@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
     /* -----------------------------------------------------*/
     long long cycles;
 
-#if add
+#if benchmark_add
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -180,14 +180,16 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input1_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - add(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if mul
+#if benchmark_mul
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -203,14 +205,16 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input1_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - mul(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if average_pool
+#if benchmark_average_pool
     halide_dimension_t c_dim{ 0, 1024, 1 };
     halide_dimension_t x_dim{ 0, width/32, 128 };
     halide_dimension_t y_dim{ 0, height/32, 128 * (width / 32) };
@@ -227,14 +231,16 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - average_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if max_pool
+#if benchmark_max_pool
     halide_dimension_t c_dim{ 0, 1024, 1 };
     halide_dimension_t x_dim{ 0, width / 32, 128 };
     halide_dimension_t y_dim{ 0, height / 32, 128 * (width / 32) };
@@ -250,11 +256,12 @@ int main(int argc, char **argv) {
             printf("max_pool pipeline failed: %d\n", error);
             }
             });
-    SIM_RELEASE_HVX;
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
@@ -319,7 +326,7 @@ int main(int argc, char **argv) {
     printf("AppReported (HVX128B-mode): Image %dx%d - fully_connected(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
-#if conv_nn
+#if benchmark_conv_nn
     int* bias = (int*)memalign(1 << LOG2VLEN, width * height * sizeof(int));
     for (int i = 0; i < (width * height); i++)
         bias[i] = 10000;
@@ -358,10 +365,13 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
+
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
 
+#endif
     printf("AppReported (): Image %dx%d - conv_nn(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
@@ -371,8 +381,8 @@ int main(int argc, char **argv) {
     halide_dimension_t y_dim{ 0, height, width/2 };
     halide_dimension_t shape[2] = { x_dim, y_dim };
 
-    Halide::Runtime::Buffer<int16_t> input_buf((short*)input, dims, shape);
-    Halide::Runtime::Buffer<int16_t> output_buf((short*)output, dims, shape);
+    Halide::Runtime::Buffer<uint16_t> input_buf((uint16_t*)input, dims, shape);
+    Halide::Runtime::Buffer<uint16_t> output_buf((uint16_t*)output, dims, shape);
 
     cycles = benchmark([&]() {
             int error = blur3x3(input_buf, output_buf);
@@ -416,7 +426,7 @@ int main(int argc, char **argv) {
 #endif
 
 
-#if sobel3x3
+#if benchmark_sobel3x3
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
@@ -430,18 +440,20 @@ int main(int argc, char **argv) {
             printf("sobel3x3 pipeline failed: %d\n", error);
             }
             });
-
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
 
     printf("AppReported (): Image %dx%d - sobel3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 
-#if gaussian3x3
+#if benchmark_gaussian3x3
     halide_dimension_t x_dim{ 0, width, 1 };
-    halide_dimension_t y_dim{ 1, height-1, width };
+    //halide_dimension_t y_dim{ 1, height-1, width };
+    halide_dimension_t y_dim{ 1, height, width };
     halide_dimension_t shape[2] = { x_dim, y_dim };
 
     Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
@@ -455,6 +467,7 @@ int main(int argc, char **argv) {
             }
             });
 
+#if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
             printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d, true-val: %d\n", x, y, input_buf(x, y), output_buf(x, y),
@@ -464,6 +477,7 @@ int main(int argc, char **argv) {
                       static_cast<int16_t>(input_buf(x-1, y+1)) * 1 + static_cast<int16_t>(input_buf(x, y+1)) * 2 + static_cast<int16_t>(input_buf(x+1, y+1) * 1)) + 8) >> 4
 
                   );
+#endif
 
     printf("AppReported (): Image %dx%d - gaussian3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif

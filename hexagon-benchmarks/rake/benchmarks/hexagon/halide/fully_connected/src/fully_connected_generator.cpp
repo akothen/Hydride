@@ -47,6 +47,20 @@ public:
         filter_.dim(0).set_min(0);
         RDom rc(0, filter_extent);
 
+        Func read_input("read_input");
+
+        read_input = Halide::BoundaryConditions::repeat_edge(filter_,
+                {{filter_.dim(0).min(), filter_.dim(0).extent()},
+                {filter_.dim(1).min(), filter_.dim(1).extent()}}
+                );
+
+        Func read_filter("read_filter");
+
+        read_filter = Halide::BoundaryConditions::repeat_edge(input_,
+                {{input_.dim(0).min(), input_.dim(0).extent()},
+                {input_.dim(1).min(), input_.dim(1).extent()}}
+                );
+
         Func sum_input("sum_input");
         Func sum_filter("sum_filter");
         Func multiplied("multiplied");
@@ -70,14 +84,14 @@ public:
             // We can then separate this into several reductions. The last reduction
             // is a constant, and the middle two reductions can be computed once for
             // each c or b, instead of each (c, b).
-            sum_input(b) += u32(input_(rc, b));
-            sum_filter(c) += u32(filter_(rc, c));
+            sum_input(b) += u32(read_input(rc, b));
+            sum_filter(c) += u32(read_filter(rc, c));
 
             multiplied(c, b) =
                 bias_(c) + filter_extent * filter_zero_ * input_zero_ -
                 i32(sum_input(b)) * filter_zero_;
 
-            multiplied(c, b) += i32(u16(filter_(rc, c)) * u16(input_(rc, b)));
+            multiplied(c, b) += i32(u16(read_filter(rc, c)) * u16(read_input(rc, b)));
 
             // TODO: This subtract happens after the total vector reductions from the
             // above reduction. It would be a lot better if we could do this subtract
@@ -87,8 +101,8 @@ public:
         else {
             multiplied(c, b) = bias_(c);
             multiplied(c, b) +=
-                i32(i16(filter_(rc, c)) - i16(filter_zero_)) *
-                i32(i16(input_(rc, b)) - i16(input_zero_));
+                i32(i16(read_filter(rc, c)) - i16(filter_zero_)) *
+                i32(i16(read_input(rc, b)) - i16(input_zero_));
         }
 
         // Saturate and narrow the output.
@@ -100,7 +114,7 @@ public:
         }
         output_(c, b) = output;
         Pipeline p(output_);
-        apply_schedule_fully_connected_batch_0029_sample_0031(p, target);
+        //apply_schedule_fully_connected_batch_0029_sample_0031(p, target);
 
     }
 
