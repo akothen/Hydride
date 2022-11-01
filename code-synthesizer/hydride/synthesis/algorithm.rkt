@@ -85,7 +85,9 @@
   (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log hydride:cost #t #f))
   (pretty-print id-map)
   (displayln "========================================")
-  legalized-shuffles-expr
+  ;; Apply constant folding again after lowering swizzles
+  ;; as additional simplfication oppurtunities may have resulted
+  (hydride:const-fold legalized-shuffles-expr) 
   )
 
 

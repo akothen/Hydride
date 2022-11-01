@@ -2,7 +2,7 @@
 (require rosette/lib/synthax)
 (require rosette/lib/angelic)
 (require racket/pretty)
-(require data/bit-vector)
+(require racket/hash)
 (require rosette/lib/destruct)
 (require hydride/utils/bvops)
 (require hydride/utils/debug)
@@ -272,4 +272,12 @@
   (fprintf out str)
   (close-output-port out)
   (debug-log "Completed writing to file ...")
+  )
+
+
+
+(define (merge-hashes h1 h2)
+  (define merged-hash (make-hash))
+  (hash-union! merged-hash h1 h2)
+  merged-hash
   )

@@ -1449,9 +1449,12 @@
 
 
 (define (contains-complex-op-in-subexpr expr expr-depth)
+  (debug-log "here")
 
   (define leaves (get-sub-exprs expr (+ expr-depth 1)))
   (define leaves-sizes (get-expr-bv-sizes leaves))
+
+  (debug-log leaves)
   (define leaves-elemT (get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes))
 
@@ -1508,6 +1511,9 @@
               [(int-imm data signed?) 
                (set! imms-vals (append imms-vals (list data)))
                ]
+              ;; When target doesn't support saturating operations
+              ;; of a given size then we can decompose the operation
+              ;; into 
               [_ e]
               )
     )

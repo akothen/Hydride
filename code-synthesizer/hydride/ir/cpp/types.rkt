@@ -7,16 +7,16 @@
 (provide (all-defined-out))
 
 ;; Types
-(struct int8_t (v ) #:transparent)
-(struct int16_t (v ) #:transparent)
-(struct int32_t (v ) #:transparent)
-(struct int64_t (v ) #:transparent)
+(struct int8_t (v ) #:transparent #:mutable)
+(struct int16_t (v ) #:transparent #:mutable )
+(struct int32_t (v ) #:transparent #:mutable )
+(struct int64_t (v ) #:transparent #:mutable)
 
-(struct uint1_t (v ) #:transparent)
-(struct uint8_t (v ) #:transparent)
-(struct uint16_t (v ) #:transparent)
-(struct uint32_t (v ) #:transparent)
-(struct uint64_t (v ) #:transparent)
+(struct uint1_t (v ) #:transparent #:mutable)
+(struct uint8_t (v ) #:transparent #:mutable)
+(struct uint16_t (v ) #:transparent #:mutable)
+(struct uint32_t (v ) #:transparent #:mutable)
+(struct uint64_t (v ) #:transparent #:mutable)
 
 ;; Get bit-vector value of the integer expression
 (define (cpp:eval e)

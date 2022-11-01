@@ -2709,6 +2709,9 @@ namespace Halide {
 
             debug(0) << "Returned with return code: "<<ret_code <<"\n";
 
+            internal_assert(ret_code == 0) << "Copying crashed, exiting ..."<<"\n";
+
+
 
 
         }
