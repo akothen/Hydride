@@ -517,9 +517,11 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         UnknownVal.add(Op)
       # Get the type to use for all operands
       CommonType = RoseUndefinedType()
-      for OperandIndex, Operand in enumerate(Op.getOperands()):
+      CommonBitwidthVal = RoseUndefValue()
+      for Operand in Op.getOperands():
         if Operand in BVValToBitwidthVal:
-          CommonType = Operand.getOperand(OperandIndex)
+          CommonType = Operand.getType()
+          CommonBitwidthVal = BVValToBitwidthVal[Operand]
           break
       for OperandIndex, Operand in enumerate(Op.getOperands()):
         if isinstance(Operand, RoseConstant):
@@ -533,8 +535,13 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
           Op.setOperand(OperandIndex, Arg)
         if not isinstance(CommonType, RoseUndefinedType):
+          assert not isinstance(CommonBitwidthVal, RoseUndefValue)
           Op.getOperand(OperandIndex).setType(CommonType)
-          BVValToBitwidthVal[Op.getOperand(OperandIndex)] = Op.getOperand(OperandIndex).getType().getBitwidth()
+          print("CommonType:")
+          CommonType.print()
+          #if Op.getOperand(OperandIndex) not in BVValToBitwidthVal:
+          BVValToBitwidthVal[Op.getOperand(OperandIndex)] = CommonBitwidthVal
+          #Op.getOperand(OperandIndex).getType().getBitwidth()
           if Op.getOperand(OperandIndex) in UnknownVal:
             UnknownVal.remove(Op.getOperand(OperandIndex))
         if Op.getOperand(OperandIndex) not in BVValToBitwidthVal:
@@ -619,6 +626,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         Op.setOperand(Op.getBitwidthPos(), BVValToBitwidthVal[Op])
         Op.setType(RoseBitVectorType.create(BVValToBitwidthVal[Op]))
         BVValToBitwidthVal[Op] =  Op.getOperand(Op.getBitwidthPos())
+        print("^^^^^^^^EXTRACT OP:")
+        Op.print()
       elif Op in OpBitwidthEqLoopStepList:
         Op.setOperand(Op.getBitwidthPos(), Loop.getStep())
         Op.setType(RoseBitVectorType.create(Loop.getStep()))
@@ -628,6 +637,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         print("MODIFIED EXTRACT OP:")
         Op.print()
         AddBitwidthValForUnknownVal(Op, Loop.getStep(), BVValToBitwidthVal, UnknownVal)
+        print("********EXTRACT OP:")
+        Op.print()
       elif (Op.getLowIndex(), Op.getHighIndex()) in IndicesToBitwidth:
         BitwidthVal = IndicesToBitwidth[(Op.getLowIndex(), Op.getHighIndex())]
         Op.setOperand(Op.getBitwidthPos(), BitwidthVal)
@@ -635,6 +646,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         BVValToBitwidthVal[Op] = Op.getOperand(Op.getBitwidthPos())
         if Op in UnknownVal:
           UnknownVal.remove(Op)
+        print("++++-EXTRACT OP:")
+        Op.print()
       else:
         # Add a new argument
         Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
@@ -646,6 +659,8 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
         if Op in UnknownVal:
           UnknownVal.remove(Op)
         AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
+        print("------EXTRACT OP:")
+        Op.print()
       if Loop != RoseUndefRegion():
         print("EXTRACT OP:")
         Op.print()
@@ -987,7 +1002,6 @@ def Run(Function : RoseFunction, Context : RoseContext, \
   ExtractConstantsFromFunction(Function, Context,  ArgToConstantValsMap)
   print("\n\n\n\n\n")
   Function.print()
-
 
 
 
