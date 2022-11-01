@@ -97,7 +97,16 @@ def PerformReg2RegOnBlock(Block : RoseBlock):
     
     # Remove the bvinsert op from the block if we are done with all its uses
     if BVInsertOp not in BVInsertIsNotDeletable:
+      # Remove the bvinsert op
+      Lowindex = BVInsertOp.getLowIndex()
+      HighIndex = BVInsertOp.getHighIndex()
       Block.eraseOperation(BVInsertOp)
+      # Remove indexing ops
+      Worklist = [Lowindex, HighIndex]
+      while len(Worklist) != 0:
+        Operation = Worklist.pop()
+        if Block.getParent().getNumUsersOf(Operation) == 0:
+          Block.eraseOperation(Operation)
 
 
 def RunReg2Reg(Function : RoseFunction):
