@@ -1,2 +1,0 @@
-Benchmark for gaussian3x3_batch_0064_sample_0013 produces best case of 0.000121902 sec/iter (over 8 samples, 2352 iterations, accuracy 17%).
-Best output throughput is 1.6e+04 mpix/sec.

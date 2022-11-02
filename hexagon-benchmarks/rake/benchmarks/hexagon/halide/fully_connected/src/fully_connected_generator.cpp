@@ -1,7 +1,6 @@
 #include "Halide.h"
 #include "../../hannk/common_halide.h"
 #include "../../common_params.h"
-#include "../samples/batch_29_0/31/fully_connected_batch_0029_sample_0031.schedule.h"
 
 using namespace Halide;
 using namespace Halide::BoundaryConditions;
@@ -114,7 +113,6 @@ public:
         }
         output_(c, b) = output;
         Pipeline p(output_);
-        //apply_schedule_fully_connected_batch_0029_sample_0031(p, target);
 
     }
 

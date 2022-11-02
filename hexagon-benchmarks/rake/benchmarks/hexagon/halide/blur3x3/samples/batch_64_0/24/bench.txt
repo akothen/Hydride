@@ -1,2 +1,0 @@
-Benchmark for blur3x3_batch_0064_sample_0024 produces best case of 0.000157148 sec/iter (over 8 samples, 1952 iterations, accuracy 44%).
-Best output throughput is 6.3e+03 mpix/sec.
