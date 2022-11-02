@@ -288,10 +288,11 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
 
 
 function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ ;; Nested inlinable function
  function INTERLEAVE_HIGH_WORDS ( bv128 src1, bv128 src2 ) {
   ;; Extract src[64:79]
   %0 = bvextract bv128 src1, int32 64, int32 79, int32 16
-  ;; Insert %0 into %dst0[0:15]
+  ;; Insert bitvector %0 into %dst0
   bvinsert bv16 %0, bv128 %dst0, int32 0, int32 15, int32 16
   %1 = bvextract bv128 src2, int32 64, int32 79, int32 16
   bvinsert bv16 %1, bv128 %dst0, int32 16, int32 31, int32 16
@@ -300,8 +301,9 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
  }
  %0 = bvextract bv256 a, int32 0, int32 127, int32 128
  %1 = bvextract bv256 b, int32 0, int32 127, int32 128
- ;; call instruction invokes a function
+ ;; Call instruction invokes a function
  %2 = call INTERLEAVE_HIGH_WORDS( bv128 %0, bv128 %1 )
+ ;; Insert result from the function call into dst
  bvinsert bv128 %2, bv256 dst, int32 0, int32 127, int32 128
  %3 = bvextract bv256 a, int32 128, int32 255, int32 128
  %4 = bvextract bv256 b, int32 128, int32 255, int32 128
@@ -320,13 +322,17 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
    %offset.0 = add int32 %factor, int32 64
    %low.idx = add int32 %outer.it, int32 %offset.0
    %high.idx = add int32 %low.idx, int32 15
+   ;; Extract slice from a
    %ext.a = bvextract bv256 a, int32 %low.idx, int32 %high.idx, int32 16
    %6 = add int32 %inner.it, int32 15
+   ;; Insert slice from a into dst
    bvinsert bv16 %ext.b, bv256 dst, int32 %inner.it, int32 %6, int32 16
+   ;; Extract slice from b
    %ext.b = bvextract bv256 b, int32 %low.idx, int32 %high.idx, int32 16
    %offset.1 = add int32 %inner.it, int32 16
    %7 = add int32 %offset.1, int32 %outer.it
    %8 = add int32 %7, int32 15
+   ;; Insert slice from b into dst
    bvinsert bv16 %ext.b, bv256 dst, int32 %7, int32 %8, int32 16
   }
  }
