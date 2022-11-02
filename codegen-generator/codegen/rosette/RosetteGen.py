@@ -432,22 +432,41 @@ def GenerateRosetteForForLoop(Loop : RoseForLoop, RosetteCode : str, NumSpace : 
   if NumChildrenLoops > 1:
     TmpRosetteCode += Spaces + " (concat \n"
     NumSpace += 1
-  for Abstraction in Loop:
-    if isinstance(Abstraction, RoseForLoop):
-      TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
-                                        NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
-      continue
-    if isinstance(Abstraction, RoseCond):
-      TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
-                                                    VisitedLoop, ReductionLoops, SkipOpsMap)
-      continue
-    if isinstance(Abstraction, RoseBlock):
-      if Abstraction in SkipOpsMap:
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, \
-                                                           NumSpace + 1, SkipOpsMap[Abstraction])
-      else:
-        TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
-      continue
+    # If a loop has multiple loops, the order in which the loops are generated
+    # must be reversed.
+    for Abstraction in reversed(Loop.getChildren()):
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
+      if isinstance(Abstraction, RoseBlock):
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, \
+                                                            NumSpace + 1, SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
+  else:
+    for Abstraction in Loop:
+      if isinstance(Abstraction, RoseForLoop):
+        TmpRosetteCode = GenerateRosetteForForLoop(Abstraction, TmpRosetteCode, \
+                                          NumSpace + 1, VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
+      if isinstance(Abstraction, RoseCond):
+        TmpRosetteCode = GenerateRosetteForCondRegion(Abstraction, TmpRosetteCode, NumSpace + 1, \
+                                                      VisitedLoop, ReductionLoops, SkipOpsMap)
+        continue
+      if isinstance(Abstraction, RoseBlock):
+        if Abstraction in SkipOpsMap:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, \
+                                                            NumSpace + 1, SkipOpsMap[Abstraction])
+        else:
+          TmpRosetteCode = GenerateRosetteForBlock(Abstraction, TmpRosetteCode, NumSpace + 1)
+        continue
   #print("+++++TmpRosetteCode:")
   #print(TmpRosetteCode)
   if NumChildrenLoops > 1:
