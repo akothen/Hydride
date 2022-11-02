@@ -135,6 +135,35 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
 
 
 
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ function INTERLEAVE_HIGH_WORDS ( bv128 src1, bv128 src2 ) {
+  %0 = bvextract bv128 src1, int32 64, int32 79, int32 16
+  bvinsert bv16 %0, bv128 %dst0, int32 0, int32 15, int32 16
+  %1 = bvextract bv128 src2, int32 64, int32 79, int32 16
+  bvinsert bv16 %1, bv128 %dst0, int32 16, int32 31, int32 16
+  ...
+  ret bv128 %dst0
+ }
+ %0 = bvextract bv256 a, int32 0, int32 127, int32 128
+ %1 = bvextract bv256 b, int32 0, int32 127, int32 128
+ %2 = call INTERLEAVE_HIGH_WORDS( bv128 %0, bv128 %1 )
+ bvinsert bv128 %2, bv256 dst, int32 0, int32 127, int32 128
+ %3 = bvextract bv256 a, int32 128, int32 255, int32 128
+ %4 = bvextract bv256 b, int32 128, int32 255, int32 128
+ %5 = call INTERLEAVE_HIGH_WORDS( bv128 %3, bv128 %4 )
+ bvinsert bv128 %5, bv256 dst, int32 128, int32 255, int32 128
+ ret bv256 dst
+}
+
+
+
+
+
+
+
+
 function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
  function INTERLEAVE_HIGH_WORDS ( bv128 src1, bv128 src2 ) {
   for ([iterator.0 (range 0 128 32)]) {
@@ -280,6 +309,33 @@ function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
  }
  ret bv256 dst
 }
+
+
+
+
+
+function _mm256_unpackhi_epi16 ( bv256 a, bv256 b ) {
+ for ([%outer.it (range 0 256 128)]) {
+  for ([%inner.it (range 0 128 32)]) {
+   %factor = div int32 %inner.it, int32 2
+   %offset.0 = add int32 %factor, int32 64
+   %low.idx = add int32 %outer.it, int32 %offset.0
+   %high.idx = add int32 %low.idx, int32 15
+   %ext.a = bvextract bv256 a, int32 %low.idx, int32 %high.idx, int32 16
+   %6 = add int32 %inner.it, int32 15
+   bvinsert bv16 %ext.b, bv256 dst, int32 %inner.it, int32 %6, int32 16
+   %ext.b = bvextract bv256 b, int32 %low.idx, int32 %high.idx, int32 16
+   %offset.1 = add int32 %inner.it, int32 16
+   %7 = add int32 %offset.1, int32 %outer.it
+   %8 = add int32 %7, int32 15
+   bvinsert bv16 %ext.b, bv256 dst, int32 %7, int32 %8, int32 16
+  }
+ }
+ ret bv256 dst
+}
+
+
+
 
 
 function _mm512_unpacklo_epi8 ( bv512 a, bv512 b ) {
