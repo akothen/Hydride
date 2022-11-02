@@ -211,6 +211,14 @@
   )
 
 
+;; Rotate vector of element precision prec by
+;; num-rotate elements
+(define (rotate-vector v1 num-rotate size prec)
+  (define rotate-bits (* num-rotate prec))
+  (bvrol v1 (integer->bitvector rotate-bits (bitvector (* size prec))))
+  )
+
+
 (define (write-str-to-file str file)
   (debug-log (format "Writing [~a] to file ~a\n" str file))
   (system (string-append "rm " file))

@@ -423,7 +423,6 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
     }
 
-    /*
 
     // First inline hydride functions
     for(llvm::Function& Fn : *module){
@@ -459,7 +458,6 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
     }
 
-    */
 
     llvm::errs() << *module << "\n";
 
@@ -705,7 +703,7 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::finish_codegen() {
     debug(2) << "Done generating llvm bitcode\n";
 
     // Optimize
-    // CodeGen_LLVM::optimize_module();
+     CodeGen_LLVM::optimize_module();
 
     if (target.has_feature(Target::EmbedBitcode)) {
         std::string halide_command = "halide target=" + target.to_string();

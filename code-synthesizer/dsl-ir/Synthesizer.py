@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["_mm_sub_pi16"]
+DEBUG_LIST = []
 SKIP_LIST = ["mask"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -488,7 +488,7 @@ class Synthesizer:
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 15)
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):

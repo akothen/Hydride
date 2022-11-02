@@ -462,6 +462,7 @@
     (define full-interpret-res (hydride:interpret grammar env))
     (displayln "Lane Index")
     (println random-idx)
+
     (define low (* word-size random-idx))
     (define high (+ low  (- word-size 1)))
 
