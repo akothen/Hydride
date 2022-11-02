@@ -147,6 +147,9 @@ class RoseConstant(RoseValue):
             print(ElemStr)
             print(int(ElemStr, 16))
             ElemList.append(int(ElemStr, 16))
+          # Reverse the list of elements in elemlist because
+          # indexing in rosette works in reverse order.
+          ElemList.reverse()
           return LLVMConstant(LLVMType, ElemList)
         else:
           return LLVMConstant(LLVMType, self.getValue())
