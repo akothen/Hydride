@@ -69,6 +69,11 @@ namespace hannk {
                 // We don't have estimates for this in: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp
                 // We will use similar estimates as in the other benchmarks.
                 input_.set_estimates({{0, stef_width}, {0, stef_height}});
+                beta_multiplier_.set_estimate(7);
+                beta_shift_.set_estimate(1);
+                output_zero_.set_estimate(7);
+                output_multiplier_.set_estimate(32767);
+                output_shift_.set_estimate(1);
                 output_.set_estimates({{0, stef_width}, {0, stef_height}});
             }
         }
