@@ -52,7 +52,10 @@ class TypedSimpleGrammarGenerator:
             definition = ";(define-symbolic {} (bitvector {}))".format(hole_name, prec)
             self.prec_holes[prec] = {"name": hole_name, "def": definition}
 
-        return "(lit (create-splat-bv {}  {}))".format(self.prec_holes[prec]["name"], splat_factor)
+
+        #return "(lit (?? (bitvector {})))".format(bv_size)
+        return "(lit (create-symbolic-bv {}))".format(bv_size)
+        #return "(lit (create-splat-bv {}  {}))".format(self.prec_holes[prec]["name"], splat_factor)
 
 
     def emit_lit_0(self, bv_size, prec):

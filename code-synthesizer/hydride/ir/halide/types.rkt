@@ -37,9 +37,9 @@
 (struct x512 (sca) #:transparent)
 
 
-(struct int-imm (data signed?) #:transparent)
+(struct int-imm (data signed?) #:transparent #:mutable)
 
-(struct buffer (data  elemT buffSize) #:transparent)
+(struct buffer (data  elemT buffSize) #:transparent #:mutable)
 (struct load (buf idxs alignment) #:transparent)
 (struct ramp (base stride len) #:transparent)
 (struct aligned (mod rem) #:transparent)

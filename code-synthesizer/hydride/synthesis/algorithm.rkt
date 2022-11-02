@@ -85,7 +85,9 @@
   (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log hydride:cost #t #f))
   (pretty-print id-map)
   (displayln "========================================")
-  legalized-shuffles-expr
+  ;; Apply constant folding again after lowering swizzles
+  ;; as additional simplfication oppurtunities may have resulted
+  (hydride:const-fold legalized-shuffles-expr) 
   )
 
 
@@ -218,7 +220,10 @@
                         (debug-log "Beginning Synthesis")
 
                         (define-values (sat? mat el) 
-                                       (synthesize-sol-with-depth (max (+ -1 actual-expr-depth) 1) depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
+                                       (synthesize-sol-with-depth 
+                                         ;;(max (+ -1 actual-expr-depth) 1) 
+                                         1
+                                                                  depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
                                        )
 
                         (define test-end (current-seconds))

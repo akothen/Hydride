@@ -1606,6 +1606,7 @@ namespace Halide {
                                 return IRMutator::mutate(expr);
                             }
 
+
                             std::cout << "Starting synthesis for expr: "<< expr_id <<"\n";
 
 
@@ -2708,6 +2709,9 @@ namespace Halide {
             ret_code = system(temp_cmd.c_str());
 
             debug(0) << "Returned with return code: "<<ret_code <<"\n";
+
+            internal_assert(ret_code == 0) << "Copying crashed, exiting ..."<<"\n";
+
 
 
 

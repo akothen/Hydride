@@ -207,7 +207,7 @@
                 [_ (error "unrecognized reference for swizzle")]
                 )
       )
-    (debug-log (format "spec produced: ~a\n" result))
+    (debug-log (format "swizzle spec produced: ~a\n" result))
     result
     )
 
@@ -283,11 +283,10 @@
               [(llvm:shuffle-vectors_dsl v0 v1 len prec_i_o mask num-mask-elems)  
                (llvm:shuffle-vectors_dsl (vector-ref original-args 0) (vector-ref original-args 1) len prec_i_o mask num-mask-elems)
                ]
+               
               [v 
                 (bind-expr v original-args)
                 ]
-
-
               )
     )
 

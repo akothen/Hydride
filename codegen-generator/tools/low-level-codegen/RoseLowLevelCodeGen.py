@@ -52,7 +52,7 @@ def HandleLowLevelCodeGen(RosetteFileName : str, PathToLegalizerLib : str, \
   os.system(Command)
   print("EXECUTING:")
   LegalizeLLVMModuleName = LLVMIRModule.name + ".legalize.ll"
-  Command = "opt -load {} -enable-new-pm=0 {} {} -S -o {}".format(PathToLegalizerLib, LegalizationFlag, \
+  Command = "opt -load {} -enable-new-pm=0 {} -adce -globaldce {} -S -o {}".format(PathToLegalizerLib, LegalizationFlag, \
                                                           LinkedLLVMModuleName, LegalizeLLVMModuleName)
   print(Command)
   os.system(Command)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
   if len(sys.argv[1:]) == 4:
     HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, LegalizationFlag, PathToWrapperFile)
   else:
-    LLVMModuleName = sys.argv[3]
+    LLVMModuleName = sys.argv[5]
     HandleLowLevelCodeGen(RosetteFileName, PathToLegalizerLib, PathToWrapperFile, \
                         LegalizationFlag, LLVMModuleName)
 

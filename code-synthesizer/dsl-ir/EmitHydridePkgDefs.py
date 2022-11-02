@@ -2,7 +2,8 @@ import sys
 import time
 import subprocess as sb
 from DSLParser import parse_dict
-from LatestSemantics import semantcs
+#from LatestSemantics import semantcs
+from merged_dict import semantcs
 from PredefinedDSL import *
 from StructDef import StructDef
 from InterpreterDef import InterpreterDef

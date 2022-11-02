@@ -367,7 +367,47 @@ dummy_vector_load_dsl = create_vector_load_dsl(
     precisions = [8]
 )
 
+rotate_vector_sema = [
 
+"(define (rotate-vector v1 num-rotate size prec)",
+  "(define rotate-bits (* num-rotate prec))",
+  "(bvrol v1 (integer->bitvector rotate-bits (bitvector (* size prec))))",
+  ")",
+]
+
+
+def create_rotate_dsl(input_vector_sizes = [],
+                            precisions = [],
+                            rotate_num = []
+                      ):
+    rotate_dsl = DSLInstruction(name = "rotate-vector", simd = False,
+                                          operation = False, semantics = rotate_vector_sema)
+
+
+    for i in range(0, len(input_vector_sizes)):
+        rotate_dsl.add_context(
+            name = "rotate-vector-{}-{}-{}".format(rotate_num[i],input_vector_sizes[i], precisions[i]),
+            in_vectsize = input_vector_sizes[i],
+            out_vectsize = input_vector_sizes[i],
+            lane_size = input_vector_sizes[i],
+            in_precision = precisions[i],
+            out_precision = precisions[i],
+            SIMD = "False",
+            args = ["SYMBOLIC_BV_{}".format(input_vector_sizes[i]) , str(roate_num[i]) , str(input_vector_sizes[i]),
+                    str(precisions[i])],
+            in_vectsize_index = 1,
+            out_vectsize_index = 1,
+            lanesize_index = 1,
+            in_precision_index = 2,
+            out_precision_index = 2,
+            cost = "2",
+        )
+
+    return vec_deinterleave_dsl
+
+
+# Place holder DSL object definitions to enable generating
+# the Hydride symbolic interpreter
 dummy_vector_swizzle_dsl = create_two_input_swizzle(
     input_vector_sizes = [64],
     num_elem_sizes = [6],

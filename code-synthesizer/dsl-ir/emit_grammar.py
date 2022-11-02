@@ -9,7 +9,7 @@ from StructDef import StructDef
 from InterpreterDef import InterpreterDef
 from CostDef import CostDef
 from GetLengthDef import GetLengthDef
-
+from legal_insts import legal_map
 from Specification import Specification, parse_spec
 
 
@@ -89,7 +89,8 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   contexts_per_dsl_inst = 2,
                   vectorization_factor = VF,
                   depth = 3,
-                  is_shuffle = IS_SHUFFLE
+                  is_shuffle = IS_SHUFFLE,
+                  legal_map = legal_map
                   )
     grammar_name = spec['name']
     write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))

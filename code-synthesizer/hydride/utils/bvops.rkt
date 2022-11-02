@@ -24,167 +24,134 @@
 
 
 (define (bvumaxval bitwidth)
-  (apply
-    concat
+  (apply 
+  concat
     (for/list ([idx (range 0 bitwidth)])
-              (bv #b1 1)
-              )
+      (bv #b1 1)
     )
   )
+)
 
 
 (define (bvsmaxval bitwidth)
   (define end (- bitwidth 1))
   (define res
-    (apply
-      concat
-      (for/list ([idx (range 0 end)])
-                (bv #b1 1)
-                )
-      )
+  (apply 
+  concat
+    (for/list ([idx (range 0 end)])
+      (bv #b1 1)
     )
-  (concat (bv #b0 1) res)
   )
+  )
+  (concat (bv #b0 1) res)
+)
 
 
 (define (bvuminval bitwidth)
-  (apply
-    concat
+  (apply 
+  concat
     (for/list ([idx (range 0 bitwidth)])
-              (bv #b0 1)
-              )
+      (bv #b0 1)
     )
   )
+)
 
 
 (define (bvsminval bitwidth)
   (define end (- bitwidth 1))
   (define res
-    (apply
-      concat
-      (for/list ([idx (range 0 end)])
-                (bv #b0 1)
-                )
-      )
+  (apply 
+  concat
+    (for/list ([idx (range 0 end)])
+      (bv #b0 1)
     )
-  (concat (bv #b1 1) res)
   )
-
-
-;(define (bvssat vect bitwidth sat_size)
-;  (if (> bitwidth sat_size)
-;    (begin
-;      (cond
-;        [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
-;        [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
-;        [else (extract (- sat_size 1) 0 vect)])
-;      )
-;    (begin
-;      vect
-;      )
-;    )
-;  )
+  )
+  (concat (bv #b1 1) res)
+)
 
 
 (define (bvssat vect bitwidth sat_size)
   (if (> bitwidth sat_size)
-    (begin
-      (define sminval (bvsminval sat_size))
-      (define smaxval (bvsmaxval sat_size))
-      (cond
-        [(bvslt vect (sign-extend sminval (bitvector bitwidth))) sminval]
-        [(bvsgt vect (sign-extend smaxval (bitvector bitwidth))) smaxval]
-        [else (extract (- sat_size 1) 0 vect)])
-      )
-    (begin
-      vect
-      )
-    )
+  (begin
+    (cond
+    [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
+    [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
+    [else (extract (- sat_size 1) 0 vect)])
   )
-
-(define (bvpadhighbits vect num_pad_bits)
-  (if (equal? num_pad_bits 0)
-    (begin
-      vect
-      )
-    (begin
-      (concat (integer->bitvector 0 (bitvector num_pad_bits)) vect)
-      )
-    )
+  (begin
+   vect
   )
+ )
+)
 
 
 (define (bvusat vect bitwidth sat_size)
-  (if (bvugt vect (bvumaxval bitwidth)) 
+  (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
     (begin
-      (bvumaxval bitwidth)
+      (bvumaxval sat_size)
     )
     (begin
       (extract (- sat_size 1) 0 vect)
     )
   )
-  ;;(bvumin (bvumax vect (bvuminval bitwidth)) (bvumaxval bitwidth))
 )
 
+
+(define (bvpadhighbits vect num_pad_bits)
+  (if (equal? num_pad_bits 0)
+    (begin
+      vect
+    )
+    (begin
+      (concat (bv 0 num_pad_bits) vect)
+    )
+  )
+)
+
+
 (define (bvaddnsw a b bitwidth)
-  (define zerobv (bv 0 (bitvector bitwidth)))
+  (define c (bvadd a b))
   (define result
   (cond
-    [(and (bvsgt a zerobv) (bvsgt b zerobv) 
-          (bvsgt a (bvsub (bvsmaxval bitwidth) b))) 
+    [(and (> (bitvector->integer a) 0) (> (bitvector->integer b) 0)
+          (< (bitvector->integer c) 0))
           (bvsmaxval bitwidth)]
-    [(and (bvslt a zerobv) (bvslt b zerobv) 
-          (bvslt a (bvsub (bvsminval bitwidth) b))) 
-          (bvsmaxval bitwidth)]
+    [(and (< (bitvector->integer a) 0) (< (bitvector->integer b) 0)
+          (> (bitvector->integer c) 0))
+          (bvsminval bitwidth)]
     [else (bvadd a b)]
   )
   )
   result
 )
 
+
 (define (bvaddnuw a b bitwidth)
-  (define result 
-  (if (bvugt a (bvsub (bvumaxval bitwidth) b))
-    (begin 
-      (bvumaxval bitwidth)
-    )
-    (begin
-      (bvadd a b)
-    )
-  )
-  )
-  result
+  (bvadd a (bvumin (bvsub (bvumaxval bitwidth) a) b))
 )
+
 
 (define (bvsubnsw a b bitwidth)
-  (define zerobv (bv 0 (bitvector bitwidth)))
   (define result
   (cond
-    [(and (bvsgt a zerobv) (bvsgt (bvneg b) zerobv) 
-          (bvsgt a (bvsub (bvsmaxval bitwidth) (bvneg b)))) 
-          (bvsmaxval bitwidth)]
-    [(and (bvslt a zerobv) (bvslt (bvneg b) zerobv) 
-          (bvslt a (bvsub (bvsminval bitwidth) (bvneg b)))) 
-          (bvsmaxval bitwidth)]
-    [else (bvsub a b)]
+     [(and (> (bitvector->integer b) 0)
+           (< (bitvector->integer a) (bitvector->integer (bvadd (bvsminval bitwidth) b))))
+            (bvsminval bitwidth)]
+     [(and (< (bitvector->integer b) 0)
+           (> (bitvector->integer a) (bitvector->integer (bvadd (bvsmaxval bitwidth) b))))
+            (bvsmaxval bitwidth)]
+      [else (bvsub a b)]
   )
   )
   result
 )
 
+
 (define (bvsubnuw a b bitwidth)
-  (define result 
-  (if (bvugt a (bvsub (bvumaxval bitwidth) (bvneg b)))
-    (begin 
-      (bvumaxval bitwidth)
-    )
-    (begin
-      (bvsub a b)
-    )
-  )
-  )
-  result
+  (bvsub a (bvumin a b))
 )
+
 
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
@@ -204,6 +171,7 @@
   result
 )
 
+
 (define (bvmulnuw a b bitwidth)
   (define result 
   (if (bvugt a (bvudiv (bvumaxval bitwidth) b))
@@ -214,6 +182,21 @@
       (bvmul a b)
     )
   )
+  )
+  result
+)
+
+
+(define (bvsizeext vect ext_size is_signed)
+  (define result 
+    (if (equal? is_signed #t)
+      (begin
+        (sign-extend vect (bitvector ext_size))
+      )
+      (begin
+        (zero-extend vect (bitvector ext_size))
+      )
+    )
   )
   result
 )

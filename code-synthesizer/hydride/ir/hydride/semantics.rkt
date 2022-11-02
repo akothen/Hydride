@@ -32,27 +32,6 @@
   result
   )
 
-(define (_mm256_set_m128i  lo.1 hi.1 %innerlanesize0.1 %elemsize0.1 %arg0.1 )
-  (define dst.1
-    (apply
-      concat
-      (for/list ([%outer.it.1 (reverse (range 0 1 1))])
-                (apply
-                  concat
-                  (for/list ([%inner.it.1 (reverse (range 0 %innerlanesize0.1 %elemsize0.1))])
-                            (define %lastidx1.1 (-  %elemsize0.1  1))
-                            (define %3.1 (+  %inner.it.1  %lastidx1.1))
-                            (define %0.1 (extract  %3.1 %inner.it.1 lo.1))
-                            (define %1.1 (extract  %3.1 %inner.it.1 hi.1))
-                            (concat %1.1 %0.1)
-                            )
-                  )
-                )
-      )
-    )
-  (bvpadhighbits  dst.1 0)
-  )
-
 (define (_mm_sub_pi16  a b %innerlanesize0 %elemsize0 )
   (define dst
     (apply
@@ -72,8 +51,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_mask_extracti32x4_epi32  k.norm imm8.norm src.norm a.norm %elemsize1.norm )
@@ -146,8 +124,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_maskz_sllv_epi16  count.perm %arg2.perm k.perm %arg5.perm %arg6.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg3.perm %arg4.perm )
@@ -198,8 +175,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm256_mask_adds_epi16  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -235,8 +211,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_mask_cmplt_epi16_mask  k1.norm %arg2.norm %arg3.norm a.norm b.norm %arg5.norm %innerlanesize0.norm %arg4.norm %arg6.norm )
@@ -317,8 +292,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_mask_srl_epi16  count.norm %arg2.norm k.norm %arg6.norm src.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )
@@ -371,8 +345,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_mulhi_pi16  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -399,8 +372,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maskz_cvtepu8_epi32  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm )
@@ -437,8 +409,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_hadd_epi16  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -447,6 +418,22 @@
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
                 (concat 
+                  (apply
+                    concat
+                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
+                              (define %low.cofactor2 (*  iterator.1  2))
+                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
+                              (define %lastidx5 (-  %elemsize1  1))
+                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
+                              (define %6 (extract  %high.offset3 %low.offset1.new0 b))
+                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
+                              (define %lastidx4 (-  %elemsize1  1))
+                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
+                              (define %7 (extract  %high.offset4 %low.offset2.new0 b))
+                              (define %8 (bvadd  %6  %7))
+                              %8
+                              )
+                    )
                   (apply
                     concat
                     (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
@@ -464,28 +451,11 @@
                               %2
                               )
                     )
-                  (apply
-                    concat
-                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-                              (define %low.cofactor2 (*  iterator.1  2))
-                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
-                              (define %lastidx5 (-  %elemsize1  1))
-                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
-                              (define %12 (extract  %high.offset3 %low.offset1.new0 b))
-                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
-                              (define %lastidx4 (-  %elemsize1  1))
-                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
-                              (define %13 (extract  %high.offset4 %low.offset2.new0 b))
-                              (define %14 (bvadd  %12  %13))
-                              %14
-                              )
-                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_hsubs_epi16  a b %innerlanesize0 %innerlaneoffset1 %innerlanesize1 %arg1 %arg2 )
@@ -494,6 +464,20 @@
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
                 (concat 
+                  (apply
+                    concat
+                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 16))])
+                              (define %low.cofactor2 (*  iterator.1  2))
+                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
+                              (define %high.offset3 (+  %low.offset1.new0  15))
+                              (define %8 (extract  %high.offset3 %low.offset1.new0 b))
+                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
+                              (define %high.offset4 (+  %low.offset2.new0  15))
+                              (define %9 (extract  %high.offset4 %low.offset2.new0 b))
+                              (define %10 (bvsubnsw  %8  %9 16))
+                              %10
+                              )
+                    )
                   (apply
                     concat
                     (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 16))])
@@ -507,26 +491,11 @@
                               %2
                               )
                     )
-                  (apply
-                    concat
-                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 16))])
-                              (define %low.cofactor2 (*  iterator.1  2))
-                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
-                              (define %high.offset3 (+  %low.offset1.new0  15))
-                              (define %16 (extract  %high.offset3 %low.offset1.new0 b))
-                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
-                              (define %high.offset4 (+  %low.offset2.new0  15))
-                              (define %17 (extract  %high.offset4 %low.offset2.new0 b))
-                              (define %18 (bvsubnsw  %16  %17 16))
-                              %18
-                              )
-                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_extract_epi16  %arg2 a index %innerlanesize0 %elemsize0 %arg0 %arg1 %arg3 %arg4 )
@@ -591,8 +560,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_div_epi16  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -619,8 +587,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_mask_subs_epi16  k.0 src.0 a.0 b.0 %innerlanesize0.0 %elemsize0.0 )
@@ -656,8 +623,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.0 0)
-  dst.0
+  (bvpadhighbits  dst.0 0)
   )
 
 (define (_mm256_hadds_epi16  a b )
@@ -666,20 +632,6 @@
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
                 (concat 
-                  (apply
-                    concat
-                    (for/list ([iterator.0 (reverse (range 0 64 16))])
-                              (define %low.cofactor0 (*  iterator.0  2))
-                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
-                              (define %low.offset0 (+  %low.scaled.it0  16))
-                              (define %high.offset0 (+  %low.offset0  15))
-                              (define %0 (extract  %high.offset0 %low.offset0 a))
-                              (define %high.offset1 (+  %low.scaled.it0  15))
-                              (define %1 (extract  %high.offset1 %low.scaled.it0 a))
-                              (define %2 (bvaddnsw  %0  %1 16))
-                              %2
-                              )
-                    )
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 16))])
@@ -695,12 +647,25 @@
                               %18
                               )
                     )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 64 16))])
+                              (define %low.cofactor0 (*  iterator.0  2))
+                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
+                              (define %low.offset0 (+  %low.scaled.it0  16))
+                              (define %high.offset0 (+  %low.offset0  15))
+                              (define %0 (extract  %high.offset0 %low.offset0 a))
+                              (define %high.offset1 (+  %low.scaled.it0  15))
+                              (define %1 (extract  %high.offset1 %low.scaled.it0 a))
+                              (define %2 (bvaddnsw  %0  %1 16))
+                              %2
+                              )
+                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_hsub_epi32  a b %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -709,6 +674,23 @@
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
                 (concat 
+                  (apply
+                    concat
+                    (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
+                              (define %low.cofactor2 (*  iterator.1  2))
+                              (define %low.scaled.it3 (+  iterator.lane  %low.cofactor2))
+                              (define %low.offset1.new0 (-  %low.scaled.it3  128))
+                              (define %lastidx5 (-  %elemsize1  1))
+                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
+                              (define %12 (extract  %high.offset3 %low.offset1.new0 b))
+                              (define %low.offset2.new0 (-  %low.scaled.it3  %arg2))
+                              (define %lastidx4 (-  %elemsize1  1))
+                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
+                              (define %13 (extract  %high.offset4 %low.offset2.new0 b))
+                              (define %14 (bvsub  %12  %13))
+                              %14
+                              )
+                    )
                   (apply
                     concat
                     (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
@@ -725,29 +707,11 @@
                               %2
                               )
                     )
-                  (apply
-                    concat
-                    (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
-                              (define %low.cofactor2 (*  iterator.1  2))
-                              (define %low.scaled.it3 (+  iterator.lane  %low.cofactor2))
-                              (define %low.offset1.new0 (-  %low.scaled.it3  128))
-                              (define %lastidx5 (-  %elemsize1  1))
-                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
-                              (define %6 (extract  %high.offset3 %low.offset1.new0 b))
-                              (define %low.offset2.new0 (-  %low.scaled.it3  %arg2))
-                              (define %lastidx4 (-  %elemsize1  1))
-                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
-                              (define %7 (extract  %high.offset4 %low.offset2.new0 b))
-                              (define %8 (bvsub  %6  %7))
-                              %8
-                              )
-                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_maskz_madd52lo_epu64  k.norm %arg6.norm a.norm b.norm c.norm %innerlanesize0.norm %arg4.norm )
@@ -793,8 +757,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_maskz_extracti64x2_epi64  k.perm imm8.perm %arg10.perm a.perm %innerlanesize1.perm %elemsize1.perm %arg3.perm %arg7.perm )
@@ -858,8 +821,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_maskz_cvtepi16_epi8  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm %arg4.perm )
@@ -924,8 +886,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_mask_max_epi32  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -961,8 +922,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_cmplt_epi16  b.norm %arg1.norm %arg0.norm a.norm %elemsize0.norm )
@@ -985,8 +945,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_srli_pi32  imm8.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %arg3.norm )
@@ -1026,8 +985,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_cmple_epu16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -1160,8 +1118,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_mask_mul_epi32  k.6 src.6 a.6 b.6 %innerlanesize0.6 )
@@ -1199,8 +1156,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.6 0)
-  dst.6
+  (bvpadhighbits  dst.6 0)
   )
 
 (define (_mm512_cmpneq_epi8_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -1250,8 +1206,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_max_epi16  a b %innerlanesize0 %elemsize0 )
@@ -1273,9 +1228,7 @@
                 )
       )
     )
-  ;;(bvpadhighbits  dst 0)
-  ;; TEMP
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_madd52lo_epu64  a b c %innerlanesize0 %arg2 )
@@ -1306,8 +1259,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_m_por  a b %innerlanesize0 %elemsize0 )
@@ -1329,8 +1281,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_unpackhi_epi8  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1355,8 +1306,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_mask_mul_epu32  k.norm src.norm a.norm b.norm %innerlanesize0.norm )
@@ -1394,8 +1344,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_maskz_mulhi_epi16  k.perm %arg4.perm a.perm b.perm %innerlanesize0.perm %arg2.perm )
@@ -1433,8 +1382,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_mul_epi32  a b %innerlanesize0 )
@@ -1458,8 +1406,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_packus_epi16  a b %vectsize0 %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -1468,18 +1415,6 @@
       concat
       (for/list ([iterator.lane (reverse (range 0 %vectsize0 128))])
                 (concat 
-                  (apply
-                    concat
-                    (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
-                              (define %low.cofactor0 (*  iterator.0  2))
-                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
-                              (define %lastidx1 (-  %arg0  1))
-                              (define %high.offset0 (+  %low.scaled.it0  %lastidx1))
-                              (define %0 (extract  %high.offset0 %low.scaled.it0 a))
-                              (define %1 (bvusat %0 %arg0 %elemsize0 ))
-                              %1
-                              )
-                    )
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -1493,12 +1428,23 @@
                               %17
                               )
                     )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
+                              (define %low.cofactor0 (*  iterator.0  2))
+                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
+                              (define %lastidx1 (-  %arg0  1))
+                              (define %high.offset0 (+  %low.scaled.it0  %lastidx1))
+                              (define %0 (extract  %high.offset0 %low.scaled.it0 a))
+                              (define %1 (bvusat %0 %arg0 %elemsize0 ))
+                              %1
+                              )
+                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_sllv_epi64  %arg0.norm count.norm %arg2.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1535,8 +1481,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_unpacklo_epi64  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -1557,8 +1502,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maskz_dpbusds_epi32  k.norm %arg3.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -1608,8 +1552,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_m_paddsb  a b %innerlanesize0 %elemsize0 )
@@ -1631,8 +1574,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_cvtsepi64_epi16  a %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1713,8 +1655,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_srl_epi64  count.norm %arg3.norm a.norm %innerlanesize0.norm )
@@ -1747,8 +1688,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_srlv_epi32  count.norm %arg0.norm %arg2.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1785,8 +1725,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_srav_epi64  %arg0.norm count.norm %arg2.norm a.norm %arg3.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1825,8 +1764,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_maskz_slli_epi16  imm8.perm %arg2.perm k.perm %arg6.perm %arg9.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg5.perm )
@@ -1876,8 +1814,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_mulhi_epu16  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1904,8 +1841,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_maskz_adds_epu8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -1941,8 +1877,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_mask_cmplt_epu16_mask  k1.norm a.norm %arg3.norm %arg2.norm b.norm %arg5.norm %innerlanesize0.norm %arg4.norm %arg6.norm )
@@ -2023,8 +1958,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_mask_ror_epi32  k.norm %arg4.norm %arg3.norm src.norm a.norm imm8.norm %innerlanesize0.norm %arg2.norm )
@@ -2070,8 +2004,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_broadcast_i64x4  a %innerlanesize0 %elemsize0 %arg0 )
@@ -2094,8 +2027,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maskz_broadcastq_epi64  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2128,8 +2060,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm512_mask_fmadd_epi32  k.norm a.norm b.norm c.norm )
@@ -2171,8 +2102,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_avg_epu16  %arg1 %arg0 a b %innerlanesize0 %elemsize0 )
@@ -2196,8 +2126,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_mask_min_epu16  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2233,8 +2162,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_cvtepi64_epi32  a %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -2282,8 +2210,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_maskz_dpbusd_epi32  k.norm %arg3.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -2333,8 +2260,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_mask_abs_epi64  k.perm src.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2415,8 +2341,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_maskz_unpackhi_epi64  k.norm %arg8.norm a.norm b.norm %arg2.norm %arg5.norm )
@@ -2465,8 +2390,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_mask_sub_epi32  k.perm src.perm b.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2502,8 +2426,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_xor_epi32  a b %innerlanesize0 %elemsize0 )
@@ -2525,8 +2448,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_blendv_epi8  mask.norm a.norm b.norm %innerlanesize0.norm )
@@ -2558,8 +2480,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_movepi64_pi64  a %innerlanesize0 %elemsize0 %arg0 )
@@ -2613,8 +2534,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm256_sign_epi8  b.norm %arg2.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm %arg3.norm )
@@ -2665,8 +2585,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_maskz_cvtusepi64_epi16  k.norm %arg3.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg2.norm %arg4.norm )
@@ -2714,18 +2633,6 @@
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
-                              (define %factor0 (/  %arg0  %elemsize0))
-                              (define %low.cofactor0 (*  iterator.0  %factor0))
-                              (define %lastidx1 (-  %arg0  1))
-                              (define %high.offset0 (+  %low.cofactor0  %lastidx1))
-                              (define %0 (extract  %high.offset0 %low.cofactor0 a))
-                              (define %1 (bvusat %0 %arg0 %elemsize0 ))
-                              %1
-                              )
-                    )
-                  (apply
-                    concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
                               (define %low.cofactor1 (*  iterator.1  2))
                               (define %low.offset0.new0 (-  %low.cofactor1  %arg2))
@@ -2736,12 +2643,23 @@
                               %17
                               )
                     )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
+                              (define %factor0 (/  %arg0  %elemsize0))
+                              (define %low.cofactor0 (*  iterator.0  %factor0))
+                              (define %lastidx1 (-  %arg0  1))
+                              (define %high.offset0 (+  %low.cofactor0  %lastidx1))
+                              (define %0 (extract  %high.offset0 %low.cofactor0 a))
+                              (define %1 (bvusat %0 %arg0 %elemsize0 ))
+                              %1
+                              )
+                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_max_epu64  a b %innerlanesize0 %elemsize0 )
@@ -2763,8 +2681,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_maskz_subs_epu8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -2800,8 +2717,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_ror_epi64  %arg2 %arg1 a imm8 %innerlanesize0 %arg0 )
@@ -2831,8 +2747,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_abs_epi16  a %innerlanesize0 %elemsize0 )
@@ -2853,8 +2768,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maskz_min_epi8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -2890,8 +2804,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_mask_mulhi_epi32  k.norm src.norm a.norm b.norm )
@@ -2931,8 +2844,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_sll_epi64  count.norm %arg3.norm a.norm %innerlanesize0.norm )
@@ -2965,11 +2877,10 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
-(define (_mm256_unpacklo_epi64  a b %innerlanesize0 )
+(define (_mm256_unpacklo_epi64  a b %innerlanesize0 %arg2 )
   (define dst
     (apply
       concat
@@ -2978,17 +2889,17 @@
                   concat
                   (for/list ([iterator.0.new (reverse (range 0 %innerlanesize0 64))])
                             (define iterator.0.new.mul (*  iterator.0.new  2))
-                            (define %0.site0.new.high.idx0 (+  iterator.0.new.mul  63))
-                            (define %0.copy.copy.00.new (extract  %0.site0.new.high.idx0 iterator.0.new.mul a))
-                            (define %1.copy.copy.00.new (extract  %0.site0.new.high.idx0 iterator.0.new.mul b))
+                            (define %0.site0.new.low.idx (+  iterator.0.new.mul  %arg2))
+                            (define %0.site0.new.high.idx0 (+  %0.site0.new.low.idx  63))
+                            (define %0.copy.copy.00.new (extract  %0.site0.new.high.idx0 %0.site0.new.low.idx a))
+                            (define %1.copy.copy.00.new (extract  %0.site0.new.high.idx0 %0.site0.new.low.idx b))
                             (concat %1.copy.copy.00.new %0.copy.copy.00.new)
                             )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_cmpgt_epi16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -3036,8 +2947,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_mask_div_epu32  k.norm src.norm a.norm b.norm )
@@ -3076,8 +2986,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_dpbusds_epi32  src a b %vectsize0 )
@@ -3109,8 +3018,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maddubs_pi16  a b %innerlanesize0 )
@@ -3142,8 +3050,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_extracti32x4_epi32  imm8.norm a.norm )
@@ -3186,8 +3093,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_maskz_srlv_epi32  %arg2.norm count.norm k.norm %arg6.norm %arg5.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg3.norm %arg4.norm )
@@ -3238,8 +3144,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_div_epu16  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -3266,8 +3171,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_mask3_fmadd_epi32  k.norm a.norm b.norm c.norm )
@@ -3309,8 +3213,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_dpwssds_epi32  src a b %vectsize0 )
@@ -3341,8 +3244,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_cvtepi8_epi32  a %innerlanesize0 %elemsize0 %arg0 )
@@ -3363,8 +3265,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_maskz_or_epi64  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -3400,8 +3301,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_cmplt_epu16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -3459,8 +3359,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_mask_dpwssds_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -3509,8 +3408,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm256_hadd_epi32  a b %elemsize0 %elemsize1 %arg0 %arg3 )
@@ -3519,22 +3417,6 @@
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
                 (concat 
-                  (apply
-                    concat
-                    (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
-                              (define %low.cofactor0 (*  iterator.0  2))
-                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
-                              (define %low.offset0 (+  %low.scaled.it0  %arg0))
-                              (define %lastidx2 (-  %elemsize0  1))
-                              (define %high.offset0 (+  %low.offset0  %lastidx2))
-                              (define %0 (extract  %high.offset0 %low.offset0 a))
-                              (define %lastidx1 (-  %elemsize0  1))
-                              (define %high.offset1 (+  %low.scaled.it0  %lastidx1))
-                              (define %1 (extract  %high.offset1 %low.scaled.it0 a))
-                              (define %2 (bvadd  %0  %1))
-                              %2
-                              )
-                    )
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -3550,6 +3432,22 @@
                               (define %7 (extract  %high.offset4 %low.offset2.new0 b))
                               (define %8 (bvadd  %6  %7))
                               %8
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
+                              (define %low.cofactor0 (*  iterator.0  2))
+                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
+                              (define %low.offset0 (+  %low.scaled.it0  %arg0))
+                              (define %lastidx2 (-  %elemsize0  1))
+                              (define %high.offset0 (+  %low.offset0  %lastidx2))
+                              (define %0 (extract  %high.offset0 %low.offset0 a))
+                              (define %lastidx1 (-  %elemsize0  1))
+                              (define %high.offset1 (+  %low.scaled.it0  %lastidx1))
+                              (define %1 (extract  %high.offset1 %low.scaled.it0 a))
+                              (define %2 (bvadd  %0  %1))
+                              %2
                               )
                     )
                   )
@@ -3582,8 +3480,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_hsub_epi32  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -3592,6 +3489,22 @@
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
                 (concat 
+                  (apply
+                    concat
+                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
+                              (define %low.cofactor2 (*  iterator.1  2))
+                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
+                              (define %lastidx5 (-  %elemsize1  1))
+                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
+                              (define %12 (extract  %high.offset3 %low.offset1.new0 b))
+                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
+                              (define %lastidx4 (-  %elemsize1  1))
+                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
+                              (define %13 (extract  %high.offset4 %low.offset2.new0 b))
+                              (define %14 (bvsub  %12  %13))
+                              %14
+                              )
+                    )
                   (apply
                     concat
                     (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
@@ -3607,22 +3520,6 @@
                               (define %1 (extract  %high.offset1 %low.offset0 a))
                               (define %2 (bvsub  %0  %1))
                               %2
-                              )
-                    )
-                  (apply
-                    concat
-                    (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
-                              (define %low.cofactor2 (*  iterator.1  2))
-                              (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
-                              (define %lastidx5 (-  %elemsize1  1))
-                              (define %high.offset3 (+  %low.offset1.new0  %lastidx5))
-                              (define %6 (extract  %high.offset3 %low.offset1.new0 b))
-                              (define %low.offset2.new0 (-  %low.cofactor2  %arg1))
-                              (define %lastidx4 (-  %elemsize1  1))
-                              (define %high.offset4 (+  %low.offset2.new0  %lastidx4))
-                              (define %7 (extract  %high.offset4 %low.offset2.new0 b))
-                              (define %8 (bvsub  %6  %7))
-                              %8
                               )
                     )
                   )
@@ -3890,8 +3787,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.perm 0)
-  dst.perm
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_cmpge_epu64_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -4052,7 +3948,7 @@
   (bvpadhighbits  dst 0)
   )
 
-(define (_mm512_mask_unpackhi_epi8  k.norm src.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %innerlanesize1.norm %elemsize1.norm %arg0.norm %arg1.norm %arg2.norm )
+(define (_mm512_mask_unpackhi_epi8  k.norm %arg6.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %innerlanesize1.norm %elemsize1.norm %arg0.norm %arg1.norm %arg2.norm )
   (define tmp_dst.norm
     (apply
       concat
@@ -4097,8 +3993,8 @@
                               [else (begin
                                       (define %lastidx5.norm (-  %elemsize1.norm  1))
                                       (define %19.norm (+  j0.new.norm  %lastidx5.norm))
-                                      (define %20.norm (extract  %19.norm j0.new.norm src.norm))
-                                      %20.norm
+                                      (define %23.norm (extract  %19.norm j0.new.norm %arg6.norm))
+                                      %23.norm
                                       )]
                               )
                             )
@@ -4125,9 +4021,7 @@
                 )
       )
     )
-  ;;(bvpadhighbits  dst 0)
-  ;; TEMP
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm512_unpackhi_epi64  a b %innerlanesize0 )
@@ -4205,52 +4099,52 @@
   (bvpadhighbits  dst.perm 0)
   )
 
-(define (_mm256_maskz_unpacklo_epi8  k.norm %arg5.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %innerlanesize1.norm %elemsize1.norm %arg0.norm %arg1.norm %arg2.norm )
-  (define tmp_dst0.norm
+(define (_mm256_maskz_unpacklo_epi8  k.perm src.perm a.perm b.perm %vectsize0.perm %elemsize0.perm %innerlanesize1.perm %elemsize1.perm %arg0.perm %arg1.perm %arg2.perm )
+  (define tmp_dst0.perm
     (apply
       concat
-      (for/list ([iterator.0.norm (reverse (range 0 %vectsize0.norm 128))])
+      (for/list ([iterator.0.perm (reverse (range 0 %vectsize0.perm 128))])
                 (apply
                   concat
-                  (for/list ([iterator.0.site0.new.norm (reverse (range 0 64 %elemsize0.norm))])
-                            (define %factor0.norm (/  %arg2.norm  %elemsize0.norm))
-                            (define %factor1.norm (*  2  %factor0.norm))
-                            (define iterator.0.site0.new.mul.norm (*  iterator.0.site0.new.norm  %factor1.norm))
-                            (define %0.site0.new.low.idx.norm (+  iterator.0.norm  iterator.0.site0.new.norm))
-                            (define %lastidx1.norm (-  %arg0.norm  1))
-                            (define %0.site0.new.high.idx0.norm (+  %0.site0.new.low.idx.norm  %lastidx1.norm))
-                            (define %0.copy.copy.00.new.norm (extract  %0.site0.new.high.idx0.norm %0.site0.new.low.idx.norm a.norm))
-                            (define %1.copy.copy.00.new.norm (extract  %0.site0.new.high.idx0.norm %0.site0.new.low.idx.norm b.norm))
-                            (define %low.offset0.site0.norm (+  iterator.0.site0.new.mul.norm  %arg1.norm))
-                            (concat %1.copy.copy.00.new.norm %0.copy.copy.00.new.norm)
+                  (for/list ([iterator.0.site0.new.perm (reverse (range 0 64 %elemsize0.perm))])
+                            (define %factor0.perm (/  %arg2.perm  %elemsize0.perm))
+                            (define %factor1.perm (*  2  %factor0.perm))
+                            (define iterator.0.site0.new.mul.perm (*  iterator.0.site0.new.perm  %factor1.perm))
+                            (define %0.site0.new.low.idx.perm (+  iterator.0.perm  iterator.0.site0.new.perm))
+                            (define %lastidx1.perm (-  %arg0.perm  1))
+                            (define %0.site0.new.high.idx0.perm (+  %0.site0.new.low.idx.perm  %lastidx1.perm))
+                            (define %0.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm a.perm))
+                            (define %1.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm b.perm))
+                            (define %low.offset0.site0.perm (+  iterator.0.site0.new.mul.perm  %arg1.perm))
+                            (concat %1.copy.copy.00.new.perm %0.copy.copy.00.new.perm)
                             )
                   )
                 )
       )
     )
-  (define dst.norm
+  (define dst.perm
     (apply
       concat
-      (for/list ([%outer.it.norm (reverse (range 0 1 1))])
+      (for/list ([%outer.it.perm (reverse (range 0 1 1))])
                 (apply
                   concat
-                  (for/list ([j0.new.norm (reverse (range 0 %innerlanesize1.norm %elemsize1.norm))])
-                            (define j0.new.div.norm (/  j0.new.norm  %elemsize1.norm))
-                            (define %7.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))
-                            (define %cond0.norm (bveq  %7.norm  (bv 1 1)))
+                  (for/list ([j0.new.perm (reverse (range 0 %innerlanesize1.perm %elemsize1.perm))])
+                            (define j0.new.div.perm (/  j0.new.perm  %elemsize1.perm))
+                            (define %7.perm (extract  j0.new.div.perm j0.new.div.perm k.perm))
+                            (define %cond0.perm (bveq  %7.perm  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.norm #t)
+                              [(equal? %cond0.perm #t)
                                (begin
-                                 (define %lastidx4.norm (-  %elemsize1.norm  1))
-                                 (define %9.norm (+  j0.new.norm  %lastidx4.norm))
-                                 (define %10.norm (extract  %9.norm j0.new.norm tmp_dst0.norm))
-                                 %10.norm
+                                 (define %lastidx4.perm (-  %elemsize1.perm  1))
+                                 (define %9.perm (+  j0.new.perm  %lastidx4.perm))
+                                 (define %10.perm (extract  %9.perm j0.new.perm tmp_dst0.perm))
+                                 %10.perm
                                  )]
                               [else (begin
-                                      (define %lastidx5.norm (-  %elemsize1.norm  1))
-                                      (define %13.norm (+  j0.new.norm  %lastidx5.norm))
-                                      (define %17.norm (extract  %13.norm j0.new.norm %arg5.norm))
-                                      %17.norm
+                                      (define %lastidx5.perm (-  %elemsize1.perm  1))
+                                      (define %13.perm (+  j0.new.perm  %lastidx5.perm))
+                                      (define %14.perm (extract  %13.perm j0.new.perm src.perm))
+                                      %14.perm
                                       )]
                               )
                             )
@@ -4258,7 +4152,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_maskz_broadcast_i32x2  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm )
@@ -4337,62 +4231,62 @@
   (bvpadhighbits  dst.perm 0)
   )
 
-(define (_mm512_maskz_packs_epi16  k.0 %arg5.0 a.0 b.0 %vectsize0.0 %elemsize0.0 %elemsize1.0 %innerlanesize2.0 %elemsize2.0 %arg0.0 %arg1.0 )
-  (define tmp_dst.0
+(define (_mm512_maskz_packs_epi16  k.norm src.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %elemsize1.norm %innerlanesize2.norm %elemsize2.norm %arg0.norm %arg1.norm )
+  (define tmp_dst.norm
     (apply
       concat
-      (for/list ([iterator.lane.0 (reverse (range 0 %vectsize0.0 128))])
+      (for/list ([iterator.lane.norm (reverse (range 0 %vectsize0.norm 128))])
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0.new.0 (reverse (range 0 128 %elemsize0.0))])
-                              (define %low.scaled.it0.0 (+  iterator.lane.0  iterator.0.new.0))
-                              (define %lastidx1.0 (-  %elemsize0.0  1))
-                              (define %high.offset0.0 (+  %low.scaled.it0.0  %lastidx1.0))
-                              (define %0.0 (extract  %high.offset0.0 %low.scaled.it0.0 a.0))
-                              (define %1.0 (bvssat %0.0 %elemsize0.0 %arg0.0 ))
-                              %1.0
+                    (for/list ([iterator.1.new.norm (reverse (range 128 256 %elemsize1.norm))])
+                              (define %low.scaled.it2.norm (+  iterator.lane.norm  iterator.1.new.norm))
+                              (define %low.offset0.new0.norm (-  %low.scaled.it2.norm  128))
+                              (define %lastidx3.norm (-  %elemsize1.norm  1))
+                              (define %high.offset2.norm (+  %low.offset0.new0.norm  %lastidx3.norm))
+                              (define %16.norm (extract  %high.offset2.norm %low.offset0.new0.norm b.norm))
+                              (define %17.norm (bvssat %16.norm %elemsize1.norm %arg1.norm ))
+                              %17.norm
                               )
                     )
                   (apply
                     concat
-                    (for/list ([iterator.1.new.0 (reverse (range 128 256 %elemsize1.0))])
-                              (define %low.scaled.it2.0 (+  iterator.lane.0  iterator.1.new.0))
-                              (define %low.offset0.new0.0 (-  %low.scaled.it2.0  128))
-                              (define %lastidx3.0 (-  %elemsize1.0  1))
-                              (define %high.offset2.0 (+  %low.offset0.new0.0  %lastidx3.0))
-                              (define %16.0 (extract  %high.offset2.0 %low.offset0.new0.0 b.0))
-                              (define %17.0 (bvssat %16.0 %elemsize1.0 %arg1.0 ))
-                              %17.0
+                    (for/list ([iterator.0.new.norm (reverse (range 0 128 %elemsize0.norm))])
+                              (define %low.scaled.it0.norm (+  iterator.lane.norm  iterator.0.new.norm))
+                              (define %lastidx1.norm (-  %elemsize0.norm  1))
+                              (define %high.offset0.norm (+  %low.scaled.it0.norm  %lastidx1.norm))
+                              (define %0.norm (extract  %high.offset0.norm %low.scaled.it0.norm a.norm))
+                              (define %1.norm (bvssat %0.norm %elemsize0.norm %arg0.norm ))
+                              %1.norm
                               )
                     )
                   )
                 )
       )
     )
-  (define dst.0
+  (define dst.norm
     (apply
       concat
-      (for/list ([%outer.it.0 (reverse (range 0 1 1))])
+      (for/list ([%outer.it.norm (reverse (range 0 1 1))])
                 (apply
                   concat
-                  (for/list ([j0.new.0 (reverse (range 0 %innerlanesize2.0 %elemsize2.0))])
-                            (define j0.new.div.0 (/  j0.new.0  %elemsize2.0))
-                            (define %129.0 (extract  j0.new.div.0 j0.new.div.0 k.0))
-                            (define %cond0.0 (bveq  %129.0  (bv 1 1)))
+                  (for/list ([j0.new.norm (reverse (range 0 %innerlanesize2.norm %elemsize2.norm))])
+                            (define j0.new.div.norm (/  j0.new.norm  %elemsize2.norm))
+                            (define %129.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))
+                            (define %cond0.norm (bveq  %129.norm  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.0 #t)
+                              [(equal? %cond0.norm #t)
                                (begin
-                                 (define %lastidx5.0 (-  %elemsize2.0  1))
-                                 (define %131.0 (+  j0.new.0  %lastidx5.0))
-                                 (define %132.0 (extract  %131.0 j0.new.0 tmp_dst.0))
-                                 %132.0
+                                 (define %lastidx5.norm (-  %elemsize2.norm  1))
+                                 (define %131.norm (+  j0.new.norm  %lastidx5.norm))
+                                 (define %132.norm (extract  %131.norm j0.new.norm tmp_dst.norm))
+                                 %132.norm
                                  )]
                               [else (begin
-                                      (define %lastidx6.0 (-  %elemsize2.0  1))
-                                      (define %135.0 (+  j0.new.0  %lastidx6.0))
-                                      (define %136.0 (extract  %135.0 j0.new.0 %arg5.0))
-                                      %136.0
+                                      (define %lastidx6.norm (-  %elemsize2.norm  1))
+                                      (define %135.norm (+  j0.new.norm  %lastidx6.norm))
+                                      (define %136.norm (extract  %135.norm j0.new.norm src.norm))
+                                      %136.norm
                                       )]
                               )
                             )
@@ -4400,7 +4294,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.0 0)
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_mask_sra_epi16  %arg2.norm count.norm k.norm %arg6.norm %arg7.norm a.norm src.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )
@@ -4613,19 +4507,6 @@
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 16))])
-                              (define %low.cofactor0 (*  iterator.0  2))
-                              (define %low.offset0 (+  %low.cofactor0  16))
-                              (define %high.offset0 (+  %low.offset0  15))
-                              (define %0 (extract  %high.offset0 %low.offset0 a))
-                              (define %high.offset1 (+  %low.cofactor0  15))
-                              (define %1 (extract  %high.offset1 %low.cofactor0 a))
-                              (define %2 (bvaddnsw  %0  %1 16))
-                              %2
-                              )
-                    )
-                  (apply
-                    concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 16))])
                               (define %low.cofactor2 (*  iterator.1  2))
                               (define %low.offset1.new0 (-  %low.cofactor2  %arg2))
@@ -4638,6 +4519,19 @@
                               %18
                               )
                     )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 16))])
+                              (define %low.cofactor0 (*  iterator.0  2))
+                              (define %low.offset0 (+  %low.cofactor0  16))
+                              (define %high.offset0 (+  %low.offset0  15))
+                              (define %0 (extract  %high.offset0 %low.offset0 a))
+                              (define %high.offset1 (+  %low.cofactor0  15))
+                              (define %1 (extract  %high.offset1 %low.cofactor0 a))
+                              (define %2 (bvaddnsw  %0  %1 16))
+                              %2
+                              )
+                    )
                   )
                 )
       )
@@ -4645,7 +4539,7 @@
   (bvpadhighbits  dst 0)
   )
 
-(define (_mm_unpacklo_epi32  a b %innerlanesize0 %elemsize0 %arg0 )
+(define (_mm_unpacklo_epi32  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
   (define dst
     (apply
       concat
@@ -4656,10 +4550,11 @@
                             (define %factor0 (/  %elemsize0  %elemsize0))
                             (define %factor1 (*  2  %factor0))
                             (define iterator.0.site0.new.mul (*  iterator.0.site0.new  %factor1))
+                            (define %0.site0.new.low.idx (+  %arg1  iterator.0.site0.new))
                             (define %lastidx1 (-  %elemsize0  1))
-                            (define %0.site0.new.high.idx0 (+  iterator.0.site0.new  %lastidx1))
-                            (define %0.copy.copy.00.new (extract  %0.site0.new.high.idx0 iterator.0.site0.new a))
-                            (define %1.copy.copy.00.new (extract  %0.site0.new.high.idx0 iterator.0.site0.new b))
+                            (define %0.site0.new.high.idx0 (+  %0.site0.new.low.idx  %lastidx1))
+                            (define %0.copy.copy.00.new (extract  %0.site0.new.high.idx0 %0.site0.new.low.idx a))
+                            (define %1.copy.copy.00.new (extract  %0.site0.new.high.idx0 %0.site0.new.low.idx b))
                             (concat %1.copy.copy.00.new %0.copy.copy.00.new)
                             )
                   )
@@ -4867,18 +4762,6 @@
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
-                              (define %factor0 (/  %arg0  %elemsize0))
-                              (define %low.cofactor0 (*  iterator.0  %factor0))
-                              (define %lastidx1 (-  %arg0  1))
-                              (define %high.offset0 (+  %low.cofactor0  %lastidx1))
-                              (define %0 (extract  %high.offset0 %low.cofactor0 a))
-                              (define %1 (bvssat %0 %arg0 %elemsize0 ))
-                              %1
-                              )
-                    )
-                  (apply
-                    concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
                               (define %low.cofactor1 (*  iterator.1  2))
                               (define %low.offset0.new0 (-  %low.cofactor1  %arg2))
@@ -4889,6 +4772,18 @@
                               %9
                               )
                     )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 %innerlanesize0 %elemsize0))])
+                              (define %factor0 (/  %arg0  %elemsize0))
+                              (define %low.cofactor0 (*  iterator.0  %factor0))
+                              (define %lastidx1 (-  %arg0  1))
+                              (define %high.offset0 (+  %low.cofactor0  %lastidx1))
+                              (define %0 (extract  %high.offset0 %low.cofactor0 a))
+                              (define %1 (bvssat %0 %arg0 %elemsize0 ))
+                              %1
+                              )
+                    )
                   )
                 )
       )
@@ -4896,60 +4791,60 @@
   (bvpadhighbits  dst 0)
   )
 
-(define (_mm_mask_packus_epi16  k.norm src.norm a.norm b.norm %elemsize0.norm %elemsize1.norm %elemsize2.norm %arg0.norm %arg1.norm )
-  (define tmp_dst0.norm
+(define (_mm_mask_packus_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %elemsize2.perm %arg0.perm %arg1.perm )
+  (define tmp_dst0.perm
     (apply
       concat
-      (for/list ([%outer.it.norm (reverse (range 0 128 128))])
+      (for/list ([%outer.it.perm (reverse (range 0 128 128))])
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0.new.norm (reverse (range 0 128 %elemsize0.norm))])
-                              (define %lastidx1.norm (-  %elemsize0.norm  1))
-                              (define %high.offset0.norm (+  iterator.0.new.norm  %lastidx1.norm))
-                              (define %0.norm (extract  %high.offset0.norm iterator.0.new.norm a.norm))
-                              (define %1.norm (bvusat %0.norm %elemsize0.norm %arg0.norm ))
-                              %1.norm
+                    (for/list ([iterator.1.new.perm (reverse (range 128 256 %elemsize1.perm))])
+                              (define %low.offset0.new0.perm (-  iterator.1.new.perm  128))
+                              (define %lastidx3.perm (-  %elemsize1.perm  1))
+                              (define %high.offset2.perm (+  %low.offset0.new0.perm  %lastidx3.perm))
+                              (define %16.perm (extract  %high.offset2.perm %low.offset0.new0.perm b.perm))
+                              (define %17.perm (bvusat %16.perm %elemsize1.perm %arg1.perm ))
+                              %17.perm
                               )
                     )
                   (apply
                     concat
-                    (for/list ([iterator.1.new.norm (reverse (range 128 256 %elemsize1.norm))])
-                              (define %low.offset0.new0.norm (-  iterator.1.new.norm  128))
-                              (define %lastidx3.norm (-  %elemsize1.norm  1))
-                              (define %high.offset2.norm (+  %low.offset0.new0.norm  %lastidx3.norm))
-                              (define %16.norm (extract  %high.offset2.norm %low.offset0.new0.norm b.norm))
-                              (define %17.norm (bvusat %16.norm %elemsize1.norm %arg1.norm ))
-                              %17.norm
+                    (for/list ([iterator.0.new.perm (reverse (range 0 128 %elemsize0.perm))])
+                              (define %lastidx1.perm (-  %elemsize0.perm  1))
+                              (define %high.offset0.perm (+  iterator.0.new.perm  %lastidx1.perm))
+                              (define %0.perm (extract  %high.offset0.perm iterator.0.new.perm a.perm))
+                              (define %1.perm (bvusat %0.perm %elemsize0.perm %arg0.perm ))
+                              %1.perm
                               )
                     )
                   )
                 )
       )
     )
-  (define dst.norm
+  (define dst.perm
     (apply
       concat
-      (for/list ([%outer.it.norm (reverse (range 0 128 128))])
+      (for/list ([%outer.it.perm (reverse (range 0 128 128))])
                 (apply
                   concat
-                  (for/list ([j0.new.norm (reverse (range 0 128 %elemsize2.norm))])
-                            (define j0.new.div.norm (/  j0.new.norm  %elemsize2.norm))
-                            (define %33.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))
-                            (define %cond0.norm (bveq  %33.norm  (bv 1 1)))
+                  (for/list ([j0.new.perm (reverse (range 0 128 %elemsize2.perm))])
+                            (define j0.new.div.perm (/  j0.new.perm  %elemsize2.perm))
+                            (define %33.perm (extract  j0.new.div.perm j0.new.div.perm k.perm))
+                            (define %cond0.perm (bveq  %33.perm  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.norm #t)
+                              [(equal? %cond0.perm #t)
                                (begin
-                                 (define %lastidx5.norm (-  %elemsize2.norm  1))
-                                 (define %35.norm (+  j0.new.norm  %lastidx5.norm))
-                                 (define %36.norm (extract  %35.norm j0.new.norm tmp_dst0.norm))
-                                 %36.norm
+                                 (define %lastidx5.perm (-  %elemsize2.perm  1))
+                                 (define %35.perm (+  j0.new.perm  %lastidx5.perm))
+                                 (define %36.perm (extract  %35.perm j0.new.perm tmp_dst0.perm))
+                                 %36.perm
                                  )]
                               [else (begin
-                                      (define %lastidx6.norm (-  %elemsize2.norm  1))
-                                      (define %39.norm (+  j0.new.norm  %lastidx6.norm))
-                                      (define %40.norm (extract  %39.norm j0.new.norm src.norm))
-                                      %40.norm
+                                      (define %lastidx6.perm (-  %elemsize2.perm  1))
+                                      (define %39.perm (+  j0.new.perm  %lastidx6.perm))
+                                      (define %40.perm (extract  %39.perm j0.new.perm src.perm))
+                                      %40.perm
                                       )]
                               )
                             )
@@ -4957,7 +4852,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm256_min_epi16  a b %innerlanesize0 %elemsize0 )
@@ -4979,9 +4874,7 @@
                 )
       )
     )
-  ;;(bvpadhighbits  dst 0)
-  ;;TEMP
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_mask_madd52hi_epu64  k.norm a.norm b.norm c.norm %innerlanesize0.norm %arg4.norm )
@@ -5027,8 +4920,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm512_mask_div_epi32  k.norm src.norm a.norm b.norm )
@@ -5067,8 +4959,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst.norm 0)
-  dst.norm
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_m_psllwi  imm8.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %arg3.norm )
@@ -5354,62 +5245,62 @@
   (bvpadhighbits  dst.perm 0)
   )
 
-(define (_mm256_mask_packus_epi16  k.0 src.0 a.0 b.0 %vectsize0.0 %elemsize0.0 %elemsize1.0 %innerlanesize2.0 %elemsize2.0 %arg0.0 %arg1.0 )
-  (define tmp_dst0.0
+(define (_mm256_mask_packus_epi16  k.6 %arg5.6 a.6 b.6 %vectsize0.6 %elemsize0.6 %elemsize1.6 %innerlanesize2.6 %elemsize2.6 %arg0.6 %arg1.6 )
+  (define tmp_dst.6
     (apply
       concat
-      (for/list ([iterator.lane.0 (reverse (range 0 %vectsize0.0 128))])
+      (for/list ([iterator.lane.6 (reverse (range 0 %vectsize0.6 128))])
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0.new.0 (reverse (range 0 128 %elemsize0.0))])
-                              (define %low.scaled.it0.0 (+  iterator.lane.0  iterator.0.new.0))
-                              (define %lastidx1.0 (-  %elemsize0.0  1))
-                              (define %high.offset0.0 (+  %low.scaled.it0.0  %lastidx1.0))
-                              (define %0.0 (extract  %high.offset0.0 %low.scaled.it0.0 a.0))
-                              (define %1.0 (bvusat %0.0 %elemsize0.0 %arg0.0 ))
-                              %1.0
+                    (for/list ([iterator.1.new.6 (reverse (range 128 256 %elemsize1.6))])
+                              (define %low.scaled.it2.6 (+  iterator.lane.6  iterator.1.new.6))
+                              (define %low.offset0.new0.6 (-  %low.scaled.it2.6  128))
+                              (define %lastidx3.6 (-  %elemsize1.6  1))
+                              (define %high.offset2.6 (+  %low.offset0.new0.6  %lastidx3.6))
+                              (define %8.6 (extract  %high.offset2.6 %low.offset0.new0.6 b.6))
+                              (define %9.6 (bvusat %8.6 %elemsize1.6 %arg1.6 ))
+                              %9.6
                               )
                     )
                   (apply
                     concat
-                    (for/list ([iterator.1.new.0 (reverse (range 128 256 %elemsize1.0))])
-                              (define %low.scaled.it2.0 (+  iterator.lane.0  iterator.1.new.0))
-                              (define %low.offset0.new0.0 (-  %low.scaled.it2.0  128))
-                              (define %lastidx3.0 (-  %elemsize1.0  1))
-                              (define %high.offset2.0 (+  %low.offset0.new0.0  %lastidx3.0))
-                              (define %16.0 (extract  %high.offset2.0 %low.offset0.new0.0 b.0))
-                              (define %17.0 (bvusat %16.0 %elemsize1.0 %arg1.0 ))
-                              %17.0
+                    (for/list ([iterator.0.new.6 (reverse (range 0 128 %elemsize0.6))])
+                              (define %low.scaled.it0.6 (+  iterator.lane.6  iterator.0.new.6))
+                              (define %lastidx1.6 (-  %elemsize0.6  1))
+                              (define %high.offset0.6 (+  %low.scaled.it0.6  %lastidx1.6))
+                              (define %0.6 (extract  %high.offset0.6 %low.scaled.it0.6 a.6))
+                              (define %1.6 (bvusat %0.6 %elemsize0.6 %arg0.6 ))
+                              %1.6
                               )
                     )
                   )
                 )
       )
     )
-  (define dst.0
+  (define dst.6
     (apply
       concat
-      (for/list ([%outer.it.0 (reverse (range 0 1 1))])
+      (for/list ([%outer.it.6 (reverse (range 0 1 1))])
                 (apply
                   concat
-                  (for/list ([j0.new.0 (reverse (range 0 %innerlanesize2.0 %elemsize2.0))])
-                            (define j0.new.div.0 (/  j0.new.0  %elemsize2.0))
-                            (define %65.0 (extract  j0.new.div.0 j0.new.div.0 k.0))
-                            (define %cond0.0 (bveq  %65.0  (bv 1 1)))
+                  (for/list ([j0.new.6 (reverse (range 0 %innerlanesize2.6 %elemsize2.6))])
+                            (define j0.new.div.6 (/  j0.new.6  %elemsize2.6))
+                            (define %65.6 (extract  j0.new.div.6 j0.new.div.6 k.6))
+                            (define %cond0.6 (bveq  %65.6  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.0 #t)
+                              [(equal? %cond0.6 #t)
                                (begin
-                                 (define %lastidx5.0 (-  %elemsize2.0  1))
-                                 (define %67.0 (+  j0.new.0  %lastidx5.0))
-                                 (define %68.0 (extract  %67.0 j0.new.0 tmp_dst0.0))
-                                 %68.0
+                                 (define %lastidx5.6 (-  %elemsize2.6  1))
+                                 (define %67.6 (+  j0.new.6  %lastidx5.6))
+                                 (define %68.6 (extract  %67.6 j0.new.6 tmp_dst.6))
+                                 %68.6
                                  )]
                               [else (begin
-                                      (define %lastidx6.0 (-  %elemsize2.0  1))
-                                      (define %71.0 (+  j0.new.0  %lastidx6.0))
-                                      (define %72.0 (extract  %71.0 j0.new.0 src.0))
-                                      %72.0
+                                      (define %lastidx6.6 (-  %elemsize2.6  1))
+                                      (define %71.6 (+  j0.new.6  %lastidx6.6))
+                                      (define %72.6 (extract  %71.6 j0.new.6 %arg5.6))
+                                      %72.6
                                       )]
                               )
                             )
@@ -5417,7 +5308,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.0 0)
+  (bvpadhighbits  dst.6 0)
   )
 
 (define (_mm256_packs_epi32  a b %vectsize0 %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -5426,6 +5317,19 @@
       concat
       (for/list ([iterator.lane (reverse (range 0 %vectsize0 128))])
                 (concat 
+                  (apply
+                    concat
+                    (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
+                              (define %low.cofactor1 (*  iterator.1  2))
+                              (define %low.scaled.it2 (+  iterator.lane  %low.cofactor1))
+                              (define %low.offset0.new0 (-  %low.scaled.it2  128))
+                              (define %lastidx3 (-  %arg2  1))
+                              (define %high.offset2 (+  %low.offset0.new0  %lastidx3))
+                              (define %16 (extract  %high.offset2 %low.offset0.new0 b))
+                              (define %17 (bvssat %16 %arg2 %elemsize1 ))
+                              %17
+                              )
+                    )
                   (apply
                     concat
                     (for/list ([iterator.0 (reverse (range 0 64 %elemsize0))])
@@ -5438,25 +5342,11 @@
                               %1
                               )
                     )
-                  (apply
-                    concat
-                    (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
-                              (define %low.cofactor1 (*  iterator.1  2))
-                              (define %low.scaled.it2 (+  iterator.lane  %low.cofactor1))
-                              (define %low.offset0.new0 (-  %low.scaled.it2  128))
-                              (define %lastidx3 (-  %arg2  1))
-                              (define %high.offset2 (+  %low.offset0.new0  %lastidx3))
-                              (define %8 (extract  %high.offset2 %low.offset0.new0 b))
-                              (define %9 (bvssat %8 %arg2 %elemsize1 ))
-                              %9
-                              )
-                    )
                   )
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm_cmpgt_epu8_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -5602,7 +5492,7 @@
   (bvpadhighbits  dst.norm 0)
   )
 
-(define (_m_punpckhdq  a b %innerlanesize0 %elemsize0 %arg0 )
+(define (_m_punpckhdq  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
   (define dst
     (apply
       concat
@@ -5610,7 +5500,7 @@
                 (apply
                   concat
                   (for/list ([%inner.it (reverse (range 0 %innerlanesize0 %elemsize0))])
-                            (define %2 (+  %inner.it  %arg0))
+                            (define %2 (+  %inner.it  %arg1))
                             (define %lastidx0 (-  %elemsize0  1))
                             (define %3 (+  %2  %lastidx0))
                             (define %0 (extract  %3 %2 a))
@@ -5691,60 +5581,60 @@
   (bvpadhighbits  k.perm %arg6.perm)
   )
 
-(define (_mm_mask_packs_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %elemsize2.perm %arg0.perm %arg1.perm )
-  (define tmp_dst0.perm
+(define (_mm_mask_packs_epi16  k.norm src.norm a.norm b.norm %elemsize0.norm %elemsize1.norm %elemsize2.norm %arg0.norm %arg1.norm )
+  (define tmp_dst0.norm
     (apply
       concat
-      (for/list ([%outer.it.perm (reverse (range 0 128 128))])
+      (for/list ([%outer.it.norm (reverse (range 0 128 128))])
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0.new.perm (reverse (range 0 128 %elemsize0.perm))])
-                              (define %lastidx1.perm (-  %elemsize0.perm  1))
-                              (define %high.offset0.perm (+  iterator.0.new.perm  %lastidx1.perm))
-                              (define %0.perm (extract  %high.offset0.perm iterator.0.new.perm a.perm))
-                              (define %1.perm (bvssat %0.perm %elemsize0.perm %arg0.perm ))
-                              %1.perm
+                    (for/list ([iterator.1.new.norm (reverse (range 128 256 %elemsize1.norm))])
+                              (define %low.offset0.new0.norm (-  iterator.1.new.norm  128))
+                              (define %lastidx3.norm (-  %elemsize1.norm  1))
+                              (define %high.offset2.norm (+  %low.offset0.new0.norm  %lastidx3.norm))
+                              (define %16.norm (extract  %high.offset2.norm %low.offset0.new0.norm b.norm))
+                              (define %17.norm (bvssat %16.norm %elemsize1.norm %arg1.norm ))
+                              %17.norm
                               )
                     )
                   (apply
                     concat
-                    (for/list ([iterator.1.new.perm (reverse (range 128 256 %elemsize1.perm))])
-                              (define %low.offset0.new0.perm (-  iterator.1.new.perm  128))
-                              (define %lastidx3.perm (-  %elemsize1.perm  1))
-                              (define %high.offset2.perm (+  %low.offset0.new0.perm  %lastidx3.perm))
-                              (define %16.perm (extract  %high.offset2.perm %low.offset0.new0.perm b.perm))
-                              (define %17.perm (bvssat %16.perm %elemsize1.perm %arg1.perm ))
-                              %17.perm
+                    (for/list ([iterator.0.new.norm (reverse (range 0 128 %elemsize0.norm))])
+                              (define %lastidx1.norm (-  %elemsize0.norm  1))
+                              (define %high.offset0.norm (+  iterator.0.new.norm  %lastidx1.norm))
+                              (define %0.norm (extract  %high.offset0.norm iterator.0.new.norm a.norm))
+                              (define %1.norm (bvssat %0.norm %elemsize0.norm %arg0.norm ))
+                              %1.norm
                               )
                     )
                   )
                 )
       )
     )
-  (define dst.perm
+  (define dst.norm
     (apply
       concat
-      (for/list ([%outer.it.perm (reverse (range 0 128 128))])
+      (for/list ([%outer.it.norm (reverse (range 0 128 128))])
                 (apply
                   concat
-                  (for/list ([j0.new.perm (reverse (range 0 128 %elemsize2.perm))])
-                            (define j0.new.div.perm (/  j0.new.perm  %elemsize2.perm))
-                            (define %33.perm (extract  j0.new.div.perm j0.new.div.perm k.perm))
-                            (define %cond0.perm (bveq  %33.perm  (bv 1 1)))
+                  (for/list ([j0.new.norm (reverse (range 0 128 %elemsize2.norm))])
+                            (define j0.new.div.norm (/  j0.new.norm  %elemsize2.norm))
+                            (define %33.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))
+                            (define %cond0.norm (bveq  %33.norm  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.perm #t)
+                              [(equal? %cond0.norm #t)
                                (begin
-                                 (define %lastidx5.perm (-  %elemsize2.perm  1))
-                                 (define %35.perm (+  j0.new.perm  %lastidx5.perm))
-                                 (define %36.perm (extract  %35.perm j0.new.perm tmp_dst0.perm))
-                                 %36.perm
+                                 (define %lastidx5.norm (-  %elemsize2.norm  1))
+                                 (define %35.norm (+  j0.new.norm  %lastidx5.norm))
+                                 (define %36.norm (extract  %35.norm j0.new.norm tmp_dst0.norm))
+                                 %36.norm
                                  )]
                               [else (begin
-                                      (define %lastidx6.perm (-  %elemsize2.perm  1))
-                                      (define %39.perm (+  j0.new.perm  %lastidx6.perm))
-                                      (define %40.perm (extract  %39.perm j0.new.perm src.perm))
-                                      %40.perm
+                                      (define %lastidx6.norm (-  %elemsize2.norm  1))
+                                      (define %39.norm (+  j0.new.norm  %lastidx6.norm))
+                                      (define %40.norm (extract  %39.norm j0.new.norm src.norm))
+                                      %40.norm
                                       )]
                               )
                             )
@@ -5752,7 +5642,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  (bvpadhighbits  dst.norm 0)
   )
 
 (define (_mm_mask_rol_epi64  k.perm src.perm %arg4.perm %arg3.perm a.perm imm8.perm %innerlanesize0.perm %arg2.perm )
@@ -5822,7 +5712,7 @@
   (bvpadhighbits  dst 0)
   )
 
-(define (_mm_mask_unpacklo_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %arg0.perm %arg1.perm %arg2.perm )
+(define (_mm_mask_unpacklo_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %arg0.perm %arg1.perm %arg2.perm %arg3.perm )
   (define tmp_dst0.perm
     (apply
       concat
@@ -5833,10 +5723,11 @@
                             (define %factor0.perm (/  %arg2.perm  %elemsize0.perm))
                             (define %factor1.perm (*  2  %factor0.perm))
                             (define iterator.0.site0.new.mul.perm (*  iterator.0.site0.new.perm  %factor1.perm))
+                            (define %0.site0.new.low.idx.perm (+  %arg3.perm  iterator.0.site0.new.perm))
                             (define %lastidx1.perm (-  %arg0.perm  1))
-                            (define %0.site0.new.high.idx0.perm (+  iterator.0.site0.new.perm  %lastidx1.perm))
-                            (define %0.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm iterator.0.site0.new.perm a.perm))
-                            (define %1.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm iterator.0.site0.new.perm b.perm))
+                            (define %0.site0.new.high.idx0.perm (+  %0.site0.new.low.idx.perm  %lastidx1.perm))
+                            (define %0.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm a.perm))
+                            (define %1.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm b.perm))
                             (concat %1.copy.copy.00.new.perm %0.copy.copy.00.new.perm)
                             )
                   )
@@ -5896,45 +5787,46 @@
   (bvpadhighbits  dst %arg2)
   )
 
-(define (_mm512_maskz_unpacklo_epi64  k.norm %arg6.norm a.norm b.norm %innerlanesize0.norm %innerlanesize1.norm )
-  (define tmp_dst.norm
+(define (_mm512_maskz_unpacklo_epi64  k.perm %arg8.perm a.perm b.perm %innerlanesize0.perm %innerlanesize1.perm %arg4.perm )
+  (define tmp_dst.perm
     (apply
       concat
-      (for/list ([%outer.it.norm (reverse (range 0 1 1))])
+      (for/list ([%outer.it.perm (reverse (range 0 1 1))])
                 (apply
                   concat
-                  (for/list ([iterator.0.new.norm (reverse (range 0 %innerlanesize0.norm 64))])
-                            (define iterator.0.new.mul.norm (*  iterator.0.new.norm  2))
-                            (define %0.site0.new.high.idx0.norm (+  iterator.0.new.mul.norm  63))
-                            (define %0.copy.copy.00.new.norm (extract  %0.site0.new.high.idx0.norm iterator.0.new.mul.norm a.norm))
-                            (define %1.copy.copy.00.new.norm (extract  %0.site0.new.high.idx0.norm iterator.0.new.mul.norm b.norm))
-                            (concat %1.copy.copy.00.new.norm %0.copy.copy.00.new.norm)
+                  (for/list ([iterator.0.new.perm (reverse (range 0 %innerlanesize0.perm 64))])
+                            (define iterator.0.new.mul.perm (*  iterator.0.new.perm  2))
+                            (define %0.site0.new.low.idx.perm (+  iterator.0.new.mul.perm  %arg4.perm))
+                            (define %0.site0.new.high.idx0.perm (+  %0.site0.new.low.idx.perm  63))
+                            (define %0.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm a.perm))
+                            (define %1.copy.copy.00.new.perm (extract  %0.site0.new.high.idx0.perm %0.site0.new.low.idx.perm b.perm))
+                            (concat %1.copy.copy.00.new.perm %0.copy.copy.00.new.perm)
                             )
                   )
                 )
       )
     )
-  (define dst.norm
+  (define dst.perm
     (apply
       concat
-      (for/list ([%outer.it.norm (reverse (range 0 1 1))])
+      (for/list ([%outer.it.perm (reverse (range 0 1 1))])
                 (apply
                   concat
-                  (for/list ([j0.new.norm (reverse (range 0 %innerlanesize1.norm 64))])
-                            (define j0.new.div.norm (/  j0.new.norm  64))
-                            (define %13.norm (extract  j0.new.div.norm j0.new.div.norm k.norm))
-                            (define %cond0.norm (bveq  %13.norm  (bv 1 1)))
+                  (for/list ([j0.new.perm (reverse (range 0 %innerlanesize1.perm 64))])
+                            (define j0.new.div.perm (/  j0.new.perm  64))
+                            (define %13.perm (extract  j0.new.div.perm j0.new.div.perm k.perm))
+                            (define %cond0.perm (bveq  %13.perm  (bv 1 1)))
                             (cond
-                              [(equal? %cond0.norm #t)
+                              [(equal? %cond0.perm #t)
                                (begin
-                                 (define %15.norm (+  j0.new.norm  63))
-                                 (define %16.norm (extract  %15.norm j0.new.norm tmp_dst.norm))
-                                 %16.norm
+                                 (define %15.perm (+  j0.new.perm  63))
+                                 (define %16.perm (extract  %15.perm j0.new.perm tmp_dst.perm))
+                                 %16.perm
                                  )]
                               [else (begin
-                                      (define %19.norm (+  j0.new.norm  63))
-                                      (define %20.norm (extract  %19.norm j0.new.norm %arg6.norm))
-                                      %20.norm
+                                      (define %19.perm (+  j0.new.perm  63))
+                                      (define %20.perm (extract  %19.perm j0.new.perm %arg8.perm))
+                                      %20.perm
                                       )]
                               )
                             )
@@ -5942,7 +5834,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  (bvpadhighbits  dst.perm 0)
   )
 
 (define (_mm_maskz_srai_epi64  imm8.perm %arg2.perm k.perm a.perm %arg7.perm %arg6.perm %arg12.perm %innerlanesize0.perm %elemsize0.perm %arg5.perm )
@@ -6082,8 +5974,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_maskz_rorv_epi64  k.norm %arg4.norm %arg3.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -6341,8 +6232,7 @@
                 )
       )
     )
-  ;(bvpadhighbits  dst 0)
-  dst
+  (bvpadhighbits  dst 0)
   )
 
 (define (_mm256_mask_dpbusds_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -6526,20 +6416,6 @@
                 (concat 
                   (apply
                     concat
-                    (for/list ([iterator.0 (reverse (range 0 64 16))])
-                              (define %low.cofactor0 (*  iterator.0  2))
-                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
-                              (define %high.offset0 (+  %low.scaled.it0  15))
-                              (define %0 (extract  %high.offset0 %low.scaled.it0 a))
-                              (define %low.offset0 (+  %low.scaled.it0  16))
-                              (define %high.offset1 (+  %low.offset0  15))
-                              (define %1 (extract  %high.offset1 %low.offset0 a))
-                              (define %2 (bvsubnsw  %0  %1 16))
-                              %2
-                              )
-                    )
-                  (apply
-                    concat
                     (for/list ([iterator.1 (reverse (range 64 128 16))])
                               (define %low.cofactor2 (*  iterator.1  2))
                               (define %low.scaled.it3 (+  iterator.lane  %low.cofactor2))
@@ -6551,6 +6427,20 @@
                               (define %17 (extract  %high.offset4 %low.offset2.new0 b))
                               (define %18 (bvsubnsw  %16  %17 16))
                               %18
+                              )
+                    )
+                  (apply
+                    concat
+                    (for/list ([iterator.0 (reverse (range 0 64 16))])
+                              (define %low.cofactor0 (*  iterator.0  2))
+                              (define %low.scaled.it0 (+  iterator.lane  %low.cofactor0))
+                              (define %high.offset0 (+  %low.scaled.it0  15))
+                              (define %0 (extract  %high.offset0 %low.scaled.it0 a))
+                              (define %low.offset0 (+  %low.scaled.it0  16))
+                              (define %high.offset1 (+  %low.offset0  15))
+                              (define %1 (extract  %high.offset1 %low.offset0 a))
+                              (define %2 (bvsubnsw  %0  %1 16))
+                              %2
                               )
                     )
                   )
@@ -6664,6 +6554,27 @@
       )
     )
   (bvpadhighbits  dst.norm 0)
+  )
+
+(define (_mm256_set_m128i  lo.1 hi.1 %innerlanesize0.1 %elemsize0.1 %arg0.1 )
+  (define dst.1
+    (apply
+      concat
+      (for/list ([%outer.it.1 (reverse (range 0 1 1))])
+                (apply
+                  concat
+                  (for/list ([%inner.it.1 (reverse (range 0 %innerlanesize0.1 %elemsize0.1))])
+                            (define %lastidx1.1 (-  %elemsize0.1  1))
+                            (define %3.1 (+  %inner.it.1  %lastidx1.1))
+                            (define %0.1 (extract  %3.1 %inner.it.1 lo.1))
+                            (define %1.1 (extract  %3.1 %inner.it.1 hi.1))
+                            (concat %1.1 %0.1)
+                            )
+                  )
+                )
+      )
+    )
+  (bvpadhighbits  dst.1 0)
   )
 
 ;; ================================================================================

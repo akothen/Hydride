@@ -357,6 +357,11 @@ void CodeGen_LLVM::add_external_code(const Module &halide_module) {
     }
 }
 
+inline bool ends_with(std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
 
 void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
@@ -382,6 +387,44 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
     // of these calls.
     llvm::InlineFunctionInfo ifi;
 
+
+    // Inline wrapper functions inside the hydride methods
+
+    for(llvm::Function& Fn : *module){
+        std::vector<llvm::CallInst*> ToInline;
+        for(auto& BB : Fn){
+            for(llvm::Instruction &I : BB){
+                llvm::CallInst* CI = llvm::dyn_cast<llvm::CallInst>(&I);
+
+                if(!CI) continue;
+
+                llvm::Function* CF = CI->getCalledFunction();
+                if(!CF) continue;
+
+                std::string fn_name = CF->getName().str();
+
+                if(ends_with(fn_name, "_wrapper")){
+                    debug(0) << "Found hydride wrapper call, inlining..."<<"\n";
+                    llvm::errs() << *CI << "\n";
+                    llvm::errs() << *CF << "\n";
+
+                    internal_assert(!CF->isDeclaration()) << "Function to inline must be defined";
+
+                    ToInline.push_back(CI);
+                }
+
+                
+            }
+        }
+
+        for(llvm::CallInst* CI : ToInline){
+            llvm::InlineFunction(*CI, ifi);
+        }
+
+    }
+
+
+    // First inline hydride functions
     for(llvm::Function& Fn : *module){
         std::vector<llvm::CallInst*> ToInline;
         for(auto& BB : Fn){
@@ -414,6 +457,10 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
         }
 
     }
+
+
+    llvm::errs() << *module << "\n";
+
 
 }
 
@@ -656,7 +703,7 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::finish_codegen() {
     debug(2) << "Done generating llvm bitcode\n";
 
     // Optimize
-    CodeGen_LLVM::optimize_module();
+     CodeGen_LLVM::optimize_module();
 
     if (target.has_feature(Target::EmbedBitcode)) {
         std::string halide_command = "halide target=" + target.to_string();
@@ -3580,15 +3627,16 @@ void CodeGen_LLVM::visit(const Call *op) {
 
 
                 CallInst *call = builder->CreateCall(fn, args);
+                /*
+                debug(0) << "Why is this being invoked in build" << "\n";
                 if (op->is_pure()) {
                     call->setDoesNotAccessMemory();
                 }
+                */
                 call->setDoesNotThrow();
                 value = call;
 
                 llvm::errs() << "Generating Hydride Call: "<< *value << "in parent function "<<call->getFunction()->getName()<<"\n";
-                
-
 
 
             } else {
