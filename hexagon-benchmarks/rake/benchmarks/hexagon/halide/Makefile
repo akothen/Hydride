@@ -7,6 +7,7 @@ benchmarks = gaussian3x3 \
 			 median3x3 \
 			 sobel3x3 \
 			 blur3x3 \
+			 chroma \
 			 depthwise_conv \
 			 matmul \
 			 matmul_128 \
@@ -47,11 +48,11 @@ $(benchmarks): %: %/bin
 
 # 	Use the generator (to get a manual schedule which is the default)
 #
-#	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
-#		-o $@/bin \
-#		-g $@ \
-#		-e static_library,stmt,h,llvm_assembly,assembly \
-#		-f $@ target=host
+	export LD_LIBRARY_PATH=$(HALIDE_DISTRIB)/lib; ./$@/bin/$@_generator \
+		-o $@/bin \
+		-g $@ \
+		-e static_library,stmt,h,llvm_assembly,assembly \
+		-f $@ target=host
 
 fft:
 # 	Compile the generator
