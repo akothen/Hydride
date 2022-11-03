@@ -204,19 +204,22 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
     FullTrace1.append(Trace1Op)
     FullTrace2.append(Trace2Op)
     if type(Trace1Op) != type(Trace2Op):
+      print("false5")
       return False
     # The types of the operands of these ops must be the same too
     assert Trace1Op.getOpcode().typesOfInputsAndOutputEqual() \
       or Trace1Op.getOpcode().typesOfOperandsAreEqual()
     assert Trace2Op.getOpcode().typesOfInputsAndOutputEqual() \
         or Trace2Op.getOpcode().typesOfOperandsAreEqual()
-    assert len(Trace1Op.getOperands()) == len(Trace2Op.getOperands())
     assert len(Trace1Op.getOperands()) == 2
+    assert len(Trace2Op.getOperands()) == 2
     if type(Trace1Op.getOperand(0)) != type(Trace2Op.getOperand(0)):
       # Try again
       if type(Trace1Op.getOperand(0)) != type(Trace2Op.getOperand(1)):
+        print("false4")
         return False
       if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(2)):
+        print("false3")
         return False
       if isinstance(Trace1Op.getOperand(0), RoseOperation):
         assert isinstance(Trace2Op.getOperand(1), RoseOperation)
@@ -228,6 +231,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
         OpTrace2.append(Trace2Op.getOperand(0))
     else:
       if type(Trace1Op.getOperand(1)) != type(Trace2Op.getOperand(1)):
+        print("false2")
         return False
       if isinstance(Trace1Op.getOperand(0), RoseOperation):
         assert isinstance(Trace2Op.getOperand(0), RoseOperation)
@@ -237,7 +241,7 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
         assert isinstance(Trace2Op.getOperand(1), RoseOperation)
         OpTrace1.append(Trace1Op.getOperand(1))
         OpTrace2.append(Trace2Op.getOperand(1))
-    # Now check if these operationns are same as each other or not
+    # Now check if these operationns are same as each other
     if Trace1Op.isSameAs(Trace2Op):
       # These ops must have one use in add op.
       AptUserFound = False
@@ -256,25 +260,37 @@ def AreBitSlicesContiguous(BVOp1 : RoseBitVectorOp, BVOp2 : RoseBitVectorOp) -> 
             break
       if AptUserFound == False:
         continue
-      # Now see if, after simplifying these ops, we get
-      # a difference of values that is equivalent to the 
-      # bitwidth of the operation(s) for which these ops
-      # serve as indexing ops.
-      ClonedTrace1Op = Trace1Op.cloneOperation()
-      ClonedTrace2Op = Trace2Op.cloneOperation()
-      SimplifiedClonedTrace1Op = ClonedTrace1Op.simplify()
-      SimplifiedClonedTrace2Op = ClonedTrace2Op.simplify()
-      if not isinstance(SimplifiedClonedTrace1Op, RoseConstant) \
-        or not isinstance(SimplifiedClonedTrace2Op, RoseConstant):
-        continue
+    # Now see if, after simplifying these ops, we get
+    # a difference of values that is equivalent to the 
+    # bitwidth of the operation(s) for which these ops
+    # serve as indexing ops.
+    ClonedTrace1Op = Trace1Op.cloneOperation()
+    ClonedTrace2Op = Trace2Op.cloneOperation()
+    SimplifiedClonedTrace1Op = ClonedTrace1Op.simplify()
+    SimplifiedClonedTrace2Op = ClonedTrace2Op.simplify()
+    print("ClonedTrace1Op:")
+    ClonedTrace1Op.print()
+    print("SimplifiedClonedTrace1Op:")
+    SimplifiedClonedTrace1Op.print()
+    print("ClonedTrace2Op:")
+    ClonedTrace2Op.print()
+    print("SimplifiedClonedTrace2Op:")
+    SimplifiedClonedTrace2Op.print()
+    if isinstance(SimplifiedClonedTrace1Op, RoseConstant) \
+      and isinstance(SimplifiedClonedTrace2Op, RoseConstant):
       if SimplifiedClonedTrace1Op.getValue() > SimplifiedClonedTrace2Op.getValue():
         if SimplifiedClonedTrace1Op.getValue() \
             - SimplifiedClonedTrace2Op.getValue() == BVOp2.getOutputBitwidth():
+          print("CONTIGUOUS!!!!")
           return True
       if SimplifiedClonedTrace1Op.getValue() < SimplifiedClonedTrace2Op.getValue():
         if SimplifiedClonedTrace2Op.getValue() \
               - SimplifiedClonedTrace1Op.getValue() == BVOp2.getOutputBitwidth():
+          print("CONTIGUOUS!!!!")
           return True
+      print("false1")
+      return False    
+  print("false0")
   return False
 
 
@@ -1018,4 +1034,5 @@ def GetElemSizeOfArg(Function : RoseFunction, Arg : RoseArgument):
           ElemSize = Op.getOutputBitwidth()
           return ElemSize
   assert ElemSize != None
+
 
