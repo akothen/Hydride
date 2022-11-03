@@ -169,7 +169,7 @@ namespace hannk {
                 input_.set_estimates({{0, 1024}, {0, custom_width/32}, {0, custom_height/32}, {0, 1}});
                 input_zero_.set_estimate(3);
 
-                filter_.set_estimates({{0, 4}, {0, 4}, {0, 4}, {0, 4}, {0, custom_width/32}, {0, 1}});
+                filter_.set_estimates({{0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}});
                 filter_zero_.set_estimate(5);
 
                 bias_.set_estimates({{0, custom_width*custom_height}});
