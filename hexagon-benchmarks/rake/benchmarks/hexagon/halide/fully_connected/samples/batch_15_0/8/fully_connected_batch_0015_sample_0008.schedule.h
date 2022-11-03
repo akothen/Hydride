@@ -40,21 +40,21 @@ inline void apply_schedule_fully_connected_batch_0015_sample_0008(
         .split(ci, ci, cii, 32, TailStrategy::ShiftInwards)
         .unroll(ci)
         .unroll(bi)
-        .vectorize(cii)
+        .vectorize(cii, 512 / 64) // Added vectorization factor
         .compute_root()
         .reorder({cii, ci, bi, c, b})
         .parallel(b);
     multiplied
         .store_in(MemoryType::Stack)
         .split(c, c, ci, 8, TailStrategy::ShiftInwards)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(output, c)
         .reorder({ci, c, b});
     multiplied.update(0)
         .split(c, c, ci, 32, TailStrategy::RoundUp)
         .unroll(c)
         .unroll(b)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .reorder({ci, c, b, r9_x});
     repeat_edge_1
         .split(_0, _0, _0i, 60, TailStrategy::ShiftInwards)

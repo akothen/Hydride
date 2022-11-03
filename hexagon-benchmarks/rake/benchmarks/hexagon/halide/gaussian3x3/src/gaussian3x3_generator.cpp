@@ -1,6 +1,7 @@
 #include "Halide.h"
 #include "utils.h"
 #include "../../common_params.h"
+#include "../samples/batch_81_0/8/gaussian3x3_batch_0081_sample_0008.schedule.h"
 
 using namespace Halide;
 
@@ -29,6 +30,7 @@ class Gaussian3x3 : public Generator<Gaussian3x3> {
             output(x, y)  = cast<uint8_t> ((cols(x, y) + 8) >> 4);
 
             Pipeline p(output);
+            apply_schedule_gaussian3x3_batch_0081_sample_0008(p, target);
         }
 
         void schedule() {

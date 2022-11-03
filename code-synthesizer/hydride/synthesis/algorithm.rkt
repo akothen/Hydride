@@ -96,6 +96,10 @@
 
   (define actual-expr-depth 
     (cond
+       [(halide:contains-complex-op-in-subexpr halide-expr 1)
+        ;; Immediate expression is ramp, we can use the provided depth
+        expr-depth
+       ]
       [(halide:contains-complex-op-in-subexpr halide-expr expr-depth)
        (debug-log (format "Contains complex operation, hence decrement depth from ~a to ~a\n" expr-depth (max 1 (- expr-depth 1))))
        (max 1 (- expr-depth 1))

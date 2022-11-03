@@ -1,5 +1,6 @@
 #include "Halide.h"
 #include "../../common_params.h"
+#include "../samples/batch_79_0/17/blur3x3_batch_0079_sample_0017.schedule.h"
 
 using namespace Halide;
 
@@ -22,6 +23,7 @@ public:
         blur_y(x, y) = (blur_x(x, y) + blur_x(x, y+1) + blur_x(x, y+2))/3;
 
         Pipeline p(blur_y);
+        apply_schedule_blur3x3_batch_0079_sample_0017(p, target);
     }
 
     void schedule() {
