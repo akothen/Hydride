@@ -163,12 +163,13 @@ namespace hannk {
             if (auto_schedule) {
                 // Estimates taken from here: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L402
                 // Notice this: https://github.com/uwplse/rake/blob/hvx-artifact/benchmarks/hexagon/halide/test/run.cpp#L371
+                // Also notice that in the last two dims, they use x_dim and b_dim and not fx_dim and fy_dim.
                 int custom_width = 128;
                 int custom_height = 128;
                 input_.set_estimates({{0, 1024}, {0, custom_width/32}, {0, custom_height/32}, {0, 1}});
                 input_zero_.set_estimate(3);
 
-                filter_.set_estimates({{0, 4}, {0, 4}, {0, 4}, {0, 4}, {0, 1}, {0, 1}});
+                filter_.set_estimates({{0, 4}, {0, 4}, {0, 4}, {0, 4}, {0, custom_width/32}, {0, 1}});
                 filter_zero_.set_estimate(5);
 
                 bias_.set_estimates({{0, custom_width*custom_height}});
