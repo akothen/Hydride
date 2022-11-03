@@ -7,6 +7,7 @@ benchmarks = gaussian3x3 \
 			 median3x3 \
 			 sobel3x3 \
 			 blur3x3 \
+			 depthwise_conv \
 			 matmul \
 			 matmul_128 \
 			 matmul_256 \
