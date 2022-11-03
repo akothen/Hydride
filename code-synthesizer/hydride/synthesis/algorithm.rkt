@@ -225,8 +225,7 @@
 
                         (define-values (sat? mat el) 
                                        (synthesize-sol-with-depth 
-                                         ;;(max (+ -1 actual-expr-depth) 1) 
-                                         1
+                                         (max (+ -1 actual-expr-depth) 1) 
                                                                   depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
                                        )
 

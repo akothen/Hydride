@@ -27,6 +27,11 @@ BV_OPS = [
     "bvrol", "bvror"
 ]
 
+BV_OP_VARIANTS = [
+    ["bvadd","bvaddnsw", "bvaddnuw"],
+    ["bvsub","bvsubnsw", "bvsubnuw"],
+    ["bvmul", "bvmulnsw", "bvmulnuw" ]
+]
 
 
 

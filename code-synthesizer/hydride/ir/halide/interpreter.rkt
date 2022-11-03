@@ -703,7 +703,7 @@
     
     [(vec-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list sign-extend  ) (list zero-extend)) (get-bv-ops v1)  (get-bv-ops v2) )]
 
-    [(vec-sat-add v1 v2) (append (list extract bvadd) (if (is-signed-expr? v1 v2) (list  bvaddnsw 'bvssat) (list  bvaddnuw 'bvusat )) (get-bv-ops v1)  (get-bv-ops v2) )]
+    [(vec-sat-add v1 v2) (append (list extract ) (if (is-signed-expr? v1 v2) (list  bvaddnsw 'bvssat) (list  bvaddnuw 'bvusat )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))]

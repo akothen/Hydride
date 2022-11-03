@@ -11,6 +11,7 @@ USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
+PRUNE_BVOP_VARIANTS = True
 
 
 # Any shuffle operation producing bitvectors more than
@@ -120,6 +121,10 @@ class Synthesizer:
         for idx, input_size in enumerate(self.input_sizes):
             if not ENABLE_SHUFFLE:
                 continue
+
+            if input_size <= 32:
+                continue
+
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
 
@@ -152,6 +157,10 @@ class Synthesizer:
         for idx, input_size in enumerate(self.input_sizes):
             if not ENABLE_SHUFFLE:
                 continue
+
+            if input_size <= 32:
+                continue
+
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
 
@@ -184,6 +193,10 @@ class Synthesizer:
         for idx, input_size in enumerate(self.input_sizes):
             if not ENABLE_SHUFFLE:
                 continue
+
+            if input_size <= 32:
+                continue
+
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
 
@@ -309,7 +322,10 @@ class Synthesizer:
             if not ENABLE_SHUFFLE:
                 continue
 
-            # input_size = 16
+
+            if input_size <= 32:
+                continue
+
 
             # 16, 16
             precision = self.spec.input_precision[idx]
@@ -488,6 +504,12 @@ class Synthesizer:
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
+        (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_precision(operation_dsl_insts, operation_dsl_args_list)
+
+
+
+        (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
+
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
 
 
@@ -578,6 +600,58 @@ class Synthesizer:
         return (pruned_ops, pruned_ctxs)
 
 
+    # If enabled, aggressively prunes those instructions
+    # which contain a different variant of a bvop
+    # from that present in the spec. For example,
+    # if the spec contains 'bvaddnsw' but not 'bvadd',
+    # and `bvnuw`, we will prune those operations using
+    # using `bvadd` and `bvnuw`
+    def prune_variant_bvops(self, ops, ctxs):
+
+        if not PRUNE_BVOP_VARIANTS:
+            return (ops, ctxs)
+
+        spec_ops = self.spec.get_semantics_ops_list()
+
+        def op_has_variant(op):
+            for variant_list in BV_OP_VARIANTS:
+                if op in variant_list:
+                    return variant_list
+            return []
+
+        disallowed_ops = []
+
+        for op in spec_ops:
+            op_variant = op_has_variant(op)
+
+            for var in op_variant:
+                # Only variants which are in the spec are allowed
+                if var not in spec_ops:
+                    disallowed_ops.append(var)
+
+        print("Disallowed bvops: ", disallowed_ops)
+        pruned_ops = []
+        pruned_ctxs = []
+
+        for idx in range(len(ops)):
+            dsl_ops = ops[idx].get_semantics_ops_list()
+
+            to_insert = True
+            for op in dsl_ops:
+                if op in disallowed_ops:
+                    to_insert = False
+                    break
+            if to_insert:
+                pruned_ops.append(ops[idx])
+                pruned_ctxs.append(ctxs[idx])
+            else:
+                print("Pruning ",ctxs[idx], "due to bv op variants")
+
+
+
+        return (pruned_ops, pruned_ctxs)
+
+
     def prune_ops_relying_on_imm(self, ops, ctxs):
         # Imms used in specification, conservatively keep
         # all operations
@@ -608,6 +682,51 @@ class Synthesizer:
                 pruned_ctxs.append(ctx_i)
 
         print("Prunning Based of non-immediate usage pruned", len(ops) - len(pruned_ops), "instructions ... ")
+        return (pruned_ops, pruned_ctxs)
+
+
+
+    # Certain ops may take the elements to smaller element types
+    # i.e. precisions, than what may be available in the spec.
+    #, we can trivially prune these ops (when there is no bvssat
+    # bvusat involved)
+    def prune_ops_relying_on_precision(self, ops, ctxs):
+
+        spec_ops = self.spec.get_semantics_ops_list()
+
+        if "bvssat" in spec_ops:
+            return (ops,ctxs)
+        if "bvusat" in spec_ops:
+            return (ops,ctxs)
+
+
+
+        smallest_imm = min([imm[1] for imm in self.spec.imms], default = self.spec.output_precision)
+        smallest_input = min(self.spec.input_precision, default = self.spec.output_precision)
+        smallest_output = self.spec.output_precision
+
+        smallest_bv_prec = min(smallest_input, smallest_output, smallest_imm)
+
+        print("Smallest input precision for spec:", smallest_bv_prec)
+
+        pruned_ops = []
+        pruned_ctxs = []
+
+        for i in range(len(ops)):
+            op_i = ops[i]
+            ctx_i = ctxs[i]
+
+            min_ctx_bvs = min(ctx_i.out_precision, ctx_i.in_precision)
+
+            if min_ctx_bvs < smallest_bv_prec:
+                if DEBUG:
+                    print("Pruning", ctx_i.name, "as it has an argument of precision ",min_ctx_bvs, "which is smaller than", smallest_bv_prec)
+                continue
+            else:
+                pruned_ops.append(op_i)
+                pruned_ctxs.append(ctx_i)
+
+        print("Prunning Based of precisions", len(ops) - len(pruned_ops), "instructions ... ")
         return (pruned_ops, pruned_ctxs)
 
 

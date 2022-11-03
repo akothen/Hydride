@@ -51,7 +51,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_extracti32x4_epi32  k.norm imm8.norm src.norm a.norm %elemsize1.norm )
@@ -124,7 +124,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_maskz_sllv_epi16  count.perm %arg2.perm k.perm %arg5.perm %arg6.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg3.perm %arg4.perm )
@@ -175,7 +175,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_mask_adds_epi16  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -211,7 +211,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_mask_cmplt_epi16_mask  k1.norm %arg2.norm %arg3.norm a.norm b.norm %arg5.norm %innerlanesize0.norm %arg4.norm %arg6.norm )
@@ -292,7 +292,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_srl_epi16  count.norm %arg2.norm k.norm %arg6.norm src.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )
@@ -345,7 +345,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mulhi_pi16  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -372,7 +372,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_cvtepu8_epi32  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm )
@@ -409,7 +409,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_hadd_epi16  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -417,7 +417,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
@@ -455,7 +455,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_hsubs_epi16  a b %innerlanesize0 %innerlaneoffset1 %innerlanesize1 %arg1 %arg2 )
@@ -463,7 +463,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 16))])
@@ -495,7 +495,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_extract_epi16  %arg2 a index %innerlanesize0 %elemsize0 %arg0 %arg1 %arg3 %arg4 )
@@ -560,7 +560,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_div_epi16  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -587,7 +587,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_subs_epi16  k.0 src.0 a.0 b.0 %innerlanesize0.0 %elemsize0.0 )
@@ -623,7 +623,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.0 0)
+  dst.0
   )
 
 (define (_mm256_hadds_epi16  a b )
@@ -631,7 +631,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 16))])
@@ -665,7 +665,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_hsub_epi32  a b %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -673,7 +673,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -711,7 +711,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_maskz_madd52lo_epu64  k.norm %arg6.norm a.norm b.norm c.norm %innerlanesize0.norm %arg4.norm )
@@ -757,7 +757,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_maskz_extracti64x2_epi64  k.perm imm8.perm %arg10.perm a.perm %innerlanesize1.perm %elemsize1.perm %arg3.perm %arg7.perm )
@@ -821,7 +821,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_maskz_cvtepi16_epi8  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm %arg4.perm )
@@ -886,7 +886,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_mask_max_epi32  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -922,7 +922,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_cmplt_epi16  b.norm %arg1.norm %arg0.norm a.norm %elemsize0.norm )
@@ -945,7 +945,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_srli_pi32  imm8.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %arg3.norm )
@@ -985,7 +985,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_cmple_epu16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -1118,7 +1118,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_mask_mul_epi32  k.6 src.6 a.6 b.6 %innerlanesize0.6 )
@@ -1156,7 +1156,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.6 0)
+  dst.6
   )
 
 (define (_mm512_cmpneq_epi8_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -1206,7 +1206,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_max_epi16  a b %innerlanesize0 %elemsize0 )
@@ -1228,7 +1228,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_madd52lo_epu64  a b c %innerlanesize0 %arg2 )
@@ -1259,7 +1259,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_m_por  a b %innerlanesize0 %elemsize0 )
@@ -1281,7 +1281,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_unpackhi_epi8  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1306,7 +1306,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_mask_mul_epu32  k.norm src.norm a.norm b.norm %innerlanesize0.norm )
@@ -1344,7 +1344,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_maskz_mulhi_epi16  k.perm %arg4.perm a.perm b.perm %innerlanesize0.perm %arg2.perm )
@@ -1382,7 +1382,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_mul_epi32  a b %innerlanesize0 )
@@ -1406,7 +1406,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_packus_epi16  a b %vectsize0 %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -1414,7 +1414,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 %vectsize0 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -1444,7 +1444,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_sllv_epi64  %arg0.norm count.norm %arg2.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1481,7 +1481,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_unpacklo_epi64  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -1502,7 +1502,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_dpbusds_epi32  k.norm %arg3.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -1552,7 +1552,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_m_paddsb  a b %innerlanesize0 %elemsize0 )
@@ -1574,7 +1574,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_cvtsepi64_epi16  a %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1655,7 +1655,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_srl_epi64  count.norm %arg3.norm a.norm %innerlanesize0.norm )
@@ -1688,7 +1688,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_srlv_epi32  count.norm %arg0.norm %arg2.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1725,7 +1725,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_srav_epi64  %arg0.norm count.norm %arg2.norm a.norm %arg3.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm )
@@ -1764,7 +1764,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_maskz_slli_epi16  imm8.perm %arg2.perm k.perm %arg6.perm %arg9.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg5.perm )
@@ -1814,7 +1814,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_mulhi_epu16  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -1841,7 +1841,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_maskz_adds_epu8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -1877,7 +1877,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_cmplt_epu16_mask  k1.norm a.norm %arg3.norm %arg2.norm b.norm %arg5.norm %innerlanesize0.norm %arg4.norm %arg6.norm )
@@ -1958,7 +1958,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_mask_ror_epi32  k.norm %arg4.norm %arg3.norm src.norm a.norm imm8.norm %innerlanesize0.norm %arg2.norm )
@@ -2004,7 +2004,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_broadcast_i64x4  a %innerlanesize0 %elemsize0 %arg0 )
@@ -2027,7 +2027,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_broadcastq_epi64  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2060,7 +2060,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm512_mask_fmadd_epi32  k.norm a.norm b.norm c.norm )
@@ -2102,7 +2102,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_avg_epu16  %arg1 %arg0 a b %innerlanesize0 %elemsize0 )
@@ -2126,7 +2126,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_min_epu16  k.perm src.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2162,7 +2162,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_cvtepi64_epi32  a %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -2210,7 +2210,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_maskz_dpbusd_epi32  k.norm %arg3.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -2260,7 +2260,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_mask_abs_epi64  k.perm src.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2295,7 +2295,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_mask_sll_epi64  k.perm count.perm src.perm %arg6.perm a.perm %innerlanesize0.perm )
@@ -2341,7 +2341,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_maskz_unpackhi_epi64  k.norm %arg8.norm a.norm b.norm %arg2.norm %arg5.norm )
@@ -2390,7 +2390,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_mask_sub_epi32  k.perm src.perm b.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -2426,7 +2426,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_xor_epi32  a b %innerlanesize0 %elemsize0 )
@@ -2448,7 +2448,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_blendv_epi8  mask.norm a.norm b.norm %innerlanesize0.norm )
@@ -2480,7 +2480,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_movepi64_pi64  a %innerlanesize0 %elemsize0 %arg0 )
@@ -2534,7 +2534,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_sign_epi8  b.norm %arg2.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg1.norm %arg3.norm )
@@ -2585,7 +2585,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_maskz_cvtusepi64_epi16  k.norm %arg3.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg2.norm %arg4.norm )
@@ -2630,7 +2630,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
@@ -2659,7 +2659,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_max_epu64  a b %innerlanesize0 %elemsize0 )
@@ -2681,7 +2681,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_maskz_subs_epu8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -2717,7 +2717,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_ror_epi64  %arg2 %arg1 a imm8 %innerlanesize0 %arg0 )
@@ -2747,7 +2747,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_abs_epi16  a %innerlanesize0 %elemsize0 )
@@ -2768,7 +2768,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_min_epi8  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -2804,7 +2804,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_mask_mulhi_epi32  k.norm src.norm a.norm b.norm )
@@ -2844,7 +2844,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_sll_epi64  count.norm %arg3.norm a.norm %innerlanesize0.norm )
@@ -2877,7 +2877,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_unpacklo_epi64  a b %innerlanesize0 %arg2 )
@@ -2899,7 +2899,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_cmpgt_epi16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -2947,7 +2947,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_div_epu32  k.norm src.norm a.norm b.norm )
@@ -2986,7 +2986,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_dpbusds_epi32  src a b %vectsize0 )
@@ -3018,7 +3018,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maddubs_pi16  a b %innerlanesize0 )
@@ -3050,7 +3050,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_extracti32x4_epi32  imm8.norm a.norm )
@@ -3093,7 +3093,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_maskz_srlv_epi32  %arg2.norm count.norm k.norm %arg6.norm %arg5.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg3.norm %arg4.norm )
@@ -3144,7 +3144,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_div_epu16  a b %innerlanesize0 %elemsize0 %arg0 )
@@ -3171,7 +3171,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask3_fmadd_epi32  k.norm a.norm b.norm c.norm )
@@ -3213,7 +3213,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_dpwssds_epi32  src a b %vectsize0 )
@@ -3244,7 +3244,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_cvtepi8_epi32  a %innerlanesize0 %elemsize0 %arg0 )
@@ -3265,7 +3265,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_or_epi64  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -3301,7 +3301,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_cmplt_epu16_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -3359,7 +3359,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_mask_dpwssds_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -3408,7 +3408,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_hadd_epi32  a b %elemsize0 %elemsize1 %arg0 %arg3 )
@@ -3416,7 +3416,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -3454,7 +3454,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_rorv_epi32  %arg1 %arg0 a b %innerlanesize0 %elemsize0 )
@@ -3480,7 +3480,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_hsub_epi32  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -3488,7 +3488,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
@@ -3526,7 +3526,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_srai_epi32  %arg0.norm imm8.norm %arg5.norm a.norm %arg4.norm %innerlanesize0.norm %arg3.norm )
@@ -3568,7 +3568,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_maskz_avg_epu16  k.perm %arg3.perm %arg2.perm %arg4.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -3606,7 +3606,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_cmpeq_epi32  %arg1.norm %arg0.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -3629,7 +3629,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_dpwssd_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -3678,7 +3678,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_subs_epi16  a b %innerlanesize0 %elemsize0 )
@@ -3700,7 +3700,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_sra_epi64  count.norm k.norm a.norm %arg11.norm %innerlanesize0.norm )
@@ -3748,7 +3748,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_sll_pi16  count.perm %arg0.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm )
@@ -3787,7 +3787,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_cmpge_epu64_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -3834,7 +3834,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mulhi_epi32  a b )
@@ -3861,7 +3861,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_unpacklo_epi32  a b %vectsize0 %elemsize0 %arg0 )
@@ -3886,7 +3886,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_maskz_xor_epi32  k.perm %arg2.perm a.perm b.perm %innerlanesize0.perm %elemsize0.perm )
@@ -3922,7 +3922,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_mul_su32  a b )
@@ -3945,7 +3945,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_unpackhi_epi8  k.norm %arg6.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %innerlanesize1.norm %elemsize1.norm %arg0.norm %arg1.norm %arg2.norm )
@@ -4002,7 +4002,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_set1_pi8  a %innerlanesize0 %elemsize0 )
@@ -4021,7 +4021,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_unpackhi_epi64  a b %innerlanesize0 )
@@ -4043,7 +4043,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_srav_epi16  count.perm %arg2.perm k.perm %arg5.perm %arg6.perm a.perm src.perm %innerlanesize0.perm %elemsize0.perm %arg3.perm %arg4.perm )
@@ -4096,7 +4096,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_maskz_unpacklo_epi8  k.perm src.perm a.perm b.perm %vectsize0.perm %elemsize0.perm %innerlanesize1.perm %elemsize1.perm %arg0.perm %arg1.perm %arg2.perm )
@@ -4152,7 +4152,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_maskz_broadcast_i32x2  k.perm %arg3.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm )
@@ -4189,7 +4189,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_maskz_mulhrs_epi16  k.perm %arg6.perm a.perm b.perm %innerlanesize0.perm )
@@ -4228,7 +4228,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm512_maskz_packs_epi16  k.norm src.norm a.norm b.norm %vectsize0.norm %elemsize0.norm %elemsize1.norm %innerlanesize2.norm %elemsize2.norm %arg0.norm %arg1.norm )
@@ -4236,7 +4236,7 @@
     (apply
       concat
       (for/list ([iterator.lane.norm (reverse (range 0 %vectsize0.norm 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1.new.norm (reverse (range 128 256 %elemsize1.norm))])
@@ -4294,7 +4294,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_sra_epi16  %arg2.norm count.norm k.norm %arg6.norm %arg7.norm a.norm src.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )
@@ -4349,7 +4349,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_fmadd_epi32  a b c )
@@ -4378,7 +4378,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_maskz_unpackhi_epi32  k.norm %arg6.norm a.norm b.norm %elemsize0.norm %elemsize1.norm %arg0.norm %arg1.norm %arg2.norm )
@@ -4433,7 +4433,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_and_si256  a b %innerlanesize0 %elemsize0 )
@@ -4455,7 +4455,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_mullo_epi64  k.norm src.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm %arg2.norm %arg3.norm )
@@ -4496,7 +4496,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_hadds_epi16  a b %innerlanesize0 %innerlaneoffset1 %innerlanesize1 %arg1 %arg2 )
@@ -4504,7 +4504,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 16))])
@@ -4536,7 +4536,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_unpacklo_epi32  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -4561,7 +4561,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_cmpeq_epi64_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -4607,7 +4607,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_cvtusepi64_epi8  a %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -4652,7 +4652,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_maskz_dpwssd_epi32  k.norm %arg2.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -4701,7 +4701,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_dpbusd_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -4751,7 +4751,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_m_packsswb  a b %innerlanesize0 %elemsize0 %innerlaneoffset1 %innerlanesize1 %elemsize1 %arg0 %arg1 %arg2 )
@@ -4759,7 +4759,7 @@
     (apply
       concat
       (for/list ([%outer.it (reverse (range 0 1 1))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range %innerlaneoffset1 %innerlanesize1 %elemsize1))])
@@ -4788,7 +4788,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_packus_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %elemsize2.perm %arg0.perm %arg1.perm )
@@ -4796,7 +4796,7 @@
     (apply
       concat
       (for/list ([%outer.it.perm (reverse (range 0 128 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1.new.perm (reverse (range 128 256 %elemsize1.perm))])
@@ -4852,7 +4852,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_min_epi16  a b %innerlanesize0 %elemsize0 )
@@ -4874,7 +4874,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_madd52hi_epu64  k.norm a.norm b.norm c.norm %innerlanesize0.norm %arg4.norm )
@@ -4920,7 +4920,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_mask_div_epi32  k.norm src.norm a.norm b.norm )
@@ -4959,7 +4959,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_m_psllwi  imm8.norm %arg0.norm %arg4.norm a.norm %innerlanesize0.norm %arg3.norm )
@@ -4999,7 +4999,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_broadcastmw_epi32  k %innerlanesize0 %elemsize0 %arg0 )
@@ -5019,7 +5019,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_andnot_epi32  k.0 src.0 a.0 b.0 %innerlanesize0.0 %elemsize0.0 )
@@ -5056,7 +5056,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.0 0)
+  dst.0
   )
 
 (define (_mm256_mask_add_epi8  k.norm src.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -5092,7 +5092,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_dpwssd_epi32  src a b %vectsize0 )
@@ -5123,7 +5123,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_cmple_epi32_mask  b.norm a.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -5173,7 +5173,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_madd_pi16  a b %innerlanesize0 )
@@ -5205,7 +5205,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_mask_cvtepi8_epi32  k.perm src.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm )
@@ -5242,7 +5242,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_mask_packus_epi16  k.6 %arg5.6 a.6 b.6 %vectsize0.6 %elemsize0.6 %elemsize1.6 %innerlanesize2.6 %elemsize2.6 %arg0.6 %arg1.6 )
@@ -5250,7 +5250,7 @@
     (apply
       concat
       (for/list ([iterator.lane.6 (reverse (range 0 %vectsize0.6 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1.new.6 (reverse (range 128 256 %elemsize1.6))])
@@ -5308,7 +5308,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.6 0)
+  dst.6
   )
 
 (define (_mm256_packs_epi32  a b %vectsize0 %elemsize0 %elemsize1 %arg0 %arg2 )
@@ -5316,7 +5316,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 %vectsize0 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 %elemsize1))])
@@ -5346,7 +5346,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_cmpgt_epu8_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -5440,7 +5440,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_maskz_dpwssds_epi32  k.norm %arg2.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -5489,7 +5489,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_m_punpckhdq  a b %innerlanesize0 %elemsize0 %arg0 %arg1 )
@@ -5511,7 +5511,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_dpbusd_epi32  src a b %vectsize0 )
@@ -5543,7 +5543,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_cmpneq_epu16_mask  k1.perm %arg3.perm b.perm a.perm %arg2.perm %arg5.perm %innerlanesize0.perm %arg4.perm %arg6.perm )
@@ -5586,7 +5586,7 @@
     (apply
       concat
       (for/list ([%outer.it.norm (reverse (range 0 128 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1.new.norm (reverse (range 128 256 %elemsize1.norm))])
@@ -5642,7 +5642,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_mask_rol_epi64  k.perm src.perm %arg4.perm %arg3.perm a.perm imm8.perm %innerlanesize0.perm %arg2.perm )
@@ -5688,7 +5688,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_cvtepu16_epi32  a %innerlanesize0 %elemsize0 %arg0 )
@@ -5709,7 +5709,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm_mask_unpacklo_epi16  k.perm src.perm a.perm b.perm %elemsize0.perm %elemsize1.perm %arg0.perm %arg1.perm %arg2.perm %arg3.perm )
@@ -5764,7 +5764,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_movemask_pi8  a %innerlanesize0 %arg2 )
@@ -5834,7 +5834,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm_maskz_srai_epi64  imm8.perm %arg2.perm k.perm a.perm %arg7.perm %arg6.perm %arg12.perm %innerlanesize0.perm %elemsize0.perm %arg5.perm )
@@ -5886,7 +5886,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm512_mask_rolv_epi64  k.norm %arg3.norm %arg2.norm src.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -5926,7 +5926,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_hadd_pi32  a b )
@@ -5952,7 +5952,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_add_epi8  a b %innerlanesize0 %elemsize0 )
@@ -5974,7 +5974,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_maskz_rorv_epi64  k.norm %arg4.norm %arg3.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -6014,7 +6014,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm512_maskz_unpackhi_epi64  k.perm %arg8.perm a.perm b.perm %innerlanesize0.perm %innerlanesize1.perm )
@@ -6064,7 +6064,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.perm 0)
+  dst.perm
   )
 
 (define (_mm256_extract_epi8  %arg2 a index %innerlanesize0 %elemsize0 %arg1 %arg3 )
@@ -6128,7 +6128,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_sra_pi16  %arg0.norm count.norm %arg4.norm a.norm %arg3.norm %innerlanesize0.norm %elemsize0.norm )
@@ -6169,7 +6169,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_mask_cvtsepi32_epi16  k.perm src.perm a.perm %innerlanesize0.perm %elemsize0.perm %arg2.perm %arg3.perm )
@@ -6232,7 +6232,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_mask_dpbusds_epi32  k.norm src.norm a.norm b.norm %vectsize0.norm )
@@ -6282,7 +6282,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_rol_epi64  %arg2 %arg1 a imm8 %innerlanesize0 %arg0 )
@@ -6312,7 +6312,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_maskz_and_epi64  k.norm %arg2.norm a.norm b.norm %innerlanesize0.norm %elemsize0.norm )
@@ -6348,7 +6348,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_cmplt_epi16_mask  a.norm b.norm %innerlanesize0.norm %arg2.norm %arg3.norm )
@@ -6405,7 +6405,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_hsubs_epi16  a b )
@@ -6413,7 +6413,7 @@
     (apply
       concat
       (for/list ([iterator.lane (reverse (range 0 256 128))])
-                (concat 
+                (concat
                   (apply
                     concat
                     (for/list ([iterator.1 (reverse (range 64 128 16))])
@@ -6447,7 +6447,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm256_extracti32x4_epi32  imm8.norm a.norm %elemsize0.norm %arg6.norm )
@@ -6481,7 +6481,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm_subs_epu8  a b %innerlanesize0 %elemsize0 )
@@ -6503,7 +6503,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst 0)
+  dst
   )
 
 (define (_mm512_mask_srli_epi64  %arg2.norm imm8.norm k.norm %arg6.norm src.norm a.norm %innerlanesize0.norm %elemsize0.norm %arg5.norm )
@@ -6553,7 +6553,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.norm 0)
+  dst.norm
   )
 
 (define (_mm256_set_m128i  lo.1 hi.1 %innerlanesize0.1 %elemsize0.1 %arg0.1 )
@@ -6574,7 +6574,7 @@
                 )
       )
     )
-  (bvpadhighbits  dst.1 0)
+  dst.1
   )
 
 ;; ================================================================================
