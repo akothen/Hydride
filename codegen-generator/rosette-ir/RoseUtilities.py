@@ -544,6 +544,34 @@ def GatherIndexingOps(Operation : RoseOperation):
   return IndexingOps
 
 
+def GatherIndexingValues(Operation : RoseOperation):
+  print("GatherIndexingValues")
+  # Sanity checks
+  assert isinstance(Operation, RoseBitVectorOp) 
+  assert Operation.isIndexingBVOp()
+  IndexingValues = list()
+  Worklist = [Operation.getLowIndex(), Operation.getHighIndex()]
+  Visited = set()
+  while len(Worklist) != 0:
+    IndexingVal = Worklist.pop()
+    print("IndexingVal:")
+    IndexingVal.print()
+    print(IndexingVal.ID)
+    if IndexingVal in Visited:
+      print("INDEXING VAL IN VISITED")
+      continue
+    print("INDEXING VAL NOT IN VISITED")
+    IndexingValues.append(IndexingVal)
+    Visited.add(IndexingVal)
+    if isinstance(IndexingVal, RoseOperation):
+      # We can erase Op, but first get the operands
+      for Operand in IndexingVal.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Worklist.append(Operand)
+  IndexingValues.reverse()
+  return IndexingValues
+
+
 def HasReductionPattern(Block : RoseBlock):
   Loop = Block.getParentOfType(RoseForLoop)
   if isinstance(Loop, RoseUndefRegion):
@@ -1038,5 +1066,4 @@ def GetElemSizeOfArg(Function : RoseFunction, Arg : RoseArgument):
           ElemSize = Op.getOutputBitwidth()
           return ElemSize
   assert ElemSize != None
-
 
