@@ -10,6 +10,7 @@ benchmarks = gaussian3x3 \
 			 matmul \
 			 matmul_128 \
 			 matmul_256 \
+			 matmul_256_32bit \
 			 matmul_512 \
 			 matmul_1024 \
 			 add \
