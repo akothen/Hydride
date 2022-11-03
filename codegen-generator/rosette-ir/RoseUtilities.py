@@ -529,9 +529,13 @@ def GatherIndexingOps(Operation : RoseOperation):
     Worklist.append(Operation.getLowIndex())
   if isinstance(Operation.getHighIndex(), RoseOperation):
     Worklist.append(Operation.getHighIndex())
+  Visited = set()
   while len(Worklist) != 0:
     IndexingOp = Worklist.pop()
+    if IndexingOp in Visited:
+      continue
     IndexingOps.append(IndexingOp)
+    Visited.add(IndexingOp)
     # We can erase Op, but first get the operands
     for Operand in IndexingOp.getOperands():
       if isinstance(Operand, RoseOperation):
