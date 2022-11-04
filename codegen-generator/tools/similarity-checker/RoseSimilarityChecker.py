@@ -1702,7 +1702,9 @@ class RoseSimilarityChecker():
                       break
                   else:
                     assert isinstance(OlderArg.getType().getBitwidth(), RoseArgument)
-                    assert OlderFunctionInfo.argHasConcreteVal(OlderArg) == True
+                    #### DOUBLE CHECK
+                    #assert OlderFunctionInfo.argHasConcreteVal(OlderArg) == True
+                    assert OlderFunctionInfo.argHasConcreteVal(OlderArg.getType().getBitwidth()) == True
                     print("\n\n______________________________________________")
                     ClonedOlderArg = OlderArg.clone()
                     print("OlderArg.getType().getBitwidth():")
@@ -1809,10 +1811,84 @@ class RoseSimilarityChecker():
         OldArgPermutation = self.FunctionToArgPermutationMap[OlderFunction]
         #else:
         #  OldArgPermutation = [X for X in range(OlderFunction.getNumArgs())]
+        print("OlderFunction:")
+        OlderFunction.print()
+        print("NEW Function:")
+        Function.print()
+        #RecoveredArgMap = list()
+        #for Idx, Arg in enumerate(Function.getArgs()):
+        #  print("Arg:")
+        #  Arg.print()
+        #  OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+        #  RecoveredArgMap.append(OldArgPermutation[OldArgIndex])
         RecoveredArgMap = list()
-        for Idx, Arg in enumerate(Function.getArgs()):
-          OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+        for Arg in Function.getArgs():
+          print("Arg:")
+          Arg.print()
+          Arg.getType().print()
+          if isinstance(Arg.getType(), RoseBitVectorType) \
+            or isinstance(Arg.getType(), RoseIntegerType):
+            if isinstance(Arg.getType().getBitwidth(), RoseArgument):
+              OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+              RecoveredArgMap.append(OldArgPermutation[OldArgIndex]) 
+              continue
+          # Now we have to be more careful with checking equivalence
+          OldArgIndex = None
+          OlderFunctionInfo = FunctionToClonedFunctionInfo[Function]
+          for Idx, OlderArg in enumerate(OlderFunction.getArgs()):
+            if isinstance(OlderArg.getType(), RoseBitVectorType) \
+              or isinstance(OlderArg.getType(), RoseIntegerType):
+              if isinstance(OlderArg.getType().getBitwidth(), int):
+                if OlderArg == Arg:
+                  print("OlderArg.getType():")
+                  OlderArg.getType().print()
+                  OldArgIndex = Idx
+                  break
+              else:
+                assert isinstance(OlderArg.getType().getBitwidth(), RoseArgument)
+                print("OlderArg:")
+                OlderArg.print()
+                assert OlderFunctionInfo.argHasConcreteVal(OlderArg.getType().getBitwidth()) == True
+                print("\n\n______________________________________________")
+                ClonedOlderArg = OlderArg.clone()
+                print("OlderArg.getType().getBitwidth():")
+                print(OlderArg.getType().getBitwidth())
+                print("ClonedOlderArg.getType().getBitwidth():")
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth():")
+                print(OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()))
+                if isinstance(OlderArg.getType(), RoseBitVectorType):
+                  ClonedOlderArg.setType(RoseBitVectorType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                else:
+                  assert isinstance(OlderArg.getType(), RoseIntegerType)
+                  ClonedOlderArg.setType(RoseIntegerType.create( \
+                        OlderFunctionInfo.getConcreteValFor(OlderArg.getType().getBitwidth()).getValue()))
+                print("Arg:")
+                Arg.print()
+                Arg.getType().print()
+                print(Arg.getType())
+                print(Arg.getType().getBitwidth())
+                print("ARG ID:")
+                print(Arg.ID)
+                print("ClonedOlderArg:")
+                ClonedOlderArg.print()
+                ClonedOlderArg.getType().print()
+                print(ClonedOlderArg.getType())
+                print(ClonedOlderArg.getType().getBitwidth())
+                print("CLONED ARG ID:")
+                print(ClonedOlderArg.ID)
+                if Arg == ClonedOlderArg:
+                  print("CLONED ARG == ARG")
+                  OldArgIndex = Idx
+                  break
+          assert OldArgIndex != None
+          #OldArgIndex = OlderFunction.getIndexOfArg(Arg)
+          print("OldArgIndex:")
+          print(OldArgIndex)
           RecoveredArgMap.append(OldArgPermutation[OldArgIndex])
+        print("RecoveredArgMap:")
+        print(RecoveredArgMap)
         NewRecoveredMap = self.getArgPermutationMapRecursively(OlderFunction, RecoveredArgMap)
         self.FunctionToArgPermutationMap[Function] = NewRecoveredMap
         print("!!!!!!!!!!!!!!FINAL FUNCTION:")

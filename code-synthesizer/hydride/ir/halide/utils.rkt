@@ -1116,7 +1116,7 @@
 
 ;; Returns the sub-expressions at depth away from
 ;; the root of expr. In the case where a leaf is reached
-;; before at an earlir depth, we return '().
+;; before at an earlier depth, we return '().
 (define (get-sub-exprs expr depth)
 
   (cond
@@ -1129,7 +1129,6 @@
     [(equal? depth 1)
         (list expr)
      ]
-
     [else
       (define imm-sub-exprs (halide:sub-exprs expr))
       (apply append
@@ -1449,18 +1448,17 @@
 
 
 (define (contains-complex-op-in-subexpr expr expr-depth)
-  (debug-log "here")
 
   (define leaves (get-sub-exprs expr (+ expr-depth 1)))
   (define leaves-sizes (get-expr-bv-sizes leaves))
 
-  (debug-log leaves)
   (define leaves-elemT (get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes))
 
   (define dummy-args (create-buffers leaves sym-bvs))
 
   (define-values (expr-extract num-used) (bind-expr-args expr dummy-args expr-depth))
+
 
   (contains-complex-op expr-extract)
   )

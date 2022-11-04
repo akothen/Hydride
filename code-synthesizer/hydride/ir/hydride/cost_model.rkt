@@ -221,7 +221,7 @@
 		)
 	]
 		[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-		(+ 2 (hydride:cost  v0)  (hydride:cost  v1)  
+		(+ 4 (hydride:cost  v0)  (hydride:cost  v1)  
 		 
 		)
 	]

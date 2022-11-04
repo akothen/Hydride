@@ -93,7 +93,7 @@
 
   (clear-vc!)
 
-  (current-solver (z3)) ;; timeout verification after 5 mins
+  ;(current-solver (z3)) ;; timeout verification after 5 mins
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
   (define num-bw (length bw-list))
@@ -112,10 +112,10 @@
   (debug-log cex)
 
   ;; Restore solver state
-  (if (equal? solver 'boolector)
-    (current-solver (boolector))
-    (current-solver (z3))
-    )
+  ;(if (equal? solver 'boolector)
+  ;  (current-solver (boolector))
+  ;  (current-solver (z3))
+  ;  )
   (begin
     (cond
       [(sat? cex) ;; If there exists some cex for which it is not equal
@@ -296,6 +296,8 @@
     (debug-log (format "Boolector optimize with cost-bound ~a ...\n" cost-bound))
     (debug-log "Synthesizing...\n")
     (current-solver (boolector))
+    (current-bitwidth 16)
+    (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
     (define sol?
       (synthesize 
@@ -664,6 +666,10 @@
     (current-solver (boolector))
     (current-solver (z3))
     )
+
+
+    (current-bitwidth 16)
+    (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
 
   ;; Clear the verification condition up till this point
