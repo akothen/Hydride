@@ -1,0 +1,140 @@
+module name=matmul_512_batch_0044_sample_0001, target=x86-64-linux-avx-avx2-avx512-avx512_sapphirerapids-avx512_skylake-disable_llvm_loop_opt-f16c-fma-sse41
+external_plus_metadata func matmul_512_batch_0044_sample_0001 (A, B, res) {
+assert((uint64)reinterpret((halide_buffer_t *)res.buffer) != (uint64)0, halide_error_buffer_argument_is_null("res"))
+assert((uint64)reinterpret((halide_buffer_t *)B.buffer) != (uint64)0, halide_error_buffer_argument_is_null("B"))
+assert((uint64)reinterpret((halide_buffer_t *)A.buffer) != (uint64)0, halide_error_buffer_argument_is_null("A"))
+let A = (void *)_halide_buffer_get_host((halide_buffer_t *)A.buffer)
+let A.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)A.buffer)
+let A.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)A.buffer)
+let A.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)A.buffer)
+let A.min.0 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 0)
+let A.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)A.buffer, 0)
+let A.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 0)
+let A.min.1 = _halide_buffer_get_min((halide_buffer_t *)A.buffer, 1)
+let A.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)A.buffer, 1)
+let A.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)A.buffer, 1)
+let B = (void *)_halide_buffer_get_host((halide_buffer_t *)B.buffer)
+let B.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)B.buffer)
+let B.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)B.buffer)
+let B.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)B.buffer)
+let B.min.0 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 0)
+let B.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)B.buffer, 0)
+let B.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 0)
+let B.min.1 = _halide_buffer_get_min((halide_buffer_t *)B.buffer, 1)
+let B.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)B.buffer, 1)
+let B.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)B.buffer, 1)
+let res = (void *)_halide_buffer_get_host((halide_buffer_t *)res.buffer)
+let res.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)res.buffer)
+let res.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)res.buffer)
+let res.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)res.buffer)
+let res.min.0 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 0)
+let res.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 0)
+let res.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 0)
+let res.min.1 = _halide_buffer_get_min((halide_buffer_t *)res.buffer, 1)
+let res.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)res.buffer, 1)
+let res.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)res.buffer, 1)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)A.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)A.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)A.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 16, 2, (halide_dimension_t *)make_struct(0, 512, 1, 0, 0, 512, 512, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)B.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)B.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)B.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 16, 2, (halide_dimension_t *)make_struct(0, 512, 1, 0, 0, 512, 512, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)res.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)res.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)res.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 16, 2, (halide_dimension_t *)make_struct(0, 512, 1, 0, 0, 512, 512, 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)res.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)A.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)B.buffer)))) {
+ assert(A.type == (uint32)69632, halide_error_bad_type("Input buffer A", A.type, (uint32)69632))
+ assert(A.dimensions == 2, halide_error_bad_dimensions("Input buffer A", A.dimensions, 2))
+ assert(B.type == (uint32)69632, halide_error_bad_type("Input buffer B", B.type, (uint32)69632))
+ assert(B.dimensions == 2, halide_error_bad_dimensions("Input buffer B", B.dimensions, 2))
+ assert(res.type == (uint32)69632, halide_error_bad_type("Output buffer res", res.type, (uint32)69632))
+ assert(res.dimensions == 2, halide_error_bad_dimensions("Output buffer res", res.dimensions, 2))
+ assert((A.min.0 <= 0) && (512 <= (A.extent.0 + A.min.0)), halide_error_access_out_of_bounds("Input buffer A", 0, 0, 511, A.min.0, (A.extent.0 + A.min.0) + -1))
+ assert(0 <= A.extent.0, halide_error_buffer_extents_negative("Input buffer A", 0, A.extent.0))
+ assert((A.min.1 <= 0) && (512 <= (A.extent.1 + A.min.1)), halide_error_access_out_of_bounds("Input buffer A", 1, 0, 511, A.min.1, (A.extent.1 + A.min.1) + -1))
+ assert(0 <= A.extent.1, halide_error_buffer_extents_negative("Input buffer A", 1, A.extent.1))
+ assert((B.min.0 <= 0) && (512 <= (B.extent.0 + B.min.0)), halide_error_access_out_of_bounds("Input buffer B", 0, 0, 511, B.min.0, (B.extent.0 + B.min.0) + -1))
+ assert(0 <= B.extent.0, halide_error_buffer_extents_negative("Input buffer B", 0, B.extent.0))
+ assert((B.min.1 <= 0) && (512 <= (B.extent.1 + B.min.1)), halide_error_access_out_of_bounds("Input buffer B", 1, 0, 511, B.min.1, (B.extent.1 + B.min.1) + -1))
+ assert(0 <= B.extent.1, halide_error_buffer_extents_negative("Input buffer B", 1, B.extent.1))
+ assert((res.min.0 <= 0) && (512 <= (res.extent.0 + res.min.0)), halide_error_access_out_of_bounds("Output buffer res", 0, 0, 511, res.min.0, (res.extent.0 + res.min.0) + -1))
+ assert(0 <= res.extent.0, halide_error_buffer_extents_negative("Output buffer res", 0, res.extent.0))
+ assert((res.min.1 <= 0) && (512 <= (res.extent.1 + res.min.1)), halide_error_access_out_of_bounds("Output buffer res", 1, 0, 511, res.min.1, (res.extent.1 + res.min.1) + -1))
+ assert(0 <= res.extent.1, halide_error_buffer_extents_negative("Output buffer res", 1, res.extent.1))
+ assert(A.stride.0 == 1, halide_error_constraint_violated("A.stride.0", A.stride.0, "1", 1))
+ assert(B.stride.0 == 1, halide_error_constraint_violated("B.stride.0", B.stride.0, "1", 1))
+ assert(res.stride.0 == 1, halide_error_constraint_violated("res.stride.0", res.stride.0, "1", 1))
+ let A.total_extent.1 = int64(A.extent.1)*int64(A.extent.0)
+ let B.total_extent.1 = int64(B.extent.1)*int64(B.extent.0)
+ let res.total_extent.1 = int64(res.extent.1)*int64(res.extent.0)
+ assert(uint64(A.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("A", uint64(A.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(A.extent.1)*int64(A.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("A", (uint64)abs(int64(A.extent.1)*int64(A.stride.1)), (uint64)2147483647))
+ assert(A.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("A", A.total_extent.1, (int64)2147483647))
+ assert(uint64(B.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("B", uint64(B.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(B.extent.1)*int64(B.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("B", (uint64)abs(int64(B.extent.1)*int64(B.stride.1)), (uint64)2147483647))
+ assert(B.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("B", B.total_extent.1, (int64)2147483647))
+ assert(uint64(res.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("res", uint64(res.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(res.extent.1)*int64(res.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("res", (uint64)abs(int64(res.extent.1)*int64(res.stride.1)), (uint64)2147483647))
+ assert(res.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("res", res.total_extent.1, (int64)2147483647))
+ assert(!A.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer A"))
+ assert(!B.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer B"))
+ assert(!res.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer res"))
+ assert(A != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer A"))
+ assert(B != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer B"))
+ assert(res != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer res"))
+ assert((0 <= res.min.1) && ((res.extent.1 + res.min.1) <= 512), halide_error_explicit_bounds_too_small("y", "res", 0, 511, res.min.1, (res.extent.1 + res.min.1) + -1))
+ assert((0 <= res.min.0) && ((res.extent.0 + res.min.0) <= 512), halide_error_explicit_bounds_too_small("x", "res", 0, 511, res.min.0, (res.extent.0 + res.min.0) + -1))
+ produce res {
+  let t36 = (B.min.1*B.stride.1) + B.min.0
+  let t37 = (A.min.1*A.stride.1) + A.min.0
+  parallel (res.s0.y.y, 0, 128) {
+   let t38 = res.s0.y.y*2
+   for (res.s0.y.yi.yi, 0, 2) {
+    let t43 = res.s0.y.yi.yi + t38
+    let t44 = (t43*2) + 1
+    let t42 = res.stride.1*t44
+    let t41 = res.stride.1*t43
+    let t39 = ((A.stride.1*t43)*2) - t37
+    let t40 = (A.stride.1*t44) - t37
+    for (res.s0.x.x, 0, 4) {
+     allocate matrix_mul[int16 * 256] in Stack
+     produce matrix_mul {
+      matrix_mul[ramp(0, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(32, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(64, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(96, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(128, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(160, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(192, 1, 32)] = x32((int16)0)
+      matrix_mul[ramp(224, 1, 32)] = x32((int16)0)
+      let t45 = (res.s0.x.x*128) - t36
+      for (matrix_mul.s1.r8$x, 0, 512) {
+       matrix_mul[ramp(0, 1, 32)] = matrix_mul[ramp(0, 1, 32)] + (B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t45, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t39]))
+       matrix_mul[ramp(32, 1, 32)] = matrix_mul[ramp(32, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 32, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t39]))
+       matrix_mul[ramp(64, 1, 32)] = matrix_mul[ramp(64, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 64, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t39]))
+       matrix_mul[ramp(96, 1, 32)] = matrix_mul[ramp(96, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 96, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t39]))
+       matrix_mul[ramp(128, 1, 32)] = matrix_mul[ramp(128, 1, 32)] + (B[ramp((B.stride.1*matrix_mul.s1.r8$x) + t45, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t40]))
+       matrix_mul[ramp(160, 1, 32)] = matrix_mul[ramp(160, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 32, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t40]))
+       matrix_mul[ramp(192, 1, 32)] = matrix_mul[ramp(192, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 64, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t40]))
+       matrix_mul[ramp(224, 1, 32)] = matrix_mul[ramp(224, 1, 32)] + (B[ramp(((B.stride.1*matrix_mul.s1.r8$x) + t45) + 96, 1, 32)]*x32(A[matrix_mul.s1.r8$x + t40]))
+      }
+     }
+     consume matrix_mul {
+      res[ramp(((res.s0.x.x*64) + t41)*2, 1, 32) aligned(2, 0)] = matrix_mul[ramp(0, 1, 32)]
+      res[ramp((((res.s0.x.x*64) + t41)*2) + 32, 1, 32) aligned(2, 0)] = matrix_mul[ramp(32, 1, 32)]
+      res[ramp((((res.s0.x.x*64) + t41)*2) + 64, 1, 32) aligned(2, 0)] = matrix_mul[ramp(64, 1, 32)]
+      res[ramp((((res.s0.x.x*64) + t41)*2) + 96, 1, 32) aligned(2, 0)] = matrix_mul[ramp(96, 1, 32)]
+      res[ramp((res.s0.x.x*128) + t42, 1, 32)] = matrix_mul[ramp(128, 1, 32)]
+      res[ramp(((res.s0.x.x*128) + t42) + 32, 1, 32)] = matrix_mul[ramp(160, 1, 32)]
+      res[ramp(((res.s0.x.x*128) + t42) + 64, 1, 32)] = matrix_mul[ramp(192, 1, 32)]
+      res[ramp(((res.s0.x.x*128) + t42) + 96, 1, 32)] = matrix_mul[ramp(224, 1, 32)]
+      free matrix_mul
+     }
+    }
+   }
+  }
+ }
+}
+}
+
+

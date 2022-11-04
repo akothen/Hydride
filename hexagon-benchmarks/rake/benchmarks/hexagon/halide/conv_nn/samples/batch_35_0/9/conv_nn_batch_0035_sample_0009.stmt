@@ -1,0 +1,285 @@
+module name=conv_nn_batch_0035_sample_0009, target=x86-64-linux-avx-avx2-avx512-avx512_sapphirerapids-avx512_skylake-disable_llvm_loop_opt-f16c-fma-sse41
+external_plus_metadata func conv_nn_batch_0035_sample_0009 (input, input_zero, filter, filter_zero, bias, stride_x, stride_y, dilation_x, dilation_y, output_multiplier, output_shift, output_zero, output_min, output_max, output) {
+assert((uint64)reinterpret((halide_buffer_t *)output.buffer) != (uint64)0, halide_error_buffer_argument_is_null("output"))
+assert((uint64)reinterpret((halide_buffer_t *)input.buffer) != (uint64)0, halide_error_buffer_argument_is_null("input"))
+assert((uint64)reinterpret((halide_buffer_t *)filter.buffer) != (uint64)0, halide_error_buffer_argument_is_null("filter"))
+assert((uint64)reinterpret((halide_buffer_t *)bias.buffer) != (uint64)0, halide_error_buffer_argument_is_null("bias"))
+let bias = (void *)_halide_buffer_get_host((halide_buffer_t *)bias.buffer)
+let bias.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)bias.buffer)
+let bias.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)bias.buffer)
+let bias.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)bias.buffer)
+let bias.min.0 = _halide_buffer_get_min((halide_buffer_t *)bias.buffer, 0)
+let bias.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)bias.buffer, 0)
+let bias.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)bias.buffer, 0)
+let filter = (void *)_halide_buffer_get_host((halide_buffer_t *)filter.buffer)
+let filter.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)filter.buffer)
+let filter.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)filter.buffer)
+let filter.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)filter.buffer)
+let filter.min.0 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 0)
+let filter.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 0)
+let filter.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 0)
+let filter.min.1 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 1)
+let filter.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 1)
+let filter.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 1)
+let filter.min.2 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 2)
+let filter.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 2)
+let filter.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 2)
+let filter.min.3 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 3)
+let filter.extent.3 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 3)
+let filter.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 3)
+let filter.min.4 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 4)
+let filter.extent.4 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 4)
+let filter.stride.4 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 4)
+let filter.min.5 = _halide_buffer_get_min((halide_buffer_t *)filter.buffer, 5)
+let filter.extent.5 = _halide_buffer_get_extent((halide_buffer_t *)filter.buffer, 5)
+let filter.stride.5 = _halide_buffer_get_stride((halide_buffer_t *)filter.buffer, 5)
+let input = (void *)_halide_buffer_get_host((halide_buffer_t *)input.buffer)
+let input.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)input.buffer)
+let input.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)input.buffer)
+let input.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)input.buffer)
+let input.min.0 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 0)
+let input.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 0)
+let input.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 0)
+let input.min.1 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 1)
+let input.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 1)
+let input.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 1)
+let input.min.2 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 2)
+let input.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 2)
+let input.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 2)
+let input.min.3 = _halide_buffer_get_min((halide_buffer_t *)input.buffer, 3)
+let input.extent.3 = _halide_buffer_get_extent((halide_buffer_t *)input.buffer, 3)
+let input.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)input.buffer, 3)
+let output = (void *)_halide_buffer_get_host((halide_buffer_t *)output.buffer)
+let output.type = (uint32)_halide_buffer_get_type((halide_buffer_t *)output.buffer)
+let output.device_dirty = (uint1)_halide_buffer_get_device_dirty((halide_buffer_t *)output.buffer)
+let output.dimensions = _halide_buffer_get_dimensions((halide_buffer_t *)output.buffer)
+let output.min.0 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 0)
+let output.extent.0 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 0)
+let output.stride.0 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 0)
+let output.min.1 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 1)
+let output.extent.1 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 1)
+let output.stride.1 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 1)
+let output.min.2 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 2)
+let output.extent.2 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 2)
+let output.stride.2 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 2)
+let output.min.3 = _halide_buffer_get_min((halide_buffer_t *)output.buffer, 3)
+let output.extent.3 = _halide_buffer_get_extent((halide_buffer_t *)output.buffer, 3)
+let output.stride.3 = _halide_buffer_get_stride((halide_buffer_t *)output.buffer, 3)
+let bias.extent.0.required.s = min(max(max(-128 - output.extent.0, output.extent.0 + -1)/128, 0)*128, output.extent.0 + -128)
+let filter.extent.3.required.s = (((bias.extent.0.required.s + output.min.0) + 143)/16) - ((min(output.extent.0, 128) + output.min.0)/16)
+let filter.stride.4.required.s = (((filter.extent.0*filter.extent.2) + 3)/4)*(filter.extent.3.required.s + 8)
+let input.extent.1.required.s = let t428 = (dilation_x < 0) in (let t430 = (stride_x < 0) in (let t432 = min(max(max(-2 - output.extent.1, output.extent.1 + -1)/2, 0)*2, output.extent.1 + -2) in ((select(t428, 0 - dilation_x, dilation_x)*(filter.extent.4 + -1)) + ((select(t430, ((min(output.extent.1, 2) + output.min.1) - t432) + -3, ((output.min.1 + t432) - min(output.extent.1, 2)) + 3) - output.min.1)*stride_x))))
+let input.min.1.required = select(dilation_x < 0, (filter.extent.4 + -1)*dilation_x, 0) + (select(stride_x < 0, (min(max(max(-2 - output.extent.1, output.extent.1 + -1)/2, 0)*2, output.extent.1 + -2) + output.min.1) + 1, (min(output.extent.1, 2) + output.min.1) + -2)*stride_x)
+let input.extent.2.required.s = let t433 = (dilation_y < 0) in (let t435 = (stride_y < 0) in (let t436 = (0 < output.extent.1) in (let t437 = (0 < output.extent.0) in (let t438 = (((((output.extent.0 + 127)/128)*(((output.extent.1 + 1)/2)*output.extent.2)) + -1)/((output.extent.0 + 127)/128)) in (let t439 = select(t437, 0, t438) in (let t440 = select(t437, t438, 0) in (let t441 = (select(t436, t439, t440)/((output.extent.1 + 1)/2)) in (let t442 = (select(t436, t440, t439)/((output.extent.1 + 1)/2)) in ((select(t433, 0 - dilation_y, dilation_y)*(filter.extent.5 + -1)) + (select(t435, t441 - t442, t442 - t441)*stride_y))))))))))
+let input.min.2.required = let t443 = (0 < output.extent.1) in (let t444 = (0 < output.extent.0) in (let t445 = (((((output.extent.0 + 127)/128)*(((output.extent.1 + 1)/2)*output.extent.2)) + -1)/((output.extent.0 + 127)/128)) in (let t446 = select(t444, t445, 0) in (let t447 = select(t444, 0, t445) in (select(dilation_y < 0, (filter.extent.5 + -1)*dilation_y, 0) + (((select(stride_y < 0, select(t443, t446, t447), select(t443, t447, t446))/((output.extent.1 + 1)/2)) + output.min.2)*stride_y))))))
+let input.stride.2.required.s = (((filter.extent.0*filter.extent.2) + 3)/4)*(input.extent.1.required.s + 1)
+let output.extent.1.required.s = min(max(max(-2 - output.extent.1, output.extent.1 + -1)/2, 0)*2, output.extent.1 + -2)
+let output.extent.2.required.s = let t448 = (0 < output.extent.1) in (let t449 = (0 < output.extent.0) in (let t450 = (((((output.extent.0 + 127)/128)*(((output.extent.1 + 1)/2)*output.extent.2)) + -1)/((output.extent.0 + 127)/128)) in (let t451 = select(t449, t450, 0) in (let t452 = select(t449, 0, t450) in ((select(t448, t451, t452)/((output.extent.1 + 1)/2)) - (select(t448, t452, t451)/((output.extent.1 + 1)/2)))))))
+let output.min.2.required.s = let t453 = (0 < output.extent.0) in (let t454 = (((((output.extent.0 + 127)/128)*(((output.extent.1 + 1)/2)*output.extent.2)) + -1)/((output.extent.0 + 127)/128)) in (select(0 < output.extent.1, select(t453, 0, t454), select(t453, t454, 0))/((output.extent.1 + 1)/2)))
+let output.stride.2.required = (max(bias.extent.0.required.s, 0) + 128)*(max(output.extent.1.required.s, 0) + 2)
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)bias.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)bias.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)bias.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 0, 32, 1, (halide_dimension_t *)make_struct((min(output.extent.0, 128) + output.min.0) + -128, max(bias.extent.0.required.s, 0) + 128, 1, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)filter.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)filter.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)filter.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 6, (halide_dimension_t *)make_struct(0, 4, 1, 0, 0, 16, 4, 0, 0, ((filter.extent.0*filter.extent.2) + 3)/4, 64, 0, ((min(output.extent.0, 128) + output.min.0)/16) + -8, filter.extent.3.required.s + 8, (((filter.extent.0*filter.extent.2) + 3)/4)*64, 0, 0, filter.extent.4, filter.stride.4.required.s*64, 0, 0, filter.extent.5, (filter.extent.4*filter.stride.4.required.s)*64, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)input.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)input.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 4, (halide_dimension_t *)make_struct(0, (((filter.extent.0*filter.extent.2) + 3)/4)*4, 1, 0, input.min.1.required, input.extent.1.required.s + 1, (((filter.extent.0*filter.extent.2) + 3)/4)*4, 0, input.min.2.required, input.extent.2.required.s + 1, input.stride.2.required.s*4, 0, output.min.3, output.extent.3, ((input.extent.2.required.s + 1)*input.stride.2.required.s)*4, 0), (uint64)0)
+}
+if ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer)) {
+ (halide_buffer_t *)_halide_buffer_init((halide_buffer_t *)output.buffer, (halide_dimension_t *)_halide_buffer_get_shape((halide_buffer_t *)output.buffer), (void *)reinterpret((uint64)0), (uint64)0, (halide_device_interface_t *)reinterpret((uint64)0), 1, 8, 4, (halide_dimension_t *)make_struct((min(output.extent.0, 128) + output.min.0) + -128, max(bias.extent.0.required.s, 0) + 128, 1, 0, (min(output.extent.1, 2) + output.min.1) + -2, max(output.extent.1.required.s, 0) + 2, max(bias.extent.0.required.s, 0) + 128, 0, output.min.2 + output.min.2.required.s, output.extent.2.required.s + 1, output.stride.2.required, 0, output.min.3, output.extent.3, (output.extent.2.required.s + 1)*output.stride.2.required, 0), (uint64)0)
+}
+if (!((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)output.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)input.buffer) || ((uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)bias.buffer) || (uint1)_halide_buffer_is_bounds_query((halide_buffer_t *)filter.buffer))))) {
+ assert(bias.type == (uint32)73728, halide_error_bad_type("Input buffer bias", bias.type, (uint32)73728))
+ assert(bias.dimensions == 1, halide_error_bad_dimensions("Input buffer bias", bias.dimensions, 1))
+ assert(filter.type == (uint32)67585, halide_error_bad_type("Input buffer filter", filter.type, (uint32)67585))
+ assert(filter.dimensions == 6, halide_error_bad_dimensions("Input buffer filter", filter.dimensions, 6))
+ assert(input.type == (uint32)67585, halide_error_bad_type("Input buffer input", input.type, (uint32)67585))
+ assert(input.dimensions == 4, halide_error_bad_dimensions("Input buffer input", input.dimensions, 4))
+ assert(output.type == (uint32)67585, halide_error_bad_type("Output buffer output", output.type, (uint32)67585))
+ assert(output.dimensions == 4, halide_error_bad_dimensions("Output buffer output", output.dimensions, 4))
+ assert(((bias.min.0 + 128) <= (min(output.extent.0, 128) + output.min.0)) && (((max(bias.extent.0.required.s, 0) + min(output.extent.0, 128)) + output.min.0) <= (bias.extent.0 + bias.min.0)), halide_error_access_out_of_bounds("Input buffer bias", 0, (min(output.extent.0, 128) + output.min.0) + -128, ((max(bias.extent.0.required.s, 0) + min(output.extent.0, 128)) + output.min.0) + -1, bias.min.0, (bias.extent.0 + bias.min.0) + -1))
+ assert(0 <= bias.extent.0, halide_error_buffer_extents_negative("Input buffer bias", 0, bias.extent.0))
+ assert((filter.min.0 <= 0) && (4 <= (filter.extent.0 + filter.min.0)), halide_error_access_out_of_bounds("Input buffer filter", 0, 0, 3, filter.min.0, (filter.extent.0 + filter.min.0) + -1))
+ assert(0 <= filter.extent.0, halide_error_buffer_extents_negative("Input buffer filter", 0, filter.extent.0))
+ assert((filter.min.1 <= 0) && (16 <= (filter.extent.1 + filter.min.1)), halide_error_access_out_of_bounds("Input buffer filter", 1, 0, 15, filter.min.1, (filter.extent.1 + filter.min.1) + -1))
+ assert(0 <= filter.extent.1, halide_error_buffer_extents_negative("Input buffer filter", 1, filter.extent.1))
+ assert((filter.min.2 <= 0) && ((((filter.extent.0*filter.extent.2) + 3)/4) <= (filter.extent.2 + filter.min.2)), halide_error_access_out_of_bounds("Input buffer filter", 2, 0, ((filter.extent.0*filter.extent.2) + -1)/4, filter.min.2, (filter.extent.2 + filter.min.2) + -1))
+ assert(0 <= filter.extent.2, halide_error_buffer_extents_negative("Input buffer filter", 2, filter.extent.2))
+ assert(((filter.min.3 + 8) <= ((min(output.extent.0, 128) + output.min.0)/16)) && ((((min(output.extent.0, 128) + output.min.0)/16) + filter.extent.3.required.s) <= (filter.extent.3 + filter.min.3)), halide_error_access_out_of_bounds("Input buffer filter", 3, ((min(output.extent.0, 128) + output.min.0)/16) + -8, (((min(output.extent.0, 128) + output.min.0)/16) + filter.extent.3.required.s) + -1, filter.min.3, (filter.extent.3 + filter.min.3) + -1))
+ assert(0 <= filter.extent.3, halide_error_buffer_extents_negative("Input buffer filter", 3, filter.extent.3))
+ assert((filter.min.4 <= 0) && (0 <= filter.min.4), halide_error_access_out_of_bounds("Input buffer filter", 4, 0, filter.extent.4 + -1, filter.min.4, (filter.extent.4 + filter.min.4) + -1))
+ assert(0 <= filter.extent.4, halide_error_buffer_extents_negative("Input buffer filter", 4, filter.extent.4))
+ assert((filter.min.5 <= 0) && (0 <= filter.min.5), halide_error_access_out_of_bounds("Input buffer filter", 5, 0, filter.extent.5 + -1, filter.min.5, (filter.extent.5 + filter.min.5) + -1))
+ assert(0 <= filter.extent.5, halide_error_buffer_extents_negative("Input buffer filter", 5, filter.extent.5))
+ assert((input.min.0 <= 0) && (((((filter.extent.0*filter.extent.2) + 3)/4)*4) <= (input.extent.0 + input.min.0)), halide_error_access_out_of_bounds("Input buffer input", 0, 0, ((((filter.extent.0*filter.extent.2) + 3)/4)*4) + -1, input.min.0, (input.extent.0 + input.min.0) + -1))
+ assert(0 <= input.extent.0, halide_error_buffer_extents_negative("Input buffer input", 0, input.extent.0))
+ assert((input.min.1 <= input.min.1.required) && (((input.extent.1.required.s + input.min.1.required) + 1) <= (input.extent.1 + input.min.1)), halide_error_access_out_of_bounds("Input buffer input", 1, input.min.1.required, input.extent.1.required.s + input.min.1.required, input.min.1, (input.extent.1 + input.min.1) + -1))
+ assert(0 <= input.extent.1, halide_error_buffer_extents_negative("Input buffer input", 1, input.extent.1))
+ assert((input.min.2 <= input.min.2.required) && (((input.extent.2.required.s + input.min.2.required) + 1) <= (input.extent.2 + input.min.2)), halide_error_access_out_of_bounds("Input buffer input", 2, input.min.2.required, input.extent.2.required.s + input.min.2.required, input.min.2, (input.extent.2 + input.min.2) + -1))
+ assert(0 <= input.extent.2, halide_error_buffer_extents_negative("Input buffer input", 2, input.extent.2))
+ assert((input.min.3 <= output.min.3) && ((output.extent.3 + output.min.3) <= (input.extent.3 + input.min.3)), halide_error_access_out_of_bounds("Input buffer input", 3, output.min.3, (output.extent.3 + output.min.3) + -1, input.min.3, (input.extent.3 + input.min.3) + -1))
+ assert(0 <= input.extent.3, halide_error_buffer_extents_negative("Input buffer input", 3, input.extent.3))
+ assert(max(max(bias.extent.0.required.s, 0) + min(output.extent.0, 128), 128) <= output.extent.0, halide_error_access_out_of_bounds("Output buffer output", 0, (min(output.extent.0, 128) + output.min.0) + -128, ((max(bias.extent.0.required.s, 0) + min(output.extent.0, 128)) + output.min.0) + -1, output.min.0, (output.extent.0 + output.min.0) + -1))
+ assert(max(max(output.extent.1.required.s, 0) + min(output.extent.1, 2), 2) <= output.extent.1, halide_error_access_out_of_bounds("Output buffer output", 1, (min(output.extent.1, 2) + output.min.1) + -2, ((max(output.extent.1.required.s, 0) + min(output.extent.1, 2)) + output.min.1) + -1, output.min.1, (output.extent.1 + output.min.1) + -1))
+ assert((0 <= output.min.2.required.s) && ((((output.min.2 + output.min.2.required.s) + output.extent.2.required.s) + 1) <= (output.extent.2 + output.min.2)), halide_error_access_out_of_bounds("Output buffer output", 2, output.min.2 + output.min.2.required.s, (output.min.2 + output.min.2.required.s) + output.extent.2.required.s, output.min.2, (output.extent.2 + output.min.2) + -1))
+ assert(0 <= output.extent.2, halide_error_buffer_extents_negative("Output buffer output", 2, output.extent.2))
+ assert(0 <= output.extent.3, halide_error_buffer_extents_negative("Output buffer output", 3, output.extent.3))
+ assert(bias.stride.0 == 1, halide_error_constraint_violated("bias.stride.0", bias.stride.0, "1", 1))
+ assert(filter.stride.0 == 1, halide_error_constraint_violated("filter.stride.0", filter.stride.0, "1", 1))
+ assert(input.stride.0 == 1, halide_error_constraint_violated("input.stride.0", input.stride.0, "1", 1))
+ assert(output.stride.0 == 1, halide_error_constraint_violated("output.stride.0", output.stride.0, "1", 1))
+ let filter.total_extent.1 = int64(filter.extent.1)*int64(filter.extent.0)
+ let filter.total_extent.2 = filter.total_extent.1*int64(filter.extent.2)
+ let filter.total_extent.3 = filter.total_extent.2*int64(filter.extent.3)
+ let filter.total_extent.4 = filter.total_extent.3*int64(filter.extent.4)
+ let filter.total_extent.5 = filter.total_extent.4*int64(filter.extent.5)
+ let input.total_extent.1 = int64(input.extent.1)*int64(input.extent.0)
+ let input.total_extent.2 = input.total_extent.1*int64(input.extent.2)
+ let input.total_extent.3 = input.total_extent.2*int64(input.extent.3)
+ let output.total_extent.1 = int64(output.extent.1)*int64(output.extent.0)
+ let output.total_extent.2 = output.total_extent.1*int64(output.extent.2)
+ let output.total_extent.3 = output.total_extent.2*int64(output.extent.3)
+ assert(uint64(bias.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("bias", uint64(bias.extent.0), (uint64)2147483647))
+ assert(uint64(filter.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", uint64(filter.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(filter.extent.1)*int64(filter.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", (uint64)abs(int64(filter.extent.1)*int64(filter.stride.1)), (uint64)2147483647))
+ assert(filter.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("filter", filter.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(filter.extent.2)*int64(filter.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", (uint64)abs(int64(filter.extent.2)*int64(filter.stride.2)), (uint64)2147483647))
+ assert(filter.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("filter", filter.total_extent.2, (int64)2147483647))
+ assert((uint64)abs(int64(filter.extent.3)*int64(filter.stride.3)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", (uint64)abs(int64(filter.extent.3)*int64(filter.stride.3)), (uint64)2147483647))
+ assert(filter.total_extent.3 <= (int64)2147483647, halide_error_buffer_extents_too_large("filter", filter.total_extent.3, (int64)2147483647))
+ assert((uint64)abs(int64(filter.extent.4)*int64(filter.stride.4)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", (uint64)abs(int64(filter.extent.4)*int64(filter.stride.4)), (uint64)2147483647))
+ assert(filter.total_extent.4 <= (int64)2147483647, halide_error_buffer_extents_too_large("filter", filter.total_extent.4, (int64)2147483647))
+ assert((uint64)abs(int64(filter.extent.5)*int64(filter.stride.5)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("filter", (uint64)abs(int64(filter.extent.5)*int64(filter.stride.5)), (uint64)2147483647))
+ assert(filter.total_extent.5 <= (int64)2147483647, halide_error_buffer_extents_too_large("filter", filter.total_extent.5, (int64)2147483647))
+ assert(uint64(input.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", uint64(input.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(input.extent.1)*int64(input.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", (uint64)abs(int64(input.extent.1)*int64(input.stride.1)), (uint64)2147483647))
+ assert(input.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("input", input.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(input.extent.2)*int64(input.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", (uint64)abs(int64(input.extent.2)*int64(input.stride.2)), (uint64)2147483647))
+ assert(input.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("input", input.total_extent.2, (int64)2147483647))
+ assert((uint64)abs(int64(input.extent.3)*int64(input.stride.3)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("input", (uint64)abs(int64(input.extent.3)*int64(input.stride.3)), (uint64)2147483647))
+ assert(input.total_extent.3 <= (int64)2147483647, halide_error_buffer_extents_too_large("input", input.total_extent.3, (int64)2147483647))
+ assert(uint64(output.extent.0) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", uint64(output.extent.0), (uint64)2147483647))
+ assert((uint64)abs(int64(output.extent.1)*int64(output.stride.1)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.1)*int64(output.stride.1)), (uint64)2147483647))
+ assert(output.total_extent.1 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.1, (int64)2147483647))
+ assert((uint64)abs(int64(output.extent.2)*int64(output.stride.2)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.2)*int64(output.stride.2)), (uint64)2147483647))
+ assert(output.total_extent.2 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.2, (int64)2147483647))
+ assert((uint64)abs(int64(output.extent.3)*int64(output.stride.3)) <= (uint64)2147483647, halide_error_buffer_allocation_too_large("output", (uint64)abs(int64(output.extent.3)*int64(output.stride.3)), (uint64)2147483647))
+ assert(output.total_extent.3 <= (int64)2147483647, halide_error_buffer_extents_too_large("output", output.total_extent.3, (int64)2147483647))
+ assert(!bias.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer bias"))
+ assert(!filter.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer filter"))
+ assert(!input.device_dirty, halide_error_device_dirty_with_no_device_support("Input buffer input"))
+ assert(!output.device_dirty, halide_error_device_dirty_with_no_device_support("Output buffer output"))
+ assert(bias != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer bias"))
+ assert(filter != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer filter"))
+ assert(input != (void *)reinterpret((uint64)0), halide_error_host_is_null("Input buffer input"))
+ assert(output != (void *)reinterpret((uint64)0), halide_error_host_is_null("Output buffer output"))
+ let output.s0.c.c.c.loop_extent = ((output.extent.0 + 127)/128)*(((output.extent.1 + 1)/2)*output.extent.2)
+ produce output {
+  let t477 = ((filter.extent.0*filter.extent.2) + 3)/4
+  let t470 = (output.extent.1 + 1)/2
+  let t469 = (output.extent.0 + 127)/128
+  let t471 = t477*4
+  let t473 = (((filter.extent.4*filter.extent.5)*t477)*int32((uint16((uint8)filter_zero)*uint16((uint8)input_zero))))*4
+  let t476 = (((output.min.0 - (output.min.3*output.stride.3)) - (output.min.2*output.stride.2)) - (output.min.1*output.stride.1)) - output.min.0
+  let t474 = output.min.0 - bias.min.0
+  let t475 = ((input.min.1*input.stride.1) + ((input.min.3*input.stride.3) + (input.min.2*input.stride.2))) + input.min.0
+  let t472 = ((filter.min.1*filter.stride.1) + ((filter.min.3*filter.stride.3) + (filter.min.2*filter.stride.2))) + filter.min.0
+  for (output.s0.b.rebased, 0, output.extent.3) {
+   let t480 = output.min.3 + output.s0.b.rebased
+   let t478 = (input.stride.3*t480) - t475
+   let t479 = (output.stride.3*t480) + t476
+   parallel (output.s0.c.c.c, 0, output.s0.c.c.c.loop_extent) {
+    let output.s0.c.ci.base.s = min((output.s0.c.c.c % t469)*128, output.extent.0 + -128)
+    let output.s0.x.xi.base.s = min(((output.s0.c.c.c/t469) % t470)*2, output.extent.1 + -2)
+    let output.s0.y.min_1.s = (output.s0.c.c.c/t469)/t470
+    allocate offset_c[int32 * 128]
+    produce offset_c {
+     offset_c[ramp(0, 1, 16)] = x16(0)
+     offset_c[ramp(16, 1, 16)] = x16(0)
+     offset_c[ramp(32, 1, 16)] = x16(0)
+     offset_c[ramp(48, 1, 16)] = x16(0)
+     offset_c[ramp(64, 1, 16)] = x16(0)
+     offset_c[ramp(80, 1, 16)] = x16(0)
+     offset_c[ramp(96, 1, 16)] = x16(0)
+     offset_c[ramp(112, 1, 16)] = x16(0)
+     let t481 = output.min.0 + output.s0.c.ci.base.s
+     for (offset_c.s1.r19$z, 0, t471) {
+      let t482 = ((offset_c.s1.r19$z/4)*filter.stride.2) + (offset_c.s1.r19$z % 4)
+      for (offset_c.s1.r19$y, 0, filter.extent.5) {
+       let t483 = (filter.stride.5*offset_c.s1.r19$y) - t472
+       for (offset_c.s1.r19$x, 0, filter.extent.4) {
+        offset_c[ramp(0, 1, 64)] = offset_c[ramp(0, 1, 64)] + int32x64((uint16x64)widening_mul(filter[(((int32x64)shift_right(ramp(t481, 1, 64), x64((uint32)4))*x64(filter.stride.3)) + ((ramp(t481, 1, 64) % x64(16))*x64(filter.stride.1))) + x64(((filter.stride.4*offset_c.s1.r19$x) + t483) + t482)], x64((uint8)input_zero)))
+        offset_c[ramp(64, 1, 64)] = offset_c[ramp(64, 1, 64)] + int32x64((uint16x64)widening_mul(filter[((((int32x64)shift_right(ramp(t481, 1, 64), x64((uint32)4)) + x64(4))*x64(filter.stride.3)) + ((ramp(t481, 1, 64) % x64(16))*x64(filter.stride.1))) + x64(((filter.stride.4*offset_c.s1.r19$x) + t483) + t482)], x64((uint8)input_zero)))
+       }
+      }
+     }
+     offset_c[ramp(0, 1, 64)] = bias[ramp(output.s0.c.ci.base.s + t474, 1, 64)] + (x64(t473) - offset_c[ramp(0, 1, 64)])
+     offset_c[ramp(64, 1, 64)] = bias[ramp((output.s0.c.ci.base.s + t474) + 64, 1, 64)] + (x64(t473) - offset_c[ramp(64, 1, 64)])
+    }
+    allocate convolved[int32 * 128 * 2 * 1 * 1]
+    produce convolved {
+     consume offset_c {
+      let t484 = (output.min.2 + output.s0.y.min_1.s)*stride_y
+      let t485 = output.min.1 + output.s0.x.xi.base.s
+      for (convolved.s0.x.rebased, 0, 2) {
+       allocate sum_input[int32 * 16] in Stack
+       produce sum_input {
+        sum_input[ramp(0, 1, 16)] = x16(0)
+        let t486 = (convolved.s0.x.rebased + t485)*stride_x
+        for (sum_input.s1.r19$z, 0, t471) {
+         let t487 = sum_input.s1.r19$z + t478
+         for (sum_input.s1.r19$y, 0, filter.extent.5) {
+          let t488 = (((dilation_y*sum_input.s1.r19$y) + t484)*input.stride.2) + t487
+          for (sum_input.s1.r19$x, 0, filter.extent.4) {
+           sum_input[0] = sum_input[0] + int32(input[(((dilation_x*sum_input.s1.r19$x) + t486)*input.stride.1) + t488])
+          }
+         }
+        }
+       }
+       consume sum_input {
+        convolved[ramp(convolved.s0.x.rebased*128, 1, 64) aligned(128, 0)] = offset_c[ramp(0, 1, 64)] - x64(sum_input[0]*int32((uint8)filter_zero))
+        convolved[ramp((convolved.s0.x.rebased*128) + 64, 1, 64) aligned(128, 64)] = offset_c[ramp(64, 1, 64)] - x64(sum_input[0]*int32((uint8)filter_zero))
+        free sum_input
+       }
+      }
+     }
+     free offset_c
+     let t490 = (output.min.2 + output.s0.y.min_1.s)*stride_y
+     let t491 = output.min.1 + output.s0.x.xi.base.s
+     let t489 = output.min.0 + output.s0.c.ci.base.s
+     for (convolved.s1.x.rebased, 0, 2) {
+      let t493 = (convolved.s1.x.rebased + t491)*stride_x
+      let t492 = convolved.s1.x.rebased*2
+      for (convolved.s1.c.c, 0, 2) {
+       let t495 = convolved.s1.c.c*4
+       let t494 = convolved.s1.c.c + t492
+       for (convolved.s1.r19$z, 0, t471) {
+        let t496 = t494*64
+        let t497 = ((convolved.s1.r19$z/4)*filter.stride.2) + (convolved.s1.r19$z % 4)
+        let t498 = convolved.s1.r19$z + t478
+        for (convolved.s1.r19$y, 0, filter.extent.5) {
+         let t499 = (convolved.s1.r19$y*filter.stride.5) - t472
+         let t500 = (((convolved.s1.r19$y*dilation_y) + t490)*input.stride.2) + t498
+         for (convolved.s1.r19$x, 0, filter.extent.4) {
+          convolved[ramp(t496, 1, 64) aligned(64, 0)] = convolved[ramp(t496, 1, 64) aligned(64, 0)] + int32x64((uint16x64)widening_mul(filter[(((ramp(t489, 1, 64) % x64(16))*x64(filter.stride.1)) + (((int32x64)shift_right(ramp(t489, 1, 64), x64((uint32)4)) + x64(t495))*x64(filter.stride.3))) + x64(((convolved.s1.r19$x*filter.stride.4) + t499) + t497)], x64(input[(((convolved.s1.r19$x*dilation_x) + t493)*input.stride.1) + t500])))
+         }
+        }
+       }
+      }
+     }
+    }
+    consume convolved {
+     output[ramp((((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + (((output.min.2 + output.s0.y.min_1.s)*output.stride.2) + t479)) + output.s0.c.ci.base.s, 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)rounding_mul_shift_right(convolved[ramp(0, 1, 64)], x64(output_multiplier), x64((uint32)31)), x64(output_shift)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+     output[ramp(((((output.min.1 + output.s0.x.xi.base.s)*output.stride.1) + (((output.min.2 + output.s0.y.min_1.s)*output.stride.2) + t479)) + output.s0.c.ci.base.s) + 64, 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)rounding_mul_shift_right(convolved[ramp(64, 1, 64)], x64(output_multiplier), x64((uint32)31)), x64(output_shift)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+     output[ramp(((((output.min.1 + output.s0.x.xi.base.s) + 1)*output.stride.1) + (((output.min.2 + output.s0.y.min_1.s)*output.stride.2) + t479)) + output.s0.c.ci.base.s, 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)rounding_mul_shift_right(convolved[ramp(128, 1, 64)], x64(output_multiplier), x64((uint32)31)), x64(output_shift)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+     output[ramp((((((output.min.1 + output.s0.x.xi.base.s) + 1)*output.stride.1) + (((output.min.2 + output.s0.y.min_1.s)*output.stride.2) + t479)) + output.s0.c.ci.base.s) + 64, 1, 64)] = max(min(uint8x64(max(min((int16x64)saturating_add(int16x64(max(min((int32x64)rounding_shift_right((int32x64)rounding_mul_shift_right(convolved[ramp(192, 1, 64)], x64(output_multiplier), x64((uint32)31)), x64(output_shift)), x64(32767)), x64(-32768))), x64(int16((uint8)output_zero))), x64((int16)255)), x64((int16)0))), x64((uint8)output_max)), x64((uint8)output_min))
+     free convolved
+    }
+   }
+  }
+ }
+}
+}
+
+
