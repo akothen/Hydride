@@ -341,7 +341,7 @@ std::unique_ptr<llvm::Module> clone_module(const llvm::Module &module_in) {
 void emit_file(const llvm::Module &module_in, Internal::LLVMOStream &out,
                llvm::CodeGenFileType file_type) {
     Internal::debug(1) << "emit_file.Compiling to native code...\n";
-    Internal::debug(2) << "Target triple: " << module_in.getTargetTriple() << "\n";
+    Internal::debug(0) << "Target triple: " << module_in.getTargetTriple() << "\n";
 
     auto time_start = std::chrono::high_resolution_clock::now();
 

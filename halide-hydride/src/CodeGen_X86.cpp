@@ -256,6 +256,15 @@ void CodeGen_X86::init_module() {
 // i32(i16_a)*i32(i16_b) +/- i32(i16_c)*i32(i16_d) can be done by
 // interleaving a, c, and b, d, and then using dot_product.
 bool should_use_dot_product(const Expr &a, const Expr &b, vector<Expr> &result) {
+
+    const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
+    if(enable_hydride && strcmp(enable_hydride, "0") != 0){
+        // Should not try to fold dot product when hydride is enabled
+        return false;
+    }
+
+
+
     Type t = a.type();
     internal_assert(b.type() == t);
 
@@ -688,6 +697,7 @@ void CodeGen_X86::visit(const Store *op) {
 }
 
 string CodeGen_X86::mcpu() const {
+    return "cascadelake";
     if (target.has_feature(Target::AVX512_SapphireRapids)) {
         return "sapphirerapids";
     } else if (target.has_feature(Target::AVX512_Cannonlake)) {

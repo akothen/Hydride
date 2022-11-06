@@ -1615,6 +1615,12 @@ namespace Halide {
                             // Lower intrinsics
                             Expr spec_expr = LowerIntrinsics().mutate(expr);
 
+                            std::cout << "Expression after lower intrinsic: "<< spec_expr <<"\n";
+
+                            // Simplify constants
+                            spec_expr = simplify(spec_expr);
+
+                            std::cout << "Expression after simplification: "<< spec_expr <<"\n";
 
                             std::cout << "Expression before InlineLets: "<< spec_expr <<"\n";
 
@@ -1747,16 +1753,19 @@ namespace Halide {
                     Expr visit(const Call *op) override {
                         std::cout << "Lower Intrinsic on call: "<< op->name << "\n";
                         Expr lowered;
+
+                        bool lower_using_halide = false;
                         // Generate cleaner specs. Since performance is not a concern, we can freely
                         // use widening casts etc.
                         if (op->is_intrinsic(Call::saturating_add)) {
                             size_t element_bits = op->args[0].type().bits();
-                            if(element_bits >= 32 && element_bits < 64){
-                                lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
-                                            op->args[0].type().min(), op->args[0].type().max()));
-                            } else if (element_bits >= 64){
-                                lowered = lower_intrinsic(op);
-                            }
+                            if(element_bits >= 32){
+                                lowered = lower_saturating_add(op->args[0], op->args[1]);                             
+                            } 
+                            /*
+                            else if (element_bits >= 64){
+                                lower_using_halide = true;
+                            }*/
 
                             // Map Saturating add to saturating add in Rosette.
                         } 
@@ -1764,57 +1773,141 @@ namespace Halide {
 
                             size_t element_bits = op->args[0].type().bits();
                             if(element_bits >= 32 && element_bits < 64){
-                                lowered = narrow(clamp(widen(op->args[0]) - widen(op->args[1]),
-                                            op->args[0].type().min(), op->args[0].type().max()));
+                                lowered = lower_saturating_sub(op->args[0], op->args[1]);                             
                             } else if (element_bits >= 64){
-                                lowered = lower_intrinsic(op);
+                                lower_using_halide = true;
                             }
-
                             // Map Saturating sub to saturating sub in Rosette.
                         } 
-                        /*
                         else if (op->is_intrinsic(Call::halving_add)) {
-                            lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
                         else if (op->is_intrinsic(Call::halving_sub)) {
-                            lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
                         else if (op->is_intrinsic(Call::rounding_halving_add)) {
-                            lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+                            } else {
+                                lower_using_halide = true;
+                            } 
+
                         } 
                         else if (op->is_intrinsic(Call::rounding_halving_sub)) {
-                            lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
-                        } 
-                        else if (op->is_intrinsic(Call::rounding_halving_sub)) {
-                            lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+                            
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow((widen(op->args[0]) - widen(op->args[1]) + 1) / 2);
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
                         else if (op->is_intrinsic(Call::sorted_avg)) {
-                            lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
-                        }*/ 
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                            } else {
+                                lower_using_halide = true;
+                            } 
+
+                        }
                         else if (SIMPLIFY_ABSD && op->is_intrinsic(Call::absd)) {
                             lowered = max(op->args[0], op->args[1]) - min(op->args[0], op->args[1]);
                         } 
-                        /*
                         else if (op->is_intrinsic(Call::rounding_shift_right)){
                             lowered = saturating_add(op->args[0], (1 << max(0,op->args[1]))/ 2) >> op->args[1]; 
                         } 
                         else if (op->is_intrinsic(Call::widening_mul)) {
-                            lowered = (widen(op->args[0]) * widen(op->args[1]));
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = (widen(op->args[0]) * widen(op->args[1]));
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
                         else if (op->is_intrinsic(Call::widening_add)) {
-                            lowered = (widen(op->args[0]) + widen(op->args[1]));
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = (widen(op->args[0]) + widen(op->args[1]));
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
                         else if (op->is_intrinsic(Call::widening_sub)) {
-                            lowered = (widen(op->args[0]) - widen(op->args[1]));
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = (widen(op->args[0]) - widen(op->args[1]));
+                            } else {
+                                lower_using_halide = true;
+                            } 
+                        }
+                        else if(op->is_intrinsic(Call::widening_shift_left)) {
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = widen(op->args[0]) << op->args[1];
+                            } else {
+                                lower_using_halide = true;
+                            } 
+
+                        }
+                        else if(op->is_intrinsic(Call::widening_shift_right)) {
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = widen(op->args[0]) >> op->args[1];
+                            } else {
+                                lower_using_halide = true;
+                            } 
                         } 
-                        */
+                        else if(op->is_intrinsic(Call::rounding_mul_shift_right)) {
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow(rounding_shift_right(widening_mul(op->args[0], op->args[1]), op->args[2]));
+                            } else {
+                                lower_using_halide = true;
+                            } 
+                        } 
+
+                        else if(op->is_intrinsic(Call::mul_shift_right)) {
+
+                            size_t element_bits = op->args[0].type().bits();
+                            if(element_bits < 64){
+                                lowered = narrow(widening_mul(op->args[0], op->args[1]) >> op->args[2]);
+                            } else {
+                                lower_using_halide = true;
+                            } 
+                        } 
+
+                        /*
                         else {
                             lowered = lower_intrinsic(op);
-                        }
+                        }*/
 
                         if (lowered.defined()) {
                             debug(0) << "Lowered Expression: "<<lowered <<"\n";
                             return mutate(lowered);
+                        } else if (lower_using_halide){
+                            debug(0) << "Falling back onto halide to lower...\n" << "for "<<op->name<<"\n";
+                            return mutate(lower_intrinsic(op));
                         }
                         return IRMutator::visit(op);
                     }
@@ -2535,7 +2628,15 @@ namespace Halide {
                     }
 
                     std::string emit_hydride_synthesis(std::string expr_name, size_t expr_depth, size_t VF, std::string id_map_name, std::string synth_log_path, std::string synth_log_name){
-                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " 'z3 \"" + synth_log_path + "\"  \"" + synth_log_name + "\" )";
+
+                        std::string solver = "'z3";
+                        const char* hydride_solver = getenv("HYDRIDE_SOLVER");
+
+                        if(hydride_solver){
+                            solver = hydride_solver;
+                        }
+
+                        return "(synthesize-halide-expr "+expr_name+ " "+ id_map_name +" " +std::to_string(expr_depth) +" "+std::to_string(VF) + " " + solver + "  \"" + synth_log_path + "\"  \"" + synth_log_name + "\" )";
                     }
 
                     std::string emit_interpret_expr(std::string expr_name){
@@ -2699,9 +2800,19 @@ namespace Halide {
             std::string cmd = "python " + codegen_script_path + " " + input_file + " " + std::string(legalizer_so) + " " + std::string(intrin_wrapper) +" "+ target_flag + " " + output_file;
             debug(0) << cmd << "\n";
 
+            auto start = std::chrono::system_clock::now();
+
             int ret_code = system(cmd.c_str());
 
             internal_assert(ret_code == 0) << "Codegeneration crashed, exiting ..."<<"\n";
+
+
+            auto end = std::chrono::system_clock::now();
+            std::cout << "Compilation completed with return code:\t"<< ret_code <<"\n";
+            
+            std::chrono::duration<double> elapsed_seconds = end - start;
+
+            std::cout << "Compilation took "<< elapsed_seconds.count() << "seconds ..."<<"\n";
 
             // TEMP CMD
             std::string temp_cmd = "cp /tmp/hydride.ll.legalize.ll  " + output_file;
@@ -2739,7 +2850,6 @@ namespace Halide {
 
         Stmt hydride_optimize_x86(FuncValueBounds fvb, const Stmt &s, std::set<const BaseExprNode *> &mutated_exprs) {
             debug(0) << "Hydride Optimize X86" <<"\n";
-            /*
             std::set<const IRNode*> DeadStmts;
             auto FLS = Hydride::FoldLoadStores(DeadStmts);
             auto folded = FLS.mutate(s);
@@ -2751,8 +2861,7 @@ namespace Halide {
             auto pruned = Hydride::RemoveRedundantStmt(DeadStmts).mutate(folded);
             debug(1) << "Printing Pruned Stmt:\n";
             debug(1) << pruned <<"\n";
-            */
-            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(s);
+            auto Result = Hydride::IROptimizer(fvb, Hydride::IROptimizer::X86, mutated_exprs).mutate(pruned);
 
             if(mutated_exprs.size()){
                hydride_generate_llvm_bitcode(Target::X86, "/tmp/hydride_exprs.rkt","/tmp/hydride.ll");

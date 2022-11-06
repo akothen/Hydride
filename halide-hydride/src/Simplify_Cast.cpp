@@ -6,6 +6,8 @@ namespace Internal {
 Expr Simplify::visit(const Cast *op, ExprInfo *bounds) {
     Expr value = mutate(op->value, bounds);
 
+
+
     if (bounds) {
         // If either the min value or the max value can't be represented
         // in the destination type, or the min/max value is undefined,
@@ -114,8 +116,13 @@ Expr Simplify::visit(const Cast *op, ExprInfo *bounds) {
             // or a zero extend, and the outer cast truncates the extended bits
             return mutate(Cast::make(op->type, cast->value), bounds);
         } else if (broadcast_value) {
-            // cast(broadcast(x)) -> broadcast(cast(x))
-            return mutate(Broadcast::make(Cast::make(op->type.with_lanes(broadcast_value->value.type().lanes()), broadcast_value->value), broadcast_value->lanes), bounds);
+            // DISABLE SIMPLIFICATION FOR HYDRIDE:
+            const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
+            if(!enable_hydride ||  strcmp(enable_hydride, "0") == 0){
+                // cast(broadcast(x)) -> broadcast(cast(x))
+                return mutate(Broadcast::make(Cast::make(op->type.with_lanes(broadcast_value->value.type().lanes()), broadcast_value->value), broadcast_value->lanes), bounds);
+            }
+
         } else if (ramp_value &&
                    op->type.element_of() == Int(64) &&
                    op->value.type().element_of() == Int(32)) {

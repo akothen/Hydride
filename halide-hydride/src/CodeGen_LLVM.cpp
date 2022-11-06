@@ -458,8 +458,9 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
     }
 
+    llvm::errs()<<"Printing Module: <START>\n" << *module << "\n<END>"<<"\n";
 
-    llvm::errs() << *module << "\n";
+
 
 
 }
@@ -568,7 +569,9 @@ void CodeGen_LLVM::init_codegen(const std::string &name, bool any_strict_float) 
 
     internal_assert(module && context);
 
-    debug(1) << "Target triple of initial module: " << module->getTargetTriple() << "\n";
+    debug(0) << "Target triple of initial module: " << module->getTargetTriple() << "\n";
+
+    //module->setTargetTriple("x86_64-unknown-linux-gnu");
 
     module->setModuleIdentifier(name);
 
@@ -703,12 +706,19 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::finish_codegen() {
     debug(2) << "Done generating llvm bitcode\n";
 
     // Optimize
-     CodeGen_LLVM::optimize_module();
+
+     const char* disable_ops = getenv("HYDRIDE_DISABLE_LLVM_OPTS");
+     if(!disable_ops){
+        CodeGen_LLVM::optimize_module();
+     }
 
     if (target.has_feature(Target::EmbedBitcode)) {
         std::string halide_command = "halide target=" + target.to_string();
         embed_bitcode(module.get(), halide_command);
     }
+
+    //llvm::errs()<<"Printing Module after optimizations: <START>\n" << *module << "\n<END>"<<"\n";
+
 
     // Disown the module and return it.
     return std::move(module);
