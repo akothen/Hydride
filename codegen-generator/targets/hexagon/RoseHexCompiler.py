@@ -1791,10 +1791,7 @@ def FixFunctionsWithReductionPattern(Function : RoseFunction, Context : HexRoseC
   return
 
 
-def CompileSemantics(Sema):
-  # Create the root context
-  RootContext = HexRoseContext()
-  
+def CompileSemantics(Sema, RootContext : HexRoseContext):  
   # Some sanity checks
   assert len(Sema.params) > 0
   assert len(Sema.params) == len(Sema.paramsizes)
