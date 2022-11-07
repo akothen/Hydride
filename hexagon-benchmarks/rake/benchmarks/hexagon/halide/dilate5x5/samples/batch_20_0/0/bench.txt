@@ -1,0 +1,2 @@
+Benchmark for dilate5x5_batch_0020_sample_0000 produces best case of 7.36763e-05 sec/iter (over 5 samples, 3510 iterations, accuracy 2.4%).
+Best output throughput is 2.7e+04 mpix/sec.
