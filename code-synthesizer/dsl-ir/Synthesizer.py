@@ -5,7 +5,7 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = []
+DEBUG_LIST = ["hexagon_V6_vmaxw_128B"]
 SKIP_LIST = []
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
@@ -13,7 +13,6 @@ UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
-FORCE_INCLUDE = ["_mm256_set1_epi16"]
 
 
 # Any shuffle operation producing bitvectors more than
@@ -63,6 +62,7 @@ class Synthesizer:
 
 
     def is_instruction_legal(self, name):
+        return True
         if self.is_shuffle:
             return True
 
