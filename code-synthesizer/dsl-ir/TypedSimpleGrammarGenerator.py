@@ -1,5 +1,6 @@
 from Types import *
 from Instructions import *
+import math
 
 USE_CAST_SHORTCUT = False
 
@@ -9,6 +10,7 @@ class TypedSimpleGrammarGenerator:
     def __init__(self ):
         self.typed_contexts = {}
         self.prec_holes = {}
+        self.zero_map = []
 
 
 
@@ -59,19 +61,29 @@ class TypedSimpleGrammarGenerator:
 
 
     def emit_lit_0(self, bv_size, prec):
-        return "(lit (integer->bitvector 0 (bitvector {})))".format(bv_size)
+        return "(lit (bv 0 (bitvector {})))".format(bv_size)
 
     def emit_lit_neg_1(self, bv_size, prec):
-        return "(lit (integer->bitvector -1 (bitvector {})))".format(bv_size)
+        return "(lit (bv -1 (bitvector {})))".format(bv_size)
 
 
     def emit_lit_1(self, bv_size, prec):
         splat_factor = bv_size // prec
-        return "(lit (create-splat-bv (integer->bitvector 1 (bitvector {})) {}))".format(prec, splat_factor)
+        return "(lit (create-splat-bv (bv 1 (bitvector {})) {}))".format(prec, splat_factor)
 
     def emit_lit_imm(self, imm, bv_size, prec):
         splat_factor = bv_size // prec
-        return "(lit (create-splat-bv (integer->bitvector {} (bitvector {})) {}))".format(imm, prec, splat_factor)
+        return "(lit (create-splat-bv (bv {} (bitvector {})) {}))".format(imm, prec, splat_factor)
+
+    def emit_log2_imm(self, imm, bv_size, prec):
+        if imm <= 0:
+            return ""
+        if not math.log(imm,2).is_integer():
+            return ""
+
+
+        splat_factor = bv_size // prec
+        return "(lit (create-splat-bv (bv {} (bitvector {})) {}))".format(int(math.log(imm,2)), prec, splat_factor)
 
     def emit_lit_ramp(self, bv_size, prec):
         splat_factor = bv_size // prec
@@ -96,18 +108,32 @@ class TypedSimpleGrammarGenerator:
         neg_one = self.emit_lit_neg_1(bv_size, prec)
         ramp = self.emit_lit_ramp(bv_size, prec)
 
-        imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [1,0,-1] ]
+        imm_clauses = [self.emit_lit_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [0] ]
+
+
+        imm_log2_clauses = [self.emit_log2_imm(imm ,bv_size, imm_prec) for (imm,imm_prec) in self.imms if imm not in [0] ]
+
+        if bv_size in self.zero_map:
+            zero = ""
+        else:
+            self.zero_map.append(bv_size)
 
         zero_clause = "{}".format(zero)
-        one_clause = "{}".format(one)
-        neg_one_clause = "{}".format(neg_one)
+
+
+        one_clause ="{}".format(one)
+        neg_one_clause = " " #"{}".format(neg_one)
+
         ramp_clause = "{}".format(ramp)
+
+        if not self.include_ramp_lit:
+            ramp_clause = ""
 
         close = ""
 
         hole_clause = "" # "\n\t".join([condition, hole, close])
 
-        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses)
+        return "\n".join([zero_clause, one_clause, neg_one_clause, hole_clause, ramp_clause] + imm_clauses + imm_log2_clauses)
 
 
     def is_broadcast_like_operation(self, dsl_inst):
@@ -336,13 +362,15 @@ class TypedSimpleGrammarGenerator:
                      lit_holes = [],
                      input_sizes = [],
                      vars_name = "vars",
-                     imms = []
+                     imms = [],
+                     include_ramp_lit = False
                      ):
 
         self.return_type = return_type
         self.operation_layer_name = operation_layer_name
         self.input_sizes = input_sizes
         self.imms = imms
+        self.include_ramp_lit = include_ramp_lit
 
         # Sort grammar operations into buckets identified by the return type
         # of the operation contexts

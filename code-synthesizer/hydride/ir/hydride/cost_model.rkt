@@ -207,34 +207,22 @@
 
 (define (hydride:cost prog)
  (destruct prog
-	[(idx-i id) 1]
-	[(idx-j id) 1]
 	[(reg id) 1]
 	[(lit v) 1 ]
-	[(nop v1) (+ 1 (hydride:cost v1))]
-	[(dim-x id) 4]
-	[(dim-y id) 4]
-	[(idx-add i1 i2) (+ 4 (hydride:cost i1) (hydride:cost i2))]
-	[(idx-mul i1 i2) (+ 4 (hydride:cost i1) (hydride:cost i2))]
-		[ (vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o)
-		(+ 2 (hydride:cost  v0)  
-		)
-	]
 		[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
 		(+ 4 (hydride:cost  v0)  (hydride:cost  v1)  
 		 
 		)
 	]
 		[ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-         ;; TEMP
 		(+ 4 (hydride:cost  v0)  (hydride:cost  v1)  
 		)
 	]
 		[ (interleave-vector_dsl v0 size_i_o prec_i_o)
-		(+ 2 (hydride:cost  v0) )
+		(+ 3 (hydride:cost  v0) )
 	]
 		[ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-		(+ 2 (hydride:cost  v0) )
+		(+ 3 (hydride:cost  v0) )
 	]
 		[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
 		(+ 5 (hydride:cost  v0)  (hydride:cost  v1)  
@@ -585,8 +573,9 @@
 		(+ cost__mm_sll_epi64_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
 		)
 	]
-	[ (_mm256_unpacklo_epi64_dsl v0 v1 num_2)
-		(+ cost__mm256_unpacklo_epi64_dsl (hydride:cost  v0)  (hydride:cost  v1) )
+	[ (_mm256_unpacklo_epi64_dsl v0 v1 num_2 num_3)
+		(+ cost__mm256_unpacklo_epi64_dsl (hydride:cost  v0)  (hydride:cost  v1)  
+		)
 	]
 	[ (_mm512_cmpgt_epi16_mask_dsl v0 v1 num_2 prec_i num_4)
 		(+ cost__mm512_cmpgt_epi16_mask_dsl (hydride:cost  v0)  (hydride:cost  v1)  
@@ -713,8 +702,8 @@
 	[ (_mm_mul_su32_dsl v0 v1)
 		(+ cost__mm_mul_su32_dsl (hydride:cost  v0)  (hydride:cost  v1) )
 	]
-	[ (_mm512_mask_unpackhi_epi8_dsl v0 v1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
-		(+ cost__mm512_mask_unpackhi_epi8_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
+	[ (_mm512_mask_unpackhi_epi8_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+		(+ cost__mm512_mask_unpackhi_epi8_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  
 		 
 		)
@@ -731,8 +720,8 @@
 		 (hydride:cost  v6)  
 		)
 	]
-	[ (_mm256_maskz_unpacklo_epi8_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
-		(+ cost__mm256_maskz_unpacklo_epi8_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
+	[ (_mm256_maskz_unpacklo_epi8_dsl v0 v1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+		(+ cost__mm256_maskz_unpacklo_epi8_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  
 		 
 		)
@@ -745,8 +734,8 @@
 		(+ cost__mm256_maskz_mulhrs_epi16_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
 		 (hydride:cost  v3) )
 	]
-	[ (_mm512_maskz_packs_epi16_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
-		(+ cost__mm512_maskz_packs_epi16_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
+	[ (_mm512_maskz_packs_epi16_dsl v0 v1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(+ cost__mm512_maskz_packs_epi16_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  
 		 
 		)
@@ -779,7 +768,7 @@
 		 
 		)
 	]
-	[ (_mm_unpacklo_epi32_dsl v0 v1 num_2 prec_i_o num_4)
+	[ (_mm_unpacklo_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
 		(+ cost__mm_unpacklo_epi32_dsl (hydride:cost  v0)  (hydride:cost  v1)  
 		)
 	]
@@ -865,8 +854,8 @@
 		(+ cost__mm256_mask_cvtepi8_epi32_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
 		)
 	]
-	[ (_mm256_mask_packus_epi16_dsl v0 v1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
-		(+ cost__mm256_mask_packus_epi16_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
+	[ (_mm256_mask_packus_epi16_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(+ cost__mm256_mask_packus_epi16_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  
 		 
 		)
@@ -892,7 +881,7 @@
 		(+ cost__mm256_maskz_dpwssds_epi32_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  (hydride:cost  v4) )
 	]
-	[ (_m_punpckhdq_dsl v0 v1 num_2 prec_i_o num_4)
+	[ (_m_punpckhdq_dsl v0 v1 num_2 prec_i_o num_4 num_5)
 		(+ cost__m_punpckhdq_dsl (hydride:cost  v0)  (hydride:cost  v1)  
 		)
 	]
@@ -919,17 +908,19 @@
 		(+ cost__mm256_cvtepu16_epi32_dsl (hydride:cost  v0)  
 		)
 	]
-	[ (_mm_mask_unpacklo_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7 num_8)
+	[ (_mm_mask_unpacklo_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7 num_8 num_9)
 		(+ cost__mm_mask_unpacklo_epi16_dsl (hydride:cost  v0)  (hydride:cost  v1)  (hydride:cost  v2)  
 		 (hydride:cost  v3)  
+		 
 		)
 	]
 	[ (_mm_movemask_pi8_dsl v0 num_1 num_2)
 		(+ cost__mm_movemask_pi8_dsl (hydride:cost  v0) )
 	]
-	[ (_mm512_maskz_unpacklo_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
+	[ (_mm512_maskz_unpacklo_epi64_dsl v0 vc_1 v2 v3 num_4 num_5 num_6)
 		(+ cost__mm512_maskz_unpacklo_epi64_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
-		 (hydride:cost  v3) )
+		 (hydride:cost  v3)  
+		)
 	]
 	[ (_mm_maskz_srai_epi64_dsl v0 vc_1 v2 v3 vc_4 vc_5 vc_6 num_7 prec_i_o num_9)
 		(+ cost__mm_maskz_srai_epi64_dsl (hydride:cost  v0)  (hydride:cost  vc_1)  (hydride:cost  v2)  
@@ -1020,7 +1011,7 @@
 		(+ cost__mm256_set_m128i_dsl (hydride:cost  v0)  (hydride:cost  v1)  
 		)
 	]
-	[_ 4]
+	[v  (error "Unrecognized Term in cost model")]
  )
 )
 

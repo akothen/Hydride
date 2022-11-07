@@ -85,19 +85,25 @@ class GetOutPrecDef:
 
 
 
-    def emit_ctx_prec_clause(self, ctx):
+    # Sample context sample ctx is used to define
+    # argument names
+    def emit_ctx_prec_clause(self, ctx, sample_ctx):
         predicate = ""
         size_expr = ""
 
+
+        def get_arg(i):
+            return sample_ctx.context_args[i]
+
         for idx, arg in enumerate(ctx.context_args):
             if isinstance(arg, Integer):
-                predicate += " (equal? {} {})".format(arg.name, arg.value)
+                predicate += " (equal? {} {})".format(get_arg(idx).name, arg.value)
 
             if isinstance(arg, Precision):
-                predicate += " (equal? {} {})".format(arg.name, arg.value)
+                predicate += " (equal? {} {})".format(get_arg(idx).name, arg.value)
 
             if isinstance(arg, LaneSize):
-                predicate += " (equal? {} {})".format(arg.name, arg.value)
+                predicate += " (equal? {} {})".format(get_arg(idx).name, arg.value)
 
         predicate = "(and " + predicate +  ")"
 
@@ -132,7 +138,7 @@ class GetOutPrecDef:
         cond_clauses = []
         # Iterate over contexts and condition on parameter values
         for ctx in dsl_inst.contexts:
-            cond_clauses.append(self.emit_ctx_prec_clause(ctx))
+            cond_clauses.append(self.emit_ctx_prec_clause(ctx, dsl_inst.get_sample_context()))
 
         cond_expr = "(cond \n\t\t"+"\n\t\t".join(cond_clauses) +"\n)\n"
         clause.append(cond_expr)

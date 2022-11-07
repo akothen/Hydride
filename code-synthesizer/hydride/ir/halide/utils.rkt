@@ -1390,7 +1390,7 @@
     [(vec-max v1 v2) (vec-size v1)]
 
     [(vec-if v1 v2 v3) (vec-size v2)]
-    [(vec-eq v1 v2) (vec-size v1)]
+    [(vec-eq v1 v2) (halide:vec-len v1)] ;; Vec eq returns one bit per lane
     [(vec-lt v1 v2) (vec-size v1)]
     [(vec-le v1 v2) (vec-size v1)]
 
@@ -1419,6 +1419,29 @@
 
 
 (define id-map (make-hash))
+
+
+(define (count-number-instructions expr)
+
+  (define count 0)
+  (define (visitor-fn e)
+    (destruct e
+              [(buffer data elemT buffsize) 
+               '()
+               ]
+              [(int-imm data signed?) 
+               '()
+               ]
+              [_ 
+                (set! count (+ count 1))
+                ]
+              )
+    )
+
+  (halide:visit expr visitor-fn)
+  count
+  
+  )
 
 (define (get-buffer-ids expr)
   (hash-clear! id-map)
@@ -1466,7 +1489,8 @@
 
 ;; Checks if the expression contains a complex operation
 ;; such as Ramp which performs broadcasts multiplication
-;; and add. 
+;; and add. Additionally, check for expensive ops
+;; such as div
 
 (define (contains-complex-op expr)
 
@@ -1474,6 +1498,13 @@
   (define (visitor-fn e)
     (destruct e
               [(ramp base stride len) 
+               (set! flag #t)
+               ]
+
+              ;[(vec-div v1 v2) 
+              ; (set! flag #t)
+              ; ]
+              [(vec-if vi v1 v2)
                (set! flag #t)
                ]
               [_ e]
@@ -1684,7 +1715,7 @@
     [(vec-max v1 v2) (get-elemT v1)]
 
     [(vec-if v1 v2 v3) (get-elemT v2)]
-    [(vec-eq v1 v2) (get-elemT v1)]
+    [(vec-eq v1 v2) 'uint1]
     [(vec-lt v1 v2) (get-elemT v1)]
     [(vec-le v1 v2) (get-elemT v1)]
 
@@ -1838,7 +1869,7 @@
     [(vec-max v1 v2) (vec-precision v1)]
 
     [(vec-if v1 v2 v3) (vec-precision v2)]
-    [(vec-eq v1 v2) (vec-precision v1)]
+    [(vec-eq v1 v2) 1]
     [(vec-lt v1 v2) (vec-precision v1)]
     [(vec-le v1 v2) (vec-precision v1)]
 

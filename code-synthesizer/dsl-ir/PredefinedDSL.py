@@ -137,7 +137,7 @@ def create_two_input_swizzle(input_vector_sizes = [],
             lanesize_index = 5,
             in_precision_index = 3,
             out_precision_index = 3,
-            cost = "2",
+            cost = "4",
         )
 
     return swizzle_dsl
@@ -182,7 +182,7 @@ def create_interleave_two_dsl(input_vector_sizes = [],
             lanesize_index = 2,
             in_precision_index = 3,
             out_precision_index = 3,
-            cost = "2",
+            cost = "4",
         )
 
     return vec_interleave_two_dsl
@@ -232,7 +232,7 @@ def create_interleave_dsl(input_vector_sizes = [],
             lanesize_index = 1,
             in_precision_index = 2,
             out_precision_index = 2,
-            cost = "2",
+            cost = "3",
         )
 
     return vec_interleave_dsl
@@ -284,7 +284,7 @@ def create_deinterleave_dsl(input_vector_sizes = [],
             lanesize_index = 1,
             in_precision_index = 2,
             out_precision_index = 2,
-            cost = "2",
+            cost = "3",
         )
 
     return vec_deinterleave_dsl
@@ -445,7 +445,7 @@ dummy_llvm_shuffle_dsl = create_llvm_shufflevector_dsl(
 
 
 default_structs = [
-    dummy_vector_load_dsl,
+    #dummy_vector_load_dsl,
     dummy_vector_swizzle_dsl,
     dummy_vector_two_interleave_dsl,
     dummy_vector_interleave_dsl,

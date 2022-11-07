@@ -16,23 +16,14 @@ class CostDef:
         return
 
 
-    def emit_default_def(self, struct_definer, cost_name = "hydride:cost"):
+    def emit_default_def(self, struct_definer, cost_name = "hydride:cost", use_label = False):
         defaults = []
 
 
 
-        defaults.append("[(idx-i id) {}]".format(IDX_I_COST))
-        defaults.append("[(idx-j id) {}]".format(IDX_J_COST))
         defaults.append("[(reg id) 1]")
         defaults.append("[(lit v) {} ]".format(LIT_COST))
-        defaults.append("[(nop v1) (+ {} ({} v1))]".format(NOP_COST, cost_name))
 
-        defaults.append("[(dim-x id) {}]".format(DEFAULT_COST))
-        defaults.append("[(dim-y id) {}]".format(DEFAULT_COST))
-
-
-        defaults.append("[(idx-add i1 i2) (+ {} ({} i1) ({} i2))]".format(DEFAULT_COST, cost_name, cost_name))
-        defaults.append("[(idx-mul i1 i2) (+ {} ({} i1) ({} i2))]".format(DEFAULT_COST, cost_name, cost_name))
 
         for struct in default_structs:
             defaults.append(self.emit_dsl_cost_def(struct, struct_definer, use_label = False, cost_name = cost_name)[1])
@@ -69,6 +60,7 @@ class CostDef:
         if use_label:
             cost_clause = "(+ {} {})".format(cost_label, " ".join(sub_cost))
         else:
+            def_cost = ""
             cost_clause = "(+ {} {})".format(dsl_cost, " ".join(sub_cost))
 
 
@@ -82,13 +74,13 @@ class CostDef:
 
 
     def emit_fallback_def(self):
-        return "\t[_ {}]".format(DEFAULT_COST)
+        return "\t[v  (error \"Unrecognized Term in cost model\")]"
 
-    def emit_cost_model(self, dsl_list, struct_definer, cost_name = "hydride:cost"):
+    def emit_cost_model(self, dsl_list, struct_definer, cost_name = "hydride:cost", use_label = True):
         default_costs = self.emit_default_def(struct_definer, cost_name = cost_name)
 
 
-        dsl_costs = [self.emit_dsl_cost_def(dsl_inst, struct_definer, cost_name = cost_name) for dsl_inst in dsl_list ]
+        dsl_costs = [self.emit_dsl_cost_def(dsl_inst, struct_definer, cost_name = cost_name, use_label = use_label) for dsl_inst in dsl_list ]
 
         cost_defs = [dsl_cost[0] for dsl_cost in dsl_costs] +["\n"]
 

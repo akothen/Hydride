@@ -15,12 +15,13 @@ from BindDef import BindDef
 from Specification import Specification, parse_spec
 from VisitorDef import VisitorDef
 
+from hvx_sema import hvx_semantics
 from GrammarGenerator import GrammarGenerator
 
 from Synthesizer import Synthesizer
 from ConstFold import ConstFold
 
-dsl_list = parse_dict(semantcs)
+dsl_list = parse_dict(hvx_semantics)
 
 print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
 print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
@@ -31,9 +32,9 @@ idd = InterpreterDef()
 cd = CostDef()
 #sp = parse_spec(specification)
 gg = GrammarGenerator()
-gl = GetLengthDef(get_len_name = "get-length")
-gp = GetOutPrecDef(get_prec_name = "get-prec")
-ip = IRPrinter(printer_name = "hydride-printer")
+gl = GetLengthDef(get_len_name = "hvx:get-length")
+gp = GetOutPrecDef(get_prec_name = "hvx:get-prec")
+ip = IRPrinter(printer_name = "hvx:hydride-printer")
 bd = BindDef()
 vd = VisitorDef()
 
@@ -77,9 +78,9 @@ with open("gen.rkt","w+") as RacketFile:
     write_to_file(sd.emit_struct_defs(dsl_list))
 
 
-    write_to_file(cd.emit_cost_model(dsl_list, sd))
+    write_to_file(cd.emit_cost_model(dsl_list, sd, cost_name = "hvx:cost"))
 
-    write_to_file(idd.emit_interpreter(dsl_list, sd, add_assertions = False))
+    write_to_file(idd.emit_interpreter(dsl_list, sd, add_assertions = False, interpret_name = "hvx:interpret"))
 
     write_to_file(gl.emit_get_length(dsl_list, sd))
 
@@ -89,9 +90,9 @@ with open("gen.rkt","w+") as RacketFile:
 
     write_to_file(bd.emit_binder(dsl_list ,sd))
 
-    write_to_file(cf.emit_const_fold(dsl_list, sd))
+    write_to_file(cf.emit_const_fold(dsl_list, sd, const_fold_name = "hvx:const-fold"))
 
-    write_to_file(vd.emit_visitor(dsl_list, sd))
+    write_to_file(vd.emit_visitor(dsl_list, sd, visitor_name = "hvx:visitor"))
 
 
 

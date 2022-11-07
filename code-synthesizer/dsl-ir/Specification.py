@@ -54,6 +54,14 @@ class Specification:
 
         return operations
 
+    def contains_conditional(self):
+        CONDITIONAL_OPS = ["bveq", "if", "cond"]
+        self_ops = self.get_semantics_ops_list()
+        for cond in CONDITIONAL_OPS:
+            if cond in self_ops:
+                return True
+        return False
+
 
     def parse_args(self, args):
 

@@ -24,7 +24,8 @@ BV_OPS = [
     "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
     "bvmulnsw", "bvmulnuw","if", "abs", "cond",
     "bvsmax", "bvumax", "bvsmin", "bvumin",
-    "bvrol", "bvror"
+    "bvrol", "bvror",
+    "ramp"
 ]
 
 BV_OP_VARIANTS = [

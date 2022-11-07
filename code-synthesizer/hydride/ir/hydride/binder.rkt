@@ -22,820 +22,812 @@
 ;;                                DSL Binder
 ;; ================================================================================
 (define (bind-expr prog env)
-  (destruct prog
-            [(dim-x id) (dim-x id)]
-            [(dim-y id) (dim-y id)]
-            [(idx-i id) (idx-i id)]
-            [(idx-j id) (idx-j id)]
-            [(reg id) (vector-ref-bv env id)]
-            [(lit v) (lit v)]
-            [(nop v1) (nop (bind-expr v1 env))]
-            [(idx-add i1 i2) (idx-add i1 i2)]
-            [(idx-mul i1 i2) (idx-mul i1 i2)]
-            [ (vector-load_dsl v0 size_i_o num_2 num_3 prec_i_o)
-             (vector-load_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr num_2 env) 
-                              (bind-expr num_3 env) (bind-expr prec_i_o env))
-             ]
-            [ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
-             (vector-two-input-swizzle_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                           (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr lane_size env) 
-                                           (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
-             (interleave-vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
-                                     (bind-expr prec_i_o env))
-             ]
-            [ (interleave-vector_dsl v0 size_i_o prec_i_o)
-             (interleave-vector_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr prec_i_o env))
-             ]
-            [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-             (deinterleave-vector_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr prec_i_o env))
-             ]
-            [ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
-             (llvm:shuffle-vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i_o env) (bind-expr v4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)
-             (_mm_sub_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                               (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_extracti32x4_epi32_dsl v0 v1 v2 v3 prec_i_o)
-             (_mm512_mask_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                                 (bind-expr v3 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_maskz_sllv_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8 num_9)
-             (_mm_maskz_sllv_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                       (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                       (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
-                                       (bind-expr num_9 env))
-             ]
-            [ (_mm256_mask_adds_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm256_mask_adds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                         (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_mask_cmplt_epi16_mask_dsl v0 vc_1 vc_2 v3 v4 vc_5 num_6 prec_i num_8)
-             (_mm_mask_cmplt_epi16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                            (bind-expr v3 env) (bind-expr v4 env) (bind-expr vc_5 env) 
-                                            (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
-             ]
-            [ (_mm_mask_madd_epi16_dsl v0 v1 v2 v3 num_4)
-             (_mm_mask_madd_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                      (bind-expr v3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm_mask_srl_epi16_dsl v0 vc_1 v2 vc_3 v4 v5 num_6 prec_i_o num_8)
-             (_mm_mask_srl_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                     (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                     (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
-             ]
-            [ (_mm_mulhi_pi16_dsl v0 v1 num_2 prec_i_o num_4 num_5)
-             (_mm_mulhi_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm_maskz_cvtepu8_epi32_dsl v0 vc_1 v2 num_3 num_4 prec_i_o)
-             (_mm_maskz_cvtepu8_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                          (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_hadd_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-             (_mm_hadd_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env) 
-                                 (bind-expr num_9 env))
-             ]
-            [ (_mm_hsubs_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
-             (_mm_hsubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                  (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                  (bind-expr num_6 env))
-             ]
-            [ (_mm256_extract_epi16_dsl vc_0 v1 v2 num_3 num_4 prec_o prec_i num_7 num_8)
-             (_mm256_extract_epi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                       (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_o env) 
-                                       (bind-expr prec_i env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm_sra_epi64_dsl v0 v1 num_2)
-             (_mm_sra_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm256_div_epi16_dsl v0 v1 num_2 prec_i_o num_4)
-             (_mm256_div_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm_mask_subs_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm_mask_subs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                      (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_hadds_epi16_dsl v0 v1)
-             (_mm256_hadds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm256_hsub_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
-             (_mm256_hsub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                    (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm512_maskz_madd52lo_epu64_dsl v0 vc_1 v2 v3 v4 num_5 num_6)
-             (_mm512_maskz_madd52lo_epu64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                              (bind-expr v3 env) (bind-expr v4 env) (bind-expr num_5 env) 
-                                              (bind-expr num_6 env))
-             ]
-            [ (_mm256_maskz_extracti64x2_epi64_dsl v0 v1 vc_2 v3 num_4 prec_i_o num_6 num_7)
-             (_mm256_maskz_extracti64x2_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                                  (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                                  (bind-expr num_6 env) (bind-expr num_7 env))
-             ]
-            [ (_mm_maskz_cvtepi16_epi8_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
-             (_mm_maskz_cvtepi16_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                          (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
-                                          (bind-expr num_6 env))
-             ]
-            [ (_mm_hsub_pi32_dsl v0 v1)
-             (_mm_hsub_pi32_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm256_mask_max_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm256_mask_max_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmplt_epi16_dsl v0 vc_1 vc_2 v3 prec_i_o)
-             (_mm_cmplt_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                  (bind-expr v3 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_srli_pi32_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
-             (_mm_srli_pi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmple_epu16_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmple_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_movepi64_mask_dsl v0 vc_1 vc_2 num_3 num_4 num_5 num_6)
-             (_mm512_movepi64_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                       (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                       (bind-expr num_6 env))
-             ]
-            [ (_mm256_testn_epi16_mask_dsl v0 vc_1 vc_2 vc_3 v4 num_5 prec_i num_7)
-             (_mm256_testn_epi16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                          (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env) 
-                                          (bind-expr prec_i env) (bind-expr num_7 env))
-             ]
-            [ (_mm512_maskz_sll_epi32_dsl v0 v1 vc_2 vc_3 vc_4 v5 num_6 prec_i_o num_8)
-             (_mm512_maskz_sll_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                         (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                         (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_mask_mul_epi32_dsl v0 v1 v2 v3 num_4)
-             (_mm256_mask_mul_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_cmpneq_epi8_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm512_cmpneq_epi8_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                          (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm_mulhrs_pi16_dsl v0 v1 num_2)
-             (_mm_mulhrs_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_max_epi16_dsl v0 v1 num_2 prec_i_o)
-             (_mm512_max_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_madd52lo_epu64_dsl v0 v1 v2 num_3 num_4)
-             (_mm512_madd52lo_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr num_3 env) (bind-expr num_4 env))
-             ]
-            [ (_m_por_dsl v0 v1 num_2 prec_i_o)
-             (_m_por_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                         (bind-expr prec_i_o env))
-             ]
-            [ (_mm_unpackhi_epi8_dsl v0 v1 num_2 prec_i_o num_4 num_5)
-             (_mm_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                    (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_mask_mul_epu32_dsl v0 v1 v2 v3 num_4)
-             (_mm256_mask_mul_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm256_maskz_mulhi_epi16_dsl v0 vc_1 v2 v3 num_4 num_5)
-             (_mm256_maskz_mulhi_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm_mul_epi32_dsl v0 v1 num_2)
-             (_mm_mul_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_packus_epi16_dsl v0 v1 size_i_o num_3 prec_o num_5 prec_i)
-             (_mm512_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
-                                      (bind-expr num_3 env) (bind-expr prec_o env) (bind-expr num_5 env) 
-                                      (bind-expr prec_i env))
-             ]
-            [ (_mm512_sllv_epi64_dsl vc_0 v1 vc_2 v3 num_4 prec_i_o num_6)
-             (_mm512_sllv_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                    (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                    (bind-expr num_6 env))
-             ]
-            [ (_mm_unpacklo_epi64_dsl v0 v1 num_2 prec_i_o num_4)
-             (_mm_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                     (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm_maskz_dpbusds_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
-             (_mm_maskz_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
-             ]
-            [ (_m_paddsb_dsl v0 v1 num_2 prec_i_o)
-             (_m_paddsb_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                            (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cvtsepi64_epi16_dsl v0 num_1 prec_o prec_i num_4)
-             (_mm_cvtsepi64_epi16_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
-                                      (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_mask_testn_epi32_mask_dsl v0 vc_1 vc_2 v3 vc_4 vc_5 v6 num_7 prec_i num_9)
-             (_mm512_mask_testn_epi32_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                               (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
-                                               (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i env) 
-                                               (bind-expr num_9 env))
-             ]
-            [ (_m_pminub_dsl v0 v1 num_2 prec_i_o)
-             (_m_pminub_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                            (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_srl_epi64_dsl v0 vc_1 v2 num_3)
-             (_mm256_srl_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                   (bind-expr num_3 env))
-             ]
-            [ (_mm_srlv_epi32_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o num_6)
-             (_mm_srlv_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                 (bind-expr num_6 env))
-             ]
-            [ (_mm512_srav_epi64_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o num_7)
-             (_mm512_srav_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                    (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
-                                    (bind-expr prec_i_o env) (bind-expr num_7 env))
-             ]
-            [ (_mm256_maskz_slli_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8)
-             (_mm256_maskz_slli_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                          (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                          (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
-             ]
-            [ (_mm_mulhi_epu16_dsl v0 v1 num_2 prec_i_o num_4 num_5)
-             (_mm_mulhi_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                  (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_maskz_adds_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm256_maskz_adds_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                         (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_mask_cmplt_epu16_mask_dsl v0 v1 vc_2 vc_3 v4 vc_5 num_6 prec_i num_8)
-             (_mm_mask_cmplt_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                            (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr vc_5 env) 
-                                            (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_mask_maddubs_epi16_dsl v0 v1 v2 v3 num_4)
-             (_mm256_mask_maddubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_mask_ror_epi32_dsl v0 vc_1 vc_2 v3 v4 v5 num_6 prec_i_o)
-             (_mm512_mask_ror_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                        (bind-expr v3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                        (bind-expr num_6 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_broadcast_i64x4_dsl v0 num_1 prec_i_o num_3)
-             (_mm512_broadcast_i64x4_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env) 
-                                         (bind-expr num_3 env))
-             ]
-            [ (_mm_maskz_broadcastq_epi64_dsl v0 vc_1 v2 num_3 prec_i_o)
-             (_mm_maskz_broadcastq_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                             (bind-expr num_3 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_fmadd_epi32_dsl v0 v1 v2 v3)
-             (_mm512_mask_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env))
-             ]
-            [ (_mm256_avg_epu16_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm256_avg_epu16_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                   (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_min_epu16_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm512_mask_min_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cvtepi64_epi32_dsl v0 num_1 prec_o prec_i num_4)
-             (_mm_cvtepi64_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
-                                     (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm_cmpgt_pi32_dsl vc_0 v1 v2 vc_3 num_4 prec_i_o)
-             (_mm_cmpgt_pi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                 (bind-expr vc_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_dpbusd_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
-             (_mm512_maskz_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
-             ]
-            [ (_mm256_mask_abs_epi64_dsl v0 v1 v2 num_3 prec_i_o)
-             (_mm256_mask_abs_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr num_3 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_mask_sll_epi64_dsl v0 v1 v2 vc_3 v4 num_5)
-             (_mm256_mask_sll_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm_maskz_unpackhi_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
-             (_mm_maskz_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm512_mask_sub_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm512_mask_sub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_xor_epi32_dsl v0 v1 num_2 prec_i_o)
-             (_mm_xor_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                (bind-expr prec_i_o env))
-             ]
-            [ (_mm_blendv_epi8_dsl v0 v1 v2 num_3)
-             (_mm_blendv_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                  (bind-expr num_3 env))
-             ]
-            [ (_mm_movepi64_pi64_dsl v0 num_1 prec_i_o num_3)
-             (_mm_movepi64_pi64_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env) 
-                                    (bind-expr num_3 env))
-             ]
-            [ (_mm256_movm_epi64_dsl v0 vc_1 vc_2 num_3 prec_i_o)
-             (_mm256_movm_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                    (bind-expr num_3 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_sign_epi8_dsl v0 vc_1 vc_2 vc_3 v4 num_5 prec_i_o num_7 num_8)
-             (_mm256_sign_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                   (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env) 
-                                   (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_maskz_cvtusepi64_epi16_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
-             (_mm256_maskz_cvtusepi64_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                                (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
-                                                (bind-expr num_6 env))
-             ]
-            [ (_mm_packus_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 prec_o num_7 prec_i num_9)
-             (_mm_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                   (bind-expr prec_o env) (bind-expr num_7 env) (bind-expr prec_i env) 
-                                   (bind-expr num_9 env))
-             ]
-            [ (_mm512_max_epu64_dsl v0 v1 num_2 prec_i_o)
-             (_mm512_max_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_subs_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm512_maskz_subs_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                         (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_ror_epi64_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm512_ror_epi64_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                   (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_abs_epi16_dsl v0 num_1 prec_i_o)
-             (_mm256_abs_epi16_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_maskz_min_epi8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm_maskz_min_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                     (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_mulhi_epi32_dsl v0 v1 v2 v3)
-             (_mm512_mask_mulhi_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env))
-             ]
-            [ (_mm_sll_epi64_dsl v0 vc_1 v2 num_3)
-             (_mm_sll_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                (bind-expr num_3 env))
-             ]
-            [ (_mm256_unpacklo_epi64_dsl v0 v1 num_2)
-             (_mm256_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_cmpgt_epi16_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm512_cmpgt_epi16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                          (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_mul_epu32_dsl v0 v1 num_2)
-             (_mm512_mul_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3)
-             (_mm512_mask_div_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env))
-             ]
-            [ (_mm_dpbusds_epi32_dsl v0 v1 v2 size_i)
-             (_mm_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                    (bind-expr size_i env))
-             ]
-            [ (_mm_maddubs_pi16_dsl v0 v1 num_2)
-             (_mm_maddubs_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_extracti32x4_epi32_dsl v0 v1)
-             (_mm512_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm512_maskz_srlv_epi32_dsl vc_0 v1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8 num_9)
-             (_mm512_maskz_srlv_epi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                          (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
-                                          (bind-expr num_9 env))
-             ]
-            [ (_mm512_div_epu16_dsl v0 v1 num_2 prec_i_o num_4)
-             (_mm512_div_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_mask3_fmadd_epi32_dsl v0 v1 v2 v3)
-             (_mm512_mask3_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env))
-             ]
-            [ (_mm256_dpwssds_epi32_dsl v0 v1 v2 size_i)
-             (_mm256_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                       (bind-expr size_i env))
-             ]
-            [ (_mm256_cvtepi8_epi32_dsl v0 num_1 prec_i prec_o)
-             (_mm256_cvtepi8_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
-                                       (bind-expr prec_o env))
-             ]
-            [ (_mm_maskz_or_epi64_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm_maskz_or_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                     (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmplt_epu16_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmplt_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_mask_rem_epu32_dsl v0 v1 v2 v3)
-             (_mm512_mask_rem_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env))
-             ]
-            [ (_mm512_mask_dpwssds_epi32_dsl v0 v1 v2 v3 size_i_o)
-             (_mm512_mask_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr size_i_o env))
-             ]
-            [ (_mm256_hadd_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
-             (_mm256_hadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                    (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_rorv_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm256_rorv_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                    (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_hsub_epi32_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
-             (_mm_hsub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env) 
-                                 (bind-expr num_9 env))
-             ]
-            [ (_mm256_srai_epi32_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o)
-             (_mm256_srai_epi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                    (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
-                                    (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_avg_epu16_dsl v0 vc_1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
-             (_mm512_maskz_avg_epu16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                         (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                         (bind-expr num_6 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmpeq_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm_cmpeq_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                  (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_mask_dpwssd_epi32_dsl v0 v1 v2 v3 size_i_o)
-             (_mm_mask_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr size_i_o env))
-             ]
-            [ (_mm512_subs_epi16_dsl v0 v1 num_2 prec_i_o)
-             (_mm512_subs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                    (bind-expr prec_i_o env))
-             ]
-            [ (_mm_maskz_sra_epi64_dsl v0 v1 v2 vc_3 num_4)
-             (_mm_maskz_sra_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                      (bind-expr vc_3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm_sll_pi16_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
-             (_mm_sll_pi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                               (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmpge_epu64_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmpge_epu64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_andnot_epi32_dsl v0 v1 num_2 prec_i_o)
-             (_mm512_andnot_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                      (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mulhi_epi32_dsl v0 v1)
-             (_mm512_mulhi_epi32_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm256_unpacklo_epi32_dsl v0 v1 size_i_o prec_i_o num_4)
-             (_mm256_unpacklo_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
-                                        (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_maskz_xor_epi32_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm512_maskz_xor_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                         (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_mul_su32_dsl v0 v1)
-             (_mm_mul_su32_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm512_mask_unpackhi_epi8_dsl v0 v1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
-             (_mm512_mask_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                            (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
-                                            (bind-expr num_9 env) (bind-expr num_10 env))
-             ]
-            [ (_mm_set1_pi8_dsl v0 num_1 prec_i_o)
-             (_mm_set1_pi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_unpackhi_epi64_dsl v0 v1 num_2)
-             (_mm512_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm_mask_srav_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 v6 num_7 prec_i_o num_9 num_10)
-             (_mm_mask_srav_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                      (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                      (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
-                                      (bind-expr num_9 env) (bind-expr num_10 env))
-             ]
-            [ (_mm256_maskz_unpacklo_epi8_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
-             (_mm256_maskz_unpacklo_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                             (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                             (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
-                                             (bind-expr num_9 env) (bind-expr num_10 env))
-             ]
-            [ (_mm_maskz_broadcast_i32x2_dsl v0 vc_1 v2 num_3 prec_i_o num_5)
-             (_mm_maskz_broadcast_i32x2_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                            (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_maskz_mulhrs_epi16_dsl v0 vc_1 v2 v3 num_4)
-             (_mm256_maskz_mulhrs_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_maskz_packs_epi16_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
-             (_mm512_maskz_packs_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                           (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
-                                           (bind-expr num_9 env) (bind-expr num_10 env))
-             ]
-            [ (_mm_mask_sra_epi16_dsl vc_0 v1 v2 vc_3 vc_4 v5 v6 num_7 prec_i_o num_9)
-             (_mm_mask_sra_epi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                     (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
-                                     (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
-                                     (bind-expr num_9 env))
-             ]
-            [ (_mm512_fmadd_epi32_dsl v0 v1 v2)
-             (_mm512_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env))
-             ]
-            [ (_mm_maskz_unpackhi_epi32_dsl v0 vc_1 v2 v3 num_4 prec_i_o num_6 num_7 num_8)
-             (_mm_maskz_unpackhi_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                           (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_and_si256_dsl v0 v1 num_2 prec_i_o)
-             (_mm256_and_si256_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_mullo_epi64_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7)
-             (_mm512_mask_mullo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                          (bind-expr num_6 env) (bind-expr num_7 env))
-             ]
-            [ (_mm_hadds_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
-             (_mm_hadds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                  (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                  (bind-expr num_6 env))
-             ]
-            [ (_mm_unpacklo_epi32_dsl v0 v1 num_2 prec_i_o num_4)
-             (_mm_unpacklo_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                     (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm_cmpeq_epi64_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmpeq_epi64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm512_rem_epu16_dsl v0 v1 num_2 prec_i_o)
-             (_mm512_rem_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cvtusepi64_epi8_dsl v0 num_1 prec_o prec_i num_4)
-             (_mm_cvtusepi64_epi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
-                                      (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_m_paddusw_dsl v0 v1 num_2 prec_i_o)
-             (_m_paddusw_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                             (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_dpwssd_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
-             (_mm512_maskz_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
-             ]
-            [ (_mm_mask_dpbusd_epi32_dsl v0 v1 v2 v3 size_i_o)
-             (_mm_mask_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr size_i_o env))
-             ]
-            [ (_m_packsswb_dsl v0 v1 num_2 num_3 num_4 num_5 prec_o num_7 prec_i num_9)
-             (_m_packsswb_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                              (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                              (bind-expr prec_o env) (bind-expr num_7 env) (bind-expr prec_i env) 
-                              (bind-expr num_9 env))
-             ]
-            [ (_mm_mask_packus_epi16_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
-             (_mm_mask_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                        (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_min_epi16_dsl v0 v1 num_2 prec_i_o)
-             (_mm256_min_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env))
-             ]
-            [ (_mm_mask_madd52hi_epu64_dsl v0 v1 v2 v3 num_4 num_5)
-             (_mm_mask_madd52hi_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3)
-             (_mm512_mask_div_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env))
-             ]
-            [ (_m_psllwi_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
-             (_m_psllwi_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                            (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_broadcastmw_epi32_dsl v0 num_1 prec_i prec_o)
-             (_mm256_broadcastmw_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
-                                           (bind-expr prec_o env))
-             ]
-            [ (_mm_mask_andnot_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm_mask_andnot_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_mask_add_epi8_dsl v0 v1 v2 v3 num_4 prec_i_o)
-             (_mm256_mask_add_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                       (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_dpwssd_epi32_dsl v0 v1 v2 size_i)
-             (_mm_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                   (bind-expr size_i env))
-             ]
-            [ (_mm256_cmple_epi32_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm256_cmple_epi32_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                          (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm256_unpackhi_epi8_dsl v0 v1 size_i_o prec_i_o num_4)
-             (_mm256_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
-                                       (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm_madd_pi16_dsl v0 v1 num_2)
-             (_mm_madd_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm256_mask_cvtepi8_epi32_dsl v0 v1 v2 num_3 num_4 prec_i_o)
-             (_mm256_mask_cvtepi8_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                            (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_mask_packus_epi16_dsl v0 v1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
-             (_mm256_mask_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                           (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                           (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
-                                           (bind-expr num_9 env) (bind-expr num_10 env))
-             ]
-            [ (_mm256_packs_epi32_dsl v0 v1 size_i_o num_3 prec_o num_5 prec_i)
-             (_mm256_packs_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
-                                     (bind-expr num_3 env) (bind-expr prec_o env) (bind-expr num_5 env) 
-                                     (bind-expr prec_i env))
-             ]
-            [ (_mm_cmpgt_epu8_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmpgt_epu8_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                      (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm256_cmpge_epi64_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm256_cmpge_epi64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                          (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm_maskz_srl_epi64_dsl v0 v1 vc_2 vc_3 v4 num_5)
-             (_mm_maskz_srl_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                      (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_maskz_dpwssds_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
-             (_mm256_maskz_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                             (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
-             ]
-            [ (_m_punpckhdq_dsl v0 v1 num_2 prec_i_o num_4)
-             (_m_punpckhdq_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                               (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [ (_mm256_dpbusd_epi32_dsl v0 v1 v2 size_i)
-             (_mm256_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                      (bind-expr size_i env))
-             ]
-            [ (_mm512_mask_cmpneq_epu16_mask_dsl v0 vc_1 v2 v3 vc_4 vc_5 num_6 prec_i num_8)
-             (_mm512_mask_cmpneq_epu16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                                (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
-                                                (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
-             ]
-            [ (_mm_mask_packs_epi16_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
-             (_mm_mask_packs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                       (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
-                                       (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm_mask_rol_epi64_dsl v0 v1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
-             (_mm_mask_rol_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                                     (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                     (bind-expr num_6 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_cvtepu16_epi32_dsl v0 num_1 prec_i prec_o)
-             (_mm256_cvtepu16_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
-                                        (bind-expr prec_o env))
-             ]
-            [ (_mm_mask_unpacklo_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7 num_8)
-             (_mm_mask_unpacklo_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                          (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
-                                          (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env))
-             ]
-            [ (_mm_movemask_pi8_dsl v0 num_1 num_2)
-             (_mm_movemask_pi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr num_2 env))
-             ]
-            [ (_mm512_maskz_unpacklo_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
-             (_mm512_maskz_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                              (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm_maskz_srai_epi64_dsl v0 vc_1 v2 v3 vc_4 vc_5 vc_6 num_7 prec_i_o num_9)
-             (_mm_maskz_srai_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                       (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
-                                       (bind-expr vc_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
-                                       (bind-expr num_9 env))
-             ]
-            [ (_mm512_mask_rolv_epi64_dsl v0 vc_1 vc_2 v3 v4 v5 num_6 prec_i_o)
-             (_mm512_mask_rolv_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                         (bind-expr v3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                         (bind-expr num_6 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_hadd_pi32_dsl v0 v1)
-             (_mm_hadd_pi32_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm256_add_epi8_dsl v0 v1 num_2 prec_i_o)
-             (_mm256_add_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                  (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_maskz_rorv_epi64_dsl v0 vc_1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
-             (_mm256_maskz_rorv_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
-                                          (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                          (bind-expr num_6 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_unpackhi_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
-             (_mm512_maskz_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                              (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
-             ]
-            [ (_mm256_extract_epi8_dsl vc_0 v1 v2 num_3 num_4 prec_i num_6)
-             (_mm256_extract_epi8_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                      (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i env) 
-                                      (bind-expr num_6 env))
-             ]
-            [ (_mm256_maskz_max_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm256_maskz_max_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                        (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_sra_pi16_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o)
-             (_mm_sra_pi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
-                               (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
-                               (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_mask_cvtsepi32_epi16_dsl v0 v1 v2 num_3 prec_i_o num_5 num_6)
-             (_mm256_mask_cvtsepi32_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                              (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
-                                              (bind-expr num_6 env))
-             ]
-            [ (_mm_rolv_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm_rolv_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm256_mask_dpbusds_epi32_dsl v0 v1 v2 v3 size_i_o)
-             (_mm256_mask_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                            (bind-expr v3 env) (bind-expr size_i_o env))
-             ]
-            [ (_mm256_rol_epi64_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm256_rol_epi64_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                   (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_maskz_and_epi64_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
-             (_mm512_maskz_and_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
-                                         (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
-             ]
-            [ (_mm_cmplt_epi16_mask_dsl v0 v1 num_2 prec_i num_4)
-             (_mm_cmplt_epi16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                       (bind-expr prec_i env) (bind-expr num_4 env))
-             ]
-            [ (_mm256_blend_epi16_dsl v0 v1 v2)
-             (_mm256_blend_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env))
-             ]
-            [ (_mm256_hsubs_epi16_dsl v0 v1)
-             (_mm256_hsubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env))
-             ]
-            [ (_mm256_extracti32x4_epi32_dsl v0 v1 prec_i_o num_3)
-             (_mm256_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr prec_i_o env) 
-                                            (bind-expr num_3 env))
-             ]
-            [ (_mm_subs_epu8_dsl v0 v1 num_2 prec_i_o)
-             (_mm_subs_epu8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                (bind-expr prec_i_o env))
-             ]
-            [ (_mm512_mask_srli_epi64_dsl vc_0 v1 v2 vc_3 v4 v5 num_6 prec_i_o num_8)
-             (_mm512_mask_srli_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
-                                         (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
-                                         (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
-             ]
-            [ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
-             (_mm256_set_m128i_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
-                                   (bind-expr prec_i_o env) (bind-expr num_4 env))
-             ]
-            [v v]
-            )
-  )
+ (destruct prog
+	[(reg id) (vector-ref-bv env id)]
+	[(lit v) (lit v)]
+	[ (vector-two-input-swizzle_dsl v0 v1 num_2 prec_i_o num_4 lane_size num_6 num_7 num_8)
+		(vector-two-input-swizzle_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr lane_size env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (interleave-vectors_dsl v0 v1 size_i_o prec_i_o)
+		(interleave-vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (interleave-vector_dsl v0 size_i_o prec_i_o)
+		(interleave-vector_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr prec_i_o env))
+	]
+	[ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
+		(deinterleave-vector_dsl (bind-expr v0 env) (bind-expr size_i_o env) (bind-expr prec_i_o env))
+	]
+	[ (llvm:shuffle-vectors_dsl v0 v1 num_2 prec_i_o v4 num_5)
+		(llvm:shuffle-vectors_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr v4 env) (bind-expr num_5 env))
+	]
+	[ (_mm_sub_pi16_dsl v0 v1 num_2 prec_i_o)
+		(_mm_sub_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_extracti32x4_epi32_dsl v0 v1 v2 v3 prec_i_o)
+		(_mm512_mask_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_maskz_sllv_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8 num_9)
+		(_mm_maskz_sllv_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm256_mask_adds_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm256_mask_adds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_mask_cmplt_epi16_mask_dsl v0 vc_1 vc_2 v3 v4 vc_5 num_6 prec_i num_8)
+		(_mm_mask_cmplt_epi16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr vc_5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
+	]
+	[ (_mm_mask_madd_epi16_dsl v0 v1 v2 v3 num_4)
+		(_mm_mask_madd_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env))
+	]
+	[ (_mm_mask_srl_epi16_dsl v0 vc_1 v2 vc_3 v4 v5 num_6 prec_i_o num_8)
+		(_mm_mask_srl_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
+	]
+	[ (_mm_mulhi_pi16_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm_mulhi_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm_maskz_cvtepu8_epi32_dsl v0 vc_1 v2 num_3 num_4 prec_i_o)
+		(_mm_maskz_cvtepu8_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_hadd_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
+		(_mm_hadd_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm_hsubs_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
+		(_mm_hsubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm256_extract_epi16_dsl vc_0 v1 v2 num_3 num_4 prec_o prec_i num_7 num_8)
+		(_mm256_extract_epi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_o env) 
+		 (bind-expr prec_i env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (_mm_sra_epi64_dsl v0 v1 num_2)
+		(_mm_sra_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm256_div_epi16_dsl v0 v1 num_2 prec_i_o num_4)
+		(_mm256_div_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[ (_mm_mask_subs_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm_mask_subs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_hadds_epi16_dsl v0 v1)
+		(_mm256_hadds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm256_hsub_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm256_hsub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm512_maskz_madd52lo_epu64_dsl v0 vc_1 v2 v3 v4 num_5 num_6)
+		(_mm512_maskz_madd52lo_epu64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm256_maskz_extracti64x2_epi64_dsl v0 v1 vc_2 v3 num_4 prec_i_o num_6 num_7)
+		(_mm256_maskz_extracti64x2_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env))
+	]
+	[ (_mm_maskz_cvtepi16_epi8_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
+		(_mm_maskz_cvtepi16_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_hsub_pi32_dsl v0 v1)
+		(_mm_hsub_pi32_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm256_mask_max_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm256_mask_max_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmplt_epi16_dsl v0 vc_1 vc_2 v3 prec_i_o)
+		(_mm_cmplt_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_srli_pi32_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
+		(_mm_srli_pi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmple_epu16_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmple_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_movepi64_mask_dsl v0 vc_1 vc_2 num_3 num_4 num_5 num_6)
+		(_mm512_movepi64_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm256_testn_epi16_mask_dsl v0 vc_1 vc_2 vc_3 v4 num_5 prec_i num_7)
+		(_mm256_testn_epi16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i env) (bind-expr num_7 env))
+	]
+	[ (_mm512_maskz_sll_epi32_dsl v0 v1 vc_2 vc_3 vc_4 v5 num_6 prec_i_o num_8)
+		(_mm512_maskz_sll_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
+	]
+	[ (_mm256_mask_mul_epi32_dsl v0 v1 v2 v3 num_4)
+		(_mm256_mask_mul_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env))
+	]
+	[ (_mm512_cmpneq_epi8_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm512_cmpneq_epi8_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm_mulhrs_pi16_dsl v0 v1 num_2)
+		(_mm_mulhrs_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm512_max_epi16_dsl v0 v1 num_2 prec_i_o)
+		(_mm512_max_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_madd52lo_epu64_dsl v0 v1 v2 num_3 num_4)
+		(_mm512_madd52lo_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env))
+	]
+	[ (_m_por_dsl v0 v1 num_2 prec_i_o)
+		(_m_por_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_unpackhi_epi8_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_mask_mul_epu32_dsl v0 v1 v2 v3 num_4)
+		(_mm256_mask_mul_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env))
+	]
+	[ (_mm256_maskz_mulhi_epi16_dsl v0 vc_1 v2 v3 num_4 num_5)
+		(_mm256_maskz_mulhi_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm_mul_epi32_dsl v0 v1 num_2)
+		(_mm_mul_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm512_packus_epi16_dsl v0 v1 size_i_o num_3 prec_o num_5 prec_i)
+		(_mm512_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
+		 (bind-expr num_3 env) (bind-expr prec_o env) (bind-expr num_5 env) 
+		 (bind-expr prec_i env))
+	]
+	[ (_mm512_sllv_epi64_dsl vc_0 v1 vc_2 v3 num_4 prec_i_o num_6)
+		(_mm512_sllv_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_unpacklo_epi64_dsl v0 v1 num_2 prec_i_o num_4)
+		(_mm_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[ (_mm_maskz_dpbusds_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
+		(_mm_maskz_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
+	]
+	[ (_m_paddsb_dsl v0 v1 num_2 prec_i_o)
+		(_m_paddsb_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_cvtsepi64_epi16_dsl v0 num_1 prec_o prec_i num_4)
+		(_mm_cvtsepi64_epi16_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_mask_testn_epi32_mask_dsl v0 vc_1 vc_2 v3 vc_4 vc_5 v6 num_7 prec_i num_9)
+		(_mm512_mask_testn_epi32_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
+		 (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_m_pminub_dsl v0 v1 num_2 prec_i_o)
+		(_m_pminub_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm256_srl_epi64_dsl v0 vc_1 v2 num_3)
+		(_mm256_srl_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm_srlv_epi32_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o num_6)
+		(_mm_srlv_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm512_srav_epi64_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o num_7)
+		(_mm512_srav_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env))
+	]
+	[ (_mm256_maskz_slli_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8)
+		(_mm256_maskz_slli_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
+	]
+	[ (_mm_mulhi_epu16_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm_mulhi_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_maskz_adds_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm256_maskz_adds_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_mask_cmplt_epu16_mask_dsl v0 v1 vc_2 vc_3 v4 vc_5 num_6 prec_i num_8)
+		(_mm_mask_cmplt_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr vc_5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
+	]
+	[ (_mm256_mask_maddubs_epi16_dsl v0 v1 v2 v3 num_4)
+		(_mm256_mask_maddubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env))
+	]
+	[ (_mm512_mask_ror_epi32_dsl v0 vc_1 vc_2 v3 v4 v5 num_6 prec_i_o)
+		(_mm512_mask_ror_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_broadcast_i64x4_dsl v0 num_1 prec_i_o num_3)
+		(_mm512_broadcast_i64x4_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm_maskz_broadcastq_epi64_dsl v0 vc_1 v2 num_3 prec_i_o)
+		(_mm_maskz_broadcastq_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_fmadd_epi32_dsl v0 v1 v2 v3)
+		(_mm512_mask_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_mm256_avg_epu16_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm256_avg_epu16_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_min_epu16_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm512_mask_min_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cvtepi64_epi32_dsl v0 num_1 prec_o prec_i num_4)
+		(_mm_cvtepi64_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm_cmpgt_pi32_dsl vc_0 v1 v2 vc_3 num_4 prec_i_o)
+		(_mm_cmpgt_pi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_dpbusd_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
+		(_mm512_maskz_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
+	]
+	[ (_mm256_mask_abs_epi64_dsl v0 v1 v2 num_3 prec_i_o)
+		(_mm256_mask_abs_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_mask_sll_epi64_dsl v0 v1 v2 vc_3 v4 num_5)
+		(_mm256_mask_sll_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env))
+	]
+	[ (_mm_maskz_unpackhi_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
+		(_mm_maskz_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm512_mask_sub_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm512_mask_sub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_xor_epi32_dsl v0 v1 num_2 prec_i_o)
+		(_mm_xor_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_blendv_epi8_dsl v0 v1 v2 num_3)
+		(_mm_blendv_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm_movepi64_pi64_dsl v0 num_1 prec_i_o num_3)
+		(_mm_movepi64_pi64_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm256_movm_epi64_dsl v0 vc_1 vc_2 num_3 prec_i_o)
+		(_mm256_movm_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_sign_epi8_dsl v0 vc_1 vc_2 vc_3 v4 num_5 prec_i_o num_7 num_8)
+		(_mm256_sign_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (_mm256_maskz_cvtusepi64_epi16_dsl v0 vc_1 v2 num_3 prec_i_o num_5 num_6)
+		(_mm256_maskz_cvtusepi64_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_packus_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 prec_o num_7 prec_i num_9)
+		(_mm_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_o env) (bind-expr num_7 env) (bind-expr prec_i env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm512_max_epu64_dsl v0 v1 num_2 prec_i_o)
+		(_mm512_max_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_subs_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm512_maskz_subs_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_ror_epi64_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm512_ror_epi64_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_abs_epi16_dsl v0 num_1 prec_i_o)
+		(_mm256_abs_epi16_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_maskz_min_epi8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm_maskz_min_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_mulhi_epi32_dsl v0 v1 v2 v3)
+		(_mm512_mask_mulhi_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_mm_sll_epi64_dsl v0 vc_1 v2 num_3)
+		(_mm_sll_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm256_unpacklo_epi64_dsl v0 v1 num_2 num_3)
+		(_mm256_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm512_cmpgt_epi16_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm512_cmpgt_epi16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_mul_epu32_dsl v0 v1 num_2)
+		(_mm512_mul_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm512_mask_div_epu32_dsl v0 v1 v2 v3)
+		(_mm512_mask_div_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_mm_dpbusds_epi32_dsl v0 v1 v2 size_i)
+		(_mm_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr size_i env))
+	]
+	[ (_mm_maddubs_pi16_dsl v0 v1 num_2)
+		(_mm_maddubs_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm512_extracti32x4_epi32_dsl v0 v1)
+		(_mm512_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm512_maskz_srlv_epi32_dsl vc_0 v1 v2 vc_3 vc_4 v5 num_6 prec_i_o num_8 num_9)
+		(_mm512_maskz_srlv_epi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm512_div_epu16_dsl v0 v1 num_2 prec_i_o num_4)
+		(_mm512_div_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[ (_mm512_mask3_fmadd_epi32_dsl v0 v1 v2 v3)
+		(_mm512_mask3_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_mm256_dpwssds_epi32_dsl v0 v1 v2 size_i)
+		(_mm256_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr size_i env))
+	]
+	[ (_mm256_cvtepi8_epi32_dsl v0 num_1 prec_i prec_o)
+		(_mm256_cvtepi8_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
+		 (bind-expr prec_o env))
+	]
+	[ (_mm_maskz_or_epi64_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm_maskz_or_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmplt_epu16_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmplt_epu16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_mask_rem_epu32_dsl v0 v1 v2 v3)
+		(_mm512_mask_rem_epu32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_mm512_mask_dpwssds_epi32_dsl v0 v1 v2 v3 size_i_o)
+		(_mm512_mask_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr size_i_o env))
+	]
+	[ (_mm256_hadd_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm256_hadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_rorv_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm256_rorv_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_hsub_epi32_dsl v0 v1 num_2 num_3 num_4 num_5 prec_i_o num_7 num_8 num_9)
+		(_mm_hsub_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm256_srai_epi32_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o)
+		(_mm256_srai_epi32_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_avg_epu16_dsl v0 vc_1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
+		(_mm512_maskz_avg_epu16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmpeq_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm_cmpeq_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_mask_dpwssd_epi32_dsl v0 v1 v2 v3 size_i_o)
+		(_mm_mask_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr size_i_o env))
+	]
+	[ (_mm512_subs_epi16_dsl v0 v1 num_2 prec_i_o)
+		(_mm512_subs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_maskz_sra_epi64_dsl v0 v1 v2 vc_3 num_4)
+		(_mm_maskz_sra_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr num_4 env))
+	]
+	[ (_mm_sll_pi16_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
+		(_mm_sll_pi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmpge_epu64_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmpge_epu64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_andnot_epi32_dsl v0 v1 num_2 prec_i_o)
+		(_mm512_andnot_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mulhi_epi32_dsl v0 v1)
+		(_mm512_mulhi_epi32_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm256_unpacklo_epi32_dsl v0 v1 size_i_o prec_i_o num_4)
+		(_mm256_unpacklo_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[ (_mm512_maskz_xor_epi32_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm512_maskz_xor_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_mul_su32_dsl v0 v1)
+		(_mm_mul_su32_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm512_mask_unpackhi_epi8_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+		(_mm512_mask_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env) (bind-expr num_10 env))
+	]
+	[ (_mm_set1_pi8_dsl v0 num_1 prec_i_o)
+		(_mm_set1_pi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_unpackhi_epi64_dsl v0 v1 num_2)
+		(_mm512_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm_mask_srav_epi16_dsl v0 vc_1 v2 vc_3 vc_4 v5 v6 num_7 prec_i_o num_9 num_10)
+		(_mm_mask_srav_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_9 env) (bind-expr num_10 env))
+	]
+	[ (_mm256_maskz_unpacklo_epi8_dsl v0 v1 v2 v3 num_4 num_5 num_6 prec_i_o num_8 num_9 num_10)
+		(_mm256_maskz_unpacklo_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env) (bind-expr num_10 env))
+	]
+	[ (_mm_maskz_broadcast_i32x2_dsl v0 vc_1 v2 num_3 prec_i_o num_5)
+		(_mm_maskz_broadcast_i32x2_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env))
+	]
+	[ (_mm256_maskz_mulhrs_epi16_dsl v0 vc_1 v2 v3 num_4)
+		(_mm256_maskz_mulhrs_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env))
+	]
+	[ (_mm512_maskz_packs_epi16_dsl v0 v1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(_mm512_maskz_packs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_9 env) (bind-expr num_10 env))
+	]
+	[ (_mm_mask_sra_epi16_dsl vc_0 v1 v2 vc_3 vc_4 v5 v6 num_7 prec_i_o num_9)
+		(_mm_mask_sra_epi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr vc_4 env) (bind-expr v5 env) 
+		 (bind-expr v6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm512_fmadd_epi32_dsl v0 v1 v2)
+		(_mm512_fmadd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env))
+	]
+	[ (_mm_maskz_unpackhi_epi32_dsl v0 vc_1 v2 v3 num_4 prec_i_o num_6 num_7 num_8)
+		(_mm_maskz_unpackhi_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (_mm256_and_si256_dsl v0 v1 num_2 prec_i_o)
+		(_mm256_and_si256_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_mullo_epi64_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7)
+		(_mm512_mask_mullo_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env))
+	]
+	[ (_mm_hadds_epi16_dsl v0 v1 num_2 num_3 num_4 num_5 num_6)
+		(_mm_hadds_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_unpacklo_epi32_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_mm_unpacklo_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm_cmpeq_epi64_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmpeq_epi64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm512_rem_epu16_dsl v0 v1 num_2 prec_i_o)
+		(_mm512_rem_epu16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_cvtusepi64_epi8_dsl v0 num_1 prec_o prec_i num_4)
+		(_mm_cvtusepi64_epi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_o env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_m_paddusw_dsl v0 v1 num_2 prec_i_o)
+		(_m_paddusw_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_dpwssd_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
+		(_mm512_maskz_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
+	]
+	[ (_mm_mask_dpbusd_epi32_dsl v0 v1 v2 v3 size_i_o)
+		(_mm_mask_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr size_i_o env))
+	]
+	[ (_m_packsswb_dsl v0 v1 num_2 num_3 num_4 num_5 prec_o num_7 prec_i num_9)
+		(_m_packsswb_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_o env) (bind-expr num_7 env) (bind-expr prec_i env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm_mask_packus_epi16_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
+		(_mm_mask_packus_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (_mm256_min_epi16_dsl v0 v1 num_2 prec_i_o)
+		(_mm256_min_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm_mask_madd52hi_epu64_dsl v0 v1 v2 v3 num_4 num_5)
+		(_mm_mask_madd52hi_epu64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm512_mask_div_epi32_dsl v0 v1 v2 v3)
+		(_mm512_mask_div_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env))
+	]
+	[ (_m_psllwi_dsl v0 vc_1 vc_2 v3 num_4 prec_i_o)
+		(_m_psllwi_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_broadcastmw_epi32_dsl v0 num_1 prec_i prec_o)
+		(_mm256_broadcastmw_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
+		 (bind-expr prec_o env))
+	]
+	[ (_mm_mask_andnot_epi32_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm_mask_andnot_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_mask_add_epi8_dsl v0 v1 v2 v3 num_4 prec_i_o)
+		(_mm256_mask_add_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_dpwssd_epi32_dsl v0 v1 v2 size_i)
+		(_mm_dpwssd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr size_i env))
+	]
+	[ (_mm256_cmple_epi32_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm256_cmple_epi32_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm256_unpackhi_epi8_dsl v0 v1 size_i_o prec_i_o num_4)
+		(_mm256_unpackhi_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[ (_mm_madd_pi16_dsl v0 v1 num_2)
+		(_mm_madd_pi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env))
+	]
+	[ (_mm256_mask_cvtepi8_epi32_dsl v0 v1 v2 num_3 num_4 prec_i_o)
+		(_mm256_mask_cvtepi8_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_mask_packus_epi16_dsl v0 vc_1 v2 v3 num_4 num_5 num_6 num_7 prec_i_o num_9 num_10)
+		(_mm256_mask_packus_epi16_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_9 env) (bind-expr num_10 env))
+	]
+	[ (_mm256_packs_epi32_dsl v0 v1 size_i_o num_3 prec_o num_5 prec_i)
+		(_mm256_packs_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr size_i_o env) 
+		 (bind-expr num_3 env) (bind-expr prec_o env) (bind-expr num_5 env) 
+		 (bind-expr prec_i env))
+	]
+	[ (_mm_cmpgt_epu8_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmpgt_epu8_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm256_cmpge_epi64_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm256_cmpge_epi64_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm_maskz_srl_epi64_dsl v0 v1 vc_2 vc_3 v4 num_5)
+		(_mm_maskz_srl_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_maskz_dpwssds_epi32_dsl v0 vc_1 v2 v3 v4 size_i_o)
+		(_mm256_maskz_dpwssds_epi32_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr size_i_o env))
+	]
+	[ (_m_punpckhdq_dsl v0 v1 num_2 prec_i_o num_4 num_5)
+		(_m_punpckhdq_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_dpbusd_epi32_dsl v0 v1 v2 size_i)
+		(_mm256_dpbusd_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr size_i env))
+	]
+	[ (_mm512_mask_cmpneq_epu16_mask_dsl v0 vc_1 v2 v3 vc_4 vc_5 num_6 prec_i num_8)
+		(_mm512_mask_cmpneq_epu16_mask_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i env) (bind-expr num_8 env))
+	]
+	[ (_mm_mask_packs_epi16_dsl v0 v1 v2 v3 num_4 num_5 prec_i_o num_7 num_8)
+		(_mm_mask_packs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_7 env) (bind-expr num_8 env))
+	]
+	[ (_mm_mask_rol_epi64_dsl v0 v1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
+		(_mm_mask_rol_epi64_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_cvtepu16_epi32_dsl v0 num_1 prec_i prec_o)
+		(_mm256_cvtepu16_epi32_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr prec_i env) 
+		 (bind-expr prec_o env))
+	]
+	[ (_mm_mask_unpacklo_epi16_dsl v0 v1 v2 v3 num_4 prec_i_o num_6 num_7 num_8 num_9)
+		(_mm_mask_unpacklo_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_6 env) (bind-expr num_7 env) (bind-expr num_8 env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm_movemask_pi8_dsl v0 num_1 num_2)
+		(_mm_movemask_pi8_dsl (bind-expr v0 env) (bind-expr num_1 env) (bind-expr num_2 env))
+	]
+	[ (_mm512_maskz_unpacklo_epi64_dsl v0 vc_1 v2 v3 num_4 num_5 num_6)
+		(_mm512_maskz_unpacklo_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_maskz_srai_epi64_dsl v0 vc_1 v2 v3 vc_4 vc_5 vc_6 num_7 prec_i_o num_9)
+		(_mm_maskz_srai_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr vc_5 env) 
+		 (bind-expr vc_6 env) (bind-expr num_7 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_9 env))
+	]
+	[ (_mm512_mask_rolv_epi64_dsl v0 vc_1 vc_2 v3 v4 v5 num_6 prec_i_o)
+		(_mm512_mask_rolv_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_hadd_pi32_dsl v0 v1)
+		(_mm_hadd_pi32_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm256_add_epi8_dsl v0 v1 num_2 prec_i_o)
+		(_mm256_add_epi8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm256_maskz_rorv_epi64_dsl v0 vc_1 vc_2 vc_3 v4 v5 num_6 prec_i_o)
+		(_mm256_maskz_rorv_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr vc_2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_unpackhi_epi64_dsl v0 vc_1 v2 v3 num_4 num_5)
+		(_mm512_maskz_unpackhi_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr num_5 env))
+	]
+	[ (_mm256_extract_epi8_dsl vc_0 v1 v2 num_3 num_4 prec_i num_6)
+		(_mm256_extract_epi8_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr num_4 env) (bind-expr prec_i env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm256_maskz_max_epu8_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm256_maskz_max_epu8_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_sra_pi16_dsl vc_0 v1 vc_2 v3 vc_4 num_5 prec_i_o)
+		(_mm_sra_pi16_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr vc_2 env) 
+		 (bind-expr v3 env) (bind-expr vc_4 env) (bind-expr num_5 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm256_mask_cvtsepi32_epi16_dsl v0 v1 v2 num_3 prec_i_o num_5 num_6)
+		(_mm256_mask_cvtsepi32_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr num_3 env) (bind-expr prec_i_o env) (bind-expr num_5 env) 
+		 (bind-expr num_6 env))
+	]
+	[ (_mm_rolv_epi32_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm_rolv_epi32_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm256_mask_dpbusds_epi32_dsl v0 v1 v2 v3 size_i_o)
+		(_mm256_mask_dpbusds_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr size_i_o env))
+	]
+	[ (_mm256_rol_epi64_dsl vc_0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm256_rol_epi64_dsl (bind-expr vc_0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm512_maskz_and_epi64_dsl v0 vc_1 v2 v3 num_4 prec_i_o)
+		(_mm512_maskz_and_epi64_dsl (bind-expr v0 env) (bind-expr vc_1 env) (bind-expr v2 env) 
+		 (bind-expr v3 env) (bind-expr num_4 env) (bind-expr prec_i_o env))
+	]
+	[ (_mm_cmplt_epi16_mask_dsl v0 v1 num_2 prec_i num_4)
+		(_mm_cmplt_epi16_mask_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i env) (bind-expr num_4 env))
+	]
+	[ (_mm256_blend_epi16_dsl v0 v1 v2)
+		(_mm256_blend_epi16_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr v2 env))
+	]
+	[ (_mm256_hsubs_epi16_dsl v0 v1)
+		(_mm256_hsubs_epi16_dsl (bind-expr v0 env) (bind-expr v1 env))
+	]
+	[ (_mm256_extracti32x4_epi32_dsl v0 v1 prec_i_o num_3)
+		(_mm256_extracti32x4_epi32_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr prec_i_o env) 
+		 (bind-expr num_3 env))
+	]
+	[ (_mm_subs_epu8_dsl v0 v1 num_2 prec_i_o)
+		(_mm_subs_epu8_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env))
+	]
+	[ (_mm512_mask_srli_epi64_dsl vc_0 v1 v2 vc_3 v4 v5 num_6 prec_i_o num_8)
+		(_mm512_mask_srli_epi64_dsl (bind-expr vc_0 env) (bind-expr v1 env) (bind-expr v2 env) 
+		 (bind-expr vc_3 env) (bind-expr v4 env) (bind-expr v5 env) 
+		 (bind-expr num_6 env) (bind-expr prec_i_o env) (bind-expr num_8 env))
+	]
+	[ (_mm256_set_m128i_dsl v0 v1 num_2 prec_i_o num_4)
+		(_mm256_set_m128i_dsl (bind-expr v0 env) (bind-expr v1 env) (bind-expr num_2 env) 
+		 (bind-expr prec_i_o env) (bind-expr num_4 env))
+	]
+	[v v]
+ )
+)
 ;; ================================================================================

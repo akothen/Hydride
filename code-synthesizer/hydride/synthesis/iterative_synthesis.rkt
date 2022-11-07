@@ -11,6 +11,7 @@
 (require hydride/utils/debug)
 (require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
+(require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
 
@@ -53,6 +54,7 @@
 ;; Verify that the spec is equivalent to the synthesized results over all lanes by verifying 
 ;; each lane independently over symbolic bitvectors.
 (define (verify-across-lanes bw-list invoke_ref_lane invoke_sol_lane solver lane-size output_size)
+  (clear-vc!)
 
   (define num-lanes (/ output_size lane-size))
 
@@ -60,15 +62,32 @@
   (define symbols (create-symbolic-bvs bw-list))
   (debug-log (format "Symbols: ~a\n" symbols))
 
+  (define uneq? #f)
+
   (define (test-lane lane-idx)
-    (define cex 
-      (verify 
-        (begin
-          (assert (bveq   (invoke_ref_lane lane-idx symbols) (invoke_sol_lane lane-idx symbols)))
+    (if uneq? 
+      #f
+      (begin 
+
+        (define cex 
+          (verify 
+            (begin
+              (assert (bveq   (invoke_ref_lane lane-idx symbols) (invoke_sol_lane lane-idx symbols)))
+              )
+            )
           )
+        (define verified? (not (sat? cex))) ;; True i verified equal on lane-idx
+
+        (if (not verified?)
+          (set! uneq? #t)
+          '()
+          )
+
+        verified?
+
         )
+
       )
-    (not (sat? cex)) ;; True i verified equal on lane-idx
     )
 
 
@@ -250,7 +269,7 @@
   )
 
 
-(define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
+(define (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin 
     (synthesize 
       #:forall (list cex-ls)
@@ -258,12 +277,13 @@
       (begin 
         ;; loop over inputs and add asserts
         (get-concrete-asserts assert-query-fn cex-ls failing-ls) 
+        ;(assert (< (cost-fn grammar) cost-bound))
         )
       ) 
     )
   )
 
-(define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
+(define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin 
     (debug-log "*********** z3-optimize *****************")
 
@@ -274,6 +294,7 @@
                 ;; loop over inputs and add asserts
                 (begin 
                         (get-concrete-asserts assert-query-fn cex-ls failing-ls)
+                        ;(assert (< (cost-fn grammar) cost-bound))
                   )
 
                 )
@@ -295,9 +316,9 @@
   (begin
     (debug-log (format "Boolector optimize with cost-bound ~a ...\n" cost-bound))
     (debug-log "Synthesizing...\n")
-    (current-solver (boolector))
-    (current-bitwidth 16)
-    (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
+    ;(current-solver (boolector))
+    ;(current-bitwidth 16)
+    ;(custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
     (define sol?
       (synthesize 
@@ -340,11 +361,11 @@
   (if optimize?
     (if 
       (equal? solver 'z3)
-      (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
+      (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
       (boolector-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
       )
 
-    (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn failed-sols)
+    (regular-concrete-synthesis assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
     )
   )
 
@@ -409,7 +430,7 @@
 )
 
 
-(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cexs failing-lanes cost-bound solver failed-sols)
+(define (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cexs failing-lanes cost-bound solver failed-sols)
   (debug-log "synthesize-sol-iterative")
 
 
@@ -418,6 +439,7 @@
 
   
 
+  ;(gc-terms!)
 
 
   (debug-log "Garbage collected")
@@ -461,7 +483,7 @@
   (define (assert-query-synth-fn env random-idx)
 
 
-    (define full-interpret-res (hydride:interpret grammar env))
+    (define full-interpret-res (interpreter-fn grammar env))
     (displayln "Lane Index")
     (println random-idx)
 
@@ -540,7 +562,7 @@
       (debug-log (format "Is solution a union? ~a\n" is-union))
 
       (define (invoke_sol_lane lane-idx env)
-        (define intermediate-result (hydride:interpret materialize env))
+        (define intermediate-result (interpreter-fn materialize env))
         (define low (* word-size lane-idx))
         (define high (+ low  (- word-size 1)))
         (extract high low intermediate-result)
@@ -582,12 +604,13 @@
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
-            (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn materialize)))
+            (define simplify (hydride:const-fold materialize))
+            (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn simplify)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
-              (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
+              (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn 
                                         cex-ls  
                                         failing-ls
-                                        (cost-fn materialize) ;; Use tighter cost bound
+                                        (cost-fn simplify) ;; Use tighter cost bound
                                         solver
                                         failed-sols
                                         )
@@ -597,7 +620,7 @@
             (if 
               tighter-sol-sat?
               (values tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time)
-              (values satisfiable? materialize elapsed_time)
+              (values satisfiable? simplify elapsed_time)
               )
             )
 
@@ -619,7 +642,7 @@
             )
           (define new-failing-lane (get-failing-lanes invoke_ref materialize (list new-failing-cex) word-size))
 
-            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
+            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn  
                                       (append cex-ls (list new-failing-cex)) ;; Append new cex into accumulated inputs
                                       (append failing-ls new-failing-lane)
                                       cost-bound
@@ -638,9 +661,9 @@
         (debug-log "Contains symbolic union, retry synthesis")
         (debug-log "Union solution:")
         (debug-log materialize)
-        (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn 
+        (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn 
                                       (append cex-ls (list (create-concrete-bvs bitwidth-list))) ;; Append new cex into accumulated inputs
-                                      (append failing-ls (list 1))
+                                      (append failing-ls (list (random num-lanes)))
                                       cost-bound
                                       solver
                                       (append failed-sols (list materialize))
@@ -668,7 +691,7 @@
     )
 
 
-    (current-bitwidth 16)
+    ;(current-bitwidth 16)
     (custodian-limit-memory (current-custodian) (* 20000 1024 1024))
 
 

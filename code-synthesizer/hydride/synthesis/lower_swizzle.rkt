@@ -13,6 +13,7 @@
 (require hydride/ir/hydride/definition)
 (require hydride/ir/hydride/visitor)
 (require hydride/ir/hydride/binder)
+(require hydride/ir/hydride/interpreter)
 
 (require hydride/synthesis/synth_main)
 
@@ -253,7 +254,7 @@
         (define memo-result (hash-ref swizzle-synth-log swizzle-hash))
         (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
         )
-      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? hydride:interpret cost-fn symbolic? cost-bound solver)
       )
     )
 

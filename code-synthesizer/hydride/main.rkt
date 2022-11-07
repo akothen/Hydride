@@ -43,6 +43,21 @@
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/visitor)
 
+
+
+;; HVX IR
+(require hydride/ir/hvx/semantics)
+(require hydride/ir/hvx/definition)
+(require hydride/ir/hvx/cost_model)
+(require hydride/ir/hvx/length)
+(require hydride/ir/hvx/prec)
+(require hydride/ir/hvx/printer)
+(require hydride/ir/hvx/interpreter)
+(require hydride/ir/hvx/binder)
+(require hydride/ir/hvx/const_fold)
+(require hydride/ir/hvx/visitor)
+
+
 ;; CPP IR
 (require hydride/cpp)
 
@@ -77,6 +92,18 @@
   (all-from-out hydride/ir/hydride/binder)
   (all-from-out hydride/ir/hydride/const_fold)
   (all-from-out hydride/ir/hydride/visitor)
+
+
+  (all-from-out hydride/ir/hvx/semantics)
+  (all-from-out hydride/ir/hvx/definition)
+  (all-from-out hydride/ir/hvx/cost_model)
+  (all-from-out hydride/ir/hvx/length)
+  (all-from-out hydride/ir/hvx/prec)
+  (all-from-out hydride/ir/hvx/printer)
+  (all-from-out hydride/ir/hvx/interpreter)
+  (all-from-out hydride/ir/hvx/binder)
+  (all-from-out hydride/ir/hvx/const_fold)
+  (all-from-out hydride/ir/hvx/visitor)
 
 
   (all-from-out hydride/cpp)

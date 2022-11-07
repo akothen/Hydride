@@ -66,6 +66,18 @@
 
     )
 
+  (cond 
+    [(equal? solver 'boolector)
+     (current-solver (boolector))
+     ]
+
+    [(equal? solver 'z3)
+     (current-solver (z3))
+     ]
+    )
+
+  (printf "Number of instructions: ~a\n" (halide:count-number-instructions halide-expr))
+
   (define synthesized-sol (synthesize-halide-expr-step halide-expr expr-depth VF id-map solver))
   (displayln "========================================")
   (displayln "Original Halide Expression:")
@@ -82,7 +94,10 @@
 
   ;; Lower target agnostic specialized shuffles to sequences
   ;; of target specific shuffle operations.
+  (define swizzle-start (current-seconds))
   (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log hydride:cost #t #f))
+  (define swizzle-end (current-seconds))
+  (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
   (pretty-print id-map)
   (displayln "========================================")
   ;; Apply constant folding again after lowering swizzles
@@ -96,7 +111,7 @@
 
   (define actual-expr-depth 
     (cond
-       [(halide:contains-complex-op-in-subexpr halide-expr 1)
+       [(ramp? halide-expr) 
         ;; Immediate expression is ramp, we can use the provided depth
         expr-depth
        ]
@@ -145,6 +160,17 @@
                   (define base_name (string-append "base_" (~s (random 10000))))
 
 
+                  ;; The extracted sub-expression is to be treated
+                  ;; as synthesis of some un-seen new expression
+                  ;; and so we must create a new id-map for the registers to bind to
+                  (define sub-id-map (make-hash))
+                  (for/list ([i (range (vector-length dummy-args))])
+                            (define dummy-buf (vector-ref dummy-args i))
+                            (hash-set! sub-id-map dummy-buf (bv i (bitvector 8)) )
+
+                            )
+
+
 
                   (define expr-VF (halide:vec-len expr-extract))
 
@@ -181,10 +207,9 @@
                     )
 
 
-                  (define depth-limit 4)
+                  (define depth-limit 3)
                   (define optimize? #t)
                   (define symbolic? #f)
-                  (define cost-bound 40)
 
                   (displayln (format "Synthesizing sub-expression using expression-depth ~a \n" actual-expr-depth))
                   (pretty-print expr-extract)
@@ -206,9 +231,33 @@
                       (begin
 
 
-                        (define grammar (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
+                        ;; First synthesize the expression with depth 1 to get an estimate
+                        ;; of the cost upper bound. We want to provide synthesis at larger
+                        ;; depths a bound on cost so it may exit early if the solution
+                        ;; can't be optimized further than with depth 1.
+                        
+
+                        (define mat1 
+                                 (if (eq? expr-depth 1)
+                                   '()
+                                    '();(synthesize-halide-expr-step expr-extract 1 VF sub-id-map solver)
+                                  )
+                                )
+
+                        (define sat?1 (not (equal? mat1 '())))
+
+
+                        (define-values (grammar interpreter cost-model) 
+                                       (get-expr-grammar expr-extract leaves base_name expr-VF));;VF))
                         (debug-log "Grammar:")
                         (debug-log grammar)
+
+                        (debug-log "Interpreter:")
+                        (debug-log interpreter)
+
+
+                        (debug-log "Cost-Model:")
+                        (debug-log cost-model)
 
 
                         (define regs (create-n-reg (length leaves)))
@@ -221,12 +270,29 @@
                             )
                           )
                         (define test-start (current-seconds))
-                        (debug-log "Beginning Synthesis")
+
+
+
+                        (define cost-bound 
+                          (cond 
+                            [sat?1 
+                              (debug-log "Found tighter cost bound at depth 1, use that")
+                              (cost-model mat1)
+                              ]
+                            [else 30]
+                            
+                            )
+                          )
+
+
+                  (displayln "Hashed expression")
+                  (println hashed-expr)
 
                         (define-values (sat? mat el) 
                                        (synthesize-sol-with-depth 
                                          (max (+ -1 actual-expr-depth) 1) 
-                                                                  depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes optimize? hydride:cost symbolic? cost-bound solver) 
+                                                                  depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
+                                                                  optimize? interpreter cost-model  symbolic? cost-bound solver) 
                                        )
 
                         (define test-end (current-seconds))
@@ -238,17 +304,29 @@
                         (debug-log (vector sat? mat el))
 
                         ;; Only memoize succesful entries
-                        (if sat? 
-                            (hash-set! synth-log hashed-expr (vector sat? mat el) )
-                            '()
+                        (cond 
+                          [sat? 
+                            (hash-set! synth-log hashed-expr (vector sat? mat (- test-end test-start)) )]
+                          [(and (not sat?) sat?1)
+                           (hash-set! synth-log hashed-expr (vector sat?1 mat1 (- test-end test-start)) )
+                           ]
                           )
 
                         
+                        (define result
+                          (cond
+                            [sat? 
+                              (vector sat? mat (- test-end test-start))]
+                            [(and (not sat?) sat?1)
+                             (vector sat?1 mat1 (- test-end test-start)) 
+                             ]
+                            )
+                          )
 
 
 
                         (debug-log "Synthesis step completed!")
-                        (values sat? mat el)
+                        (values (vector-ref result 0 ) (vector-ref result 1) (vector-ref result 2) )
                         )
                       )
                     )
@@ -263,15 +341,6 @@
                       (define-values (expr-extract num-used) (halide:bind-expr-args halide-expr dummy-args actual-expr-depth))
                       (define expr-VF (halide:vec-len expr-extract))
 
-                      ;; The extracted sub-expression is to be treated
-                      ;; as synthesis of some un-seen new expression
-                      ;; and so we must create a new id-map for the registers to bind to
-                      (define sub-id-map (make-hash))
-                      (for/list ([i (range (vector-length dummy-args))])
-                                (define dummy-buf (vector-ref dummy-args i))
-                                (hash-set! sub-id-map dummy-buf (bv i (bitvector 8)) )
-
-                                )
                       (if (eq? actual-expr-depth 1)
                         (begin
                           (debug-log "Error unable to synthesize expression even with depth 1")

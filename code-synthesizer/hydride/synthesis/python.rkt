@@ -120,7 +120,9 @@
     )
 
   (define grammar (get-grammar mod-path (string-append base_name "")))
-  grammar
+  (define interpreter (get-grammar mod-path (string-append base_name ":interpret")))
+  (define cost-model (get-grammar mod-path (string-append base_name ":cost")))
+  (values grammar interpreter cost-model)
   )
 
 

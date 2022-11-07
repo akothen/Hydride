@@ -6,18 +6,24 @@ from ShuffleList import ShuffleList
 
 DEBUG = True
 DEBUG_LIST = []
-SKIP_LIST = ["mask"]
+SKIP_LIST = []
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
+FORCE_INCLUDE = ["_mm256_set1_epi16"]
+
 
 # Any shuffle operation producing bitvectors more than
 # this size can be pruned earlier without the solver
 # having to worry about it
 MAX_BW_SIZE = 512
+
+# Bound the number of swizzle operations in the
+# grammar
+SWIZZLE_BOUND = 5
 
 class Synthesizer:
 
@@ -40,6 +46,8 @@ class Synthesizer:
         self.depth = depth
         self.output_slice_length = self.spec.output_shape[0] * self.spec.output_shape[1] * self.spec.output_precision #self.VF * self.spec.output_precision
         self.contexts_per_dsl_inst = contexts_per_dsl_inst
+        if self.spec.contains_conditional():
+            self.contexts_per_dsl_inst = max(contexts_per_dsl_inst, 3)
         self.is_shuffle = is_shuffle
         self.input_sizes = []
 
@@ -55,6 +63,9 @@ class Synthesizer:
 
 
     def is_instruction_legal(self, name):
+        if self.is_shuffle:
+            return True
+
         SPECIAL_CASE = ["div", "rem"]
         for sc in SPECIAL_CASE:
             if sc in name:
@@ -407,6 +418,8 @@ class Synthesizer:
 
         max_prec = max(self.spec.input_precision, default = 32)
 
+        min_prec = min(self.spec.input_precision, default = 32)
+
         pairs = []
 
         for hole in holes:
@@ -414,6 +427,14 @@ class Synthesizer:
                 pairs.append((hole, hole))
             else:
                 pairs.append((hole, max_prec))
+
+            if min_prec == max_prec:
+                continue
+
+            if hole % min_prec != 0:
+                pairs.append((hole, hole))
+            else:
+                pairs.append((hole, min_prec))
 
 
 
@@ -454,9 +475,22 @@ class Synthesizer:
         # When legalizing target agnostic shuffle operations
         # into target specific shuffles, we don't want to include
         # target agnostic shuffles in the grammar
-        if self.is_shuffle:
+        if self.is_shuffle or self.spec.contains_conditional():
             memory_shuffle_insts = []
             memory_shuffle_args_list = []
+
+        else:
+            if len(memory_shuffle_insts) > SWIZZLE_BOUND:
+                (msi, msa) = self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = SWIZZLE_BOUND)
+
+                if len(msi) == 0:
+                    memory_shuffle_insts = memory_shuffle_insts[:SWIZZLE_BOUND]
+                    memory_shuffle_args_list = memory_shuffle_args_list[:SWIZZLE_BOUND]
+                else:
+                    (memory_shuffle_insts, memory_shuffle_args_list) = (msi,msa)
+
+
+
 
 
 
@@ -465,6 +499,8 @@ class Synthesizer:
 
         operation_dsl_insts = []
         operation_dsl_args_list = []
+
+
 
         for dsl_inst in self.dsl_operators:
 
@@ -510,7 +546,10 @@ class Synthesizer:
 
         (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = 20)
+        BOUND = 20
+        if self.spec.contains_conditional():
+            BOUND = 25
+        (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
 
 
         for idx, dsl_inst in enumerate(operation_dsl_insts):
@@ -553,7 +592,20 @@ class Synthesizer:
         print("Grammar Number of Shuffle DSL Clauses:\t",len(memory_shuffle_args_list))
         print("Grammar Number of DSL Compute Clauses:\t",len(operation_dsl_args_list))
 
-        #TEMP
+
+
+
+        op_names = []
+        unique_target_agnostic_ops = []
+
+        for op in operation_dsl_insts:
+            if op.name in op_names:
+                continue
+            unique_target_agnostic_ops.append(op)
+            op_names.append(op.name)
+
+        self.dsl_subset = unique_target_agnostic_ops
+
         operation_dsl_insts += memory_shuffle_insts
         operation_dsl_args_list += memory_shuffle_args_list
         memory_shuffle_insts = []
@@ -561,6 +613,8 @@ class Synthesizer:
 
 
 
+        spec_ops = self.spec.get_semantics_ops_list()
+        include_ramp_lit = "ramp" in spec_ops
 
 
         return self.grammar_generator.emit_grammar(
@@ -572,7 +626,8 @@ class Synthesizer:
             lit_holes = lit_holes,
             return_type = self.output_slice_length,
             input_sizes = self.input_sizes,
-            imms = self.spec.imms
+            imms = self.spec.imms,
+            include_ramp_lit = include_ramp_lit
         )
 
     # Sort the operations and contexts together such that
@@ -694,10 +749,12 @@ class Synthesizer:
 
         spec_ops = self.spec.get_semantics_ops_list()
 
+        """
         if "bvssat" in spec_ops:
             return (ops,ctxs)
         if "bvusat" in spec_ops:
             return (ops,ctxs)
+        """
 
 
 
@@ -753,7 +810,7 @@ class Synthesizer:
         compute_ops = []
         compute_ctxs = []
 
-        MAX_OCCURANCES = 3
+        MAX_OCCURANCES = 2
 
         names = []
 
@@ -784,7 +841,7 @@ class Synthesizer:
         print("Actual Compute ops", len(compute_ops))
 
 
-        num_broadcasts = min(int(bound * 0.40), num_broadcasts_actual)
+        num_broadcasts = min(int(bound * 0.50), num_broadcasts_actual)
         num_computes = bound - num_broadcasts
 
         # if allocated more rules than are actually
@@ -851,7 +908,7 @@ class Synthesizer:
 
         # Divide upcasts and downcasts evenly when both exceed 50% of
         # the allocated number of rules for broadcast instructions
-        num_upcasts = min(len(upcast_ops), int(0.5 * num_broadcasts))
+        num_upcasts = min(len(upcast_ops), int(0.4 * num_broadcasts))
         num_downcasts = num_broadcasts - num_upcasts
 
         upcasts = get_top_N_ops(upcast_ops,upcast_ctxs, num_upcasts)
@@ -1133,9 +1190,13 @@ class Synthesizer:
 
             old_condition =  (supports_inputs_prec and supports_input_length) and (supports_outputs_prec or supports_output_length)
 
+            # If broadcast like, we also want to include operations where inputs of different sizes can be casted to each other
+            unique_input_sizes = list(set(self.input_sizes))
+            casts_inter_inputs = is_broadcast_like and supports_input_length and any([ctx.supports_output_size(isize) for isize in unique_input_sizes])
+
             # Either can process the input or can produce output shape
             new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) # and (not is_broadcast_like)
-            if new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)):
+            if new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -1143,6 +1204,11 @@ class Synthesizer:
 
 
         contexts = sorted(contexts, key = lambda x : self.score_context(dsl_inst ,x))
+
+        if check:
+            print("Contexts in ascending order of score")
+            for ctx in contexts:
+                print(ctx.name)
 
 
 
@@ -1194,18 +1260,16 @@ class Synthesizer:
         score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
         score += int(ctx.supports_output_precision(self.spec.output_precision))
         score += int(ctx.supports_output_size(self.output_slice_length))
-        score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True) != 0)
+        score +=  max(int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes]).count(True)), 2)
 
 
 
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
 
-        score += len(list (set(spec_ops) & set(dsl_ops)))
+        score += min(len(list (set(spec_ops) & set(dsl_ops))), 2)
 
 
-        if "mask" in ctx.name:
-            score = int(0.5 * score)
 
 
         if is_broadcast_like:
@@ -1215,6 +1279,19 @@ class Synthesizer:
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
             score += int(ctx.supports_output_size(self.output_slice_length))
+
+
+            # In the case where we have inputs of varying sizes, we want also want
+            #unique_input_sizes = self.input_sizes
+            #score +=  int([ctx.supports_output_size(isize) for isize in unique_input_sizes].count(True)) * 2
+
+        # Does specification contain conditional code:
+        spec_ops = self.spec.get_semantics_ops_list()
+
+        need_masked = ("if" in spec_ops) or ("cond" in spec_ops) or ("bveq" in spec_ops)
+
+        if "mask" in ctx.name and not need_masked:
+            score = int(0)
 
 
 
@@ -1350,7 +1427,7 @@ class Synthesizer:
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
 
-        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat"] for op in ops])
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond"] for op in ops])
 
 
     # Is the operation either a broadcast operation or an

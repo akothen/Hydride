@@ -15,7 +15,7 @@
 
 (provide (all-defined-out))
 
-(define (synthesize-sol-with-depth depth depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+(define (synthesize-sol-with-depth depth depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? interpreter-fn cost-fn symbolic? cost-bound solver)
 
   (if (equal? solver 'boolector)
     (current-solver (boolector))
@@ -37,8 +37,8 @@
       (define-values 
         (satisfiable? materialize elapsed_time)
         (if symbolic?
-            (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn cost-bound solver)
-            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? cost-fn '() '() cost-bound solver '())
+            (synthesize-sol invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn cost-bound solver)
+            (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn '() '() cost-bound solver '())
           )
         )
 
@@ -49,7 +49,7 @@
         (begin
           (define-values 
             (_satisfiable? _materialize _elapsed_time)
-            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? cost-fn symbolic? cost-bound solver)
+            (synthesize-sol-with-depth (+ 1 depth) depth-limit invoke_ref invoke_ref_lane grammar-fn bitwidth-list optimize? interpreter-fn cost-fn symbolic? cost-bound solver)
             )
           (values _satisfiable? _materialize (+ elapsed_time _elapsed_time)) ;; Accumulate synthesis time 
           )

@@ -12,17 +12,10 @@ class InterpreterDef:
     def emit_default_def(self, struct_definer , env_name = "env", add_assertions = True, interpret_name = "hydride:interpret"):
         defaults = []
 
-        defaults.append("[(dim-x id) (vector-ref {} (- (vector-length {}) 2))]".format(env_name, env_name))
-        defaults.append("[(dim-y id) (vector-ref {} (- (vector-length {}) 1))]".format(env_name, env_name))
-        defaults.append("[(idx-i id) (vector-ref {} (- (vector-length {}) 4))]".format(env_name, env_name))
-        defaults.append("[(idx-j id) (vector-ref {} (- (vector-length {}) 3))]".format(env_name, env_name))
         defaults.append("[(reg id) (vector-ref-bv {} id)]".format(env_name))
 
         defaults.append("[(lit v) v]")
 
-        defaults.append("[(nop v1) ({} v1 {})]".format(interpret_name , env_name))
-        defaults.append("[(idx-add i1 i2) (+ ({} i1 {}) ({} i2 {}))]".format(interpret_name , env_name, interpret_name , env_name))
-        defaults.append("[(idx-mul i1 i2) (* ({} i1 {}) ({} i2 {}))]".format(interpret_name , env_name, interpret_name, env_name))
 
         for structs in default_structs:
             defaults.append(self.emit_interpret_def(structs, struct_definer, add_assertions = add_assertions)[1:])
@@ -32,7 +25,7 @@ class InterpreterDef:
 
 
     def emit_fallback_def(self, env_name = "env"):
-        return "\t[v v]"
+        return "\t[v (error \"Unrecognized Term in Interpreterv\")]"
 
     def get_asserts(self, dsl_inst, struct_definer):
         return self.constraints_def.emit_dsl_interpreter_constraints(dsl_inst, struct_definer)

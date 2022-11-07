@@ -581,7 +581,7 @@
     [(x512 sca) empty-list]
 
     [(ramp base stride len)
-     (list extract bvmul bvadd sign-extend zero-extend)
+     (list extract bvmul bvadd sign-extend zero-extend 'ramp)
      ]
 
     [(load buf idxs alignment) empty-list]
@@ -706,7 +706,7 @@
     [(vec-sat-add v1 v2) (append (list extract ) (if (is-signed-expr? v1 v2) (list  bvaddnsw 'bvssat) (list  bvaddnuw 'bvusat )) (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sub v1 v2) (append (list extract bvsub)  (get-bv-ops v1)  (get-bv-ops v2) )]
     [(vec-sat-sub v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvsubnsw 'bvssat) (list  bvsubnuw 'bvusat)) (get-bv-ops v1)  (get-bv-ops v2) )]
-    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list sign-extend zero-extend) (list zero-extend )) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list bvshl sign-extend zero-extend) (list bvshl zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
@@ -870,12 +870,35 @@
      ;])
      )
 
+(define (do-widening-mul a b signed?)
+
+  (define bitwidth (bvlength a))
+  (cond 
+    [signed?
+      (define a-sext (sign-extend a (bitvector (* 2 bitwidth))))
+      (define b-sext (sign-extend b (bitvector (* 2 bitwidth))))
+      (define result (bvmul a-sext b-sext) )
+      (extract  (- bitwidth 1) 0 result)
+      ]
+
+    [else
+      (define a-zext (zero-extend a (bitvector (* 2 bitwidth))))
+      (define b-zext (zero-extend b (bitvector (* 2 bitwidth))))
+      (define result (bvmul a-zext b-zext) )
+      (extract  (- bitwidth 1) 0 result)
+      ]
+    
+    )
+  )
+
 (define (do-mul lhs rhs)
   ;(cond
   ;  [(and (integer? lhs) (integer? rhs))
   ;   (* lhs rhs)]
   ;  [else
      (define outT (infer-out-type lhs rhs))
+     ;(define result  (do-widening-mul (cpp:eval lhs) (cpp:eval rhs) (cpp:signed-type? outT)) )
+     ;(mk-cpp-expr result outT)
      (mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)
   ;   ])
 )
@@ -885,6 +908,14 @@
   (define a-double (sign-extend a (bitvector (* 2 bvlen))))
   (define b-double (sign-extend b (bitvector (* 2 bvlen))))
   (define widen-div (bvsdiv a-double b-double))
+  (extract (- bvlen 1) 0 widen-div)
+  )
+
+(define (widening-udiv a b)
+  (define bvlen (bvlength a))
+  (define a-double (zero-extend a (bitvector (* 2 bvlen))))
+  (define b-double (zero-extend b (bitvector (* 2 bvlen))))
+  (define widen-div (bvudiv a-double b-double))
   (extract (- bvlen 1) 0 widen-div)
   )
 
@@ -907,7 +938,7 @@
         ]
        [else
         ;(assume (not (bvzero? (cpp:eval rhs))))
-        (mk-cpp-expr (bvudiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
+        (mk-cpp-expr (widening-udiv (cpp:eval lhs) (cpp:eval rhs)) outT)]
        )
      ;])
 )
@@ -998,17 +1029,20 @@
      (if condition lhs rhs)]
     [else
      (define outT (infer-out-type lhs rhs))
-     (define eval-condition (bveq (cpp:eval condition) (bv #b1 1)))
+     (define mask-val (cpp:eval condition))
+     (define last-bit (lsb mask-val))
+     (define eval-condition (bveq last-bit (bv #b1 1)))
      (mk-cpp-expr (if eval-condition (cpp:eval lhs) (cpp:eval rhs)) outT)]))
 
 (define (do-eq lhs rhs)
+  (printf "do-eq\n")
   (cond
     [(and (integer? lhs) (integer? rhs))
      (eq? lhs rhs)]
     [(cpp:signed-expr? lhs)
-     (mk-cpp-expr (bveq (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]
+     (mk-cpp-expr (if (bveq (cpp:eval lhs) (cpp:eval rhs)) (bv #b1 1) (bv #b0 1)) 'uint1)]
     [else
-     (mk-cpp-expr (bveq (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]))
+     (mk-cpp-expr (if (bveq (cpp:eval lhs) (cpp:eval rhs)) (bv #b1 1) (bv #b0 1)) 'uint1)]))
 
 (define (do-lt lhs rhs)
   (cond

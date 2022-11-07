@@ -3,7 +3,8 @@ import time
 import json
 import subprocess as sb
 from DSLParser import parse_dict
-from LatestSemantics import semantcs
+#from LatestSemantics import semantcs
+from merged_dict import semantcs
 from PredefinedDSL import *
 from StructDef import StructDef
 from InterpreterDef import InterpreterDef
@@ -11,6 +12,8 @@ from CostDef import CostDef
 from GetLengthDef import GetLengthDef
 from legal_insts import legal_map
 from Specification import Specification, parse_spec
+
+from hvx_sema import hvx_semantics
 
 
 from GrammarGenerator import GrammarGenerator
@@ -92,8 +95,24 @@ with open(OUTPUT_GRAMMAR_FILE, "w+") as OutputFile:
                   is_shuffle = IS_SHUFFLE,
                   legal_map = legal_map
                   )
+
+
     grammar_name = spec['name']
+
     write_to_file(syn.emit_synthesis_grammar(main_grammar_name = grammar_name))
+
+    dsl_subset = syn.dsl_subset
+
+    print(dsl_subset)
+
+    subset_interpreter = idd.emit_interpreter(dsl_subset, sd, add_assertions = False, interpret_name = grammar_name+":interpret")
+
+    subset_cost_model = cd.emit_cost_model(dsl_subset, sd, cost_name = grammar_name+":cost", use_label = False)
+
+
+    write_to_file(subset_interpreter)
+
+    write_to_file(subset_cost_model)
 
 
 
