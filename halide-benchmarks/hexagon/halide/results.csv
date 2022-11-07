@@ -1,0 +1,14 @@
+Benchmark,Halide Total Cycles,Halide Cycles/Pixel,
+gaussian3x3,332610,0.1604
+gaussian5x5,1249110,0.6024
+dilate3x3,1247572,0.6016
+median3x3,1148762,0.554
+sobel3x3,1255764,0.6056
+blur3x3,422560,0.2038
+matmul,65945360,31.8024
+add,385070,0.1857
+mul,553542,0.2669
+l2norm,1294364,0.6242
+max_pool,957656,0.4618
+average_pool,1316318,0.6348
+conv_nn,720052,43.9485
