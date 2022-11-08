@@ -66,27 +66,6 @@
 )
 
 
-(define (bvsubnsw a b bitwidth)
-  (define result
-  (cond
-     [(and (> (bitvector->integer b) 0)
-           (< (bitvector->integer a) (bitvector->integer (bvadd (bvsminval bitwidth) b))))
-            (bvsminval bitwidth)]
-     [(and (< (bitvector->integer b) 0)
-           (> (bitvector->integer a) (bitvector->integer (bvadd (bvsmaxval bitwidth) b))))
-            (bvsmaxval bitwidth)]
-      [else (bvsub a b)]
-  )
-  )
-  result
-)
-
-
-(define (bvsubnuw a b bitwidth)
-  (bvsub a (bvumin a b))
-)
-
-
 (define (bvmulnsw a b bitwidth)
   (define minusonebv (bv -1 (bitvector bitwidth)))
   (define result
@@ -163,7 +142,7 @@
 )
 
 
-(define (bvsat vect bitwidth sat_size is_signed)
+(define (bvsaturate vect bitwidth sat_size is_signed)
   (define result
     (if (equal? is_signed 1)
       (begin
@@ -200,21 +179,49 @@
 )
 
 
-(define (bvaddnw a b bitwidth is_signed)
+(define (bvsubnsw a b bitwidth)
   (define result
-    (if (equal? is_signed 1)
-      (begin
-        (bvaddnsw a b bitwidth)
-      )
-      (begin
-        (bvaddnuw a b bitwidth)
-      )
+  (cond
+     [(and (> (bitvector->integer b) 0)
+           (< (bitvector->integer a) (bitvector->integer (bvadd (bvsminval bitwidth) b))))
+            (bvsminval bitwidth)]
+     [(and (< (bitvector->integer b) 0)
+           (> (bitvector->integer a) (bitvector->integer (bvadd (bvsmaxval bitwidth) b))))
+            (bvsmaxval bitwidth)]
+      [else (bvsub a b)]
+  )
+  )
+  result
+)
+
+
+(define (bvsubnuw a b bitwidth)
+  (bvsub a (bvumin a b))
+)
+
+
+(define (bvaddnw a b bitwidth wrap_around_id)
+  (define result
+    (cond
+    [(equal? wrap_around_id 1) (bvaddnsw a b bitwidth)]
+    [(equal? wrap_around_id 0) (bvaddnuw a b bitwidth)]
+    [else (bvadd a b)]
     )
   )
   result
 )
 
 
+(define (bvsubnw a b bitwidth wrap_around_id)
+  (define result
+    (cond
+    [(equal? wrap_around_id 1) (bvsubnsw a b bitwidth)]
+    [(equal? wrap_around_id 0) (bvsubnuw a b bitwidth)]
+    [else (bvsub a b)]
+    )
+  )
+  result
+)
 
 
 ;; Tests
@@ -240,6 +247,7 @@
   (pretty-print "(bvmulnuw au64 bu64 64):")
   (pretty-print (bvmulnuw au64 bu64 64))
 )
+
 
 
 
