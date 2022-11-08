@@ -64,10 +64,10 @@ class RoseBVSizeExensionOp(RoseBitVectorOp):
     return 2
   
   def getExtensionSize(self):
-    return 0
+    return self.getOperand(1)
 
   def getInputBitVector(self):
-    return self.getOperand(self.getExtensionSize())
+    return self.getOperand(0)
 
   def getExtensionKind(self):
     return self.getOperand(self.getExtensionKindPos())
@@ -84,9 +84,9 @@ class RoseBVSizeExensionOp(RoseBitVectorOp):
     String += " " + str(self.getOutputBitwidth())
     if isinstance(self.getExtensionKind(), RoseConstant):
       if self.getExtensionKind().getValue() == 1:
-        String += " #t"
+        String += " 1"
       else:
-        String += " #f"
+        String += " 0"
     else:
       String += " " + self.getExtensionKind().getName()
     String += "))\n"
