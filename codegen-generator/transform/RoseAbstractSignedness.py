@@ -93,9 +93,63 @@ def RunAbstractSignednessOnBlock(Block : RoseBlock, Context : RoseContext):
       Block.addOperationBefore(NewOp, Op)
       Block.eraseOperation(Op)
       continue
-    
-      
-
+    if isinstance(Op, RoseBVSdivOp):
+      NewOp = RoseBVGeneralDivOp.createSigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperand(0), Op.getOperand(1))
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVUdivOp):
+      NewOp = RoseBVGeneralDivOp.createUnsigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperand(0), Op.getOperand(1))
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVSremOp):
+      NewOp = RoseBVGeneralRemOp.createSigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperand(0), Op.getOperand(1))
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVUremOp):
+      NewOp = RoseBVGeneralRemOp.createUnsigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperand(0), Op.getOperand(1))
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVSmaxOp):
+      NewOp = RoseBVGeneralMaxOp.createSigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperands())
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVUmaxOp):
+      NewOp = RoseBVGeneralMaxOp.createUnsigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperands())
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVSminOp):
+      NewOp = RoseBVGeneralMinOp.createSigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperands())
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+    if isinstance(Op, RoseBVUminOp):
+      NewOp = RoseBVGeneralMinOp.createUnsigned(Context.genName(Op.getName() + ".ab"), \
+                  Op.getOperands())
+      Op.replaceUsesWith(NewOp)
+      Block.addOperationBefore(NewOp, Op)
+      Block.eraseOperation(Op)
+      continue
+  return
 
 def RunAbstractSignedness(Function : RoseFunction, Context : RoseContext):
   print("RUN ABSTRACT SIGNEDNESS ON FUNCTION")
