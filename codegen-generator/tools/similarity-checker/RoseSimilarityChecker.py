@@ -28,7 +28,7 @@ EquivalenceClassesLock = threading.Lock()
 EQToEQMapLock = threading.Lock()
 RegionLock = threading.Lock()
 
-NumThreads = 100
+NumThreads = 1
 
 class RoseSimilarityChecker():
   def __init__(self, TargetList : list):
@@ -152,6 +152,8 @@ class RoseSimilarityChecker():
     for Idx in range(NumArgs - 1, -1, -1):
       CopyArg = CopyFunction.getArg(Idx)
       OriginalArg = Function.getArg(Idx)
+      print("REMVING ARG:")
+      CopyArg.print()
       if FunctionInfo.argHasConcreteVal(OriginalArg) == True:
         self.replaceUsesInRegion(CopyFunction, CopyArg, FunctionInfo.getConcreteValFor(OriginalArg))
         CopyFunction.eraseArg(Idx)
@@ -167,7 +169,7 @@ class RoseSimilarityChecker():
 
   def genSymbolicInput(self, Param, NameSuffix):
     Input = "(define-symbolic {} (bitvector {}))\n".format(Param.getName() + NameSuffix,\
-                                         str(Param.getType().getBitwidth()))
+                                        str(Param.getType().getBitwidth()))
     return Input
 
   def genConcreteInput(self, Param : RoseArgument, ConcreteArg : RoseConstant, NameSuffix : str):
@@ -222,7 +224,7 @@ class RoseSimilarityChecker():
     return Code
 
   def emitVerificationCodeFor(self, FunctionInfo1 : RoseFunctionInfo, \
-                             FunctionInfo2 : RoseFunctionInfo):
+                            FunctionInfo2 : RoseFunctionInfo):
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("PERFORMING VERIFICATION")
     Function1 = FunctionInfo1.getLatestFunction()
@@ -249,7 +251,7 @@ class RoseSimilarityChecker():
       ArgNamesList1String += Name + NameSuffix + " "
     Content.append("(verify (assert (equal? ({} {}) ({} {}))))\n".format(Function1.getName(), \
                 ArgNamesList1String, Function2.getName(), ArgNamesList1String, NameSuffix))
-     # Generate verification code on second set of inputs
+    # Generate verification code on second set of inputs
     NameSuffix = "_2"
     Content.append(self.emitVerificationCodeForFunction(FunctionInfo2, NameSuffix))
     ArgNamesList2 = [Arg.getName() for Arg in Function2.getArgs()]
@@ -261,7 +263,7 @@ class RoseSimilarityChecker():
     return "\n".join(Content)
     
   def verify(self, FunctionInfo1 : RoseFunctionInfo, \
-                   FunctionInfo2 : RoseFunctionInfo, Suffix : str = None):
+                  FunctionInfo2 : RoseFunctionInfo, Suffix : str = None):
     if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2) == False:
       return False
     # Generate verification code
@@ -738,7 +740,7 @@ class RoseSimilarityChecker():
         continue
       RemainingBVArgs.append(Arg)
     ArgsPermuations = list()
-     # Get permutations of arguments
+    # Get permutations of arguments
     if len(MaskArgs) == 0 and len(ConditionalOpsArgs) == 0:
       ArgsPermuations = Permutations(BVArgs)
     elif len(MaskArgs) != 0 and len(ConditionalOpsArgs) == 0:
@@ -1217,6 +1219,8 @@ class RoseSimilarityChecker():
       Arg = Function.getArg(Idx)
       print("ARG:")
       Arg.print()
+      print('FUNCTION AFTER')
+      Function.print()
       if Function.getNumUsersOf(Arg) == 0:
         FunctionInfo.eraseConcreteValForArg(Arg)
         Function.eraseArg(Idx)
@@ -1275,18 +1279,22 @@ class RoseSimilarityChecker():
         if Op.isSizeChangingOp():
           print("OP TYPE:")
           Op.getType().print()
+          print("SIZE EXTENSION OP")
           assert isinstance(Op.getType(), RoseBitVectorType)
           if isinstance(Op.getType().getBitwidth(), RoseArgument) \
             and Op.getType().getBitwidth() == Arg:
             Op.setType(RoseBitVectorType.create(NewVal.getValue()))
             BitvectorToBitwidth[Op] = NewVal.getValue()
-          if Op.getOperand(1) == Arg:
+          if Op.getExtensionSize() == Arg:
             Op.setOperand(1, NewVal)
             Op.setType(RoseBitVectorType.create(NewVal.getValue()))
             BitvectorToBitwidth[Op] = NewVal.getValue()
           elif Op.getInputBitVector() == Arg:
             Op.setOperand(0, NewVal)
             BitvectorToBitwidth[Op.getInputBitVector()] = NewVal.getType().getBitwidth()
+          if isinstance(Op, RoseBVSizeExensionOp):
+            if Op.getExtensionKind() == Arg:
+              Op.setOperand(Op.getExtensionKindPos(), NewVal)
           continue
         if Op.getOpcode().typesOfInputsAndOutputEqual():
           for Idx, Operand in enumerate(Op.getOperands()):
@@ -1683,7 +1691,8 @@ class RoseSimilarityChecker():
               Arg.print()
               Arg.getType().print()
               if isinstance(Arg.getType(), RoseBitVectorType) \
-                or isinstance(Arg.getType(), RoseIntegerType):
+                or isinstance(Arg.getType(), RoseIntegerType) \
+                or isinstance(Arg.getType(), RoseBooleanType):
                 if isinstance(Arg.getType().getBitwidth(), RoseArgument):
                   OldArgIndex = OlderFunction.getIndexOfArg(Arg)
                   RecoveredArgMap.append(OldArgPermutation[OldArgIndex]) 
@@ -1693,8 +1702,13 @@ class RoseSimilarityChecker():
               OlderFunctionInfo = FunctionToClonedFunctionInfo[Function]
               for Idx, OlderArg in enumerate(OlderFunction.getArgs()):
                 if isinstance(OlderArg.getType(), RoseBitVectorType) \
-                  or isinstance(OlderArg.getType(), RoseIntegerType):
+                  or isinstance(OlderArg.getType(), RoseIntegerType) \
+                  or isinstance(OlderArg.getType(), RoseBooleanType):
                   if isinstance(OlderArg.getType().getBitwidth(), int):
+                    print("OLD ARG:")
+                    OlderArg.print()
+                    print("ARG:")
+                    Arg.print()
                     if OlderArg == Arg:
                       print("OlderArg.getType():")
                       OlderArg.getType().print()
@@ -1827,7 +1841,8 @@ class RoseSimilarityChecker():
           Arg.print()
           Arg.getType().print()
           if isinstance(Arg.getType(), RoseBitVectorType) \
-            or isinstance(Arg.getType(), RoseIntegerType):
+            or isinstance(Arg.getType(), RoseIntegerType) \
+            or isinstance(Arg.getType(), RoseBooleanType):
             if isinstance(Arg.getType().getBitwidth(), RoseArgument):
               OldArgIndex = OlderFunction.getIndexOfArg(Arg)
               RecoveredArgMap.append(OldArgPermutation[OldArgIndex]) 
@@ -1837,7 +1852,8 @@ class RoseSimilarityChecker():
           OlderFunctionInfo = FunctionToClonedFunctionInfo[Function]
           for Idx, OlderArg in enumerate(OlderFunction.getArgs()):
             if isinstance(OlderArg.getType(), RoseBitVectorType) \
-              or isinstance(OlderArg.getType(), RoseIntegerType):
+              or isinstance(OlderArg.getType(), RoseIntegerType) \
+              or isinstance(OlderArg.getType(), RoseBooleanType):
               if isinstance(OlderArg.getType().getBitwidth(), int):
                 if OlderArg == Arg:
                   print("OlderArg.getType():")
@@ -1899,7 +1915,7 @@ class RoseSimilarityChecker():
 
 
   def verifyParallel(self, FunctionInfo1 : RoseFunctionInfo, \
-                   FunctionInfo2 : RoseFunctionInfo):
+                  FunctionInfo2 : RoseFunctionInfo):
     if self.qualifiesForSimilarityChecking(FunctionInfo1, FunctionInfo2) == False:
       return False
     # Generate verification code
