@@ -169,8 +169,8 @@
 
 
 (define (bvsizeext vect ext_size is_signed)
-  (define result 
-    (if (equal? is_signed #t)
+  (define result
+    (if (equal? is_signed 1)
       (begin
         (sign-extend vect (bitvector ext_size))
       )
