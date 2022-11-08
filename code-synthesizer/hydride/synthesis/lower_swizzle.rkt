@@ -15,6 +15,12 @@
 (require hydride/ir/hydride/binder)
 (require hydride/ir/hydride/interpreter)
 
+
+(require hydride/ir/hvx/definition)
+(require hydride/ir/hvx/visitor)
+(require hydride/ir/hvx/binder)
+(require hydride/ir/hvx/interpreter)
+
 (require hydride/synthesis/synth_main)
 
 (require hydride/synthesis/iterative_synthesis)
@@ -25,6 +31,8 @@
 
 (provide (all-defined-out))
 
+
+(define swizzle-target 'hvx)
 
 
 (define (legalize-expr-swizzles hydride-expr solver swizzle-synth-log cost-fn optimize? symbolic?)
@@ -52,7 +60,19 @@
               )
     )
 
-  (hydride:visitor hydride-expr swizzle-visitor)
+  (define visitor-functor
+    (cond
+      [(equal? swizzle-target 'hvx)
+       hvx:visitor
+       ]
+      [(equal? swizzle-target 'x86)
+       hydride:visitor
+       ]
+    
+      )
+    
+    )
+  (visitor-functor hydride-expr swizzle-visitor)
   )
 
 
@@ -247,6 +267,21 @@
 
   (define cost-bound 40)
 
+
+
+  (define interpret-functor
+    (cond
+      [(equal? swizzle-target 'hvx)
+       hvx:interpret
+       ]
+      [(equal? swizzle-target 'x86)
+       hydride:interpret
+       ]
+    
+      )
+    
+    )
+
   (define-values 
     (satisfiable? materialize elapsed)
     (if (hash-has-key? swizzle-synth-log swizzle-hash)
@@ -254,7 +289,7 @@
         (define memo-result (hash-ref swizzle-synth-log swizzle-hash))
         (values (vector-ref memo-result 0)  (vector-ref memo-result 1) (vector-ref memo-result 2))
         )
-      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? hydride:interpret cost-fn symbolic? cost-bound solver)
+      (synthesize-sol-with-depth 2 3  invoke_ref invoke_ref_lane swizzle-grammar bitwidth-list optimize? interpret-functor cost-fn symbolic? cost-bound solver)
       )
     )
 
@@ -278,6 +313,16 @@
   ;; Bind the original operands of the shuffle back
   ;; into the synthesized shuffle
 
+  (define bind-functor
+    (cond
+      [(equal? swizzle-target 'hvx)
+       hvx:bind-expr
+       ]
+      [(equal? swizzle-target 'x86)
+       bind-expr
+       ]
+      )
+    )
 
   (define bound-expr
     (destruct lowered-expression
@@ -286,7 +331,7 @@
                ]
                
               [v 
-                (bind-expr v original-args)
+                (bind-functor v original-args)
                 ]
               )
     )

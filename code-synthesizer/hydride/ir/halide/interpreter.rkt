@@ -18,6 +18,8 @@
   (define intr-expr (interpret expr))
   (cpp:type (intr-expr 0)))
 
+(define target-hvx #t)
+
 
 (define (intr-elemT-size elemT) 
 (cond
@@ -709,8 +711,8 @@
     [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list bvshl sign-extend zero-extend) (list bvshl zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsmin) (list  bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-max v1 v2) (append (list extract) (list (if (is-signed-expr? v1 v2) bvsmax bvumax)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvslt bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-max v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvsgt bvsmax) (list bvugt bvumax))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-if v1 v2 v3) (append (list bveq 'if 'cond) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]

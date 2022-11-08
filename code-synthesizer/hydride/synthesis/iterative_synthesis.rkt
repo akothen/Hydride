@@ -11,6 +11,9 @@
 (require hydride/utils/debug)
 (require hydride/utils/misc)
 (require hydride/ir/hydride/interpreter)
+
+(require hydride/ir/hvx/interpreter)
+
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
 (require hydride/synthesis/symbolic_synthesis)
@@ -121,7 +124,7 @@
   (define cex 
     (verify 
       (begin
-          (assert (bveq   (invoke_ref symbols) (hydride:interpret sol symbols)))
+          (assert (bveq   (invoke_ref symbols) (hvx:interpret sol symbols)))
 
            )
       )
@@ -151,7 +154,7 @@
         (debug-log spec_res)
 
 
-        (define synth_res  (hydride:interpret sol new-bvs))
+        (define synth_res  (hvx:interpret sol new-bvs))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
@@ -374,7 +377,7 @@
 (define (print-temp-result-on-cex mat invoke_ref cex-ls)
   (for/list
     ([cex cex-ls])
-    (define hydride-result (hydride:interpret mat cex))
+    (define hydride-result (hvx:interpret mat cex))
     (define halide-result (invoke_ref cex))
     (displayln "Counter Example:")
     (println cex)
@@ -393,7 +396,7 @@
   (define difference-predicate
   (for/list ([cex cex-ls])
             (define spec-result (invoke_ref cex))
-            (define synth-result (hydride:interpret synth-sol cex))
+            (define synth-result (hvx:interpret synth-sol cex))
             (define size (bvlength spec-result))
             (define num-elems (/ size word-size))
 

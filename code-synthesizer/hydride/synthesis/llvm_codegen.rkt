@@ -15,9 +15,15 @@
 (require hydride/synthesis/algorithm)
 (require hydride/ir/hydride/printer)
 
+(require hydride/ir/hvx/printer)
+
+
+
+
 
 (provide (all-defined-out))
 
+(define llvm-target 'hvx)
 
 ;; Convert hydride expression with into string
 ;; with type information for inputs and intermediate
@@ -30,7 +36,19 @@
    type-str
    )
   (define string-list (hash-map id-map print-helper))
-  (define hydride-str (hydride-printer hydride-expr))
+
+
+  (define printer-functor
+    (cond
+      [(equal? llvm-target 'hvx)
+       hvx:hydride-printer
+       ]
+      [(equal? llvm-target 'x86)
+       hydride-printer
+       ]
+      )
+    )
+  (define hydride-str (printer-functor hydride-expr))
 
   (string-append (apply string-append string-list) "\n" hydride-str "\n")
   )

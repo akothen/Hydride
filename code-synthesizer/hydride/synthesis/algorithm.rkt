@@ -23,7 +23,19 @@
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/printer)
 
+
+(require hydride/ir/hvx/definition)
+(require hydride/ir/hvx/cost_model)
+(require hydride/ir/hvx/const_fold)
+(require hydride/ir/hvx/printer)
+(require hydride/ir/hvx/binder)
+
+
+
 (provide (all-defined-out))
+
+
+(define halide-target 'hvx)
 
 
 ;; Defines the utilities to perform synthesis on Halide IR expressions
@@ -47,7 +59,20 @@
     v
     )
   (define printed-map (hash-map id-map print-helper))
-  (displayln (hydride-printer sol))
+
+
+  (define printer-functor
+    (cond
+      [(equal? halide-target 'hvx)
+       hvx:hydride-printer
+       ]
+      [(equal? halide-target 'x86)
+       hydride-printer
+       ]
+      )
+    )
+
+  (displayln (printer-functor sol))
 
   )
 
@@ -90,19 +115,43 @@
   ;; any operation are all literals then that operation
   ;; can instead be replaced with it's result. Traverse
   ;; bottom up and incrementally simplify operations.
-  (define folded (hydride:const-fold synthesized-sol))
+
+  (define const-fold-functor
+    (cond
+      [(equal? halide-target 'hvx)
+       hvx:const-fold
+       ]
+      [(equal? halide-target 'x86)
+       hydride:const-fold
+       ]
+      )
+    )
+
+
+  (define cost-functor
+    (cond
+      [(equal? halide-target 'hvx)
+       hvx:cost
+       ]
+      [(equal? halide-target 'x86)
+       hydride:cost
+       ]
+      )
+    )
+
+  (define folded (const-fold-functor synthesized-sol))
 
   ;; Lower target agnostic specialized shuffles to sequences
   ;; of target specific shuffle operations.
   (define swizzle-start (current-seconds))
-  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log hydride:cost #t #f))
+  (define legalized-shuffles-expr (legalize-expr-swizzles folded solver  synth-log cost-functor #t #f))
   (define swizzle-end (current-seconds))
   (debug-log (format "Lowering swizzles took ~a seconds" (- swizzle-end swizzle-start)))
   (pretty-print id-map)
   (displayln "========================================")
   ;; Apply constant folding again after lowering swizzles
   ;; as additional simplfication oppurtunities may have resulted
-  (hydride:const-fold legalized-shuffles-expr) 
+  (const-fold-functor legalized-shuffles-expr) 
   )
 
 
@@ -361,7 +410,7 @@
                   (println materialize)
 
                   (displayln "Cost")
-                  (println (hydride:cost materialize))
+                  (println (hvx:cost materialize))
 
                   ;; Now that we've synthesized the sub-expression
                   ;; we can clear the symbolic heap
@@ -378,7 +427,19 @@
                     )
                   (debug-log "Synthesized-leaves")
                   (debug-log synthesized-leaves)
-                  (bind-expr materialize (list->vector synthesized-leaves))
+
+                  (define bind-functor
+                    (cond
+                      [(equal? halide-target 'hvx)
+                       hvx:bind-expr
+                       ]
+                      [(equal? halide-target 'x86)
+                       bind-expr
+                       ]
+                      )
+                    )
+
+                  (bind-functor materialize (list->vector synthesized-leaves))
                   )]
               )
     )
