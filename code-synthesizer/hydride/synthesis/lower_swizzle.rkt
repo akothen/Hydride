@@ -223,7 +223,7 @@
                  (interleave-vector (vector-ref env 0) size_i_o prec_i_o)
                  ]
                 [ (deinterleave-vector_dsl v0 size_i_o prec_i_o)
-                 (deinterleave-vector (vector-ref env 1) size_i_o prec_i_o)
+                 (deinterleave-vector (vector-ref env 0) size_i_o prec_i_o)
                  ]
                 [_ (error "unrecognized reference for swizzle")]
                 )

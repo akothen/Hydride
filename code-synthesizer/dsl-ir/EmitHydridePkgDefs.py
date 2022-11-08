@@ -90,7 +90,7 @@ with open("gen.rkt","w+") as RacketFile:
 
     write_to_file(bd.emit_binder(dsl_list ,sd))
 
-    write_to_file(cf.emit_const_fold(dsl_list, sd, const_fold_name = "hvx:const-fold"))
+    write_to_file(cf.emit_const_fold(dsl_list, sd, const_fold_name = "hvx:const-fold", interpret_name = "hvx:interpret"))
 
     write_to_file(vd.emit_visitor(dsl_list, sd, visitor_name = "hvx:visitor"))
 

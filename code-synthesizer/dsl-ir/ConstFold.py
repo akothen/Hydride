@@ -8,7 +8,7 @@ class ConstFold:
         return
 
 
-    def emit_default_def(self, struct_definer ,  const_fold_name = "hydride:const-fold"):
+    def emit_default_def(self, struct_definer ,  const_fold_name = "hydride:const-fold", interpret_name = "hydride:interpret"):
         defaults = []
 
         defaults.append("[(dim-x id) (dim-x id)]")
@@ -24,7 +24,7 @@ class ConstFold:
         defaults.append("[(idx-mul i1 i2) (idx-mul i1 i2) ]")
 
         for structs in default_structs:
-            defaults.append(self.emit_const_fold_def(structs, struct_definer, const_fold_name = const_fold_name )[1:])
+            defaults.append(self.emit_const_fold_def(structs, struct_definer, const_fold_name = const_fold_name , interpret_name = interpret_name)[1:])
 
 
         return ["\t{}".format(d) for d in defaults]
@@ -106,7 +106,7 @@ class ConstFold:
 
     def emit_const_fold(self, dsl_inst_ls, struct_definer, const_fold_name = "hydride:const-fold", interpret_name = "hydride:interpret"):
 
-        interpret_clauses = self.emit_default_def(struct_definer, const_fold_name = const_fold_name)
+        interpret_clauses = self.emit_default_def(struct_definer, const_fold_name = const_fold_name, interpret_name = interpret_name)
         interpret_clauses += [self.emit_const_fold_def(dsl_inst, struct_definer, const_fold_name = const_fold_name, interpret_name = interpret_name) for dsl_inst in dsl_inst_ls]
         interpret_clauses.append(self.emit_fallback_def())
 

@@ -31,10 +31,10 @@ class GetLengthDef:
 
         # Special case handling for vector loads
 
-        load_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_load_dsl)
-        load_args = dummy_vector_load_dsl.get_sample_context().context_args
-        load_len_expr = "(* {} {})".format(load_args[3].name, load_args[4].name)
-        defaults.append("[{} {}]".format(load_dsl_use, load_len_expr))
+        #load_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_load_dsl)
+        #load_args = dummy_vector_load_dsl.get_sample_context().context_args
+        #load_len_expr = "(* {} {})".format(load_args[3].name, load_args[4].name)
+        #defaults.append("[{} {}]".format(load_dsl_use, load_len_expr))
 
         # Special case handling for two input swizzle
 

@@ -250,3 +250,42 @@
   )
   result
 )
+
+(define (bvsaturate vect bitwidth sat_size is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvssat vect bitwidth sat_size)
+      )
+      (begin
+        (bvusat vect bitwidth sat_size)
+      )
+    )
+  )
+  result
+)
+
+(define (bvaddnw a b bitwidth wrap_around_id)
+  (define result
+    (cond
+    [(equal? wrap_around_id 1) (bvaddnsw a b bitwidth)]
+    [(equal? wrap_around_id 0) (bvaddnuw a b bitwidth)]
+    [else (bvadd a b)]
+    )
+  )
+  result
+)
+
+
+(define (bvsubnw a b bitwidth wrap_around_id)
+  (define result
+    (cond
+    [(equal? wrap_around_id 1) (bvsubnsw a b bitwidth)]
+    [(equal? wrap_around_id 0) (bvsubnuw a b bitwidth)]
+    [else (bvsub a b)]
+    )
+  )
+  result
+)
+
+

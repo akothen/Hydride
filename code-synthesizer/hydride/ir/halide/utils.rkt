@@ -544,12 +544,12 @@
         )
      ]
     
-    [(uint64x128 vec) 
+    [(uint8x128 vec) 
        (if is-leaf-depth
-        (values (uint64x128 (arg 0)) 1)
+        (values (uint8x128 (arg 0)) 1)
         (begin
           (define-values (leaf-sol args-used) (bind-expr-args vec args (- depth 1)))
-          (values (uint64x128 leaf-sol) args-used)
+          (values (uint8x128 leaf-sol) args-used)
         )
         )
      ]

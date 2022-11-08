@@ -34,7 +34,7 @@ class GetOutPrecDef:
         load_dsl_use = struct_definer.emit_dsl_struct_use(dummy_vector_load_dsl)
         load_args = dummy_vector_load_dsl.get_sample_context().context_args
         load_prec_expr = "{}".format(load_args[4].name)
-        defaults.append("[{} {}]".format(load_dsl_use, load_prec_expr))
+        #defaults.append("[{} {}]".format(load_dsl_use, load_prec_expr))
 
         # Special case handling for two input swizzle
 

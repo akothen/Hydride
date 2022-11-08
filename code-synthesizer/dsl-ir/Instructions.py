@@ -25,7 +25,8 @@ BV_OPS = [
     "bvmulnsw", "bvmulnuw","if", "abs", "cond",
     "bvsmax", "bvumax", "bvsmin", "bvumin",
     "bvrol", "bvror",
-    "ramp"
+    "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
+    "bvsubnw"
 ]
 
 BV_OP_VARIANTS = [
@@ -223,7 +224,7 @@ class Context:
                                         input_precision = is_in,
                                         output_precision = is_out,
                                         value = precision_value)
-            elif arg.isnumeric() or type(arg) == int:
+            elif arg.isnumeric() or type(arg) == int or arg.lstrip('-+').isnumeric() :
 
                 context_arg = Integer("num_{}".format(idx), int(arg))
 

@@ -18,7 +18,7 @@ class InterpreterDef:
 
 
         for structs in default_structs:
-            defaults.append(self.emit_interpret_def(structs, struct_definer, add_assertions = add_assertions)[1:])
+            defaults.append(self.emit_interpret_def(structs, struct_definer, add_assertions = add_assertions, interpret_name = interpret_name)[1:])
 
 
         return ["\t{}".format(d) for d in defaults]
