@@ -52,31 +52,6 @@
 )
 
 
-(define (bvssat vect bitwidth sat_size)
-  (if (> bitwidth sat_size)
-  (begin
-    (cond
-    [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
-    [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
-    [else (extract (- sat_size 1) 0 vect)])
-  )
-  (begin
-   vect
-  )
- )
-)
-
-
-(define (bvusat vect bitwidth sat_size)
-  (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
-    (begin
-      (bvumaxval sat_size)
-    )
-    (begin
-      (extract (- sat_size 1) 0 vect)
-    )
-  )
-)
 
 
 (define (bvpadhighbits vect num_pad_bits)
@@ -88,28 +63,6 @@
       (concat (bv 0 num_pad_bits) vect)
     )
   )
-)
-
-
-(define (bvaddnsw a b bitwidth)
-  (define c (bvadd a b))
-  (define result
-  (cond
-    [(and (> (bitvector->integer a) 0) (> (bitvector->integer b) 0)
-          (< (bitvector->integer c) 0))
-          (bvsmaxval bitwidth)]
-    [(and (< (bitvector->integer a) 0) (< (bitvector->integer b) 0)
-          (> (bitvector->integer c) 0))
-          (bvsminval bitwidth)]
-    [else (bvadd a b)]
-  )
-  )
-  result
-)
-
-
-(define (bvaddnuw a b bitwidth)
-  (bvadd a (bvumin (bvsub (bvumaxval bitwidth) a) b))
 )
 
 
@@ -181,6 +134,87 @@
   )
   result
 )
+
+
+(define (bvssat vect bitwidth sat_size)
+  (if (> bitwidth sat_size)
+  (begin
+    (cond
+    [(bvslt vect (bv (bitvector->integer (bvsminval sat_size)) bitwidth)) (bvsminval sat_size)]
+    [(bvsgt vect (bv (bitvector->integer (bvsmaxval sat_size)) bitwidth)) (bvsmaxval sat_size)]
+    [else (extract (- sat_size 1) 0 vect)])
+  )
+  (begin
+   vect
+  )
+ )
+)
+
+
+(define (bvusat vect bitwidth sat_size)
+  (if (bvugt vect (bv (bitvector->natural (bvumaxval sat_size)) bitwidth)) 
+    (begin
+      (bvumaxval sat_size)
+    )
+    (begin
+      (extract (- sat_size 1) 0 vect)
+    )
+  )
+)
+
+
+(define (bvsat vect bitwidth sat_size is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvssat vect bitwidth sat_size)
+      )
+      (begin
+        (bvusat vect bitwidth sat_size)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvaddnsw a b bitwidth)
+  (define c (bvadd a b))
+  (define result
+  (cond
+    [(and (> (bitvector->integer a) 0) (> (bitvector->integer b) 0)
+          (< (bitvector->integer c) 0))
+          (bvsmaxval bitwidth)]
+    [(and (< (bitvector->integer a) 0) (< (bitvector->integer b) 0)
+          (> (bitvector->integer c) 0))
+          (bvsminval bitwidth)]
+    [else (bvadd a b)]
+  )
+  )
+  result
+)
+
+
+(define (bvaddnuw a b bitwidth)
+  (bvadd a (bvumin (bvsub (bvumaxval bitwidth) a) b))
+)
+
+
+(define (bvaddnw a b bitwidth is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvaddnsw a b bitwidth)
+      )
+      (begin
+        (bvaddnuw a b bitwidth)
+      )
+    )
+  )
+  result
+)
+
+
 
 
 ;; Tests
