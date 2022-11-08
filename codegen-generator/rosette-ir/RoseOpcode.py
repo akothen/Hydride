@@ -102,6 +102,7 @@ class RoseOpcode(Enum):
     # Ops to represent saturation
     bvssat = auto()
     bvusat = auto()
+    bvsaturate = auto()
 
     # Racket/Rosette doesn't have these ops
     # but its convenient to have them here.
@@ -265,6 +266,13 @@ class RoseOpcode(Enum):
             assert isinstance(Inputs[1], RoseValues.RoseConstant)
             assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
             return RoseBitVectorType.create(Inputs[1].getValue())
+        if self.value == self.bvsaturate.value:
+            BVInputs = self.getBVOpInputs(Inputs)
+            assert(len(BVInputs) == 1)
+            assert isinstance(Inputs[1], RoseValues.RoseConstant)
+            assert isinstance(Inputs[2], RoseValues.RoseConstant)
+            assert Inputs[1].getValue() <= BVInputs[0].getType().getBitwidth()
+            return RoseBitVectorType.create(Inputs[1].getValue())
         if self.value == self.bvtrunclow.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 1)
@@ -406,6 +414,17 @@ class RoseOpcode(Enum):
         or self.value == self.bvusat.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if not isinstance(Inputs[1], RoseValues.RoseConstant):
+                return False
+            if Inputs[1].getValue() > BVInputs[0].getType().getBitwidth():
+                return False
+            if len(BVInputs) == 1:
+                return True
+            else:
+                return False
+        if self.value == self.bvsaturate.value:
+            if not isinstance(Inputs[1], RoseValues.RoseConstant):
+                return False
+            if not isinstance(Inputs[2], RoseValues.RoseConstant):
                 return False
             if Inputs[1].getValue() > BVInputs[0].getType().getBitwidth():
                 return False
@@ -644,6 +663,7 @@ class RoseOpcode(Enum):
         or self.value == self.cast.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsaturate.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value \
         or self.value == self.bvsignextend.value \
@@ -713,6 +733,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsaturate.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value \
         or self.value == self.call.value \
@@ -791,7 +812,8 @@ class RoseOpcode(Enum):
         or self.value == self.bvtrunchigh.value:
             return (NumInputs == 2)
         if self.value == self.select.value \
-        or self.value == self.bvsizeextend.value:
+        or self.value == self.bvsizeextend.value \
+        or self.value == self.bvsaturate.value:
             return (NumInputs == 3)
         if self.value == self.call.value \
         or self.value == self.opaquecall.value:
@@ -881,6 +903,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsaturate.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value \
         or self.value == self.bvpadhighbits.value:
@@ -893,6 +916,7 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsaturate.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value:
             return True
@@ -989,6 +1013,7 @@ class RoseOpcode(Enum):
         # These ops exist in Rose IR but not in Rosette
         if self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
+        or self.value == self.bvsaturate.value \
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value \
