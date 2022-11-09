@@ -29,6 +29,10 @@
 #include "average_pool.h"
 #elif benchmark_idct4
 #include "idct4.h"
+#elif benchmark_idct8
+#include "idct8.h"
+#elif benchmark_sbc
+#include "sbc.h"
 #elif benchmark_max_pool
 #include "max_pool.h"
 #elif benchmark_l2norm
@@ -388,6 +392,75 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - idct8(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+#if benchmark_sbc
+
+    // See: https://github.com/ychen306/vegenbench/blob/803d7692b3ad580428ef34ce692b22dd981d988f/bench.cc#L46
+    // This seems arbitrary, I couldn't find any logic for it. Probably the original author checked the function,
+    // saw what is the maximum offset that accesses any of the buffers, and picked this length
+    // for all the buffers.
+    // But the output buffer definitely goes up to 4 if you see the code.
+    halide_dimension_t in_dim{ 0, 64, 1 };
+    halide_dimension_t in_shape[1] = { in_dim };
+
+    halide_dimension_t out_dim{ 0, 4, 1 };
+    halide_dimension_t out_shape[1] = { out_dim };
+
+    // Divide by 2 because of the int16_t buffer
+    int input_size = (width*height) / sizeof(int16_t);
+
+    int iteration_size = 64;
+
+    // Create the buffers here. Don't put them inside the loop in the benchmark because then
+    // constructors and destructors will be called for every iteration.
+    //
+    // Ideally, we'd allocate a single buffer on the stack and just reset its data pointer
+    // in every iteration. But there doesn't seem to be a cheap way to do that. All the functions
+    // in Runtime::Buffer call constructors etc.
+    //
+    // The buffers seem to just get allocated, without setting their values:
+    // https://github.com/ychen306/vegenbench/blob/803d7692b3ad580428ef34ce692b22dd981d988f/bench.h#L79
+    // I allocate a single buffer for `consts` which is set with the first values of `input`. And then multiple
+    // input/output buffers.
+
+    Halide::Runtime::Buffer<int16_t> consts((int16_t *)input, /* ndims */ 1, in_shape);
+
+    struct BufferPair {
+        Halide::Runtime::Buffer<int16_t> input_buf;
+        Halide::Runtime::Buffer<int32_t> output_buf;
+    };
+
+    int num_iterations = input_size / iteration_size;
+    BufferPair *buffers = (BufferPair *) malloc(num_iterations*sizeof(BufferPair));
+    for (int i = 0; i < num_iterations; ++i) {
+        buffers[i].input_buf = 
+            Halide::Runtime::Buffer<int16_t>((int16_t *)(&input[i*iteration_size]), /* ndims */ 1, in_shape);
+        // The output buffer is different because it needs only 4 elements.
+        buffers[i].output_buf =
+            Halide::Runtime::Buffer<int32_t>((int32_t *)(&output[i*4]), /* ndims */ 1, out_shape);
+    }
+
+    cycles = benchmark([&]() {
+        for (int i = 0; i < num_iterations; ++i) {
+            Halide::Runtime::Buffer<int16_t> input_buf = buffers[i].input_buf;
+            Halide::Runtime::Buffer<int32_t> output_buf = buffers[i].output_buf;
+            int error = sbc(input_buf, consts, output_buf);
+            if (error != 0) {
+                printf("sbc pipeline failed: %d\n", error);
+            }
+        }
+    });
+
+    // Free the buffers
+    free(buffers);
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - sbc(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
 
 
 
