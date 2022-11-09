@@ -82,7 +82,7 @@ class HexRoseContext(RoseContext):
       ChildContext.setParentContext(self)
       ChildContext.copyAbstractionsFromParent()
       super().createContext(ID, ChildContext)
-  
+
   def destroyContext(self, ContextName : str):
     print("ROOT ABSTRACTION:")
     print(self.getRootAbstraction())
@@ -95,7 +95,6 @@ class HexRoseContext(RoseContext):
       print("HERE")
       ChildContext.replaceParentAbstractionsWithChild()
       super().destroyContext(ContextName)
-
 
 
 def CompileNumber(Num, Context : HexRoseContext):
@@ -116,11 +115,15 @@ def CompileVar(Variable, Context):
   print("VARIABLE:")
   print(Variable)
   # Check if the variable is already defined and cached. If yes, just return that.
+  print("CONTEXT ID:")
+  print(id(Context))
   if Context.isVariableDefined(Variable.name):
+    print("VARIABLE IS ALREADY DEFINED")
     ID = Context.getVariableID(Variable.name)
     return Context.getCompiledAbstractionForID(ID)
 
   # Create a new rose value. We do not know the bitwidth, so use the maximum bitwidth
+  print("COMPILING A NEW VARIABLE")
   CompiledVar = RoseValue.create(Variable.name, \
           RoseBitVectorType.create(Context.getMaxVectorLength()))
 
@@ -914,6 +917,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
   print("GET RHS TYPE:")
   PredictedType.print()
   if not isinstance(PredictedType, RoseUndefinedType):
+    print("????????????????????????/#")
     Context.setNumberType(PredictedType)
   else:
     print("!!!!!!! LHS TYPE UNDEFINED")
@@ -923,10 +927,12 @@ def CompileUpdate(Update, Context : HexRoseContext):
   print(Update)
   print("COMPILING RHS")
   RHSExprVal = CompileExpression(Update.rhs, Context)
+  print("############################")
   Context.setNumberType(OriginalNumberTy)
   print(type(RHSExprVal))
   print("COMPILED RHS")
   RHSExprVal.print()
+  print(id(RHSExprVal))
 
   if type(Update.lhs) == Var:
     # Get the ID associated with the RHS value
@@ -1144,7 +1150,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
         elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getValue():
-          RHSExprVal = RoseBVTruncateOp.create(Context.genName(), \
+          RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
                         RHSExprVal, BitwidthValue.getValue())
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
@@ -1315,9 +1321,9 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   print("--Operand1:")
   Operand1.print()
   Operand1.getType().print()
-  if isinstance(Operand1.getType(), RoseBitVectorType):
-    print("Context.isValueSigned(Operand1):")
-    print(Context.isValueSigned(Operand1))
+  #if isinstance(Operand1.getType(), RoseBitVectorType):
+  #  print("Context.isValueSigned(Operand1):")
+  #  print(Context.isValueSigned(Operand1))
   Operand2 = CompileExpression(BinaryExpr.b, Context)
   print("--Operand2:")
   Operand2.print()
@@ -1328,9 +1334,9 @@ def CompileBinaryExpr(BinaryExpr, Context : HexRoseContext):
   print("--Operand2:")
   Operand2.print()
   Operand2.getType().print()
-  if isinstance(Operand2.getType(), RoseBitVectorType):
-    print("Context.isValueSigned(Operand2):")
-    print(Context.isValueSigned(Operand2))
+  #if isinstance(Operand2.getType(), RoseBitVectorType):
+  #  print("Context.isValueSigned(Operand2):")
+  #  print(Context.isValueSigned(Operand2))
 
   # We have to deal with the special case
   ExtendOperandSize = False
@@ -1795,6 +1801,8 @@ def CompileSemantics(Sema, RootContext : HexRoseContext):
   # Some sanity checks
   assert len(Sema.params) > 0
   assert len(Sema.params) == len(Sema.paramsizes)
+  print("ROOT CONTEXT ID")
+  print(id(RootContext))
   ParamValues = []
   ParamsIDs = []
   OutputParam = RoseUndefValue()
@@ -1889,11 +1897,37 @@ def CompileSemantics(Sema, RootContext : HexRoseContext):
   print(OutputParam)
   print(type(OutputParam))
   # Fix some reduction patterns specific to hexagon
-  FixFunctionsWithReductionPattern(CompiledFunction, RootContext)
+  #FixFunctionsWithReductionPattern(CompiledFunction, RootContext)
 
   print("\n\n\n\n\n")
   CompiledFunction.print()
 
+  # Replace the uses of arguments
+  BlockList = CompiledFunction.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    for Op in Block:
+      for OperandIndex, Operand in enumerate(Op.getOperands()):
+        if isinstance(Operand, RoseArgument):
+          for Arg in CompiledFunction.getArgs():
+            if Arg == Operand:
+              Op.setOperand(OperandIndex, Arg)
+              break
+  
+  for Arg in CompiledFunction.getArgs():
+    print("ARG:")
+    Arg.print()
+    print(Arg.ID)
+    Arg.getType().print()
+    print(id(Arg))
+  BlockList = CompiledFunction.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    for Op in Block:
+      if isinstance(Op, RoseBVInsertSliceOp):
+        Op.getInsertValue().print()
+        print(Op.getInsertValue().ID)
+        print(id(Op.getInsertValue()))
+        print(type(Op.getInsertValue()))
+  
   return CompiledFunction
 
 
@@ -2421,6 +2455,7 @@ BinaryOps = {
     '==' : HandleToEqual,
     '!=' : HandleToNotEqual,
     '>>' : HandleToLshr,
+    '>>>' : HandleToAshr,
     '<<' : HandleToShl,
     '&' : HandleToAnd,
     '|' : HandleToOr,
