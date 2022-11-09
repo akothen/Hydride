@@ -6,7 +6,7 @@
 
 
 import x86RoseLang
-#import HexRoseLang
+import HexRoseLang
 
 import RoseCSE
 import RoseDCE
@@ -19,6 +19,9 @@ import RoseCanonicalize
 import RoseOpCombine
 import RoseOpSimplify
 import RosetteGen
+import RoseReg2Reg
+import RoseAssignDestination
+import RoseAbstractSignedness
 
 import multiprocessing
 
@@ -27,7 +30,7 @@ class RoseCodeGenerator:
   # Keep a record of all target-specific APIs here
   TargetAPI = {
     "x86" : x86RoseLang,
-    #"Hexagon" : HexRoseLang,
+    "Hexagon" : HexRoseLang,
   }
 
   def __init__(self, Target : str):
@@ -42,17 +45,30 @@ class RoseCodeGenerator:
     print("Function NAEEM:")
     print(Function.getName())
     Context = FunctionInfo.getContext()
+    print("EXTERACTED CONTEXT FROM FUNCTIONINFO")
+    Context.print()
     if self.JustGenRosette == False:
       Function = Function.clone()
+      RoseReg2Reg.Run(Function, Context)
+      Context.print()
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      Context.print()
+      RoseAssignDestination.Run(Function, Context)
+      FunctionInfo.addFunctionAtNewStage(Function)
+      Function = Function.clone()
+      Context.print()
       RoseBVLengthReduction.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseLoopReroller.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       #Function = Function.clone()
       #RoseOpSimplify.Run(Function, Context)
       #FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseOpCombine.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       #Function = Function.clone()
@@ -62,42 +78,55 @@ class RoseCodeGenerator:
       #RoseDCE.Run(Function, Context)
       #FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseLoopDistributer.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseOpSimplify.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseOpCombine.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseCSE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseDCE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseFunctionInliner.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseOpCombine.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseCSE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseDCE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseCanonicalize.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseOpCombine.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseCSE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       Function = Function.clone()
+      Context.print()
       RoseDCE.Run(Function, Context)
       FunctionInfo.addFunctionAtNewStage(Function)
       FunctionInfo.addTargetSpecificFunction(Function)
@@ -108,6 +137,10 @@ class RoseCodeGenerator:
         #File.write(str(Function))
         #File.write("\n")
         #File.close()
+        Context.print()
+        RoseAbstractSignedness.Run(Function, Context)
+        FunctionInfo.addFunctionAtNewStage(Function)
+        Function = Function.clone()
         ArgToConstantValsMap = dict()
         RoseExtractConstants.Run(Function, Context, ArgToConstantValsMap)
         FunctionInfo.addFunctionAtNewStage(Function)
@@ -152,7 +185,7 @@ class RoseCodeGenerator:
 
 
 if __name__ == '__main__':
+  CodeGenerator = RoseCodeGenerator(Target="Hexagon")
   #CodeGenerator = RoseCodeGenerator(Target="x86")
-  CodeGenerator = RoseCodeGenerator(Target="x86")
   CodeGenerator.codeGen(JustGenRosette=False, ExtractConstants=True)
 
