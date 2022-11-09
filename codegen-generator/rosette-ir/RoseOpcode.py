@@ -113,6 +113,12 @@ class RoseOpcode(Enum):
     bvgeneralrem = auto()
     bvgeneralmax = auto()
     bvgeneralmin = auto()
+    
+    # Some general comparison operations
+    bvgenerallt = auto()
+    bvgeneralle = auto()
+    bvgeneralgt = auto()
+    bvgeneralge = auto()
 
     # Racket/Rosette doesn't have these ops
     # but its convenient to have them here.
@@ -220,7 +226,11 @@ class RoseOpcode(Enum):
         or self.value == self.bvsgt.value \
         or self.value == self.bvugt.value \
         or self.value == self.bvsge.value \
-        or self.value == self.bvuge.value:
+        or self.value == self.bvuge.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value:
             BVInputs = self.getBVOpInputs(Inputs)
             assert(len(BVInputs) == 2)
             return RoseBooleanType.create()
@@ -532,7 +542,11 @@ class RoseOpcode(Enum):
             else:
                 return False
         if self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value:
+        or self.value == self.bvgeneralrem.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value:
             BVInputs = self.getBVOpInputs(Inputs)
             if len(BVInputs) != 2:
                 return False
@@ -540,7 +554,7 @@ class RoseOpcode(Enum):
                 return False
             if isinstance(Inputs[-1].getType(), RoseBooleanType):
                 return True
-            return False
+            return False            
         if self.value == self.call.value:
             Callee = Inputs[0]
             if len(Inputs) > 1:
@@ -724,6 +738,10 @@ class RoseOpcode(Enum):
         or self.value == self.bvgeneralrem.value \
         or self.value == self.bvgeneralmax.value \
         or self.value == self.bvgeneralmin.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value \
         or self.value == self.ret.value:
             return False
         return None
@@ -792,6 +810,10 @@ class RoseOpcode(Enum):
         or self.value == self.bvgeneralrem.value \
         or self.value == self.bvgeneralmax.value \
         or self.value == self.bvgeneralmin.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value \
         or self.value == self.bvssat.value \
         or self.value == self.bvusat.value \
         or self.value == self.bvsaturate.value \
@@ -876,7 +898,11 @@ class RoseOpcode(Enum):
         or self.value == self.bvsizeextend.value \
         or self.value == self.bvsaturate.value \
         or self.value == self.bvgeneraldiv.value \
-        or self.value == self.bvgeneralrem.value:
+        or self.value == self.bvgeneralrem.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value:
             return (NumInputs == 3)
         if self.value == self.call.value \
         or self.value == self.opaquecall.value:
@@ -953,6 +979,10 @@ class RoseOpcode(Enum):
         or self.value == self.bvurem.value \
         or self.value == self.bvgeneraldiv.value \
         or self.value == self.bvgeneralrem.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value \
         or self.value == self.bvsmod.value \
         or self.value == self.bvrol.value \
         or self.value == self.bvror.value \
@@ -1095,6 +1125,10 @@ class RoseOpcode(Enum):
         or self.value == self.bvgeneralrem.value \
         or self.value == self.bvgeneralmax.value \
         or self.value == self.bvgeneralmin.value \
+        or self.value == self.bvgenerallt.value \
+        or self.value == self.bvgeneralle.value \
+        or self.value == self.bvgeneralgt.value \
+        or self.value == self.bvgeneralge.value \
         or self.value == self.bvtrunclow.value \
         or self.value == self.bvtrunchigh.value \
         or self.value == self.bvinsert.value \
