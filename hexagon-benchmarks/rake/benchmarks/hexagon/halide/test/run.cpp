@@ -41,6 +41,14 @@
 #include "fully_connected.h"
 #elif benchmark_conv_nn
 #include "conv.h"
+#elif benchmark_matmul_256
+#include "matmul_256.h"
+#elif benchmark_matmul_256_32bit
+#include "matmul_256_32bit.h"
+#elif benchmark_matmul_1024_32bit
+#include "matmul_1024_32bit.h"
+#elif benchmark_depthwise_conv
+#include "depthwise_conv.h"
 #endif
 
 #define LOG2VLEN 7
@@ -647,6 +655,153 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - sobel3x3(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
+
+#if benchmark_matmul_256
+
+    halide_dimension_t x_dim{ 0, 256, 1 };
+    halide_dimension_t y_dim{ 0, 256, 256 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) input, dims, shape);
+    Halide::Runtime::Buffer<int16_t> output_buf((int16_t*)output, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = matmul_256(matA, matB, output_buf);
+            if (error != 0) {
+            printf("matmul_256 pipeline failed: %d\n", error);
+            }
+            });
+
+
+    printf("AppReported (): Image %dx%d - matmul_256(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_matmul_256_32bit
+
+    int32_t matrix_size = 256;
+    
+    halide_dimension_t x_dim{ 0, matrix_size, 1 };
+    halide_dimension_t y_dim{ 0, matrix_size, matrix_size };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    int16_t matATensor[matrix_size * matrix_size];
+    int16_t matBTensor[matrix_size * matrix_size];
+    int32_t outputTensor[matrix_size * matrix_size];
+
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)matATensor, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) matBTensor, dims, shape);
+    Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)outputTensor, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = matmul_256_32bit(matA, matB, output_buf);
+            if (error != 0) {
+            printf("matmul_256_32bit pipeline failed: %d\n", error);
+            }
+            });
+
+
+    printf("AppReported (): Image %dx%d - matmul_256_32bit(): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_matmul_1024_32bit
+
+    int32_t matrix_size = 1024;
+    
+    halide_dimension_t x_dim{ 0, matrix_size, 1 };
+    halide_dimension_t y_dim{ 0, matrix_size, matrix_size };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    int16_t* matATensor = (int16_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int16_t* matBTensor = (int16_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int32_t* outputTensor = (int32_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int32_t), 1 << LOG2VLEN);
+
+
+    printf("Allocated new memory!\n");
+
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)matATensor, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) matBTensor, dims, shape);
+    Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)outputTensor, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = matmul_1024_32bit(matA, matB, output_buf);
+            if (error != 0) {
+            printf("matmul_1024_32bit pipeline failed: %d\n", error);
+            }
+            });
+
+
+    printf("AppReported (): Image %dx%d - matmul_1024_32bit(): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+#if benchmark_depthwise_conv
+    halide_dimension_t x_dim{ 0, width, 1 };
+    halide_dimension_t y_dim{ 0, height, width };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+
+    int custom_width = 128;
+    int custom_height = 128;
+
+    int stride_i_dim3 = 1024 * (custom_width/32);
+    int stride_i_dim4 = stride_i_dim3 * (custom_height/32);
+    halide_dimension_t input_shape[4] = {{0, 1024, 1}, {0, custom_width/32, 1024}, {0, custom_height/32,stride_i_dim3}, {0, 1,stride_i_dim4}};
+    size_t num_input_elem = 1024 * (custom_width/32) * (custom_height/32) * 1;
+    uint8_t* inputTensor = (uint8_t*) aligned_malloc(num_input_elem * sizeof(uint8_t), 1 << LOG2VLEN);
+
+    Halide::Runtime::Buffer<uint8_t> input_(inputTensor, 4, input_shape);
+
+
+
+    halide_dimension_t filter_shape[3] = {{0, 4,1}, {0, 4,4}, {0, 4,16}};
+    size_t num_filter_elem = 4 * 4 * 4 ;
+    uint8_t* filterTensor = (uint8_t*) aligned_malloc(num_filter_elem * sizeof(uint8_t), 1 << LOG2VLEN);
+    Halide::Runtime::Buffer<uint8_t> filter_(filterTensor, 3, filter_shape);
+
+
+
+
+    halide_dimension_t bias_shape[1] = {{0, custom_width*custom_height, 1}};
+    size_t num_bias_elem = custom_width * custom_height ;
+    int32_t* biasTensor = (int32_t*) aligned_malloc(num_bias_elem * sizeof(int32_t), 1 << LOG2VLEN);
+    Halide::Runtime::Buffer<int32_t> bias_(biasTensor, 1, bias_shape);
+
+
+
+    halide_dimension_t output_shape[4] = {{0, 1024,1}, {0, custom_width/32, 1024}, {0, custom_height/32, stride_i_dim3}, {0, 1, stride_i_dim4}};
+    size_t num_output_elem = 1024 * (custom_width/32) * (custom_height/32) * 1;
+    uint8_t* outputTensor = (uint8_t*) aligned_malloc(num_output_elem * sizeof(uint8_t), 1 << LOG2VLEN);
+
+    Halide::Runtime::Buffer<uint8_t> output_buf(outputTensor, 4, shape);
+
+    int inv_depth_multiplier_ = -1;
+    uint8_t input_zero_ = 3;
+    uint8_t filter_zero_ = 5;
+    int depth_multiplier_ = 1;
+    int stride_x_ = 1;
+    int stride_y_ = 1;
+    int dilation_x_ = 1;
+    int dilation_y_ = 1;
+    int32_t output_multiplier_ = 32767;
+    uint32_t output_shift_ = 1;
+    uint8_t output_zero_ = 3;
+    uint8_t output_min_ =5;
+    uint8_t output_max_ = 250;
+
+
+
+    cycles = benchmark([&]() {
+            int error = depthwise_conv(input_,  input_zero_, filter_ ,  filter_zero_, bias_,  depth_multiplier_,  stride_x_,  stride_y_, dilation_x_, dilation_y_, output_multiplier_, output_shift_, output_zero_,  output_min_, output_max_, output_buf );
+            if (error != 0) {
+            printf("depthwise_conv pipeline failed: %d\n", error);
+            }
+            });
+
+
+    printf("AppReported (): Image %dx%d - l2norm(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
 
 #if benchmark_gaussian3x3
     halide_dimension_t x_dim{ 0, width, 1 };
