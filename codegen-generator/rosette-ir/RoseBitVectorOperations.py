@@ -15,7 +15,11 @@ from RoseValues import *
 from RoseBitVectorOperation import RoseBitVectorOp
 from RoseSaturableBitVectorOperation import RoseSaturableBitVectorOp
 from RoseComparisonBitVectorOp import RoseComparisonBitVectorOp
-from RoseSizeExtBitVectorOperation import RoseBVSizeExensionOp
+from RoseSizeExtBitVectorOperation import *
+from RoseGeneralSaturationOperation import *
+from RoseGeneralSaturableOperations import *
+from RoseSignAgnosticOperations import *
+from RoseGeneralComparisonOperations import *
 from RoseLLVMContext import *
 
 from llvmlite.ir.values import Undefined as LLVMUndefined
@@ -201,15 +205,18 @@ class RoseBVSSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSaturationSize(self):
+    return self.getOperand(1)
+
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     String = Spaces + "(define " + self.getName() + " (bvssat "
-    String += self.getOperand(0).getName() + " " \
-            + str(self.getOperand(0).getOutputBitwidth()) \
-            + " " + self.getOperand(1).getName() + " "
+    String += self.getInputBitVector().getName() + " " \
+            + str(self.getInputBitVector().getOutputBitwidth()) \
+            + " " + self.getSaturationSize().getName() + " "
     String += "))\n"
     return String
 
@@ -243,15 +250,18 @@ class RoseBVUSaturateOp(RoseBitVectorOp):
   def getInputBitVector(self):
     return self.getOperand(0)
 
+  def getSaturationSize(self):
+    return self.getOperand(1)
+
   def to_rosette(self, NumSpace = 0, ReverseIndexing = False):
     assert ReverseIndexing == False
     Spaces = ""
     for _ in range(NumSpace):
       Spaces += " "
     String = Spaces + "(define " + self.getName() + " (bvusat "
-    String += self.getOperand(0).getName() + " " \
-            + str(self.getOperand(0).getOutputBitwidth()) \
-            + " " + self.getOperand(1).getName() + " "
+    String += self.getInputBitVector().getName() + " " \
+            + str(self.getInputBitVector().getOutputBitwidth()) \
+            + " " + self.getSaturationSize().getName() + " "
     String += "))\n"
     return String
 
