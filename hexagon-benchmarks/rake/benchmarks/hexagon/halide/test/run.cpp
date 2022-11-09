@@ -325,6 +325,64 @@ int main(int argc, char **argv) {
 #endif
 
 
+#if benchmark_idct8
+    halide_dimension_t x_dim{ 0, 8, 1 };
+    halide_dimension_t y_dim{ 0, 8, 8 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    // Divide by 2 because of the int16_t buffer
+    int width_i16 = width / sizeof(int16_t);
+
+    struct BufferPair {
+        Halide::Runtime::Buffer<int16_t> input_buf;
+        Halide::Runtime::Buffer<int16_t> output_buf;
+    };
+
+    // Create the buffers here. Don't put them inside the loop in the benchmark because then
+    // constructors and destructors will be called for every iteration.
+    BufferPair **buffers = (BufferPair **) malloc((height/8)*sizeof(BufferPair *));
+    for (int y = 0; y < height; y += 8) {
+        buffers[y/8] = (BufferPair *) malloc((width_i16/8)*sizeof(BufferPair));
+        for (int x = 0; x < width_i16; x += 8) {
+            buffers[y/8][x/8].input_buf = Halide::Runtime::Buffer<int16_t>((int16_t *)(&input[y*width_i16 + x]), /* ndims */ 2, shape);
+            buffers[y/8][x/8].output_buf = Halide::Runtime::Buffer<int16_t>((int16_t *)(&output[y*width_i16 + x]), /* ndims */ 2, shape);
+        }
+    }
+
+    cycles = benchmark([&]() {
+        // Notice the +4 steps. My understanding is that the idct8
+        // kernel is to be applied to a 8x8 input and outputs
+        // a 8x8 output.
+        for (int y = 0; y < height; y += 8) {
+            for (int x = 0; x < width_i16; x += 8) {
+                Halide::Runtime::Buffer<int16_t> input_buf = buffers[y/8][x/8].input_buf;
+                Halide::Runtime::Buffer<int16_t> output_buf = buffers[y/8][x/8].output_buf;
+                int error = idct8(input_buf, output_buf);
+                if (error != 0) {
+                    printf("idct8 pipeline failed: %d\n", error);
+                }
+            }
+        }
+    });
+
+    // Free the buffers
+    for (int y = 0; y < height; y += 8) {
+        free(buffers[y/8]);
+    }
+    free(buffers);
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - idct8(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+
+
 #if benchmark_l2norm
     halide_dimension_t x_dim{ 0, width, 1 };
     halide_dimension_t y_dim{ 0, height, width };
