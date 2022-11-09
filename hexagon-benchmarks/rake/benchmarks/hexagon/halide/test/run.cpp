@@ -284,6 +284,10 @@ int main(int argc, char **argv) {
 
     // Create the buffers here. Don't put them inside the loop in the benchmark because then
     // constructors and destructors will be called for every iteration.
+    //
+    // Ideally, we'd allocate a single buffer on the stack and just reset its data pointer
+    // in every iteration. But there doesn't seem to be a cheap way to do that. All the functions
+    // in Runtime::Buffer call constructors etc.
     BufferPair **buffers = (BufferPair **) malloc((height/4)*sizeof(BufferPair *));
     for (int y = 0; y < height; y += 4) {
         buffers[y/4] = (BufferPair *) malloc((width_i16/4)*sizeof(BufferPair));
@@ -340,6 +344,10 @@ int main(int argc, char **argv) {
 
     // Create the buffers here. Don't put them inside the loop in the benchmark because then
     // constructors and destructors will be called for every iteration.
+    //
+    // Ideally, we'd allocate a single buffer on the stack and just reset its data pointer
+    // in every iteration. But there doesn't seem to be a cheap way to do that. All the functions
+    // in Runtime::Buffer call constructors etc.
     BufferPair **buffers = (BufferPair **) malloc((height/8)*sizeof(BufferPair *));
     for (int y = 0; y < height; y += 8) {
         buffers[y/8] = (BufferPair *) malloc((width_i16/8)*sizeof(BufferPair));
