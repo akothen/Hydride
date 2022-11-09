@@ -27,6 +27,8 @@
 #include "mul.h"
 #elif benchmark_average_pool
 #include "average_pool.h"
+#elif benchmark_idct4
+#include "idct4.h"
 #elif benchmark_max_pool
 #include "max_pool.h"
 #elif benchmark_l2norm
@@ -265,6 +267,63 @@ int main(int argc, char **argv) {
 
     printf("AppReported (): Image %dx%d - max_pool(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
+
+
+#if benchmark_idct4
+    halide_dimension_t x_dim{ 0, 4, 1 };
+    halide_dimension_t y_dim{ 0, 4, 4 };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    // Divide by 2 because of the int16_t buffer
+    int width_i16 = width / sizeof(int16_t);
+
+    struct BufferPair {
+        Halide::Runtime::Buffer<int16_t> input_buf;
+        Halide::Runtime::Buffer<int16_t> output_buf;
+    };
+
+    // Create the buffers here. Don't put them inside the loop in the benchmark because then
+    // constructors and destructors will be called for every iteration.
+    BufferPair **buffers = (BufferPair **) malloc((height/4)*sizeof(BufferPair *));
+    for (int y = 0; y < height; y += 4) {
+        buffers[y/4] = (BufferPair *) malloc((width_i16/4)*sizeof(BufferPair));
+        for (int x = 0; x < width_i16; x += 4) {
+            buffers[y/4][x/4].input_buf = Halide::Runtime::Buffer<int16_t>((int16_t *)(&input[y*width_i16 + x]), /* ndims */ 2, shape);
+            buffers[y/4][x/4].output_buf = Halide::Runtime::Buffer<int16_t>((int16_t *)(&output[y*width_i16 + x]), /* ndims */ 2, shape);
+        }
+    }
+
+    cycles = benchmark([&]() {
+        // Notice the +4 steps. My understanding is that the idct4
+        // kernel is to be applied to a 4x4 input and outputs
+        // a 4x4 output.
+        for (int y = 0; y < height; y += 4) {
+            for (int x = 0; x < width_i16; x += 4) {
+                Halide::Runtime::Buffer<int16_t> input_buf = buffers[y/4][x/4].input_buf;
+                Halide::Runtime::Buffer<int16_t> output_buf = buffers[y/4][x/4].output_buf;
+                int error = idct4(input_buf, output_buf);
+                if (error != 0) {
+                    printf("idct4 pipeline failed: %d\n", error);
+                }
+            }
+        }
+    });
+
+    // Free the buffers
+    for (int y = 0; y < height; y += 4) {
+        free(buffers[y/4]);
+    }
+    free(buffers);
+
+#if DEBUG
+    for (int x = 0; x < 10; x++)
+        for (int y = 0; y < 10; y++)
+            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
+#endif
+
+    printf("AppReported (): Image %dx%d - idct4(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
 
 #if benchmark_l2norm
     halide_dimension_t x_dim{ 0, width, 1 };
