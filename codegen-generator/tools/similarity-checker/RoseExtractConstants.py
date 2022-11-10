@@ -25,17 +25,31 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
   assert Op not in UnknownVal
   Worklist = list()
   Worklist.extend(Op.getUsers())
+  Visited = set()
   while len(Worklist) != 0:
     Operation = Worklist.pop()
-    if Operation not in UnknownVal:
+    print("WORKLIST OP:")
+    Operation.print()
+    if Operation in Visited:
       continue
+    Visited.add(Operation)
+    #if Operation not in UnknownVal:
+    #  continue
     if not isinstance(Operation, RoseOperation):
       continue
     if Operation.getOpcode().typesOfInputsAndOutputEqual():
       # Add this operation to the map
       Operation.setType(RoseBitVectorType.create(Param))
       BVValToBitwidthVal[Operation] = Param
-      UnknownVal.remove(Operation)
+      if Operation in UnknownVal:
+        UnknownVal.remove(Operation)
+    if isinstance(Op, RoseGeneralSaturableBitVectorOp) \
+      or isinstance(Op, RoseSignAgnosticBitVectorOp):
+      # Add this operation to the map
+      Operation.setType(RoseBitVectorType.create(Param))
+      BVValToBitwidthVal[Operation] = Param
+      if Operation in UnknownVal:
+        UnknownVal.remove(Operation)
     if Operation.getOpcode().typesOfInputsAndOutputEqual() \
     or Operation.getOpcode().typesOfOperandsAreEqual():
       # Add all the operands to the map if their sizes are unknown
@@ -50,14 +64,17 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
           Operand.print()
           print("BVValToBitwidthVal[Operand].print():")
           BVValToBitwidthVal[Operand].print()
+          print("Param:")
+          Param.print()
           assert Operand not in UnknownVal
           assert Param == BVValToBitwidthVal[Operand]
           continue
         else:
-          assert Operand in UnknownVal
+          #assert Operand in UnknownVal
           Operand.setType(RoseBitVectorType.create(Param))
           BVValToBitwidthVal[Operand] = Param
-          UnknownVal.remove(Operand)
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
           # Add all the users of this operand to the worklist
           if isinstance(Operand, RoseOperation):
             Worklist.extend(Operand.getUsers())
@@ -70,6 +87,53 @@ def AddBitwidthValForUnknownVal(Op : RoseOperation, Param : RoseArgument, \
         print("USER:")
         User.print()
       Worklist.extend(Operation.getUsers())
+      for Operand in Operation.getOperands():
+        # Add all the users of this operand to the worklist
+        if isinstance(Operand, RoseOperation):
+          print("ADDING USERS OF:")
+          Operand.print()
+          Worklist.extend(Operand.getUsers())
+      continue
+    if isinstance(Op, RoseGeneralSaturableBitVectorOp) \
+      or isinstance(Op, RoseSignAgnosticBitVectorOp) \
+      or isinstance(Op, RoseGeneralComparisonBitVectorOp):
+      # Add all the operands to the map if their sizes are unknown.
+      # Ignore the last operand.
+      for Operand in Operation.getOperands()[:-1]:
+        if not isinstance(Operand, RoseOperation) \
+          and not isinstance(Operand, RoseArgument):
+          continue
+        if Operand in BVValToBitwidthVal:
+          print("Operation:")
+          Operation.print()
+          print("Operand:")
+          Operand.print()
+          print("BVValToBitwidthVal[Operand].print():")
+          BVValToBitwidthVal[Operand].print()
+          assert Operand not in UnknownVal
+          assert Param == BVValToBitwidthVal[Operand]
+          continue
+        else:
+          #assert Operand in UnknownVal
+          Operand.setType(RoseBitVectorType.create(Param))
+          BVValToBitwidthVal[Operand] = Param
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+          print("OPERAND REMOVED FROM UNKNONW SET:")
+          Operand.print()
+      # Add all the users of this operation to the worklist
+      print("Operation.getUsers():")
+      print(Operation.getUsers())
+      print("Operation:")
+      Operation.print()
+      for User in Operation.getUsers():
+        print("USER:")
+        User.print()
+      Worklist.extend(Operation.getUsers())
+      for Operand in Operation.getOperands():
+        # Add all the users of this operand to the worklist
+        if isinstance(Operand, RoseOperation):
+          Worklist.extend(Operand.getUsers())
       continue
   return
 
@@ -100,6 +164,8 @@ def FixLowIndices(Function : RoseFunction, Op : RoseBitVectorOp, Bitwidth : Rose
   Op.print()
   print("Bitwidth:")
   Bitwidth.print()
+  print("LoopIterator:")
+  LoopIterator.print()
   if isinstance(Op.getLowIndex(), RoseMulOp):
     assert len(Op.getLowIndex().getOperands()) == 2
     if isinstance(Op.getLowIndex().getOperand(0), RoseConstant):
@@ -415,25 +481,84 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           Operand.setType(Op.getType())
       continue
 
+    if isinstance(Op, RoseDivOp):
+      print("DIV OP:")
+      if Loop != RoseUndefRegion():
+        if isinstance(Op.getOperand(1), RoseConstant):
+          if Op.getOperand(0) == Loop.getIterator():
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(1).clone()
+            Op.setOperand(1, Arg)
+            Visited.add(Op)
+            continue
+
+    # if Op.isSizeChangingOp():
+    #   print("++++++=isSizeChangingOp OP IN OPLIST:")
+    #   Op.print()
+    #   # if this is an indexing op, we can ignore it
+    #   if Op in IndexingOps:
+    #     continue
+    #   if isinstance(Op, RoseBVSizeExensionOp):
+    #     ExtractBVSignedness(Function, Op, ArgToConstantValsMap, \
+    #                   OpsWithUnknownExtensionKind, Visited, Context)
+    #     OpsToTry = set()
+    #     OpsToTry.update(OpsWithUnknownExtensionKind)
+    #     for Operation in OpsToTry:
+    #       if ExtractBVSignedness(Function, Operation, ArgToConstantValsMap, \
+    #                     OpsWithUnknownExtensionKind, Visited, Context) == True:
+    #         OpsWithUnknownExtensionKind.remove(Operation)
+    #   if Op in BVValToBitwidthVal:
+    #     Op.setOperand(1, BVValToBitwidthVal[Op])
+    #     Op.setType(RoseBitVectorType.create(BVValToBitwidthVal[Op]))
+    #     BVValToBitwidthVal[Op] =  Op.getOperand(1)
+    #     if Op.getOperand(0) not in BVValToBitwidthVal:
+    #       UnknownVal.add(Op.getOperand(0))
+    #     continue
+    #   print("====SIZE EXTENSION OP:")
+    #   Op.print()
+    #   Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+    #                                               Op.getOperand(1).getType()))
+    #   ArgToConstantValsMap[Arg] = Op.getOperand(1).clone()
+    #   Op.setOperand(1, Arg)
+    #   Op.setType(RoseBitVectorType.create(Arg))
+    #   BVValToBitwidthVal[Op] = Arg
+    #   print("NEW OP:")
+    #   Op.print()
+    #   Op.getType().print()
+    #   if Op in UnknownVal:
+    #     UnknownVal.remove(Op)
+    #   AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
+    #   continue
+    
+    if isinstance(Op, RoseBVSizeExensionOp):
+      # Abstract away the signedness operand
+      if isinstance(Op.getExtensionKind(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                    Op.getExtensionKind().getType()))
+        ArgToConstantValsMap[Arg] = Op.getExtensionKind().clone()
+        Op.setOperand(Op.getExtensionKindPos(), Arg)
+      # Fall through 
+      
+    if isinstance(Op, RoseBVGeneralSaturationOp):
+      # Abstract away the signedness operand
+      if isinstance(Op.getSaturationKind(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                    Op.getSaturationKind().getType()))
+        ArgToConstantValsMap[Arg] = Op.getSaturationKind().clone()
+        Op.setOperand(Op.getSaturationKindPos(), Arg)
+      # Fall through 
+    
     if Op.isSizeChangingOp():
       print("++++++=isSizeChangingOp OP IN OPLIST:")
       Op.print()
       # if this is an indexing op, we can ignore it
       if Op in IndexingOps:
         continue
-      if isinstance(Op, RoseBVSizeExensionOp):
-        ExtractBVSignedness(Function, Op, ArgToConstantValsMap, \
-                      OpsWithUnknownExtensionKind, Visited, Context)
-        OpsToTry = set()
-        OpsToTry.update(OpsWithUnknownExtensionKind)
-        for Operation in OpsToTry:
-          if ExtractBVSignedness(Function, Operation, ArgToConstantValsMap, \
-                        OpsWithUnknownExtensionKind, Visited, Context) == True:
-            OpsWithUnknownExtensionKind.remove(Operation)
       if Op in BVValToBitwidthVal:
         Op.setOperand(1, BVValToBitwidthVal[Op])
         Op.setType(RoseBitVectorType.create(BVValToBitwidthVal[Op]))
-        BVValToBitwidthVal[Op] =  Op.getOperand(1)
+        BVValToBitwidthVal[Op] = Op.getOperand(1)
         if Op.getOperand(0) not in BVValToBitwidthVal:
           UnknownVal.add(Op.getOperand(0))
         continue
@@ -453,14 +578,111 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
       AddBitwidthValForUnknownVal(Op, Arg, BVValToBitwidthVal, UnknownVal)
       continue
   
-    if isinstance(Op, RoseDivOp):
-      print("DIV OP:")
-      if Loop != RoseUndefRegion():
-        if isinstance(Op.getOperand(1), RoseConstant):
-          if Op.getOperand(0) == Loop.getIterator():
-            Op.setOperand(1, Loop.getStep())
-            Visited.add(Op)
+    if isinstance(Op, RoseGeneralSaturableBitVectorOp):
+      print("RoseGeneralSaturableBitVectorOp:")
+      Op.print()
+      if Op in BVValToBitwidthVal:
+        # Skip the final operand
+        for OperandIndex, Operand in enumerate(Op.getOperands()[:-1]):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+            Op.setOperand(OperandIndex, Arg)
+            BVValToBitwidthVal[Op.getOperand(OperandIndex)] = BVValToBitwidthVal[Op]
             continue
+          print("SETTING TYPE FOR Operand:")
+          Operand.print()
+          Operand.setType(Op.getType())
+          BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+      else:
+        UnknownVal.add(Op)
+        # Skip the final operand
+        for OperandIndex, Operand in enumerate(Op.getOperands()[:-1]):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+            Op.setOperand(OperandIndex, Arg)
+            UnknownVal.add(Op.getOperand(OperandIndex))
+            continue      
+          if Operand not in BVValToBitwidthVal: 
+            Operand.setType(Op.getType())
+            UnknownVal.add(Operand)
+      # Account for the saturation qualifier 
+      print("Op.getSaturationQualifierID():")
+      Op.getSaturationQualifierID().print()
+      if isinstance(Op.getSaturationQualifierID(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Op.getSaturationQualifierID().getType()))
+        ArgToConstantValsMap[Arg] = Op.getSaturationQualifierID().clone()
+        Op.setOperand(Op.getSaturationQualifierIDPos(), Arg)
+      continue
+
+    if isinstance(Op, RoseSignAgnosticBitVectorOp):
+      print("RoseSignAgnosticBitVectorOp:")
+      Op.print()
+      if Op in BVValToBitwidthVal:
+        # Skip the final operand
+        for OperandIndex, Operand in enumerate(Op.getOperands()[:-1]):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+            Op.setOperand(OperandIndex, Arg)
+            BVValToBitwidthVal[Op.getOperand(OperandIndex)] = BVValToBitwidthVal[Op]
+            continue
+          print("SETTING TYPE FOR Operand:")
+          Operand.print()
+          Operand.setType(Op.getType())
+          BVValToBitwidthVal[Operand] = BVValToBitwidthVal[Op]
+          if Operand in UnknownVal:
+            UnknownVal.remove(Operand)
+      else:
+        UnknownVal.add(Op)
+        # Skip the final operand
+        for OperandIndex, Operand in enumerate(Op.getOperands()[:-1]):
+          if isinstance(Operand, RoseConstant):
+            # Abstract away this constant value
+            if isinstance(Operand.getType(), RoseBitVectorType):
+              Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            else:
+              Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                            Op.getType()))
+            ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+            Op.setOperand(OperandIndex, Arg)
+            UnknownVal.add(Op.getOperand(OperandIndex))
+            continue      
+          if Operand not in BVValToBitwidthVal: 
+            Operand.setType(Op.getType())
+            UnknownVal.add(Operand)
+      # Account for the saturation qualifier 
+      print("Op.getSignID():")
+      Op.getSignID().print()
+      if isinstance(Op.getSignID(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Op.getSignID().getType()))
+        ArgToConstantValsMap[Arg] = Op.getSignID().clone()
+        Op.setOperand(Op.getSignIDPos(), Arg)
+      continue
 
     if Op.getOpcode().typesOfInputsAndOutputEqual():
       print("typesOfInputsAndOutputEqual:")
@@ -789,7 +1011,20 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
                                     #Op.getInsertValue().clone()
         #Op.setOperand(0, Arg)
         Op.setOperand(0, ExtractOp)
+      print("********Op.getInsertValue():")
+      Op.getInsertValue().print()
+      print(Op.getInsertValue().ID)
+      print(id(Op.getInsertValue()))
+      print(type(Op.getInsertValue()))
       Op.getInsertValue().setType(RoseBitVectorType.create(Op.getOperand(Op.getBitwidthPos())))
+      print(Op.getInsertValue().getType())
+      for Arg in Block.getFunction().getArgs():
+        print("ARG:")
+        Arg.print()
+        print(Arg.ID)
+        Arg.getType().print()
+        print(id(Arg))
+      print("********************")
       # Add indexing ops in a set
       for IndexingOp in GatherIndexingOps(Op):
         IndexingOps.add(IndexingOp)
@@ -949,6 +1184,20 @@ def ExtractConstants(Function : RoseFunction, Context : RoseContext, \
   CondBlocksBVInsertsMap = MapBVInsertsInCondBlocks(Function)
 
   DealWithSkippedBVExtracts(Function, SkipBVExtracts, Context)
+
+  print("@@@@@@@@@@@@@@@@@@!!!!!!Function:")
+  Function.print()
+  for Block in Function.getRegionsOfType(RoseBlock):
+    for Op in Block:
+      if isinstance(Op, RoseBVInsertSliceOp):
+        print("bvinsert op:")
+        Op.print()
+        print("Op.getInputBitVector():")
+        Op.getInputBitVector().print()
+        print(Op.getInputBitVector().ID)
+        print("Function.getReturnValue():")
+        Function.getReturnValue().print()
+        print(Function.getReturnValue().ID)
 
   UnknownVal = set()
   BlockList = Function.getRegionsOfType(RoseBlock)
