@@ -256,7 +256,7 @@
                     )
 
 
-                  (define depth-limit 3)
+                  (define depth-limit 5)
                   (define optimize? #t)
                   (define symbolic? #f)
 
@@ -361,6 +361,7 @@
                            ]
                           )
 
+                        (displayln "Here")
                         
                         (define result
                           (cond
@@ -369,6 +370,9 @@
                             [(and (not sat?) sat?1)
                              (vector sat?1 mat1 (- test-end test-start)) 
                              ]
+                            [else
+                              (vector #f '() 0)
+                              ]
                             )
                           )
 
@@ -410,7 +414,19 @@
                   (println materialize)
 
                   (displayln "Cost")
-                  (println (hvx:cost materialize))
+
+
+                  (define cost-functor
+                    (cond
+                      [(equal? halide-target 'hvx)
+                       hvx:cost
+                       ]
+                      [(equal? halide-target 'x86)
+                       hydride:cost
+                       ]
+                      )
+                    )
+                  (println (cost-functor materialize))
 
                   ;; Now that we've synthesized the sub-expression
                   ;; we can clear the symbolic heap

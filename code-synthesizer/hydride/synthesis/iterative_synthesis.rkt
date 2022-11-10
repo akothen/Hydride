@@ -13,6 +13,7 @@
 (require hydride/ir/hydride/interpreter)
 
 (require hydride/ir/hvx/interpreter)
+(require hydride/ir/hvx/const_fold)
 
 (require hydride/ir/hydride/const_fold)
 (require hydride/ir/hydride/length)
@@ -607,7 +608,7 @@
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
-            (define simplify (hydride:const-fold materialize))
+            (define simplify (hvx:const-fold materialize))
             (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn simplify)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
               (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn 

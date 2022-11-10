@@ -656,7 +656,7 @@
 
     [(int32x8 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     [(int32x16 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
-    [(int32x32 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
+    [(int32x32 vec) (append (list  extract sign-extend  bvsizeext bvsaturate) (get-bv-ops vec))]
     [(int32x64 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     [(int32x128 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
     [(int32x256 vec) (append (list  extract sign-extend ) (get-bv-ops vec))]
@@ -711,8 +711,8 @@
     [(vec-mul v1 v2) (append (list extract bvmul) (if (is-signed-expr? v1 v2) (list bvshl sign-extend zero-extend) (list bvshl zero-extend sign-extend)) (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-div v1 v2) (append (list  extract)  (if (is-signed-expr? v1 v2) (list sign-extend bvsdiv bvashr) (list zero-extend bvudiv bvlshr))  (get-bv-ops v1)  (get-bv-ops v2))]
     [(vec-mod v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsrem bvsmod) (list  bvurem bvurem))   (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvslt bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
-    [(vec-max v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvsgt bvsmax) (list bvugt bvumax))  (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-min v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list bvslt  bvsmin) (list bvult bvumin)) (get-bv-ops v1)  (get-bv-ops v2))]
+    [(vec-max v1 v2) (append (list extract) (if (is-signed-expr? v1 v2) (list  bvsmax bvsgt) (list  bvumax bvugt))  (get-bv-ops v1)  (get-bv-ops v2))]
 
     [(vec-if v1 v2 v3) (append (list bveq 'if 'cond) (get-bv-ops v1)  (get-bv-ops v2)  (get-bv-ops v3) )]
     [(vec-eq v1 v2) (append (list eq? bveq) (get-bv-ops v1)  (get-bv-ops v2)   )]
@@ -933,10 +933,20 @@
         ;(assume (not (bvzero? (cpp:eval rhs))))
         ;(cpp:euclidean-div lhs rhs outT)
 
-        (mk-cpp-expr 
-          ;(bvsdiv (cpp:eval lhs) (cpp:eval rhs))
-          (widening-div (cpp:eval lhs) (cpp:eval rhs))
-          outT)
+
+        (define use-euc-div #f)
+
+        (define bv-result 
+          (if use-euc-div
+             (cpp:euclidean-div lhs rhs outT)
+            (mk-cpp-expr 
+              (widening-div (cpp:eval lhs) (cpp:eval rhs))
+              outT)
+            )
+          )
+
+        bv-result
+
         ]
        [else
         ;(assume (not (bvzero? (cpp:eval rhs))))

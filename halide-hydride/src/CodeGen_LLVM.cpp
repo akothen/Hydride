@@ -359,11 +359,59 @@ void CodeGen_LLVM::add_external_code(const Module &halide_module) {
 
 inline bool ends_with(std::string const & value, std::string const & ending)
 {
-    if (ending.size() > value.size()) return false;
-    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+    //if (ending.size() > value.size()) return false;
+    //return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+    return value.find(ending) != std::string::npos;
 }
 
-void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
+
+void CustomInliner(llvm::CallInst* CI){
+    llvm::ValueToValueMapTy  VMap;
+
+    llvm::Function* CF = CI->getCalledFunction();
+
+    if(!CF) return;
+
+    // Map Arguments in the VMAP
+    for(unsigned i = 0; i < CI->getNumArgOperands(); i++){
+        llvm::Value* ActualParam = CI->getArgOperand(i);
+
+        llvm::Value* FormalParam = llvm::dyn_cast<llvm::Argument>((CF->arg_begin() + i));
+
+        VMap[FormalParam] = ActualParam;
+    }
+
+    llvm::Instruction* InsertBefore = CI;
+
+
+    for(auto& BB : *CF){
+        for(llvm::Instruction &I : BB){
+
+            if(auto RI = llvm::dyn_cast<llvm::ReturnInst>(&I)){
+                CI->replaceAllUsesWith(VMap[RI->getReturnValue()]);
+                break;
+            }
+
+            llvm::Instruction* Cloned = I.clone();
+            Cloned->insertBefore(InsertBefore);
+            llvm::Value* oldI = &I;
+            VMap[oldI] = (llvm::Value*) Cloned;
+            llvm::RemapInstruction(Cloned, VMap, llvm::RF_NoModuleLevelChanges | llvm::RF_IgnoreMissingLocals);
+
+            Cloned->dropLocation();
+            Cloned->dropUnknownNonDebugMetadata();
+            
+        }
+    }
+
+
+    CI->eraseFromParent();
+
+
+
+}
+
+void CodeGen_LLVM::add_hydride_code() {
 
     std::cout << "Linking Hydride module!" << "\n";
     std::string hydride_bitcode_name = "/tmp/hydride.ll";
@@ -382,6 +430,8 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
         internal_error << "Failure linking in additional module: " << hydride_bitcode_name<< "\n";
     }
 
+    debug(0) <<"Linked hydride module to halide module"<<"\n";
+
 
     // Now that the hydride methods have been linked into the main module. We can inline the definition
     // of these calls.
@@ -389,6 +439,39 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
 
     // Inline wrapper functions inside the hydride methods
+
+
+    // First inline hydride functions
+    for(llvm::Function& Fn : *module){
+        std::vector<llvm::CallInst*> ToInline;
+
+            std::string fn_name = Fn.getName().str();
+
+            debug(0) << "Called Function:\t" << fn_name <<"\n";
+
+            if(fn_name.rfind("hydride", 0) == 0){
+                debug(0) << "Found hydride node fn, inlining..."<<"\n";
+                llvm::errs() << Fn << "\n";
+
+                for(auto* User : Fn.users()){
+                    if(llvm::CallInst* CI = llvm::dyn_cast<llvm::CallInst>(User)){
+                        llvm::errs() << "Found User of hydride node method:" << *CI <<"\n";
+                        ToInline.push_back(CI);
+                    }
+                }
+            }
+
+        for(llvm::CallInst* CI : ToInline){
+            llvm::InlineFunction(*CI, ifi);
+        }
+
+    }
+
+
+
+    debug(0) << "Inlined hydride node calls ..." <<"\n";
+
+
 
     for(llvm::Function& Fn : *module){
         std::vector<llvm::CallInst*> ToInline;
@@ -398,7 +481,10 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
                 if(!CI) continue;
 
-                llvm::Function* CF = CI->getCalledFunction();
+                //llvm::Value* arg0 = CI->getOperand(0);
+                //if(!arg0) continue; // Indirect call
+
+                llvm::Function* CF = CI->getCalledFunction(); //llvm::dyn_cast<llvm::Function>(CI->getOperand(0)->stripPointerCasts());
                 if(!CF) continue;
 
                 std::string fn_name = CF->getName().str();
@@ -410,55 +496,41 @@ void CodeGen_LLVM::add_hydride_code(const Module &halide_module) {
 
                     internal_assert(!CF->isDeclaration()) << "Function to inline must be defined";
 
+                    //CF->setCallingConv(CallingConv::X86_VectorCall);
+                    //CI->setCallingConv(CallingConv::X86_VectorCall);
+
                     ToInline.push_back(CI);
                 }
-
-                
             }
         }
 
         for(llvm::CallInst* CI : ToInline){
-            llvm::InlineFunction(*CI, ifi);
+            //llvm::InlineFunction(*CI, ifi);
+            CustomInliner(CI);
         }
 
     }
 
+    debug(0) << "Inlined wrapper calls ..." <<"\n";
 
-    // First inline hydride functions
+
+    // Delete all wrapper nodes from the module
+    std::vector<llvm::Function*> ToErase;
     for(llvm::Function& Fn : *module){
-        std::vector<llvm::CallInst*> ToInline;
-        for(auto& BB : Fn){
-            for(llvm::Instruction &I : BB){
-                llvm::CallInst* CI = llvm::dyn_cast<llvm::CallInst>(&I);
+        std::string fn_name = Fn.getName().str();
 
-                if(!CI) continue;
-
-                llvm::Function* CF = CI->getCalledFunction();
-                if(!CF) continue;
-
-                std::string fn_name = CF->getName().str();
-
-                if(fn_name.rfind("hydride", 0) == 0){
-                    debug(0) << "Found hydride node call, inlining..."<<"\n";
-                    llvm::errs() << *CI << "\n";
-                    llvm::errs() << *CF << "\n";
-
-                    internal_assert(!CF->isDeclaration()) << "Function to inline must be defined";
-
-                    ToInline.push_back(CI);
-                }
-
-                
-            }
+        if(ends_with(fn_name, "_wrapper")){
+            ToErase.push_back(&Fn);
         }
-
-        for(llvm::CallInst* CI : ToInline){
-            llvm::InlineFunction(*CI, ifi);
-        }
-
     }
 
-    llvm::errs()<<"Printing Module: <START>\n" << *module << "\n<END>"<<"\n";
+    for(auto Fn : ToErase){
+        debug(0) << "Erasing:"<<Fn->getName().str() <<"\n";
+
+        Fn->eraseFromParent();
+    }
+
+    //llvm::errs()<<"Printing Module: <START>\n" << *module << "\n<END>"<<"\n";
 
 
 
@@ -627,6 +699,8 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::compile(const Module &input) {
 
     add_external_code(input);
 
+
+
     // Generate the code for this module.
     debug(1) << "Generating llvm bitcode...\n";
     for (const auto &b : input.buffers()) {
@@ -693,9 +767,12 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::compile(const Module &input) {
 
     const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
     if(enable_hydride && strcmp(enable_hydride, "0") != 0)
-        add_hydride_code(input);
+        add_hydride_code();
+
 
     debug(2) << "llvm::Module pointer: " << module.get() << "\n";
+
+
 
     return finish_codegen();
 }
@@ -711,6 +788,8 @@ std::unique_ptr<llvm::Module> CodeGen_LLVM::finish_codegen() {
      if(!disable_ops){
         CodeGen_LLVM::optimize_module();
      }
+
+
 
     if (target.has_feature(Target::EmbedBitcode)) {
         std::string halide_command = "halide target=" + target.to_string();
@@ -812,7 +891,7 @@ void CodeGen_LLVM::compile_func(const LoweredFunc &f, const std::string &simple_
         if(target.arch == Target::X86){
             body = optimize_x86_instructions_synthesis(body, target, this->func_value_bounds);
         } else if(target.arch == Target::Hexagon){
-            body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+            //body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
         }
     }
     body.accept(this);
@@ -1231,6 +1310,11 @@ llvm::Function *CodeGen_LLVM::embed_metadata_getter(const std::string &metadata_
 llvm::Type *CodeGen_LLVM::llvm_type_of(const Type &t) const {
     return Internal::llvm_type_of(context, t);
 }
+
+
+void CodeGen_LLVM::optimize_hydride_module() {
+}
+
 
 void CodeGen_LLVM::optimize_module() {
     debug(3) << "Optimizing module\n";
@@ -3637,16 +3721,17 @@ void CodeGen_LLVM::visit(const Call *op) {
 
 
                 CallInst *call = builder->CreateCall(fn, args);
-                /*
+
                 debug(0) << "Why is this being invoked in build" << "\n";
                 if (op->is_pure()) {
                     call->setDoesNotAccessMemory();
                 }
-                */
                 call->setDoesNotThrow();
                 value = call;
 
                 llvm::errs() << "Generating Hydride Call: "<< *value << "in parent function "<<call->getFunction()->getName()<<"\n";
+
+                hydride_nodes.push_back(call);
 
 
             } else {

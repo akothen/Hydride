@@ -1406,7 +1406,7 @@
     [(vector_reduce op width vec) (quotient (vec-size vec) width)]
 
     ;; Shuffles
-    [(slice_vectors vec base stride len) len]
+    [(slice_vectors vec base stride len) (* len (vec-precision vec)) ]
     [(concat_vectors v1 v2) (+ (vec-size v1) (vec-size v2))]
     [(interleave v1 v2) (+ (vec-size v1) (vec-size v2))]
     [(interleave4 v1 v2 v3 v4) (+ (vec-size v1) (vec-size v2) (vec-size v3) (vec-size v4))]
@@ -1501,9 +1501,9 @@
                (set! flag #t)
                ]
 
-              ;[(vec-div v1 v2) 
-              ; (set! flag #t)
-              ; ]
+              [(vec-div v1 v2) 
+               (set! flag #t)
+               ]
               [(vec-if vi v1 v2)
                (set! flag #t)
                ]

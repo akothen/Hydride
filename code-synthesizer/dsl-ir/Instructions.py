@@ -32,10 +32,85 @@ BV_OPS = [
 BV_OP_VARIANTS = [
     ["bvadd","bvaddnsw", "bvaddnuw"],
     ["bvsub","bvsubnsw", "bvsubnuw"],
-    ["bvmul", "bvmulnsw", "bvmulnuw" ]
+    ["bvmul", "bvmulnsw", "bvmulnuw" ],
+    ["bvsdiv", "bvudiv"],
+    ["bvule", "bvsle"],
+    ["bvsgt", "bvugt"],
+    #["zero-extend", "sign-extend"],
+    ["bvsmin", "bvumin"],
+    ["bvsmax", "bvumax"],
+    ["bvsrem", "bvurem"],
+    ["bvssat", "bvusat"],
+    ["bvult", "bvslt"],
+    ["bvlshr", "bvashr"]
+
+]
+
+NONSIGNED_OPS = [
+    "bveq",
+    "bvnot", "bvand",
+    "bvor", "bvxor", "bvshl",
+    "bvneg", "bvadd", "bvsub",
+    "bvmul",
+    "concat",
+    "extract",
+    "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
+    "bvmulnsw", "bvmulnuw","if", "abs", "cond",
+    "bvrol", "bvror",
+    "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
+    "bvsubnw"
+]
+
+UNSIGNED_OPS = [
+    "bvult",
+    "bvule",  "bvugt",
+    "bvuge",
+    "bvlshr",
+    "bvudiv",
+    "bvurem", "bvurem",
+    "zero-extend",
+    "bvumaxval",
+    "bvuminval",
+    "bvusat",
+    "bvumax",  "bvumin",
 ]
 
 
+SIGNED_OPS = [
+    "bvslt"
+    "bvsle",  "bvsgt",
+    "bvsge",  "bvnot",
+    "bvashr",
+    "bvsdiv",  "bvsrem",
+    "bvsmod",
+    "sign-extend",
+    "bvsmaxval",
+    "bvsminval",
+    "bvssat",
+    "bvsmax",  "bvsmin",
+]
+
+
+SIGN_VARIANTS = {
+    'bvsizeext' : {'signed': 'sign-extend', 'unsigned': 'zero-extend'},
+    'bvsaturate' : {'signed': 'bvssat', 'unsigned':'bvusat'},
+    'bvdiv' : {'signed': 'bvsdiv', 'unsigned': 'bvudiv'},
+    'bvrem': {'signed': 'bvsrem', "unsigned": 'bvurem'},
+    'bvmin': {'signed': 'bvsmin', "unsigned": 'bvumin'},
+    'bvmax': {'signed': 'bvsmax', "unsigned": 'bvumax'},
+}
+
+def get_variant_by_sign(op, sign):
+    if sign == None:
+        return op
+
+    if op not in SIGN_VARIANTS:
+        return op
+
+    if sign == 1:
+        return SIGN_VARIANTS[op]['signed']
+    else:
+        return SIGN_VARIANTS[op]['unsigned']
 
 
 
@@ -45,7 +120,8 @@ class Context:
                  out_precision = None, SIMD = False, args = [],
                  in_vectsize_index = None, out_vectsize_index = None,
                  lanesize_index = None, in_precision_index = None,
-                 out_precision_index = None, cost = None):
+                 out_precision_index = None, cost = None,
+                 signedness = None):
         self.name= name
         self.in_vectsize = in_vectsize
         self.out_vectsize = out_vectsize
@@ -59,11 +135,20 @@ class Context:
         self.in_precision_index = in_precision_index
         self.out_precision_index = out_precision_index
         self.cost = cost
+        self.signedness = signedness
 
         self.num_args = len(args)
         self.parse_args(args)
 
 
+    def is_signed(self):
+        return (self.signedness != None) and self.signedness == 1
+
+    def is_unsigned(self):
+        return (self.signedness != None) and self.signedness == 0
+
+    def is_nonsigned(self):
+        return (self.signedness == None)
 
     def get_input_size(self):
         assert (self.in_precision != None) and (self.in_vectsize != None) , "Unable to process input size for instruction"
@@ -296,7 +381,8 @@ class DSLInstruction(InstructionType):
                     out_precision = None, SIMD = False, args = [],
                     in_vectsize_index = None, out_vectsize_index = None,
                     lanesize_index = None, in_precision_index = None,
-                    out_precision_index = None, cost = None):
+                    out_precision_index = None, cost = None,
+                    signedness = None):
 
         self.contexts.append(
             Context(name = name, in_vectsize = in_vectsize, out_vectsize = out_vectsize,
@@ -307,7 +393,7 @@ class DSLInstruction(InstructionType):
                     lanesize_index = lanesize_index,
                     in_precision_index = in_precision_index,
                     out_precision_index = out_precision_index,
-                    cost = cost)
+                    cost = cost, signedness = signedness)
         )
 
     def print_instruction(self):

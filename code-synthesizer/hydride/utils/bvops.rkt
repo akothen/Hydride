@@ -289,3 +289,62 @@
 )
 
 
+(define (bvdiv a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsdiv a b)
+      )
+      (begin
+        (bvudiv a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvrem a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsrem a b)
+      )
+      (begin
+        (bvurem a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvmax a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsmax a b)
+      )
+      (begin
+        (bvumax a b)
+      )
+    )
+  )
+  result
+)
+
+
+(define (bvmin a b is_signed)
+  (define result
+    (if (equal? is_signed 1)
+      (begin
+        (bvsmin a b)
+      )
+      (begin
+        (bvumin a b)
+      )
+    )
+  )
+  result
+)
+

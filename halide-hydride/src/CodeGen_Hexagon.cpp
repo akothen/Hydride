@@ -520,15 +520,19 @@ void CodeGen_Hexagon::compile_func(const LoweredFunc &f,
              << body << "\n\n";
 
     // Optimize the IR for Hexagon.
-#if 0 
-    debug(1) << "Hexagon: Optimizing Hexagon instructions...\n";
-    body = optimize_hexagon_instructions(body, target);
-#else
 
-    debug(1) << "Optimizing Hexagon instructions (synthesis)...\n";
-    body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+    const char* enable_hydride = getenv("HL_ENABLE_HYDRIDE");
+    if(enable_hydride && strcmp(enable_hydride, "0") != 0){
 
-#endif
+        debug(1) << "Optimizing Hexagon instructions (synthesis)...\n";
+        body = optimize_hexagon_instructions_synthesis(body, target, this->func_value_bounds);
+
+    } else {
+        debug(1) << "Hexagon: Optimizing Hexagon instructions...\n";
+        body = optimize_hexagon_instructions(body, target);
+    }
+
+
 
     debug(2) << "Hexagon: Lowering after optimizing Hexagon instructions:\n"
              << body << "\n\n";

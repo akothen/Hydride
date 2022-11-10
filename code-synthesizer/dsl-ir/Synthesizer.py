@@ -5,20 +5,28 @@ import random
 from ShuffleList import ShuffleList
 
 DEBUG = True
-DEBUG_LIST = ["hexagon_V6_vmaxw_128B"]
-SKIP_LIST = []
+DEBUG_LIST = ["hexagon_V6_lo_128B", "hexagon_V6_vassign_128B"]
+SKIP_LIST = ["vasl", "vlsr", "vasr"]
+
+MUST_INCLUDE = [ "hexagon_V6_lvsplatw_128B" , "hexagon_V6_lvsplatw_128B"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
+ENABLE_PRUNING = False
+FLEXIBLE_CASTING =  True
+
 
 
 # Any shuffle operation producing bitvectors more than
 # this size can be pruned earlier without the solver
 # having to worry about it
-MAX_BW_SIZE = 512
+MAX_BW_SIZE = 2048
+
+
+BASE_VECT_SIZE = 1024
 
 # Bound the number of swizzle operations in the
 # grammar
@@ -62,7 +70,9 @@ class Synthesizer:
 
 
     def is_instruction_legal(self, name):
-        return True
+        if self.target == 'hvx':
+            return True
+
         if self.is_shuffle:
             return True
 
@@ -133,8 +143,8 @@ class Synthesizer:
             if not ENABLE_SHUFFLE:
                 continue
 
-            if input_size <= 32:
-                continue
+            #if input_size <= 32:
+            #    continue
 
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
@@ -169,8 +179,8 @@ class Synthesizer:
             if not ENABLE_SHUFFLE:
                 continue
 
-            if input_size <= 32:
-                continue
+            #if input_size <= 32:
+            #    continue
 
             precision = self.spec.input_precision[idx]
             number_elems = self.spec.input_shapes[idx][1]
@@ -334,8 +344,8 @@ class Synthesizer:
                 continue
 
 
-            if input_size <= 32:
-                continue
+            #if input_size <= 32:
+            #    continue
 
 
             # 16, 16
@@ -481,7 +491,7 @@ class Synthesizer:
 
         else:
             if len(memory_shuffle_insts) > SWIZZLE_BOUND:
-                (msi, msa) = self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = SWIZZLE_BOUND)
+                (msi, msa) = ([],[])#self.reduce_operations(memory_shuffle_insts, memory_shuffle_args_list, bound = SWIZZLE_BOUND)
 
                 if len(msi) == 0:
                     memory_shuffle_insts = memory_shuffle_insts[:SWIZZLE_BOUND]
@@ -530,21 +540,22 @@ class Synthesizer:
         ## Based of operations and input/output configurations may still result
         ## in too many instructions which would explode synthesis times.
 
-        # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
-        (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
+        if ENABLE_PRUNING:
+            # First we filter off operations whose score is <= 2 as they are not likely to be used in the synthesis.
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_low_score_ops(operation_dsl_insts, operation_dsl_args_list,  score = 2)
 
 
-        # When immediates are present in the specification, they are likely to be used in either broadcast operations or compute operations
-        # hence including operations relying on casting these constants to larger bitwidth is necessary. However, when there are no immediates
-        # it is unlikely that operations casting a bitvector smaller than the smallest input (or output if output is smallest) would be used.
-        (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
+            # When immediates are present in the specification, they are likely to be used in either broadcast operations or compute operations
+            # hence including operations relying on casting these constants to larger bitwidth is necessary. However, when there are no immediates
+            # it is unlikely that operations casting a bitvector smaller than the smallest input (or output if output is smallest) would be used.
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_imm(operation_dsl_insts, operation_dsl_args_list)
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_precision(operation_dsl_insts, operation_dsl_args_list)
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_ops_relying_on_precision(operation_dsl_insts, operation_dsl_args_list)
 
 
 
-        (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
+            (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
 
         BOUND = 20
         if self.spec.contains_conditional():
@@ -792,7 +803,7 @@ class Synthesizer:
 
         if bound == None or bound > len(operation_insts):
             print("EARLY RETURN FROM REDUCE")
-            return self.prune_low_score_ops(operation_insts, operation_contexts, score = 2) #(operation_insts, operation_contexts)
+            return (operation_insts, operation_contexts)
 
         # Filter broadcast like operations seperately from compute/shuffle operations
         # Hence we limit the % of broadcast like operationsto be 25% and 75% of the operations
@@ -882,7 +893,7 @@ class Synthesizer:
                 # add complexity to the synthesis without really
                 # improving the types of expressions which can be
                 # synthesized
-                if self.score_context(ops[idx], ctxs[idx]) <= 2:
+                if not FLEXIBLE_CASTING and self.score_context(ops[idx], ctxs[idx]) <= 2:
                     continue
 
 
@@ -1134,6 +1145,19 @@ class Synthesizer:
         assert self.consider_dsl_inst(dsl_inst), "Can not get supported contexts for dsl inst"
 
 
+        if dsl_inst.name in MUST_INCLUDE:
+            return dsl_inst.contexts
+
+        dsl_ops = dsl_inst.get_semantics_ops_list()
+
+        spec_ops = self.spec.get_semantics_ops_list()
+
+        def get_op_variant(op):
+            for variant_list in BV_OP_VARIANTS:
+                if op in variant_list:
+                    return variant_list
+            return []
+
 
 
         contexts = []
@@ -1145,6 +1169,26 @@ class Synthesizer:
         is_logical_like = self.is_elementwise_logical_like_operation(dsl_inst)
 
         for ctx in dsl_inst.contexts:
+
+            ctx_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
+
+            skip = False
+
+            for c_op in ctx_ops:
+                variants = get_op_variant(c_op)
+
+                for v in variants:
+
+                    # If ctx is using an operation of opposite signedness
+                    # which is not being used in the spec, skip
+                    if v in ctx_ops and v not in spec_ops:
+                        skip = True
+
+
+
+
+            if skip:
+                continue
 
             # We only include those instructions in the grammar
             # that we know can be generated for a given
@@ -1196,7 +1240,12 @@ class Synthesizer:
 
             # Either can process the input or can produce output shape
             new_condition =  (supports_inputs_prec and supports_input_length) or (supports_outputs_prec and supports_output_length) # and (not is_broadcast_like)
-            if new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:
+
+
+            # Hexagon condition for distribution:
+            hexagon_cond = (supports_inputs_prec and supports_outputs_prec) or (supports_input_length or supports_output_length)
+
+            if dsl_inst.name in MUST_INCLUDE or  hexagon_cond or  new_condition  or (is_broadcast_like and supports_input_length and supports_output_length) or (is_logical_like and (supports_input_length or supports_output_length)) or casts_inter_inputs:
                 if check:
                     ctx.print_context()
                 contexts.append(ctx)
@@ -1266,24 +1315,34 @@ class Synthesizer:
 
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
+        dsl_ops = self.convert_ops_to_signedness( dsl_ops, get_signed = ctx.is_signed(), get_unsigned = ctx.is_unsigned())
 
         score += min(len(list (set(spec_ops) & set(dsl_ops))), 2)
 
 
 
 
+
         if is_broadcast_like:
             score = 0
-            score +=  int(any([ctx.supports_input_size(input_size) for input_size in self.input_sizes]))
+            score +=  int(([ctx.supports_input_size(input_size) for input_size in self.input_sizes].count(True)))
             score += int(ctx.supports_output_size(self.output_slice_length))
             score += int(ctx.supports_output_precision(self.spec.output_precision))
             score +=  int(([ctx.supports_input_precision(input_precision) for input_precision in self.spec.input_precision]).count(True) != 0)
             score += int(ctx.supports_output_size(self.output_slice_length))
 
+            # For targets which prefer distributing computation
+            # over a base vector size
+            if BASE_VECT_SIZE != None :
+                score += int(ctx.supports_output_size(BASE_VECT_SIZE))
+                score +=  int(([ctx.supports_input_size(input_size) for input_size in [BASE_VECT_SIZE]].count(True)))
+
 
             # In the case where we have inputs of varying sizes, we want also want
             #unique_input_sizes = self.input_sizes
             #score +=  int([ctx.supports_output_size(isize) for isize in unique_input_sizes].count(True)) * 2
+
+
 
         # Does specification contain conditional code:
         spec_ops = self.spec.get_semantics_ops_list()
@@ -1299,6 +1358,21 @@ class Synthesizer:
 
         return score
 
+    def convert_ops_to_signedness(self, ops, get_signed = False, get_unsigned = False):
+        ops_list = []
+
+        for op in ops:
+            if get_signed:
+                ops_list.append(get_variant_by_sign(op, 1))
+
+            if get_unsigned:
+                ops_list.append(get_variant_by_sign(op, 0))
+
+
+            ops_list.append(op)
+
+        return list(set(ops_list))
+
 
 
     # Checks whether the operations performed
@@ -1308,6 +1382,10 @@ class Synthesizer:
     def does_dsl_ops_overlap(self, dsl_inst, match_exact_order = False):
         spec_ops = self.spec.get_semantics_ops_list()
         dsl_ops = dsl_inst.get_semantics_ops_list()
+
+        # When checking if ops overlap, check for both signedness
+        # , when sorting based on score check for signedness explicitly
+        dsl_ops = self.convert_ops_to_signedness(dsl_ops, get_signed = True, get_unsigned = True)
 
 
         if dsl_inst.name in DEBUG_LIST and DEBUG :
@@ -1335,7 +1413,7 @@ class Synthesizer:
             ## Synthesis more complex (non-Press burger arithmetic) and hence any dsl operations
             ## which contain them should only be included if necessary
 
-            EXPENSIVE_OPS = ["bvmul", "bvsdiv", "bvudiv", "bvssat", "bvusat", "sign-extend", "zero-extend", "bvaddnsw", "bvaddnuw"]
+            EXPENSIVE_OPS = ["bvmul", "bvsdiv", "bvudiv", "bvssat", "bvusat", "sign-extend", "zero-extend", "bvaddnsw", "bvaddnuw", "abs"]
 
             # Including dot-products type operations is only required
             # when there is some form of accumulation with multiplication
@@ -1345,7 +1423,7 @@ class Synthesizer:
 
             for expensive_op in EXPENSIVE_OPS:
                 if expensive_op in dsl_ops and expensive_op not in spec_ops:
-                    return False
+                    pass
 
 
 
@@ -1427,13 +1505,15 @@ class Synthesizer:
     def is_broadcast_like_operation(self, dsl_inst):
         ops = dsl_inst.get_semantics_ops_list()
 
-        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond"] for op in ops])
+        return all([op in ["sign-extend", "zero-extend", "extract", "concat", "bvssat", "bvusat", "bveq" ,"if" ,"cond", "bvsaturate", "bvsizeext"] for op in ops]) or ops == []
 
 
     # Is the operation either a broadcast operation or an
     # operation which sign/zero extends from a smallar
     # type to a larger type
     def is_upcast_like_operation(self, dsl_inst, ctx):
+        if ctx.in_vectsize == None:
+            return False
         return self.is_broadcast_like_operation(dsl_inst) and ((ctx.out_vectsize > ctx.in_vectsize) or (ctx.in_precision < ctx.out_precision))
 
     def is_downcast_like_operation(self, dsl_inst, ctx):
@@ -1462,6 +1542,7 @@ class Synthesizer:
         assert self.consider_bitwise_heuristic(dsl_inst), "Can not get supported contexts for dsl inst"
 
         contexts = []
+
 
 
         for ctx in dsl_inst.contexts:
@@ -1517,6 +1598,8 @@ class Synthesizer:
 
 
 
+        # TEMP
+        return self.does_dsl_ops_overlap(dsl_inst) or dsl_inst.name in MUST_INCLUDE
 
         return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
 
