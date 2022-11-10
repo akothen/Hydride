@@ -20,6 +20,14 @@ class Specification:
     def get_output_size(self):
         return self.output_precision * self.output_shape[0] * self.output_shape[1]
 
+    def has_signed_ops(self):
+        spec_ops = self.get_semantics_ops_list()
+        return any([op in SIGNED_OPS for op in spec_ops])
+
+    def has_unsigned_ops(self):
+        spec_ops = self.get_semantics_ops_list()
+        return any([op in UNSIGNED_OPS for op in spec_ops])
+
 
     def get_semantics_ops_list(self, exclude_concat = True, exclude_extract = True):
         operations = []

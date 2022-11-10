@@ -39,7 +39,7 @@ inline void apply_schedule_depthwise_conv_batch_0058_sample_0000(
         .split(ci, ci, cii, 64, TailStrategy::ShiftInwards)
         .unroll(ci)
         .unroll(xi)
-        .vectorize(cii)
+        .vectorize(cii, 512 / 64) // Added vectorization factor
         .compute_root()
         .reorder({cii, ci, xi, c, x, y, b})
         .fuse(x, y, x)
@@ -47,40 +47,40 @@ inline void apply_schedule_depthwise_conv_batch_0058_sample_0000(
         .parallel(c);
     convolved
         .split(c, c, ci, 16, TailStrategy::RoundUp)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(output, c)
         .reorder({ci, c, x, y, b});
     convolved.update(0)
         .split(c, c, ci, 64, TailStrategy::GuardWithIf)
-        .vectorize(ci)
+        .vectorize(ci,  512 / 64) // Added vectorization factor
         .reorder({ci, r19_x, x, r19_y, c, y, b});
     resampled_input
         .store_in(MemoryType::Stack)
         .split(c, c, ci, 64, TailStrategy::ShiftInwards)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(convolved, r19_y)
         .reorder({ci, c, x, y, b});
     offset_c
         .split(c, c, ci, 64, TailStrategy::ShiftInwards)
         .unroll(c)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(output, c)
         .reorder({ci, c});
     sum_filter
         .store_in(MemoryType::Stack)
         .split(c, c, ci, 16, TailStrategy::RoundUp)
         .unroll(c)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(offset_c, c)
         .reorder({ci, c});
     sum_filter.update(0)
         .split(c, c, ci, 32, TailStrategy::RoundUp)
         .unroll(c)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .reorder({ci, c, r19_x, r19_y});
     filter_zeroed
         .split(c, c, ci, 64, TailStrategy::ShiftInwards)
-        .vectorize(ci)
+        .vectorize(ci, 512 / 64) // Added vectorization factor
         .compute_at(output, c)
         .reorder({ci, c, x, y});
 

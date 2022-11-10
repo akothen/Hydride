@@ -59,9 +59,11 @@ public:
         // TODO: Figure out how to vectorize this efficiently without this
         // code duplication. We should be able to just vectorize and predicate
         // somehow.
-        const int vector_size = natural_vector_size<uint8_t>();
+        const int vector_size = 1024 / 16; //natural_vector_size<uint8_t>();
+        printf("Natural Vector Size: %d\n", vector_size);
         Expr output_channels = output_.dim(0).extent();
-        for (int i : {4, 2, 1}) {
+        // Changed specialization just for the natural vector size
+        for (int i : {4, 2,  1}) { //{4, 2, 1}) {
             output_.specialize(output_channels >= vector_size * i)
                 .vectorize(c, vector_size * i, TailStrategy::ShiftInwards);
         }

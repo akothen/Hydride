@@ -40,6 +40,7 @@
   (set! synthesize-by-lane #t)
   )
 
+(define target 'hvx)
 
 
 
@@ -116,6 +117,16 @@
 
   (clear-vc!)
 
+  (define interpreter
+    (cond
+      [(equal? target 'x86)
+       hydride:interpret
+       ]
+      [(equal? target 'hvx)
+       hvx:interpret
+       ]
+      )
+    )
   ;(current-solver (z3)) ;; timeout verification after 5 mins
   (define start (current-seconds))
   (debug-log "Attempting to verify synthesized solution")
@@ -125,7 +136,7 @@
   (define cex 
     (verify 
       (begin
-          (assert (bveq   (invoke_ref symbols) (hvx:interpret sol symbols)))
+          (assert (bveq   (invoke_ref symbols) (interpreter sol symbols)))
 
            )
       )
@@ -154,8 +165,19 @@
         (define spec_res (invoke_ref new-bvs))
         (debug-log spec_res)
 
+      (define interpreter
+        (cond
+          [(equal? target 'x86)
+           hydride:interpret
+           ]
+          [(equal? target 'hvx)
+           hvx:interpret
+           ]
+          )
+        )
 
-        (define synth_res  (hvx:interpret sol new-bvs))
+
+        (define synth_res  (interpreter sol new-bvs))
         (debug-log (format "Verification failed ...\n\tspec produced: ~a ~a \n\tsynthesized result produced: ~a ~a\n" spec_res (bvlength spec_res) synth_res (bvlength synth_res)))
         (values #f new-bvs)
 
@@ -376,9 +398,22 @@
 
 
 (define (print-temp-result-on-cex mat invoke_ref cex-ls)
+
+
+  (define interpreter
+    (cond
+      [(equal? target 'x86)
+       hydride:interpret
+       ]
+      [(equal? target 'hvx)
+       hvx:interpret
+       ]
+      )
+    )
+
   (for/list
     ([cex cex-ls])
-    (define hydride-result (hvx:interpret mat cex))
+    (define hydride-result (interpreter mat cex))
     (define halide-result (invoke_ref cex))
     (displayln "Counter Example:")
     (println cex)
@@ -394,10 +429,21 @@
 
 (define (get-failing-lanes invoke_ref synth-sol cex-ls word-size)
 
+  (define interpreter
+    (cond
+      [(equal? target 'x86)
+       hydride:interpret
+       ]
+      [(equal? target 'hvx)
+       hvx:interpret
+       ]
+      )
+    )
+
   (define difference-predicate
   (for/list ([cex cex-ls])
             (define spec-result (invoke_ref cex))
-            (define synth-result (hvx:interpret synth-sol cex))
+            (define synth-result (interpreter synth-sol cex))
             (define size (bvlength spec-result))
             (define num-elems (/ size word-size))
 
@@ -596,6 +642,16 @@
         )
 
 
+      (define const-fold 
+        (cond
+          [(equal? target 'x86)
+           hydride:const-fold
+           ]
+          [(equal? target 'hvx)
+           hvx:const-fold
+           ]
+          )
+        )
 
 
       (if
@@ -608,7 +664,7 @@
 
           ;; If true, then attempt synthesizing a solution with a tighter cost bound
           (begin
-            (define simplify (hvx:const-fold materialize))
+            (define simplify (const-fold materialize))
             (debug-log (format "Searching for better solution with cost < ~a \n" (cost-fn simplify)))
             (define-values (tighter-sol-sat? tighter-sol-materialize tighter-sol-elapsed-time )
               (synthesize-sol-iterative invoke_ref invoke_ref_lane grammar bitwidth-list optimize? interpreter-fn cost-fn 

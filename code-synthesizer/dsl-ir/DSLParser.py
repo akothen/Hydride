@@ -29,6 +29,10 @@ def parse_cost(dsl_inst_cost, hw_name = "Skylake"):
 def populate_dsl_inst(dsl_inst , sub_inst_dict):
     for subinst_name in sub_inst_dict:
         sub_obj = sub_inst_dict[subinst_name]
+        signedness = None
+        if 'Signedness' in sub_obj:
+            signedness = sub_obj['Signedness']
+
         dsl_inst.add_context(name = subinst_name,
                              in_vectsize = sub_obj['in_vectsize'],
                              out_vectsize = sub_obj['out_vectsize'],
@@ -42,6 +46,7 @@ def populate_dsl_inst(dsl_inst , sub_inst_dict):
                              lanesize_index = sub_obj['lanesize_index'],
                              in_precision_index = sub_obj['in_precision_index'],
                              out_precision_index = sub_obj['out_precision_index'],
+                             signedness = signedness,
                              cost = parse_cost(sub_obj['Cost'])
                              )
 

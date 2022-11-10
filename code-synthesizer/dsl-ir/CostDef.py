@@ -2,7 +2,7 @@ from Instructions import DSLInstruction
 from Types import *
 from PredefinedDSL import default_structs
 
-DEFAULT_COST = 4
+DEFAULT_COST = 1#4
 IDX_I_COST = 1
 IDX_J_COST = 1
 REG_COST = 1

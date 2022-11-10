@@ -339,7 +339,7 @@
 
                         (define-values (sat? mat el) 
                                        (synthesize-sol-with-depth 
-                                         (max (+ -1 actual-expr-depth) 1) 
+                                         (max (+ 0 actual-expr-depth) 1) 
                                                                   depth-limit invoke-spec invoke-spec-lane grammar-fn leaves-sizes 
                                                                   optimize? interpreter cost-model  symbolic? cost-bound solver) 
                                        )

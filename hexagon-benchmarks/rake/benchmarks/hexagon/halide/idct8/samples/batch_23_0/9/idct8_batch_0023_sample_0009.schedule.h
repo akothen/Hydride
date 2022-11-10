@@ -25,13 +25,13 @@ inline void apply_schedule_idct8_batch_0023_sample_0009(
     Var y(output.get_schedule().dims()[1].var);
     output
         .split(x, x, xi, 32, TailStrategy::GuardWithIf)
-        .vectorize(xi)
+        .vectorize(xi, 512 / 32) // Added vectorization factor
         .compute_root()
         .reorder({xi, x, y})
         .parallel(y);
     src
         .split(x, x, xi, 32, TailStrategy::GuardWithIf)
-        .vectorize(xi)
+        .vectorize(xi, 512 / 32) // Added vectorization factor
         .compute_root()
         .reorder({xi, x, y})
         .parallel(y);

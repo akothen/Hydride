@@ -1817,12 +1817,17 @@ namespace Halide {
                         // use widening casts etc.
                         if (op->is_intrinsic(Call::saturating_add)) {
 
+                            size_t element_bits = op->args[0].type().bits();
+
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
+                                if(element_bits >= 64){
+                                   lowered = narrow(clamp(widen(op->args[0]) + widen(op->args[1]),
                                        op->args[0].type().min(), op->args[0].type().max()));
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
 
-                                size_t element_bits = op->args[0].type().bits();
                                 if(element_bits >= 32){
                                     lowered = lower_saturating_add(op->args[0], op->args[1]);                             
                                 } 
@@ -1852,10 +1857,15 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::halving_add)) {
 
+                            size_t element_bits = op->args[0].type().bits();
+
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                if(element_bits < 64){
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
-                                size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
                                 } else {
@@ -1865,11 +1875,17 @@ namespace Halide {
 
                         } 
                         else if (op->is_intrinsic(Call::halving_sub)) {
+
+                            size_t element_bits = op->args[0].type().bits();
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+
+                                if(element_bits < 64){
+                                    lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
 
-                                size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = narrow((widen(op->args[0]) - widen(op->args[1])) / 2);
                                 } else {
@@ -1880,11 +1896,17 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::rounding_halving_add)) {
 
+                            size_t element_bits = op->args[0].type().bits();
+
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+
+                                if(element_bits < 64){
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
 
-                                size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1]) + 1) / 2);
                                 } else {
@@ -1911,10 +1933,14 @@ namespace Halide {
                         } 
                         else if (op->is_intrinsic(Call::sorted_avg)) {
 
+                            size_t element_bits = op->args[0].type().bits();
                             if(_arch ==  Architecture::HVX){
-                                lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                if(element_bits < 64){
+                                    lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
+                                } else {
+                                    lower_using_halide = true;
+                                } 
                             } else if (_arch == Architecture::X86){
-                                size_t element_bits = op->args[0].type().bits();
                                 if(element_bits < 64){
                                     lowered = narrow((widen(op->args[0]) + widen(op->args[1])) / 2);
                                 } else {

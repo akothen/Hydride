@@ -15,7 +15,7 @@ UPCAST_OPERATIONS = False
 USE_LIT_HOLES = True
 PRUNE_BVOP_VARIANTS = True
 
-ENABLE_PRUNING = False
+ENABLE_PRUNING = False # True
 FLEXIBLE_CASTING =  True
 
 
@@ -23,7 +23,7 @@ FLEXIBLE_CASTING =  True
 # Any shuffle operation producing bitvectors more than
 # this size can be pruned earlier without the solver
 # having to worry about it
-MAX_BW_SIZE = 2048
+MAX_BW_SIZE =  2048
 
 
 BASE_VECT_SIZE = 1024
@@ -557,7 +557,7 @@ class Synthesizer:
 
             (operation_dsl_insts, operation_dsl_args_list) = self.prune_variant_bvops(operation_dsl_insts, operation_dsl_args_list)
 
-        BOUND = 20
+        BOUND = 15
         if self.spec.contains_conditional():
             BOUND = 25
         (operation_dsl_insts, operation_dsl_args_list) = self.reduce_operations(operation_dsl_insts, operation_dsl_args_list, bound = BOUND)
@@ -1334,7 +1334,7 @@ class Synthesizer:
             # For targets which prefer distributing computation
             # over a base vector size
             if BASE_VECT_SIZE != None :
-                score += int(ctx.supports_output_size(BASE_VECT_SIZE))
+                score += int(ctx.supports_output_size(BASE_VECT_SIZE)) * 2
                 score +=  int(([ctx.supports_input_size(input_size) for input_size in [BASE_VECT_SIZE]].count(True)))
 
 

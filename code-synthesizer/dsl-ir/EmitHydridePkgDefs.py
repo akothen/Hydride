@@ -21,7 +21,14 @@ from GrammarGenerator import GrammarGenerator
 from Synthesizer import Synthesizer
 from ConstFold import ConstFold
 
-dsl_list = parse_dict(hvx_semantics)
+dsl_list = []
+
+TARGET = 'hvx'
+
+if TARGET == 'x86':
+    dsl_list = parse_dict(semantcs)
+else:
+    dsl_list = parse_dict(hvx_semantics)
 
 print("Number of Target Agnostic DSL Instructions:\t",len(dsl_list))
 print("Number of Target Specific Instructions:\t",sum([len(inst.contexts) for inst in dsl_list]))
