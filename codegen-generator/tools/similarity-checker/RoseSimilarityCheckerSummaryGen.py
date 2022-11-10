@@ -20,10 +20,11 @@ from x86InstsCosts import x86Costs
 
 class RoseSimilarityCheckerSummaryGen():
   def __init__(self, FunctionToFunctionInfo : dict, FunctionToRosetteCodeMap : dict, \
-                                                    EquivalenceClasses : set):
+                    FunctionToArgPermuteMap : dict, EquivalenceClasses : set):
     self.FunctionToFunctionInfo = FunctionToFunctionInfo
     self.FunctionToRosetteCodeMap = FunctionToRosetteCodeMap
     self.EquivalenceClasses = EquivalenceClasses
+    self.FunctionToArgPermuteMap = FunctionToArgPermuteMap
 
   def genDictionarySubEntry(self, Function : RoseFunction):
     print("FUNCTION IN EQUIVALENCE CLASS:")
@@ -37,14 +38,22 @@ class RoseSimilarityCheckerSummaryGen():
         ConcreteVal = FunctionInfo.getConcreteValFor(Arg)
         ArgList.append("\"" + GenConcreteValue(ConcreteVal) + "\"")
     # Get cost
+    print("Function:")
+    Function.print()
     SemaInfo = FunctionInfo.getRawSemantics()
-    if SemaInfo.xed != None:
-      if SemaInfo.xed in x86Costs:
-        Cost = x86Costs[SemaInfo.xed]
+    try:
+      if SemaInfo.xed != None:
+        if SemaInfo.xed in x86Costs:
+          Cost = x86Costs[SemaInfo.xed]
+        else:
+          Cost = None
       else:
         Cost = None
-    else:
+    except:
       Cost = None
+    ArgPermuteMap = list()
+    for Idx in self.FunctionToArgPermuteMap[Function]:
+      ArgPermuteMap.append(str(Idx))
     TempEntryString = f'''
                   "args" : {"[" + ",".join(ArgList) + "]"},
                   "in_vectsize" : {str(FunctionInfo.getInVectorLength())},
@@ -57,6 +66,8 @@ class RoseSimilarityCheckerSummaryGen():
                   "lanesize_index" : {str(FunctionInfo.getLaneSizeIndex())},
                   "in_precision_index" : {str(FunctionInfo.getInElemTypeIndex())},
                   "out_precision_index" : {str(FunctionInfo.getOutElemTypeIndex())},
+                  "arg_permute_map" : {"[" + ",".join(ArgPermuteMap) + "]"},
+                  "Signedness" : {str(FunctionInfo.getSignedness())},
                   "Cost" : "{Cost}",
                   "SIMD" : "{str(FunctionInfo.isSIMD())}",
       '''
@@ -80,7 +91,7 @@ class RoseSimilarityCheckerSummaryGen():
     for Index, Line in enumerate(RosetteCodeList):
       RosetteCodeList[Index] = "\"" + Line + "\""
     String = f'''
-            "x86_instructions" : {EntryString},
+            "target_instructions" : {EntryString},
             "semantics" : {RosetteCodeList}, 
       '''
     String = "{" + String + "}"
