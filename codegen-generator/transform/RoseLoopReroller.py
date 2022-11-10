@@ -119,7 +119,7 @@ def GetOffsetsBetweenPacks(Pack1 : list, Pack2 : list, OffsetsList : list = []):
   return OffsetsList
 
 
-def GetValidRerollableCandidates(RerollableCandidatePacks : list):
+def GetValidRerollableCandidates(RerollableCandidatePacks : list, Context : RoseContext):
   print("++++++++++++++++++++++++++++++++++++++++++++++++")
   # Collect list of rerollable windows in a set.
   RerollableCandidatesList = list()
@@ -132,7 +132,7 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
     # Now lets see if the window should be added to the window list
     CheckPack = PacksList[len(PacksList) - 1]
     # The DFGs for the packs have to be the same
-    CheckDFGsAreIsomorphic = DFGsAreIsomorphic(CheckPack, Pack)
+    CheckDFGsAreIsomorphic = DFGsAreIsomorphic(CheckPack, Pack, Context)
     print("CheckDFGsAreIsomorphic:")
     print(CheckDFGsAreIsomorphic)
     if CheckDFGsAreIsomorphic == False:
@@ -190,27 +190,107 @@ def GetValidRerollableCandidates(RerollableCandidatePacks : list):
   return RerollableCandidatesList
 
 
+def GetDependenciesBetweenPacks(Pack1 : list, Pack2 : list):
+  # Check if Pack2 is dependent on Pack1
+  Dependencies = list()
+  for Op2 in Pack2:
+    for Operand in Op2.getOperands():
+      if not isinstance(Operand, RoseOperation):
+        continue
+      if isinstance(Operand, RoseBitVectorOp):
+        continue
+      if Operand in Pack1:
+        if Operand not in Dependencies:
+          Dependencies.append(Operand)
+  if len(Dependencies) != 0:
+    return Dependencies
+  return None
+
+
+def FixDependentPack(Pack : list, Dependencies : list, \
+                      Context : RoseContext):
+  print("FixDependentPack")
+  PrintPack(Pack)
+  for Op in Dependencies:
+    print("DEPENCY:")
+    Op.print()
+    ClonedOp = Op.clone(NewName=Context.genName(Op.getName() + ".cloned"), ChangeID=True)
+    print("ClonedOp:")
+    ClonedOp.print()
+    Users = Op.getUsers()
+    ClonedOpNotInserted = False
+    for User in Users:
+      print("USER:")
+      User.print()
+      if User not in Pack:
+        continue
+      if ClonedOpNotInserted == False:
+        User.getParent().addOperationBefore(ClonedOp, User)
+        ClonedOpNotInserted = True
+        # Add cloned op to the second pack
+        OpIndex = Pack.index(User)
+        Pack.insert(OpIndex, ClonedOp)
+      for OperandIdx, Operand in enumerate(User.getOperands()):
+        if not isinstance(Operand, RoseOperation):
+          continue
+        if isinstance(Operand, RoseBitVectorOp):
+          continue
+        if Operand == Op:
+          User.setOperand(OperandIdx, ClonedOp)
+    assert ClonedOpNotInserted == True
+  return
+    
+
 # Op1 is an add ops and op2 is not.
 def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
             Pack : list, OpsList1 : list, OpsList2 : list, \
-            Visited : list, ValueToValueMap : dict):
+            Visited : list, ValueToValueMap : dict, Context : RoseContext):
   print("FIXING PACK")
+  print("OP1:")
+  Op1.print()
+  print("OP2:")
+  Op2.print()
+  print("Block2:")
+  Block2.print()
+  print("Pack:")
+  PrintPack(Pack)
   # See if adding on Add op before Op2 would do.
   if not isinstance(Op1, RoseAddOp):
     return False
   if len(Op1.getOperands()) != 2:
     return False
+  if Op1 in ValueToValueMap:
+    print("OP1 IN VALUE TO VALUE MAP")
+    Op1Users = Op1.getUsers()
+    for Op1User in Op1Users:
+      if Op1User in ValueToValueMap:
+        for OperandIdx, Operand in enumerate(ValueToValueMap[Op1User].getOperands()):
+          if Operand == Op2:
+            PackIndex = Pack.index(ValueToValueMap[Op1User])
+            ValueToValueMap[Op1User].setOperand(OperandIdx, NewOp2)
+            Pack[PackIndex] = ValueToValueMap[Op1User]
+    print("NEW BLOCK?")
+    Block2.print()
+    return True
   if isinstance(Op1.getOperand(0), RoseConstant) \
     or isinstance(Op1.getOperand(1), RoseConstant):
     print("FIRST CONDITION")
     #return False
     # Generate a new add op
     Zero = RoseConstant(0, Op2.getType())
-    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, Zero])
+    NewOp2 = RoseAddOp.create(Context.genName(Op2.getName() + ".new"), [Op2, Zero])
     print("NEW ADD OP:")
     NewOp2.print()
     # Replace the uses of Op2 with NewOp2
-    Op2.replaceUsesWith(NewOp2)
+    #Op2.replaceUsesWith(NewOp2)
+    Op1Users = Op1.getUsers()
+    for Op1User in Op1Users:
+      if Op1User in ValueToValueMap:
+        for OperandIdx, Operand in enumerate(ValueToValueMap[Op1User].getOperands()):
+          if Operand == Op2:
+            PackIndex = Pack.index(ValueToValueMap[Op1User])
+            ValueToValueMap[Op1User].setOperand(OperandIdx, NewOp2)
+            Pack[PackIndex] = ValueToValueMap[Op1User]
     # Add the new op to the block
     Block2.addOperationAfter(NewOp2, Op2)
     # Consider all other instructions
@@ -222,66 +302,8 @@ def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
     # Fix the visited ops list
     Visited.remove(Op2)
     Visited.add(NewOp2)
-    print("NEW BLOCK:")
-    Block2.print()
-    print("---AFTER PACK:")
-    for Op in Pack:
-      Op.print()
-  elif Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2:
-    print("Op1.getOperand(0) == Op2 or Op1.getOperand(1) == Op2")
-    Operand = Op1.getOperand(1) if Op1.getOperand(0) == Op2 else Op1.getOperand(0)
-    if not isinstance(Operand, RoseOperation):
-      return False
-    if not Operand.getOpcode().typesOfOperandsAreEqual():
-      return False
-    ClonedOperand = Operand.clone(Operand.getName() + ".new")
-    Zero = RoseConstant(0, ClonedOperand.getType())
-    ClonedOperand.setOperand(0, Zero)
-    NewOp2 = RoseAddOp.create(Op2.getName() + ".new", [Op2, ClonedOperand])
-    print("NEW ADD OP:")
-    NewOp2.print()
-    # Replace the uses of Op2 with NewOp2
-    #Function = Op1.getParent().getFunction()
-    #Function.replaceUsesWith(Op2, NewOp2)
-    for OperandIndex, Operand in enumerate(ValueToValueMap[Op2].getOperands()):
-      if Operand == Op2:
-        ValueToValueMap[Op2].setOperand(OperandIndex, NewOp2)
-    # Add the new op to the block
-    Block2.addOperationBefore(ClonedOperand, ValueToValueMap[Op2])
-    Block2.addOperationBefore(NewOp2, ValueToValueMap[Op2])
-    # Consider all other instructions
-    OpsList1.extend(Op1.getOperands())
-    OpsList2.extend(NewOp2.getOperands())
-    print("---BEFORE PACK:")
-    for Op in Pack:
-      Op.print()
-    print("ValueToValueMap[Op2]:")
-    ValueToValueMap[Op2].print()
-    # Extend the pack
-    Index = Pack.index(ValueToValueMap[Op2])
-    print("INDEX:")
-    print(Index)
-    Pack.insert(Index, NewOp2)
-    #if Index == 0:
-    #  Pack.insert(0, NewOp2)
-    #else:
-    #  Pack.insert(Index - 1, NewOp2)
-    print("+++++BEFORE PACK:")
-    for Op in Pack:
-      Op.print()
-    print("NewOp2:")
-    NewOp2.print()
-    Index = Pack.index(NewOp2)
-    print("INDEX:")
-    print(Index)
-    Pack.insert(Index, ClonedOperand)
-    #if Index == 0:
-    #  Pack.insert(0, ClonedOperand)
-    #else:
-    #  Pack.insert(Index - 1, ClonedOperand)
-    # Fix the visited ops list
-    #Visited.remove(Op2)
-    Visited.add(NewOp2)
+    ValueToValueMap[Op1] = NewOp2
+    ValueToValueMap[NewOp2] = Op1
     print("NEW BLOCK:")
     Block2.print()
     print("---AFTER PACK:")
@@ -292,17 +314,56 @@ def FixPack(Op1 : RoseOperation, Op2 : RoseOperation, Block2 : RoseBlock, \
   return True
 
 
-def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
+def AlignPacks(Pack1 : list, Pack2 : list, ValueToValueMap : dict):
+  assert len(Pack1) == len(Pack2)
+  for Pack1Op, Pack2Op in ValueToValueMap.items():
+    # The value to value maps pack1 op to pack2 op and vice versa.
+    # so we only loop for mappings one way.
+    if Pack1Op not in Pack1:
+      continue
+    Pack1Index = Pack1.index(Pack1Op)
+    if Pack1Index != Pack2.index(Pack2Op):
+      print("FIXING PACK ALIGNMENT")
+      print("PACK1:")
+      Pack1Op.print()
+      print("PACK2:")
+      Pack2Op.print()
+      # Fix the index of Pack2Op in pack2
+      Pack2.remove(Pack2Op)
+      Pack2.insert(Pack1Index, Pack2Op)
+      # Packs always end with bvinserts, so this is not
+      # the last op.
+      Block = Pack2[Pack1Index + 1].getParent()
+      Block.removeOperation(Pack2Op)
+      Block.addOperationBefore(Pack2Op, Pack2[Pack1Index + 1])
+  return
+
+
+def FixDFGIsomorphism(Pack1 : list, Pack2 : list, Context):
   print("FixDFGIsomorphism")
   assert len(Pack1) != 0 and len(Pack2) != 0
   Block1 = Pack1[0].getParent()
   Block2 = Pack2[0].getParent()
 
+  Dependencies = GetDependenciesBetweenPacks(Pack1, Pack2)
+  if Dependencies != None:
+    # Fix the pack dependency
+    FixDependentPack(Pack2, Dependencies, Context)
+    # Check if the DFGs have been made isomorphic
+    if DFGsAreIsomorphic(Pack1, Pack2, Context):
+      return True
+  Dependencies = GetDependenciesBetweenPacks(Pack2, Pack1)
+  if Dependencies != None:
+    # Fix the pack dependency
+    FixDependentPack(Pack1, Dependencies, Context)
+    # Check if the DFGs have been made isomorphic
+    if DFGsAreIsomorphic(Pack1, Pack2, Context):
+      return True
+
   # We need to see if we can make these two packs isomorphic.
   # First step is to see where the DFG isomorphism is violated
   # and correct it if it has to do with one special case --
   # missing add indexing op (addition to zero).
-
   def GetNumBVOps(Pack : list):
     NumExtractOps = 0
     NumInsertOps = 0
@@ -342,8 +403,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
   Visited = set()
-  ValueToValuePack1Map = dict()
-  ValueToValuePack2Map = dict()
+  ValueToValuePackMap = dict()
   while len(OpsList1) != 0:
     #print("OpsList1:")
     #print(OpsList1)
@@ -365,7 +425,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("TRY FIXING PACK 1")
         # Fix the pack if possible
         if FixPack(Op2, Op1, Block1, Pack1, \
-                  OpsList2, OpsList1, Visited, ValueToValuePack1Map) == True:
+                  OpsList2, OpsList1, Visited, ValueToValuePackMap, Context) == True:
           print("---AFTER PACK1:")
           for Op in Pack1:
             Op.print()
@@ -379,7 +439,7 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         print("TRY FIXING PACK 2")
         # Fix the pack if possible
         if FixPack(Op1, Op2, Block2, Pack2, \
-                  OpsList1, OpsList2, Visited, ValueToValuePack2Map) == True:
+                  OpsList1, OpsList2, Visited, ValueToValuePackMap, Context) == True:
           print("---AFTER PACK2:")
           for Op in Pack2:
             Op.print()
@@ -388,14 +448,30 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       if Op1 != Op2:
         return False
       continue
-    if Op1 in Visited:
-      if not Op2 in Visited:
-         return False
-      continue
-    if Op2 in Visited:
-      if not Op1 in Visited:
-         return False
-      continue
+    # if Op1 in Visited:
+    #   print("OP1 IN VISITED")
+    #   if not Op2 in Visited:
+    #     print("OP2 NOT IN VISITED")
+    #     if FixPack(Op1, Op2, Block2, Pack2, \
+    #               OpsList1, OpsList2, Visited, ValueToValuePackMap, Context) == True:
+    #       continue
+    #     if FixPack(Op2, Op1, Block2, Pack2, \
+    #               OpsList2, OpsList1, Visited, ValueToValuePackMap, Context) == True:
+    #       continue
+    #     return False
+    #   continue
+    # if Op2 in Visited:
+    #   print("OP2 IN VISITED")
+    #   if not Op1 in Visited:
+    #     print("OP1 NOT IN VISITED")
+    #     if FixPack(Op1, Op2, Block2, Pack2, \
+    #               OpsList1, OpsList2, Visited, ValueToValuePackMap, Context) == True:
+    #       continue
+    #     if FixPack(Op2, Op1, Block2, Pack2, \
+    #               OpsList2, OpsList1, Visited, ValueToValuePackMap, Context) == True:
+    #       continue
+    #     return False
+    #   continue
     Visited.add(Op1)
     Visited.add(Op2)
     print("--OP1:")
@@ -406,33 +482,37 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
     if Op1.getOpcode() != Op2.getOpcode():
       print("OPCODES ARE NOT THE SAME")
       # Check if one of the ops is an indexing op
-      if Op1 in IndexingToBVOpsMap1:
-        print("Op1 in IndexingToBVOpsMap1")
-        print("OP1:")
-        Op1.print()
-        print("OP2:")
-        Op2.print()
+      #if Op1 in IndexingToBVOpsMap1:
+      print("Op1 in IndexingToBVOpsMap1")
+      print("OP1:")
+      Op1.print()
+      print("OP2:")
+      Op2.print()
+      if Op1 in IndexingToBVOpsMap1 and Op2 in IndexingToBVOpsMap2:
         if FixPack(Op2, Op1, Block1, Pack1, \
-                   OpsList2, OpsList1, Visited, ValueToValuePack1Map) == True:
+                    OpsList2, OpsList1, Visited, ValueToValuePackMap, Context) == True:
           print("---AFTER PACK1:")
           for Op in Pack1:
             Op.print()
           continue
-      elif  Op2 in IndexingToBVOpsMap2:
-        print("Op2 in IndexingToBVOpsMap2")
-        print("OP1:")
-        Op1.print()
-        print("OP2:")
-        Op2.print()
-        if FixPack(Op1, Op2, Block2, Pack2,\
-                   OpsList1, OpsList2, Visited, ValueToValuePack2Map) == True:
-          print("---AFTER PACK2:")
-          for Op in Pack2:
-            Op.print()
-          continue
-      return False
+        #elif  Op2 in IndexingToBVOpsMap2:
+        else:
+          print("Op2 in IndexingToBVOpsMap2")
+          print("OP1:")
+          Op1.print()
+          print("OP2:")
+          Op2.print()
+          if FixPack(Op1, Op2, Block2, Pack2,\
+                    OpsList1, OpsList2, Visited, ValueToValuePackMap, Context) == True:
+            print("---AFTER PACK2:")
+            for Op in Pack2:
+              Op.print()
+            continue
+        return False
     if Op1.getType() != Op2.getType():
       return False
+    ValueToValuePackMap[Op1] = Op2
+    ValueToValuePackMap[Op2] = Op1
     # Deal with call operations
     if isinstance(Op1, RoseCallOp):
       assert isinstance(Op2, RoseCallOp)
@@ -441,10 +521,10 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
         return False
       OpsList1.extend(Op1.getCallOperands())
       OpsList2.extend(Op2.getCallOperands())
-      for Operand1 in Op1.getCallOperands():
-        ValueToValuePack1Map[Operand1] = Op1
-      for Operand2 in Op2.getCallOperands():
-        ValueToValuePack2Map[Operand2] = Op2
+      #for Operand1 in Op1.getCallOperands():
+      #  ValueToValuePackMap[Operand1] = Op1
+      #for Operand2 in Op2.getCallOperands():
+      #  ValueToValuePackMap[Operand2] = Op2
       continue
     # If this operation has not indexing operands, add None
     if (isinstance(Op1, RoseBVExtractSliceOp) or isinstance(Op1, RoseBVInsertSliceOp)) \
@@ -458,18 +538,18 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
       OpsList2.extend(Op2.getBitVectorOperands())
       OpsList2.append(Op2.getLowIndex())
       OpsList2.append(Op2.getHighIndex())
-      for Operand in Op1.getBitVectorOperands():
-        ValueToValuePack1Map[Operand] = Op1
-      for Operand in Op2.getBitVectorOperands():
-        ValueToValuePack2Map[Operand] = Op2
+      #for Operand in Op1.getBitVectorOperands():
+      #  ValueToValuePackMap[Operand] = Op1
+      #for Operand in Op2.getBitVectorOperands():
+      #  ValueToValuePackMap[Operand] = Op2
       continue
     # Consider all other instructions
     OpsList1.extend(Op1.getOperands())
     OpsList2.extend(Op2.getOperands())
-    for Operand1 in Op1.getOperands():
-      ValueToValuePack1Map[Operand1] = Op1
-    for Operand2 in Op2.getOperands():
-      ValueToValuePack2Map[Operand2] = Op2
+    #for Operand1 in Op1.getOperands():
+    #  ValueToValuePackMap[Operand1] = Op1
+    #for Operand2 in Op2.getOperands():
+    #  ValueToValuePackMap[Operand2] = Op2
   # We are done exploring the DFGs
   print("AFTER PACK1:")
   for Op in Pack1:
@@ -477,11 +557,12 @@ def FixDFGIsomorphism(Pack1 : list, Pack2 : list):
   print("AFTER PACK2:")
   for Op in Pack2:
     Op.print()
+  AlignPacks(Pack1, Pack2, ValueToValuePackMap)
   return True  
 
 
 # This is necessary to ensure that 2 packs are rerollable.
-def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
+def DFGsAreIsomorphic(Pack1 : list, Pack2 : list, Context : RoseContext):
   print("PACK1:")
   for Op in Pack1:
     Op.print()
@@ -490,7 +571,8 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
     Op.print()
   #print("DATAFLOW PATTERNS ARE SAME")
   if len(Pack1) != len(Pack2): 
-    return FixDFGIsomorphism(Pack1, Pack2)
+    return FixDFGIsomorphism(Pack1, Pack2, Context)
+    #return False
   # Reverse iterate the packs
   OpsList1 =[Pack1[len(Pack1) - 1]]
   OpsList2 =[Pack2[len(Pack2) - 1]]
@@ -525,11 +607,11 @@ def DFGsAreIsomorphic(Pack1 : list, Pack2 : list):
       continue
     if Op1 in Visited:
       if not Op2 in Visited:
-         return False
+        return False
       continue
     if Op2 in Visited:
       if not Op1 in Visited:
-         return False
+        return False
       continue
     Visited.add(Op1)
     Visited.add(Op2)
@@ -727,7 +809,8 @@ def FuseCandidatePacks(RerollableCandidatePacks : list):
   return NewCandidatePacks
 
 
-def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict):
+def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict, \
+                        Context : RoseContext):
   print("RUN REROLLER ON BLOCK")
   print("BLOCK:")
   Block.print()
@@ -768,7 +851,7 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
   RerollableCandidatePacks = FuseCandidatePacks(RerollableCandidatePacks)
 
   # Get a set of rerollable sets
-  RerollableCandidatesList = GetValidRerollableCandidates(RerollableCandidatePacks)
+  RerollableCandidatesList = GetValidRerollableCandidates(RerollableCandidatePacks, Context)
 
   print("+++=RerollableCandidatesList:")
   print(RerollableCandidatesList)
@@ -782,9 +865,11 @@ def RunRerollerOnBlock(Block : RoseBlock, BlockToRerollableCandidatesMap : dict)
 def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
                         Context : RoseContext, VisitedRegion : set = set()):
   if Region in VisitedRegion:
+    print("REGION HAS BEEN VISITED")
     return BlockToRerollableCandidatesMap
   # Iterate over all the contents of this region
   assert not isinstance(Region, RoseBlock)
+  AbstractionToReductionInfo = dict()
   for Abstraction in Region: #Region.getChildren():
     print("NEXT ABSTRACTION:")
     Abstraction.print()
@@ -795,28 +880,32 @@ def RunRerollerOnRegion(Region, BlockToRerollableCandidatesMap : dict, \
     # Reroller only operates on blocks
     if not isinstance(Abstraction, RoseBlock):
       Abstraction.print()
-      BlockToRerollableCandidatesMap = RunRerollerOnRegion(Abstraction, \
-                                            BlockToRerollableCandidatesMap, Context)
+      AbstractionToReductionInfoMap, BlockToRerollableCandidatesMap = \
+                      RunRerollerOnRegion(Abstraction, BlockToRerollableCandidatesMap, Context)
+      AbstractionToReductionInfo.update(AbstractionToReductionInfoMap)
       continue
     if Abstraction in VisitedRegion:
       continue
-    if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
-      if FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
-        FixReductionPattern3ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
+    AbstractionToReductionInfo[Abstraction] = \
+              FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
+
+    #if FixReductionPattern1ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
+    #  if FixReductionPattern2ToMakeBlockRerollable(Abstraction, Context, VisitedRegion) == False:
+    #    FixReductionPattern3ToMakeBlockRerollable(Abstraction, Context, VisitedRegion)
     BlockToRerollableCandidatesMap = RunRerollerOnBlock(Abstraction, \
-                                            BlockToRerollableCandidatesMap)
+                                            BlockToRerollableCandidatesMap, Context)
     print("^^^^^^^ABSTRACTION:")
     Abstraction.print()
     VisitedRegion.add(Abstraction)
   VisitedRegion.add(Region)
-  return BlockToRerollableCandidatesMap
+  return AbstractionToReductionInfo, BlockToRerollableCandidatesMap
 
 
 # The assumption here is that the relationship between the 
 # indices is of the form: A * iterator + B. 
 # We need to find A and B for every indexed bitvector operation.
-def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list, Context : RoseContext):
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
   # Get the low index for the first bvinsert op in the pack
   StartIndex1 = None
   StartIndex2 = None
@@ -857,7 +946,7 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
     # Solve the linear equations
     # C1 * outer_iterator + C2 * innner_iterator + Offset = 
     Cofactor = (LowIndex2.getValue() - LowIndex1.getValue())\
-                           / (StartIndex2 - StartIndex1)
+                          / (StartIndex2 - StartIndex1)
     if Cofactor == int(Cofactor):
       Cofactor = int(Cofactor)
     print("--OP1:")
@@ -870,7 +959,7 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
     print(LowIndex2.getValue())
     print("FLOAT COFACTOR:")
     print((LowIndex2.getValue() - LowIndex1.getValue())\
-                           / (StartIndex2 - StartIndex1))
+                          / (StartIndex2 - StartIndex1))
     print("Cofactor:")
     print(Cofactor)
     Offset = LowIndex1.getValue() - (Cofactor * StartIndex1)
@@ -883,9 +972,9 @@ def GetLowOffsetsWithinPackConstantIndices(Pack1 : list, Pack2 : list):
   return LowOffsetsListMap, CoFactactorsListMap
 
 
-def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
+def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list, Context : RoseContext):
   print("AreStartingIndicesNonConstant")
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
 
   def GatherLowIndexingOps(Pack : list):
     IndexingToBVOpsMap = dict()
@@ -953,10 +1042,11 @@ def AreStartingIndicesNonConstant(Pack1 : list, Pack2 : list):
 
 
 def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
-                                            PackIndex : int, OperandIndex : int):
+                                            PackIndex : int, OperandIndex : int, \
+                                            Context : RoseContext):
   assert type(PackIndex) == int
   assert type(OperandIndex) == int
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
   print("GetLowOffsetsWithinPackNonConstantIndices")
   print("PACK1:")
   PrintPack(Pack1)
@@ -984,6 +1074,10 @@ def GetLowOffsetsWithinPackNonConstantIndices(Pack1 : list, Pack2 : list, \
   for Index in range(len(Pack1)):
     Op1 = Pack1[Index]
     Op2 = Pack2[Index]
+    print("+++OP1:")
+    Op1.print()
+    print("++++OP2:")
+    print(Op2)
     LowOffsetsListMap[Index] = list()
     CoFactactorsListMap[Index] = list()
     if isinstance(Op1, RoseCallOp):
@@ -1037,10 +1131,11 @@ def GetFirstLowIndexInPackConstantIndices(Pack : list):
 
 
 def GetStepForRerolledLoopNonConstantIndices(Pack1 : list, Pack2 : list,  \
-                                             PackIndex : int, OperandIndex : int):
+                                            PackIndex : int, OperandIndex : int, \
+                                            Context : RoseContext):
   assert type(PackIndex) == int
   assert type(OperandIndex) == int
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
 
   # We just get the difference between 2 different packs
   Offset = None
@@ -1060,8 +1155,8 @@ def GetStepForRerolledLoopNonConstantIndices(Pack1 : list, Pack2 : list,  \
   return Offset
 
 
-def GetStepForRerolledLoopConstantIndices(Pack1 : list, Pack2 : list):
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
+def GetStepForRerolledLoopConstantIndices(Pack1 : list, Pack2 : list, Context : RoseContext):
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
 
   # We just get the difference between 2 different packs
   Offset = None
@@ -1079,7 +1174,7 @@ def GetStepForRerolledLoopConstantIndices(Pack1 : list, Pack2 : list):
 
 
 # This aims to see if the rerollable packs can be rerolled more again
-def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
+def GetValidCandidatesRerollableTwice(RerollableCandidatesList, Context : RoseContext):
   print("****************************************************")
   print("RerollableCandidatesList:")
   for PackList in RerollableCandidatesList:
@@ -1113,7 +1208,7 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
       print("CheckPackList[0]:")
       for Op in CheckPackList[0]:
           Op.print()
-      CheckDFGsAreIsomorphic = DFGsAreIsomorphic(TailPackList[0], CheckPackList[0])
+      CheckDFGsAreIsomorphic = DFGsAreIsomorphic(TailPackList[0], CheckPackList[0], Context)
       print("++++CheckDFGsAreIsomorphic:")
       print(CheckDFGsAreIsomorphic)
       if CheckDFGsAreIsomorphic == False:
@@ -1151,20 +1246,27 @@ def GetValidCandidatesRerollableTwice(RerollableCandidatesList):
 
 
 def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
-                         IteratorSuffix : int, RemovedOps : list, Context : RoseContext):
+                        IteratorSuffix : int, RemovedOps : list, Context : RoseContext):
   print("PerformRerollingOnce:")
   Block.print()
+  print("FUNCTION:")
+  Block.getFunction().print()
   # Reroll the candidares in the list
   for PackList in RerollableCandidatesList:
     # Get the non-constant index
-    PackIndices, OperandIndicesMap = AreStartingIndicesNonConstant(PackList[0], PackList[1])
+    PackIndices, OperandIndicesMap = AreStartingIndicesNonConstant(PackList[0], \
+                                                          PackList[1], Context)
+    print("PackIndices:")
+    print(PackIndices)
+    print("OperandIndicesMap:")
+    print(OperandIndicesMap)
     NonConstantIndexing = False
     if PackIndices == None:
       assert OperandIndicesMap == None
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsListMap, CoFactactorsListMap = \
-                GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1])
-      Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
+                GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1], Context)
+      Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1], Context)
       Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
       End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     else:
@@ -1173,9 +1275,11 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
       # Lets get the offsets across windows and other info for generating a loop
       LowOffsetsListMap, CoFactactorsListMap = \
                 GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
-                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                          Context)
       Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
-                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                          Context)
       Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
                                           PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
       End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
@@ -1261,7 +1365,7 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
           else:
             LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
             ScaledIterator = RoseMulOp.create(Context.genName("%" + "low.cofactor"),\
-                                               [Iterator, LowCofactorVal])
+                                              [Iterator, LowCofactorVal])
           Loop.addAbstraction(ScaledIterator)
         [LowOffset] = LowOffsetsListMap[OpIndex]
         assert LowOffset != None
@@ -1304,7 +1408,10 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
               print(PackIndices)
               print("OperandIndices:")
               print(OperandIndicesMap)
-              print("----NewOperand:")
+              print("----Index:")
+              print(Index)
+              print("Loop.getStep().getValue():")
+              print(Loop.getStep().getValue())
               # Check if the next pack has the operation with an operand 
               # at "Index" with a constant value of "Step".
               if LowOffsetsListMap[OpIndex][Index] == Loop.getStep().getValue():
@@ -1315,6 +1422,11 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
                   print(LowOffsetsListMap[OpIndex][Index])
                   OpInFirstPack = PackList[0][OpIndex]
                   OpInSecondPack = PackList[1][OpIndex]
+                  print("OpInFirstPack.getOperand(Index).getValue():")
+                  print(OpInFirstPack.getOperand(Index).getValue())
+                  print("OpInSecondPack.getOperand(Index).getValue():")
+                  print(OpInSecondPack.getOperand(Index).getValue())
+                  print("BUGGER THIS CODE")
                   assert OpInFirstPack.getOperand(Index).getValue() \
                           > OpInSecondPack.getOperand(Index).getValue()
                   Factor = int(OpInFirstPack.getOperand(Index).getValue() \
@@ -1371,10 +1483,330 @@ def PerformRerollingOnce(Block: RoseBlock, RerollableCandidatesList : list, \
         RemovedOps.append(Op)
 
 
+def PerformRerollingOnceNew(Block: RoseBlock, RerollableCandidatesList : list, \
+                        DoesReduction : bool, IteratorSuffix : int, \
+                        RemovedOps : list, Context : RoseContext):
+  print("PerformRerollingOnce:")
+  Block.print()
+  print("FUNCTION:")
+  Block.getFunction().print()
+  # Reroll the candidares in the list
+  for PackList in RerollableCandidatesList:
+    # Get the non-constant index
+    PackIndices, OperandIndicesMap = AreStartingIndicesNonConstant(PackList[0], \
+                                                        PackList[1], Context)
+    print("PackIndices:")
+    print(PackIndices)
+    print("OperandIndicesMap:")
+    print(OperandIndicesMap)
+    NonConstantIndexing = False
+    if PackIndices == None:
+      assert OperandIndicesMap == None
+      # Lets get the offsets across windows and other info for generating a loop
+      LowOffsetsListMap, CoFactactorsListMap = \
+                GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1], Context)
+      Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1], Context)
+      Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
+      End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
+    else:
+      assert OperandIndicesMap != None
+      NonConstantIndexing = True
+      # Lets get the offsets across windows and other info for generating a loop
+      LowOffsetsListMap, CoFactactorsListMap = \
+                GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                          Context)
+      Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                          Context)
+      Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
+      End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
+                                          PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
+    if DoesReduction == True and Step < 0:
+      # Reverse the list of packs and try again
+      PackList.reverse()
+      # Get the non-constant index
+      PackIndices, OperandIndicesMap = AreStartingIndicesNonConstant(PackList[0], \
+                                                          PackList[1], Context)
+      print("PackIndices:")
+      print(PackIndices)
+      print("OperandIndicesMap:")
+      print(OperandIndicesMap)
+      NonConstantIndexing = False
+      if PackIndices == None:
+        assert OperandIndicesMap == None
+        # Lets get the offsets across windows and other info for generating a loop
+        LowOffsetsListMap, CoFactactorsListMap = \
+                  GetLowOffsetsWithinPackConstantIndices(PackList[0], PackList[1], Context)
+        Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1], Context)
+        Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
+        End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
+      else:
+        assert OperandIndicesMap != None
+        NonConstantIndexing = True
+        # Lets get the offsets across windows and other info for generating a loop
+        LowOffsetsListMap, CoFactactorsListMap = \
+                  GetLowOffsetsWithinPackNonConstantIndices(PackList[0], PackList[1], \
+                                            PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                            Context)
+        Step = GetStepForRerolledLoopNonConstantIndices(PackList[0], PackList[1], \
+                                            PackIndices[0], OperandIndicesMap[PackIndices[0]][0], \
+                                            Context)
+        Start = GetFirstLowIndexInPackNonConstantIndices(PackList[0], \
+                                            PackIndices[0], OperandIndicesMap[PackIndices[0]][0])
+        End = GetFirstLowIndexInPackNonConstantIndices(PackList[len(PackList) - 1], \
+                                            PackIndices[0], OperandIndicesMap[PackIndices[0]][0])  
+    print("START:")
+    print(Start)
+    print("END:")
+    print(End)
+    print("STEP:")
+    print(Step)
+    print("CoFactactorsListMap:")
+    print(CoFactactorsListMap)
+    print("LowOffsetsListMap:")
+    print(LowOffsetsListMap)
+    print("PackIndices:")
+    print(PackIndices)
+    print("OperandIndices:")
+    print(OperandIndicesMap)
+    # Because of the way ranges in Rosette work, we have to add step to end before
+    # generating a loop
+    End += Step
+    Loop = RoseForLoop.create("iterator." + str(IteratorSuffix), Start, End, Step)
+    IteratorSuffix += 1
+    Iterator = Loop.getIterator()
+    # Map to track old and new ops.
+    OldToNewOPsMap = dict()
+    # Insert operations in the generated loop.
+    for OpIndex, Op in enumerate(PackList[0]):
+      # Handle ops that do not have indices in operands
+      if isinstance(Op, RoseCallOp):
+        NewOp = Op.clone()
+        for Index, Operand in enumerate(Op.getOperands()):
+          # If the operand is a constant value, we just copy constants over
+          if isinstance(Operand, RoseConstant):
+            NewOperand = Op.getOperand(Index)
+          else:
+            NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+            if NewOperand == RoseUndefValue():
+              # Operand is coming from some other source, just use 
+              # the same operand as the old op.
+              NewOperand = Op.getOperand(Index)
+          print("----NewOperand:")
+          NewOperand.print()
+          NewOp.setOperand(Index, NewOperand)
+        OldToNewOPsMap[Op] = NewOp
+        Loop.addAbstraction(NewOp)
+        continue
+      if NonConstantIndexing == False:
+        # Handle ops that do not have indices in operands
+        if not isinstance(Op, RoseBitVectorOp) \
+          or (isinstance(Op, RoseBitVectorOp) and not Op.isIndexingBVOp()):
+          NewOp = Op.clone()
+          for Index, Operand in enumerate(Op.getOperands()):
+            # If the operand is a constant value, we just copy constants over
+            if isinstance(Operand, RoseConstant):
+              NewOperand = Op.getOperand(Index)
+            else:
+              NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+              if NewOperand == RoseUndefValue():
+                # Operand is coming from some other source, just use 
+                # the same operand as the old op.
+                NewOperand = Op.getOperand(Index)
+            print("----NewOperand:")
+            NewOperand.print()
+            NewOp.setOperand(Index, NewOperand)
+          OldToNewOPsMap[Op] = NewOp
+          Loop.addAbstraction(NewOp)
+          continue
+        # Handle bitvector operations (especially the indexing operations)
+        [LowCofactor] = CoFactactorsListMap[OpIndex]
+        Op.print()
+        assert LowCofactor != None
+        if LowCofactor == 1:
+          ScaledIterator = Iterator
+        elif LowCofactor == 0:
+          ScaledIterator = RoseConstant(0, Iterator.getType())
+        else:
+          if type(LowCofactor) != int:
+            LowCofactor = int(1 / LowCofactor)
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseDivOp.create(Context.genName("%" + "low.cofactor"), \
+                                              Iterator, LowCofactorVal)
+          else:
+            LowCofactorVal = RoseConstant(LowCofactor, Iterator.getType())
+            ScaledIterator = RoseMulOp.create(Context.genName("%" + "low.cofactor"),\
+                                              [Iterator, LowCofactorVal])
+          Loop.addAbstraction(ScaledIterator)
+        [LowOffset] = LowOffsetsListMap[OpIndex]
+        assert LowOffset != None
+        if LowOffset != 0:
+        # Generate an add instruction
+          LowOffsetVal = RoseConstant(LowOffset, ScaledIterator.getType())
+          LowIndex = RoseAddOp.create(Context.genName("%" + "low.offset"), [ScaledIterator, LowOffsetVal]) 
+          Loop.addAbstraction(LowIndex)
+        else:
+          LowIndex = ScaledIterator
+        OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
+        HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), [LowIndex, OpBitWidthVal]) 
+        Loop.addAbstraction(HighIndex)
+        NewOp = Op.clone()
+        for Index, Operand in enumerate(Op.getOperands()):
+          if Index == Op.getLowIndexPos():
+            NewOp.setOperand(Index, LowIndex)
+            continue
+          if Index == Op.getHighIndexPos():
+            NewOp.setOperand(Index, HighIndex)
+            continue
+          if isinstance(Operand, RoseConstant):
+            # Just copy this constant over
+            NewOp.setOperand(Index, Operand)
+            continue
+          NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+          if NewOperand == RoseUndefValue():
+            # Operand is coming from some other source, just use 
+            # the same operand as the old op.
+            NewOperand = Op.getOperand(Index)
+          NewOp.setOperand(Index, NewOperand)
+      else:
+        # Deal with a bitvector and non-bitvector ops
+        NewOp = Op.clone()
+        for Index, Operand in enumerate(Op.getOperands()):
+          if isinstance(Operand, RoseConstant):
+            if OpIndex in PackIndices and Index in OperandIndicesMap[OpIndex]:
+              # Replace this constant with the iterator
+              print("PackIndices:")
+              print(PackIndices)
+              print("OperandIndices:")
+              print(OperandIndicesMap)
+              print("----Index:")
+              print(Index)
+              print("Loop.getStep().getValue():")
+              print(Loop.getStep().getValue())
+              # Check if the next pack has the operation with an operand 
+              # at "Index" with a constant value of "Step".
+              if LowOffsetsListMap[OpIndex][Index] == Loop.getStep().getValue():
+                NewOp.setOperand(Index, Loop.getIterator())
+              else:
+                print("LowOffsetsListMap[OpIndex][Index]:")
+                print(LowOffsetsListMap[OpIndex][Index])
+                if LowOffsetsListMap[OpIndex][Index] > 0:
+                  OpInFirstPack = PackList[0][OpIndex]
+                  OpInSecondPack = PackList[1][OpIndex]
+                  print("OpInFirstPack.getOperand(Index).getValue():")
+                  print(OpInFirstPack.getOperand(Index).getValue())
+                  print("OpInSecondPack.getOperand(Index).getValue():")
+                  print(OpInSecondPack.getOperand(Index).getValue())
+                  # if OpInFirstPack.getOperand(Index).getValue() \
+                  #         > OpInSecondPack.getOperand(Index).getValue():
+                  #   Factor = int(OpInFirstPack.getOperand(Index).getValue() \
+                  #               / OpInSecondPack.getOperand(Index).getValue())
+                  #   assert Factor * OpInSecondPack.getOperand(Index).getValue() \
+                  #             == OpInFirstPack.getOperand(Index).getValue()
+                  # else:
+                  #   # Now we deal with 
+                  #   Factor = int(OpInSecondPack.getOperand(Index).getValue() \
+                  #               / OpInFirstPack.getOperand(Index).getValue())
+                  #   assert Factor * OpInFirstPack.getOperand(Index).getValue() \
+                  #             == OpInSecondPack.getOperand(Index).getValue()  
+                  # FactorVal = RoseConstant.create(Factor, Loop.getStep().getType())
+                  # MulOp = RoseMulOp.create(Context.genName(), [Loop.getIterator(), FactorVal])
+                  # DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
+                  # NewOp.setOperand(Index, DivOp)
+                  # Loop.addAbstraction(MulOp)
+                  # Loop.addAbstraction(DivOp)
+                  # if Loop.getStartIndex().getValue() == OpInFirstPack.getOperand(Index).getValue():
+                  #   MulOp = RoseMulOp.create(Context.genName(), [Loop.getIterator(), \
+                  #                                     OpInSecondPack.getOperand(Index)])
+                  #   DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
+                  #   NewOp.setOperand(Index, DivOp)
+                  #   Loop.addAbstraction(MulOp)
+                  #   Loop.addAbstraction(DivOp)
+                  # else:
+                  #   MulOp = RoseMulOp.create(Context.genName(), [Loop.getIterator(), \
+                  #                                     OpInSecondPack.getOperand(Index)])
+                  #   DivOp = RoseDivOp.create(Context.genName(), MulOp, Loop.getStep())
+                  #   Offset = OpInFirstPack.getOperand(Index).getValue() \
+                  #                     - Loop.getStartIndex().getValue()
+                  #   OffsetVal = RoseConstant.create(Offset, Loop.getStep().getType())
+                  #   AddOp =  RoseAddOp.create(Context.genName(), [OffsetVal, DivOp])
+                  #   NewOp.setOperand(Index, AddOp)
+                  #   Loop.addAbstraction(MulOp)
+                  #   Loop.addAbstraction(DivOp)
+                  #   Loop.addAbstraction(AddOp)
+                  #
+                  # x0 = OpInFirstPack.getValue()
+                  # x1 = OpInSecondPack.getValue()
+                  # x0 = k * iterator_0 + b
+                  # x1 = k * iterator_1 + b
+                  # iteration_n = n * step + start
+                  # Solve these equations and you get:
+                  # k = (x1 - x0) / step
+                  # b = x0 - k * start
+                  # x_n = k * iterator + b
+                  Diff = OpInSecondPack.getOperand(Index).getValue()\
+                            - OpInFirstPack.getOperand(Index).getValue()
+                  K = int(Diff / Loop.getStep().getValue())
+                  assert K * Loop.getStep().getValue() == Diff
+                  KVal = RoseConstant.create(K, Loop.getStep().getType())
+                  B = OpInFirstPack.getOperand(Index).getValue() \
+                            - (K * Loop.getStartIndex().getValue())
+                  BVal = RoseConstant.create(B, Loop.getStep().getType())
+                  MulOp = RoseMulOp.create(Context.genName(), [Loop.getIterator(), KVal])
+                  AddOp = RoseAddOp.create(Context.genName(), [MulOp, BVal])
+                  NewOp.setOperand(Index, AddOp)
+                  Loop.addAbstraction(MulOp)
+                  Loop.addAbstraction(AddOp)
+                else:
+                  # Only support special case for now
+                  print("REROLLER SPECIAL CASE SUPPORT")
+                  assert LowOffsetsListMap[OpIndex][Index] + Loop.getStep().getValue() == 0
+                  SubOp1 = RoseSubOp.create(Context.genName(), 
+                      [Loop.getEndIndex(), Loop.getIterator()])
+                  SubOp2 = RoseSubOp.create(Context.genName(), 
+                            [SubOp1, Loop.getStep()])
+                  NewOp.setOperand(Index, SubOp2)
+                  Loop.addAbstraction(SubOp1)
+                  Loop.addAbstraction(SubOp2)
+            else:
+              # Just copy this constant over
+              print("+++++NewOperand:")
+              Operand.print()
+              NewOp.setOperand(Index, Operand)
+            continue
+          NewOperand = OldToNewOPsMap.get(Operand, RoseUndefValue())
+          if NewOperand == RoseUndefValue():
+            # Operand is coming from some other source, just use 
+            # the same operand as the old op.
+            NewOperand = Op.getOperand(Index)
+          NewOp.setOperand(Index, NewOperand)
+      OldToNewOPsMap[Op] = NewOp
+      Loop.addAbstraction(NewOp)
+    # This is the full loop
+    Loop.print()
+    # Now add the generated loop before the given block
+    ParentRegion = Block.getParent()
+    ParentRegion.print()
+    Block.print()
+    ParentKey = ParentRegion.getKeyForChild(Block)
+    Index = ParentRegion.getPosOfChild(Block, ParentKey)
+    ParentRegion.addRegionBefore(Index, Loop, ParentKey)
+    print("PRINTING PARENT REGION BEFORE:")
+    ParentRegion.print()
+    print("PRINTING PARENT REGION AFTER:")
+    ParentRegion.print()
+    # Lets queue all the ops in the pack list to be removed
+    for Pack in PackList:
+      for Op in Pack:
+        RemovedOps.append(Op)
+
+
 # Assumption here is that the indices are expressed as:
 # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
 # We try to find C1, C2 and Offset for every bitslice.
-def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
+def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists, Context : RoseContext):
   print("GetIndexRelationsAcrossPacks:")
   print(ListOfCandidatePackLists)
   Pack1 = ListOfCandidatePackLists[0][0]
@@ -1386,8 +1818,8 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
   PrintPack(Pack2)
   PrintPack(Pack3)
   # Check if the candidate packs are isomorphic.
-  assert DFGsAreIsomorphic(Pack1, Pack2) == True
-  assert DFGsAreIsomorphic(Pack1, Pack3) == True
+  assert DFGsAreIsomorphic(Pack1, Pack2, Context) == True
+  assert DFGsAreIsomorphic(Pack1, Pack3, Context) == True
   # Get the low index for the first bvinsert op in the pack
   StartIndex1 = None
   StartIndex2 = None
@@ -1487,7 +1919,7 @@ def GetIndexRelationsAcrossPacks(ListOfCandidatePackLists):
     # Solve the linear equations
     # C1 * outer_iterator + C2 * innner_iterator + Offset = BitSlice_Index
     A = np.array([[Pack1LaneIndex,  StartIndex1, 1], [Pack2LaneIndex, StartIndex2, 1], \
-                 [Pack3LaneIndex, StartIndex3, 1]])
+                [Pack3LaneIndex, StartIndex3, 1]])
     B = np.array([LowIndex1.getValue(), LowIndex2.getValue(), LowIndex3.getValue()])
     X =  np.linalg.solve(A, B)
     Cofactor1 = Round(X[0])
@@ -1520,16 +1952,16 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
   LastLoopPack = ListOfCandidatePackLists[len(ListOfCandidatePackLists) - 1][0]
   OutStart = GetFirstLowIndexInPackConstantIndices(FirstLoopPack)
   OutEnd = GetFirstLowIndexInPackConstantIndices(LastLoopPack)
-  OutStep = GetStepForRerolledLoopConstantIndices(FirstLoopPack, SecondLoopPack)
+  OutStep = GetStepForRerolledLoopConstantIndices(FirstLoopPack, SecondLoopPack, Context)
   # Account for how Rosette expects the loop bounds to be expressed.
   OutEnd += OutStep
   OuterLoop = RoseForLoop.create("iterator.lane", OutStart, OutEnd, OutStep)
   OutIterator = OuterLoop.getIterator()
   # Now pack the code for inner loops
   for ListOfPackLists in ListOfCandidateIsomorphicPackLists: 
-   # Lets get the offsets across windows and other info for generating a loop
+  # Lets get the offsets across windows and other info for generating a loop
     LowOffsetsListMap, CoFactactorsListMap1, CoFactactorsListMap2 = \
-                GetIndexRelationsAcrossPacks(ListOfPackLists)
+                GetIndexRelationsAcrossPacks(ListOfPackLists, Context)
     print("LowOffsetsListMap:")
     print(LowOffsetsListMap)
     print("CoFactactorsListMap1:")
@@ -1537,7 +1969,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
     print("CoFactactorsListMap2:")
     print(CoFactactorsListMap2)
     PackList = ListOfPackLists[0]
-    Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1])
+    Step = GetStepForRerolledLoopConstantIndices(PackList[0], PackList[1], Context)
     Start = GetFirstLowIndexInPackConstantIndices(PackList[0])
     End = GetFirstLowIndexInPackConstantIndices(PackList[len(PackList) - 1])
     print("START:")
@@ -1603,11 +2035,11 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
           LowCofactor2 = int(1 / LowCofactor2)
           LowCofactorVal2 = RoseConstant(LowCofactor2, Iterator.getType())
           ScaledIterator2 = RoseDivOp.create(Context.genName("%" + "low.cofactor"), \
-                                                         Iterator, LowCofactorVal2)
+                                                        Iterator, LowCofactorVal2)
         else:
           LowCofactorVal2 = RoseConstant(LowCofactor2, Iterator.getType())
           ScaledIterator2 = RoseMulOp.create(Context.genName("%" + "low.cofactor"), \
-                                                         [Iterator, LowCofactorVal2])
+                                                        [Iterator, LowCofactorVal2])
         Loop.addAbstraction(ScaledIterator2)
       if isinstance(ScaledIterator1, RoseConstant) and ScaledIterator1.getValue() == 0:
         ScaledIterator = ScaledIterator2
@@ -1615,7 +2047,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         ScaledIterator = ScaledIterator1
       else:
         ScaledIterator = RoseAddOp.create(Context.genName("%" + "low.scaled.it"), \
-                                                       [ScaledIterator1, ScaledIterator2])
+                                                      [ScaledIterator1, ScaledIterator2])
         Loop.addAbstraction(ScaledIterator)
       LowOffset = LowOffsetsListMap[OpIndex]
       assert LowOffset != None
@@ -1629,7 +2061,7 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
         LowIndex = ScaledIterator
       OpBitWidthVal = RoseConstant(Op.getOutputBitwidth() - 1, ScaledIterator.getType())
       HighIndex = RoseAddOp.create(Context.genName("%" + "high.offset"), \
-                                                   [LowIndex, OpBitWidthVal]) 
+                                                  [LowIndex, OpBitWidthVal]) 
       Loop.addAbstraction(HighIndex)
       NewOp = Op.clone()
       for Index, Operand in enumerate(Op.getOperands()):
@@ -1675,14 +2107,75 @@ def PerformRerollingTwice(Block: RoseBlock, ListOfCandidateIsomorphicPackLists :
   ParentRegion.print()
 
 
-def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContext):
+# Fix some packs
+def FixBitvectorOpsInPack(Block : RoseBlock, Pack : list, Context : RoseContext):
+  print("FixBitvectorOpsInPack")
+  ToBeRemoved = set()
+  for PackIndex, Op in enumerate(Pack):
+    print("OP IN PACK:")
+    Op.print()
+    if isinstance(Op, RoseBVExtractSliceOp) \
+      or isinstance(Op, RoseBVInsertSliceOp):
+      print("BITVECTOR OPERATION:")
+      Op.print()
+      HighIndexOp = Op.getHighIndex()
+      if isinstance(HighIndexOp, RoseOperation):
+        print("HIGH INDEX IS AN OPERATION")
+        # At least one of the operands must be the low index
+        if isinstance(HighIndexOp, RoseAddOp):
+          print("HIGH INDEX IS AN ADD OPERATION")
+          assert len(HighIndexOp.getOperands()) == 2
+          if HighIndexOp.getOperand(0) == Op.getLowIndex():
+            continue
+          if HighIndexOp.getOperand(1) == Op.getLowIndex():
+            continue
+        print("GENERATING NEW HIGH INDEX")
+        BitwidthVal = RoseConstant.create(Op.getOutputBitwidth() - 1, Op.getLowIndex().getType())
+        HighIndexPackIndex = Pack.index(HighIndexOp)
+        NewHighIndex = RoseAddOp.create(Context.genName(HighIndexOp.getName() + ".new"), \
+                                          [Op.getLowIndex(), BitwidthVal])
+        Op.setOperand(Op.getHighIndexPos(), NewHighIndex)
+        Block.addOperationBefore(NewHighIndex, Op)
+        Pack[PackIndex] = Op
+        print("HighIndexOp.getNumUsers():")
+        print(HighIndexOp.getNumUsers())
+        print(type(HighIndexOp.getNumUsers()))
+        if HighIndexOp.getNumUsers() == 0:
+          # Erase this high index op
+          print("ERASING OP:")
+          HighIndexOp.print()
+          Block.eraseOperation(HighIndexOp)
+          print("OEPRATION ERASED")
+          if HighIndexOp in ToBeRemoved:
+            ToBeRemoved.remove(HighIndexOp)
+          Pack[HighIndexPackIndex] = NewHighIndex
+        else:
+          Pack.insert(PackIndex, NewHighIndex)
+          ToBeRemoved.add(HighIndexOp)
+  # Remove any ops that can be removed
+  for HighIndexOp in ToBeRemoved:
+    print("++++HighIndexOp:")
+    HighIndexOp.print()
+    if HighIndexOp.getNumUsers() == 0:
+      Block.eraseOperation(HighIndexOp)
+  print("BLOCK AFTER FIXING PACK:")
+  Block.print()
+  return
+
+
+def PerformRerolling(BlockToRerollableCandidatesMap : dict, \
+                      AbstractionToReductionInfo : dict, Context : RoseContext):
   print("PERFORMING REROLLING")
   RemovedOps = []
   IteratorSuffix = 0
   # Iterate over the candidate lists for different blocks
   # and reroll as much as possible.
   for Block, RerollableCandidatesList in BlockToRerollableCandidatesMap.items():
-    ListOfCandidateIsomorphicPackLists = GetValidCandidatesRerollableTwice(RerollableCandidatesList)
+    for Packs in RerollableCandidatesList:
+      for Pack in Packs:
+        FixBitvectorOpsInPack(Block, Pack, Context)
+    ListOfCandidateIsomorphicPackLists = \
+                  GetValidCandidatesRerollableTwice(RerollableCandidatesList, Context)
     print(len(ListOfCandidateIsomorphicPackLists))
     if ListOfCandidateIsomorphicPackLists != []:
       print("PERFORMING REROLLING TWICE")
@@ -1693,14 +2186,18 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContex
       ParentRegion = Block.getParent()
       print("+++++++BLOCK VALIDITY:")
       print(Block in ParentRegion.getChildren())
-      PerformRerollingOnce(Block, RerollableCandidatesList, IteratorSuffix, RemovedOps, Context)
+      DoesReduction = AbstractionToReductionInfo[Block]
+      PerformRerollingOnceNew(Block, RerollableCandidatesList, DoesReduction, \
+                            IteratorSuffix, RemovedOps, Context)
       print("---------BLOCK VALIDITY:")
       print(Block in ParentRegion.getChildren())
-  # Finaly, remove the ops.
+  # Finaly, remove the ops. 
   # Reverse the list of ops since we want to remove
   # uses of ops before the ops themselves.
   RemovedOps.reverse()
   for Operation in RemovedOps:
+    print("OPERATION BEING REMOVED:")
+    Operation.print()
     Block = Operation.getParent()
     Block.eraseOperation(Operation)
     # If the block is empty now, we can remove it
@@ -1712,6 +2209,27 @@ def PerformRerolling(BlockToRerollableCandidatesMap : dict, Context : RoseContex
       ParentRegion.eraseChild(Block, ParentKey)
 
 
+def FixExternalDependencyInBlock(Block : RoseBlock, Context : RoseContext):
+  OpList = list()
+  OpList.extend(Block.getOperations())
+  for Op in OpList:
+    if not isinstance(Op, RoseBVExtractSliceOp) and \
+      not isinstance(Op, RoseBVInsertSliceOp):
+      continue
+    IndexingOps = GatherIndexingOps(Op)
+    for IndexingOp in IndexingOps:
+      if IndexingOp.getParent() == Block:
+        continue
+      print("^^^INDEXING OP:")
+      IndexingOp.print()
+      # Clone the indexing op and replace uses with
+      # unique copy.
+      ClonedIndexingOp = IndexingOp.clone(Context.genName(IndexingOp.getName() + ".copy"), \
+                                        ChangeID=True)
+      ReplaceUsesWithUniqueCopiesOf(Block, IndexingOp, ClonedIndexingOp, Context)
+  return
+
+
 def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
                               Context : RoseContext, VisitedRegion : set = set()):
   print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
@@ -1719,11 +2237,20 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   print("BLOCK:")
   Block.print()
   # Look for chains of bvadd ops
+  Function = Block.getFunction()
+  PrintFunctionInfo(Function)
   BVAddChain = list()
   BVInsertOp = RoseUndefValue()
   IntermediateOp = RoseUndefValue()
   for Op in reversed(Block.getOperations()):
     if isinstance(Op, RoseBVInsertSliceOp):
+      # Right now, we cannot deal with blocks with multiple
+      # reduction patterns i.e. if there are multiple
+      # bvinserts in the block.
+      # TODO: fix this
+      if not isinstance(BVInsertOp, RoseUndefValue):
+        print("MULTIPLE BVINSERTS FOUND")
+        return False
       # Go up the use-def chain to look for add ops.
       # Skip bvsat and bvusat ops.
       InsertValue = Op.getInsertValue()
@@ -1743,10 +2270,50 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
             and Operand.getParent() == Block:
               Worklist.append(Operand)
         BVInsertOp = Op
-        break
-  if len(BVAddChain) == 0 or len(BVAddChain) == 1 \
-    or BVInsertOp == RoseUndefValue():
+
+  if len(BVAddChain) == 0 \
+    or BVInsertOp == RoseUndefValue(): #or len(BVAddChain) == 1
+    print("len(BVAddChain):")
+    print(len(BVAddChain))
+    print("RETURNING EARLY!!!")
     return False
+
+  if len(BVAddChain) == 1:
+    print("BVAddCHAIN == 1")
+    # Check if there is any distant possibility that this reduction
+    # pattern is reroller. Trace back two threads.
+    AddOp = BVAddChain[0]
+    assert isinstance(AddOp, RoseBVAddOp)
+    assert len(AddOp.getOperands()) == 2
+    Trace1 = [AddOp.getOperand(0)]
+    Trace2 = [AddOp.getOperand(1)]
+    while len(Trace1) != 0 and len(Trace2) != 0:
+      Trace1Op = Trace1.pop()
+      Trace2Op = Trace2.pop()
+      if type(Trace1Op) != type(Trace2Op):
+        print("EXIT2")
+        return False
+      if isinstance(Trace1Op, RoseArgument) \
+        and isinstance(Trace2Op, RoseArgument):
+        continue
+      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+        and isinstance(Trace2Op, RoseBVExtractSliceOp):
+        if Trace1Op.getInputBitVector() != Trace2Op.getInputBitVector():
+          return False
+        Trace1.append(Trace1Op.getInputBitVector())
+        Trace2.append(Trace2Op.getInputBitVector())
+        continue
+      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
+        Trace1.append(Trace1Op.getOperand(0))
+        Trace2.append(Trace2Op.getOperand(0))
+        continue
+      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
+      for Operand in Trace1Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace1.append(Operand)
+      for Operand in Trace2Op.getOperands():
+        if not isinstance(Operand, RoseConstant):
+          Trace2.append(Operand)
 
   if not isinstance(IntermediateOp, RoseUndefValue):
     assert isinstance(IntermediateOp, RoseBVSSaturateOp) \
@@ -1782,6 +2349,31 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
             Trace1 = [Trace1Op.getOperand(0)]
             Trace2 = [Trace1Op.getOperand(1)]
             continue
+        if isinstance(Trace1Op, RoseBVExtractSliceOp) \
+          or Trace1Op.isSizeChangingOp():
+          if Trace2Op.getOpcode().typesOfOperandsAreEqual() \
+            and Trace2Op.getOpcode().typesOfInputsAndOutputEqual():
+            Trace1 = [Trace2Op]
+            continue
+        if isinstance(Trace2Op, RoseBVExtractSliceOp) \
+          or Trace2Op.isSizeChangingOp():
+          if Trace1Op.getOpcode().typesOfOperandsAreEqual() \
+            and Trace1Op.getOpcode().typesOfInputsAndOutputEqual():
+            Trace2 = [Trace1Op]
+            continue
+        if Trace2Op.getOpcode().typesOfOperandsAreEqual() \
+          and Trace2Op.getOpcode().typesOfInputsAndOutputEqual():
+          if Trace1Op.getOpcode().typesOfOperandsAreEqual() \
+            and Trace1Op.getOpcode().typesOfInputsAndOutputEqual():
+            Trace1 = [Trace1Op.getOperand(0)]
+            Trace2 = [Trace2Op]
+            continue
+        if Trace1Op.getOpcode().typesOfOperandsAreEqual() \
+          and Trace1Op.getOpcode().typesOfInputsAndOutputEqual():
+          if isinstance(Trace2Op, RoseBVAddOp):
+            Trace1 = [Trace2Op.getOperand(0)]
+            Trace2 = [Trace2Op]
+            continue
         return False
       if isinstance(Trace1Op, RoseArgument) \
         and isinstance(Trace2Op, RoseArgument):
@@ -1810,18 +2402,30 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
         if not isinstance(Operand, RoseConstant):
           Trace2.append(Operand)
   
+  # Remove any external dependencies
+  FixExternalDependencyInBlock(Block, Context)
+  print("FIXED BLOCK AFTER REMOVING EXTERNAL DEPENDENCIES")
+  Block.print()
+  
   # One of the bvadds must be coming from external source
   # (some other block or function argument).
-  TempValues = []
-  ExternalOperands = []
-  OpsWithExternalOperands = []
-  OpsWithTempVals = []
+  print("LOOKING FOR BVADDS FROM EXTERNAL SOURCE")
+  TempValues = list()
+  ExternalOperands = list()
+  OpsWithExternalOperands = list()
+  OpsWithTempVals = list()
   for Op in BVAddChain:
+    print("OP IN BVADDCHAIN:")
+    Op.print()
     ExternalOperandFound = False
     for Operand in Op.getOperands():
+      print("Operand:")
+      Operand.print()
       if Operand in BVAddChain:
+        print("OPERAND IN BV ADD CHAIN")
         continue
       if Operand not in Block:
+        print("OPERAND NOT IN BLOCK")
         ExternalOperands.append(Operand)
         ExternalOperandFound = True
         continue
@@ -1837,13 +2441,17 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
       OpsWithTempVals.append(Op)
     else:
       OpsWithExternalOperands.append(Op)
-  if TempValues == [] or ExternalOperands == []:
+  if TempValues == []: #or ExternalOperands == []:
+    print("TempValues is empty")
     return False
   # Limit the reduction pattern we analyze
   if len(OpsWithTempVals) == 0:
+    print("OpsWithTempVals is empty")
     return False
 
   # Insert bvinserts after TempValues
+  print("$$$$$BVInsertOp:")
+  BVInsertOp.print()
   InsertOpLowIndex = BVInsertOp.getLowIndex()
   InsertOpHighIndex = BVInsertOp.getHighIndex()
   BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
@@ -1949,6 +2557,7 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
     assert isinstance(BVOp, RoseBVExtractSliceOp) \
         or isinstance(BVOp, RoseBVInsertSliceOp)
     print("EraseIndexingBVOp")
+    BVOp.print()
     ParentBlock = BVOp.getParent()
     assert not isinstance(ParentBlock, RoseUndefRegion)
     ErasedOps = []
@@ -1967,6 +2576,7 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
       Op = IndexingOps.pop()
       print("--INDEXING OP:")
       Op.print()
+      Op.getParent().print()
       # If we have already erased this op, continue
       if Op in ErasedOps:
         continue
@@ -1989,438 +2599,113 @@ def FixReductionPattern1ToMakeBlockRerollable(Block : RoseBlock, \
   EraseIndexingBVOp(BVInsertOp)
   if not isinstance(IntermediateOp, RoseUndefValue):
     Block.eraseOperation(IntermediateOp)
-  
 
-  # Erase some other extraneous ops
-  for Op in reversed(OpsWithExternalOperands):
-      Block.eraseOperation(Op)
-
-  print("BLOCK AGAIN:")
-  Block.print()
-  # Remove the temp values
-  print("OpsWithTempVals:")
-  print(OpsWithTempVals)
-  for Op in reversed(OpsWithTempVals):
-    print("OP WITH TEMP VAL:")
-    Op.print()
-    Block.eraseOperation(Op)
+  ToBeRemoved = OpsWithExternalOperands + OpsWithTempVals
+  while len(ToBeRemoved) != 0:
+    UpdatedList = list()
+    UpdatedList.extend(ToBeRemoved)
+    for Op in reversed(UpdatedList):
+      if Op.getNumUsers() == 0:
+        Block.eraseOperation(Op)
+        ToBeRemoved.remove(Op)
   
-  # Now erase the externaloperands
+  # Now erase the external operands
   for Op in ExternalOperands:
     EraseIndexingBVOp(Op)
 
   print("++++++FIXED BLOCK:")
   Block.print()
-
+  
   # Create a new block
-  FirstBlock = Block.create()
+  FirstBlock = RoseBlock.create()
   ParentRegion = Block.getParent()
   ParentKey = ParentRegion.getKeyForChild(Block)
   Index = ParentRegion.getPosOfChild(Block, ParentKey)
   ParentRegion.addRegionBefore(Index, FirstBlock, ParentKey)
-
-  # Add instructions to the first block
-  OpList = list()
-  OpList.extend(Block.getOperations())
-  for Op in OpList:
-    Block.removeOperation(Op)
-    FirstBlock.addOperation(Op)
-    if Op == LastInsertOp:
-      break
-
-  # Now let's split this block 
-  #print("LastInsertOp:")
-  #LastInsertOp.print()
-  #NewBlock = Block.splitAt(Block.getPosOfChild(LastInsertOp) + 1)
+  
+  if len(OpsWithExternalOperands) != 0:
+    # Add instructions to the first block
+    OpList = list()
+    OpList.extend(Block.getOperations())
+    for Op in OpList:
+      Block.removeOperation(Op)
+      FirstBlock.addOperation(Op)
+      if Op == LastInsertOp:
+        break
+  else:
+    # Create a new constant as big as BVInsertOp.getInputVector()
+    print("BVInsertOp:")
+    BVInsertOp.print()
+    IndexingVals = GatherIndexingValues(BVInsertOp)
+    print("len(IndexingVals):")
+    print(IndexingVals)
+    ValueToValueMap = dict()
+    ValueToValueMap[BVInsertOp.getInputBitVector()] = BVInsertOp.getInputBitVector()
+    print("---FirstBlock:")
+    FirstBlock.print()
+    for IndexingVal in IndexingVals:
+      print("INDEXING Val:")
+      IndexingVal.print()
+      if isinstance(IndexingVal, RoseOperation):
+        for Operand in IndexingVal.getOperands():
+          print("OPERNAD:")
+          Operand.print()
+          print(Operand.ID)
+        ClonedIndexingOp = IndexingVal.cloneOperation(\
+                            ValueToValueMap=ValueToValueMap, ChangeID=True)
+        print("CLONE OPERATION ClonedIndexingOp:")
+        ClonedIndexingOp.print()
+        ClonedIndexingOp.setName(Context.genName(ClonedIndexingOp.getName() + "."))
+        print("ClonedIndexingOp:")
+        ClonedIndexingOp.print()
+        for Operand in ClonedIndexingOp.getOperands():
+          print("CLONED OPERNAD:")
+          Operand.print()
+          print(Operand.ID)
+        FirstBlock.addOperation(ClonedIndexingOp)
+        print("Mapping IndexingOp to ClonedIndexingOp:")
+        IndexingVal.print()
+        print("IndexingOp.id:")
+        print(IndexingVal.ID)
+        ClonedIndexingOp.print()
+        print("ClonedIndexingOp.id:")
+        print(ClonedIndexingOp.ID)
+        ValueToValueMap[IndexingVal] = ClonedIndexingOp
+      else:
+        # No need to clone non-operation values
+        ValueToValueMap[IndexingVal] = IndexingVal
+    print("FirstBlock:")
+    FirstBlock.print()
+    # Replace the low index and high of the ClonedBVInsertOp
+    OldLowIndex = BVInsertOp.getLowIndex()
+    OldHighIndex = BVInsertOp.getHighIndex()
+    print("OLD  LOW IDNEX:")
+    OldLowIndex.print()
+    print("OldLowIndex.id:")
+    print(OldLowIndex.ID)
+    print("OLD HIGH INDEX:")
+    OldHighIndex.print()
+    print("OldHighIndex.id:")
+    print(OldHighIndex.ID)
+    ClonedBVInsertOp = BVInsertOp.cloneOperation(ChangeID=True, \
+                                      ValueToValueMap=ValueToValueMap)
+    FirstBlock.addOperation(ClonedBVInsertOp)
+    ClonedBVInsertOp.setOperand(ClonedBVInsertOp.getLowIndexPos(),\
+                                ValueToValueMap[OldLowIndex])
+    ClonedBVInsertOp.setOperand(ClonedBVInsertOp.getHighIndexPos(),\
+                                ValueToValueMap[OldHighIndex])
+    ConstantVal = RoseConstant.create(0, BVInsertOp.getInputBitVector().getType())
+    ExtractedVal = RoseBVExtractSliceOp.create(Context.genName("%zero.const"), \
+                                          ConstantVal, ClonedBVInsertOp.getLowIndex(), \
+                                            ClonedBVInsertOp.getHighIndex(), BitwidthVal)
+    ClonedBVInsertOp.setOperand(0, ExtractedVal)
+    FirstBlock.addOperationBefore(ExtractedVal, ClonedBVInsertOp)
   VisitedRegion.add(FirstBlock)
-
+  print("FIRST BLOCK:")
+  FirstBlock.print()  
   print("FIXED BLOCK:")
   Block.print()
-  print("FIRST BLOCK:")
-  FirstBlock.print()
-  return True
-
-
-def FixReductionPattern2ToMakeBlockRerollable(Block : RoseBlock, \
-                          Context : RoseContext, VisitedRegion : set = set()):
-  print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
-  print("FixReductionPattern2ToMakeBlockRerollable")
-  print("BLOCK:")
-  Block.print()
-  # Look for chains of bvadd ops
-  Function = Block.getFunction()
-  BVExtractOps = list()
-  FirstInsertOp = RoseUndefValue()
-  DstInsertPrecededByExtract = None
-  for Op in Block.getOperations():
-    if isinstance(Op, RoseBVExtractSliceOp):
-      print("EXTRACT OP:")
-      Op.print()
-      if Op.getInputBitVector() == Function.getReturnValue():
-        if DstInsertPrecededByExtract == None:
-          DstInsertPrecededByExtract = False
-      #if len(BVExtractOps) != 0:
-        #if Op.getLowIndex() != BVExtractOps[-1].getLowIndex():
-        #  return False
-        BVExtractOps.append(Op)
-      continue
-    if isinstance(Op, RoseBVInsertSliceOp):
-      print("INSERT OP:")
-      Op.print()
-      if Op.getInputBitVector() == Function.getReturnValue():
-        if DstInsertPrecededByExtract == False:
-          DstInsertPrecededByExtract = True
-      if isinstance(FirstInsertOp, RoseUndefValue):
-        FirstInsertOp = Op
-      continue
-  
-  print("LOOPED ALREADY")
-  if DstInsertPrecededByExtract != True:
-    return False
-  if len(BVExtractOps) == 0:
-    return False
-
-  print("INSERTING INSTRUCTIONS")
-  # Get the new op for external operand
-  FirstOp = Block.getOperation(0)
-  ExtractOp = BVExtractOps[0]
-  BitwidthVal = RoseConstant.create(ExtractOp.getOutputBitwidth(), \
-                                    ExtractOp.getLowIndex().getType())
-  InsertValue = FirstInsertOp.getInsertValue()
-  OrginalValToClonedValMap = dict()
-  if isinstance(ExtractOp.getLowIndex(), RoseOperation):
-    LowIndex = CloneAndInsertOperation(ExtractOp.getLowIndex(), FirstOp, \
-                                       Context, OrginalValToClonedValMap)
-  else:
-    LowIndex = ExtractOp.getLowIndex()
-  if isinstance(ExtractOp.getHighIndex(), RoseOperation):
-    HighIndex = CloneAndInsertOperation(ExtractOp.getHighIndex(), FirstOp, \
-                                        Context, OrginalValToClonedValMap)
-  else:
-    HighIndex = ExtractOp.getHighIndex()
-  NewExtractOp = RoseBVExtractSliceOp.create(Context.genName(ExtractOp.getName() + ".ext"), \
-                                        ExtractOp.getInputBitVector(), \
-                                        LowIndex, HighIndex, BitwidthVal)
-  AddOp = RoseBVAddOp.create(Context.genName(ExtractOp.getName() + ".acc"), \
-                                            [NewExtractOp, InsertValue])
-  FirstInsertOp.setOperand(0, AddOp)
-  Block.addOperationBefore(NewExtractOp, FirstOp)
-  Block.addOperationAfter(AddOp, InsertValue)
-
-  # Now initialize the function return register in the first block
-  Region = Function.getChild(0)
-  if not isinstance(Region, RoseBlock):
-    FirstBlock = Block.create()
-    Function.addRegionBefore(0, FirstBlock)
-    print("ALLOCATED NEW BLOCK")
-    print("----FirstBlock:")
-    FirstBlock.print()
-    print(FirstBlock)
-  else:
-    FirstBlock = Region
-  ReturnVal = Function.getReturnValue()
-  InitVal = RoseConstant.create(0, ReturnVal.getType())
-  InitLowIndex = RoseConstant.create(0, RoseIntegerType.create(32))
-  InitHighIndex = RoseConstant.create(ReturnVal.getType().getBitwidth() - 1, \
-                                      RoseIntegerType.create(32))
-  InitBitwidth = RoseConstant.create(ReturnVal.getType().getBitwidth(), \
-                                RoseIntegerType.create(32))
-  InitOp = RoseBVInsertSliceOp.create(InitVal, ReturnVal, InitLowIndex, \
-                                      InitHighIndex, InitBitwidth)
-  if FirstBlock.getNumOperations() == 0:
-    FirstBlock.addRegion(InitOp)
-  else:
-    FirstBlock.addOperationBefore(InitOp, FirstBlock.getOperation(0))
-  VisitedRegion.add(FirstBlock)
-
-  print("FUNCTION FIX REDUCTION PATTERN:")
-  Function.print()
-
-  return True
-
-
-def FixReductionPattern3ToMakeBlockRerollable(Block : RoseBlock, \
-                              Context : RoseContext, VisitedRegion : set = set()):
-  print("FIX REDUCTION PATTERN TO MAKE BLOCK REROLLABLE")
-  print("FixReductionPattern3ToMakeBlockRerollable")
-  # Look for chains of bvadd ops
-  BVAddChain = list()
-  BVInsertOp = RoseUndefValue()
-  IntermediateOp = RoseUndefValue()
-  for Op in reversed(Block.getOperations()):
-    if isinstance(Op, RoseBVInsertSliceOp):
-      # Go up the use-def chain to look for add ops.
-      # Skip bvsat and bvusat ops.
-      InsertValue = Op.getInsertValue()
-      if isinstance(InsertValue, RoseBVSSaturateOp) \
-      or isinstance(InsertValue, RoseBVUSaturateOp):
-        IntermediateOp = InsertValue
-        InsertValue = IntermediateOp.getInputBitVector()
-      if isinstance(InsertValue, RoseBVAddOp):
-        Worklist = [InsertValue]
-        while len(Worklist) != 0:
-          AddOp = Worklist.pop()
-          # Number of uses for the add op must be only 1.
-          if AddOp.getNumUsers() == 1:
-            BVAddChain.append(AddOp)
-          for Operand in AddOp.getOperands():
-            if isinstance(Operand, RoseBVAddOp) \
-            and Operand.getParent() == Block:
-              Worklist.append(Operand)
-        BVInsertOp = Op
-        break
-  if len(BVAddChain) == 0 or BVInsertOp == RoseUndefValue():
-    print("EXIT1")
-    return False
-
-  if len(BVAddChain) == 2:
-    print("SPECIAL CHECK")
-    # Check if there is any distant possibility that this reduction
-    # pattern is rerollable. Trace back two threads.
-    AddOp = BVAddChain[0]
-    assert isinstance(AddOp, RoseBVAddOp)
-    assert len(AddOp.getOperands()) == 2
-    Trace1 = [AddOp.getOperand(0)]
-    Trace2 = [AddOp.getOperand(1)]
-    while len(Trace1) != 0 and len(Trace2) != 0:
-      Trace1Op = Trace1.pop()
-      Trace2Op = Trace2.pop()
-      print("TRACE1 OP:")
-      Trace1Op.print()
-      print("TRACE2 OP:")
-      Trace2Op.print()
-      if type(Trace1Op) != type(Trace2Op):
-        print("EXIT2")
-        if isinstance(Trace1Op, RoseBVExtractSliceOp) \
-          or Trace1Op.isSizeChangingOp():
-          if isinstance(Trace2Op, RoseBVAddOp):
-            Trace1 = [Trace2Op.getOperand(0)]
-            Trace2 = [Trace2Op.getOperand(1)]
-            continue
-        if isinstance(Trace2Op, RoseBVExtractSliceOp) \
-          or Trace2Op.isSizeChangingOp():
-          if isinstance(Trace1Op, RoseBVAddOp):
-            Trace1 = [Trace1Op.getOperand(0)]
-            Trace2 = [Trace1Op.getOperand(1)]
-            continue
-        return False
-      if isinstance(Trace1Op, RoseArgument) \
-        and isinstance(Trace2Op, RoseArgument):
-        print("ARGUMENTS:")
-        print("TRACE1 OP:")
-        Trace1Op.print()
-        print("TRACE2 OP:")
-        Trace2Op.print()
-        if Trace1Op != Trace2Op:
-          return False
-        continue
-      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
-        and isinstance(Trace2Op, RoseBVExtractSliceOp):
-        Trace1.append(Trace1Op.getInputBitVector())
-        Trace2.append(Trace2Op.getInputBitVector())
-        continue
-      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
-        Trace1.append(Trace1Op.getOperand(0))
-        Trace2.append(Trace2Op.getOperand(0))
-        continue
-      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
-      for Operand in Trace1Op.getOperands():
-        if not isinstance(Operand, RoseConstant):
-          Trace1.append(Operand)
-      for Operand in Trace2Op.getOperands():
-        if not isinstance(Operand, RoseConstant):
-          Trace2.append(Operand)
-
-  if len(BVAddChain) == 1:
-    # Check if there is any distant possibility that this reduction
-    # pattern is reroller. Trace back two threads.
-    AddOp = BVAddChain[0]
-    assert isinstance(AddOp, RoseBVAddOp)
-    assert len(AddOp.getOperands()) == 2
-    Trace1 = [AddOp.getOperand(0)]
-    Trace2 = [AddOp.getOperand(1)]
-    while len(Trace1) != 0 and len(Trace2) != 0:
-      Trace1Op = Trace1.pop()
-      Trace2Op = Trace2.pop()
-      if type(Trace1Op) != type(Trace2Op):
-        print("EXIT2")
-        return False
-      if isinstance(Trace1Op, RoseArgument) \
-        and isinstance(Trace2Op, RoseArgument):
-        continue
-      if isinstance(Trace1Op, RoseBVExtractSliceOp) \
-        and isinstance(Trace2Op, RoseBVExtractSliceOp):
-        if Trace1Op.getInputBitVector() != Trace2Op.getInputBitVector():
-          return False
-        Trace1.append(Trace1Op.getInputBitVector())
-        Trace2.append(Trace2Op.getInputBitVector())
-        continue
-      if Trace1Op.isSizeChangingOp() and Trace2Op.isSizeChangingOp():
-        Trace1.append(Trace1Op.getOperand(0))
-        Trace2.append(Trace2Op.getOperand(0))
-        continue
-      assert len(Trace1Op.getOperands()) == 2 and len(Trace2Op.getOperands()) == 2
-      for Operand in Trace1Op.getOperands():
-        if not isinstance(Operand, RoseConstant):
-          Trace1.append(Operand)
-      for Operand in Trace2Op.getOperands():
-        if not isinstance(Operand, RoseConstant):
-          Trace2.append(Operand)
-
-  if not isinstance(IntermediateOp, RoseUndefValue):
-    assert isinstance(IntermediateOp, RoseBVSSaturateOp) \
-        or isinstance(IntermediateOp, RoseBVUSaturateOp)
-  
-  # One of the bvadds must be coming from external source
-  # (some other block or function argument).
-  TempValues = []
-  OpsWithTempVals = []
-  for Op in BVAddChain:
-    for Operand in Op.getOperands():
-      if Operand in BVAddChain:
-        continue
-      if Operand not in Block:
-        continue
-      print("--####Operand:")
-      Operand.print()
-      TempValues.append(Operand)
-    OpsWithTempVals.append(Op)
-  if TempValues == []:
-    print("EXIT3")
-    return False
-  # Limit the reduction pattern we analyze
-  if len(OpsWithTempVals) == 0:
-    print("EXIT4")
-    return False
-
-  # Insert bvinserts after TempValues
-  print("INSERTING BVINSERTS")
-  InsertOpLowIndex = BVInsertOp.getLowIndex()
-  InsertOpHighIndex = BVInsertOp.getHighIndex()
-  BitwidthVal = RoseConstant.create(BVInsertOp.getOutputBitwidth(), \
-                                      InsertOpLowIndex.getType())
-  FirstOp = Block.getOperation(0)
-  # Insert bvinserts after TempValues
-  for Op in TempValues:
-    print("TEMP:")
-    Op.print()
-    InsertionPoint = Block.getPosOfOperation(Op) + 1
-    InsertBefore = Block.getChild(InsertionPoint)
-    if isinstance(InsertOpLowIndex, RoseOperation):
-      LowIndex = CloneAndInsertOperation(InsertOpLowIndex, InsertBefore, Context)
-    else:
-      LowIndex = InsertOpLowIndex
-    if isinstance(InsertOpHighIndex, RoseOperation):
-      HighIndex = CloneAndInsertOperation(InsertOpHighIndex, InsertBefore, Context)
-    else:
-      HighIndex = InsertOpHighIndex
-    print("LowIndex:")
-    LowIndex.print()
-    print("HighIndex:")
-    HighIndex.print()
-    ExtractOp = RoseBVExtractSliceOp.create(Context.genName(Op.getName() + ".ext"), \
-                                          BVInsertOp.getInputBitVector(), \
-                                          LowIndex, HighIndex, BitwidthVal)
-    print("Op:")
-    Op.print()
-    AddOp = RoseBVAddOp.create(Context.genName(Op.getName() + ".acc"), [ExtractOp, Op])
-    if isinstance(IntermediateOp, RoseBVSSaturateOp):
-      InsertValue = RoseBVSSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
-                                              AddOp, BitwidthVal)
-    elif isinstance(IntermediateOp, RoseBVUSaturateOp):
-      InsertValue = RoseBVUSaturateOp.create(Context.genName(Op.getName() + ".sat"), \
-                                              AddOp, BitwidthVal)
-    else:
-      InsertValue = AddOp
-    InsertOp = RoseBVInsertSliceOp.create(InsertValue, BVInsertOp.getInputBitVector(), \
-                                          LowIndex, HighIndex, BitwidthVal)
-    Block.addOperationBefore(ExtractOp, InsertBefore)
-    Block.addOperationBefore(AddOp, InsertBefore)
-    if not isinstance(IntermediateOp, RoseUndefValue):
-      Block.addOperationBefore(InsertValue, InsertBefore)
-    Block.addOperationBefore(InsertOp, InsertBefore)
-
-  def EraseIndexingBVOp(BVOp : RoseBitVectorOp):
-    assert isinstance(BVOp, RoseBVExtractSliceOp) \
-        or isinstance(BVOp, RoseBVInsertSliceOp)
-    print("EraseIndexingBVOp")
-    ParentBlock = BVOp.getParent()
-    assert not isinstance(ParentBlock, RoseUndefRegion)
-    ErasedOps = []
-    # Get all the indexing operations for bvinsert
-    IndexingOps = []
-    if isinstance(BVOp.getLowIndex(), RoseOperation):
-      IndexingOps.append(BVOp.getLowIndex())
-    if isinstance(BVOp.getHighIndex(), RoseOperation):
-      IndexingOps.append(BVOp.getHighIndex())
-    # Erase the bvinsert op
-    ParentBlock.eraseOperation(BVOp)
-    print("BV OP ERASED")
-    ParentBlock.print()
-    ErasedOps.append(BVOp)
-    while len(IndexingOps) != 0:
-      Op = IndexingOps.pop()
-      print("--INDEXING OP:")
-      Op.print()
-      # If we have already erased this op, continue
-      if Op in ErasedOps:
-        continue
-      if ParentBlock.hasUsesOf(Op) == False:
-        print("INDEXING OP HAS NO MORE USES")
-        # We can erase Op, but first get the operands
-        for Operand in Op.getOperands():
-          if isinstance(Operand, RoseOperation):
-            IndexingOps.append(Operand)
-        # Erase the op
-        ParentBlock.eraseOperation(Op)
-        ErasedOps.append(Op)
-    return ErasedOps
-    
-  print("---FIXED BLOCK:")
-  Block.print()
-
-  # Erase the bvinsert op
-  print("ERASE INSERT OP")
-  EraseIndexingBVOp(BVInsertOp)
-  if not isinstance(IntermediateOp, RoseUndefValue):
-    Block.eraseOperation(IntermediateOp)
-  # Remove the temp values
-  for Op in OpsWithTempVals:
-    Block.eraseOperation(Op)
-
-  print("++++++FIXED BLOCK:")
-  Block.print()
-
-  # Now initialize the function return register in the first block
-  Function = Block.getFunction()
-  Region = Function.getChild(0)
-  if not isinstance(Region, RoseBlock):
-    FirstBlock = Block.create()
-    Function.addRegionBefore(0, FirstBlock)
-    print("ALLOCATED NEW BLOCK")
-    print("----FirstBlock:")
-    FirstBlock.print()
-    print(FirstBlock)
-  else:
-    FirstBlock = Region
-  ReturnVal = Function.getReturnValue()
-  InitVal = RoseConstant.create(0, ReturnVal.getType())
-  InitLowIndex = RoseConstant.create(0, RoseIntegerType.create(32))
-  InitHighIndex = RoseConstant.create(ReturnVal.getType().getBitwidth() - 1, \
-                                      RoseIntegerType.create(32))
-  InitBitwidth = RoseConstant.create(ReturnVal.getType().getBitwidth(), \
-                                RoseIntegerType.create(32))
-  InitOp = RoseBVInsertSliceOp.create(InitVal, ReturnVal, InitLowIndex, \
-                                      InitHighIndex, InitBitwidth)
-  if FirstBlock.getNumOperations() == 0:
-    FirstBlock.addRegion(InitOp)
-  else:
-    FirstBlock.addOperationBefore(InitOp, FirstBlock.getOperation(0))
-  VisitedRegion.add(FirstBlock)
-
-  print("FUNCTION FIX REDUCTION PATTERN:")
-  Function.print()
-
+  PrintFunctionInfo(Function)
   return True
 
 
@@ -2432,19 +2717,40 @@ def RunRerollerOnFunction(Function : RoseFunction, Context : RoseContext):
   BlockToRerollableCandidatesMap = dict()
 
   # Run loop reroller on the given function
-  BlockToRerollableCandidatesMap = RunRerollerOnRegion(Function, \
-                                    BlockToRerollableCandidatesMap, Context)
+  AbstractionToReductionInfo, BlockToRerollableCandidatesMap = \
+                    RunRerollerOnRegion(Function, BlockToRerollableCandidatesMap, Context)
   # Time to perform some rerolling
-  PerformRerolling(BlockToRerollableCandidatesMap, Context)
+  PerformRerolling(BlockToRerollableCandidatesMap, AbstractionToReductionInfo, Context)
+
+
+def PrintFunctionInfo(Function : RoseFunction):
+  print("PrintFunctionInfo")
+  Function.print()
+  for Block in Function.getRegionsOfType(RoseBlock):
+    for Op in Block:
+      if isinstance(Op, RoseBVInsertSliceOp):
+        print("bvinsert op:")
+        Op.print()
+        print("Op.getInputBitVector():")
+        Op.getInputBitVector().print()
+        print(Op.getInputBitVector().ID)
+        print("Function.getReturnValue():")
+        Function.getReturnValue().print()
+        print(Function.getReturnValue().ID)
 
 
 # Runs Loop reroller
 def Run(Function : RoseFunction, Context : RoseContext):
   print("RUN LOOP REROLLER")
+  Function.print()
+  Context.print()
+  PrintFunctionInfo(Function)
   RunRerollerOnFunction(Function, Context)
   print("___________")
   print("\n\n\n\n")
+  print("Function:")
   Function.print()
+  PrintFunctionInfo(Function)
 
 
 
