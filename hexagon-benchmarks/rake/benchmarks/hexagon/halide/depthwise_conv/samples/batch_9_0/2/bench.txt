@@ -1,2 +1,0 @@
-Benchmark for depthwise_conv_batch_0009_sample_0002 produces best case of 0.000234133 sec/iter (over 7 samples, 1582 iterations, accuracy 16%).
-Best output throughput is 17 mpix/sec.
