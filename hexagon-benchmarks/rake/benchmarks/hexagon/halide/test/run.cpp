@@ -7,6 +7,7 @@
 
 
 #include "HalideBuffer.h"
+#include <vector>
 
 
 #if benchmark_gaussian3x3
@@ -56,6 +57,8 @@
 
 #define O_CREAT_WRONLY_TRUNC (O_CREAT | O_WRONLY | O_TRUNC)
 
+#define NUM_ITERATIONS 1000
+
 extern "C" {
     ssize_t      write(int, const void *, size_t);
 }
@@ -80,19 +83,28 @@ int write_file(int fp, unsigned char *src, int height, int width, int border_wid
 }
 
 template<typename F>
-long long benchmark(F op) {
+float benchmark(F op) {
     //long long start_time = q6sim_read_pcycles();
 
-    clock_t start_cycle = clock();
+    //clock_t start_cycle = clock();
+
+
+
+    // Run for 50 iterations to warm up
+    for(int i =0 ; i < 50; i++){
+        op();
+    }
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    op();
+    for(int i =0 ; i < NUM_ITERATIONS; i++){
+        op();
+    }
 
 
     auto end_time = std::chrono::high_resolution_clock::now();
 
-    clock_t end_cycle = clock();
+    //clock_t end_cycle = clock();
 
     std::chrono::duration<double> duration = end_time - start_time;
 
@@ -100,10 +112,10 @@ long long benchmark(F op) {
     printf("Execution took %0.4f s\n", duration.count());
 
 
-    long long total_cycles =  (long long) (end_cycle - start_cycle);
+    //long long total_cycles =  (long long) (end_cycle - start_cycle);
 
     //long long total_cycles = q6sim_read_pcycles() - start_time;
-    return total_cycles;
+    return duration.count();///total_cycles;
 }
 
 // This is a basic implementation of the Halide runtime for Hexagon.
@@ -187,7 +199,8 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input2_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-    cycles = benchmark([&]() {
+
+        benchmark([&]() {
             int error = add(input1_buf, 0, 100, input2_buf, 0, 100, 0, 5, 225, output_buf);
             if (error != 0) {
             printf("add pipeline failed: %d\n", error);
@@ -212,12 +225,13 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input2_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-    cycles = benchmark([&]() {
+     benchmark([&]() {
             int error = mul(input1_buf, 2, input2_buf, 5, 5, 10000, 1, 5, 225, output_buf);
             if (error != 0) {
             printf("mul pipeline failed: %d\n", error);
             }
             });
+
 
 #if DEBUG
     for (int x = 0; x < 10; x++)
@@ -238,7 +252,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
 
-    cycles = benchmark([&]() {
+    benchmark([&]() {
             int error = average_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
             if (error != 0) {
             printf("average_pool pipeline failed: %d\n", error);
@@ -264,7 +278,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, 4, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, 4, shape);
 
-    cycles = benchmark([&]() {
+     benchmark([&]() {
             int error = max_pool(input_buf, 2, 2, 8, 8, 5, 225, output_buf);
             if (error != 0) {
             printf("max_pool pipeline failed: %d\n", error);
@@ -615,7 +629,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-    cycles = benchmark([&]() {
+     benchmark([&]() {
             int error = dilate3x3(input_buf, output_buf);
             if (error != 0) {
             printf("dilate3x3 pipeline failed: %d\n", error);
@@ -640,12 +654,15 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-    cycles = benchmark([&]() {
+
+    float exec_time = benchmark([&]() {
             int error = sobel3x3(input_buf, output_buf);
             if (error != 0) {
             printf("sobel3x3 pipeline failed: %d\n", error);
             }
             });
+
+      printf("Execution took %0.4f s\n", exec_time);
 #if DEBUG
     for (int x = 0; x < 10; x++)
         for (int y = 0; y < 10; y++)
@@ -737,6 +754,7 @@ int main(int argc, char **argv) {
 #endif
 
 #if benchmark_depthwise_conv
+
   int custom_width = 128;
   int custom_height = 128;
 
@@ -791,7 +809,7 @@ int main(int argc, char **argv) {
 
 
 
-    cycles = benchmark([&]() {
+     benchmark([&]() {
             int error = depthwise_conv(input_,  input_zero_, filter_ ,  filter_zero_, bias_,  depth_multiplier_,  stride_x_,  stride_y_, dilation_x_, dilation_y_, output_multiplier_, output_shift_, output_zero_,  output_min_, output_max_, output_buf );
             if (error != 0) {
             printf("depthwise_conv pipeline failed: %d\n", error);
@@ -800,6 +818,7 @@ int main(int argc, char **argv) {
 
 
     printf("AppReported (): Image %dx%d - depthwise_conv(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+
 #endif
 
 #if benchmark_gaussian3x3
@@ -812,7 +831,7 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
     // Run in 128 byte mode
-    cycles = benchmark([&]() {
+     benchmark([&]() {
             int error = gaussian3x3(input_buf, output_buf);
             if (error != 0) {
             printf("gaussian3x3 pipeline failed: %d\n", error);
@@ -870,12 +889,15 @@ int main(int argc, char **argv) {
     Halide::Runtime::Buffer<uint8_t> input_buf(input, dims, shape);
     Halide::Runtime::Buffer<uint8_t> output_buf(output, dims, shape);
 
-    cycles = benchmark([&]() {
-            int error = median3x3(input_buf, output_buf);
-            if (error != 0) {
-            printf("median3x3 pipeline failed: %d\n", error);
-            }
-            });
+
+
+
+         benchmark([&]() {
+                int error = median3x3(input_buf, output_buf);
+                if (error != 0) {
+                printf("median3x3 pipeline failed: %d\n", error);
+                }
+                });
 #if DEBUG
 
     for (int x = 0; x < 10; x++)
