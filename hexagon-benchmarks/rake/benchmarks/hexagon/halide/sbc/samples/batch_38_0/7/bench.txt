@@ -1,0 +1,2 @@
+Benchmark for sbc_batch_0038_sample_0007 produces best case of 2.11231e-07 sec/iter (over 6 samples, 1114212 iterations, accuracy 2.2%).
+Best output throughput is 18 mpix/sec.

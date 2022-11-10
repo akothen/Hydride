@@ -740,7 +740,7 @@ int main(int argc, char **argv) {
   int custom_width = 128;
   int custom_height = 128;
 
-  int divider = 16;
+  int divider = 4;
   int stride_i_dim3 = 1024 * (custom_width/divider);
   int stride_i_dim4 = stride_i_dim3 * (custom_height/divider);
   halide_dimension_t input_shape[4] = {{0, 1024, 1}, {0, custom_width/divider, 1024}, {0, custom_height/divider,stride_i_dim3}, {0, 1,stride_i_dim4}};
