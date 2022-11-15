@@ -48,6 +48,8 @@
 #include "matmul_256_32bit.h"
 #elif benchmark_matmul_1024_32bit
 #include "matmul_1024_32bit.h"
+#elif benchmark_handtune_matmul
+#include "handtune_matmul.h"
 #elif benchmark_depthwise_conv
 #include "depthwise_conv.h"
 #endif
@@ -58,6 +60,7 @@
 #define O_CREAT_WRONLY_TRUNC (O_CREAT | O_WRONLY | O_TRUNC)
 
 #define NUM_ITERATIONS 1000
+#define WARMUP 50 
 
 extern "C" {
     ssize_t      write(int, const void *, size_t);
@@ -90,8 +93,8 @@ float benchmark(F op) {
 
 
 
-    // Run for 50 iterations to warm up
-    for(int i =0 ; i < 50; i++){
+    // Run for WARMUP iterations to warm up
+    for(int i =0 ; i < WARMUP; i++){
         op();
     }
 
@@ -323,7 +326,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    cycles = benchmark([&]() {
+     benchmark([&]() {
         // Notice the +4 steps. My understanding is that the idct4
         // kernel is to be applied to a 4x4 input and outputs
         // a 4x4 output.
@@ -345,11 +348,6 @@ int main(int argc, char **argv) {
     }
     free(buffers);
 
-#if DEBUG
-    for (int x = 0; x < 10; x++)
-        for (int y = 0; y < 10; y++)
-            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
-#endif
 
     printf("AppReported (): Image %dx%d - idct4(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
@@ -405,11 +403,6 @@ int main(int argc, char **argv) {
     }
     free(buffers);
 
-#if DEBUG
-    for (int x = 0; x < 10; x++)
-        for (int y = 0; y < 10; y++)
-            printf("(x: %d, y: %d) ==> input-val: %d   output-val: %d\n", x, y, input_buf(x, y), output_buf(x, y));
-#endif
 
     printf("AppReported (): Image %dx%d - idct8(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
@@ -750,7 +743,44 @@ int main(int argc, char **argv) {
             });
 
 
+    free(matATensor);
+    free(matBTensor);
+    free(outputTensor);
     printf("AppReported (): Image %dx%d - matmul_1024_32bit(): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
+#endif
+
+
+#if benchmark_handtune_matmul
+
+    int32_t matrix_size = 1024;
+    
+    halide_dimension_t x_dim{ 0, matrix_size, 1 };
+    halide_dimension_t y_dim{ 0, matrix_size, matrix_size };
+    halide_dimension_t shape[2] = { x_dim, y_dim };
+
+    int16_t* matATensor = (int16_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int16_t* matBTensor = (int16_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int16_t), 1 << LOG2VLEN);
+    int32_t* outputTensor = (int32_t*) aligned_malloc(matrix_size * matrix_size * sizeof(int32_t), 1 << LOG2VLEN);
+
+
+    printf("Allocated new memory!\n");
+
+    Halide::Runtime::Buffer<int16_t> matA((int16_t*)matATensor, dims, shape);
+    Halide::Runtime::Buffer<int16_t> matB((int16_t*) matBTensor, dims, shape);
+    Halide::Runtime::Buffer<int32_t> output_buf((int32_t*)outputTensor, dims, shape);
+
+    cycles = benchmark([&]() {
+            int error = handtune_matmul(matA, matB, output_buf);
+            if (error != 0) {
+            printf("handtune_matmul pipeline failed: %d\n", error);
+            }
+            });
+
+
+    free(matATensor);
+    free(matBTensor);
+    free(outputTensor);
+    printf("AppReported (): Image %dx%d - handtune_matmul(): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 #endif
 
 #if benchmark_depthwise_conv
@@ -820,6 +850,8 @@ int main(int argc, char **argv) {
     printf("AppReported (): Image %dx%d - depthwise_conv(128B): %lld cycles (%0.4f cycles/pixel)\n", (int)width, (int)height, cycles, (float)cycles / (width * height));
 
 #endif
+
+
 
 #if benchmark_gaussian3x3
     halide_dimension_t x_dim{ 0, width, 1 };
