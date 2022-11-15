@@ -54,10 +54,12 @@ NONSIGNED_OPS = [
     "bvmul",
     "concat",
     "extract",
-    "bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
-    "bvmulnsw", "bvmulnuw","if", "abs", "cond",
+    #"bvaddnsw", "bvaddnuw","bvsubnsw", "bvsubnuw",
+    "bvmulnsw", "bvmulnuw",
+    "if", "abs", "cond",
     "bvrol", "bvror",
-    "ramp", "bvsaturate", "bvsizeext", "bvaddnw",
+    "ramp",
+    "bvsaturate", "bvsizeext", "bvaddnw",
     "bvsubnw"
 ]
 
@@ -73,6 +75,8 @@ UNSIGNED_OPS = [
     "bvuminval",
     "bvusat",
     "bvumax",  "bvumin",
+    "bvaddnuw",
+    "bvsubnuw",
 ]
 
 
@@ -88,6 +92,8 @@ SIGNED_OPS = [
     "bvsminval",
     "bvssat",
     "bvsmax",  "bvsmin",
+    "bvaddnsw",
+    "bvsubnsw",
 ]
 
 
@@ -98,10 +104,19 @@ SIGN_VARIANTS = {
     'bvrem': {'signed': 'bvsrem', "unsigned": 'bvurem'},
     'bvmin': {'signed': 'bvsmin', "unsigned": 'bvumin'},
     'bvmax': {'signed': 'bvsmax', "unsigned": 'bvumax'},
+    'bvaddnw' : {'signed': 'bvaddnsw', 'unsigned': 'bvaddnuw'},
+    'bvsubnw' : {'signed': 'bvsubnsw', 'unsigned': 'bvsubnuw'},
+}
+
+SIGN_AGNOSTIC_MAP = {
+    "bvaddnw" : "bvadd",
+    "bvsubnw" : "bvsub",
 }
 
 def get_variant_by_sign(op, sign):
     if sign == None:
+        if op in SIGN_AGNOSTIC_MAP:
+            return SIGN_AGNOSTIC_MAP[op]
         return op
 
     if op not in SIGN_VARIANTS:
