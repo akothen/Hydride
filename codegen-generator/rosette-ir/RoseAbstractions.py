@@ -780,6 +780,12 @@ class RoseCond(RoseRegion):
   def hasElseIfRegion(self):
      return len(self.getKeys()) == 3
 
+  def replaceUsesWith(self, Abstraction, NewAbstraction):
+    for Index, Condition in enumerate(self.getConditions()):
+      if Condition == Abstraction:
+        self.setCondition(Index, NewAbstraction)
+    super().replaceUsesWith(Abstraction, NewAbstraction)
+
   def getNumUsersInRegion(self, Abstraction):
     assert not isinstance(Abstraction, RoseUndefValue) \
       and not isinstance(Abstraction, RoseConstant)
