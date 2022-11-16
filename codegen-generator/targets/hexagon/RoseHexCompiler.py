@@ -1006,7 +1006,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
       Context.addAbstractionToIR(RHSExprVal)
       Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
     elif RHSExprVal.getType().getBitwidth() > Bitwidth:
-      RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
+      RHSExprVal = RoseBVTruncateLowOp.create(Context.genName(), \
                           RHSExprVal, Bitwidth)
     # Add an bitslice operation
     LHSOp = RoseBVInsertSliceOp.create(RHSExprVal, BitVector, Low, High, BitwidthValue)
@@ -1070,7 +1070,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
         elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getValue():
-          RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
+          RHSExprVal = RoseBVTruncateLowOp.create(Context.genName(), \
                         RHSExprVal, BitwidthValue.getValue())
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
@@ -1150,7 +1150,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
           Context.addAbstractionToIR(RHSExprVal)
           Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
         elif RHSExprVal.getType().getBitwidth() > BitwidthValue.getValue():
-          RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
+          RHSExprVal = RoseBVTruncateLowOp.create(Context.genName(), \
                         RHSExprVal, BitwidthValue.getValue())
           # Add this add op to the IR and the context
           Context.addAbstractionToIR(RHSExprVal)
@@ -1241,7 +1241,7 @@ def CompileUpdate(Update, Context : HexRoseContext):
         Context.addAbstractionToIR(RHSExprVal)
         Context.addCompiledAbstraction(RHSExprVal.getName(), RHSExprVal)
       elif RHSExprVal.getType().getBitwidth() > ElemType.getBitwidth():
-        RHSExprVal = RoseBVTruncateHighOp.create(Context.genName(), \
+        RHSExprVal = RoseBVTruncateLowOp.create(Context.genName(), \
                       RHSExprVal, ElemType.getBitwidth())
         # Add this add op to the IR and the context
         Context.addAbstractionToIR(RHSExprVal)
@@ -1762,41 +1762,6 @@ def CompileStatement(Stmt, Context : HexRoseContext):
   return CompileAbstractions[StmtTy](Stmt, Context)
 
 
-def FixFunctionsWithReductionPattern(Function : RoseFunction, Context : HexRoseContext):
-  print("FixFunctionsWithReductionPattern:")
-  # There are times when the return values of the functions are
-  # the same as the function argument.
-  if not isinstance(Function.getReturnValue(), RoseArgument):
-    return
-  for Arg in Function.getArgs():
-    print("Arg:")
-    print(id(Arg))
-    Arg.print()
-    print("Function.getReturnValue():")
-    Function.getReturnValue().print()
-    if Arg == Function.getReturnValue():
-      print("EQUAL ARG AND RETURN VALUE")
-      # Create an alternative to the return value 
-      NewReturnValue = RoseValue.create(Context.genName("%" + "dst"), Arg.getType())
-      # Replace the uses of the Arg in bvinsert ops and return ops
-      ArgUsers = Function.getUsersOf(Arg)
-      for User in ArgUsers:
-        if isinstance(User, RoseBVInsertSliceOp):
-          if User.getInputBitVector() == Arg:
-            User.setOperand(1, NewReturnValue)
-          continue
-        if isinstance(User, RoseBVPadHighBitsOp):
-          User.setOperand(0, NewReturnValue)
-          continue
-        if isinstance(User, RoseReturnOp):
-          User.setOperand(0, NewReturnValue)
-          Function.setRetVal(NewReturnValue)
-          continue
-  print("NEW FUNCTIONS:")
-  Function.print()
-  return
-
-
 def CompileSemantics(Sema, RootContext : HexRoseContext):  
   # Some sanity checks
   assert len(Sema.params) > 0
@@ -1896,9 +1861,6 @@ def CompileSemantics(Sema, RootContext : HexRoseContext):
   print(id(OutputParam))
   print(OutputParam)
   print(type(OutputParam))
-  # Fix some reduction patterns specific to hexagon
-  #FixFunctionsWithReductionPattern(CompiledFunction, RootContext)
-
   print("\n\n\n\n\n")
   CompiledFunction.print()
 
@@ -2053,20 +2015,7 @@ def HandleToTruncate(Bitwidth : int):
     [Value] = Args
     assert isinstance(Value.getType(), RoseBitVectorType) == True
     assert Value.getType().getBitwidth() > Bitwidth
-    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
-    Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
-    return Op
-
-  return LamdaImplFunc
-
-
-def HandleToSpecialTruncate(_):
-  def LamdaImplFunc(Name : str, Args : list, Context : HexRoseContext):
-    [Value] = Args
-    assert isinstance(Value.getType(), RoseBitVectorType) == True
-    Bitwidth = int(Value.getType().getBitwidth() / 2)
-    assert Value.getType().getBitwidth() > Bitwidth
-    Op = RoseBVTruncateLowOp.create(Name, Value, Bitwidth)
+    Op = RoseBVTruncateHighOp.create(Name, Value, Bitwidth)
     Context.addSignednessInfoForValue(Op, IsSigned=Context.isValueSigned(Value))
     return Op
 
