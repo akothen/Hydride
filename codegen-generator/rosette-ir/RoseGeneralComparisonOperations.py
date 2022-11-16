@@ -7,20 +7,20 @@
 
 from RoseOpcode import RoseOpcode
 from RoseTypes import *
-from RoseAbstractions import RoseBlock
+from RoseValues import *
+from RoseAbstractions import RoseUndefRegion, RoseBlock
 from RoseBitVectorOperation import RoseBitVectorOp
 
 
 class RoseGeneralComparisonBitVectorOp(RoseBitVectorOp):
   def __init__(self, Opcode : RoseOpcode,  Name : str,  Operand1 : RoseValue, \
-                      Operand2 : RoseValue, SignID : RoseConstan, \
+                      Operand2 : RoseValue, SignID : RoseConstant, \
                       ParentBlock : RoseBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
     self.signIDIsValid(SignID)
     OperandList = [Operand1, Operand2]
     super().__init__(Opcode, Name, OperandList + [SignID], ParentBlock)
-
 
   @staticmethod
   def getIDForSignedOperation():
@@ -76,10 +76,12 @@ class RoseGeneralComparisonBitVectorOp(RoseBitVectorOp):
 
 
 class RoseBVGeneralLTOp(RoseGeneralComparisonBitVectorOp):
-  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                     SignID : RoseConstant, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvgenerallt, Name, Operand1, Operand2, ParentBlock)
+    assert isinstance(SignID, RoseConstant)
+    super().__init__(RoseOpcode.bvgenerallt, Name, Operand1, Operand2, SignID, ParentBlock)
     
   @staticmethod
   def createSigned(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
@@ -98,10 +100,12 @@ class RoseBVGeneralLTOp(RoseGeneralComparisonBitVectorOp):
 
 
 class RoseBVGeneralLEOp(RoseGeneralComparisonBitVectorOp):
-  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                     SignID : RoseConstant, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvgeneralle, Name, Operand1, Operand2, ParentBlock)
+    assert isinstance(SignID, RoseConstant)
+    super().__init__(RoseOpcode.bvgeneralle, Name, Operand1, Operand2, SignID, ParentBlock)
 
   @staticmethod
   def createSigned(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
@@ -120,10 +124,12 @@ class RoseBVGeneralLEOp(RoseGeneralComparisonBitVectorOp):
 
 
 class RoseBVGeneralGTOp(RoseGeneralComparisonBitVectorOp):
-  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                     SignID : RoseConstant, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvgeneralgt, Name, Operand1, Operand2, ParentBlock)
+    assert isinstance(SignID, RoseConstant)
+    super().__init__(RoseOpcode.bvgeneralgt, Name, Operand1, Operand2, SignID, ParentBlock)
     
   @staticmethod
   def createSigned(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
@@ -142,10 +148,12 @@ class RoseBVGeneralGTOp(RoseGeneralComparisonBitVectorOp):
 
 
 class RoseBVGeneralGEOp(RoseGeneralComparisonBitVectorOp):
-  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, ParentBlock):
+  def __init__(self, Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
+                     SignID : RoseConstant, ParentBlock):
     assert isinstance(Operand1.getType(), RoseBitVectorType)
     assert isinstance(Operand2.getType(), RoseBitVectorType)
-    super().__init__(RoseOpcode.bvgeneralge, Name, Operand1, Operand2, ParentBlock)
+    assert isinstance(SignID, RoseConstant)
+    super().__init__(RoseOpcode.bvgeneralge, Name, Operand1, Operand2, SignID, ParentBlock)
 
   @staticmethod
   def createSigned(Name : str, Operand1 : RoseValue, Operand2 : RoseValue, \
