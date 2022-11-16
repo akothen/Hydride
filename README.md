@@ -1,6 +1,6 @@
 # Hydride
 
-Hydride is a retargetable synthesis-based compiler for modern hardware architectures.
+Hydride is a retargetable and extensible synthesis-based compiler for modern hardware architectures. Checkout the [wiki page](https://github.com/AkashIwnK/Hydride/wiki) for details.
 
 Hydride has two major components:
 - CodeGen Generator - It is responsible for automatically generating target-agnostic DSL in Rosette for synthesis, LLVM IR extensions and legalization code.
@@ -37,6 +37,6 @@ Hydride has two major components:
 - `benchmarks` contains the benchmarks synthesized for which Hydride generates vector instructions. It also contains Halide basline kernels.
 
 ## Targets Supported (WIP)
-- x86 (AVX, SSE, VNNI)
+- x86 (AVX, SSE, VNNI, AMX)
 - Hexagon (HVX)
 - ARM A64
