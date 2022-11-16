@@ -7,6 +7,7 @@
 
 import xml.etree.ElementTree as ET
 from x86AST import *
+from x86Types import *
 
 
 
@@ -479,7 +480,10 @@ def p_expr_call_no_args(p):
 
 def p_expr_lookup(p):
   'expr : expr DOT ID'
-  p[0] = Lookup(p[1], p[3])
+  if p[3] in x86Types:
+    p[0] = TypeLookup(p[1], p[3])
+  else:
+    p[0] = DimLookup(p[1], p[3])
 
 def p_args(p):
   '''args : expr
@@ -615,5 +619,6 @@ def p_expr_var(p):
 def p_expr_num(p):
   'expr : NUMBER'
   p[0] = Number(p[1])
+
 
 
