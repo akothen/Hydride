@@ -104,8 +104,6 @@ class x86RoseContext(RoseContext):
       ChildContext.replaceParentAbstractionsWithChild()
       # There are times when temporary variables are written to (using bvinsert)
       # so we will need to get those variables.
-      #print("ChildContext.getRootAbstraction():")
-      #ChildContext.getRootAbstraction().print()
       BlockList = list()
       if ChildContext.getRootAbstraction().getKeys() == None:
         BlockList = ChildContext.getRootAbstraction().getRegionsOfType(RoseBlock)
@@ -142,8 +140,6 @@ def CompileNumber(Num, Context : x86RoseContext):
 
 
 def CompileVariable(Variable, Context):
-  #print("COMPILING VARIABLE")
-  #print(Variable)
   # Check if the variable is already defined and cached. If yes, just return that.
   if Context.isVariableDefined(Variable.name):
     ID = Context.getVariableID(Variable.name)
@@ -290,10 +286,6 @@ def CompileBitSlice(BitSliceExpr, Context : x86RoseContext):
 
   # Add an bitslice operation
   Operation = RoseBVExtractSliceOp.create(Context.genName(), BitVector, Low, High, BitwidthValue)
-  #print("EXTRACT OP CREATED:")
-  #print("Operation.getInputBitVector():")
-  #Operation.getInputBitVector().print()
-  #print(Operation.getInputBitVector().ID)
 
   # Add signedness info on the op
   if Context.isValueSignKnown(BitVector):
@@ -337,11 +329,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     # Get the bitwdith value
     BitwidthValue = RoseConstant.create(ElemType.getBitwidth(), LowIndex.getType())
     # Now, generate the extract op. 
-    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, LowIndex, HighIndex, BitwidthValue)
-    #print("EXTRACT OP CREATED:")
-    #print("Operation.getInputBitVector():")
-    #Operation.getInputBitVector().print()
-    #print(Operation.getInputBitVector().ID)
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, LowIndex,\
+                                            HighIndex, BitwidthValue)
   else:
     # Compile the index first
     IndexVal = CompileIndex(IndexExpr.idx, Context)
@@ -350,11 +339,8 @@ def CompileBitIndex(IndexExpr, Context : x86RoseContext):
     # The bit slice size here is 1 bit
     BitwidthValue = RoseConstant.create(1, IndexVal.getType())
     # Now, generate the extract op. 
-    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, IndexVal, IndexVal, BitwidthValue)
-    #print("EXTRACT OP CREATED:")
-    #print("Operation.getInputBitVector():")
-    #Operation.getInputBitVector().print()
-    #print(Operation.getInputBitVector().ID)
+    Operation = RoseBVExtractSliceOp.create(Context.genName(), Vector, \
+                                    IndexVal, IndexVal, BitwidthValue)
 
   # Add signedness info
   Context.addSignednessInfoForValue(Operation, Context.isValueSigned(Vector))
@@ -729,11 +715,6 @@ def CompileUpdate(Update, Context : x86RoseContext):
     # This could be a mask generator
     assert type(Update.lhs) == BitIndex
     if type(Update.lhs.obj) == Lookup:
-      # Compile the low index first
-      #LowIndex = CompileIndex(Update.lhs.idx, Context)
-      #print("LOW INDEX:")
-      #print(LowIndex)
-      #LowIndex.print()
       # Compile the low index
       ElemType =x86Types[Update.lhs.obj.key]
       IndexVal = CompileIndex(Update.lhs.idx, Context)
@@ -1156,19 +1137,6 @@ def CompileCall(CallStmt, Context : x86RoseContext):
   if Context.isCompiledAbstraction(CallStmt.id):
     return Context.getCompiledAbstractionForID(CallStmt.id)
 
-  # Try to get the types of the arguments first
-  #ArgTypesUndefined = False
-  #ArgsTypeList = list()
-  #for Arg in CallStmt.args:
-  #  ArgType = GetExpressionType(Arg, Context)
-  #  # Argument type cannot be undefined or void
-  #  assert not isinstance(ArgType, RoseVoidType) 
-  #  if isinstance(ArgType, RoseUndefinedType):
-  #    ArgTypesUndefined = True
-  #    break
-  #  ArgsTypeList.append(ArgType)
-  #print("ARGUMENTS TYPES FOUND")
-
   # Compile the arguments (we have no other choice)
   ArgValuesList = list()
   #if ArgTypesUndefined == True:
@@ -1209,7 +1177,6 @@ def CompileCall(CallStmt, Context : x86RoseContext):
       FuncArgList.append(ArgVal)
     
     # Compile the function and its arguments
-    #print("CREATING A NEW FUNCTION")
     Function = RoseFunction.create(CallStmt.funcname, FuncArgList, RoseUndefinedType.create())
 
     # Add arguments to the child context
@@ -1221,15 +1188,11 @@ def CompileCall(CallStmt, Context : x86RoseContext):
         ChildContext.addSignednessInfoForValue(Arg, Context.isValueSigned(ArgValuesList[Index]))
     
     RootAbstraction = Context.getRootAbstraction()
-    #print("ROOT ABSTRACTION:")
-    #RootAbstraction.print()
     if isinstance(RootAbstraction, RoseFunction):
       RegionContext = Context
       RootFunction = RootAbstraction
     else:
       RegionContext, RootFunction = Context.getFirsRootAbstractionsOfType(RoseFunction)
-      #print("FIRST ROOT ABSTRACTION:")
-      #RootFunction.print()
       assert not isinstance(RootFunction, RoseUndefRegion)
     
     # Empty the function first. We want to make sure that the nested function
@@ -1276,18 +1239,6 @@ def CompileCall(CallStmt, Context : x86RoseContext):
     # Destroy the child context now. But copy the context over for this function.
     RegionContext.copyContext(FunctionDef.id, CompiledFunction)
     RegionContext.destroyContext(FunctionDef.id)
-  
-  # Compile the function call arguments now
-  #if ArgTypesUndefined == False:
-  #  print("COMPILE ARGUMENTS")
-  #  ArgValuesList = list()
-  #  for Arg in CallStmt.args:
-  #    CompiledArg = CompileExpression(Arg, Context)
-  #    # Argument type cannot be undefined or void
-  #    assert not isinstance(CompiledArg.getType(), RoseVoidType) \
-  #      and not isinstance(CompiledArg.getType(), RoseUndefinedType)
-  #    ArgValuesList.append(CompiledArg)
-  #  print("ARGUMENTS COMPILED")
 
   # Compile call statement now.
   RootAbstraction = Context.getRootAbstraction()
@@ -1555,8 +1506,6 @@ def CompileMatch(MatchExpr, Context : x86RoseContext):
     # Generate a bitvector
     ConstantVal = RoseConstant.create(Case.val.val, CompiledValue.getType())
     Condition = RoseBVEQOp.create(Context.genName("%cond"), CompiledValue, ConstantVal)
-    print("NEW CONDITION:")
-    Condition.print()
     # Add the op to the IR
     Context.addAbstractionToIR(Condition)
     # Add the operation to the context
@@ -1565,8 +1514,6 @@ def CompileMatch(MatchExpr, Context : x86RoseContext):
 
   # Generate a cond region
   CondRegion = RoseCond.create(Conditions, len(MatchExpr.cases))
-  print("NEW COND REGION:")
-  CondRegion.print()
 
   # Add cond region as root abstraction 
   ChildContext = x86RoseContext()
@@ -1589,8 +1536,6 @@ def CompileMatch(MatchExpr, Context : x86RoseContext):
 
   # Pop the root cond region from the child context 
   CompiledCondRegion = ChildContext.getRootAbstraction()
-  print("CompiledCondRegion:")
-  CompiledCondRegion.print()
 
   # Add cond region to the root abstraction
   Context.addAbstractionToIR(CompiledCondRegion)
@@ -1679,9 +1624,6 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
   for Index in range(RootFunction.getNumArgs()):
     RootContext.addVariable(RootFunction.getArg(Index).getName(), ParamsIDs[Index])
     RootContext.addCompiledAbstraction(ParamsIDs[Index], RootFunction.getArg(Index))
-    #print("ROOT FUNCTION ARG:")
-    #RootFunction.getArg(Index).print()
-    #print(RootFunction.getArg(Index).ID)
   
   # Add the function to the context
   RootContext.addCompiledAbstraction(Sema.intrin, RootFunction)
@@ -1721,8 +1663,19 @@ def CompileSemantics(Sema, RootContext : x86RoseContext):
     # NO meed to add this operation to the context but add it to the function
     CompiledFunction.addAbstraction(Op)
 
-  print("\n\n\n\n\n")
+  print("\n\n\n\n\nFunction:")
   CompiledFunction.print()
+  
+  # Replace the uses of arguments
+  BlockList = CompiledFunction.getRegionsOfType(RoseBlock)
+  for Block in BlockList:
+    for Op in Block:
+      for OperandIndex, Operand in enumerate(Op.getOperands()):
+        if isinstance(Operand, RoseArgument):
+          for Arg in CompiledFunction.getArgs():
+            if Arg == Operand:
+              Op.setOperand(OperandIndex, Arg)
+              break
 
   return CompiledFunction
 
