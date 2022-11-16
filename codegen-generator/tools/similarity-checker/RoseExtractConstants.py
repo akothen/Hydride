@@ -674,7 +674,61 @@ def ExtractConstantsFromBlock(Block : RoseBlock, BVValToBitwidthVal : dict, \
           if Operand not in BVValToBitwidthVal: 
             Operand.setType(Op.getType())
             UnknownVal.add(Operand)
-      # Account for the saturation qualifier 
+      # Account for the sign qualifier 
+      print("Op.getSignID():")
+      Op.getSignID().print()
+      if isinstance(Op.getSignID(), RoseConstant):
+        Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                          Op.getSignID().getType()))
+        ArgToConstantValsMap[Arg] = Op.getSignID().clone()
+        Op.setOperand(Op.getSignIDPos(), Arg)
+      continue
+
+    if isinstance(Op, RoseGeneralComparisonBitVectorOp):
+      print("RoseGeneralComparisonBitVectorOp:")
+      Op.print()
+      # if this is an indexing op, we can ignore it
+      if Op in IndexingOps:
+        continue
+      if Op not in BVValToBitwidthVal:
+        print("ADDING OP IN UNKNOWN SET")
+        Op.print()
+        UnknownVal.add(Op)
+      # Get the type to use for all operands
+      CommonType = RoseUndefinedType()
+      CommonBitwidthVal = RoseUndefValue()
+      for Operand in Op.getOperands()[:-1]:
+        if Operand in BVValToBitwidthVal:
+          CommonType = Operand.getType()
+          CommonBitwidthVal = BVValToBitwidthVal[Operand]
+          break
+      for OperandIndex, Operand in enumerate(Op.getOperands()[:-1]):
+        if isinstance(Operand, RoseConstant):
+          # Abstract away this constant value
+          if isinstance(Operand.getType(), RoseBitVectorType):
+            Arg = Function.prependArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+          else:
+            Arg = Function.appendArg(RoseArgument.create(Context.genName("%" + "arg"), \
+                                                          Operand.getType()))
+          ArgToConstantValsMap[Arg] = Op.getOperand(OperandIndex).clone()
+          Op.setOperand(OperandIndex, Arg)
+        if not isinstance(CommonType, RoseUndefinedType):
+          assert not isinstance(CommonBitwidthVal, RoseUndefValue)
+          Op.getOperand(OperandIndex).setType(CommonType)
+          print("CommonType:")
+          CommonType.print()
+          #if Op.getOperand(OperandIndex) not in BVValToBitwidthVal:
+          BVValToBitwidthVal[Op.getOperand(OperandIndex)] = CommonBitwidthVal
+          #Op.getOperand(OperandIndex).getType().getBitwidth()
+          if Op.getOperand(OperandIndex) in UnknownVal:
+            UnknownVal.remove(Op.getOperand(OperandIndex))
+        if Op.getOperand(OperandIndex) not in BVValToBitwidthVal:
+          print("ADDING OPERAND TO UNKNOWN SET")
+          Op.getOperand(OperandIndex).print()
+          UnknownVal.add(Op.getOperand(OperandIndex))
+          continue
+      # Account for the sign qualifier 
       print("Op.getSignID():")
       Op.getSignID().print()
       if isinstance(Op.getSignID(), RoseConstant):
