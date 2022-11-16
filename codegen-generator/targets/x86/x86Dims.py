@@ -5,13 +5,14 @@
 #############################################################
 
 
-from RoseValues import *
+from RoseValues import RoseConstant
+from RoseTypes import RoseIntegerType
 
 
 # Define dimension names used in x86 pseudocodes
 x86Dims = {
-    'rows': RoseConstant.create(16, RoseInteger.create(32)),
-    'colsb': RoseConstant.create(512 / 8, RoseInteger.create(32)),
+    'rows': RoseConstant.create(16, RoseIntegerType.create(32)),
+    'colsb': RoseConstant.create(512 / 8, RoseIntegerType.create(32)),
 }
 
 

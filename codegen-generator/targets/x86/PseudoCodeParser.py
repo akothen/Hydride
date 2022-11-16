@@ -10,7 +10,6 @@ from x86AST import *
 from x86Types import *
 
 
-
 def ParseX86Intructions(XMLFileName : str):
   # Intializing x86 parser
   InitX86Parser()
@@ -97,7 +96,7 @@ def GetSemaFromXML(node, InstName : str = None):
       cpuids=CPUIDs,
       inst_form = None if inst is None else inst.attrib.get('form', ''),
       imm_width=imm_width,
-      elem_type=output.attrib['etype'],
+      elem_type=output.find('etype'), #output.attrib['etype'],
       xed = None if inst is None else inst.attrib.get('xed')
     )
 

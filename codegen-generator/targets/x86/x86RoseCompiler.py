@@ -16,6 +16,7 @@ from RoseContext import *
 
 from x86AST import *
 from x86Types import x86Types
+from x86Dims import x86Dims
 
 import math
 
